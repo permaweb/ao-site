@@ -1,4 +1,8 @@
-const ForwardResearchLogo = ({ size }) => {
+interface fwdProps {
+  size: number;
+}
+
+const ForwardResearchLogo = ({ size }: fwdProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
