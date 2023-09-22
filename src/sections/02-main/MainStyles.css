@@ -1,0 +1,84 @@
+main {
+  display: flex;
+  padding: 0px 40px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 1080px;
+  align-items: center;
+  flex: 1 0 0;
+  align-self: stretch;
+  gap: 40px;
+}
+
+.landing {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.landing-left {
+  display: flex;
+  max-width: 425px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.landing-right {
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+  margin-right: 100px;
+  margin-bottom: 20px;
+  opacity: 75%;
+}
+
+.landing-right video {
+  width: 300px;
+  height: 300px;
+}
+
+.current-projects {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  align-self: stretch;
+}
+
+.logo-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 80px;
+  width: 100%;
+  height: 100%;
+}
+
+.project {
+  display: flex;
+  min-width: 200px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.join-us-button {
+  position: relative;
+}
