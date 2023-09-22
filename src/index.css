@@ -159,4 +159,7 @@ button:focus-visible {
   .right-container .multi-language-container {
     display: none;
   }
+  .project {
+    width: 300px;
+  }
 }
