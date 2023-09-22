@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 
 const MultiLanguageDetail = () => {
@@ -16,6 +15,10 @@ const MultiLanguageDetail = () => {
     फॉरवर्ड रिसर्च उन बेहतरीन बिल्डर्स और नए वेब सेवाओं के निर्माण पर ध्यान केंद्रित करने वाले फाउंडर्स को इनक्यूबेट करता है जो यूज़र्स के वेब अधिकारों का सम्मान करें।
     हम एक ऐसा माहौल प्रदान करते हैं जो आपका ध्यान केवल निर्माण करने में मदद करता है। क्या आपके पास कोई नया और अभूतपूर्व विचार है? हम आपकी मदद कर सकते हैं।
     `,
+    german: `🇩🇪 Als führendes Forschungs- und Entwicklungsinkubator für das Arweave-Ökosystem sind wir auf einer Mission, das Cyberspace für alle freier und fairer zu gestalten.
+    Forward Research fördert die besten Entwickler und Gründer, die darauf abzielen, eine völlig neue Klasse von Webdiensten auf Arweave zu schaffen, die nachweislich die Rechte der Nutzer respektieren.
+    Wir bieten eine Umgebung, die speziell darauf ausgerichtet ist, Ihnen zu helfen, sich auf das Wichtigste zu konzentrieren: das Bauen.
+    Haben Sie eine bahnbrechende Idee? Wir können Ihnen helfen, diese Idee Wirklichkeit werden zu lassen, von Null bis zur Marktreife.`,
   };
   return (
     <div className="multi-language-container">
