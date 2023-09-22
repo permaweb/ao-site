@@ -117,11 +117,8 @@ const Main = () => {
           <h2>current projects</h2>
           <div className="projects-grid">
             {projects.map((project, index) => (
-              <div
-                key={index}
-                className={`project ${project.header} underline`}
-              >
-                <div className="logo-header">
+              <div key={index} className={`project ${project.header} `}>
+                <div className="logo-header underline">
                   <div className="tooltip">
                     <img src={link} alt="link-icon" />
                     <a href={project.link}>
