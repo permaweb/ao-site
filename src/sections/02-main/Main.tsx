@@ -106,7 +106,7 @@ const Main = () => {
           </div>
           <div className="landing-right">
             <video
-              src="public/arweave-principles-typing.mp4"
+              src="arweave-principles-typing.mp4"
               muted
               autoPlay
               loop
