@@ -10,14 +10,6 @@ function App() {
       <Header />
       <Main />
       <Footer />
-      <div className="accent-wrapper">
-        <div className="color">
-          <ColorBox color={'red'} />
-          <ColorBox color={'blue'} />
-          <ColorBox color={'green'} />
-          <ColorBox color={'orange'} />
-        </div>
-      </div>
     </div>
   );
 }

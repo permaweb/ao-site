@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import './HeaderStyles.css';
-import MultiLanguageDetail from './components/MultiLanguageDetail';
 import ForwardResearchLogo from './components/ForwardResearchLogo';
 
 const Header = () => {
@@ -34,12 +33,11 @@ const Header = () => {
       <div className="header-container">
         <div className="left-container">
           <div className="left-wrapper">
-            <h1>forward research</h1>
+            <h1>forward research.</h1>
             <span>{year}</span>
           </div>
         </div>
         <div className="right-container">
-          <MultiLanguageDetail />
           <ForwardResearchLogo size={logoSize} />
         </div>
       </div>

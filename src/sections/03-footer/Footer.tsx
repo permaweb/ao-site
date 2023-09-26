@@ -18,12 +18,6 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        <div className="footer-colors">
-          <ColorBox color={'orange'} />
-          <ColorBox color={'green'} />
-          <ColorBox color={'blue'} />
-          <ColorBox color={'red'} />
-        </div>
       </div>
     </footer>
   );

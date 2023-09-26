@@ -21,6 +21,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --container-padding: 80px;
+  --header-height: 116px;
 }
 
 a {
@@ -39,7 +42,7 @@ body {
 
 h1 {
   font-family: 'Roboto Mono';
-  font-size: 18px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
@@ -50,7 +53,7 @@ h1 {
 h2,
 h3 {
   font-family: 'Roboto Mono';
-  font-size: 18px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
@@ -71,7 +74,7 @@ h4 {
 
 p {
   font-family: 'DM Sans';
-  font-size: 12px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 300;
   line-height: 160.5%; /* 19.26px */
@@ -82,11 +85,11 @@ p {
 
 span {
   font-family: 'Roboto Mono';
-  font-size: 9px;
-  font-style: normal;
-  font-weight: 100;
+  font-size: 12px;
   line-height: normal;
-  letter-spacing: 0.45px;
+  font-weight: 200;
+  line-height: 160.5%;
+  letter-spacing: 0.6px;
   margin: 0;
 }
 
@@ -94,10 +97,10 @@ button {
   border: 0.5px solid #000;
   background: #fefefe;
   border-radius: 4px;
-  width: 159px;
-  height: 34px;
+  width: 250px;
+  height: 50px;
   padding: 6px 20px;
-  font-size: 12px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -143,7 +146,7 @@ button:focus-visible {
   opacity: 100%;
 }
 
-@media only screen and (max-width: 850px) {
+@media only screen and (max-width: 1000px) {
   .landing-right {
     display: none;
   }

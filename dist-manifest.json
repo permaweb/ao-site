@@ -1,0 +1,25 @@
+{
+"manifest": "arweave/paths",
+"version": "0.1.0",
+"paths": {
+"assets/ao-56c01b5f.svg":{"id":"6N_Gn_mrJndJjYg0mV-U7wbam2eAJitk4C3bSrGev-A"},
+"images/forward-research-outline.svg":{"id":"hKQ6PW4G0l4FbMBNwNUwaNDZIP6-Y1d7__NC5t-Af8Y"},
+"index.html":{"id":"DkIUeigJHg73L7gQ9b9zA9xGnyo7CJ_OjpZeTWLaLHY"},
+"assets/arweave-logo-e55d271c.svg":{"id":"zcrp4fSTaxID9-d0bP3xVoYqv7jYsEEDhLQFwDWbQgM"},
+"assets/dataOS-fcf9d3fd.svg":{"id":"SgbS2NjXDXD0WjbfKf46reOmWKjpBTdGRXQzKM9NGbQ"},
+"assets/weavers-38dfd2a1.svg":{"id":"HzO3gZTwMjk-uIgVQxJ1-qdgVYdGV9r_uDegJlKcv8o"},
+"assets/ucm-3f531a00.svg":{"id":"RfPE_y_Gk7u9MBEcvoAWg-oErikve_DX3wwfpTck4oo"},
+"assets/link-be091b90.svg":{"id":"2YSkq2IK2TOrK6TmFskFr4mD6GSwFHzCN2Ojceac8gs"},
+"assets/udl-0b10dc44.svg":{"id":"2dREapr2Cla9m-VLbOF2Dl-SJS4LPfoBP1g4din9j0U"},
+"assets/x-logo-f5545238.svg":{"id":"53nE4iRAdlQ3z1WzOUh8pNnjcSyMmzanjTL4dRqv_iM"},
+"assets/facts-fa7cb75f.svg":{"id":"teUoxAD4oKPU0UpwEOv1IGfsq7IIcQ5HYrJ_hwZyO9g"},
+"assets/emailEnvelope-d866eafa.svg":{"id":"LbaJGiynhuZmag7-GCBJ9QAXkYmt4k9JoeXW7xbz0-I"},
+"assets/fair-3641934e.svg":{"id":"si3WZCxQnSRH21su3f_V0XfKw6NME6itzhT5oER0ngs"},
+"assets/stamp-5047454a.svg":{"id":"dotMaGjLW2-sHdDNA2bSnJ1owKuLZukqQP6Q7n_FgYQ"},
+"assets/index-bd196a5a.css":{"id":"QGK4M1Hb6s_mZMr64AQ6ZgTY38nSf_rciWdCy7BNpMQ"},
+"arweave-principles-typing.mp4":{"id":"0utlVuaMCAhnJ9WGmwRhNCzdp32_5xGdDIaf8m2kLco"},
+"assets/alex-9d55fb45.svg":{"id":"diXWtgIO4X3vMFgEmIgv_D2zyT5ACXUdUJJ-3MCqa1k"},
+"assets/index-8a4a65ce.js":{"id":"kELyzof009t5p25lY8ZWX_heftnJkb8SgR00XGCDPHQ"}
+},
+"index":{"path":"index.html"}
+}

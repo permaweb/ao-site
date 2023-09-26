@@ -10,6 +10,8 @@ import weavers from '../../assets/weavers.svg';
 import ao from '../../assets/ao.svg';
 import link from '../../assets/link.svg';
 import emailEnvelope from '../../assets/emailEnvelope.svg';
+import plusSign from '../../assets/plus-bold.svg';
+import MultiLanguageDetail from '../../globalHooks/MultiLanguageDetail';
 
 const Main = () => {
   const projects = [
@@ -51,14 +53,14 @@ const Main = () => {
       logo: ucm,
       header: 'universal content marketplace',
       content:
-        'ucm is a protocol that enables the trustless exchange of any atomic asset on the permaweb, implemented as a warp smart contract. it goes beyond just nfts, allowing for the exchange of images, music, videos, papers, names, components, and even entire web apps. ucm empowers creators and users by providing a secure and transparent environment to trade assets without relying on intermediaries or centralized authorities.',
+        'ucm is a protocol that enables the trustless exchange of any atomic asset on the permaweb, implemented as a warp smart contract. it goes beyond just nfts, allowing for the exchange of images, music, videos, papers, names, components, and even entire web apps.',
       link: 'n/a',
     },
     {
       logo: udl,
       header: 'universal data license',
       content:
-        'a standard framework for digital content monetization on the permaweb, udl allows creators to set their own terms for the usage of content that they upload to Arweave, and for developers to permissionlessly license that data in their apps. the license provides programmable parameters for aspects of monetization such as the length of license term, currency used for payments, and the fee.',
+        'a standard framework for digital content monetization on the permaweb, udl allows creators to set their own terms for the usage of content that they upload to arweave, and for developers to permissionlessly license that data in their apps. the license provides programmable parameters for all aspects of monetization.',
       link: 'https://arwiki.wiki/#/en/Universal-Data-License-How-to-use-it',
     },
     {
@@ -80,37 +82,38 @@ const Main = () => {
     <main>
       <div className="main-wrapper">
         <div className="landing">
-          <div className="landing-left">
-            <p>
-              as a leading research and development incubator for the arweave
-              ecosystem, we are on a mission to make cyberspace <u>freer</u> and{' '}
-              <u>fairer</u> for <u>everyone</u>.
-            </p>
-            <p>
-              forward research incubates the best builders and founders focused
-              on creating an entirely new class of web services on arweave that
-              provably respect users rights. we provide an environment tailored
-              to help you focus on what matters most: building.
-            </p>
-            <p>
-              do you have a ground-breaking idea? we can help you make it a
-              reality, from zero to market fit.
-            </p>
+          <div className="landing-top">
+            <div className="landing-left">
+              <p>
+                <sup>1</sup> as a leading research and development incubator for
+                the arweave ecosystem, we are on a mission to make cyberspace{' '}
+                <u>freer</u> and <u>fairer</u> for <u>everyone</u>.
+              </p>
+              <p>
+                <sup>2</sup> forward research incubates the best builders and
+                founders focused on creating an entirely new class of web
+                services on arweave that provably respect users rights. we
+                provide an environment tailored to help you focus on what
+                matters most: building.
+              </p>
+              <p>
+                <sup>3</sup> do you have a ground-breaking idea? we can help you
+                make it a reality, from <sub>zero</sub> to <b>market fit</b>.
+              </p>
+            </div>
+            <div className="landing-right">
+              <MultiLanguageDetail />
+            </div>
+          </div>
+          <div className="landing-bottom">
             <div className="join-us-button">
-              <button>join us</button>
+              <button>join us.</button>
               <div className="tooltip" style={{ alignItems: 'center' }}>
                 <img src={emailEnvelope} alt="email-icon" />
                 <span>contact by email</span>
               </div>
             </div>
-          </div>
-          <div className="landing-right">
-            <video
-              src="public/arweave-principles-typing.mp4"
-              muted
-              autoPlay
-              loop
-            ></video>
+            <img src={plusSign} alt="perma-plus-sign" />
           </div>
         </div>
         <div className="current-projects">

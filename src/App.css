@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  gap: var(--container-padding, 20px);
+  gap: var(--container-padding);
 }
 
 .accent-wrapper {
@@ -41,4 +41,13 @@
 
 .orange {
   background: #ffcc9c;
+}
+
+.multi-language-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  flex: 1 0 0;
+  align-self: stretch;
 }
