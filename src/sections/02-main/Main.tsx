@@ -10,8 +10,8 @@ import weavers from '../../assets/weavers.svg';
 import ao from '../../assets/ao.svg';
 import link from '../../assets/link.svg';
 import emailEnvelope from '../../assets/emailEnvelope.svg';
-import plusSign from '../../assets/plus-bold.svg';
 import MultiLanguageDetail from '../../globalHooks/MultiLanguageDetail';
+import useParallaxScroll from '../../globalHooks/SlowScroll';
 
 const Main = () => {
   const projects = [
@@ -77,7 +77,7 @@ const Main = () => {
       link: 'n/a',
     },
   ];
-
+  useParallaxScroll();
   return (
     <main>
       <div className="main-wrapper">
@@ -123,6 +123,9 @@ const Main = () => {
         </div>
         <div className="current-projects-wrapper">
           <div className="current-projects-header">
+            <p className="spin" style={{ marginRight: '20px' }}>
+              +
+            </p>
             <h2>current projects</h2>
           </div>
           <div className="projects-grid">

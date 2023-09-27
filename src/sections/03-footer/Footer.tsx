@@ -1,4 +1,3 @@
-import ColorBox from '../02-main/components/ColorBox';
 import './FooterStyles.css';
 import x from '../../assets/x-logo.svg';
 import arweave from '../../assets/arweave-logo.svg';
@@ -8,7 +7,7 @@ const Footer = () => {
     <footer>
       <div className="footer-container">
         <div className="footer-left">
-          <p>feel free to keep with us on: </p>
+          <p>feel free to keep in touch</p>
           <div className="footer-links">
             <a href="https://twitter.com/fwdresearch">
               <img src={x} alt="x-logo" />

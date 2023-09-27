@@ -14,7 +14,7 @@ main {
   align-items: center;
   flex: 1 0 0;
   align-self: stretch;
-  gap: 200px;
+  gap: 100px;
 }
 
 .landing {
@@ -41,6 +41,11 @@ main {
   height: 100%;
   width: 100%;
   gap: 80px;
+}
+
+.landing-left,
+.landing-right {
+  will-change: transform;
 }
 
 .landing-left {
@@ -83,6 +88,7 @@ main {
   justify-content: flex-end;
   width: 100%;
   align-self: stretch;
+  align-items: center;
 }
 
 .logo-header {
@@ -149,4 +155,12 @@ main {
 .join-us-button {
   position: relative;
   margin-top: 70px;
+}
+
+.spin {
+  transition: all 500ms ease-in-out;
+}
+
+.spin:hover {
+  transform: rotate(90deg);
 }
