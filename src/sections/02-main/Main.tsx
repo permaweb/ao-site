@@ -17,7 +17,7 @@ const Main = () => {
   const projects = [
     {
       logo: alex,
-      header: 'alex.',
+      header: 'Alex.',
       content:
         'Alex. is a decentralized archival platform. Inspired by the great library of alexandria, the mission of Alex. is to preserve important historical artifacts for the enrichment of all people. Institutions and creators are incentivized to publicly archive digital content by allowing anyone to become sponsors of their digital artifacts.',
       link: 'http://alex.arweave.dev',
@@ -85,7 +85,7 @@ const Main = () => {
           <div className="landing-top">
             <div className="landing-left">
               <p>
-                <sup>1</sup>we are on a mission to make cyberspace <u>freer</u>{' '}
+                <sup>1</sup> We are on a mission to make cyberspace <u>freer</u>{' '}
                 and <u>fairer</u> for <u>everyone</u>.
               </p>
               <p>
@@ -96,7 +96,7 @@ const Main = () => {
                 <sup>3</sup> We support the best builders and founders focused
                 on creating an entirely new class of web services on Arweave
                 that provably respect users rights. We offer an environment
-                tailored to help you focus on what matters most: building, from
+                tailored to help you focus on what matters most: building, from{' '}
                 <sub>zero</sub> to <sup>market fit</sup>.
               </p>
             </div>

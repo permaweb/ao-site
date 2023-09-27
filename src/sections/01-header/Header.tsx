@@ -33,7 +33,7 @@ const Header = () => {
       <div className="header-container">
         <div className="left-container">
           <div className="left-wrapper">
-            <h1>forward research.</h1>
+            <h1>Forward Research.</h1>
             <span>{year}</span>
           </div>
         </div>
