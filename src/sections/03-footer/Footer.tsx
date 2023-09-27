@@ -8,7 +8,7 @@ const Footer = () => {
     <footer>
       <div className="footer-container">
         <div className="footer-left">
-          <span>follow us on: </span>
+          <p>feel free to keep with us on: </p>
           <div className="footer-links">
             <a href="https://twitter.com/fwdresearch">
               <img src={x} alt="x-logo" />
