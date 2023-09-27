@@ -14,6 +14,7 @@ main {
   align-items: center;
   flex: 1 0 0;
   align-self: stretch;
+  gap: 200px;
 }
 
 .landing {
@@ -22,7 +23,6 @@ main {
   justify-content: space-between;
   align-items: flex-start;
   align-self: stretch;
-  height: calc(100vh - var(--header-height) - var(--container-padding));
 }
 
 .landing-top {
@@ -35,7 +35,7 @@ main {
 .landing-bottom {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   align-self: stretch;
   justify-content: center;
   height: 100%;
@@ -70,11 +70,18 @@ main {
   left: -25%;
 }
 
-.current-projects {
+.current-projects-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 40px;
+  align-self: stretch;
+}
+
+.current-projects-header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
   align-self: stretch;
 }
 
@@ -88,7 +95,6 @@ main {
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 80px;
   width: 100%;
   height: 100%;
 }
@@ -96,11 +102,51 @@ main {
 .project {
   display: flex;
   min-width: 200px;
+  background: #f5f5f5;
+  min-height: 400px;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: space-between;
+  padding: 100px 20px 100px 20px;
+  border: 0.5px solid rgb(193, 193, 193);
+  transition: all 300ms ease-in-out;
+}
+
+.project:hover .project-content {
+  opacity: 100%;
+  transform: translateY(10px);
+}
+
+.project:hover {
+  background: #e7e7e7;
+  transform: translateY(-4px);
+}
+
+.project-content {
+  opacity: 0%;
+  transition: all 500ms;
+  transform: translateY(-10px);
+}
+
+.project-top {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.project-bottom {
+  display: flex;
+}
+
+.project-links {
+  display: flex;
   gap: 10px;
+  align-items: flex-end;
 }
 
 .join-us-button {
   position: relative;
+  margin-top: 70px;
 }

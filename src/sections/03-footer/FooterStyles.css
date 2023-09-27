@@ -8,11 +8,18 @@ footer {
   padding: 0 40px;
 }
 
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .footer-container {
   display: flex;
   max-width: 1080px;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   flex: 1 0 0;
   align-self: stretch;
 }

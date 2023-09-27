@@ -23,62 +23,116 @@ const useTypewriter = (
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
 
+  // This effect simulates typing, pausing, and deleting text for different paragraphs and languages.
   useEffect(() => {
     if (isPaused) return;
 
     const currentSpeed = isDeleting ? deleteSpeed : speed;
+
     const currentLanguage = languages[currentLangIndex];
+
+    if (!currentLanguage) {
+      console.error('currentLanguage is not defined.');
+      return;
+    }
+
     const paragraphs = languageSets[currentLanguage];
 
+    if (!paragraphs) {
+      console.error(`No paragraphs found for language: ${currentLanguage}`);
+      return;
+    }
+
+    // Set an interval for the typing effect.
     const typingInterval = setInterval(() => {
-      if (!isDeleting && charIndex < paragraphs[currentParaIndex].length) {
-        setDisplayTexts((prevTexts) => {
-          const newParagraphs = [...prevTexts];
-          newParagraphs[currentParaIndex] =
-            (newParagraphs[currentParaIndex] || '') +
-            paragraphs[currentParaIndex].charAt(charIndex);
-          return newParagraphs;
-        });
-        setCharIndex((prevCharIndex) => prevCharIndex + 1);
-      } else if (isDeleting && charIndex > 0) {
-        setDisplayTexts((prevTexts) => {
-          const newParagraphs = [...prevTexts];
-          newParagraphs[currentParaIndex] = newParagraphs[
-            currentParaIndex
-          ].slice(0, -1);
-          return newParagraphs;
-        });
-        setCharIndex((prevCharIndex) => prevCharIndex - 1);
-      } else if (currentParaIndex < paragraphs.length - 1) {
-        setCurrentParaIndex((prevIndex) => prevIndex + 1);
-        setCharIndex(0);
-        setIsDeleting(false);
-      } else if (currentLangIndex < languages.length - 1) {
-        setIsPaused(true); // Pause after finishing a language
-        setTimeout(() => {
+      try {
+        // If not in deletion mode and the current character index is within the paragraph's length:
+        if (!isDeleting && charIndex < paragraphs[currentParaIndex].length) {
+          // Append the next character to the displayTexts state.
+          setDisplayTexts((prevTexts) => {
+            const newParagraphs = [...prevTexts];
+
+            // Ensure the paragraph is initialized to an empty string if undefined.
+            if (!newParagraphs[currentParaIndex]) {
+              newParagraphs[currentParaIndex] = '';
+            }
+
+            newParagraphs[currentParaIndex] +=
+              paragraphs[currentParaIndex].charAt(charIndex);
+            return newParagraphs;
+          });
+
+          // Increment the character index.
+          setCharIndex((prevCharIndex) => prevCharIndex + 1);
+        }
+        // If in deletion mode and there are still characters left:
+        else if (isDeleting && charIndex > 0) {
+          // Remove the last character from the displayTexts state.
+          setDisplayTexts((prevTexts) => {
+            const newParagraphs = [...prevTexts];
+
+            // Check if the value at currentParaIndex is defined.
+            if (typeof newParagraphs[currentParaIndex] === 'string') {
+              newParagraphs[currentParaIndex] = newParagraphs[
+                currentParaIndex
+              ].slice(0, -1);
+            } else {
+              console.error(
+                `Unexpected value at currentParaIndex: ${currentParaIndex}. Expected a string but got ${newParagraphs[currentParaIndex]}.`
+              );
+            }
+
+            return newParagraphs;
+          });
+
+          // Decrement the character index.
+          setCharIndex((prevCharIndex) => prevCharIndex - 1);
+        }
+        // If the current paragraph has finished but there are more paragraphs for the current language:
+        else if (currentParaIndex < paragraphs.length - 1) {
+          // Move to the next paragraph.
+          setCurrentParaIndex((prevIndex) => prevIndex + 1);
+          setCharIndex(0); // Reset the character index.
+          setIsDeleting(false); // Stop deleting.
+        }
+        // If all paragraphs for the current language have been processed, but there are more languages:
+        else if (currentLangIndex < languages.length - 1) {
+          // Move to the next language.
           setCurrentLangIndex((prevIndex) => prevIndex + 1);
-          setCurrentParaIndex(0);
-          setCharIndex(0);
-          setIsDeleting(false);
-          setDisplayTexts([]);
-          setIsPaused(false); // End the pause state
-        }, pauseDuration);
-      } else {
-        setIsPaused(true);
-        setTimeout(() => {
-          setCurrentLangIndex(0); // Resetting the language index
-          setCurrentParaIndex(0); // Resetting the paragraph index
-          setCharIndex(0); // Resetting the character index
-          setIsDeleting(false); // Set it to type again
-          setDisplayTexts([]); // Reset the display text
-          setIsPaused(false); // End the pause state
-        }, pauseDuration);
+          setCurrentParaIndex(0); // Reset the paragraph index.
+          setCharIndex(0); // Reset the character index.
+          setIsDeleting(false); // Stop deleting.
+          setDisplayTexts([]); // Clear the displayed texts.
+        }
+        // If the current paragraph has finished but there are more paragraphs for the current language:
+        else if (currentParaIndex < paragraphs.length - 1) {
+          setIsPaused(true); // Pause the typing.
+          setTimeout(() => {
+            // After the pause, resume typing.
+            setIsPaused(false);
+            setCurrentParaIndex((prevIndex) => prevIndex + 1); // Move to the next paragraph.
+            setCharIndex(0); // Reset the character index.
+          }, pauseDuration);
+        }
+        // If all paragraphs for all languages have been processed:
+        else {
+          setIsDeleting(true); // Start deleting.
+          setCurrentLangIndex(0); // Reset the language index.
+          setCurrentParaIndex(0); // Reset the paragraph index.
+          setDisplayTexts([]); // Clear the displayed texts.
+        }
+      } catch (error) {
+        console.error('Error occurred in typingInterval:', error);
+        clearInterval(typingInterval);
       }
     }, currentSpeed);
 
+    // Cleanup: When this effect re-runs or the component unmounts, clear the typing interval.
     return () => {
       clearInterval(typingInterval);
     };
+
+    // Dependencies for the effect. Whenever any of these change, the effect will re-run.
   }, [
     languageSets,
     speed,

@@ -1,7 +1,6 @@
 import './App.css';
 import Header from './sections/01-header/Header';
 import Main from './sections/02-main/Main';
-import ColorBox from './sections/02-main/components/ColorBox';
 import Footer from './sections/03-footer/Footer';
 
 function App() {

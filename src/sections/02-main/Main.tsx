@@ -94,11 +94,12 @@ const Main = () => {
                 founders focused on creating an entirely new class of web
                 services on arweave that provably respect users rights. we
                 provide an environment tailored to help you focus on what
-                matters most: building.
+                matters most: <b>building</b>.
               </p>
               <p>
                 <sup>3</sup> do you have a ground-breaking idea? we can help you
-                make it a reality, from <sub>zero</sub> to <b>market fit</b>.
+                make it a reality, from <sub>zero</sub> to <sup>market fit</sup>
+                .
               </p>
             </div>
             <div className="landing-right">
@@ -108,43 +109,60 @@ const Main = () => {
           <div className="landing-bottom">
             <div className="join-us-button">
               <button>join us.</button>
-              <div className="tooltip" style={{ alignItems: 'center' }}>
+              <div
+                className="tooltip"
+                style={{ alignItems: 'center', justifyContent: 'center' }}
+              >
                 <img src={emailEnvelope} alt="email-icon" />
-                <span>contact by email</span>
+                <span style={{ marginLeft: '5px' }}>
+                  email us to start building
+                </span>
               </div>
             </div>
-            <img src={plusSign} alt="perma-plus-sign" />
           </div>
         </div>
-        <div className="current-projects">
-          <h2>current projects</h2>
+        <div className="current-projects-wrapper">
+          <div className="current-projects-header">
+            <h2>current projects</h2>
+          </div>
           <div className="projects-grid">
             {projects.map((project, index) => (
               <div key={index} className={`project ${project.header} `}>
-                <div className="logo-header underline">
-                  <div className="tooltip">
-                    <img src={link} alt="link-icon" />
+                <div className="project-top">
+                  <div className="logo-header underline">
+                    <div className="tooltip">
+                      <img src={link} alt="link-icon" />
+                      <a href={project.link}>
+                        <span>{project.link}</span>
+                      </a>
+                    </div>
+                    <img
+                      src={project.logo}
+                      alt={`${project.header}-outline-logo`}
+                    />
                     <a href={project.link}>
-                      <span>{project.link}</span>
+                      {project.header.length > 10 ? (
+                        <>
+                          <h4>{project.header}</h4>
+                        </>
+                      ) : (
+                        <>
+                          <h3>{project.header}</h3>
+                        </>
+                      )}
                     </a>
                   </div>
-                  <img
-                    src={project.logo}
-                    alt={`${project.header}-outline-logo`}
-                  />
-                  <a href={project.link}>
-                    {project.header.length > 10 ? (
-                      <>
-                        <h4>{project.header}</h4>
-                      </>
-                    ) : (
-                      <>
-                        <h3>{project.header}</h3>
-                      </>
-                    )}
-                  </a>
+                  <p className="project-content">{project.content}</p>
                 </div>
-                <p>{project.content}</p>
+                <div className="project-bottom">
+                  <div className="project-links">
+                    <a href={project.link}>
+                      <p>website</p>
+                    </a>
+                    <span>|</span>
+                    <p>docs</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
