@@ -32,11 +32,6 @@ a {
   text-decoration: inherit;
   transition: all 150ms ease-in-out;
 }
-a:hover {
-  color: #ff8400;
-  font-weight: 500;
-  transform: translateY(-2px);
-}
 
 body {
   margin: 0;
@@ -165,8 +160,5 @@ button:focus-visible {
   }
   .right-container .multi-language-container {
     display: none;
-  }
-  .project {
-    width: 300px;
   }
 }

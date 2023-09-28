@@ -37,7 +37,7 @@ const MultiLanguageDetail = () => {
 
   return (
     <div className="multi-language-text">
-      <Typewriter languageSets={languages} speed={75} deleteSpeed={500} />
+      <Typewriter languageSets={languages} speed={5} pauseDuration={3000} />
     </div>
   );
 };

@@ -8,10 +8,11 @@ import ucm from '../../assets/ucm.svg';
 import udl from '../../assets/udl.svg';
 import weavers from '../../assets/weavers.svg';
 import ao from '../../assets/ao.svg';
-import link from '../../assets/link.svg';
+
 import emailEnvelope from '../../assets/emailEnvelope.svg';
 import MultiLanguageDetail from '../../globalHooks/MultiLanguageDetail';
 import useParallaxScroll from '../../globalHooks/SlowScroll';
+import arrowRight from '../../assets/arrowRight.svg';
 
 const Main = () => {
   const projects = [
@@ -25,7 +26,8 @@ const Main = () => {
     {
       logo: dataOS,
       header: 'Data OS',
-      content: '',
+      content:
+        "Data OS is an operating system on top of arweave, aiming to build a versatile data & AI backbone. It offers clear insights into Arweave's data, and aids protocols in crafting user-focused, data-centric applications. Data os enables a new generation of tools, including large language models and infrastructure tooling.",
       link: 'https://www.dataos.so/',
     },
     {
@@ -53,7 +55,7 @@ const Main = () => {
       logo: ucm,
       header: 'Universal Content Marketplace',
       content:
-        'ucm is a protocol that enables the trustless exchange of any atomic asset on the permaweb, implemented as a warp smart contract. it goes beyond just nfts, allowing for the exchange of images, music, videos, papers, names, components, and even entire web apps.',
+        'UCM is a protocol that enables the trustless exchange of any atomic asset on the permaweb, implemented as a warp smart contract. It goes beyond just nfts, allowing for the exchange of images, music, videos, papers, names, components, and even entire web apps.',
       link: 'n/a',
     },
     {
@@ -73,10 +75,21 @@ const Main = () => {
     {
       logo: ao,
       header: 'ao',
-      content: '',
+      content: `An actor oriented network that powers unlimited concurrent smart contracts on Arweave. ao comprehensively solves the problem of horizontal scalability for smart contracts, using the smartweave paradigm and concurrent message relaying.`,
       link: 'n/a',
     },
   ];
+
+  projects.sort((a, b) => {
+    if (a.header.toLowerCase() < b.header.toLowerCase()) {
+      return -1;
+    }
+    if (a.header.toLowerCase() > b.header.toLowerCase()) {
+      return 1;
+    }
+    return 0;
+  });
+
   useParallaxScroll();
   return (
     <main>
@@ -90,7 +103,7 @@ const Main = () => {
               </p>
               <p>
                 <sup>2</sup> Forward Research is a leading research and
-                development incubator for the <b>Arweave</b> ecosystem. .
+                development incubator for the <b>Arweave</b> ecosystem.
               </p>
               <p>
                 <sup>3</sup> We support the best builders and founders focused
@@ -107,16 +120,14 @@ const Main = () => {
           <div className="landing-bottom">
             <div className="join-us-button">
               <button>
-                <p>Join Us</p>
+                <p>WeaveMail Us</p>
               </button>
               <div
                 className="tooltip"
                 style={{ alignItems: 'center', justifyContent: 'center' }}
               >
                 <img src={emailEnvelope} alt="email-icon" />
-                <span style={{ marginLeft: '5px' }}>
-                  Email us to start building
-                </span>
+                <span style={{ marginLeft: '5px' }}>Get Started Building</span>
               </div>
             </div>
           </div>
@@ -130,43 +141,27 @@ const Main = () => {
           </div>
           <div className="projects-grid">
             {projects.map((project, index) => (
-              <div key={index} className={`project ${project.header} `}>
-                <div className="project-top">
-                  <div className="logo-header underline">
-                    <div className="tooltip">
-                      <img src={link} alt="link-icon" />
-                      <a href={project.link}>
-                        <span>{project.link}</span>
-                      </a>
+              <a href={project.link}>
+                <div key={index} className={`project ${project.header} `}>
+                  <div className="project-top">
+                    <div className="logo-header underline">
+                      <img
+                        src={project.logo}
+                        alt={`${project.header}-outline-logo`}
+                      />
+
+                      <h3>{project.header}</h3>
                     </div>
-                    <img
-                      src={project.logo}
-                      alt={`${project.header}-outline-logo`}
-                    />
-                    <a href={project.link}>
-                      {project.header.length > 10 ? (
-                        <>
-                          <h4>{project.header}</h4>
-                        </>
-                      ) : (
-                        <>
-                          <h3>{project.header}</h3>
-                        </>
-                      )}
-                    </a>
+                    <p className="project-content">{project.content}</p>
                   </div>
-                  <p className="project-content">{project.content}</p>
-                </div>
-                <div className="project-bottom">
-                  <div className="project-links">
-                    <a href={project.link}>
-                      <p>Website</p>
-                    </a>
-                    <span>|</span>
-                    <p>Docs</p>
+                  <div className="project-bottom">
+                    <span className="learn-more">Learn More</span>
+                    <div className="project-links">
+                      <img src={arrowRight} alt="arrow-right" />
+                    </div>
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
