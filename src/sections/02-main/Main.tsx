@@ -106,7 +106,9 @@ const Main = () => {
           </div>
           <div className="landing-bottom">
             <div className="join-us-button">
-              <button>Join Us</button>
+              <button>
+                <p>Join Us</p>
+              </button>
               <div
                 className="tooltip"
                 style={{ alignItems: 'center', justifyContent: 'center' }}
