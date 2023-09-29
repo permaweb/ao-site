@@ -137,12 +137,12 @@ const Main = () => {
             <p className="spin" style={{ marginRight: '20px' }}>
               +
             </p>
-            <h2>Current Projects</h2>
+            <h2>Current Projects.</h2>
           </div>
           <div className="projects-grid">
             {projects.map((project, index) => (
-              <a href={project.link}>
-                <div key={index} className={`project ${project.header} `}>
+              <a key={index} href={project.link}>
+                <div className={`project ${project.header} `}>
                   <div className="project-top">
                     <div className="logo-header underline">
                       <img
