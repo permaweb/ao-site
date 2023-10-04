@@ -34,7 +34,7 @@ const Header = () => {
         <div className="left-container">
           <div className="left-wrapper">
             <h1>Forward Research.</h1>
-            <span>{year}</span>
+            <span>{year}.</span>
           </div>
         </div>
         <div className="right-container">

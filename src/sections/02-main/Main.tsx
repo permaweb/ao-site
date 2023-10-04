@@ -108,9 +108,12 @@ const Main = () => {
               <p>
                 <sup>3</sup> We support the best builders and founders focused
                 on creating an entirely new class of web services on Arweave
-                that provably respect users rights. We offer an environment
-                tailored to help you focus on what matters most: building, from{' '}
-                <sub>zero</sub> to <sup>market fit</sup>.
+                that provably respect users rights.
+              </p>
+              <p>
+                <sup>4</sup> We offer an environment tailored to help you focus
+                on what matters most: building, from <sub>zero</sub> to{' '}
+                <sup>market fit</sup>.
               </p>
             </div>
             <div className="landing-right">
@@ -120,7 +123,7 @@ const Main = () => {
           <div className="landing-bottom">
             <div className="join-us-button">
               <button>
-                <p>WeaveMail Us</p>
+                <p>Weavemail Us</p>
               </button>
               <div
                 className="tooltip"
