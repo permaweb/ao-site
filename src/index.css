@@ -57,15 +57,10 @@ h2 {
   font-family: 'General Sans';
   font-size: 12px;
   font-style: normal;
-<<<<<<< HEAD
+
   font-weight: 400;
   line-height: 150%;
   letter-spacing: 0.18px;
-=======
-  font-weight: 300;
-  line-height: normal;
-  letter-spacing: 0.9px;
-  margin: 0;
 }
 
 h4 {
@@ -75,7 +70,6 @@ h4 {
   font-weight: 300;
   line-height: normal;
   letter-spacing: -0.28px;
->>>>>>> aaa0db807401130f8bd48b1f3ac75e42c12e5ab0
   margin: 0;
 }
 
@@ -84,13 +78,8 @@ p {
   font-size: 18px;
   font-style: normal;
   font-weight: 200;
-<<<<<<< HEAD
-  line-height: 150%; /* 19.26px */
-  letter-spacing: 0.72px;
-=======
   line-height: 160.5%; /* 19.26px */
   letter-spacing: 0.6px;
->>>>>>> aaa0db807401130f8bd48b1f3ac75e42c12e5ab0
   margin: 0;
 }
 
@@ -99,73 +88,9 @@ span {
   font-family: 'Roboto Mono Variable';
   font-size: 16px;
   font-style: normal;
-<<<<<<< HEAD
-  font-weight: 300;
-  line-height: 150%;
-  letter-spacing: 0.96px;
-  margin: 0;
-=======
   font-weight: 400;
   letter-spacing: 0.6px;
   line-height: normal;
   cursor: pointer;
   transition: all 300ms;
-}
-
-button:hover {
-  border-color: #d0d0d0;
-  background: #fff;
-  transform: translateY(-2px);
-  box-shadow: 1px black;
-}
-button:focus,
-button:focus-visible {
-  outline: 1px black;
-}
-
-.underline a:hover {
-  color: #9c9c9c;
-}
-
-.tooltip {
-  position: absolute;
-  display: flex;
-  opacity: 0;
-  background-color: rgb(242, 242, 242);
-  padding: 5px 10px;
-  color: black;
-  text-align: center;
-  justify-content: center;
-  border-radius: 6px;
-  top: 100%;
-  z-index: 20;
-  transition: opacity 250ms ease-in-out;
-  gap: 5px;
-}
-
-.join-us-button:hover .tooltip {
-  opacity: 100%;
-}
-
-.underline:hover .tooltip {
-  opacity: 100%;
-}
-
-@media only screen and (max-width: 1000px) {
-  .landing-right {
-    display: none;
-  }
-  .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media only screen and (max-width: 570px) {
-  .projects-grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
-  .right-container .multi-language-container {
-    display: none;
-  }
->>>>>>> aaa0db807401130f8bd48b1f3ac75e42c12e5ab0
 }
