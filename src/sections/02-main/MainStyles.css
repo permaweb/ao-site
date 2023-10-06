@@ -9,7 +9,79 @@ main {
 
 .main-wrapper {
   display: flex;
+<<<<<<< HEAD
   padding: 60px 40px;
+=======
+  flex-direction: column;
+  max-width: 1080px;
+  align-items: center;
+  flex: 1 0 0;
+  align-self: stretch;
+  gap: 100px;
+}
+
+.landing {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.landing-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.landing-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  gap: 80px;
+}
+
+.landing-left,
+.landing-right {
+  will-change: transform;
+}
+
+.landing-left {
+  display: flex;
+  max-width: 425px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.landing-right {
+  display: flex;
+  position: relative;
+  width: 425px;
+  height: 374.5px;
+  overflow: visible;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.landing-right video {
+  position: absolute;
+  width: 1000px;
+  height: 1000px;
+  bottom: -45%;
+  left: -25%;
+}
+
+.current-projects-wrapper {
+  display: flex;
+>>>>>>> aaa0db807401130f8bd48b1f3ac75e42c12e5ab0
   flex-direction: column;
   align-items: flex-start;
   gap: 40px;
@@ -29,4 +101,94 @@ main {
   gap: 40px;
   flex-direction: column;
   align-items: flex-start;
+<<<<<<< HEAD
+=======
+  justify-content: space-between;
+  padding: 100px 20px 50px 20px;
+  border: 0.5px solid rgb(193, 193, 193);
+  transition: all 300ms ease-in-out;
+}
+
+.project:hover .project-content {
+  opacity: 100%;
+  transform: translateY(10px);
+}
+
+.learn-more {
+  display: none;
+}
+
+.project:hover .learn-more {
+  display: flex;
+}
+
+@keyframes loopTranslateAndOpacity {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 50%;
+  }
+  50% {
+    transform: translateX(2px);
+    opacity: 100%;
+  }
+}
+
+.project:hover .project-links {
+  animation: loopTranslateAndOpacity 1s infinite;
+}
+
+.project:hover {
+  background: #e7e7e7;
+  transform: translateY(-4px);
+}
+
+.project-content {
+  opacity: 0%;
+  transition: all 500ms;
+  transform: translateY(-10px);
+}
+
+.project-top {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.project-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.project-links {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.join-us-button {
+  position: relative;
+  margin-top: 70px;
+}
+
+.spin {
+  transition: all 500ms ease-in-out;
+}
+
+.spin:hover {
+  transform: rotate(90deg);
+>>>>>>> aaa0db807401130f8bd48b1f3ac75e42c12e5ab0
+}
+
+@media only screen and (max-width: 570px) {
+  .project-content {
+    opacity: 100%;
+  }
+
+  .learn-more {
+    display: flex;
+  }
 }
