@@ -18,6 +18,7 @@
     "arweave": "^1.14.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.16.0",
     "react-type-animation": "^3.1.0",
     "typer-js": "^5.5.3"
   },
