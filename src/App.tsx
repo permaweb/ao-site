@@ -1,15 +1,14 @@
-import './App.css';
-import Header from './sections/01-header/Header';
-import Main from './sections/02-main/Main';
-import Footer from './sections/03-footer/Footer';
+import { HashRouter } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import Home from './Home';
 
 function App() {
   return (
-    <div className="container">
-      <Header />
-      <Main />
-      <Footer />
-    </div>
+    <HashRouter>
+      <Routes>
+        <Route path={'/'} element={<Home />} />
+      </Routes>
+    </HashRouter>
   );
 }
 
