@@ -7,22 +7,14 @@ import morpheusAsciiArt from './components/MorpheusAsciiArt.tsx';
 
 const Main = () => {
   const [isOverlay, setIsOverlay] = useState(true);
-
   useEffect(() => {
     // console log morpheus
     morpheusAsciiArt();
-
-    // timer to clear out overlay after 4 seconds
-    const timer = setTimeout(() => {
-      setIsOverlay(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      <ProgressOverlay isOverlay={isOverlay} />
+      <ProgressOverlay setIsOverlay={setIsOverlay} isOverlay={isOverlay} />
       <main>
         <div className="main-wrapper">
           <div className="ao-wrapper">
