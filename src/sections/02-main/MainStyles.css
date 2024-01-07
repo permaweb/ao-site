@@ -26,7 +26,7 @@ main {
 
 .text-content-wrapper {
   display: flex;
-  width: 360px;
+  width: 380px;
   gap: 40px;
   flex-direction: column;
   align-items: flex-start;
