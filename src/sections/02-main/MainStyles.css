@@ -1,6 +1,5 @@
 main {
   display: flex;
-  padding: 0px 40px;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
@@ -9,8 +8,6 @@ main {
 
 .main-wrapper {
   display: flex;
-  padding: 60px 40px;
-
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;

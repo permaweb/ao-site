@@ -2,11 +2,10 @@ import './MainStyles.css';
 import aoFont from '../../assets/ao-font.svg';
 import aoPict from '../../assets/ao-pictograph.svg';
 import { useEffect, useState } from 'react';
-import ProgressOverlay from './components/ProgressOverlay';
 import morpheusAsciiArt from './components/MorpheusAsciiArt.tsx';
+import Nav from './components/Nav/Nav.tsx';
 
 const Main = () => {
-  const [isOverlay, setIsOverlay] = useState(true);
   useEffect(() => {
     // console log morpheus
     morpheusAsciiArt();
@@ -14,7 +13,7 @@ const Main = () => {
 
   return (
     <>
-      <ProgressOverlay setIsOverlay={setIsOverlay} isOverlay={isOverlay} />
+      <Nav />
       <main>
         <div className="main-wrapper">
           <div className="ao-wrapper">
