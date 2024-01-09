@@ -1,7 +1,7 @@
 import './MainStyles.css';
-import { useEffect, useState } from 'react';
-import morpheusAsciiArt from './components/MorpheusAsciiArt.tsx';
-import Nav from './components/Nav/Nav.tsx';
+import { useEffect } from 'react';
+import morpheusAsciiArt from '../../components/MorpheusAsciiArt.tsx';
+import Nav from '../../components/Nav/Nav.tsx';
 
 const Main = () => {
   useEffect(() => {
