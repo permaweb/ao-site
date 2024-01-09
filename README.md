@@ -1,47 +1,20 @@
 # ao - Front-End of Marketing Page
 
-.,```````````````````````````` "nZEm%gx;```````````````````````````````````````````````````````````````````````````-_;~//";:-``````````````````````````````````````````````````````````````````````-,:__:,' `
-, _nKM@Zg%QM&f "rJTU%NDWQMMMMQKDN%8LJr;. _|zLpZX@DRWWWKD@N%Sbas/`
+<pre>
 
--                                                               _LKMM5.   ;ZMQj                                                             .\oS@MMMMMMMMMMMMMMMMMMMMMMMM@Sy/.                                             'iuP@MMMMMMMMMMMMMMMMMMMMMMMWm6z~
--                                                             ;LWMMM@      vMMP                                                           ;L@MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMN},                                        ;JZWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNTr.
--                                                           ;LWMMMMMf      pMMQ~                                                        \$QMMMMMMMMMMMMMQDNmEEX@RQMMMMMMMMMMMMMD2:                                   -[ZQMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMDT!
--                                                         "TWMMMMMMZ.     vQMMMu                                                      "8QMMMMMMMMMQ%L}|;`       .:!l2ZWMMMMMMMMMMD].                               _5DMMMMMMMMMMMMM@ZTuevi|||it[oL$mQMMMMMMMMMMMMM%?.
--                                                       ~dQMMMMMMMQ|     -mMQQM%.                                                   .xWMMMMMMMMWCs,                   -lSQMMMMMMMMMC-                            -uKMMMMMMMMMMM@q}~                 :iu%QMMMMMMMMMMMEi
--                                                    .smMMENMMZUMMu      LMMJqMMt                                                  _%MMMMMMMMN[.                         :LQMMMMMMMMN;                          |WMMMMMMMMMMXa_                         .|bWMMMMMMMMMMT,
--                                                   lmMQPI%MQn|WMX-     \QM%.lMMk                                                 :%MMMMMMMMT-                             tRMMMMMMMM%`                       .uQMMMMMMMMM%?.                              _5&MMMMMMMMMN!
--                                                 !8MQS|vDMD?.8MMv     .ZMQi ,NM@:                                                kMMMMMMMMu                                |WMMMMMMMMo                      `CMMMMMMMMMD].                                  ;qMMMMMMMMMK?
--                                               \SQM8!`nQM%" cMMC      eMMT   LMMj                                               tQMMMMMMMN                                  oMMMMMMMMN:                    `UMMMMMMMMMZ;                                      jKMMMMMMMMQl
--                                             |PMMEl ;ZMQL` :NMR"     _@M@;   iQMg                                               UMMMMMMMM]                                  :MMMMMMMMMl                    TMMMMMMMMMp`                                        \@MMMMMMMMW|
--                                           iZMM%?. t@MRl   2MMu      LMMJ    .mMW;                                             _RMMMMMMM@:                                   @MMMMMMMM2                   }MMMMMMMMMU.                                          \RMMMMMMMMN:
--                                         tZMM%r.  iQME"   /WMm-     |QME.     uMMI                                             iMMMMMMMM%                                    %MMMMMMMMh                  ;@MMMMMMMMN_                                            [MMMMMMMMML
--                                      ,o@MQT"   :CMWI    .%MQ|      XMME.     "WM%.                                            .::::::::`                                    SMMMMMMMMF                  TMMMMMMMMQi                                              6MMMMMMMMQ\
--                                    :o@MWL;    !OMQ\     IMML      !MMMMt      UMM|                                                                                          SMMMMMMMMF                 _DMMMMMMMMS                                               !QMMMMMMMMT
--                                  _5DMKL;     }WMN\     ;@M@_     .PMQMML      [MML                                                                  `_"/!\|iiiii||\!~";:..  SMMMMMMMMF                 cMMMMMMMMMf                                               .%MMMMMMMMX.
--                                .nKMRn_     ,dMMU_      kMM}      [MMo@MN-     _DMN`                                                       ."if2YPm@RQMMMMMMMMMMMMMMMMMMQQRD@QMMMMMMMMF                 uMMMMMMMMM|                                                nMMMMMMMMQ~
--                              .}NMR5:      /XMQo.     .oQMZ.     :NMU.TMMc      6MMv                                                   ,t5%RMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMF                 6MMMMMMMMR_                                                aMMMMMMMMM|
--                            .fNMQu:       [KM@i      _UMMQ|      LMM~ rMMq      vMM6                                                ;JZQMMMMMMMMMMMMMMMMMMMQQWWWWWQQQMMMMMMMMMMMMMMMMMF                 FMMMMMMMM@-                                                IMMMMMMMMMi
--                          `INMQY~       :6MMP_      \NMMML      !QME  .XMR_     `NMD_                                             |8QMMMMMMMMMMMD%Cnaji\~;_,`.....`-:_;"~!\|tXMMMMMMMMF                 kMMMMMMMMK;                                                yMMMMMMMMM|
-  , "bQM@a, ~6QMRl TMMMMm' `EMW!   oMMy      uMMI                                           |XMMMMMMMMMRCz".                             SMMMMMMMMF                 yMMMMMMMMMi                                                TMMMMMMMMW"        
-,                      ~YQMNx` ~YQMME" `LMMMMQ?      oMMn    /QM%.     !QMZ                                          JQMMMMMMMMDj` SMMMMMMMMF tMMMMMMMMMo .NMMMMMMMM%  
-  , /CQMNf`       !gQMMQT` "%M@SMMC "DMN: SMQ\ ZMQ! }QMMMMMMMM8* PMMMMMMMMF .OMMMMMMMME. rMMMMMMMMMu  
-  , !gQMN}. \_SQMMM&j sDM@|NM&" hMM[ fMM5 IMMu "RMMMMMMMMY. EMMMMMMMMF uMMMMMMMMM[ .PMMMMMMMM&;  
-  , \8QMO[. ;LWMMMMm~ .LQMZ;nMMu rQMS. ;RMO. ;KMm 2MMMMMMMM@* WMMMMMMMMF :NMMMMMMMMN* eMMMMMMMMMn  
-  , ;LQMmj. ;LWMWQMM6- "%MQn..WMm' `EMW!        CMMt      $MM.                                      SMMMMMMMM$                                     ~MMMMMMMMMF                   lQMMMMMMMMP` |WMMMMMMMMm,  
-  , ;LWMEv. ;TWM@bmMK[ rDMDv eMQ? oMMn lMMT [MMt %MMMMMMMMw 6MMMMMMMMMF nMMMMMMMMMU- |DMMMMMMMMR!  
-  , .tZMM%r .r%MM%?}WMP* _UMMY, ~KML \QME` .XMR_ `OMY                                      CMMMMMMMMm.                                   nMMMMMMMMMMF                     uMMMMMMMMM@|                                     .nQMMMMMMMM@/            
-,       .r%MMZt.      .vEMMZi:kMMP.      \NMW}   .$M@_     .PMQt           nMMe      LMR_                                     fMMMMMMMMM}                                 .LMMMMMMMMMMMF                      IQMMMMMMMMQL:                                  |mMMMMMMMMMO"             
-,     .?%MMZi       .lmMMP| ~mMQu.     .JQMO!    sQM}      [MM6            !QMP      |MMx                                     -XMMMMMMMMWr                               /%MMMQQMMMMMMMF                       t@MMMMMMMMMDo:                              |UQMMMMMMMMM8:              
-,   .cmMMPi       .jXMQP|  jRM@i      :pMMF:    -XMK.     :NMD;            .ZMQ~     .%MP                                      |WMMMMMMMMQn.                           "TQMMMMeZMMMMMMMF                        _XMMMMMMMMMMKbi.                        _x%MMMMMMMMMMQ[                
-, .[XMQU\        [XMQU\  `LQMZ; !OMQI. uMMu LMMa oMMu uMQ~ iDMMMMMMMMM%[, _[PQMMMMQo ZMMMMMMMF .yDMMMMMMMMMMM@Y}/ :i5%QMMMMMMMMMMMZ\  
-  ,\OMQg! |SMQp! "EMQ5. fWMN\ ~KMX- \QM%`             "WM%.     ~MMu                                       "ZMMMMMMMMMMWSy|:             '/jL%QMMMMMMZ/  ZMMMMMMMF                           :o@MMMMMMMMMMMMM@Zbufli|\|ir[aL8mQMMMMMMMMMMMMQPi                   
-|DM@\        iZMMh~   `mMW? ,YMM8_ CMQs .ZMQt SMQ\ WM%. .lmMMMMMMMMMMMMQ@%UhTLLLTdg%NQMMMMMMMMQPi ZMMMMMMMF .jPQMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM@L~  
-  fMMT 'J@MQb" \MM% ;DMDr .NM@: oMMn lMM6 NM&; ;oEQMMMMMMMMMMMMMMMMMMMMMMMMMMMMK8j' ZMMMMMMMF .iLmQMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMRSe;  
-  "EMQu\_ _o@MQT" .YMQT" :fDM%; oMMP! \_oQMm, .ZMQn; \_yMML ;[TNQMMMMMMMMMMMMMMMMMMMM@P5i` ZMMMMMMMF \_snP@QMMMMMMMMMMMMMMMMMMMMWXYJ\.  
-  ,:LWMQDDQMKL; .u@MMD@QMQo. jNMMDDQMWT_ ,nRMQD@QMNx. :!lyL6S%EmXXXE%Sku[i*. *""""""": _\[uTqP%mXOXmEZUknJr"`  
-  , ,ryLLyt, .|ILLos_ .!yLLyr, `iaLLor.  
-  ,  
-  ,
+`                 -ovLL                 ;*y9OKq2i~`           '\jeqbp4z1_       
+                _oMe ^M`              ~mW0s1|\1f0W0r        ~AWWRyJ*LuqMWR*     
+              ;YOym.'bLr             \WW=        iWWr      VWWf'        >NW0:   
+            \Yro^Lr h^`q             2gz          MWO     oWW|           '0W&'  
+         `+j;^y';w !B1 4;               -!r*L}}L?1MWm    `WWX             rWWJ  
+       .v{,.Y1 \&-`b:b ^y            ;PMNwxv1rrr1*MWm    ,WWV             !WWf  
+`    :iv`:Vm:`fm1 x! 2: K           |WWL          MWm     0WN.            yWW!  
+`  ~jr ;Y8i ;V~9 "e  ~x L=          yWW'         <WWm     ;MWm,          xWWT   
+`^Y! ^Y+V~ Jv h: q'   m '9          "BWm~      ;y&mWm      -pWMy\,   `~{&W&\    
+*o`1j; X;"V; ;X`u1    Tr`R           `vKMM@RR0&X1 yWK        -TOMWWMWWM8o~      
+`;\,   `^!    _\_      ~\,               `,:,`                   `,:-`          
+
+</pre>
 
 ---
 
