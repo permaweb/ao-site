@@ -15,16 +15,10 @@ main {
   gap: 40px;
 }
 
-.ao-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
 .text-content-wrapper {
   display: flex;
-  width: 380px;
-  gap: 40px;
+  max-width: 665px;
+  gap: 52px;
   flex-direction: column;
   align-items: flex-start;
 }

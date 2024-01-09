@@ -38,6 +38,13 @@ body {
   display: flex;
 }
 
+button {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
 h1 {
   font-family: 'DM Sans';
   font-size: 32px;
