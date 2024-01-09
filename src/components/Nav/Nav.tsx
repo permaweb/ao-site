@@ -1,6 +1,6 @@
 import './Nav.css';
-import aoFont from '../../../../assets/ao-font.svg';
-import aoPict from '../../../../assets/ao-pictograph.svg';
+import aoFont from '../../assets/ao-font.svg';
+import aoPict from '../../assets/ao-pictograph.svg';
 
 const Nav = () => {
   return (
