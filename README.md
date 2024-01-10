@@ -20,9 +20,14 @@
 
 ## Introduction
 
-### What is ao?
+### What is ao and what is this permaweb app for?
 
 `ao` is an `actor oriented` machine that emerges from a network of nodes running on the Arweave network. It represents a unified computing environment, or a Single System Image, facilitated by a heterogenous set of nodes in a distributed network.
+
+This app is for inspiring users to follow the white rabbit.
+"You take the red pill - you stay in Wonderland and I show you how deep the rabbit hole goes."
+
+Specs, and link to try it to get some new weavers to join the fold.
 
 ---
 

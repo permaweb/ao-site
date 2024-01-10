@@ -13,8 +13,8 @@
   font-weight: 300;
 
   color-scheme: light dark;
-  color: #000;
-  background-color: #f7f7f7;
+  color: #101010;
+  background-color: var(--background-color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,6 +24,10 @@
 
   --container-padding: 100px;
   --header-height: 116px;
+
+  --background-color: #f7f7f7;
+  --faded-accent-color: #c59b84;
+  --accent-color: #e77b40;
 }
 
 a {
@@ -45,9 +49,24 @@ button {
   cursor: pointer;
 }
 
+th {
+  text-align: left;
+}
+
+p a,
+li a {
+  color: var(--faded-accent-color);
+  font-weight: 600;
+}
+
+p a:hover,
+li a:hover {
+  opacity: 50%;
+}
+
 h1 {
   font-family: 'DM Sans';
-  font-size: 32px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -55,43 +74,77 @@ h1 {
 }
 
 h2 {
-  font-family: 'DM Sans';
-  font-size: 12px;
+  font-family: 'Roboto Mono Variable';
+  font-size: 18px;
   font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.18px;
+}
 
-  font-weight: 400;
+h3 {
+  font-family: 'Roboto Mono Variable';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.18px;
 }
 
 h4 {
   font-family: 'Roboto Mono Variable';
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
-  letter-spacing: -0.28px;
-  margin: 0;
-}
-
-p {
-  font-family: 'DM Sans';
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 200;
-  line-height: 160.5%; /* 19.26px */
-  letter-spacing: 0.6px;
-  margin: 0;
-}
-
-span {
-  color: #f00;
-  font-family: 'Roboto Mono Variable';
-  font-size: 16px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  letter-spacing: 0.6px;
-  line-height: normal;
-  cursor: pointer;
-  transition: all 300ms;
+  line-height: 150%;
+  letter-spacing: 0.18px;
+  margin-bottom: -12px;
+}
+
+li,
+p,
+tr {
+  font-family: 'DM Sans';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 160.5%; /* 19.26px */
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+td,
+th {
+  border: 1px solid white;
+}
+
+th {
+  background: white;
+}
+
+ul li {
+  margin-bottom: 32px;
+}
+
+blockquote {
+  background: white;
+  border-left: 10px solid #d8d8d8;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: '\201C''\201D''\2018''\2019';
+}
+
+blockquote p {
+  display: inline;
+}
+
+code {
+  background: white;
+}
+
+pre {
+  width: 100%;
+  background: rgb(232, 232, 232);
+  padding: 10px;
+  overflow: hidden;
 }
