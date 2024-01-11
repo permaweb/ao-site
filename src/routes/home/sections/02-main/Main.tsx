@@ -12,7 +12,7 @@ const Main = () => {
     <>
       <main>
         <div className="home-main-wrapper">
-          <video width={500} autoPlay loop muted>
+          <video height={1000} autoPlay loop muted>
             <source src={aoMorphingShape} type="video/mp4" />
           </video>
         </div>
