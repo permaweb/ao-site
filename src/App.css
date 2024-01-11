@@ -1,7 +1,6 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
 }
 
@@ -11,7 +10,8 @@
 }
 
 .glitch:hover {
-  opacity: 50%;
+  opacity: 100%;
+  color: var(--accent-color);
 }
 
 .glitch:hover::after {
