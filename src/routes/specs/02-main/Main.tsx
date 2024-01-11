@@ -6,7 +6,7 @@ const Main = () => {
   return (
     <>
       <main>
-        <div className="main-wrapper">
+        <div className="specs-main-wrapper">
           <div className="text-content-wrapper">
             <MarkdownRenderer markdown={specsMarkdown} />
           </div>
