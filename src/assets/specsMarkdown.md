@@ -865,7 +865,7 @@ Format: JSON
 }
 ```
 
-Example:
+#### Example:
 
 ```json
 {
@@ -1106,11 +1106,11 @@ When posting to the root endpoint, the request body should have a valid DataItem
 | tags                | An avro array of tag objects                   | Binary   | Variable                  | :x:                |
 | data                | The data contents                              | Binary   | Variable                  | :x:                |
 
-##### Responses\*\*
+##### **Responses**
 
 ## 201 - Created
 
-Schema
+#### Schema
 
 ```json
 {
@@ -1121,7 +1121,7 @@ Schema
 }
 ```
 
-Example
+#### Example
 
 ```JSON
 {
@@ -1159,7 +1159,7 @@ When posting to the this endpoint, the request body should have a valid DataItem
 
 ## 201 - Created
 
-Schema
+#### Schema
 
 ```json
 {
@@ -1170,7 +1170,7 @@ Schema
 }
 ```
 
-Example
+#### Example
 
 ```JSON
 {
@@ -1208,7 +1208,7 @@ When calling this endpoint, the request body should have a valid DataItem that c
 
 ## 200 - Ok
 
-Schema
+#### Schema
 
 ```json
 {
@@ -1219,7 +1219,7 @@ Schema
 }
 ```
 
-Example
+#### Example
 
 ```JSON
 {

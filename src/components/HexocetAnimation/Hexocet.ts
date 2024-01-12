@@ -3,12 +3,12 @@ import Victor from 'victor';
 class Hexocet {
   seeds: any[] = [];
   stepCount: number = 0;
-  birthPeriod: number = 1;
-  hexSize: number = 80;
+  birthPeriod: number = 3;
+  hexSize: number = 25;
   targetBounceChance: number = 0.05;
   springStiffness: number = 0.01;
   viscosity: number = 0.5;
-  particleOpacity: number = 0.8;
+  particleOpacity: number = 0.1;
   fade: boolean = true;
   fadeLayerOpacity: number = 0.1;
   canvas: HTMLCanvasElement | null = null;
@@ -176,8 +176,8 @@ class Hexocet {
         // HSLA
         var hsla = {
           h: seed.hue,
-          s: '0%',
-          l: '100%',
+          s: '100%',
+          l: '0%',
           a: this.particleOpacity,
         };
 
