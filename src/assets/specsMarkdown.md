@@ -114,7 +114,7 @@ The `tags` section is the designated area where the specifications for each Data
 
 > NOTE: All tags names follow the ANS-116 - [Arweave Tag Naming Standard](https://specs.arweave.dev/?tx=XV8-NMh5uhLQflkrUs_7mcgj33pOWqQno1wyVi__j6w)
 
-**`ao` Types**
+### `ao` Types
 
 `ao` has several message types that instruct the network how to operate, these message type structures are provided below:
 
@@ -1056,7 +1056,7 @@ The Messenger Unit holds the responsibility for accepting incoming messages from
 
 Endpoints
 
-####s GET /
+#### GET /
 
 **Description**
 

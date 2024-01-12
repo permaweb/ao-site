@@ -2,6 +2,7 @@ import './Nav.css';
 import aoFont from '../../assets/ao-font.svg';
 import aoPict from '../../assets/ao-pictograph.svg';
 import { Link } from 'react-router-dom';
+import HyperTextLoad from '../hyperTextLoad';
 
 const Nav = () => {
   return (
@@ -14,13 +15,10 @@ const Nav = () => {
           </div>
           <div className="nav-buttons">
             <Link to={'/'}>
-              <button className="glitch" data-text="Docs">
+              <button className="glitch" data-text="Home">
                 Home
               </button>
             </Link>
-            <button className="glitch" data-text="Docs">
-              Docs
-            </button>
             <Link to={'/specs'}>
               <button className="glitch" data-text="Specs">
                 Specs
@@ -30,7 +28,7 @@ const Nav = () => {
         </div>
         <div className="nav-buttons">
           <button className="glitch" data-text="Docs">
-            Try It Now
+            <HyperTextLoad word={'Try It Now'} textType="span" speed={1} />
           </button>
         </div>
       </nav>
