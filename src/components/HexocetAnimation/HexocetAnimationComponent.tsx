@@ -5,8 +5,15 @@ const HexocetAnimationComponent = () => {
   useEffect(() => {
     const hexocet = new Hexocet();
     hexocet.setupCanvas();
+
+    const animate = () => {
+      hexocet.update();
+      requestAnimationFrame(animate);
+    };
+
+    animate();
   }, []);
-  return;
+  return <div />;
 };
 
 export default HexocetAnimationComponent;
