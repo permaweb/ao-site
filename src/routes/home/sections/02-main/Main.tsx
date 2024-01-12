@@ -1,11 +1,12 @@
 import './MainStyles.css';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt.tsx';
-import aoMorphingShape from '../../../../assets/ao.mp4';
+
 import HyperTextLoad from '../../../../components/hyperTextLoad.tsx';
 import HexocetAnimationComponent from '../../../../components/HexocetAnimation/HexocetAnimationComponent.tsx';
 
 const Main = () => {
+  const containerRef = useRef(null);
   useEffect(() => {
     morpheusAsciiArt();
   }, []);
@@ -13,11 +14,11 @@ const Main = () => {
   return (
     <>
       <main>
-        <div className="home-main-wrapper">
+        <div className="home-main-wrapper" ref={containerRef}>
           {/* <video height={300} autoPlay loop muted>
             <source src={aoMorphingShape} type="video/mp4" />
           </video> */}
-          <HexocetAnimationComponent />
+          <HexocetAnimationComponent containerRef={containerRef} />
           <div className="text-hero-wrapper">
             <div className="main-heading">
               <HyperTextLoad

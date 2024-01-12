@@ -17,14 +17,22 @@ class Hexocet {
   xC: number = 0;
   yC: number = 0;
 
-  setupCanvas(): void {
-    let canvas = document.createElement('canvas');
-    canvas.id = 'hexocet';
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    document.body.appendChild(canvas);
+  setupCanvas(container: HTMLElement): void {
+    // Check if a canvas with the same ID already exists
+    let existingCanvas = container.querySelector('#hexocet');
+    if (existingCanvas) {
+      // If canvas exists, use the existing one
+      this.canvas = existingCanvas as HTMLCanvasElement;
+    } else {
+      // Create a new canvas if it doesn't exist
+      let canvas = document.createElement('canvas');
+      canvas.id = 'hexocet';
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
+      container.appendChild(canvas);
+      this.canvas = canvas;
+    }
 
-    this.canvas = document.getElementById('hexocet') as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d');
 
     this.canvasBase = Math.min(this.canvas.width, this.canvas.height);
@@ -34,7 +42,7 @@ class Hexocet {
 
   hexCoordsToXY(Hx: number, Hy: number): { x: number; y: number } {
     // Hx and Hy are integers corresponding to vertices coordinates in Hex space
-    let xPrime, yPrime, XYprime, X, Y, XY;
+    let xPrime, yPrime, XYprime, XY;
     let isSumEven = (Hx + Hy) % 2 == 0 ? 1 : 0;
     xPrime = 1 * Hx;
     yPrime = (1 / Math.sqrt(3)) * (3 * Hy + 1 + isSumEven);
@@ -136,7 +144,7 @@ class Hexocet {
       var maxSpeed = fixedSpeed,
         minSpeed = fixedSpeed;
       var speed = Math.sqrt(
-        Math.pow(seed.xSpeed, 2) + Math.pow(seed.ySpeed, 2)
+        Math.pow(this.xSpeed, 2) + Math.pow(this.ySpeed, 2)
       );
       if (speed > maxSpeed) {
         seed.xSpeed *= maxSpeed / speed;
@@ -159,7 +167,7 @@ class Hexocet {
       if (this.fade) {
         var opa = this.fadeLayerOpacity;
         this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = 'rgba(0, 0, 0, ' + opa + ')';
+        this.ctx.fillStyle = 'rgba(242, 242, 242, ' + opa + ')';
         this.ctx.fill();
       }
       for (var key in this.seeds) {
@@ -193,8 +201,6 @@ class Hexocet {
         this.ctx.moveTo(seed.xLast, seed.yLast);
         this.ctx.lineTo(seed.x, seed.y);
         this.ctx.stroke();
-
-        //  Point target in color
 
         hsla = {
           h: seed.hue,
