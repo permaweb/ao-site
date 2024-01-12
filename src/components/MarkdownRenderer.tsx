@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkCodeBlocks from 'remark-code-blocks';
 import Prism from 'prismjs';
+import rehypeRaw from 'rehype-raw';
 import 'prismjs/components/prism-json';
 import './code-blocks.css';
 
@@ -32,6 +33,7 @@ const MarkdownRenderer: React.FC<{ markdown: string }> = ({ markdown }) => {
     <ReactMarkdown
       children={transformedMarkdown}
       remarkPlugins={[remarkGfm, [remarkCodeBlocks, codeBlockOptions]]}
+      rehypePlugins={[rehypeRaw]}
     />
   );
 };

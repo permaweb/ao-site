@@ -54,3 +54,8 @@ main {
   border-radius: 10px;
   padding: 10px;
 }
+
+.diagram {
+  display: flex;
+  width: 100%;
+}
