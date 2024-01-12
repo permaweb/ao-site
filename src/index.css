@@ -83,6 +83,15 @@ h2 {
   letter-spacing: 0.18px;
 }
 
+pre {
+  margin: 0.5em 0;
+  overflow: hidden;
+  width: 100%;
+  background: #fffcfa;
+  padding: 50px;
+  border-radius: 10px;
+}
+
 h3 {
   font-family: 'Roboto Mono Variable';
   font-size: 14px;
@@ -90,6 +99,7 @@ h3 {
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.18px;
+  margin-bottom: -20px;
 }
 
 h4 {
@@ -99,7 +109,18 @@ h4 {
   font-weight: 400;
   line-height: 150%;
   letter-spacing: 0.18px;
-  margin-bottom: -12px;
+  margin-bottom: -20px;
+}
+
+h6 {
+  font-family: 'Roboto Mono Variable';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: 0.18px;
+  margin-top: -20px;
+  text-transform: uppercase;
 }
 
 li,

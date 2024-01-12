@@ -8,7 +8,7 @@ main {
 
 .home-main-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   flex: 1 0 0;
   align-self: stretch;
@@ -16,10 +16,34 @@ main {
   justify-content: center;
 }
 
-.text-content-wrapper {
+.text-hero-wrapper {
   display: flex;
-  max-width: 665px;
-  gap: 52px;
   flex-direction: column;
+  gap: 12px;
   align-items: flex-start;
+  width: 109px;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.button-wrapper button {
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: -0.1px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.primary {
+}
+
+.secondary {
+}
+
+.main-heading {
+  display: flex;
+  flex-direction: column;
 }
