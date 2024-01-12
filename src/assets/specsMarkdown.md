@@ -214,27 +214,29 @@ The "Scheduler-Transfer" Data-Item Type in the "ao" Data-Protocol signals a chan
 | Epoch          | Marks when a data-item was created, assigning it to a specific system phase or period for organized processing and analysis within a batch of related messages.            | 1-1      | {Number}                 |
 | Nonce          | Indicates the last used unique number in a message series, ensuring message order, integrity, and security.                                                                | 1-1      | {Number}                 |
 
-## `ao` Node Unit APIs
+---
+
+# `ao` Node Unit APIs
 
 Units represent the distinct operational domains within the computer, capable of scaling from 0 to multiple instances, each assigned with unique duties within the network.
 
-### Scheduler (SU)
+## Scheduler (SU)
 
 The `ao` Scheduler Unit is tasked with the sequential arrangement and dissemination of `ao` messages to the Arweave network. Additionally, Compute Units are dependent on the Schedulers for obtaining the sequence of `ao` messages required for the assessment of updates.
 
-Endpoints
+### Endpoints
 
-### GET /
+### **GET /**
 
 **Description**
 
 Scheduler Unit Service Information, the `Unit`, `Address`, `Timestamp`, `Processes`
 
-**Responses**
+##### **Responses**
 
-- 200 - OK
+## 200 - OK
 
-Schema
+##### Schema
 
 ```json
 {
@@ -266,7 +268,7 @@ Schema
 }
 ```
 
-Example
+##### Example
 
 ```JSON
 {
@@ -282,7 +284,9 @@ Example
 }
 ```
 
-#### POST /
+---
+
+### **POST /**
 
 **Description**
 
@@ -292,11 +296,11 @@ Submits an `ao` DataItem to the Scheduler, the item can be a type of `Process` o
 
 ANS-104 DataItem Binary Format [See Spec](https://specs.arweave.dev/?tx=xwOgX-MmqN5_-Ny_zNu2A8o-PnTGsoRb_3FrtiMAkuw)
 
-**Responses**
+##### **Responses**
 
-- 201 - Created
+## 201 - Created
 
-Schema
+##### Schema
 
 ```json
 {
@@ -314,7 +318,7 @@ Schema
 }
 ```
 
-Example
+##### Example
 
 ```JSON
 {
@@ -323,9 +327,9 @@ Example
 }
 ```
 
-- 400 - Bad Request
+## 400 - Bad Request
 
-Schema
+##### Schema
 
 ```json
 {
@@ -338,7 +342,7 @@ Schema
 }
 ```
 
-Example
+##### Example
 
 ```JSON
 {
@@ -346,7 +350,7 @@ Example
 }
 ```
 
-#### GET /{process-id}
+### **GET /{process-id}**
 
 **Description**
 
@@ -365,9 +369,9 @@ This endpoint is usually requested by the `Compute Unit (cu)`, and the response 
 | from  | the Timestamp to filter all messages after or equal to this value  | {UnixTimestamp} | :heavy_check_mark: |
 | to    | the Timestamp to filter all messages before or equal to this value | {UnixTimestamp} | :heavy_check_mark: |
 
-**Responses**
+##### **Responses**
 
-- 200 - OK
+## 200 - OK
 
 When receiving a 200 response, the body of the response contains a JSON document which contains 0 to many DataItems.
 
@@ -500,7 +504,9 @@ Example
 }
 ```
 
-#### GET /{message-id}?process-id={process-id}
+---
+
+### **GET /{message-id}?process-id={process-id}**
 
 **Description**
 
@@ -518,13 +524,13 @@ This endpoint is usually requested by the `Compute Unit (cu)`, and the response 
 | ---------- | ----------------------------------------------- | ------ | --------- |
 | process-id | the {TXID} of the process for this messag value | {TXID} | :x:       |
 
-**Responses**
+##### **Responses**
 
-- 200 - OK
+## 200 - OK
 
 When receiving a 200 response, the body of the response contains a JSON document which contains 1 data-item.
 
-Schema
+##### Schema
 
 ```json
 {
@@ -583,7 +589,7 @@ Schema
 }
 ```
 
-Example
+##### Example
 
 ```json
 {
@@ -635,15 +641,15 @@ Example
 }
 ```
 
-#### GET /timestamp
+### **GET /timestamp**
 
 **Description**
 
 Returns the current timestamp JSON document from the `su`
 
-**Responses**
+##### **Responses**
 
-- 200 - OK
+## 200 - OK
 
 Format: JSON
 
@@ -652,7 +658,7 @@ Format: JSON
 | block_height | The current height of the Arweave Network   |
 | timestamp    | The current timestamp of the Scheduler Unit |
 
-Schema
+##### Schema
 
 ```json
 {
@@ -680,13 +686,13 @@ This endpoint is usually requested by the `Compute Unit (cu)` and the `Message U
 | ---------- | ------------------ | ------ | --------- |
 | process-id | the process {TXID} | {TXID} | :x:       |
 
-**Responses**
+##### **Responses**
 
-- 200 - OK
+## 200 - OK
 
 When receiving a 200 response, the body of the response contains a JSON document which contains 1 data-item.
 
-Schema
+##### Schema
 
 ```json
 {
@@ -716,7 +722,7 @@ Schema
 }
 ```
 
-Example
+##### Example
 
 ```json
 {
@@ -766,22 +772,22 @@ The Compute Unit is tasked with the extraction, assessment, and regulation of th
 
 Endpoints
 
-#### GET /
+### **GET /**
 
 **Description**
 
 The health check endpoint for the Compute Unit service provides the `Wallet` address under which the Compute Unit is managed.
 
-**Responses**
+##### **Responses**
 
-- 200 - OK
+## 200 - OK
 
 | Property  | Description       |
 | --------- | ----------------- |
 | address   | wallet address    |
 | timestamp | current timestamp |
 
-Schema
+##### Schema
 
 ```json
 {
@@ -793,7 +799,7 @@ Schema
 }
 ```
 
-#### GET /result/{message-identifier}?process-id={process-identifier}
+### **GET /result/{message-identifier}?process-id={process-identifier}**
 
 **Description**
 
@@ -817,9 +823,9 @@ The result may encompass `Output`, `Messages`, and/or `Spawns`. `Output` serves 
 
 None
 
-**Responses**
+##### **Responses**
 
-- 200 - OK
+## 200 - OK
 
 Format: JSON
 
@@ -830,7 +836,7 @@ Format: JSON
 | Output   | A string or object as a result of evaluating the message                                  |
 | Error?   | A string or object that indicates an error occurred as a result of evaluating the message |
 
-Schema
+##### Schema
 
 ```json
 {
@@ -893,7 +899,7 @@ Example:
 }
 ```
 
-#### GET /cron/{process-identifier}?from={timestamp}&to={timestamp}
+## **GET /cron/{process-identifier}?from={timestamp}&to={timestamp}**
 
 **Description**
 
@@ -920,13 +926,13 @@ The `/cron` endpoint retrieves all "Cron Outboxes", within a timestamp range. Th
 
 None
 
-**Responses**
+##### **Responses**
 
-- 200 - OK - a [Connection](https://graphql.org/learn/pagination/#complete-connection-model) page of any outcomes received as a result of evaluating Cron Messages within the range of `from` and `to`
+## 200 - OK - a [Connection](https://graphql.org/learn/pagination/#complete-connection-model) page of any outcomes received as a result of evaluating Cron Messages within the range of `from` and `to`
 
 Format: JSON
 
-Schema
+##### Schema
 
 ```json
 {
@@ -972,7 +978,7 @@ Schema
 }
 ```
 
-Example
+##### Example
 
 ```json
 {
@@ -1016,7 +1022,7 @@ Example
 }
 ```
 
-#### GET /state/{process-identifier}
+## GET /state/{process-identifier}
 
 **Description**
 
@@ -1044,9 +1050,9 @@ If `to` is not provided, the Compute Unit will evaluate the process up to the mo
 
 None
 
-**Responses**
+##### **Responses**
 
-- 200 - OK
+## 200 - OK
 
 Format: binary (`application/octet-stream`)
 
@@ -1056,7 +1062,7 @@ The Messenger Unit holds the responsibility for accepting incoming messages from
 
 Endpoints
 
-#### GET /
+## GET /
 
 **Description**
 
@@ -1072,15 +1078,15 @@ The root endpoint offers the ability to debug the messages being managed via thi
 | page      | the page number                                | {Number} | :heavy_check_mark: |
 | page-size | the amount of items per page                   | {Number} | :heavy_check_mark: |
 
-**Responses**
+##### **Responses**
 
-- 200 - OK
+## 200 - OK
 
 Format: (text/plain)
 
 Example: 'ao messenger unit'
 
-#### POST /
+## POST /
 
 **Description**
 
@@ -1100,9 +1106,9 @@ When posting to the root endpoint, the request body should have a valid DataItem
 | tags                | An avro array of tag objects                   | Binary   | Variable                  | :x:                |
 | data                | The data contents                              | Binary   | Variable                  | :x:                |
 
-**Responses**
+##### Responses\*\*
 
-- 201 - Created
+## 201 - Created
 
 Schema
 
@@ -1123,7 +1129,7 @@ Example
 }
 ```
 
-#### POST /monitor/{process-id}
+##POST /monitor/{process-id}
 
 **Description**
 
@@ -1149,9 +1155,9 @@ When posting to the this endpoint, the request body should have a valid DataItem
 | tags                | An avro array of tag objects                   | Binary   | Variable                  | :x:                |
 | data                | The data contents                              | Binary   | Variable                  | :x:                |
 
-**Responses**
+##### **Responses**
 
-- 201 - Created
+## 201 - Created
 
 Schema
 
@@ -1172,7 +1178,7 @@ Example
 }
 ```
 
-#### DELETE /monitor/{process-id}
+## DELETE /monitor/{process-id}
 
 **Description**
 
@@ -1198,9 +1204,9 @@ When calling this endpoint, the request body should have a valid DataItem that c
 | tags                | An avro array of tag objects                   | Binary   | Variable                  | :x:                |
 | data                | The data contents                              | Binary   | Variable                  | :x:                |
 
-**Responses**
+##### **Responses**
 
-- 200 - Ok
+## 200 - Ok
 
 Schema
 

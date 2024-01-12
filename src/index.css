@@ -99,7 +99,6 @@ h3 {
   font-weight: 500;
   line-height: 150%;
   letter-spacing: 0.18px;
-  margin-bottom: -20px;
 }
 
 h4 {
@@ -109,7 +108,17 @@ h4 {
   font-weight: 400;
   line-height: 150%;
   letter-spacing: 0.18px;
+}
+
+h5 {
+  font-family: 'Roboto Mono Variable';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1 50%;
+  letter-spacing: 0.18px;
   margin-bottom: -20px;
+  text-transform: uppercase;
 }
 
 h6 {

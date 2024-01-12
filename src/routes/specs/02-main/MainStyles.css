@@ -19,7 +19,7 @@ main {
 .text-content-wrapper {
   display: flex;
   max-width: 665px;
-  gap: 52px;
+  gap: 32px;
   flex-direction: column;
   align-items: flex-start;
 }
