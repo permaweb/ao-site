@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt.tsx';
 import aoMorphingShape from '../../../../assets/ao.mp4';
 import HyperTextLoad from '../../../../components/hyperTextLoad.tsx';
+import HexocetAnimationComponent from '../../../../components/HexocetAnimation/HexocetAnimationComponent.tsx';
 
 const Main = () => {
   useEffect(() => {
@@ -13,9 +14,10 @@ const Main = () => {
     <>
       <main>
         <div className="home-main-wrapper">
-          <video height={300} autoPlay loop muted>
+          {/* <video height={300} autoPlay loop muted>
             <source src={aoMorphingShape} type="video/mp4" />
-          </video>
+          </video> */}
+          <HexocetAnimationComponent />
           <div className="text-hero-wrapper">
             <div className="main-heading">
               <HyperTextLoad
@@ -40,7 +42,7 @@ const Main = () => {
             <div className="button-wrapper">
               <button className="glitch primary" data-text="Boot Up Testnet">
                 <HyperTextLoad
-                  word={'Boot Up TestNet'}
+                  word={'→ Boot Up TestNet'}
                   textType="span"
                   speed={1}
                 />

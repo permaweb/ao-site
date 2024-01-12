@@ -21,7 +21,7 @@ main {
   flex-direction: column;
   gap: 12px;
   align-items: flex-start;
-  width: 109px;
+  width: 130px;
 }
 
 .button-wrapper {

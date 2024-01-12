@@ -1,7 +1,6 @@
 import { useRive } from '@rive-app/react-canvas';
 import './ProgressOverlay.css';
 import aoProgressAnimation from '../../../assets/ao.riv';
-import aoLoadSound from '../../../assets/ao_load_up.wav';
 
 interface overlayProps {
   isOverlay: boolean;
