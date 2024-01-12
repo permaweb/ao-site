@@ -264,8 +264,6 @@ class Hexocet {
       }
     }
   }
-
-  // Additional methods...
 }
 
 export default Hexocet;
