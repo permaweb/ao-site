@@ -143,7 +143,9 @@ class Hexocet {
       var fixedSpeed = 0.01;
       var maxSpeed = fixedSpeed,
         minSpeed = fixedSpeed;
+
       var speed = Math.sqrt(
+        // @ts-ignore
         Math.pow(this.xSpeed, 2) + Math.pow(this.ySpeed, 2)
       );
       if (speed > maxSpeed) {

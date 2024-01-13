@@ -38,7 +38,8 @@ The fundamental components of `ao` are as follows:
 - **Messenger Units (MUs)**: Messenger Units are nodes that relay messages around the `ao` network according to a process called _cranking_. In essence, when MUs crank a message around the system they send it to the approprate SU for a process, then coordinate with a CU in order to calculate the output of the interaction, and then repeat the process recursively for any resulting outbox messages. This process continues until there are no more messages to crank. Users and processes can also pay a MU to _subscribe_ to a process, cranking any messages that result from its timed _cron_ interactions. Processes can also optionally label a message as a _cast_ -- leading the MU to send the message to its SU, but not listen for a response. In this way, `ao` is able to provide a vibrant environment that gives users and processes maximal choice -- VM, payment method, scheduler type, messaging security, and more -- without requiring consensus on costly computation itself.
 
 <div className='diagram ao-interactions'>
-<svg width="830" height="472" viewBox="0 0 830 472" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<svg width="100%" height="472" viewBox="0 0 830 472" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_238_127)">
 <rect x="0.5" y="0.5" width="409" height="445" rx="9.5" fill="#E6E6E6"/>
 <rect x="0.5" y="0.5" width="409" height="445" rx="9.5" stroke="#CACACA"/>
@@ -134,7 +135,7 @@ This protocol defines the `ao` computer system in terms of its message structure
 ### The `ao` Data Protocol
 
 <div className='diagram ao-messages'>
-<svg width="850" height="539" viewBox="0 0 850 539" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="100%" height="539" viewBox="0 0 850 539" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M653 463.5H797C798.381 463.5 799.5 464.619 799.5 466V525C799.5 526.381 798.381 527.5 797 527.5H653C651.619 527.5 650.5 526.381 650.5 525V466C650.5 464.619 651.619 463.5 653 463.5Z" fill="#E6E6E6" stroke="#C6C6C6"/>
 <path d="M724.117 498.578C724.049 499.104 723.914 499.589 723.711 500.031C723.508 500.469 723.245 500.844 722.922 501.156C722.594 501.474 722.206 501.721 721.758 501.898C721.315 502.07 720.82 502.156 720.273 502.156C719.805 502.156 719.378 502.091 718.992 501.961C718.612 501.826 718.273 501.641 717.977 501.406C717.674 501.172 717.414 500.896 717.195 500.578C716.982 500.26 716.805 499.914 716.664 499.539C716.518 499.164 716.409 498.771 716.336 498.359C716.268 497.948 716.232 497.531 716.227 497.109V495.523C716.232 495.102 716.268 494.685 716.336 494.273C716.409 493.862 716.518 493.469 716.664 493.094C716.805 492.719 716.982 492.372 717.195 492.055C717.414 491.732 717.674 491.453 717.977 491.219C718.273 490.984 718.612 490.802 718.992 490.672C719.372 490.536 719.799 490.469 720.273 490.469C720.841 490.469 721.349 490.557 721.797 490.734C722.245 490.906 722.63 491.151 722.953 491.469C723.276 491.792 723.534 492.177 723.727 492.625C723.924 493.073 724.055 493.568 724.117 494.109H722.672C722.625 493.766 722.544 493.445 722.43 493.148C722.315 492.852 722.161 492.591 721.969 492.367C721.776 492.143 721.539 491.969 721.258 491.844C720.982 491.714 720.654 491.648 720.273 491.648C719.93 491.648 719.625 491.706 719.359 491.82C719.099 491.93 718.875 492.081 718.688 492.273C718.495 492.466 718.333 492.69 718.203 492.945C718.078 493.201 717.977 493.471 717.898 493.758C717.82 494.044 717.763 494.339 717.727 494.641C717.695 494.938 717.68 495.227 717.68 495.508V497.109C717.68 497.391 717.695 497.682 717.727 497.984C717.763 498.281 717.82 498.573 717.898 498.859C717.977 499.151 718.078 499.424 718.203 499.68C718.328 499.935 718.487 500.159 718.68 500.352C718.872 500.549 719.099 500.706 719.359 500.82C719.62 500.93 719.924 500.984 720.273 500.984C720.654 500.984 720.982 500.924 721.258 500.805C721.539 500.685 721.776 500.516 721.969 500.297C722.161 500.083 722.315 499.831 722.43 499.539C722.544 499.242 722.625 498.922 722.672 498.578H724.117ZM733.5 490.625L733.516 498.328C733.516 498.859 733.422 499.357 733.234 499.82C733.047 500.284 732.789 500.688 732.461 501.031C732.133 501.38 731.742 501.656 731.289 501.859C730.836 502.057 730.339 502.156 729.797 502.156C729.245 502.156 728.742 502.057 728.289 501.859C727.836 501.661 727.448 501.388 727.125 501.039C726.802 500.695 726.549 500.292 726.367 499.828C726.185 499.359 726.091 498.859 726.086 498.328L726.102 490.625H727.477L727.508 498.328C727.513 498.667 727.565 498.992 727.664 499.305C727.768 499.617 727.917 499.893 728.109 500.133C728.297 500.372 728.531 500.565 728.812 500.711C729.099 500.857 729.427 500.93 729.797 500.93C730.167 500.93 730.492 500.859 730.773 500.719C731.055 500.573 731.292 500.378 731.484 500.133C731.672 499.893 731.815 499.617 731.914 499.305C732.013 498.992 732.068 498.667 732.078 498.328L732.102 490.625H733.5Z" fill="black"/>
 <path d="M453 463.5H597C598.381 463.5 599.5 464.619 599.5 466V525C599.5 526.381 598.381 527.5 597 527.5H453C451.619 527.5 450.5 526.381 450.5 525V466C450.5 464.619 451.619 463.5 453 463.5Z" fill="#E6E6E6" stroke="#C6C6C6"/>
@@ -1203,7 +1204,7 @@ When posting to the root endpoint, the request body should have a valid DataItem
 
 ## 201 - Created
 
-#### Schema
+##### Schema
 
 ```json
 {
@@ -1214,7 +1215,7 @@ When posting to the root endpoint, the request body should have a valid DataItem
 }
 ```
 
-#### Example
+##### Example
 
 ```JSON
 {
@@ -1252,7 +1253,7 @@ When posting to the this endpoint, the request body should have a valid DataItem
 
 ## 201 - Created
 
-#### Schema
+##### Schema
 
 ```json
 {
@@ -1263,7 +1264,7 @@ When posting to the this endpoint, the request body should have a valid DataItem
 }
 ```
 
-#### Example
+##### Example
 
 ```JSON
 {
@@ -1301,7 +1302,7 @@ When calling this endpoint, the request body should have a valid DataItem that c
 
 ## 200 - Ok
 
-#### Schema
+##### Schema
 
 ```json
 {
@@ -1312,7 +1313,7 @@ When calling this endpoint, the request body should have a valid DataItem that c
 }
 ```
 
-#### Example
+##### Example
 
 ```JSON
 {
