@@ -9,19 +9,21 @@ const Nav = () => {
     <header>
       <nav>
         <div className="nav-left">
-          <div className="ao-wrapper">
-            <img src={aoPict} alt="ao-pictograph" />
-            <img src={aoFont} alt="ao-font" />
-          </div>
+          <Link to={'/'}>
+            <div className="ao-wrapper">
+              <img src={aoPict} alt="ao-pictograph" />
+              <img src={aoFont} alt="ao-font" />
+            </div>
+          </Link>
           <div className="nav-buttons">
-            <Link to={'/'}>
-              <button className="glitch" data-text="Home">
-                Home
-              </button>
-            </Link>
             <Link to={'/specs'}>
-              <button className="glitch" data-text="Specs">
-                Specs
+              <button className="glitch" data-text="Spec">
+                <HyperTextLoad
+                  word={'Spec'}
+                  textType={'span'}
+                  speed={1}
+                  triggerOnLoad
+                />
               </button>
             </Link>
           </div>
