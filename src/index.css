@@ -48,6 +48,7 @@ button {
   border: none;
   background: none;
   cursor: pointer;
+  color: black;
 }
 
 th {
@@ -67,7 +68,7 @@ li a:hover {
 
 h1 {
   font-family: 'DM Sans';
-  font-size: 24px;
+  font-size: 48px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
