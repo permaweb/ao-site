@@ -26,6 +26,9 @@ nav {
   gap: 32px;
 }
 
+.nav-left a {
+  display: flex;
+}
 .ao-wrapper {
   display: flex;
   align-items: center;

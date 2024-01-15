@@ -2,9 +2,9 @@ import Victor from 'victor';
 
 class Hexocet {
   seeds: any[] = [];
-  stepCount: number = 0;
-  birthPeriod: number = 3;
-  hexSize: number = 25;
+  stepCount: number = 1;
+  birthPeriod: number = 0.25;
+  hexSize: number = 30;
   targetBounceChance: number = 0.05;
   springStiffness: number = 0.01;
   viscosity: number = 0.5;
