@@ -42,7 +42,7 @@ main {
   gap: 10px;
   background: var(--background-color);
   border-radius: 25px;
-  border: 1px solid white;
+  border: 1px solid rgb(255, 255, 255);
 }
 
 .button-wrapper button {
