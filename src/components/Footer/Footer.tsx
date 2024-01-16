@@ -20,7 +20,7 @@ const Footer = () => {
         <div className="nav-buttons">
           <button className="glitch" data-text="Powered by: Arweave">
             <HyperTextLoad
-              word={'Permanently On'}
+              word={'Only Possible On'}
               textType="span"
               speed={1}
               triggerOnLoad
