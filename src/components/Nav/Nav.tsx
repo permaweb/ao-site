@@ -28,15 +28,17 @@ const Nav = () => {
             </Link>
           </div>
         </div>
-        <div className="nav-buttons">
-          <button className="glitch" data-text="Docs">
-            <HyperTextLoad
-              word={'Try It Now'}
-              textType="span"
-              speed={1}
-              triggerOnLoad
-            />
-          </button>
+        <div className="main-cta-wrapper">
+          <div className="main-cta-button">
+            <button className="glitch" data-text="Docs">
+              <HyperTextLoad
+                word={'Try It Now'}
+                textType="span"
+                speed={1}
+                triggerOnLoad
+              />
+            </button>
+          </div>
         </div>
       </nav>
     </header>

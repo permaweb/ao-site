@@ -17,7 +17,7 @@ const Footer = () => {
             </Link>
           </div>
         </div>
-        <div className="nav-buttons">
+        <div className="nav-buttons arweave-badge">
           <button className="glitch" data-text="Powered by: Arweave">
             <HyperTextLoad
               word={'Only Possible On'}

@@ -16,6 +16,8 @@ class Hexocet {
   canvasBase: number = 0;
   xC: number = 0;
   yC: number = 0;
+  maxSeeds: number = 2000;
+  maxSeedAge: number = 1500;
 
   setupCanvas(container: HTMLElement): void {
     // Check if a canvas with the same ID already exists
@@ -64,7 +66,6 @@ class Hexocet {
   update(): void {
     this.stepCount++;
 
-    // Birthrate management
     if (this.stepCount % this.birthPeriod == 0 && this.stepCount < 60000) {
       this.birth();
     }
@@ -74,6 +75,9 @@ class Hexocet {
   }
 
   birth(xBirth?: number, yBirth?: number, seed?: any): void {
+    if (this.seeds.length >= this.maxSeeds) {
+      return;
+    }
     // Give birth around the canvas center
     var targetH = this.XYtoHexCoords(xBirth || this.xC, yBirth || this.yC);
     // I said AROUND
@@ -161,6 +165,8 @@ class Hexocet {
       seed.x += 0.01 * seed.xSpeed * this.canvasBase;
       seed.y += 0.01 * seed.ySpeed * this.canvasBase;
     }
+    // Garbage collection of older seeds
+    this.seeds = this.seeds.filter((seed) => seed.age < this.maxSeedAge);
   }
 
   draw(): void {
