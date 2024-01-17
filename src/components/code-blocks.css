@@ -1,16 +1,17 @@
 code[class*='language-'],
 pre[class*='language-'] {
-  color: black;
+  color: slategray;
   background: none;
   text-shadow: 0 1px white;
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-  font-size: 12px;
+  font-size: clamp(8px, 1.75vw, 12px);
   text-align: left;
   white-space: pre;
   word-spacing: normal;
   word-break: normal;
   word-wrap: normal;
   line-height: 1.5;
+  overflow-x: scroll;
 
   border-radius: 10px;
 
@@ -55,7 +56,6 @@ code[class*='language-'] ::selection {
 pre[class*='language-'] {
   margin: 0.5em 0;
   overflow: hidden;
-  width: 100%;
 }
 
 :not(pre) > code[class*='language-'],
