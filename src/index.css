@@ -85,12 +85,16 @@ h2 {
 }
 
 pre {
-  margin: 0.5em 0;
   overflow: hidden;
-  width: 100%;
-  background: #fffcfa;
+  background: #fefbf9;
   padding: 50px;
   border-radius: 10px;
+  overflow-x: scroll;
+}
+
+pre code {
+  font-size: clamp(8px, 1.75vw, 12px);
+  color: #999;
 }
 
 h3 {
@@ -160,7 +164,7 @@ ul li {
 
 blockquote {
   background: rgb(242, 242, 242);
-  border-left: 10px solid #d8d8d8;
+  border-left: 10px solid slategray;
   margin: 1.5em 10px;
   padding: 0.5em 10px;
   quotes: '\201C''\201D''\2018''\2019';
