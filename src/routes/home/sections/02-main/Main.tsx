@@ -28,7 +28,7 @@ const Main = () => {
             <div className="button-wrapper">
               <button className="glitch primary" data-text="Boot Up Testnet">
                 <HyperTextLoad
-                  word={'→ Boot Up TestNet'}
+                  word={'→ Boot Up The TestNet'}
                   textType="span"
                   speed={1}
                 />

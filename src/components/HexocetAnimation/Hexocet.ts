@@ -2,13 +2,13 @@ import Victor from 'victor';
 
 class Hexocet {
   seeds: any[] = [];
-  stepCount: number = 1;
+  stepCount: number = 1000;
   birthPeriod: number = 0.25;
   hexSize: number = 30;
-  targetBounceChance: number = 0.05;
+  targetBounceChance: number = 0.2;
   springStiffness: number = 0.01;
-  viscosity: number = 0.5;
-  particleOpacity: number = 0.1;
+  viscosity: number = 0.25;
+  particleOpacity: number = 0.2;
   fade: boolean = true;
   fadeLayerOpacity: number = 0.1;
   canvas: HTMLCanvasElement | null = null;
@@ -18,6 +18,7 @@ class Hexocet {
   yC: number = 0;
   maxSeeds: number = 2000;
   maxSeedAge: number = 1500;
+  initialSeedAge: number = 0; // Starting age for new seeds
 
   setupCanvas(container: HTMLElement): void {
     // Check if a canvas with the same ID already exists
@@ -96,7 +97,7 @@ class Hexocet {
       ySpeed: 0,
       targetHx: targetH.Hx,
       targetHy: targetH.Hy,
-      age: 0,
+      age: this.initialSeedAge,
       hue: 190 + 15 * Math.sin(this.stepCount / 50),
     };
     this.seeds.push(seed);
