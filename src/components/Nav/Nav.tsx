@@ -16,10 +16,10 @@ const Nav = () => {
             </div>
           </Link>
           <div className="nav-buttons">
-            <Link to={'/specs'}>
+            <Link to={'/spec'}>
               <button className="glitch" data-text="Spec">
                 <HyperTextLoad
-                  word={'About'}
+                  word={'Spec'}
                   textType={'span'}
                   speed={1}
                   triggerOnLoad
