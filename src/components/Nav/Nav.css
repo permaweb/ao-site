@@ -35,6 +35,10 @@ nav {
   gap: 4px;
 }
 
+.ao-wrapper:hover {
+  opacity: 75%;
+}
+
 .nav-buttons {
   display: flex;
   flex-direction: row;

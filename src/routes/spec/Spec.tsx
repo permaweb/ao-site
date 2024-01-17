@@ -1,6 +1,6 @@
 import Main from './02-main/Main';
 
-const Specs = () => {
+const Spec = () => {
   return (
     <div className="container">
       <Main />
@@ -8,4 +8,4 @@ const Specs = () => {
   );
 };
 
-export default Specs;
+export default Spec;
