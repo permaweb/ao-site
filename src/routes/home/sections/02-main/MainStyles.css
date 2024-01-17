@@ -4,6 +4,7 @@ main {
   align-items: center;
   flex-shrink: 0;
   align-self: stretch;
+  width: 100%;
 }
 
 .home-main-wrapper {
@@ -20,6 +21,7 @@ main {
 .home-main-wrapper canvas {
   position: absolute;
   z-index: -1;
+  width: 100%;
 }
 
 .text-hero-wrapper {

@@ -3,7 +3,7 @@
 #root {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
 }
 
@@ -24,7 +24,7 @@
 
   --container-padding: 100px;
   --header-height: 116px;
-  --nav-background-color: #f7f7f7;
+  --nav-background-color: #f0f0f0;
   --background-color: #f2f2f2;
   --faded-accent-color: #ff9c67;
   --table-accent-color: #feeee5;
@@ -68,7 +68,7 @@ li a:hover {
 
 h1 {
   font-family: 'DM Sans';
-  font-size: 48px;
+  font-size: clamp(28px, 5vw, 48px);
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -77,7 +77,7 @@ h1 {
 
 h2 {
   font-family: 'Roboto Mono Variable';
-  font-size: 18px;
+  font-size: clamp(10px, 2vw, 18px);
   font-style: normal;
   font-weight: 500;
   line-height: 150%;
@@ -95,7 +95,7 @@ pre {
 
 h3 {
   font-family: 'Roboto Mono Variable';
-  font-size: 14px;
+  font-size: clamp(10px, 2vw, 14px);
   font-style: normal;
   font-weight: 500;
   line-height: 150%;
@@ -104,7 +104,7 @@ h3 {
 
 h4 {
   font-family: 'Roboto Mono Variable';
-  font-size: 12px;
+  font-size: clamp(8px, 2vw, 12px);
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
@@ -113,7 +113,7 @@ h4 {
 
 h5 {
   font-family: 'Roboto Mono Variable';
-  font-size: 12px;
+  font-size: clamp(8px, 2vw, 12px);
   font-style: normal;
   font-weight: 400;
   line-height: 1 50%;
@@ -124,7 +124,7 @@ h5 {
 
 h6 {
   font-family: 'Roboto Mono Variable';
-  font-size: 12px;
+  font-size: clamp(8px, 2vw, 12px);
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
@@ -137,7 +137,7 @@ li,
 p,
 tr {
   font-family: 'DM Sans';
-  font-size: 12px;
+  font-size: clamp(8px, 1.75vw, 12px);
   font-style: normal;
   font-weight: 300;
   line-height: 160.5%; /* 19.26px */
@@ -168,4 +168,8 @@ blockquote {
 
 blockquote p {
   display: inline;
+}
+
+span {
+  font-size: clamp(10px, 2vw, 12px);
 }

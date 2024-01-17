@@ -10,7 +10,7 @@ class Hexocet {
   viscosity: number = 0.3;
   particleOpacity: number = 0.2;
   fade: boolean = true;
-  fadeLayerOpacity: number = 0.1;
+  fadeLayerOpacity: number = 0.5;
   canvas: HTMLCanvasElement | null = null;
   ctx: CanvasRenderingContext2D | null = null;
   canvasBase: number = 0;
