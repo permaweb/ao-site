@@ -5,12 +5,12 @@ class Hexocet {
   stepCount: number = 1000;
   birthPeriod: number = 0.25;
   hexSize: number = 30;
-  targetBounceChance: number = 0.15;
-  springStiffness: number = 0.01;
-  viscosity: number = 0.3;
-  particleOpacity: number = 0.2;
+  targetBounceChance: number = 0.2;
+  springStiffness: number = 0.02;
+  viscosity: number = 0.5;
+  particleOpacity: number = 0.1;
   fade: boolean = true;
-  fadeLayerOpacity: number = 0.5;
+  fadeLayerOpacity: number = 0.2;
   canvas: HTMLCanvasElement | null = null;
   ctx: CanvasRenderingContext2D | null = null;
   canvasBase: number = 0;

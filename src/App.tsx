@@ -5,8 +5,8 @@ import Nav from './components/Nav/Nav';
 import Spec from './routes/spec/Spec';
 import Footer from './components/Footer/Footer';
 import { useEffect } from 'react';
-import aoLightFavicon from '../public/images/ao-pictograph_light.svg';
-import aoDarkFavicon from '../public/images/ao-pictograph_dark.svg';
+import aoLightFavicon from '/images/ao-pictograph_light.svg?url';
+import aoDarkFavicon from '/images/ao-pictograph_light.svg?url';
 
 function App() {
   useEffect(() => {

@@ -1,11 +1,11 @@
-import './MainStyles.css';
+import './HomeMainStyles.css';
 import { useEffect, useRef } from 'react';
 import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt.tsx';
 
 import HyperTextLoad from '../../../../components/hyperTextLoad.tsx';
 import HexocetAnimationComponent from '../../../../components/HexocetAnimation/HexocetAnimationComponent.tsx';
 
-const Main = () => {
+const HomeMain = () => {
   const containerRef = useRef(null);
   useEffect(() => {
     morpheusAsciiArt();
@@ -41,4 +41,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default HomeMain;
