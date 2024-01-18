@@ -1,8 +1,8 @@
 import MarkdownRenderer from '../../../components/MarkdownRenderer';
-import './MainStyles.css';
+import './SpecMainStyles.css';
 import specsMarkdown from '../../../assets/specsMarkdown.md?raw';
 
-const Main = () => {
+const SpecMain = () => {
   return (
     <>
       <main>
@@ -16,4 +16,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default SpecMain;

@@ -1,10 +1,10 @@
 import '../../App.css';
-import Main from './sections/02-main/Main';
+import HomeMain from './sections/02-main/HomeMain';
 
 function Home() {
   return (
     <div className="container">
-      <Main />
+      <HomeMain />
     </div>
   );
 }

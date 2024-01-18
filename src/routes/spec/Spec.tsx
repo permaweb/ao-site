@@ -1,9 +1,9 @@
-import Main from './02-main/Main';
+import SpecMain from './02-main/SpecMain';
 
 const Spec = () => {
   return (
     <div className="container">
-      <Main />
+      <SpecMain />
     </div>
   );
 };
