@@ -73,5 +73,5 @@ footer {
 }
 
 .arweave-badge button:hover::after {
-  border-left: 20px solid rgb(234, 234, 234);
+  border-left: 20px solid var(--triangle-color);
 }
