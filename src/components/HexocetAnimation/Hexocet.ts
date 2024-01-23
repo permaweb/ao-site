@@ -176,7 +176,7 @@ class Hexocet {
       if (this.fade) {
         var opa = this.fadeLayerOpacity;
         this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = 'rgba(242, 242, 242, ' + opa + ')';
+        this.ctx.fillStyle = 'rgba(249, 249, 249, ' + opa + ')';
         this.ctx.fill();
       }
       for (var key in this.seeds) {

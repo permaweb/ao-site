@@ -13,7 +13,7 @@
   font-weight: 300;
 
   color-scheme: light dark;
-  color: #101010;
+  color: var(--main-dark-color);
   background-color: var(--background-color);
 
   font-synthesis: none;
@@ -24,18 +24,20 @@
 
   --container-padding: 100px;
   --header-height: 116px;
-  --nav-background-color: #f0f0f0;
-  --background-color: #f2f2f2;
+  --nav-background-color: #faf7f3;
+  --background-color: rgb(249, 249, 249);
   --faded-accent-color: #ff9c67;
   --table-accent-color: #feeee5;
   --accent-color: #e77b40;
+  --main-dark-color: #222326;
+  --triangle-color: rgb(192, 196, 201);
 }
 
 a {
   font-weight: 200;
-  color: #131313;
   text-decoration: inherit;
   transition: all 150ms ease-in-out;
+  color: var(--main-dark-color);
 }
 
 body {
@@ -48,7 +50,7 @@ button {
   border: none;
   background: none;
   cursor: pointer;
-  color: black;
+  color: var(--main-dark-color);
 }
 
 th {
@@ -164,7 +166,7 @@ ul li {
 
 blockquote {
   background: rgb(242, 242, 242);
-  border-left: 10px solid slategray;
+  border-left: 10px solid #708090;
   margin: 1.5em 10px;
   padding: 0.5em 10px;
   quotes: '\201C''\201D''\2018''\2019';
