@@ -16,6 +16,16 @@ const Nav = () => {
             </div>
           </Link>
           <div className="nav-buttons">
+            <Link to={'/scan'}>
+              <button className="glitch" data-text="scan">
+                <HyperTextLoad
+                  word={'scan'}
+                  textType={'span'}
+                  speed={1}
+                  triggerOnLoad
+                />
+              </button>
+            </Link>
             <Link to={'/spec'}>
               <button className="glitch" data-text="Spec">
                 <HyperTextLoad
