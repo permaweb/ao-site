@@ -30,7 +30,7 @@
   --table-accent-color: #feeee5;
   --accent-color: #e77b40;
   --main-dark-color: #222326;
-  --triangle-color: rgb(192, 196, 201);
+  --triangle-color: var(--table-accent-color);
 }
 
 a {
