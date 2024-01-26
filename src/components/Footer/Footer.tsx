@@ -18,21 +18,27 @@ const Footer = () => {
           </div>
         </div>
         <div className="nav-buttons arweave-badge">
-          <button className="glitch" data-text="Powered by: Arweave">
-            <HyperTextLoad
-              word={'Only Possible On'}
-              textType="span"
-              speed={1}
-              triggerOnLoad
-            />
-            <img src={arweaveLogo} alt={arweaveLogo} />
-            <HyperTextLoad
-              word={'arweave'}
-              textType="span"
-              speed={1}
-              triggerOnLoad
-            />
-          </button>
+          <Link
+            to={'http://arweave.org'}
+            target="_blank"
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            <button className="glitch" data-text="Powered by: Arweave">
+              <HyperTextLoad
+                word={'Only Possible On'}
+                textType="span"
+                speed={1}
+                triggerOnLoad
+              />
+              <img src={arweaveLogo} alt={arweaveLogo} />
+              <HyperTextLoad
+                word={'arweave'}
+                textType="span"
+                speed={1}
+                triggerOnLoad
+              />
+            </button>
+          </Link>
         </div>
       </div>
     </footer>

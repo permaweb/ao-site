@@ -16,7 +16,7 @@ const Nav = () => {
             </div>
           </Link>
           <div className="nav-buttons">
-            <Link to={'/scan'}>
+            <Link to={'http://aoscan.xyz'}>
               <button className="glitch" data-text="scan">
                 <HyperTextLoad
                   word={'scan'}
