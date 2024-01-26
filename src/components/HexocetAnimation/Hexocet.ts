@@ -19,6 +19,13 @@ class Hexocet {
   maxSeeds: number = 2000;
   maxSeedAge: number = 1500;
   initialSeedAge: number = 0; // Starting age for new seeds
+  shouldUseSecondaryColor = Math.random() < 0.35;
+  secondaryColor = [0, 112, 250];
+  secondaryColorsSL = [
+    { s: '100%', l: '50%' },
+    { s: '100%', l: '0%' },
+    { s: '100%', l: '25%' },
+  ];
 
   setupCanvas(container: HTMLElement): void {
     // Check if a canvas with the same ID already exists
@@ -88,6 +95,7 @@ class Hexocet {
     // Convert in Cartesian coords
     var targetXY = this.hexCoordsToXY(targetH.Hx, targetH.Hy);
 
+    const randomColor = Math.floor(Math.random() * this.secondaryColor.length);
     var seed = seed || {
       xLast: targetXY.x,
       x: targetXY.x,
@@ -98,7 +106,9 @@ class Hexocet {
       targetHx: targetH.Hx,
       targetHy: targetH.Hy,
       age: this.initialSeedAge,
-      hue: 190 + 15 * Math.sin(this.stepCount / 50),
+      hue: this.shouldUseSecondaryColor
+        ? this.secondaryColor[randomColor]
+        : 190 + 15 * Math.sin(this.stepCount / 50),
     };
     this.seeds.push(seed);
   }
@@ -181,13 +191,20 @@ class Hexocet {
       }
       for (var key in this.seeds) {
         var seed = this.seeds[key];
+        const randomColor = Math.floor(
+          Math.random() * this.secondaryColorsSL.length
+        );
 
         // HSLA
         var hsla = {
           h: seed.hue,
-          s: '100%',
-          l: '0%',
-          a: this.particleOpacity,
+          s: this.shouldUseSecondaryColor
+            ? this.secondaryColorsSL[randomColor].s
+            : '100%',
+          l: this.shouldUseSecondaryColor
+            ? this.secondaryColorsSL[randomColor].l
+            : '0%',
+          a: this.shouldUseSecondaryColor ? '15%' : this.particleOpacity,
         };
 
         // Line width
