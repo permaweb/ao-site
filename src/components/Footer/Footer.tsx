@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="footer-container">
         <div className="nav-left">
           <div className="nav-buttons quest-button">
-            <Link to={'/specs'}>
+            <Link to={'http://x.com/fwdresearch'}>
               <button className="glitch" data-text="100101">
                 <img width={12} src={xLogo} alt={xLogo} />
               </button>
