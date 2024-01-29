@@ -16,7 +16,7 @@ const Nav = () => {
             </div>
           </Link>
           <div className="nav-buttons">
-            <Link to={'http://aoscan.xyz'}>
+            {/* <Link to={'http://aoscan.xyz'}>
               <button className="glitch" data-text="scan">
                 <HyperTextLoad
                   word={'scan'}
@@ -25,7 +25,7 @@ const Nav = () => {
                   triggerOnLoad
                 />
               </button>
-            </Link>
+            </Link> */}
             <Link to={'/spec'}>
               <button className="glitch" data-text="Spec">
                 <HyperTextLoad
@@ -40,14 +40,20 @@ const Nav = () => {
         </div>
         <div className="main-cta-wrapper">
           <div className="main-cta-button">
-            <button className="glitch" data-text="Docs">
-              <HyperTextLoad
-                word={'Try It Now'}
-                textType="span"
-                speed={1}
-                triggerOnLoad
-              />
-            </button>
+            <Link
+              to={'https://cookbook_ao.g8way.io/welcome/index.html'}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button className="glitch" data-text="Docs">
+                <HyperTextLoad
+                  word={'Try It Now'}
+                  textType="span"
+                  speed={1}
+                  triggerOnLoad
+                />
+              </button>
+            </Link>
           </div>
         </div>
       </nav>

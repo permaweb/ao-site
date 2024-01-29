@@ -19,8 +19,8 @@ class Hexocet {
   maxSeeds: number = 2000;
   maxSeedAge: number = 1500;
   initialSeedAge: number = 0; // Starting age for new seeds
-  shouldUseSecondaryColor = Math.random() < 0.35;
-  secondaryColor = [0, 112, 250];
+  shouldUseSecondaryColor = Math.random() < 0.5;
+  secondaryColor = [29, 255, 112, 29];
   secondaryColorsSL = [
     { s: '100%', l: '50%' },
     { s: '100%', l: '0%' },
@@ -186,7 +186,7 @@ class Hexocet {
       if (this.fade) {
         var opa = this.fadeLayerOpacity;
         this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = 'rgba(249, 249, 249, ' + opa + ')';
+        this.ctx.fillStyle = 'rgba(255, 255, 255, ' + opa + ')';
         this.ctx.fill();
       }
       for (var key in this.seeds) {
@@ -204,7 +204,7 @@ class Hexocet {
           l: this.shouldUseSecondaryColor
             ? this.secondaryColorsSL[randomColor].l
             : '0%',
-          a: this.shouldUseSecondaryColor ? '15%' : this.particleOpacity,
+          a: this.shouldUseSecondaryColor ? '10%' : this.particleOpacity,
         };
 
         // Line width

@@ -24,11 +24,11 @@
 
   --container-padding: 100px;
   --header-height: 116px;
-  --nav-background-color: #faf7f3;
-  --background-color: rgb(249, 249, 249);
+  --nav-background-color: #fdfaf9;
+  --background-color: rgb(255, 255, 255);
   --faded-accent-color: #ff9c67;
   --table-accent-color: #feeee5;
-  --accent-color: #e77b40;
+  --accent-color: #e79c40;
   --main-dark-color: #222326;
   --triangle-color: #e6e7ea;
 }
