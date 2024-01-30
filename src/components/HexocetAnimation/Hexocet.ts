@@ -4,7 +4,7 @@ class Hexocet {
   seeds: any[] = [];
   stepCount: number = 1000;
   birthPeriod: number = 0.25;
-  hexSize: number = 30;
+  hexSize: number = 28;
   targetBounceChance: number = 0.1;
   springStiffness: number = 0.02;
   viscosity: number = 0.5;
@@ -19,8 +19,8 @@ class Hexocet {
   maxSeeds: number = 2000;
   maxSeedAge: number = 1500;
   initialSeedAge: number = 0; // Starting age for new seeds
-  shouldUseSecondaryColor = Math.random() < 0.5;
-  secondaryColor = [29, 255, 112, 29];
+  shouldUseSecondaryColor = Math.random() < 0.75;
+  secondaryColor = [0, 255, 112];
   secondaryColorsSL = [
     { s: '100%', l: '50%' },
     { s: '100%', l: '0%' },
@@ -204,7 +204,7 @@ class Hexocet {
           l: this.shouldUseSecondaryColor
             ? this.secondaryColorsSL[randomColor].l
             : '0%',
-          a: this.shouldUseSecondaryColor ? '10%' : this.particleOpacity,
+          a: this.particleOpacity,
         };
 
         // Line width

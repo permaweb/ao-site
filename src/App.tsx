@@ -6,7 +6,7 @@ import Spec from './routes/spec/Spec';
 import Footer from './components/Footer/Footer';
 import { useEffect } from 'react';
 import { setColorScheme } from './components/HelperFunctions/setColorScheme';
-import Scan from './routes/scan/Scan';
+// import Scan from './routes/scan/Scan';
 
 function App() {
   useEffect(() => {
@@ -27,7 +27,7 @@ function App() {
       <Routes>
         <Route path={'/'} element={<Home />} />
         <Route path={'/spec'} element={<Spec />} />
-        <Route path={'/scan'} element={<Scan />} />
+        {/* <Route path={'/scan'} element={<Scan />} /> */}
       </Routes>
       <Footer />
     </HashRouter>
