@@ -47,7 +47,7 @@ const Nav = () => {
             >
               <button className="glitch" data-text="Docs">
                 <HyperTextLoad
-                  word={'Try It Now'}
+                  word={'→ Try It Now'}
                   textType="span"
                   speed={1}
                   triggerOnLoad

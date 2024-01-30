@@ -7,18 +7,34 @@ import HexocetAnimationComponent from '../../../../components/HexocetAnimation/H
 import { Link } from 'react-router-dom';
 
 const HomeMain = () => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     morpheusAsciiArt();
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const deltaX = (clientX - centerX) * 0.05;
+      const deltaY = (clientY - centerY) * 0.05;
+
+      if (containerRef.current) {
+        const hexocet = containerRef.current.querySelector('canvas');
+        if (hexocet) {
+          hexocet.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        }
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+
+    // Clean up the event listener when the component unmounts
+    return () => document.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   return (
     <>
       <main>
         <div className="home-main-wrapper" ref={containerRef}>
-          {/* <video height={300} autoPlay loop muted>
-            <source src={aoMorphingShape} type="video/mp4" />
-          </video> */}
           <HexocetAnimationComponent containerRef={containerRef} />
           <div className="content-hero-wrapper">
             <div className="text-hero-wrapper">

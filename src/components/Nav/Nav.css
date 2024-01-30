@@ -53,19 +53,6 @@ nav {
   font-size: (8px, 5vw, 12px);
 }
 
-.main-cta-button::after {
-  content: '';
-  width: 0;
-  height: 0;
-  border-left: 20px solid transparent;
-  border-bottom: 20px solid var(--background-color);
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  transform: translate(150%, 40%);
-  z-index: 100000;
-}
-
 .main-cta-wrapper {
   position: relative;
 }
@@ -75,8 +62,4 @@ nav {
   letter-spacing: -0.1px;
   text-transform: uppercase;
   font-size: (8px, 5vw, 12px);
-}
-
-.main-cta-button:hover::after {
-  border-bottom: 20px solid var(--triangle-color);
 }

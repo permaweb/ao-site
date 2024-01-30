@@ -179,3 +179,7 @@ blockquote p {
 span {
   font-size: clamp(10px, 2vw, 12px);
 }
+
+canvas {
+  transition: all 3s;
+}
