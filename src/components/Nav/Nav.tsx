@@ -1,5 +1,5 @@
 import './Nav.css';
-import aoFont from '../../assets/ao-font.svg';
+// import aoFont from '../../assets/ao-font.svg';
 import aoPict from '../../assets/ao-pictograph.svg';
 import { Link } from 'react-router-dom';
 import HyperTextLoad from '../hyperTextLoad';
@@ -12,7 +12,7 @@ const Nav = () => {
           <Link to={'/'}>
             <div className="ao-wrapper">
               <img src={aoPict} alt="ao-pictograph" />
-              <img src={aoFont} alt="ao-font" />
+              {/* <img src={aoFont} alt="ao-font" /> */}
             </div>
           </Link>
           <div className="nav-buttons">
