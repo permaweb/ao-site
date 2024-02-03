@@ -2,15 +2,15 @@ import Victor from 'victor';
 
 class Hexocet {
   seeds: any[] = [];
-  stepCount: number = 1000;
+  stepCount: number = 10000;
   birthPeriod: number = 0.25;
-  hexSize: number = 28;
+  hexSize: number = 30;
   targetBounceChance: number = 0.1;
   springStiffness: number = 0.02;
   viscosity: number = 0.5;
-  particleOpacity: number = 0.1;
+  particleOpacity: number = 0.5;
   fade: boolean = true;
-  fadeLayerOpacity: number = 0.1;
+  fadeLayerOpacity: number = 0.2;
   canvas: HTMLCanvasElement | null = null;
   ctx: CanvasRenderingContext2D | null = null;
   canvasBase: number = 0;
@@ -19,7 +19,7 @@ class Hexocet {
   maxSeeds: number = 2000;
   maxSeedAge: number = 1500;
   initialSeedAge: number = 0; // Starting age for new seeds
-  shouldUseSecondaryColor = Math.random() < 0.75;
+  shouldUseSecondaryColor = Math.random() < 1;
   secondaryColor = [0, 255, 112];
   secondaryColorsSL = [
     { s: '100%', l: '50%' },
@@ -106,9 +106,7 @@ class Hexocet {
       targetHx: targetH.Hx,
       targetHy: targetH.Hy,
       age: this.initialSeedAge,
-      hue: this.shouldUseSecondaryColor
-        ? this.secondaryColor[randomColor]
-        : 190 + 15 * Math.sin(this.stepCount / 50),
+      hue: this.shouldUseSecondaryColor ? this.secondaryColor[randomColor] : 0,
     };
     this.seeds.push(seed);
   }
@@ -155,7 +153,7 @@ class Hexocet {
 
       // Speed calmers (here normalizers)
 
-      var fixedSpeed = 0.01;
+      var fixedSpeed = 5.0;
       var maxSpeed = fixedSpeed,
         minSpeed = fixedSpeed;
 
@@ -203,12 +201,12 @@ class Hexocet {
             : '100%',
           l: this.shouldUseSecondaryColor
             ? this.secondaryColorsSL[randomColor].l
-            : '0%',
+            : '100%',
           a: this.particleOpacity,
         };
 
         // Line width
-        var wLine = 2;
+        var wLine = 1;
 
         // Stroke
         this.ctx.strokeStyle =
@@ -232,10 +230,10 @@ class Hexocet {
           h: seed.hue,
           s: '70%',
           l: '100%',
-          a: 0.01,
+          a: 1,
         };
 
-        wLine = 5;
+        wLine = 2;
 
         var targetXY = this.hexCoordsToXY(seed.targetHx, seed.targetHy);
         var tX = targetXY.x,
