@@ -1,5 +1,5 @@
 import aoLightFavicon from '/images/ao-pictograph_light.svg?url';
-import aoDarkFavicon from '/images/ao-pictograph_light.svg?url';
+import aoDarkFavicon from '/images/ao-pictograph_dark.svg?url';
 
 const favicon = document.getElementById('favicon') as HTMLLinkElement;
 
