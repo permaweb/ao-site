@@ -8,7 +8,7 @@ class Hexocet {
   targetBounceChance: number = 0.1;
   springStiffness: number = 0.02;
   viscosity: number = 0.5;
-  particleOpacity: number = 0.5;
+  particleOpacity: number = 0.8;
   fade: boolean = true;
   fadeLayerOpacity: number = 0.2;
   canvas: HTMLCanvasElement | null = null;
