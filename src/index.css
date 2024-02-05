@@ -24,13 +24,16 @@
 
   --container-padding: 100px;
   --header-height: 116px;
-  --nav-background-color: #ffffff;
-  --background-color: rgb(255, 255, 255);
-  --faded-accent-color: #ff9c67;
-  --table-accent-color: #feeee5;
-  --accent-color: #e79c40;
-  --main-dark-color: #000000;
+  --nav-background-color: #fefefe;
+  --background-color: #fefefe;
+  --faded-accent-color: #b3ffb7;
+  --table-accent-color: #ebe1e1;
+  --accent-color: #054bfe;
+  --main-dark-color: #222326;
   --triangle-color: #e6e7ea;
+  --terminal-red: #d50e0e;
+  --terminal-green: #45cc05;
+  --terminal-blue: #054bfe;
 }
 
 a {
@@ -88,7 +91,7 @@ h2 {
 
 pre {
   overflow: hidden;
-  background: #fefbf9;
+  background: #ededed;
   padding: 50px;
   border-radius: 10px;
   overflow-x: scroll;
@@ -96,7 +99,7 @@ pre {
 
 pre code {
   font-size: clamp(8px, 1.75vw, 12px);
-  color: #999;
+  color: #606060;
 }
 
 h3 {
@@ -166,7 +169,7 @@ ul li {
 
 blockquote {
   background: rgb(242, 242, 242);
-  border-left: 10px solid #708090;
+  border-left: 10px solid var(--terminal-red);
   margin: 1.5em 10px;
   padding: 0.5em 10px;
   quotes: '\201C''\201D''\2018''\2019';
@@ -181,5 +184,16 @@ span {
 }
 
 canvas {
-  transition: all 3s;
+  transition: transform 3s;
+  animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
