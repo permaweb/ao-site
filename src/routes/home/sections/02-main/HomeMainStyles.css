@@ -46,6 +46,27 @@ main {
   border: 1px solid black;
 }
 
+@keyframes backgroundTransition {
+  0% {
+    background-color: var(--background-color);
+  }
+  20% {
+    background-color: var(--background-color-2);
+  }
+  40% {
+    background-color: var(--background-color-3);
+  }
+  60% {
+    background-color: var(--background-color-4);
+  }
+  80% {
+    background-color: var(--background-color-5);
+  }
+  100% {
+    background-color: var(--background-color);
+  }
+}
+
 .button-wrapper button {
   font-family: 'Roboto Mono', monospace;
   letter-spacing: -0.1px;
@@ -62,7 +83,8 @@ main {
 .button-wrapper button:hover {
   background: var(--triangle-color);
   font-weight: 600;
-  transition: all 500ms;
+  transition: background 500ms;
+  animation: backgroundTransition 6s ease infinite;
 }
 
 .main-heading {
