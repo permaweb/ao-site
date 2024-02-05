@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="footer-container">
         <div className="nav-left">
           <div className="nav-buttons quest-button">
-            <Link to={'http://x.com/fwdresearch'}>
+            <Link to={'http://x.com/aoTheComputer'}>
               <button className="glitch" data-text="100101">
                 <img width={12} src={xLogo} alt={xLogo} />
               </button>
@@ -23,7 +23,10 @@ const Footer = () => {
             target="_blank"
             style={{ display: 'flex', alignItems: 'center' }}
           >
-            <button className="glitch" data-text="Powered by: Arweave">
+            <button
+              className="glitch link-terminal-blue"
+              data-text="Powered by: Arweave"
+            >
               <HyperTextLoad
                 word={'Only Possible On'}
                 textType="span"

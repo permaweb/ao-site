@@ -17,9 +17,9 @@ const Nav = () => {
           </Link>
           <div className="nav-buttons">
             {/* <Link to={'http://aoscan.xyz'}>
-              <button className="glitch" data-text="scan">
+              <button className="glitch" data-text="link">
                 <HyperTextLoad
-                  word={'scan'}
+                  word={'link'}
                   textType={'span'}
                   speed={1}
                   triggerOnLoad
@@ -27,7 +27,7 @@ const Nav = () => {
               </button>
             </Link> */}
             <Link to={'/spec'}>
-              <button className="glitch" data-text="Spec">
+              <button className="glitch link-terminal-red" data-text="Spec">
                 <HyperTextLoad
                   word={'Spec'}
                   textType={'span'}
@@ -45,7 +45,7 @@ const Nav = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button className="glitch" data-text="Docs">
+              <button className="glitch link-terminal-green" data-text="Docs">
                 <HyperTextLoad
                   word={'→ Try It Now'}
                   textType="span"

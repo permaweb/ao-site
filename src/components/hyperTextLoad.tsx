@@ -62,7 +62,7 @@ const HyperTextLoad: React.FC<HyperTextLoadProps> = ({
 
   const textProps = {
     ref: textRef,
-    ...(triggerOnLoad ? {} : { onMouseOver: mouseOverHandler }), // Conditionally add onMouseOver
+    ...{ onMouseOver: mouseOverHandler },
   };
 
   const TextElement = createElement(textType, textProps, text);

@@ -2,6 +2,18 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow: hidden;
+  animation: fadeIn 2s ease-out;
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .glitch {
@@ -9,7 +21,12 @@
   margin: 0 auto;
 }
 
-.glitch:hover {
-  opacity: 100%;
-  color: var(--accent-color);
+.link-terminal-red:hover {
+  color: var(--terminal-red);
+}
+.link-terminal-green:hover {
+  color: var(--terminal-green);
+}
+.link-terminal-blue:hover {
+  color: var(--terminal-blue);
 }
