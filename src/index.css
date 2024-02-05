@@ -26,8 +26,12 @@
   --header-height: 116px;
   --nav-background-color: #fefefe;
   --background-color: #fefefe;
-  --faded-accent-color: #b3ffb7;
-  --table-accent-color: #ebe1e1;
+  --background-color-2: #fef4f4;
+  --background-color-3: #edffec;
+  --background-color-4: #fdf2f2;
+  --background-color-5: #e8eeff;
+  --faded-accent-color: #f8fff8;
+  --table-accent-color: #e1ebea;
   --accent-color: #054bfe;
   --main-dark-color: #222326;
   --triangle-color: #e6e7ea;
@@ -184,7 +188,7 @@ span {
 }
 
 canvas {
-  transition: transform 3s;
+  transition: transform 3s ease-in-out;
   animation: pulse 3s infinite;
 }
 

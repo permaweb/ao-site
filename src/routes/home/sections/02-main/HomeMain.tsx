@@ -1,5 +1,5 @@
 import './HomeMainStyles.css';
-import { useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt.tsx';
 
 import HyperTextLoad from '../../../../components/hyperTextLoad.tsx';
@@ -10,22 +10,47 @@ const HomeMain = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     morpheusAsciiArt();
+
+    const debounce = <T extends (...args: any[]) => any>(
+      func: T,
+      delay: number
+    ): ((...args: Parameters<T>) => void) => {
+      let debounceTimer: number;
+      return (...args: Parameters<T>) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          func(...args);
+        }, delay);
+      };
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
-      const deltaX = (clientX - centerX) * 0.05;
-      const deltaY = (clientY - centerY) * 0.05;
+      const deltaX = (clientX - centerX) * 0.02;
+      const deltaY = (clientY - centerY) * 0.02;
+
+      const distanceX = Math.abs(clientX - centerX);
+      const distanceY = Math.abs(clientY - centerY);
+
+      const normalizedDistanceX = distanceX / centerX;
+      const normalizedDistanceY = distanceY / centerY;
+
+      const scaleFactor =
+        1 + 0.075 * Math.max(normalizedDistanceX, normalizedDistanceY);
 
       if (containerRef.current) {
         const hexocet = containerRef.current.querySelector('canvas');
         if (hexocet) {
-          hexocet.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+          hexocet.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleFactor})`;
         }
       }
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
+    const debouncedHandleMouseMove = debounce(handleMouseMove, 100);
+
+    document.addEventListener('mousemove', debouncedHandleMouseMove);
 
     // Clean up the event listener when the component unmounts
     return () => document.removeEventListener('mousemove', handleMouseMove);
