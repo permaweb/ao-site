@@ -1320,3 +1320,142 @@ When calling this endpoint, the request body should have a valid DataItem that c
   "message": "A user friendly message from the MU"
 }
 ```
+
+## Processes
+
+Let $$\\(P_i\\)$$ represent the $$\\(i^{th}\\)$$ process. Define $$\\(P_i = (Log_i, Init_i, Env_i)\\)$$, where:
+
+- $$\\(Log_i\\)$$ is the ordered sequence of all messages for $$\\(P_i\\)$$.
+- $$\\(Init_i\\)$$ is the initialization data for $$\\(P_i\\)$$.
+- $$\\(Sched_i\\)$$ is the scheduler for $$\\(P_i\\)$$.
+- $$\\(Env_i\\)$$ is the computing environment for $$\\(P_i\\)$$.
+
+Notably, as the ao data protocol focuses on providing a universal format for decentralized and verifiable computation, it does not enforce a specific virtual machine, nor any associated parameters. Subsequently, when a developer creates a new process on ao they must specify all of the parameters necessary for units in the system to deterministically execute it. These parameters are added as tags on the spawning data item and may include (but are not limited to):
+
+- The maximum amount of memory that the process should be able to use.
+- The maximum number of operations (optionally weighted, according to the specification of the virtual machine) that the process may consume while evaluating a single message.
+- Any extensions to the virtual machine that the process requires (access to a virtualized local file system, hardware-optimized encryption instructions, etc.), as defined by the virtual machine specification.
+
+The state of $$\\(P_i\\)$$ at a given time step, $$\\(S(P_i)\\)$$, is determined by:
+$$[\\S(P_i) = F(Log_i, Env_i) \\]$$
+where $$\\(F\\)$$ is a function, defined by $$\\(Env_i\\)$$, computing the state based on the message log.
+The outbox of new messages to be sent to related processes as a result of a message is described as follows:
+$$[ \\Outbox_m = F(Log_i, Env_i, m) \\]$$
+where $$\\(m\\)$$ refers to the originating message.
+
+## Messages
+
+Let $$\\(M_{ij}\\)$$ represent the $$\\(j^{th}\\)$$ message in $$\\(P_i\\)$$. $$\\(M_{ij}\\)$$ is represented as an ANS-104 compliant data item. The delivery status $$\\(D(M_{ij})\\)$$ can be represented as:
+
+$$
+ \\D(M_{ij}) =
+\begin{cases}
+1 & \text{if delivered} \\
+0 & \text{else}
+\end{cases}
+\\
+$$
+
+The ao data protocol employs at-most-once delivery semantics, as detailed in <a href="https://groups.csail.mit.edu/tds/papers/Lampson/FORTE93.pdf" style="color:red;">Correctness of at-most-once message delivery protocols</a>, atop which additional guarantees are provided by the maintenance of message logs on Arweave through its data persistence protocol. These guarantees ensure that undelivered messages that result from $$\\(P_i\\)$$ may always been delivered later by re-computing $$\\(Outbox(P_i)\\)$$ from its message log on Arweave.
+
+## Staking
+
+Let $$\\(S_U\\)$$ denote the <i>stake</i> for unit $$\\(U\\)$$, representing the value of locked tokens committed by the unit to ensure economic security for the messages it is involved in relaying. The stake is defined as:
+$$[\\ S_U = \text{tokens committed by (U) in a staking process} \\]$$
+
+Once staked, the tokens $$\\(S_U\\)$$ for any $$\\(U\\)$$ may be subject to <i>slashing</i> as a result of malicious behavior.
+
+## Scheduler Units
+
+Upon receiving a message $$\\(m\\)$$, an SU, denoted as $$\\(SU_{P_i}\\)$$ for process $$\\(P_i\\)$$, performs the following operations:
+
+1.  <strong>Assignment:</strong> $$\\(SU*{P_i}\\)$$ assigns $$\\(m\\)$$ a unique incremental nonce, $$\\(n\\)$$, reflecting the order of receipt relative to other messages within the same process. This assignment is formalized as:
+    $$[\\ A(m) = (m, n, \sigma(SU*{P*i}, m, n)) \\]$$
+    where $$\\(\sigma(SU*{P*i}, m, n)\\)$$ denotes the cryptographic signature of $$\\(SU*{P_i}\\)$$ over the message $$\\(m\\)$$ and its nonce $$\\(n\\)$$.
+2.  <strong>Persistence:</strong> The signed assignment, along with the message, is persisted onto the Arweave data layer, ensuring its availability and integrity within the network.
+
+### Stake Slashing Conditions
+
+The stake associated with $$\\(SU_{P_i}\\)$$, denoted as $$\\(S_{SU_{P_i}}\\)$$, is subject to being slashed under the following conditions:
+
+1.  If $$\\(SU*{P_i}\\)$$ fails to perform the assignment for $$\\(m\\)$$ or maliciously drops $$\\(m\\)$$, $$\\(S*{SU*{P_i}}\\)$$ will be slashed to penalize the non-compliance.
+    $$[ \\neg A(m) \Rightarrow Slash(S*{SU*{P_i}}) \\]$$
+2.  If $$\\(SU*{P*i}\\)$$ performs the assignment for $$\\(m\\)$$ but fails to persist the signed assignment and message onto the Arweave data layer, resulting in a 'gap' in the log for $$\\(P_i\\)$$, $$(\\S*{SU*{P_i}}\\)$$ will also be slashed.
+    $$[ \neg Persist(A(m)) \lor \neg Persist(m) \Rightarrow Slash(S*{SU*{P_i}}) \\]$$
+3.  Assigning a slot more than once with the same nonce to different messages:
+    $$[\\ \exists m_1, m_2; m_1 \neq m_2 \wedge A(m_1)\_n = A(m_2)\_n \Rightarrow Slash(S*{SU\_{P_i}}) \\]$$
+
+    ## Compute Units
+
+    Compute units execute the virtual machine (defined by $$\\(Env_i\\)$$) function $$\\(\lambda\\)$$ for $$\\(P_i\\)$$ on given a message:
+    $$[\\ \lambda(P*i, m_j) = \langle \Phi*{P*i}, Outbox_j, Attest_j \rangle \\]$$
+    where $$\\(\Phi*{P_i}\\)$$ is the new process state, $$\\(Outbox_j\\)$$ is the set of any resulting outbound messages, and $$\\(\Attest_j\\)$$ is a signed attestation of the computation.
+
+    ### Stake Slashing Conditions
+
+    Should $$\\(Attest_j\\)$$ be determined to be incorrect by other parties, they have the authority to commence a slashing operation against $$\\(S_{CU}\\)$$. Subsequently, $$\\(MUs\\)$$ can employ the results of $$\\(\lambda(P_i, m_j)\\)$$ from a CU, with economic guarantees bounded by $$\\(S_{CU}\\)$$, ensuring a secure and reliable framework.
+
+    ## Messenger Units
+
+    Messenger units act on behalf of the user in order to move messages between processes in the system. By performing this task, called <i>pushing</i>, MUs are able to orchestrate any number of processes in order to perform specific tasks for users.
+
+    ### Operating Procedure
+
+    1. $$\\(MU_m\\)$$ receives a message $$\\(m_{i}\\)$$ from a client or user.
+    2. The message $$\\(m_{i}\\)$$ is then forwarded to the scheduler $$\\(SU_k\\)$$ for assignment and publication, ensuring it receives a unique slot in the process's ordering.
+    3. $$\\(MU_m\\)$$ requests the outbox of a chosen $$\\(CU_l\\)$$ for any new messages that have been generated as a result of processing $$\\(\lambda(P_i, m_i)\\)$$.
+    4. If there are new messages in the outboxes, $$\\(MU_m\\)$$ takes each new message, signs it, and forwards it to the appropriate $$\\(SU_k\\)$$, recursively continuing the process.
+
+    The recursion ends when there are no more new messages given by $$\\(CU_l\\)$$ for all prior messages, signifying the end of the processing cycle for the user's interaction.
+
+    $$
+    [\\
+    \text{Push}(MU*m, M) =
+    \begin{cases}
+    \emptyset & \text{if } M = \emptyset \\
+    \forall m \in M; SU_k(\sigma(MU_m, m)), Push(MU_m, CU_l(m)*{out}) & \text{Else}
+    \end{cases}
+    ]\\
+    $$
+
+    ### Stake Slashing Conditions
+
+    Messages are propagated via $$\\(Push(MU_m, m)\\)$$, either directly by the Messenger Unit $$\\(MU_m\\)$$ or by external initiators. Upon receipt, processes evaluate these messages and their signatures to decide on subsequent actions: either to engage ($$\\(\alpha\\)$$), ignore ($$\\(\iota\\)$$), or request re-transmission with an augmented stake $$(\\\rho\\)$$. This protocol empowers processes within the ao network to delineate their security requirements for message interaction, symbolically represented as:
+
+    $$
+    [\\
+    \text{Decision}(P*i, m, \sigma) =
+    \begin{cases}
+    \alpha, & \text{if security criteria are met}, \\
+    \iota, & \text{if the message is to be disregarded}, \\
+    \rho, & \text{if re-transmission with higher stake is required}.
+    \end{cases}
+    \\]
+    $$
+
+    In the event that $$\\(MU_m\\)$$ is discovered signing an invalid message, entities within the ao protocol possess the authority to enforce a slashing operation against the stake of $$\\(MU_m\\)$$, denoted as $$\\(S*{MU*m}\\)$$.
+
+    $$
+    [\\
+    \neg MUm \Rightarrow \text{Slash}(S*{MU*m})
+    \\]
+    $$
+
+    Moreover, should the invalidity stem from a Compute Unit's (CU) attested result, $$\\(\lambda(P_i, m_j)\\)$$, $$\\(MU_m\\)$$ may assert a claim against the CU's stake, $$\\(S*{CU}\\)$$, contingent on the staking mechanism's framework. This relationship is defined as:
+
+    $$
+    [\\
+    \neg \lambda(P*i, m_j) \Rightarrow Transfer(S*{CU}, S\_{MU_m})
+    \\]
+    $$
+
+    ## Decentralized Service Market Equilibria
+
+    The ao protocol fosters a decentralized market for computation and message passing, which can be modeled through a minimization function as follows in the presence of an efficient market:
+    $$[\\ \min*{cu \in \mathcal{U}} \sum*{i=1}^{N \times M*i} \left( \text{Cost}(CU, P_i, M_j) - \lambda S*{P_i} \right) \\]$$
+    Where:
+
+    - $$(\mathcal{U})$$ represents the set of all available Compute Units.
+    - $$\\(N \times M_i\\)$$ iteration over all messages for all processes, effectively treating the set of process-message logs as a single sequence.
+    - $$\\(\text{Cost}(cu, P_i, M_j)\\)$$ computational cost for CU processing message $$\\(M_j\\)$$ of process $$\\(P_i\\)$$.
+    - $$\\(\lambda\\)$$ weighting factor that quantifies the influence of the stake $$\\(S_{P_i}\\)$$ on the overall optimization, allowing users to balance between computational cost efficiency and necessary economic security.
