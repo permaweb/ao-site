@@ -1,6 +1,7 @@
 # Protocol Specification of the `ao` Computer.
 
-**Network Version:** ao.TN.1
+**Status:** DRAFT-2
+**Targeting Network:** ao.TN.1
 
 ## What is `ao`?
 
@@ -10,25 +11,23 @@ The `ao` computer is a single, unified computing environment (a [Single System I
 
 Unlike existing decentralized compute systems, `ao` is capable of supporting the operation of computation without protocol-enforced limitations on size and form, while also maintaining the verifiability (and thus, trust minimization) of the network itself. Further, `ao`'s distributed and modular architecture allows existing smart contract platforms to easily 'plug in' to the network, acting as a single process which can send and recieve messages from any other process.
 
-Instead of enforcing one set of choices upon all users of the computing environment, `ao` is built in a modular form: Allowing users to choose which virtual machines, sequencing models, message passing security guarantees, and payment options work best for them. This modular environment is then unified by the eventual settlement of all messages -- each sharing the same format -- onto Arweave's decentralized data layer. This modularity creates a unified computing environment suiting an extremely wide set of workloads, in which every process can easily transfer messages and cooperate.
+Instead of enforcing one set of choices upon all users of the computing environment, `ao` is built in a modular form: Allowing users to choose which virtual machines, sequencing decentralization trade-offs, message passing security guarantees, and payment options work best for them. This modular environment is then unified by the eventual settlement of all messages -- each sharing the same format -- onto Arweave's decentralized data layer. This modularity creates a unified computing environment suiting an extremely wide set of workloads, in which every process can easily transfer messages and cooperate.
 
 `ao`'s core ojective is to enable trustless and cooperating compute services without any practical bounds on scale. This allows for a radically new design space of applications that were not previously possible: Blending the benefits of smart contract applications (services without requiring trust in anything but code), and traditional compute environments (Amazon EC2, etc).
 
-`aos` -- a decentralized operating system for `ao` -- allows developers to launch command-line processes that function like smart contracts within its decentralized network. This process is similar to starting a server on a cloud service, but with decentralization and trustless computation as key advantages. These processes operate without being confined to any particular location, enabling seamless user interactions across the network. The outcome is a 'Single System Image'—a unified, global computing platform that transcends physical and scalability limits, collectively used by all participants. Essentially, AO forms a vast, scalable computer where users can interact with any process, promoting a highly collaborative ecosystem.
+Due to its scalability, the natural way for developers to use `ao` is to spawn their own command-line (`aos`) process inside the network, and to start issuing commands. This DevX is similar to how developers create a new server instance at a cloud host and connect to it via SSH, except that this command line process has the properties of a smart contracts. Their commandline process on `ao` doesn't live in any specific data center or at any one physical location, and its computation is completely trustless. Every user can message and interact with every other process and program. The result of this is a global 'Single System Image': A unified computer -- spread around the world, operating at any scale -- shared between all users.
 
-For users, `ao` represents a shared computer on which they can execute multiple processes. These processes are not confined to any particular servers or under the dominion of any single individual or group. Once activated, these processes deliver their services with cryptographic security, ensuring unbiased and perpetual operation. This design empowers users with the ability to rely on services that maintain their rights consistently over time, fostering a trustable environment for interaction with the system.
-
-## Core Functionality
+From the end-user or developer's perspective, the essence of `ao` is simple: `ao` is a shared computer that they can run any number of processes inside. These processes are not hosted on any specific servers, or under the control of any one individual or group. Instead, once launched these processes can be cryptographically entrusted to render their services in a provably neutral manner, permanently. This enables them to guarantee rights to their users over time.
 
 When compared to existing decentralized and distributed computation systems, the `ao` protocol offers the following features:
 
-- **Arbitrary numbers of processes ('contracts') running in parallel**: In `ao`, applications are built of any number of communicating processes. Inspired by the original actor model ([Carl Hewitt, 1973](https://www.ijcai.org/Proceedings/73/Papers/027B.pdf)) and [Erlang](https://erlang.org), `ao` does not allow processes to share memory between one another, but does allow them to coordinate via a native message-passing standard. Each of these processes can then be operated at the full speed of the computing resources that are available, without interfering with one another. By focusing on message-passing `ao` enables scaling mechanics that are far more similar to traditional web2/distributed systems environments, than traditional smart contracts.
-- **Unbounded resource utilization in processes**: Building on the lazily-evaluated architecture of the original versions of [SmartWeave](https://github.com/ArweaveTeam/SmartWeave) and [LazyLedger](https://arxiv.org/pdf/1905.09274.pdf) (later known as [Celestia](https://celestia.org/)), nodes in the `ao` network do not need to perform any compute at all in order to reach consensus about program state transitions. State is implied 'holographically' by the Arweave-hosted log of messages to the process. Compute costs are then delegated to users who can either calculate their own states, or request execution by nodes of their choosing.
-- **Access Arweave, a native unbounded harddrive**: `ao` processes can seamlessly load and execute data of any size directly into their memory and write back to the network. This setup eliminates the typical resource constraints and enables fully parallel execution, dramatically expanding the possibilities for application development beyond the limits of traditional smart contract platforms. Consequently, it opens the door to sophisticated applications requiring extensive data handling and computational resources, such as machine learning tasks and high-compute autonomous agents.
-- **Autonomously activating contracts**: In traditional smart contract environments (like Ethereum, Solana, Polygon, etc.), contracts 'wake up' to perform compute at the request of a user transaction. This creates an environment in which programs are not 'live' unless a user interacts with them, lessening the scope of applications that can be built ontop. `ao` removes this limitation by allowing contracts to have scheduled 'cron' interactions that automatically wake them up and execute compute at set intervals. Any user, or indeed the process itself, can pay a node to 'subscribe' to a process in order to trigger the evaluation of the compute at the appropriate frequency.
+- **Arbitrary numbers of processes ('contracts') running in parallel**: In `ao`, applications are built of any number of communicating processes. Inspired by [Erlang](https://erlang.org), `ao` does not allow processes to share memory between one another, but does allow them to coordinate via a native message-passing standard. Each of these processes can then be operated at the full speed of the computing resources that are available, without interfering with one another. By focusing on message-passing `ao` enables scaling mechanics that are far more similar to traditional web2/distributed systems environments, than traditional smart contracts.
+- **Unbounded resource utilization in processes**: Building on the lazily-evaluated architecture of the original versions of [SmartWeave](https://github.com/ArweaveTeam/SmartWeave), nodes in the `ao` network do not need to perform any compute at all in order to reach consensus about program state transitions. State is implied 'holographically' by the Arweave-hosted log of messages to the process. Compute costs are then delegated to users who can either calculate their own states, or request execution by nodes of their choosing.
+- **Access Arweave, a native unbounded harddrive**: `ao` processes are able to load data from Arweave directly into their memory for execution -- regardless of size -- as well as to write data back to the network. When paired with the network's lack of enforced resource limits and fully paralell execution, this capability significantly broadens the design space for programs, far beyond the normal constraints of traditional smart contract platforms. For example, machine learning tasks and high-compute autonomous agents.
+- **Self-waking contracts**: In traditional smart contract environments (like Ethereum, Solana, Polygon, etc.), contracts 'wake up' to perform compute at the request of a user transaction. This creates an environment in which programs are not 'live' unless a user interacts with them, lessening the scope of applications that can be built ontop. `ao` removes this limitation by allowing contracts to have scheduled 'cron' interactions that automatically wake them up and execute compute at set intervals. Any user, or indeed the process itself, can pay a node to 'subscribe' to a process in order to trigger the evaluation of the compute at the appropriate frequency.
 - **Modular architecture supporting extensions**: `ao`'s core architecture is an open data protocol that anyone can build an implementation of. Everything -- from the sequencers, message passing relayers, and even the virtual machine of the system -- can be swapped out and extended at will. This flexibility will allow the existing smart contracting systems in the Arweave ecosystem (Warp, Ever, Mem, et al) to plug into `ao` and be able to send and receive messages from the unified network. This will also allow all of these smart contracting systems to share some of the same infrastructure and tooling, making for a more coherent experience of compute on Arweave.
 
-## The `ao` Architecture in a Nutshell
+### The `ao` Architecture in a Nutshell
 
 The fundamental components of `ao` are as follows:
 
@@ -37,6 +36,8 @@ The fundamental components of `ao` are as follows:
 - **Scheduler Units (SUs):** Scheduler Units are responsible for the single assignment of atomically incrementing slot numberings to the messages that are sent to a process. After assignment, schedulers are required to ensure that data is uploaded to Arweave and thus made permanently available for others to access. Processes have free choice of their preferred sequencer, which can be implemented in a variety of ways: Decentralized, centralized, or even user-hosted.
 - **Compute Units (CUs)**: Compute Units are nodes that users and _messenger units_ can use in order to calculate the state of processes in `ao`. While SUs are obligated to sequence the messages of processes they have accepted, no CU is required to calculate the state of a process. This creates a peer-to-peer market for computation, where CUs offer the service of resolving process state in competition with one another -- trading off price, the computation requirements of the process, and other parameters. Once computation of a state is completed, the CU will return to the caller a signed attested of the _output_ (logs, outboxes, and requests to spawn other processes) of the resolution of a specific message. CUs may also generate and publish signed state attestations that other nodes can load -- optionally for a [UDL](https://mirror.xyz/0x64eA438bd2784F2C52a9095Ec0F6158f847182d9/AjNBmiD4A4Sw-ouV9YtCO6RCq0uXXcGwVJMB5cdfbhE) specified fee.
 - **Messenger Units (MUs)**: Messenger Units are nodes that relay messages around the `ao` network according to a process called _cranking_. In essence, when MUs crank a message around the system they send it to the approprate SU for a process, then coordinate with a CU in order to calculate the output of the interaction, and then repeat the process recursively for any resulting outbox messages. This process continues until there are no more messages to crank. Users and processes can also pay a MU to _subscribe_ to a process, cranking any messages that result from its timed _cron_ interactions. Processes can also optionally label a message as a _cast_ -- leading the MU to send the message to its SU, but not listen for a response. In this way, `ao` is able to provide a vibrant environment that gives users and processes maximal choice -- VM, payment method, scheduler type, messaging security, and more -- without requiring consensus on costly computation itself.
+
+<div className='diagram ao-interactions'>
 
 <svg width="100%" height="472" viewBox="0 0 830 472" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_238_127)">
@@ -88,210 +89,13 @@ The fundamental components of `ao` are as follows:
 </clipPath>
 </defs>
 </svg>
+</div>
 
-## Related Work
+### Trust Model
 
-There are no direct analogies to draw upon that describe what `ao` is and the experience of using it. There are, however, many adjacent projects and networks that can be used to contrast with `ao` in order to elucidate its properties. In this section we discuss each in turn.
+The core `ao` data protocol, as described above, provides a framework for secure computation but does not provide or enforce any forms of economic guarantees in itself. In order to fulfil this role, an `ao` staking contract and token are under development that is able to enforce the correct operation of SUs, MUs, and CUs in the network. This contract and its associated mechanisms are not discussed in this specification, as this document is focused purely on `ao`'s core data protocol.
 
-### Actor Model
-
-The Actor Model, introduced by _Carl Hewitt, Peter Bishop_, and _Richard Steiger_ in their paper, [A Universal Modular Actor Formalism for Artificial Intelligence](<(https://www.ijcai.org/Proceedings/73/Papers/027B.pdf)>), serves as a foundational framework for understanding and implementing concurrency in computer systems. This model posits that the fundamental unit of computation is the "actor," an entity that can make local decisions, create more actors, send messages, and determine how to respond to messages it receives. This approach to system design and programming facilitates the creation of distributed, highly concurrent, and scalable applications.
-
-### Erlang
-
-`ao` is largely inspired by the Erlang computing environment and its programming language. Erlang is an implementation of the actor model which offers extremely lightweight processes, handled by schedulers in the runtime, in order to enable efficient utilization of massively parallel systems (machines and networks with many physical threads). These capabilities give rise to a 'process-oriented' form of programming, in which the developer naturally splits their computation into many cooperating and parallel components in order to achieve their goal. While Erlang is not extremely well known amongst mainstream computing circles, it is used in a significant number of environments where high performance is a necessity: [Telephony switches](<https://en.wikipedia.org/wiki/Erlang_(programming_language)>), instant messenging services like [WhatsApp](https://thechipletter.substack.com/p/ericsson-to-whatsapp-the-story-of), etc.
-
-The `ao` computer derives its process-oriented approach from Erlang directly. Erlang offers clue evidence that an environment in which distributed computation is achieved through processes that pass messages but do not share memory can be highly efficient. `ao` applies this approach to the domain of smart contracts, while also offering a single system image for an Erlang-like environment for the first time.
-
-### Smart Contracting Platforms (Ex. Ethereum)
-
-Ethereum is a decentralized computing network in which all users share memory and a single thread of execution. Originally based on an idea of [adding Turing Complete computation to a blockchain](https://bitcointalk.org/index.php?topic=428589), Ethereum morphed into a project to build a ['world computer'](https://www.youtube.com/watch?v=j23HnORQXvs). Upon launch, Ethereum was able to demonstrate the power of trustless computation of arbitrary code -- without the production of an independent blockchain network -- for the first time. While the network gained immense traction with users and developers, the core network's throughput has not improved since it launched in 2015.
-
-Instead of attempting to scale the base network past the processing capacity of a single, small thread of execution, the Ethereum ecosystem has pivoted to a ['rollup-centric' roadmap](https://ethereum-magicians.org/t/a-rollup-centric-ethereum-roadmap/4698). This approach to scaling focuses on supporting additional 'rollup' networks that inherit [some](https://l2beat.com/scaling/summary) of the properties of Ethereum, but not all of them. At the time of writing, there are 14 rollups in the Ethereum ecosystem with more than $100 million of total value represented in their programs. Each of these 14 rollups represents another single thread (a 'process' in `ao` terms) of computation that can be performed in parallel. By building from the ground-up to focus on paralell execution rather than shared memory, `ao` offers a completely novel architecture that supports an arbitrary number of indepedent processes, while maintaining the ability for programs to be decentralized and trustless.
-
-### Decentralized Computer Marketplaces (Ex. Akash)
-
-In traditional smart contract platforms like Ethereum, the shared-thread architecture limits each user to executing only small computational tasks. This restriction constrains the complexity and scalability of operations on the network. This shared resource model inherently limits the scalability and efficiency of applications, impacting the potential for more computationally intensive smart contracts.
-
-Several networks aim to facilitate large-scale computing in a decentralized context, such as [Akash](https://whitepaper.io/document/633/akash-network-whitepaper). Unlike platforms that prioritize verifiable and reproducible computations, Akash and similar networks provide a decentralized marketplace for container hosting services. This approach allows for the execution of traditional, non-deterministic programs on x86 architecture physical machines. However, it sacrifices the capacity to create trustless services, such as those enabled by smart contracts.
-
-`ao` allows developers to select their preferred VM, with the initial reference implementation focusing on WASM for executing processes. WASM containers in ao can manage up to 4 GB of memory, a limit set to increase with the adoption of WASM64, enabling long-duration computations. The rich compilation tools within the WASM ecosystem support a diverse array of programs. Recent ##### Example
-s of uses of WASM include the execution of [LLM transformer models](https://huggingface.co/spaces/radames/Candle-phi1-phi2-wasm-demo), [speech recognition](https://huggingface.co/spaces/lmz/candle-whisper), and even compute-heavy [image manipulation software (Photoshop)](https://www.bram.us/2021/10/27/adobe-photoshop-in-the-browser-thanks-to-emscripten-web-components-and-project-fugu/) in web browsers.
-
-Despite its significant computational capacities, `ao` is able to maintain traditional smart contract execution capabilities due to its holographic state mechanism. Instead of coming to consensus about the state of the computation itself, `ao` focuses on ensuring that _logs_ of interactions are written to and available on Arweave. The combination of a deterministic metered VM, as well as the availability of all process messages on Arweave, projects a 'hologram' of the state: The state may not have actually been computed by any participant yet, but when it is computed we can guarantee that its outputs will always be the same. Additionally, the holographic state system enabled by message logs on Arweave enables `ao` processes to respond to implied messages on a timed basis, waking themselves up and performing actions. Paired with its holographic state mechanism, `ao` also provides a distributed network of `Compute Units` that offer cryptographically signed attestations about the results of computation. These compute nodes compete with one another in a market, decreasing the cost of resolving the holographic state for users.
-
-### Peer-to-Peer VM hosting (Ex. Urbit)
-
-[Urbit](https://media.urbit.org/whitepaper.pdf) is a peer-to-peer computation system with some similarities to `ao`. Like `ao`, by focusing on the transfer and availability of a interaction logs, Urbit is able to offer a distributed compute environment in which 'servers' can be ported from one physical host to another. During the switch from one host to another, the log of interactions with the hosted computation can be executed in order to recalculate the present state. Urbit processes can also send messages to one another in order to communicate.
-
-Unlike `ao`, Urbit does not come to decentralized consensus about its interaction logs. In practice, this means that there is no canonical agreement or ensured availability of its 'rollups' -- and thus, the state of its processes. In this way, Urbit can be seen as similar to Akash and other decentralized compute marketplaces, with the additional ability to migrate computation from one host to another in a verifiable fashion, _if_ the host is amenable to the transition. `ao` builds on this model by ensuring that logs of messages to a process are made available via Scheduler Units (SUs), which upload them to Arweave. By enforcing the availability of this log, user processes are decentralized -- no longer resident on one specific computation node -- allowing their state to be resolved by a distributed network of Compute Units (CUs) in real-time. This difference in architecture ensures that `ao` processes have the necessary properties that enable the deployment of trustless smart contracts (verifiable decentralized computation), as well as the ability to host an arbitrary number of processes. This latter ability arises due to the fact that processes can still be holographically represented (their message log is permanently available) without there being any CUs presently attached to execute them.
-
-## Flexible Trust and Security Models
-
-The core `ao` data protocol, as described in this document, provides a _framework_ for secure computation but does not provide or enforce any forms of economic guarantees in itself. Instead, `ao` offers a flexible system of cryptographically secured elements from which economic security mechanisms can be implemented.
-
-In order to fulfil the role of providing users with economic security, an `ao` staking contract and token are under development that is able to economically enforce the correct operation of units in the network. While the full specification of this mechanism is outside of the scope of this data protocol definition, we provide a blueprint in the following section to illustrate how such a system can be constructed on top of `ao`.
-
-## Formal Process and Unit Models
-
-## Processes
-
-Let $$P_i$$ represent the $$i^{th}$$ process. Define $$P_i = (Log_i, Init_i, Env_i)$$, where:
-
-- $$Log_i$$ is the ordered sequence of all messages for $$P_i$$.
-- $$Init_i$$ is the initialization data for $$P_i$$.
-- $$Sched_i$$ is the scheduler for $$P_i$$.
-- $$Env_i$$ is the computing environment for $$P_i$$.
-
-Notably, as the ao data protocol focuses on providing a universal format for decentralized and verifiable computation, it does not enforce a specific virtual machine, nor any associated parameters. Subsequently, when a developer creates a new process on ao they must specify all of the parameters necessary for units in the system to deterministically execute it. These parameters are added as tags on the spawning data item and may include (but are not limited to):
-
-- The maximum amount of memory that the process should be able to use.
-- The maximum number of operations (optionally weighted, according to the specification of the virtual machine) that the process may consume while evaluating a single message.
-- Any extensions to the virtual machine that the process requires (access to a virtualized local file system, hardware-optimized encryption instructions, etc.), as defined by the virtual machine specification.
-
-The state of $$P_i$$ at a given time step, $$S(P_i)$$, is determined by:
-$$\\S(P_i) = F(Log_i, Env_i) \\$$
-where $$F$$ is a function, defined by $$Env_i$$, computing the state based on the message log.
-The outbox of new messages to be sent to related processes as a result of a message is described as follows:
-$$[ \\Outbox_m = F(Log_i, Env_i, m) \\$$
-where $$m$$ refers to the originating message.
-
-## Messages
-
-Let $$M_{ij}$$ represent the $$j^{th}$$ message in $$P_i$$. $$M_{ij}$$ is represented as an ANS-104 compliant data item. The delivery status $$D(M_{ij})$$ can be represented as:
-
-$$
- \\D(M_{ij}) =
-\begin{cases}
-1 & \text{if delivered} \\
-0 & \text{else}
-\end{cases}
-\\
-$$
-
-The ao data protocol employs at-most-once delivery semantics, as detailed in <a href="https://groups.csail.mit.edu/tds/papers/Lampson/FORTE93.pdf" style="color:red;">Correctness of at-most-once message delivery protocols</a>, atop which additional guarantees are provided by the maintenance of message logs on Arweave through its data persistence protocol. These guarantees ensure that undelivered messages that result from $$P_i$$ may always been delivered later by re-computing $$Outbox(P_i)$$ from its message log on Arweave.
-
-## Staking
-
-Let $$S_U$$ denote the <i>stake</i> for unit $$U$$, representing the value of locked tokens committed by the unit to ensure economic security for the messages it is involved in relaying. The stake is defined as:
-$$\\ S_U = \text{tokens committed by (U) in a staking process} \\$$
-
-Once staked, the tokens $$S_U$$ for any $$U$$ may be subject to <i>slashing</i> as a result of malicious behavior.
-
-## Scheduler Units
-
-Upon receiving a message $$m$$, an SU, denoted as $$SU_{P_i}$$ for process $$P_i$$, performs the following operations:
-
-1.  <strong>Assignment:</strong> $$SU*{P_i}$$ assigns $$m$$ a unique incremental nonce, $$n$$, reflecting the order of receipt relative to other messages within the same process. This assignment is formalized as:
-    $$\\ A(m) = (m, n, \sigma(SU*{P*i}, m, n)) \\$$
-    where $$\sigma(SU*{P*i}, m, n)$$ denotes the cryptographic signature of $$SU*{P_i}$$ over the message $$m$$ and its nonce $$n$$.
-    <br></br>
-
-2.  <strong>Persistence:</strong> The signed assignment, along with the message, is persisted onto the Arweave data layer, ensuring its availability and integrity within the network.
-
-### Stake Slashing Conditions
-
-The stake associated with $$SU_{P_i}$$, denoted as $$S_{SU_{P_i}}$$, is subject to being slashed under the following conditions:
-
-1.  If $$SU*{P_i}$$ fails to perform the assignment for $$m$$ or maliciously drops $$m$$, $$S*{SU*{P_i}}$$ will be slashed to penalize the non-compliance.
-    $$[ \\neg A(m) \Rightarrow Slash(S*{SU*{P_i}}) \\$$
-    <br></br>
-
-2.  If $$SU*{P*i}$$ performs the assignment for $$m$$ but fails to persist the signed assignment and message onto the Arweave data layer, resulting in a 'gap' in the log for $$P_i$$, $$(\\S*{SU*{P_i}}$$ will also be slashed.
-    $$\\ \neg Persist(A(m)) \lor \neg Persist(m) \Rightarrow Slash(S*{SU*{P_i}}) \\$$
-    <br></br>
-
-3.  Assigning a slot more than once with the same nonce to different messages:
-
-    $$\\ \exists m_1, m_2; m_1 \neq m_2 \wedge A(m_1)\_n = A(m_2)\_n \Rightarrow Slash(S*{SU\_{P_i}}) \\$$
-    <br></br>
-
-## Compute Units
-
-Compute units execute the virtual machine (defined by $$Env_i$$) function $$\lambda$$ for $$P_i$$ on given a message:
-$$\\ \lambda(P*i, m_j) = \langle \Phi*{P*i}, Outbox_j, Attest_j \rangle \\$$
-where $$\Phi*{P_i}$$ is the new process state, $$Outbox_j$$ is the set of any resulting outbound messages, and $$Attest_j$$ is a signed attestation of the computation.
-
-### Stake Slashing Conditions
-
-Should $$Attest_j$$ be determined to be incorrect by other parties, they have the authority to commence a slashing operation against $$S_{CU}$$. Subsequently, $$MUs$$ can employ the results of $$\lambda(P_i, m_j)$$ from a CU, with economic guarantees bounded by $$S_{CU}$$, ensuring a secure and reliable framework.
-
-## Messenger Units
-
-Messenger units act on behalf of the user in order to move messages between processes in the system. By performing this task, called <i>pushing</i>, MUs are able to orchestrate any number of processes in order to perform specific tasks for users.
-
-### Operating Procedure
-
-1. $$MU_m$$ receives a message $$m_{i}$$ from a client or user.
-   <br></br>
-
-2. The message $$m_{i}$$ is then forwarded to the scheduler $$SU_k$$ for assignment and publication, ensuring it receives a unique slot in the process's ordering.
-   <br></br>
-
-3. $$MU_m$$ requests the outbox of a chosen $$CU_l$$ for any new messages that have been generated as a result of processing $$\lambda(P_i, m_i)$$.
-   <br></br>
-
-4. If there are new messages in the outboxes, $$MU_m$$ takes each new message, signs it, and forwards it to the appropriate $$SU_k$$, recursively continuing the process.
-   <br></br>
-
-The recursion ends when there are no more new messages given by $$CU_l$$ for all prior messages, signifying the end of the processing cycle for the user's interaction.
-
-$$
-  \\
-  \text{Push}(MU*m, M) =
-  \begin{cases}
-  \emptyset & \text{if } M = \emptyset \\
-  \forall m \in M; SU_k(\sigma(MU_m, m)), Push(MU_m, CU_l(m)*{out}) & \text{Else}
-  \end{cases}
-  \\
-$$
-
-### Stake Slashing Conditions
-
-Messages are propagated via $$Push(MU_m, m)$$, either directly by the Messenger Unit $$MU_m$$ or by external initiators. Upon receipt, processes evaluate these messages and their signatures to decide on subsequent actions: either to engage ($$\alpha$$), ignore ($$\iota$$), or request re-transmission with an augmented stake $$(\\\rho$$. This protocol empowers processes within the ao network to delineate their security requirements for message interaction, symbolically represented as:
-
-$$
-  \\
-  \text{Decision}(P*i, m, \sigma) =
-  \begin{cases}
-  \alpha, & \text{if security criteria are met}, \\
-  \iota, & \text{if the message is to be disregarded}, \\
-  \rho, & \text{if re-transmission with higher stake is required}.
-  \end{cases}
-  \\
-$$
-
-In the event that $$MU_m$$ is discovered signing an invalid message, entities within the ao protocol possess the authority to enforce a slashing operation against the stake of $$MU_m$$, denoted as $$S*{MU*m}$$.
-
-$$
-  \\
-  \neg MUm \Rightarrow \text{Slash}(S*{MU*m})
-  \\
-$$
-
-Moreover, should the invalidity stem from a Compute Unit's (CU) attested result, $$\lambda(P_i, m_j)$$, $$MU_m$$ may assert a claim against the CU's stake, $$S*{CU}$$, contingent on the staking mechanism's framework. This relationship is defined as:
-
-$$
-  \\
-  \neg \lambda(P*i, m_j) \Rightarrow Transfer(S*{CU}, S\_{MU_m})
-  \\
-$$
-
-## Decentralized Service Market Equilibria
-
-The ao protocol fosters a decentralized market for computation and message passing, which can be modeled through a minimization function as follows in the presence of an efficient market:
-$$\\ \min*{cu \in \mathcal{U}} \sum*{i=1}^{N \times M*i} \left( \text{Cost}(CU, P_i, M_j) - \lambda S*{P_i} \right) \\$$
-Where:
-
-- $$\mathcal{U}$$ represents the set of all available Compute Units.
-
-- $$N \times M_i$$ iteration over all messages for all processes, effectively treating the set of process-message logs as a single sequence.
-
-- $$\text{Cost}(cu, P_i, M_j)$$ computational cost for CU processing message $$M_j$$ of process $$P_i$$.
-
-- $$\lambda$$ weighting factor that quantifies the influence of the stake $$S_{P_i}$$ on the overall optimization, allowing users to balance between computational cost efficiency and necessary economic security.
-
-## Reference Implementation
+### Reference Implementation
 
 The publication of this specification accompanies the release of `ao.TN.1`. This first testnet release of the system includes fully-functional implementations of SUs, MUs, and CUs for the network. While all choices referenced in this specification are deliberately open to allow different implementations with a range of trade-offs, the initial implementations offers:
 
@@ -308,18 +112,29 @@ Notably missing from this initial version of the testnet are:
 
 Implementations of both of these systems are in development.
 
-## About this Specification
+### Related Work
+
+There are no direct analogies to draw upon that describe what `ao` is and the experience of using it. There are, however, many adjacent projects and networks that can be used to contrast with `ao` in order to elucidate its properties. In this section we discuss each in turn.
+
+#### Erlang
+
+`ao` is largely inspired by the Erlang computing environment and its programming language. Erlang is a environment which offers extremely lightweight processes, handled by schedulers in the runtime, in order to enable efficient utilization of massively parallel systems (machines and networks with many physical threads). These capabilities give rise to a 'process-oriented' form of programming, in which the developer naturally splits their computation into many cooperating and parallel components in order to achieve their goal. While Erlang is not extremely well known amongst mainstream computing circles, it is used in a significant number of environments where high performance is a necessity: [Telephony switches](TODO), instant messenging services like [WhatsApp](TODO), etc.
+
+The `ao` computer derives its process-oriented approach from Erlang directly. Erlang offers clue evidence that an environment in which distributed computation is achieved through processes that pass messages but do not share memory can be highly efficient. `ao` applies this approach to the domain of smart contracts, while also offering a single system image for an Erlang-like environment for the first time.
+
+#### Ethereum
+
+Ethereum is a decentralized computing network in which all users share and memory and a single thread of execution. Originally based on an idea of [adding Turing Complete computation to Bitcoin](TODO), Ethereum morphed into a project to build a ['world computer'](TODO). Upon launch, Ethereum was able to demonstrate the power of trustless computation of arbitrary code -- without the production of an independent blockchain network -- for the first time. While the network gained immense traction with users and developers, the core network's throughput has not improved since it launched in 2015(?).
+
+Instead of attempting to scale the base network past the processing capacity of a single, small thread of execution, the Ethereum ecosystem has pivoted to attempting to host multiple 'rollups' -- associated networks that inherit some of the properties of Ethereum. At the time of writing, there are X rollups in the Ethereum ecosystem with more than $YY million of total value represented in their programs. Each of these Y rollups represents another single thread ('process' in `ao`) of computation that can be performed in parallel. By building from the ground-up to focus on paralell execution rather than shared memory, `ao` offers a completely novel architecture that supports an arbitrary number of indepedent processes, while maintaining the ability for programs to be decentralized and trustless.
+
+### About this Specification
 
 This protocol defines the `ao` computer system in terms of its message structures, types, as well as the API endpoints that services that makeup the ao network employ to communicate. This document is intended to give the reader all of the information that they need in order to build an `ao` compliant service implementation. This specification is currently published in draft form. Please provide feedback to the authors if it does not provide sufficient detail or suffers other imprecisions, such that improvements can be made in future publications.
 
-## The `ao` Data Protocol
+### The `ao` Data Protocol
 
-### `ao` Messaging Structures
-
-All `ao` message structures are based off of ANS-104 Data-Items
-
-A data-item is a binary specification found in the [ANS-104 Bundled Data Specification](https://specs.arweave.dev/?tx=xwOgX-MmqN5_-Ny_zNu2A8o-PnTGsoRb_3FrtiMAkuw). The data-item is the base structure of Arweave Transactions. The `ao` Data-Protocol, uses this specification as a core primative for each `type` in the `ao` Data-Protocol.
-
+<div className='diagram ao-messages'>
 <svg width="100%" height="539" viewBox="0 0 850 539" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M653 463.5H797C798.381 463.5 799.5 464.619 799.5 466V525C799.5 526.381 798.381 527.5 797 527.5H653C651.619 527.5 650.5 526.381 650.5 525V466C650.5 464.619 651.619 463.5 653 463.5Z" fill="#E6E6E6" stroke="#C6C6C6"/>
 <path d="M724.117 498.578C724.049 499.104 723.914 499.589 723.711 500.031C723.508 500.469 723.245 500.844 722.922 501.156C722.594 501.474 722.206 501.721 721.758 501.898C721.315 502.07 720.82 502.156 720.273 502.156C719.805 502.156 719.378 502.091 718.992 501.961C718.612 501.826 718.273 501.641 717.977 501.406C717.674 501.172 717.414 500.896 717.195 500.578C716.982 500.26 716.805 499.914 716.664 499.539C716.518 499.164 716.409 498.771 716.336 498.359C716.268 497.948 716.232 497.531 716.227 497.109V495.523C716.232 495.102 716.268 494.685 716.336 494.273C716.409 493.862 716.518 493.469 716.664 493.094C716.805 492.719 716.982 492.372 717.195 492.055C717.414 491.732 717.674 491.453 717.977 491.219C718.273 490.984 718.612 490.802 718.992 490.672C719.372 490.536 719.799 490.469 720.273 490.469C720.841 490.469 721.349 490.557 721.797 490.734C722.245 490.906 722.63 491.151 722.953 491.469C723.276 491.792 723.534 492.177 723.727 492.625C723.924 493.073 724.055 493.568 724.117 494.109H722.672C722.625 493.766 722.544 493.445 722.43 493.148C722.315 492.852 722.161 492.591 721.969 492.367C721.776 492.143 721.539 491.969 721.258 491.844C720.982 491.714 720.654 491.648 720.273 491.648C719.93 491.648 719.625 491.706 719.359 491.82C719.099 491.93 718.875 492.081 718.688 492.273C718.495 492.466 718.333 492.69 718.203 492.945C718.078 493.201 717.977 493.471 717.898 493.758C717.82 494.044 717.763 494.339 717.727 494.641C717.695 494.938 717.68 495.227 717.68 495.508V497.109C717.68 497.391 717.695 497.682 717.727 497.984C717.763 498.281 717.82 498.573 717.898 498.859C717.977 499.151 718.078 499.424 718.203 499.68C718.328 499.935 718.487 500.159 718.68 500.352C718.872 500.549 719.099 500.706 719.359 500.82C719.62 500.93 719.924 500.984 720.273 500.984C720.654 500.984 720.982 500.924 721.258 500.805C721.539 500.685 721.776 500.516 721.969 500.297C722.161 500.083 722.315 499.831 722.43 499.539C722.544 499.242 722.625 498.922 722.672 498.578H724.117ZM733.5 490.625L733.516 498.328C733.516 498.859 733.422 499.357 733.234 499.82C733.047 500.284 732.789 500.688 732.461 501.031C732.133 501.38 731.742 501.656 731.289 501.859C730.836 502.057 730.339 502.156 729.797 502.156C729.245 502.156 728.742 502.057 728.289 501.859C727.836 501.661 727.448 501.388 727.125 501.039C726.802 500.695 726.549 500.292 726.367 499.828C726.185 499.359 726.091 498.859 726.086 498.328L726.102 490.625H727.477L727.508 498.328C727.513 498.667 727.565 498.992 727.664 499.305C727.768 499.617 727.917 499.893 728.109 500.133C728.297 500.372 728.531 500.565 728.812 500.711C729.099 500.857 729.427 500.93 729.797 500.93C730.167 500.93 730.492 500.859 730.773 500.719C731.055 500.573 731.292 500.378 731.484 500.133C731.672 499.893 731.815 499.617 731.914 499.305C732.013 498.992 732.068 498.667 732.078 498.328L732.102 490.625H733.5Z" fill="black"/>
@@ -361,18 +176,27 @@ A data-item is a binary specification found in the [ANS-104 Bundled Data Specifi
 <path d="M127 434L132 436.887V431.113L127 434ZM131.5 434.5H325.5V433.5H131.5V434.5Z" fill="#753800"/>
 <path d="M180.119 416.369H178.479V419H177.395V412.174H179.891C180.219 412.178 180.539 412.219 180.852 412.297C181.168 412.375 181.449 412.498 181.695 412.666C181.938 412.834 182.131 413.049 182.275 413.311C182.424 413.572 182.498 413.889 182.498 414.26C182.498 414.506 182.463 414.723 182.393 414.91C182.322 415.098 182.225 415.264 182.1 415.408C181.975 415.557 181.826 415.688 181.654 415.801C181.486 415.91 181.305 416.008 181.109 416.094L182.809 418.941V419H181.643L180.119 416.369ZM178.479 415.484H179.92C180.104 415.48 180.283 415.455 180.459 415.408C180.639 415.361 180.799 415.289 180.939 415.191C181.076 415.098 181.188 414.979 181.273 414.834C181.363 414.686 181.408 414.508 181.408 414.301C181.408 414.082 181.365 413.896 181.279 413.744C181.197 413.588 181.086 413.461 180.945 413.363C180.805 413.266 180.643 413.193 180.459 413.146C180.275 413.1 180.086 413.074 179.891 413.07H178.479V415.484ZM189.412 415.918H186.037V418.115H189.963V419H184.93V412.174H189.928V413.07H186.037V415.027H189.412V415.918ZM197.58 413.07H195.09V419H193.988V413.07H191.51V412.174H197.58V413.07ZM204.418 412.174L204.424 416.744C204.416 417.115 204.342 417.445 204.201 417.734C204.064 418.023 203.879 418.27 203.645 418.473C203.41 418.676 203.137 418.83 202.824 418.936C202.512 419.041 202.178 419.094 201.822 419.094C201.463 419.094 201.127 419.041 200.814 418.936C200.502 418.83 200.23 418.678 200 418.479C199.766 418.279 199.58 418.035 199.443 417.746C199.307 417.453 199.236 417.119 199.232 416.744L199.238 412.174H200.299L200.305 416.744C200.309 416.975 200.346 417.182 200.416 417.365C200.49 417.545 200.594 417.697 200.727 417.822C200.855 417.947 201.012 418.043 201.195 418.109C201.383 418.176 201.592 418.209 201.822 418.209C202.053 418.209 202.26 418.176 202.443 418.109C202.631 418.043 202.791 417.947 202.924 417.822C203.053 417.697 203.152 417.545 203.223 417.365C203.297 417.182 203.336 416.975 203.34 416.744L203.346 412.174H204.418ZM208.947 416.369H207.307V419H206.223V412.174H208.719C209.047 412.178 209.367 412.219 209.68 412.297C209.996 412.375 210.277 412.498 210.523 412.666C210.766 412.834 210.959 413.049 211.104 413.311C211.252 413.572 211.326 413.889 211.326 414.26C211.326 414.506 211.291 414.723 211.221 414.91C211.15 415.098 211.053 415.264 210.928 415.408C210.803 415.557 210.654 415.688 210.482 415.801C210.314 415.91 210.133 416.008 209.938 416.094L211.637 418.941V419H210.471L208.947 416.369ZM207.307 415.484H208.748C208.932 415.48 209.111 415.455 209.287 415.408C209.467 415.361 209.627 415.289 209.768 415.191C209.904 415.098 210.016 414.979 210.102 414.834C210.191 414.686 210.236 414.508 210.236 414.301C210.236 414.082 210.193 413.896 210.107 413.744C210.025 413.588 209.914 413.461 209.773 413.363C209.633 413.266 209.471 413.193 209.287 413.146C209.104 413.1 208.914 413.074 208.719 413.07H207.307V415.484ZM218.674 419H217.666L214.73 413.867L214.76 419H213.723V412.174H214.742L217.678 417.312L217.643 412.174H218.674V419ZM225.037 417.254C225.041 417.094 225.014 416.961 224.955 416.855C224.9 416.746 224.809 416.639 224.68 416.533C224.523 416.408 224.316 416.309 224.059 416.234C223.805 416.16 223.582 416.098 223.391 416.047C223.121 415.98 222.836 415.898 222.535 415.801C222.238 415.699 221.965 415.568 221.715 415.408C221.461 415.248 221.252 415.051 221.088 414.816C220.928 414.582 220.848 414.297 220.848 413.961C220.848 413.613 220.936 413.316 221.111 413.07C221.291 412.824 221.521 412.625 221.803 412.473C222.037 412.344 222.301 412.246 222.594 412.18C222.891 412.113 223.174 412.08 223.443 412.08C223.771 412.08 224.09 412.123 224.398 412.209C224.711 412.291 224.99 412.418 225.236 412.59C225.482 412.766 225.684 412.984 225.84 413.246C226 413.508 226.092 413.814 226.115 414.166H225.02C225.012 413.951 224.961 413.768 224.867 413.615C224.777 413.463 224.658 413.338 224.51 413.24C224.361 413.143 224.193 413.072 224.006 413.029C223.818 412.986 223.627 412.965 223.432 412.965C223.275 412.965 223.109 412.98 222.934 413.012C222.758 413.043 222.596 413.096 222.447 413.17C222.299 413.248 222.176 413.352 222.078 413.48C221.98 413.605 221.932 413.764 221.932 413.955C221.932 414.111 221.969 414.246 222.043 414.359C222.121 414.469 222.219 414.559 222.336 414.629C222.527 414.746 222.758 414.846 223.027 414.928C223.297 415.006 223.525 415.066 223.713 415.109C223.986 415.18 224.266 415.27 224.551 415.379C224.836 415.484 225.096 415.619 225.33 415.783C225.564 415.951 225.756 416.154 225.904 416.393C226.053 416.627 226.127 416.91 226.127 417.242C226.127 417.574 226.047 417.857 225.887 418.092C225.727 418.322 225.531 418.508 225.301 418.648C225.027 418.801 224.729 418.914 224.404 418.988C224.084 419.059 223.775 419.094 223.479 419.094C223.143 419.094 222.807 419.053 222.471 418.971C222.139 418.889 221.838 418.76 221.568 418.584C221.447 418.506 221.334 418.418 221.229 418.32C221.123 418.223 221.029 418.115 220.947 417.998C220.85 417.854 220.77 417.695 220.707 417.523C220.648 417.348 220.613 417.158 220.602 416.955H221.703C221.711 417.193 221.768 417.395 221.873 417.559C221.982 417.719 222.121 417.848 222.289 417.945C222.457 418.047 222.645 418.119 222.852 418.162C223.059 418.201 223.268 418.221 223.479 418.221C223.635 418.221 223.803 418.207 223.982 418.18C224.166 418.152 224.336 418.102 224.492 418.027C224.645 417.957 224.771 417.859 224.873 417.734C224.979 417.609 225.033 417.449 225.037 417.254ZM237.775 416.369H236.135V419H235.051V412.174H237.547C237.875 412.178 238.195 412.219 238.508 412.297C238.824 412.375 239.105 412.498 239.352 412.666C239.594 412.834 239.787 413.049 239.932 413.311C240.08 413.572 240.154 413.889 240.154 414.26C240.154 414.506 240.119 414.723 240.049 414.91C239.979 415.098 239.881 415.264 239.756 415.408C239.631 415.557 239.482 415.688 239.311 415.801C239.143 415.91 238.961 416.008 238.766 416.094L240.465 418.941V419H239.299L237.775 416.369ZM236.135 415.484H237.576C237.76 415.48 237.939 415.455 238.115 415.408C238.295 415.361 238.455 415.289 238.596 415.191C238.732 415.098 238.844 414.979 238.93 414.834C239.02 414.686 239.064 414.508 239.064 414.301C239.064 414.082 239.021 413.896 238.936 413.744C238.854 413.588 238.742 413.461 238.602 413.363C238.461 413.266 238.299 413.193 238.115 413.146C237.932 413.1 237.742 413.074 237.547 413.07H236.135V415.484ZM247.068 415.918H243.693V418.115H247.619V419H242.586V412.174H247.584V413.07H243.693V415.027H247.068V415.918ZM253.865 417.254C253.869 417.094 253.842 416.961 253.783 416.855C253.729 416.746 253.637 416.639 253.508 416.533C253.352 416.408 253.145 416.309 252.887 416.234C252.633 416.16 252.41 416.098 252.219 416.047C251.949 415.98 251.664 415.898 251.363 415.801C251.066 415.699 250.793 415.568 250.543 415.408C250.289 415.248 250.08 415.051 249.916 414.816C249.756 414.582 249.676 414.297 249.676 413.961C249.676 413.613 249.764 413.316 249.939 413.07C250.119 412.824 250.35 412.625 250.631 412.473C250.865 412.344 251.129 412.246 251.422 412.18C251.719 412.113 252.002 412.08 252.271 412.08C252.6 412.08 252.918 412.123 253.227 412.209C253.539 412.291 253.818 412.418 254.064 412.59C254.311 412.766 254.512 412.984 254.668 413.246C254.828 413.508 254.92 413.814 254.943 414.166H253.848C253.84 413.951 253.789 413.768 253.695 413.615C253.605 413.463 253.486 413.338 253.338 413.24C253.189 413.143 253.021 413.072 252.834 413.029C252.646 412.986 252.455 412.965 252.26 412.965C252.104 412.965 251.938 412.98 251.762 413.012C251.586 413.043 251.424 413.096 251.275 413.17C251.127 413.248 251.004 413.352 250.906 413.48C250.809 413.605 250.76 413.764 250.76 413.955C250.76 414.111 250.797 414.246 250.871 414.359C250.949 414.469 251.047 414.559 251.164 414.629C251.355 414.746 251.586 414.846 251.855 414.928C252.125 415.006 252.354 415.066 252.541 415.109C252.814 415.18 253.094 415.27 253.379 415.379C253.664 415.484 253.924 415.619 254.158 415.783C254.393 415.951 254.584 416.154 254.732 416.393C254.881 416.627 254.955 416.91 254.955 417.242C254.955 417.574 254.875 417.857 254.715 418.092C254.555 418.322 254.359 418.508 254.129 418.648C253.855 418.801 253.557 418.914 253.232 418.988C252.912 419.059 252.604 419.094 252.307 419.094C251.971 419.094 251.635 419.053 251.299 418.971C250.967 418.889 250.666 418.76 250.396 418.584C250.275 418.506 250.162 418.418 250.057 418.32C249.951 418.223 249.857 418.115 249.775 417.998C249.678 417.854 249.598 417.695 249.535 417.523C249.477 417.348 249.441 417.158 249.43 416.955H250.531C250.539 417.193 250.596 417.395 250.701 417.559C250.811 417.719 250.949 417.848 251.117 417.945C251.285 418.047 251.473 418.119 251.68 418.162C251.887 418.201 252.096 418.221 252.307 418.221C252.463 418.221 252.631 418.207 252.811 418.18C252.994 418.152 253.164 418.102 253.32 418.027C253.473 417.957 253.6 417.859 253.701 417.734C253.807 417.609 253.861 417.449 253.865 417.254ZM262.074 412.174L262.08 416.744C262.072 417.115 261.998 417.445 261.857 417.734C261.721 418.023 261.535 418.27 261.301 418.473C261.066 418.676 260.793 418.83 260.48 418.936C260.168 419.041 259.834 419.094 259.479 419.094C259.119 419.094 258.783 419.041 258.471 418.936C258.158 418.83 257.887 418.678 257.656 418.479C257.422 418.279 257.236 418.035 257.1 417.746C256.963 417.453 256.893 417.119 256.889 416.744L256.895 412.174H257.955L257.961 416.744C257.965 416.975 258.002 417.182 258.072 417.365C258.146 417.545 258.25 417.697 258.383 417.822C258.512 417.947 258.668 418.043 258.852 418.109C259.039 418.176 259.248 418.209 259.479 418.209C259.709 418.209 259.916 418.176 260.1 418.109C260.287 418.043 260.447 417.947 260.58 417.822C260.709 417.697 260.809 417.545 260.879 417.365C260.953 417.182 260.992 416.975 260.996 416.744L261.002 412.174H262.074ZM265.408 418.115H269.516V419H264.26V412.174H265.408V418.115ZM276.857 413.07H274.367V419H273.266V413.07H270.787V412.174H276.857V413.07Z" fill="black"/>
 </svg>
+</div>
 
-| Field               | Description                                    | Encoding | Length (in bytes)         | Optional           |
-| ------------------- | ---------------------------------------------- | -------- | ------------------------- | ------------------ |
-| Signature type      | Type of key format used for the signature      | Binary   | 2                         | :x:                |
-| Signature           | A signature produced by owner                  | Binary   | Depends on signature type | :x:                |
-| Owner               | The public key of the owner                    | Binary   | 512                       | :x:                |
-| Target              | An address that this DataItem is being sent to | Binary   | 32 (+ presence byte)      | :heavy_check_mark: |
-| Anchor              | A value to prevent replay attacks              | Binary   | 32 (+ presence byte)      | :heavy_check_mark: |
-| number of tags      | Number of tags                                 | Binary   | 8                         | :x:                |
-| number of tag bytes | Number of bytes used for tags                  | Binary   | 8                         | :x:                |
-| Tags                | An avro array of tag objects                   | Binary   | Variable                  | :x:                |
-| Data                | The data contents                              | Binary   | Variable                  | :x:                |
+## `ao` Messaging Structures
+
+All `ao` message structures are based off of ANS-104 Data-Items
+
+A data-item is a binary specification found in the [ANS-104 Bundled Data Specification](https://specs.arweave.dev/?tx=xwOgX-MmqN5_-Ny_zNu2A8o-PnTGsoRb_3FrtiMAkuw). The data-item is the base structure of Arweave Transactions. The `ao` Data-Protocol, uses this specification as a core primative for each `type` in the `ao` Data-Protocol.
+
+**Format**
+
+| Field               | Description                                    | Encoding | Length (in bytes)         | Optional |
+| ------------------- | ---------------------------------------------- | -------- | ------------------------- | -------- |
+| Signature type      | Type of key format used for the signature      | Binary   | 2                         | x        |
+| Signature           | A signature produced by owner                  | Binary   | Depends on signature type | x        |
+| Owner               | The public key of the owner                    | Binary   | 512                       | x        |
+| Target              | An address that this DataItem is being sent to | Binary   | 32 (+ presence byte)      | ✔        |
+| Anchor              | A value to prevent replay attacks              | Binary   | 32 (+ presence byte)      | ✔        |
+| number of tags      | Number of tags                                 | Binary   | 8                         | x        |
+| number of tag bytes | Number of bytes used for tags                  | Binary   | 8                         | x        |
+| Tags                | An avro array of tag objects                   | Binary   | Variable                  | x        |
+| Data                | The data contents                              | Binary   | Variable                  | x        |
 
 All optional fields will have a leading byte which describes whether the field is present (`1` for present, `0` for _not_ present). Any other value for this byte makes the DataItem invalid.
 
@@ -384,11 +208,11 @@ The `tags` section is the designated area where the specifications for each Data
 
 > NOTE: All tags names follow the ANS-116 - [Arweave Tag Naming Standard](https://specs.arweave.dev/?tx=XV8-NMh5uhLQflkrUs_7mcgj33pOWqQno1wyVi__j6w)
 
-**`ao` Types**
+### `ao` Types
 
 `ao` has several message types that instruct the network how to operate, these message type structures are provided below:
 
-## Modules
+#### Modules
 
 The `Module` type in the `ao` system defines the process module, essentially representing the Web Assembly-compiled code that is executed upon the instantiation of a process.
 
@@ -396,7 +220,7 @@ The `Module` type in the `ao` system defines the process module, essentially rep
 | --------------- | ------------------------------------------------------------------------------------------------------- | -------- | ------------------------- |
 | Data-Protocol   | The name of the Data-Protocol for this `data-item`                                                      | 1-1      | ao                        |
 | Variant         | The network version that this data-item is for                                                          | 1-1      | ao.TN.1                   |
-| Type            | Indicates the shape of this Data-Protocol data-item                                                     | 1-1      | Module                    |
+| Type            | The `ao` data-item type                                                                                 | 1-1      | Module                    |
 | Module-Format   | Specifies the WebAssembly compilation method for module compatibility across various host environments. | 1-1      | wasm32-unknown-emscripten |
 | Input-Encoding  | Defines the message encoding format, like JSON, XML, for developer-guided data interpretation.          | 1-1      | JSON-V1                   |
 | Output-Encoding | Specifies the encoding for outgoing messages, like JSON, XML, ensuring consistent data handling."       | 1-1      | JSON-V1                   |
@@ -404,26 +228,22 @@ The `Module` type in the `ao` system defines the process module, essentially rep
 | Compute-Limit   | Caps the compute cycles for a module per evaluation, ensuring efficient, controlled execution           | 0-1      | 1000                      |
 | Extension       | Specifies the WASM module use cases, helping the 'Compute Unit' filter and select compatible modules.   | 0-n      | ?                         |
 
-## Processes
+#### Processes
 
 The `Process` type in the `ao` system defines the process to be instantiated.
 
-| Tag Name        | Description                                                                                                                                                                                                               | Requires | Tag Value       |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- |
-| Data-Protocol   | The name of the Data-Protocol for this `data-item`                                                                                                                                                                        | 1-1      | ao              |
-| Variant         | The network version that this data-item is for                                                                                                                                                                            | 1-1      | ao.TN.1         |
-| Type            | Indicates the shape of this Data-Protocol data-item                                                                                                                                                                       | 1-1      | Process         |
-| Module          | Links the process to ao module using the module's unique Transaction ID (TXID).                                                                                                                                           | 1-1      | {TXID}          |
-| Scheduler       | Specifies the scheduler unit by Wallet Address or Name, and can be referenced by a recent `Scheduler-Location`.                                                                                                           | 1-1      | {ADDRESS}       |
-| Cron-Interval   | An interval at which a particular Cron Message is recevied by the process, in the format `X-Y`, where X is a scalar value, and Y is `milliseconds`, `seconds`, `minutes`, `hours`, `days`, `months`, `years`, or `blocks` | 0-n      | 1-second        |
-| Cron-Tag-{Name} | defines tags for Cron Messages at set intervals, specifying relevant metadata.                                                                                                                                            | 0-1      |                 |
-| Memory-Limit    | Overrides maximum memory, in megabytes or gigabytes, set by Module, can not exceed modules setting                                                                                                                        | 0-1      | 16-mb           |
-| Compute-Limit   | Caps the compute cycles for a module per evaluation, ensuring efficient, controlled execution                                                                                                                             | 0-1      | 1000            |
-| Pushed-For      | Message TXID that this Process is pushed as a result                                                                                                                                                                      | 0-1      | {TXID}          |
-| Cast            | Sets message handling: 'True' for do not push, 'False' for normal pushing                                                                                                                                                 | 0-1      | {True or False} |
-| {Any-Tags}      | Custom Tags specific for the initial input of the Process                                                                                                                                                                 | 0-n      |                 |
+| Tag Name        | Description                                                                                                                                                                                                               | Requires | Tag Value |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- |
+| Data-Protocol   | The name of the Data-Protocol for this `data-item`                                                                                                                                                                        | 1-1      | ao        |
+| Variant         | The network version that this data-item is for                                                                                                                                                                            | 1-1      | ao.TN.1   |
+| Type            | The `ao` data-item type                                                                                                                                                                                                   | 1-1      | Process   |
+| Module          | Links the process to ao module using the module's unique Transaction ID (TXID).                                                                                                                                           | 1-1      | {TXID}    |
+| Scheduler       | Specifies the scheduler unit by Wallet Address or Name, and can be referenced by a recent `Scheduler-Location`.                                                                                                           | 1-1      | {ADDRESS} |
+| Cron-Interval   | An interval at which a particular Cron Message is recevied by the process, in the format `X-Y`, where X is a scalar value, and Y is `milliseconds`, `seconds`, `minutes`, `hours`, `days`, `months`, `years`, or `blocks` | 0-n      | 1-second  |
+| Cron-Tag-{Name} | defines tags for Cron Messages at set intervals, specifying relevant metadata.                                                                                                                                            | 0-1      |           |
+| {Any-Tags}      | Custom Tags specific for the initial input of the Process                                                                                                                                                                 | 0-n      |           |
 
-## Messages
+#### Messages
 
 The `Message` type in the `ao` system defines the message to be evaluated by the `ao` process.
 
@@ -433,16 +253,15 @@ The `Message` type in the `ao` system defines the message to be evaluated by the
 | ------------- | ---------------------------------------------------------------------------------------------------------- | -------- | --------------- |
 | Data-Protocol | The name of the Data-Protocol for this `data-item`                                                         | 1-1      | ao              |
 | Variant       | The network version that this data-item is for                                                             | 1-1      | ao.TN.1         |
-| Type          | Indicates the shape of this Data-Protocol data-item                                                        | 1-1      | Message         |
+| Type          | The `ao` data-item type                                                                                    | 1-1      | Message         |
 | Load          | When set, the message includes a `data-item` from Arweave as its `data` property.                          | 0-1      | {TXID}          |
 | Read-Only     | Marks message as a message that is looking for a response only and not modifying the memory of the process | 0-1      | {True or False} |
 | From-Process  | If message is sent from a `Process` this tag references the `Process` TXID.                                | 0-1      | {TXID}          |
 | From-Module   | If message is sent from a `Process` this tag references the `Module` TXID of that `Process`                | 0-1      | {TXID}          |
-| Pushed-For    | Message TXID that this message is pushed for when a MU is evaluating the result                            | 0-1      | {TXID}          |
-| Cast          | Sets message handling: 'True' for do not push, 'False' for normal pushing                                  | 0-1      | {True or False} |
+| Cast          | Sets message handling: 'True' for do not crank, 'False' for normal cranking                                | 0-1      | {True or False} |
 | {Any-Tags}    | Custom Tags specific to the input of the Message                                                           | 0-n      | {any}           |
 
-## Assignments
+#### Assignments
 
 The `Assignment` type in the `ao` system defines the schedule of the message. The Scheduler Unit `su` may create this `data-item` as a Bundle or as a Reference to a message `data-item`.
 
@@ -450,7 +269,7 @@ The `Assignment` type in the `ao` system defines the schedule of the message. Th
 | ------------- | ---------------------------------------------------------------------------------------------------------------------- | -------- | --------------- |
 | Data-Protocol | The name of the Data-Protocol for this `data-item`                                                                     | 1-1      | ao              |
 | Variant       | The network version that this data-item is for                                                                         | 1-1      | ao.TN.1         |
-| Type          | Indicates the shape of this Data-Protocol data-item                                                                    | 1-1      | Assignment      |
+| Type          | The `ao` data-item type                                                                                                | 1-1      | Assignment      |
 | Process       | References `Process` via TXID                                                                                          | 1-1      | {TXID}          |
 | Epoch         | Scheduling event sequence, incrementing with each process-scheduler transition.                                        | 1-1      | {Number}        |
 | Nonce         | Uniquely increments per process/message within an Epoch, ensuring sequence integrity.                                  | 1-1      | {Number}        |
@@ -459,7 +278,7 @@ The `Assignment` type in the `ao` system defines the schedule of the message. Th
 | Message       | If the `Assignment` data-item is a reference to an `On-Chain` message, this tag would contain the TXID of that Message | 0-1      | {TXID}          |
 | Block-Height  | Records the Arweave blockchain's current block count, offering precise temporal context.                               | 1-1      | {Number}        |
 
-## Scheduler-Location
+#### Scheduler-Location
 
 The `Scheduler-Location` Data-Item in the "ao" Data-Protocol specifies the Scheduler's URL, determined by the Owner's Wallet Address, creating a secure and authenticated link between the Scheduler and its web endpoint for easy access to its services.
 
@@ -467,11 +286,11 @@ The `Scheduler-Location` Data-Item in the "ao" Data-Protocol specifies the Sched
 | ------------- | ----------------------------------------------------------------------------------------- | -------- | ------------------ |
 | Data-Protocol | The name of the Data-Protocol for this `data-item`                                        | 1-1      | ao                 |
 | Variant       | The network version that this data-item is for                                            | 1-1      | ao.TN.1            |
-| Type          | Indicates the shape of this Data-Protocol data-item                                       | 1-1      | Scheduler-Location |
+| Type          | The `ao` data-item type                                                                   | 1-1      | Scheduler-Location |
 | Url           | Specifies a complete internet resource address, enabling accurate access to the resource. | 1-1      | {URL}              |
 | Time-To-Live  | Sets a time limit for caching data URLs, ensuring up-to-date information.                 | 1-1      | {Milliseconds}     |
 
-## Scheduler-Transfer
+#### Scheduler-Transfer
 
 The "Scheduler-Transfer" Data-Item Type in the "ao" Data-Protocol signals a change in schedulers, ensuring a seamless transition for scheduling operations within the system.
 
@@ -479,7 +298,7 @@ The "Scheduler-Transfer" Data-Item Type in the "ao" Data-Protocol signals a chan
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------ |
 | Data-Protocol  | The name of the Data-Protocol for this `data-item`                                                                                                                         | 1-1      | ao                       |
 | Variant        | The network version that this data-item is for                                                                                                                             | 1-1      | ao.TN.1                  |
-| Type           | Indicates the shape of this Data-Protocol data-item                                                                                                                        | 1-1      | Scheduler-Transfer       |
+| Type           | The `ao` data-item type                                                                                                                                                    | 1-1      | Scheduler-Transfer       |
 | Scheduler      | Records details of the current active Scheduler, preventing confusion about which Scheduler is in control during transitions or scheduling changes within the "ao" system. | 1-1      | {WALLET_ADDRESS or NAME} |
 | Next-Scheduler | Identifies the upcoming Scheduler for message ordering, ensuring a smooth transition in scheduling duties for system continuity and efficiency.                            | 1-1      | {TXID}                   |
 | Length         | Associated with an epoch, counts the total messages created in that phase, aiding in workload tracking and system performance analysis.                                    | 1-1      | {Number}                 |
@@ -489,41 +308,19 @@ The "Scheduler-Transfer" Data-Item Type in the "ao" Data-Protocol signals a chan
 | Epoch          | Marks when a data-item was created, assigning it to a specific system phase or period for organized processing and analysis within a batch of related messages.            | 1-1      | {Number}                 |
 | Nonce          | Indicates the last used unique number in a message series, ensuring message order, integrity, and security.                                                                | 1-1      | {Number}                 |
 
-## Checkpoint
+---
 
-The "Snapshot" Data-Item Type in the "ao" Data-Protocol defines how to properly store checkpoint of a process on arweave. Checkpoints are the archiving of the current memory of a Process at a given `Epoch` and `Nonce`.
-
-| Tag Name         | Description                                                                              | Requires | Tag Value                       |
-| ---------------- | ---------------------------------------------------------------------------------------- | -------- | ------------------------------- |
-| Data-Protocol    | The name of the Data-Protocol for this `data-item`                                       | 1-1      | ao                              |
-| Variant          | The network version that this data-item is for                                           | 1-1      | ao.TN.1                         |
-| Type             | Indicates the shape of this Data-Protocol data-item                                      | 1-1      | Checkpoint                      |
-| Module           | Identifier of the module for the checkpoint                                              | 1-1      | {TXID}                          |
-| Process          | Identifier of the process for the checkpoint                                             | 1-1      | {TXID}                          |
-| Epoch            | Scheduling event sequence, incrementing with each process-scheduler transition.          | 1-1      | {Number}                        |
-| Nonce            | Uniquely increments per process/message within an Epoch, ensuring sequence integrity.    | 1-1      | {Number}                        |
-| Timestamp        | Records the creation time with precise NTP synchronization.                              | 1-1      | {UnixTimestamp}                 |
-| Block-Height     | Records the creation block height.                                                       | 1-1      | {Number}                        |
-| Cron-Interval    | The `Cron-Interval` that generated this message, identified by its `value` and tag index | 0-1      | {IntervalId} ie. `0-10-minutes` |
-| Content-Type     | The mime type of the data being stored in the data item                                  | 1-1      | application/octet-stream        |
-| Content-Encoding | the encoding of the content being stored in the data item                                | 0-1      | {encoding} ie. `gzip`           |
-| SHA-256          | Hash of the memory                                                                       | 1-1      | {hash}                          |
-
-### Data
-
-The data is stored as a binary octlet stream to arweave, you should be able to use a Compute Unit that this module is compatible with and load the Process at the specific Epoch and Nonce. The `Data` may also be encoded, according to the `Content-Encoding` Tag eg. gzipped, which will require unzipping before passing to Compute Unit.
-
-## `ao` Node Unit APIs
+# `ao` Node Unit APIs
 
 Units represent the distinct operational domains within the computer, capable of scaling from 0 to multiple instances, each assigned with unique duties within the network.
 
-### Scheduler (SU)
+## Scheduler (SU)
 
 The `ao` Scheduler Unit is tasked with the sequential arrangement and dissemination of `ao` messages to the Arweave network. Additionally, Compute Units are dependent on the Schedulers for obtaining the sequence of `ao` messages required for the assessment of updates.
 
-Endpoints
+### Endpoints
 
-#### GET /
+### **GET /**
 
 **Description**
 
@@ -531,7 +328,7 @@ Scheduler Unit Service Information, the `Unit`, `Address`, `Timestamp`, `Process
 
 ##### **Responses**
 
-## 200 - Ok
+## 200 - OK
 
 ##### Schema
 
@@ -545,21 +342,18 @@ Scheduler Unit Service Information, the `Unit`, `Address`, `Timestamp`, `Process
     },
     "Address": {
       "type": "string",
-      "##### Example
-": "Xy9PqW3vR5sT8uB1nM6dK0gF2hL4jC7iE9rV3wX5"
+      "example": "Xy9PqW3vR5sT8uB1nM6dK0gF2hL4jC7iE9rV3wX5"
     },
     "Timestamp": {
       "type": "integer",
-      "##### Example
-": 1642016756
+      "example": 1642016756
     },
     "Processes": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "##### Example
-": [
+      "example": [
         "A1b2C3d4E5f6G7h8I9j0K1L2M3N4O5P6Q7R8S9T0",
         "WxYz1234567890AbCdEfGhIjKlMnOpQrStUv"
       ]
@@ -584,7 +378,9 @@ Scheduler Unit Service Information, the `Unit`, `Address`, `Timestamp`, `Process
 }
 ```
 
-### POST /
+---
+
+### **POST /**
 
 **Description**
 
@@ -606,13 +402,11 @@ ANS-104 DataItem Binary Format [See Spec](https://specs.arweave.dev/?tx=xwOgX-Mm
   "properties": {
     "id": {
       "type": "string",
-      "##### Example
-": "4rV3wX5Xy9PqW3vR5sT8uB1nM6dK0gF2hL4jC7iE9"
+      "example": "4rV3wX5Xy9PqW3vR5sT8uB1nM6dK0gF2hL4jC7iE9"
     },
     "timestamp": {
       "type": "integer",
-      "##### Example
-": 1642016756
+      "example": 1642016756
     }
   }
 }
@@ -627,7 +421,7 @@ ANS-104 DataItem Binary Format [See Spec](https://specs.arweave.dev/?tx=xwOgX-Mm
 }
 ```
 
-- 400 - Bad Request
+## 400 - Bad Request
 
 ##### Schema
 
@@ -650,7 +444,7 @@ ANS-104 DataItem Binary Format [See Spec](https://specs.arweave.dev/?tx=xwOgX-Mm
 }
 ```
 
-### GET /{process-id}
+### **GET /{process-id}**
 
 **Description**
 
@@ -671,55 +465,9 @@ This endpoint is usually requested by the `Compute Unit (cu)`, and the response 
 
 ##### **Responses**
 
-## 200 - Ok
+## 200 - OK
 
-When receiving a 200 response, the body of the response contains a JSON document which contains 0 to many DataItems. These DataItems are structured similar to an Arweave GraphQL response to support cursors and pagination.
-
-```json
-{
-    "page_info": {
-        "has_next_page": false
-    },
-    "edges": [{
-        "cursor": "1234"
-        "node": {
-           "message": {...}
-           "block": "...",
-           "owner": { "address": "...", "key": "..."},
-           "process_id": "...",
-           "data": "...",
-           "epoch": 0,
-           "nonce": 0,
-           "timestamp": ...,
-           "hash_chain": "..."
-        }
-    }]
-}
-```
-
-In the `edges` array there is a `node` object with the following properties:
-
-| Name       | Description                                                        | Type   |
-| ---------- | ------------------------------------------------------------------ | ------ |
-| message    | The message object containg id, tags, signature                    | Object |
-| block      | The block height of Arweave at the time of scheduling this message | String |
-| owner      | Object containing message signers Address and Key                  | Object |
-| process_id | The TXID of the process that this message belongs too              | String |
-| data       | The data value of the message                                      | String |
-| epoch      | The epoch of the message                                           | Number |
-| nonce      | The nonce of the message                                           | Number |
-| timestamp  | The scheduler unit timestamp of when message was scheduled         | Number |
-| hash_chain | The hash of this message with the previous hash_chain              | String |
-
-In each `node` there is a `message` object with the following properties:
-
-| Name      | Description                  | Type   |
-| --------- | ---------------------------- | ------ |
-| id        | Message Identifier (TXID)    | String |
-| tags      | Array of (name, value) pairs | Array  |
-| signature | Signature of message         | String |
-
-##### Schema
+When receiving a 200 response, the body of the response contains a JSON document which contains 0 to many DataItems.
 
 ```json
 {
@@ -810,7 +558,7 @@ In each `node` there is a `message` object with the following properties:
 }
 ```
 
-##### Example
+Example
 
 ```json
 {
@@ -823,7 +571,7 @@ In each `node` there is a `message` object with the following properties:
                 "message":{
                     "id":"cWT4kHuayCxgSCkh__GlG6drhzru10P4VSt7HmiGwLs",
                     "tags":[
-                        {"name":"Action","value":"Register"},
+                        {"name":"function","value":"raw"},
                         {"name":"Data-Protocol","value":"ao"},
                         {"name":"Variant","value":"ao.TN.1"},
                         {"name":"Type","value":"Message"},
@@ -850,7 +598,9 @@ In each `node` there is a `message` object with the following properties:
 }
 ```
 
-### GET /{message-id}?process-id={process-id}
+---
+
+### **GET /{message-id}?process-id={process-id}**
 
 **Description**
 
@@ -870,7 +620,7 @@ This endpoint is usually requested by the `Compute Unit (cu)`, and the response 
 
 ##### **Responses**
 
-## 200 - Ok
+## 200 - OK
 
 When receiving a 200 response, the body of the response contains a JSON document which contains 1 data-item.
 
@@ -941,7 +691,7 @@ When receiving a 200 response, the body of the response contains a JSON document
     "id": "ZLc9hjPCFK6bCWwu_VM4gv-7adZEHMlJIJ4zqXruP_E",
     "tags": [
       {
-        "name": "Action",
+        "name": "function",
         "value": "ping"
       },
       {
@@ -985,7 +735,7 @@ When receiving a 200 response, the body of the response contains a JSON document
 }
 ```
 
-### GET /timestamp
+### **GET /timestamp**
 
 **Description**
 
@@ -993,7 +743,7 @@ Returns the current timestamp JSON document from the `su`
 
 ##### **Responses**
 
-## 200 - Ok
+## 200 - OK
 
 Format: JSON
 
@@ -1032,7 +782,7 @@ This endpoint is usually requested by the `Compute Unit (cu)` and the `Message U
 
 ##### **Responses**
 
-## 200 - Ok
+## 200 - OK
 
 When receiving a 200 response, the body of the response contains a JSON document which contains 1 data-item.
 
@@ -1116,7 +866,7 @@ The Compute Unit is tasked with the extraction, assessment, and regulation of th
 
 Endpoints
 
-### GET /
+### **GET /**
 
 **Description**
 
@@ -1124,7 +874,7 @@ The health check endpoint for the Compute Unit service provides the `Wallet` add
 
 ##### **Responses**
 
-## 200 - Ok
+## 200 - OK
 
 | Property  | Description       |
 | --------- | ----------------- |
@@ -1143,7 +893,7 @@ The health check endpoint for the Compute Unit service provides the `Wallet` add
 }
 ```
 
-### GET /result/{message-identifier}?process-id={process-identifier}
+### **GET /result/{message-identifier}?process-id={process-identifier}**
 
 **Description**
 
@@ -1169,7 +919,7 @@ None
 
 ##### **Responses**
 
-## 200 - Ok
+## 200 - OK
 
 Format: JSON
 
@@ -1209,9 +959,7 @@ Format: JSON
 }
 ```
 
-##### Example
-
-:
+#### Example:
 
 ```json
 {
@@ -1228,7 +976,7 @@ Format: JSON
           "value": "Message"
         },
         {
-          "name": "Action",
+          "name": "function",
           "value": "pong"
         },
         {
@@ -1245,7 +993,7 @@ Format: JSON
 }
 ```
 
-### GET /cron/{process-identifier}?from={timestamp}&to={timestamp}
+## **GET /cron/{process-identifier}?from={timestamp}&to={timestamp}**
 
 **Description**
 
@@ -1274,9 +1022,7 @@ None
 
 ##### **Responses**
 
-## 200 - Ok
-
-- a [Connection](https://graphql.org/learn/pagination/#complete-connection-model) page of any outcomes received as a result of evaluating Cron Messages within the range of `from` and `to`
+## 200 - OK - a [Connection](https://graphql.org/learn/pagination/#complete-connection-model) page of any outcomes received as a result of evaluating Cron Messages within the range of `from` and `to`
 
 Format: JSON
 
@@ -1370,7 +1116,7 @@ Format: JSON
 }
 ```
 
-### GET /state/{process-identifier}
+## GET /state/{process-identifier}
 
 **Description**
 
@@ -1400,7 +1146,7 @@ None
 
 ##### **Responses**
 
-## 200 - Ok
+## 200 - OK
 
 Format: binary (`application/octet-stream`)
 
@@ -1410,7 +1156,7 @@ The Messenger Unit holds the responsibility for accepting incoming messages from
 
 Endpoints
 
-### GET /
+## GET /
 
 **Description**
 
@@ -1428,15 +1174,13 @@ The root endpoint offers the ability to debug the messages being managed via thi
 
 ##### **Responses**
 
-## 200 - Ok
+## 200 - OK
 
 Format: (text/plain)
 
-##### Example
+Example: 'ao messenger unit'
 
-: 'ao messenger unit'
-
-### POST /
+## POST /
 
 **Description**
 
@@ -1458,7 +1202,7 @@ When posting to the root endpoint, the request body should have a valid DataItem
 
 ##### **Responses**
 
-## ## 201 - Created
+## 201 - Created
 
 ##### Schema
 
@@ -1479,7 +1223,7 @@ When posting to the root endpoint, the request body should have a valid DataItem
 }
 ```
 
-### POST /monitor/{process-id}
+## POST /monitor/{process-id}
 
 **Description**
 
@@ -1507,7 +1251,7 @@ When posting to the this endpoint, the request body should have a valid DataItem
 
 ##### **Responses**
 
-## ## 201 - Created
+## 201 - Created
 
 ##### Schema
 
@@ -1528,7 +1272,7 @@ When posting to the this endpoint, the request body should have a valid DataItem
 }
 ```
 
-### DELETE /monitor/{process-id}
+## DELETE /monitor/{process-id}
 
 **Description**
 
