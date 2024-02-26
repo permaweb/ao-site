@@ -4,6 +4,9 @@ import remarkGfm from 'remark-gfm';
 import remarkCodeBlocks from 'remark-code-blocks';
 import Prism from 'prismjs';
 import rehypeRaw from 'rehype-raw';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 import 'prismjs/components/prism-json';
 import './code-blocks.css';
 
@@ -31,10 +34,15 @@ const MarkdownRenderer: React.FC<{ markdown: string }> = ({ markdown }) => {
   };
   return (
     <ReactMarkdown
-      children={transformedMarkdown}
-      remarkPlugins={[remarkGfm, [remarkCodeBlocks, codeBlockOptions]]}
-      rehypePlugins={[rehypeRaw]}
-    />
+      remarkPlugins={[
+        remarkGfm,
+        [remarkCodeBlocks, codeBlockOptions],
+        remarkMath,
+      ]}
+      rehypePlugins={[rehypeRaw, rehypeKatex]}
+    >
+      {transformedMarkdown}
+    </ReactMarkdown>
   );
 };
 

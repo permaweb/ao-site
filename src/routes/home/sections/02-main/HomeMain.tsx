@@ -1,5 +1,5 @@
 import './HomeMainStyles.css';
-import { ReactNode, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt.tsx';
 
 import HyperTextLoad from '../../../../components/hyperTextLoad.tsx';
@@ -69,13 +69,13 @@ const HomeMain = () => {
             </div>
             <div className="button-wrapper">
               <Link
-                to={'https://cookbook_ao.g8way.io/welcome/index.html'}
+                to={'https://cookbook_ao.g8way.io/'}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <button
                   className="glitch primary link-terminal-blue"
-                  data-text="Boot Up Testnet"
+                  data-text="→ Boot Up Testnet"
                 >
                   <HyperTextLoad
                     word={'→ Boot Up The TestNet'}

@@ -41,7 +41,7 @@ const Nav = () => {
         <div className="main-cta-wrapper">
           <div className="main-cta-button">
             <Link
-              to={'https://cookbook_ao.g8way.io/welcome/index.html'}
+              to={'https://cookbook_ao.g8way.io/'}
               target="_blank"
               rel="noopener noreferrer"
             >
