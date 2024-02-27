@@ -111,72 +111,65 @@ class Hexocet {
     this.seeds.push(seed);
   }
 
-  move(): void {
-    // Move all particles
-    for (var i = 0; i < this.seeds.length; i++) {
-      var seed = this.seeds[i];
-      // Get older
-      seed.age++;
-      // Save last position
-      seed.xLast = seed.x;
-      seed.yLast = seed.y;
+move(): void {
+  // Move all particles and filter out the ones that should be removed
+  this.seeds = this.seeds.filter(seed => {
+    // Increment age
+    seed.age++;
 
-      // Randomly change target
-      if (Math.random() < this.targetBounceChance) {
-        // Either move Hx or Hy, twice more likely to change Hx
-        if (Math.random() > 0.33) {
-          // Move Hx
-          seed.targetHx += Math.random() > 0.5 ? 1 : -1;
+    // Save last position
+    seed.xLast = seed.x;
+    seed.yLast = seed.y;
+
+    // Randomly change target
+    if (Math.random() < this.targetBounceChance) {
+      if (Math.random() > 0.33) {
+        seed.targetHx += Math.random() > 0.5 ? 1 : -1;
+      } else {
+        if ((seed.targetHx + seed.targetHy) % 2 == 0) {
+          seed.targetHy += 1;
         } else {
-          // Increase Hy + Hx is even
-          if ((seed.targetHx + seed.targetHy) % 2 == 0) {
-            seed.targetHy += 1;
-          } else {
-            seed.targetHy -= 1;
-          }
+          seed.targetHy -= 1;
         }
       }
-
-      // Acceleration based on target
-      var targetXY = this.hexCoordsToXY(seed.targetHx, seed.targetHy);
-      // Spring
-      var K = this.springStiffness;
-      var accX = -K * (seed.x - targetXY.x);
-      var accY = -K * (seed.y - targetXY.y);
-      // Viscosity
-      var visc = this.viscosity;
-      accX -= visc * seed.xSpeed;
-      accY -= visc * seed.ySpeed;
-      // Speed
-      seed.xSpeed += accX;
-      seed.ySpeed += accY;
-
-      // Speed calmers (here normalizers)
-
-      var fixedSpeed = 5.0;
-      var maxSpeed = fixedSpeed,
-        minSpeed = fixedSpeed;
-
-      var speed = Math.sqrt(
-        // @ts-ignore
-        Math.pow(this.xSpeed, 2) + Math.pow(this.ySpeed, 2)
-      );
-      if (speed > maxSpeed) {
-        seed.xSpeed *= maxSpeed / speed;
-        seed.ySpeed *= maxSpeed / speed;
-      }
-      if (speed < minSpeed) {
-        seed.xSpeed *= minSpeed / speed;
-        seed.ySpeed *= minSpeed / speed;
-      }
-
-      // Position, with added canvas base size in order to maintain patterns accross zoom levels
-      seed.x += 0.01 * seed.xSpeed * this.canvasBase;
-      seed.y += 0.01 * seed.ySpeed * this.canvasBase;
     }
-    // Garbage collection of older seeds
-    this.seeds = this.seeds.filter((seed) => seed.age < this.maxSeedAge);
-  }
+
+    // Calculate acceleration towards target
+    var targetXY = this.hexCoordsToXY(seed.targetHx, seed.targetHy);
+    var K = this.springStiffness;
+    var accX = -K * (seed.x - targetXY.x);
+    var accY = -K * (seed.y - targetXY.y);
+
+    // Apply viscosity
+    var visc = this.viscosity;
+    accX -= visc * seed.xSpeed;
+    accY -= visc * seed.ySpeed;
+
+    // Update speed
+    seed.xSpeed += accX;
+    seed.ySpeed += accY;
+
+    // Normalize speed to prevent seeds from moving too fast
+    var speed = Math.sqrt(seed.xSpeed ** 2 + seed.ySpeed ** 2);
+    var maxSpeed = 5.0;
+    if (speed > maxSpeed) {
+      seed.xSpeed = (seed.xSpeed / speed) * maxSpeed;
+      seed.ySpeed = (seed.ySpeed / speed) * maxSpeed;
+    }
+
+    // Update position
+    seed.x += 0.01 * seed.xSpeed * this.canvasBase;
+    seed.y += 0.01 * seed.ySpeed * this.canvasBase;
+
+    // Check if the seed should still be kept (not too old and on-screen)
+    return seed.age < this.maxSeedAge && this.isOnScreen(seed.x, seed.y);
+  });
+}
+
+isOnScreen(x: number, y: number): boolean {
+  // Adjust these conditions based on your canvas size and expected behavior
+  return x >= 0 && x <= (this.canvas ? this.canvas.width : 0) && y >= 0 && y <= (this.canvas ? this.canvas.height : 0);
+}
 
   draw(): void {
     if (this.ctx && this.canvas) {
