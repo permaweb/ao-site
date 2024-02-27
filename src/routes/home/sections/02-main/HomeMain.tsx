@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 const HomeMain = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     morpheusAsciiArt();
 
@@ -15,12 +16,12 @@ const HomeMain = () => {
       func: T,
       delay: number
     ): ((...args: Parameters<T>) => void) => {
-      let debounceTimer: number;
+      let debounceTimer: number | NodeJS.Timeout;
       return (...args: Parameters<T>) => {
-        clearTimeout(debounceTimer);
+        clearTimeout(debounceTimer as number);
         debounceTimer = setTimeout(() => {
           func(...args);
-        }, delay);
+        }, delay) as unknown as number;
       };
     };
 

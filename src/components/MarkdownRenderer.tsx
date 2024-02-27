@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+
 import remarkGfm from 'remark-gfm';
+
 import remarkCodeBlocks from 'remark-code-blocks';
 import Prism from 'prismjs';
 import rehypeRaw from 'rehype-raw';
+
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+
 import 'katex/dist/katex.min.css';
 import 'prismjs/components/prism-json';
 import './code-blocks.css';
