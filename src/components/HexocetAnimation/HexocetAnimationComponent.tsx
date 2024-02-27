@@ -13,19 +13,6 @@ const HexocetAnimationComponent = ({ containerRef }: any) => {
       };
 
       animate();
-      const canvas = document.getElementById('hexocet');
-      const handleMouseMove = (event: any) => {
-        const x = event.pageX,
-          y = event.pageY;
-        hexocet.birth(x, y);
-      };
-      if (canvas) {
-        canvas.addEventListener('mousemove', handleMouseMove);
-
-        return () => {
-          canvas.removeEventListener('mousemove', handleMouseMove);
-        };
-      }
     }
   }, [containerRef]);
   return null;

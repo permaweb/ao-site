@@ -2,7 +2,7 @@ import Victor from 'victor';
 
 class Hexocet {
   seeds: any[] = [];
-  stepCount: number = 10000;
+  stepCount: number = 100;
   birthPeriod: number = 0.25;
   hexSize: number = 30;
   targetBounceChance: number = 0.1;
@@ -16,8 +16,8 @@ class Hexocet {
   canvasBase: number = 0;
   xC: number = 0;
   yC: number = 0;
-  maxSeeds: number = 2000;
-  maxSeedAge: number = 1500;
+  maxSeeds: number = 1000;
+  maxSeedAge: number = 1000;
   initialSeedAge: number = 0; // Starting age for new seeds
   shouldUseSecondaryColor = Math.random() < 1;
   secondaryColor = [0, 255, 112];
