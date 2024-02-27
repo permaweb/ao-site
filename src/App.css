@@ -30,3 +30,13 @@
 .link-terminal-blue:hover {
   color: var(--terminal-blue);
 }
+
+.equilibria-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.equilibria {
+  margin-top: 20px;
+  width: 30%;
+}

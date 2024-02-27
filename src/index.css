@@ -177,10 +177,6 @@ ul li {
   list-style-type: none;
 }
 
-ol li {
-  list-style-type: none;
-}
-
 blockquote {
   background: rgb(242, 242, 242);
   border-left: 10px solid var(--terminal-red);
