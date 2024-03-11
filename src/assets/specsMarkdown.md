@@ -236,7 +236,6 @@ Messenger units act on behalf of the user in order to move messages between proc
    <br></br>
 
 4. If there are new messages in the outboxes, $$MU_m$$ takes each new message, signs it, and forwards it to the appropriate $$SU_k$$, recursively continuing the process.
-   <br></br>
 
 The recursion ends when there are no more new messages given by $$CU_l$$ for all prior messages, signifying the end of the processing cycle for the user's interaction.
 
@@ -286,7 +285,7 @@ $$
 The ao protocol fosters a decentralized market for computation and message passing, which can be modeled through a minimization function as follows in the presence of an efficient market:
 
 <div class="equilibria-wrapper">
-<img src="/images/equilibria.png" class="equilibria" alt="equilibria"/>
+<img src="https://arweave.net/pfamfkwU5tZnopYHCsSqeLSCc2Q-2VVT1whB0HpCD1g" class="equilibria" alt="equilibria"/>
 </div>
 
 Where:
