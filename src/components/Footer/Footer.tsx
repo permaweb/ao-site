@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import HyperTextLoad from '../hyperTextLoad';
 import arweaveLogo from '../../assets/arweave.svg';
 import xLogo from '../../assets/X_social_media.svg';
+import githubLogo from '../../assets/GithubLogo.svg';
+import discordLogo from '../../assets/DiscordLogo.svg';
 
 const Footer = () => {
   return (
@@ -12,7 +14,17 @@ const Footer = () => {
           <div className="nav-buttons quest-button">
             <Link to={'http://x.com/aoTheComputer'}>
               <button className="glitch" data-text="100101">
-                <img width={12} src={xLogo} alt={xLogo} />
+                <img width={14} src={xLogo} alt={xLogo} />
+              </button>
+            </Link>
+            <Link to={'https://github.com/permaweb/ao'}>
+              <button className="glitch" data-text="100101">
+                <img width={18} src={githubLogo} alt={githubLogo} />
+              </button>
+            </Link>
+            <Link to={'https://discord.gg/vYctEs7aTd'}>
+              <button className="glitch" data-text="100101">
+                <img width={18} src={discordLogo} alt={discordLogo} />
               </button>
             </Link>
           </div>

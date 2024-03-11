@@ -33,7 +33,8 @@ footer {
 .nav-buttons {
   display: flex;
   flex-direction: row;
-  gap: 32px;
+  align-items: center;
+  gap: 10px;
 }
 
 .nav-buttons button {
