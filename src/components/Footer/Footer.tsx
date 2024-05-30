@@ -22,7 +22,7 @@ const Footer = () => {
                 <img width={18} src={githubLogo} alt={githubLogo} />
               </button>
             </Link>
-            <Link to={'https://discord.gg/vYctEs7aTd'}>
+            <Link to={'https://discord.gg/dYXtHwc9dc'}>
               <button className="glitch" data-text="100101">
                 <img width={18} src={discordLogo} alt={discordLogo} />
               </button>
