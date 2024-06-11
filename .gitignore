@@ -27,3 +27,13 @@ dist-manifest.json
 *.njsproj
 *.sln
 *.sw?
+
+**node_modules**
+**dist**
+**package-lock.json**
+**yarn.lock**
+**dist**
+**cache**
+**logs**
+**.DS_Store**
+**.vscode**
