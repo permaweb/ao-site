@@ -1,5 +1,5 @@
 const MorpheusAsciiArt = () => {
-  const asciiArt1Black = `
+	const asciiArt1Black = `
     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -51,16 +51,16 @@ const MorpheusAsciiArt = () => {
     ░░░░░░░░░▒░░░░░░░▒▒▒▒▒░▒▓███▓░░░░░▒▓██████████████████████████████████████████████████████▒░░░░░░░░▒▒▒██▒▒▒▓░░░░░░░░░░░░░░░░░
     `;
 
-  const asciiArt2Red = `npm i -g https://get_ao.arweave.dev && aos`;
-  const asciiArt3Black = `████████████████████████████████████████████████████▓▒░░░▒▒▒`;
-  const asciiArt4Blue = `████`;
-  const asciiArt5Black = `░▒▒░░░░░░░░░░░░░░░░
+	const asciiArt2Red = `npm i -g https://get_ao.arweave.dev && aos`;
+	const asciiArt3Black = `████████████████████████████████████████████████████▓▒░░░▒▒▒`;
+	const asciiArt4Blue = `████`;
+	const asciiArt5Black = `░▒▒░░░░░░░░░░░░░░░░
     ░░░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒░░░░░░▒▓██████████████████████████████████████████████████████████▓░░░░░░░▒▒▒`;
-  const asciiArt6Blue = `▓▓██`;
-  const asciiArt7Black = `▒▒▒░░░░░░░░░░░░░░░
+	const asciiArt6Blue = `▓▓██`;
+	const asciiArt7Black = `▒▒▒░░░░░░░░░░░░░░░
     ░░░░░░░░░░░░░░░░░▒▓▒░░░░▒░░▒▒▒▓▒▒███████████████████████████████████████████████████████████▓░▓▒▒▒░░▒▒░░`;
-  const asciiArt8Blue = `▓▓██`;
-  const asciiArt9Black = `░░░▒░░░░░░░░░░░░░
+	const asciiArt8Blue = `▓▓██`;
+	const asciiArt9Black = `░░░▒░░░░░░░░░░░░░
     ░░░░░░░░░░░░░░░░▒▓▒░░░░▓▒░░▒▓▓█▓▓████████████████████████████████████████████████████████████▓▓▓▓▓▒░░▓▒░░░▒▒▓▒░░░░░░░░░░░░░░░
     ░░░░░░░░░░░░▒▒▓▒░░░░░▒▒▒▒░▒▓██████████████████████████████████████████████████████████████████████▓░▒▒▒▒▒░░░░▒▒▒▒░░░░░░░░░░░░
     ░░░░░░░░░░▒▒▒░░░░░░▒▓██▓▓▓██████████████████████████████████████████████████████████████████████████▓▓██▓▒▒░░░░░▒▒▒░▒░░░░░░░░
@@ -74,35 +74,35 @@ const MorpheusAsciiArt = () => {
     
   `;
 
-  console.log(
-    '%c' +
-      asciiArt1Black +
-      '%c' +
-      asciiArt2Red +
-      '%c' +
-      asciiArt3Black +
-      '%c' +
-      asciiArt4Blue +
-      '%c' +
-      asciiArt5Black +
-      '%c' +
-      asciiArt6Blue +
-      '%c' +
-      asciiArt7Black +
-      '%c' +
-      asciiArt8Blue +
-      '%c' +
-      asciiArt9Black,
-    'color: black;',
-    'background: red; color: white; text-decoration: none;',
-    'color: black;',
-    'color: blue;',
-    'color: black;',
-    'color: blue;',
-    'color: black;',
-    'color: blue;',
-    'color: black;'
-  );
+	console.log(
+		'%c' +
+			asciiArt1Black +
+			'%c' +
+			asciiArt2Red +
+			'%c' +
+			asciiArt3Black +
+			'%c' +
+			asciiArt4Blue +
+			'%c' +
+			asciiArt5Black +
+			'%c' +
+			asciiArt6Blue +
+			'%c' +
+			asciiArt7Black +
+			'%c' +
+			asciiArt8Blue +
+			'%c' +
+			asciiArt9Black,
+		'color: black;',
+		'background: red; color: white; text-decoration: none;',
+		'color: black;',
+		'color: blue;',
+		'color: black;',
+		'color: blue;',
+		'color: black;',
+		'color: blue;',
+		'color: black;'
+	);
 };
 
 export default MorpheusAsciiArt;
