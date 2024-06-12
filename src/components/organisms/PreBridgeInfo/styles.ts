@@ -74,6 +74,7 @@ export const TotalSupply = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
+	margin: 0 0 20px 0;
 	p,
 	span {
 		color: ${(props) => props.theme.colors.font.primary};
@@ -169,9 +170,7 @@ export const IconLine = styled.div`
 
 export const DisconnectWrapper = styled.div`
 	width: fit-content;
-	position: absolute;
-	bottom: 15px;
-	right: 20px;
+	margin: 20px 0 0 auto;
 	button {
 		span {
 			color: ${(props) => props.theme.colors.warning.primary};

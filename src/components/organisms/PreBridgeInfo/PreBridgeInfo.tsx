@@ -138,7 +138,7 @@ export default function PreBridgeInfo(props: IProps) {
 					</S.TotalSupplyAmount>
 				</S.TotalSupply>
 				<S.CurrentEarningsWrapper>
-					<span>{language.currentEarnings}</span>
+					<span>{language.currentBalance}</span>
 					<S.CurrentEarnings>
 						<h2>{formatDisplayAmount(currentBalance)}</h2>
 						<ReactSVG src={ASSETS.ao} />
@@ -148,24 +148,24 @@ export default function PreBridgeInfo(props: IProps) {
 			<S.Section>
 				<S.IconsWrapper className={'fade-in'}>
 					<S.IconLine>
-						<p>{language.nccAudit}</p>
+						<p>{language.baseContractAudits}</p>
+						<ReactSVG src={ASSETS.morpheusAudit} />
+					</S.IconLine>
+					<S.IconLine>
+						<p>{language.aoAudit}</p>
 						<div className={'ncc-audit'}>
 							<ReactSVG src={ASSETS.nccAudit} />
 						</div>
 					</S.IconLine>
-					<S.IconLine>
-						<p>{language.aoAudit}</p>
-						<ReactSVG src={ASSETS.aoAudit} />
-					</S.IconLine>
 				</S.IconsWrapper>
+				{provider.walletAddress !== null && (
+					<S.DisconnectWrapper>
+						<button onClick={() => provider.handleDisconnect()}>
+							<span>Disconnect wallet</span>
+						</button>
+					</S.DisconnectWrapper>
+				)}
 			</S.Section>
-			{/* {provider.walletAddress !== null && (
-				<S.DisconnectWrapper>
-					<button onClick={() => provider.handleDisconnect()}>
-						<span>Disconnect wallet</span>
-					</button>
-				</S.DisconnectWrapper>
-			)} */}
 		</S.Wrapper>
 	) : null;
 }
