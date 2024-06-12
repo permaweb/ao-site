@@ -63,8 +63,7 @@ export const AltAmount = styled(Amount)`
 export const LoadingWrapper = styled.div`
 	display: flex;
 	align-items: center;
-	position: absolute;
-	bottom: -55px;
+	margin: -25px 0 0 0;
 	span {
 		color: ${(props) => props.theme.colors.font.alt1};
 		font-size: ${(props) => props.theme.typography.size.base};

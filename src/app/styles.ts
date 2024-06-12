@@ -34,6 +34,46 @@ export const GlobalStyle = createGlobalStyle`
     background: ${(props) => props.theme.colors.view.background};
   }
 
+	#root {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+
+:root {
+	font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+		'Open Sans', 'Helvetica Neue', sans-serif;
+	line-height: 1.5;
+	font-weight: 300;
+	color-scheme: light;
+	color: var(--main-dark-color);
+	background-color: var(--background-color);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
+
+	--container-padding: 100px;
+	--header-height: 116px;
+	--nav-background-color: #fefefe;
+	--background-color: #fefefe;
+	--background-color-2: #fef4f4;
+	--background-color-3: #edffec;
+	--background-color-4: #fdf2f2;
+	--background-color-5: #e8eeff;
+	--faded-accent-color: #f8fff8;
+	--table-accent-color: #e1ebea;
+	--accent-color: #054bfe;
+	--main-dark-color: #222326;
+	--triangle-color: #e6e7ea;
+	--terminal-red: #d50e0e;
+	--terminal-green: #45cc05;
+	--terminal-blue: #054bfe;
+}
+
   ol, ul {
     list-style: none;
   }
@@ -245,16 +285,15 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	header {
-  position: fixed;
-  top: 0;
-  display: flex;
-  height: 40px;
-  width: 100%;
-  background-color: var(--nav-background-color);
-  overflow: hidden;
-  z-index: 1000;
-  border-bottom: 0.25px solid eaeaea;
-}
+		position: fixed;
+		top: 0;
+		display: flex;
+		height: 40px;
+		width: 100%;
+		overflow: hidden;
+		z-index: 1000;
+		border-bottom: 0.25px solid eaeaea;
+	}
 
 nav {
   display: flex;
@@ -312,11 +351,10 @@ nav {
 
 footer {
   display: flex;
-  height: 30px;
+  height: 40px;
   width: 100%;
   overflow: hidden;
   z-index: 1000;
-	background: var(--background-color);
 }
 
 .footer-container {

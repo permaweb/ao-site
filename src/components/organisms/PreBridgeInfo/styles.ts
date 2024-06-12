@@ -3,12 +3,22 @@ import styled from 'styled-components';
 import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
+	height: fit-content;
 	width: 500px;
 	padding: 20px;
 	position: relative;
+	display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+	gap: 100px;
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		width: 100%;
 	}
+`;
+
+export const Section = styled.div`
+	display: flex;
+    flex-direction: column;
 `;
 
 export const WalletAction = styled.button<{ connected: boolean }>`
@@ -41,7 +51,7 @@ export const WalletAction = styled.button<{ connected: boolean }>`
 
 export const Description = styled.div`
 	display: flex;
-	margin: 40px 0 0 0;
+	margin: 20px 0 0 0;
 	svg {
 		height: 15px;
 		width: 15px;
@@ -64,7 +74,6 @@ export const TotalSupply = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	margin: 60px 0 20px 0;
 	p,
 	span {
 		color: ${(props) => props.theme.colors.font.primary};
@@ -100,7 +109,6 @@ export const CurrentEarningsWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	margin: 0 0 40px 0;
 	span {
 		color: ${(props) => props.theme.colors.font.alt1};
 		font-size: ${(props) => props.theme.typography.size.base};
@@ -122,6 +130,40 @@ export const CurrentEarnings = styled.div`
 		height: 38.5px;
 		width: 38.5px;
 		margin: 6.5px 0 0 0;
+	}
+`;
+
+export const IconsWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+`;
+
+export const IconLine = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 1.5px;
+	p {
+		color: ${(props) => props.theme.colors.font.alt1};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-family: ${(props) => props.theme.typography.family.primary};
+		text-transform: uppercase;
+	}
+	svg {
+		height: 30px;
+		width: 50px;
+	}
+
+	div {
+		height: 30px;
+	}
+
+	.ncc-audit {
+		svg {
+			height: 30px;
+			width: 100px;
+		}
 	}
 `;
 

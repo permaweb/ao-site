@@ -8,7 +8,6 @@ import { LanguageProvider } from 'providers/LanguageProvider';
 
 import '@fontsource-variable/roboto-mono';
 import '@fontsource-variable/dm-sans';
-import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<CustomThemeProvider>

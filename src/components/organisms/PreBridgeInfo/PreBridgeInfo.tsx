@@ -114,40 +114,58 @@ export default function PreBridgeInfo(props: IProps) {
 
 	return provider ? (
 		<S.Wrapper className={'border-wrapper-alt1 fade-in'}>
-			<S.WalletAction
-				connected={provider.walletAddress !== null}
-				onClick={() => (provider.walletAddress !== null ? {} : provider.setWalletModalVisible(true))}
-			>
-				<div className={'indicator'} />
-				<span>{label}</span>
-			</S.WalletAction>
-			{CONFIG[props.chain] && (
-				<S.Description>
-					<ReactSVG src={ASSETS.info} />
-					<p>{parse(CONFIG[props.chain].description)}</p>
-				</S.Description>
-			)}
-			<S.TotalSupply>
-				<span>{language.circulatingSupply}</span>
-				<S.TotalSupplyAmount>
-					<p>{`${formatDisplayAmount(currentSupply)}`}</p>
-					<ReactSVG src={ASSETS.ao} />
-				</S.TotalSupplyAmount>
-			</S.TotalSupply>
-			<S.CurrentEarningsWrapper>
-				<span>{language.currentEarnings}</span>
-				<S.CurrentEarnings>
-					<h2>{formatDisplayAmount(currentBalance)}</h2>
-					<ReactSVG src={ASSETS.ao} />
-				</S.CurrentEarnings>
-			</S.CurrentEarningsWrapper>
-			{provider.walletAddress !== null && (
+			<S.Section>
+				<S.WalletAction
+					connected={provider.walletAddress !== null}
+					onClick={() => (provider.walletAddress !== null ? {} : provider.setWalletModalVisible(true))}
+				>
+					<div className={'indicator'} />
+					<span>{label}</span>
+				</S.WalletAction>
+				{CONFIG[props.chain] && (
+					<S.Description>
+						<ReactSVG src={ASSETS.info} />
+						<p>{parse(CONFIG[props.chain].description)}</p>
+					</S.Description>
+				)}
+			</S.Section>
+			<S.Section>
+				<S.TotalSupply>
+					<span>{language.circulatingSupply}</span>
+					<S.TotalSupplyAmount>
+						<p>{`${formatDisplayAmount(currentSupply)}`}</p>
+						<ReactSVG src={ASSETS.ao} />
+					</S.TotalSupplyAmount>
+				</S.TotalSupply>
+				<S.CurrentEarningsWrapper>
+					<span>{language.currentEarnings}</span>
+					<S.CurrentEarnings>
+						<h2>{formatDisplayAmount(currentBalance)}</h2>
+						<ReactSVG src={ASSETS.ao} />
+					</S.CurrentEarnings>
+				</S.CurrentEarningsWrapper>
+			</S.Section>
+			<S.Section>
+				<S.IconsWrapper className={'fade-in'}>
+					<S.IconLine>
+						<p>{language.nccAudit}</p>
+						<div className={'ncc-audit'}>
+							<ReactSVG src={ASSETS.nccAudit} />
+						</div>
+					</S.IconLine>
+					<S.IconLine>
+						<p>{language.aoAudit}</p>
+						<ReactSVG src={ASSETS.aoAudit} />
+					</S.IconLine>
+				</S.IconsWrapper>
+			</S.Section>
+			{/* {provider.walletAddress !== null && (
 				<S.DisconnectWrapper>
 					<button onClick={() => provider.handleDisconnect()}>
 						<span>Disconnect wallet</span>
 					</button>
 				</S.DisconnectWrapper>
-			)}
+			)} */}
 		</S.Wrapper>
 	) : null;
 }

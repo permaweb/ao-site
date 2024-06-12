@@ -5,6 +5,7 @@ import { IP_TOKEN, URLS } from 'helpers/config';
 import { ArweaveProvider } from 'providers/ArweaveProvider';
 import { EthereumProvider } from 'providers/EthereumProvider';
 import Arweave from 'views/Arweave';
+import Cred from 'views/Cred';
 import Ethereum from 'views/Ethereum';
 
 import * as S from './styles';
@@ -35,6 +36,17 @@ export default function Mint() {
 				<URLTabs
 					tabs={[
 						{
+							label: 'Ethereum',
+							icon: null,
+							disabled: false,
+							url: URLS.ethereum,
+							view: () => (
+								<EthereumProvider>
+									<Ethereum />
+								</EthereumProvider>
+							),
+						},
+						{
 							label: 'Arweave',
 							icon: null,
 							disabled: false,
@@ -46,22 +58,22 @@ export default function Mint() {
 							),
 						},
 						{
-							label: 'Ethereum',
+							label: 'CRED',
 							icon: null,
 							disabled: false,
-							url: URLS.ethereum,
+							url: URLS.cred,
 							view: () => (
-								<EthereumProvider>
-									<Ethereum />
-								</EthereumProvider>
+								<ArweaveProvider>
+									<Cred />
+								</ArweaveProvider>
 							),
 						},
 					]}
-					activeUrl={URLS.arweave}
+					activeUrl={URLS.ethereum}
 				/>
 			</S.TabsWrapper>
 		</S.Wrapper>
 	) : (
-		<S.BlockMessage>Service is not available.</S.BlockMessage>
+		<S.BlockMessage>Service is not available</S.BlockMessage>
 	);
 }
