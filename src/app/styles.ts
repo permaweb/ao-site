@@ -292,7 +292,7 @@ export const GlobalStyle = createGlobalStyle`
 		width: 100%;
 		overflow: hidden;
 		z-index: 1000;
-		border-bottom: 0.25px solid eaeaea;
+		background: #FFFFFF;
 	}
 
 nav {

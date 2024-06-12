@@ -5,6 +5,7 @@ import arweaveApp from 'assets/arweave-app.svg';
 import calculator from 'assets/calculator.svg';
 import checkmark from 'assets/checkmark.svg';
 import close from 'assets/close.svg';
+import codehawksAudit from 'assets/codehawks-audit.svg';
 import eth from 'assets/eth.svg';
 import info from 'assets/info.svg';
 import metamask from 'assets/metamask.png';
@@ -12,12 +13,13 @@ import morpheusAudit from 'assets/morpheus-audit.svg';
 import nccAudit from 'assets/ncc-audit.svg';
 import othent from 'assets/othent.svg';
 import rabby from 'assets/rabby.png';
+import renascenseAudit from 'assets/renascense-audit.svg';
 import walletConnect from 'assets/wallet-connect.png';
 
 import { ArWalletEnum, EthWalletEnum } from './types';
 
 export const AO = {
-	token: '19t4e2PvwL53jvj4VETKbWPj1tqJqu9otIMBAu3Vhm8', // TODO - ao token process
+	token: 'svecLZdTXeqb477mwcaBUEPwJXG4-gj_09k-R9rj3pg', // TODO - ao token process
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20'
 };
@@ -32,6 +34,7 @@ export const ASSETS = {
 	calculator,
 	checkmark,
 	close,
+	codehawksAudit,
 	eth,
 	info,
 	metamask,
@@ -39,6 +42,7 @@ export const ASSETS = {
 	nccAudit,
 	othent,
 	rabby,
+	renascenseAudit,
 	walletConnect,
 };
 
@@ -103,6 +107,7 @@ export const WALLET_PERMISSIONS = ['ACCESS_ADDRESS', 'ACCESS_PUBLIC_KEY', 'SIGN_
 
 export const IP_TOKEN = '04c286535ab4dc';
 
+// TODO - mainnet contracts
 export const ETH_CONTRACTS = {
 	steth: '0x967EcD21d550634733f9cA5223d7Ad1668f4bB02',
 	ao: '0x36579d15efaD8eEa20c1F7aB1FCC314f9081246C',
@@ -677,6 +682,10 @@ export const STETH_ABI = [
 		type: 'function',
 	},
 ];
+
+export const ENDPOINTS = {
+	arTotalSupply: 'https://arweave.net/total_supply'
+}
 
 export const REDIRECTS = {
 	stethConversion: 'https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84'

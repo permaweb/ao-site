@@ -137,13 +137,13 @@ export const CurrentEarnings = styled.div`
 export const IconsWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 20px;
 `;
 
-export const IconLine = styled.div`
+export const IconGroup = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 1.5px;
+	gap: 5px;
 	p {
 		color: ${(props) => props.theme.colors.font.alt1};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
@@ -151,6 +151,11 @@ export const IconLine = styled.div`
 		font-family: ${(props) => props.theme.typography.family.primary};
 		text-transform: uppercase;
 	}
+`;
+
+export const IconsLine = styled.div`
+	display: flex;
+	gap: 30px;
 	svg {
 		height: 30px;
 		width: 50px;
@@ -166,11 +171,40 @@ export const IconLine = styled.div`
 			width: 100px;
 		}
 	}
+	
+	.renascence-audit {
+		svg {
+			height: 30px;
+			width: 125px;
+		}
+	}
+
+	.codehawks-audit {
+		svg {
+			height: 30px;
+			width: 125px;
+		}
+	}
+
+	.morpheus-audit {
+		svg {
+			height: 30px;
+			width: 40px;
+		}
+	}
+
+	a {
+		&:hover {
+			svg {
+				opacity: 0.75;
+			}
+		}
+	}
 `;
 
 export const DisconnectWrapper = styled.div`
 	width: fit-content;
-	margin: 20px 0 0 auto;
+	margin: 40px 0 0 auto;
 	button {
 		span {
 			color: ${(props) => props.theme.colors.warning.primary};
