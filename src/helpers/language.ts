@@ -17,6 +17,7 @@ export const language = {
 		executing: `Executing`,
 		fetching: `Fetching`,
 		fetchingRewards: `Fetching reward amounts`,
+		gigaArmstrongInfo: `One giga-armstrong represents 1,000,000,000 armstrongs. Armstrong is the smallest denomination of AO - similar to satoshi for Bitcoin or wei for Ethereum.`,
 		loading: `Loading`,
 		max: `Max`,
 		baseContractAudits: `Base Contract Audits`,

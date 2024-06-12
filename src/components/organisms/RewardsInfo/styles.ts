@@ -60,6 +60,25 @@ export const AltAmount = styled(Amount)`
 	}
 `;
 
+export const TooltipLine = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	margin: 0 -6.5px 0 0;
+	button {
+		width: 25px !important;
+	}
+`;
+
+export const InfoModalBody = styled.div`
+	p {
+		color: ${(props) => props.theme.colors.font.alt1};
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+	}
+`;
+
 export const LoadingWrapper = styled.div`
 	display: flex;
 	align-items: center;

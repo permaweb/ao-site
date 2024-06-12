@@ -280,6 +280,7 @@ export const GlobalStyle = createGlobalStyle`
 
 	.pre-bridge-content {
 		height: fit-content;
+		width: 100%;
 		display: flex;
 		flex: 1;
 	}
@@ -400,6 +401,10 @@ footer {
 
 .arweave-badge {
   height: 100%;
+
+	@media(max-width: 400px) {
+		display: none;
+	}
 }
 
 .arweave-badge button {

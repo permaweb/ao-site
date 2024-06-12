@@ -8,8 +8,8 @@ export const Wrapper = styled.div`
 	padding: 20px;
 	position: relative;
 	display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+	flex-direction: column;
+	justify-content: space-between;
 	gap: 100px;
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		width: 100%;
@@ -18,7 +18,7 @@ export const Wrapper = styled.div`
 
 export const Section = styled.div`
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 `;
 
 export const WalletAction = styled.button<{ connected: boolean }>`
@@ -155,7 +155,8 @@ export const IconGroup = styled.div`
 
 export const IconsLine = styled.div`
 	display: flex;
-	gap: 30px;
+	flex-wrap: wrap;
+	gap: 10px 30px;
 	svg {
 		height: 30px;
 		width: 50px;
@@ -171,7 +172,7 @@ export const IconsLine = styled.div`
 			width: 100px;
 		}
 	}
-	
+
 	.renascence-audit {
 		svg {
 			height: 30px;

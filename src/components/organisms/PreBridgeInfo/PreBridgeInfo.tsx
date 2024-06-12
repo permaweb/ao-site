@@ -14,17 +14,16 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 import * as S from './styles';
 import { IProps } from './types';
 
-// TODO: descriptions
+// TODO: links
 const CONFIG = {
 	arweave: {
-		description: `Qorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis
-		tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed
-		risus. Maecenas eget condimentum velit, <a href="#" target="_blank">Visit docs for more info</a>.`,
+		description: `Wallets holding AR generate AO continuously since genesis. Every Arweave wallet with a positive balance is generating AO proportionate to the AR circulating supply and the volume of external yield generating assets. Learn more in the <a href="#" target="_blank">blog post</a>.`,
 	},
 	ethereum: {
-		description: `Qorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis
-		tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed
-		risus. Maecenas eget condimentum velit, <a href="#" target="_blank">Visit docs for more info</a>.`,
+		description: `Two thirds of newly minted AO are distributed to accounts who deposit eligible external assets into the AO network. AO token allocation is proportional to the TVL of deposited assets and their native yield. Your deposited assets remain secure in <a href="#" target="_blank">our audited Ethereum contract</a> and can be withdrawn anytime, while the yield is allocated to the AO ecosystem to bootstrap the further development and security of the network. As AO opens to more ecosystems, other proof-of-stake assets will also be eligible. Learn more in the <a href="#" target="_blank">blog post</a>.`,
+	},
+	cred: {
+		description: `If you own AOCRED, you can claim AO tokens at a 1000 AOCRED to 1 AO ratio, available only to non-US persons. Deposit your AOCRED here, then starting January 2025, you will be able to claim your AO tokens into your Arweave wallet within 365 days. Unclaimed tokens by January 2026 will be forfeited.`,
 	},
 };
 
@@ -96,7 +95,7 @@ export default function PreBridgeInfo(props: IProps) {
 		})();
 	}, []);
 
-	// TODO - get eth address current balance
+	// TODO - eth address current balance
 	React.useEffect(() => {
 		(async function () {
 			if (provider && provider.walletAddress) {
@@ -123,6 +122,9 @@ export default function PreBridgeInfo(props: IProps) {
 		})();
 	}, [props.chain, provider]);
 
+	const urlSegments = window.location.hash.split('/');
+	const currentTab = urlSegments[urlSegments.length - 2];
+
 	return provider ? (
 		<S.Wrapper className={'border-wrapper-alt1 fade-in'}>
 			<S.Section>
@@ -133,7 +135,7 @@ export default function PreBridgeInfo(props: IProps) {
 					<div className={'indicator'} />
 					<span>{label}</span>
 				</S.WalletAction>
-				{CONFIG[props.chain] && (
+				{CONFIG[currentTab] && (
 					<S.Description>
 						<ReactSVG src={ASSETS.info} />
 						<p>{parse(CONFIG[props.chain].description)}</p>
@@ -182,9 +184,9 @@ export default function PreBridgeInfo(props: IProps) {
 						<p>{language.aoAudit}</p>
 						<S.IconsLine>
 							<Link to={REDIRECTIS.ncc} target={'_blank'}>
-							<div className={'ncc-audit'}>
-								<ReactSVG src={ASSETS.nccAudit} />
-							</div>
+								<div className={'ncc-audit'}>
+									<ReactSVG src={ASSETS.nccAudit} />
+								</div>
 							</Link>
 						</S.IconsLine>
 					</S.IconGroup>

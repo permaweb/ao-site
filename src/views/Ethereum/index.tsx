@@ -68,14 +68,24 @@ export default function Ethereum() {
 		if (invalid || loading || !ethProvider.walletAddress || amount <= 0 || response !== null) setDisabled(true);
 		else {
 			if (currentTab.name === 'Deposit') {
-				setDisabled((Number(amount) * DENOMINATION > stethBalance) || !checkValidAddress(recipient));
+				setDisabled(Number(amount) * DENOMINATION > stethBalance || !checkValidAddress(recipient));
 			} else if (currentTab.name === 'Withdraw') {
 				setDisabled(Number(amount) * DENOMINATION > depositedStethBalance);
 			} else {
 				setDisabled(false);
 			}
 		}
-	}, [loading, ethProvider.walletAddress, invalid, amount, response, stethBalance, depositedStethBalance, currentTab, recipient]);
+	}, [
+		loading,
+		ethProvider.walletAddress,
+		invalid,
+		amount,
+		response,
+		stethBalance,
+		depositedStethBalance,
+		currentTab,
+		recipient,
+	]);
 
 	React.useEffect(() => {
 		setTimeout(() => {
@@ -277,42 +287,35 @@ export default function Ethereum() {
 											</S.DropdownArrow>
 										</S.FormFieldLabel>
 									</S.Form>
-									<FormField
-										value={recipient}
-										label={language.arweaveRecipient}
-										onChange={(e: any) => setRecipient(e.target.value)}
-										invalid={{ status: recipient && !checkValidAddress(recipient), message: null }}
-										disabled={loading || !ethProvider.walletAddress}
-										required={true}
-										hideErrorMessage
-									/>
-									<S.RecipientActions>
-										<Button
-											type={'alt1'}
-											label={language.pasteFromClipboard}
-											handlePress={handleRecipientPaste}
-											disabled={loading || !ethProvider.walletAddress}
-											height={35}
-										/>
-									</S.RecipientActions>
 									{currentTab.name === 'Deposit' && (
-										<S.FormEndWrapper>
-											{/* <S.RecipientWrapper>
-												<button
+										<>
+											<FormField
+												value={recipient}
+												label={language.arweaveRecipient}
+												onChange={(e: any) => setRecipient(e.target.value)}
+												invalid={{ status: recipient && !checkValidAddress(recipient), message: null }}
+												disabled={loading || !ethProvider.walletAddress}
+												required={true}
+												hideErrorMessage
+											/>
+											<S.RecipientActions>
+												<Button
+													type={'alt1'}
+													label={language.pasteFromClipboard}
+													handlePress={handleRecipientPaste}
 													disabled={loading || !ethProvider.walletAddress}
-													onClick={() => setShowRecipientModal(true)}
-												>
-													<span>{`${language.arweaveRecipient}${
-														recipient ? ` (${formatAddress(recipient, false)})` : ''
-													}`}</span>
-												</button>
-											</S.RecipientWrapper> */}
-											<S.ConversionLink>
-												<Link to={REDIRECTS.stethConversion} target={'_blank'}>
-													{language.stethConversion}
-												</Link>
-											</S.ConversionLink>
-										</S.FormEndWrapper>
+													height={35}
+												/>
+											</S.RecipientActions>
+
+											<S.FormEndWrapper>
+												<S.ConversionLink>
+													<Link to={REDIRECTS.stethConversion} target={'_blank'}>
+														{language.stethConversion}
+													</Link>
+												</S.ConversionLink>
+											</S.FormEndWrapper>
+										</>
 									)}
 								</S.ActionWrapper>
 							</S.TabContent>
@@ -355,36 +358,6 @@ export default function Ethereum() {
 				</S.Content>
 				<PreBridgeInfo chain={'ethereum'} />
 			</S.Wrapper>
-			{/* {showRecipientModal && (
-				<Modal header={language.arweaveRecipient} handleClose={() => setShowRecipientModal(false)}>
-					<div className={'modal-wrapper'}>
-						<FormField
-							value={recipient}
-							label={language.recipient}
-							onChange={(e: any) => setRecipient(e.target.value)}
-							invalid={{ status: recipient && !checkValidAddress(recipient), message: null }}
-							disabled={loading || !ethProvider.walletAddress}
-							hideErrorMessage
-						/>
-						<S.RecipientActions>
-							<Button
-								type={'alt1'}
-								label={language.pasteFromClipboard}
-								handlePress={handleRecipientPaste}
-								disabled={false}
-								height={35}
-							/>
-							<Button
-								type={'primary'}
-								label={language.submit}
-								handlePress={() => setShowRecipientModal(false)}
-								disabled={!recipient || !checkValidAddress(recipient)}
-								height={35}
-							/>
-						</S.RecipientActions>
-					</div>
-				</Modal>
-			)} */}
 			{response && <Notification message={response.message} type={response.status} callback={handleClear} />}
 		</>
 	);

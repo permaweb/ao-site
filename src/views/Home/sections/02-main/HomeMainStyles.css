@@ -110,6 +110,7 @@ main {
 	align-items: center;
 	justify-content: center;
 	backdrop-filter: blur(2px);
+	text-align: center;
 }
 
 .ao-wrapper-hero {

@@ -82,10 +82,9 @@ export default function Cred() {
 					setCredBalance('Error');
 				}
 				setUpdating(false);
-			}
-			else {
-				setCredBalance(null)
-				setDepositedCred(null)
+			} else {
+				setCredBalance(null);
+				setDepositedCred(null);
 			}
 		})();
 	}, [arProvider.walletAddress, toggleUpdate]);
@@ -94,7 +93,7 @@ export default function Cred() {
 		if (arProvider.walletAddress && credBalance && credBalance !== 'Error' && Number(credBalance) > 0) {
 			setLoading(true);
 			try {
-				const sendAmount = (Number(credBalance) * DENOMINATION);
+				const sendAmount = Number(credBalance) * DENOMINATION;
 
 				const transferResponse = await messageResults({
 					processId: AO.cred,
@@ -105,14 +104,14 @@ export default function Cred() {
 						{ name: 'Quantity', value: sendAmount.toString() },
 					],
 					responses: ['Credit-Notice'],
-					data: null
+					data: null,
 				});
 
-				console.log(transferResponse)
+				console.log(transferResponse);
 
 				if (transferResponse) {
 					setUpdating(true);
-					setToggleUpdate(!toggleUpdate);					
+					setToggleUpdate(!toggleUpdate);
 					setResponse({
 						message: `Successful Deposit`,
 						status: 'success',
