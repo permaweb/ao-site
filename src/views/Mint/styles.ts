@@ -12,7 +12,7 @@ export const Wrapper = styled.div`
 
 export const TabsWrapper = styled.div`
 	width: 100%;
-	max-width: 1100px;
+	max-width: 1200px;
 	margin: 0 0 20px 0;
 `;
 

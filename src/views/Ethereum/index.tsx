@@ -119,6 +119,7 @@ export default function Ethereum() {
 					setStethBalance((Web3.utils.toWei(balanceOf as any, 'ether') as any) / DENOMINATION);
 				} catch (e: any) {
 					console.error(e);
+					setStethBalance('Error' as any);
 				}
 
 				try {
@@ -128,6 +129,7 @@ export default function Ethereum() {
 					setDespositedStethBalance((Web3.utils.toWei((usersData as any).deposited, 'ether') as any) / DENOMINATION);
 				} catch (e: any) {
 					console.error(e);
+					setDespositedStethBalance('Error' as any)
 				}
 			} else {
 				setStethBalance(null);
@@ -209,6 +211,7 @@ export default function Ethereum() {
 	}
 
 	const depositedBalance = React.useMemo(() => {
+		if (depositedStethBalance as any === 'Error') return depositedStethBalance;
 		if (depositedStethBalance && depositedStethBalance > 0) {
 			const calcAmount = depositedStethBalance / DENOMINATION;
 			return `${formatDisplayAmount(calcAmount)} ${language.steth}`;

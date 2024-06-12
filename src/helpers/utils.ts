@@ -79,6 +79,7 @@ export function arweaveToEVMBytes(arweaveAddress) {
 	return `0x${hexString}`;
 }
 
+// TODO - Confirm RewardPerPeriod
 export function getRewardInDays(days: number, currentSupply: number) {
 	const TOTAL_AO_SUPPLY = 21000000000000000000;
 

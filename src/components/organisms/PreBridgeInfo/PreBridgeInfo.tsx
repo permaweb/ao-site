@@ -14,7 +14,7 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 import * as S from './styles';
 import { IProps } from './types';
 
-// TODO: links
+// TODO - Add Links
 const CONFIG = {
 	arweave: {
 		description: `Wallets holding AR generate AO continuously since genesis. Every Arweave wallet with a positive balance is generating AO proportionate to the AR circulating supply and the volume of external yield generating assets. Learn more in the <a href="#" target="_blank">blog post</a>.`,
@@ -95,7 +95,7 @@ export default function PreBridgeInfo(props: IProps) {
 		})();
 	}, []);
 
-	// TODO - eth address current balance
+	// TODO - Current Balance by ETH Address
 	React.useEffect(() => {
 		(async function () {
 			if (provider && provider.walletAddress) {

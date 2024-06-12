@@ -20,7 +20,7 @@ import walletConnect from 'assets/wallet-connect.png';
 import { ArWalletEnum, EthWalletEnum } from './types';
 
 export const AO = {
-	token: 'svecLZdTXeqb477mwcaBUEPwJXG4-gj_09k-R9rj3pg', // TODO - ao token process
+	token: 'svecLZdTXeqb477mwcaBUEPwJXG4-gj_09k-R9rj3pg', // TODO - AO Token Process
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
 };
@@ -109,7 +109,7 @@ export const WALLET_PERMISSIONS = ['ACCESS_ADDRESS', 'ACCESS_PUBLIC_KEY', 'SIGN_
 
 export const IP_TOKEN = '04c286535ab4dc';
 
-// TODO - mainnet contracts
+// TODO - Mainnet Contracts
 export const ETH_CONTRACTS = {
 	steth: '0x967EcD21d550634733f9cA5223d7Ad1668f4bB02',
 	ao: '0x36579d15efaD8eEa20c1F7aB1FCC314f9081246C',
