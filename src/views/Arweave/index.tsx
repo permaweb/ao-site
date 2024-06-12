@@ -70,10 +70,15 @@ export default function Arweave() {
 	React.useEffect(() => {
 		(async function () {
 			if (arProvider.walletAddress) {
-				setFetchingReward(true);
-				await new Promise((resolve) => setTimeout(resolve, 1000));
-				setDailyReward(3627364529);
-				setFetchingReward(false);
+				try {
+					setFetchingReward(true);
+					await new Promise((resolve) => setTimeout(resolve, 1000));
+					setDailyReward(3627364529);
+					setFetchingReward(false);
+				}
+				catch (e: any) {
+					console.error(e);
+				}
 			} else {
 				setDailyReward(null);
 			}

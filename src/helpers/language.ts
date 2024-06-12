@@ -1,11 +1,14 @@
 export const language = {
 	en: {
+		aoAudit: `AO Specific Audits`,
 		arweaveRecipient: `Arweave recipient`,
 		calculator: `Calculator`,
 		circulatingSupply: `Circulating AO Supply`,
 		close: `Close`,
 		connectWallet: `Connect Wallet`,
+		credBalance: `Wallet CRED Balance`,
 		currentEarnings: `Current earnings`,
+		depositedCred: `Deposited CRED`,
 		depositedSteth: `Deposited StETH`,
 		dismiss: `Dismiss`,
 		disconnect: `Disconnect`,
@@ -14,6 +17,7 @@ export const language = {
 		fetchingRewards: `Fetching reward amounts`,
 		loading: `Loading`,
 		max: `Max`,
+		nccAudit: `Base Contract Audits`,
 		pageNotFound: `Page not found`,
 		pasteFromClipboard: `Paste from clipboard`,
 		recipient: `Recipient`,
