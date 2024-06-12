@@ -7,11 +7,11 @@ import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
 import { Loader } from 'components/atoms/Loader';
 import { Notification } from 'components/atoms/Notification';
-import { Modal } from 'components/molecules/Modal';
+// import { Modal } from 'components/molecules/Modal';
 import { PreBridgeInfo } from 'components/organisms/PreBridgeInfo';
 import { RewardsInfo } from 'components/organisms/RewardsInfo';
-import { AO_ABI, ASSETS, ETH_CONTRACTS, STETH_ABI } from 'helpers/config';
-import { arweaveToEVMBytes, checkValidAddress, formatAddress, formatDisplayAmount } from 'helpers/utils';
+import { AO_ABI, ASSETS, ETH_CONTRACTS, REDIRECTS, STETH_ABI } from 'helpers/config';
+import { arweaveToEVMBytes, checkValidAddress, formatDisplayAmount } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
@@ -37,7 +37,7 @@ export default function Ethereum() {
 	const [dailyReward, setDailyReward] = React.useState<number | null>(null);
 	const [amount, setAmount] = React.useState<number>(0);
 	const [recipient, setRecipient] = React.useState<string | null>('');
-	const [showRecipientModal, setShowRecipientModal] = React.useState<boolean>(false);
+	// const [showRecipientModal, setShowRecipientModal] = React.useState<boolean>(false);
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [response, setResponse] = React.useState<{ message: string | null; status: 'success' | 'warning' } | null>(
 		null
@@ -296,23 +296,43 @@ export default function Ethereum() {
 											</S.DropdownArrow>
 										</S.FormFieldLabel>
 									</S.Form>
-									<S.FormEndWrapper>
-										<S.RecipientWrapper>
-											<button
-												disabled={loading || !ethProvider.walletAddress}
-												onClick={() => setShowRecipientModal(true)}
-											>
-												<span>{`${language.arweaveRecipient}${
-													recipient ? ` (${formatAddress(recipient, false)})` : ''
-												}`}</span>
-											</button>
-										</S.RecipientWrapper>
-										<S.ConversionLink>
-											<Link to={'#'} target={'_blank'}>
-												{language.stethConversion}
-											</Link>
-										</S.ConversionLink>
-									</S.FormEndWrapper>
+									<FormField
+										value={recipient}
+										label={language.arweaveRecipient}
+										onChange={(e: any) => setRecipient(e.target.value)}
+										invalid={{ status: recipient && !checkValidAddress(recipient), message: null }}
+										disabled={loading || !ethProvider.walletAddress}
+										required={true}
+										hideErrorMessage
+									/>
+									<S.RecipientActions>
+										<Button
+											type={'alt1'}
+											label={language.pasteFromClipboard}
+											handlePress={handleRecipientPaste}
+											disabled={loading || !ethProvider.walletAddress}
+											height={35}
+										/>
+									</S.RecipientActions>
+									{currentTab.name === 'Deposit' && (
+										<S.FormEndWrapper>
+											{/* <S.RecipientWrapper>
+												<button
+													disabled={loading || !ethProvider.walletAddress}
+													onClick={() => setShowRecipientModal(true)}
+												>
+													<span>{`${language.arweaveRecipient}${
+														recipient ? ` (${formatAddress(recipient, false)})` : ''
+													}`}</span>
+												</button>
+											</S.RecipientWrapper> */}
+											<S.ConversionLink>
+												<Link to={REDIRECTS.stethConversion} target={'_blank'}>
+													{language.stethConversion}
+												</Link>
+											</S.ConversionLink>
+										</S.FormEndWrapper>
+									)}
 								</S.ActionWrapper>
 							</S.TabContent>
 						</S.TabsWrapper>
@@ -354,7 +374,7 @@ export default function Ethereum() {
 				</S.Content>
 				<PreBridgeInfo chain={'ethereum'} />
 			</S.Wrapper>
-			{showRecipientModal && (
+			{/* {showRecipientModal && (
 				<Modal header={language.arweaveRecipient} handleClose={() => setShowRecipientModal(false)}>
 					<div className={'modal-wrapper'}>
 						<FormField
@@ -383,7 +403,7 @@ export default function Ethereum() {
 						</S.RecipientActions>
 					</div>
 				</Modal>
-			)}
+			)} */}
 			{response && <Notification message={response.message} type={response.status} callback={handleClear} />}
 		</>
 	);

@@ -1,5 +1,4 @@
 import ao from 'assets/ao.svg';
-import aoAudit from 'assets/ao-audit.svg';
 import arconnect from 'assets/arconnect.png';
 import arrow from 'assets/arrow.svg';
 import arweaveApp from 'assets/arweave-app.svg';
@@ -9,6 +8,7 @@ import close from 'assets/close.svg';
 import eth from 'assets/eth.svg';
 import info from 'assets/info.svg';
 import metamask from 'assets/metamask.png';
+import morpheusAudit from 'assets/morpheus-audit.svg';
 import nccAudit from 'assets/ncc-audit.svg';
 import othent from 'assets/othent.svg';
 import rabby from 'assets/rabby.png';
@@ -19,14 +19,13 @@ import { ArWalletEnum, EthWalletEnum } from './types';
 export const AO = {
 	token: '19t4e2PvwL53jvj4VETKbWPj1tqJqu9otIMBAu3Vhm8', // TODO - ao token process
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
-	credLocker: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc' // TODO - cred locker process
+	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20'
 };
 
 export const TOKEN_DENOMINATION = Math.pow(10, 12);
 
 export const ASSETS = {
 	ao,
-	aoAudit,
 	arconnect,
 	arrow,
 	arweaveApp,
@@ -36,6 +35,7 @@ export const ASSETS = {
 	eth,
 	info,
 	metamask,
+	morpheusAudit,
 	nccAudit,
 	othent,
 	rabby,
@@ -677,3 +677,7 @@ export const STETH_ABI = [
 		type: 'function',
 	},
 ];
+
+export const REDIRECTS = {
+	stethConversion: 'https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84'
+}

@@ -191,7 +191,7 @@ export const PrimaryAmount = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	padding: 20px;
+	padding: 35px 20px 20px 20px;
 	position: relative;
 	span {
 		color: ${(props) => props.theme.colors.font.alt1};
@@ -200,7 +200,7 @@ export const PrimaryAmount = styled.div`
 		text-transform: uppercase;
 	}
 	h2 {
-		margin: 10px 0 0 0;
+		margin: 10px 0;
 		font-weight: ${(props) => props.theme.typography.weight.xBold};
 	}
 `;
@@ -220,6 +220,8 @@ export const WalletLoadingWrapper = styled(LoadingWrapper)`
 	position: absolute;
 	bottom: 0;
 	right: 0;
+	height: 30px;
+    bottom: 5px;
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		position: relative;
 	}

@@ -78,3 +78,30 @@ export function arweaveToEVMBytes(arweaveAddress) {
 
 	return `0x${hexString}`;
 }
+
+// RewardPerPeriod = 0.000000145
+// EmissionPeriod = 5
+
+// function rewardInDays(days) {
+//     reward = 0
+//     periods = (60 / EmissionPeriod) * 24 * days
+
+//     for(i = 0; i < periods; i++) {
+//         periodSupply = currentSupply + reward
+//         reward += (21000000 - periodSupply) * RewardPerPeriod
+//     }
+
+//     return reward
+// }
+
+// function ethReward(days, userBalance, totalBalances) {
+//     return rewardInDays(days) * (2/3) * (userBalance / totalBalances)
+// }
+
+// function arReward(days, userBalance, totalBalances) {
+//     return rewardInDays(days) * (1/3) * (userBalance / totalBalances)
+// }
+
+export function getRewardInDays(days: number) {
+	return 0
+}
