@@ -80,26 +80,26 @@ export function arweaveToEVMBytes(arweaveAddress) {
 }
 
 export function getRewardInDays(days: number, currentSupply: number) {
-	const TOTAL_AO_SUPPLY = 21000000000000000000
+	const TOTAL_AO_SUPPLY = 21000000000000000000;
 
 	const REWARD_PER_PERIOD = 0.000000145;
 	const EMISSION_PERIOD = 5;
 
 	let reward = 0;
-	const periods = (60 / EMISSION_PERIOD) * 24 * days
+	const periods = (60 / EMISSION_PERIOD) * 24 * days;
 
 	for (let i = 0; i < periods; i++) {
 		const periodSupply = currentSupply + reward;
-		reward += (TOTAL_AO_SUPPLY - periodSupply) * REWARD_PER_PERIOD
+		reward += (TOTAL_AO_SUPPLY - periodSupply) * REWARD_PER_PERIOD;
 	}
 
 	return reward;
 }
 
 export function getArReward(days: number, userBalance: number, totalBalances: number, currentAOSupply: number) {
-	return getRewardInDays(days, currentAOSupply) * (1 / 3) * (userBalance / totalBalances)
+	return getRewardInDays(days, currentAOSupply) * (1 / 3) * (userBalance / totalBalances);
 }
 
 export function getEthReward(days: number, userBalance: number, totalBalances: number, currentAOSupply: number) {
-	return getRewardInDays(days, currentAOSupply) * (2 / 3) * (userBalance / totalBalances)
+	return getRewardInDays(days, currentAOSupply) * (2 / 3) * (userBalance / totalBalances);
 }

@@ -8,6 +8,7 @@ import close from 'assets/close.svg';
 import codehawksAudit from 'assets/codehawks-audit.svg';
 import eth from 'assets/eth.svg';
 import info from 'assets/info.svg';
+import ipBlock from 'assets/ip-block.png';
 import metamask from 'assets/metamask.png';
 import morpheusAudit from 'assets/morpheus-audit.svg';
 import nccAudit from 'assets/ncc-audit.svg';
@@ -21,7 +22,7 @@ import { ArWalletEnum, EthWalletEnum } from './types';
 export const AO = {
 	token: 'svecLZdTXeqb477mwcaBUEPwJXG4-gj_09k-R9rj3pg', // TODO - ao token process
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
-	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20'
+	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
 };
 
 export const TOKEN_DENOMINATION = Math.pow(10, 12);
@@ -37,6 +38,7 @@ export const ASSETS = {
 	codehawksAudit,
 	eth,
 	info,
+	ipBlock,
 	metamask,
 	morpheusAudit,
 	nccAudit,
@@ -684,9 +686,12 @@ export const STETH_ABI = [
 ];
 
 export const ENDPOINTS = {
-	arTotalSupply: 'https://arweave.net/total_supply'
-}
+	arTotalSupply: `https://arweave.net/total_supply`,
+	ipCheck: `https://ipinfo.io?token=${IP_TOKEN}`,
+};
 
 export const REDIRECTS = {
-	stethConversion: 'https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84'
-}
+	stethConversion:
+		'https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
+	ipBlock: 'https://www.standwithcrypto.org/action/call?action=call-your-representative',
+};

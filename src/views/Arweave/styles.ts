@@ -221,7 +221,7 @@ export const WalletLoadingWrapper = styled(LoadingWrapper)`
 	bottom: 0;
 	right: 0;
 	height: 30px;
-    bottom: 5px;
+	bottom: 5px;
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		position: relative;
 	}

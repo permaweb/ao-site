@@ -128,9 +128,12 @@ export const FormFieldLabel = styled.div`
 	top: 50%;
 	right: 0;
 	transform: translate(0, -50%);
-	padding: 0 0 0 15px;
-	margin: 5px 15px 0 0;
-	border-left: 1px solid ${(props) => props.theme.colors.border.primary};
+	padding: 0 15px;
+	margin: 5px 0px 0 0;
+	background: ${(props) => props.theme.colors.container.primary.background};
+	border: 1px solid ${(props) => props.theme.colors.border.primary};
+	border-top-right-radius: ${STYLING.dimensions.radius.primary};
+	border-bottom-right-radius: ${STYLING.dimensions.radius.primary};
 	svg {
 		height: 32.5px;
 		width: 32.5px;
@@ -242,7 +245,7 @@ export const WalletLoadingWrapper = styled(LoadingWrapper)`
 	bottom: 0;
 	right: 0;
 	height: 30px;
-    bottom: 5px;
+	bottom: 5px;
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		position: relative;
 	}

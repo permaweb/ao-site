@@ -3,8 +3,10 @@ import Web3 from 'web3';
 
 import { readHandler } from 'api';
 
+import { IconButton } from 'components/atoms/IconButton';
 import { Loader } from 'components/atoms/Loader';
-import { AO, ENDPOINTS, ETH_CONTRACTS, STETH_ABI, TOKEN_DENOMINATION } from 'helpers/config';
+import { Modal } from 'components/molecules/Modal';
+import { AO, ASSETS, ENDPOINTS, ETH_CONTRACTS, STETH_ABI, TOKEN_DENOMINATION } from 'helpers/config';
 import { formatDisplayAmount, getArReward, getEthReward } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -26,6 +28,8 @@ export default function RewardsInfo(props: IProps) {
 
 	const [monthlyReward, setMonthlyReward] = React.useState<number | null>(null);
 	const [yearlyReward, setYearlyReward] = React.useState<number | null>(null);
+
+	const [showInfoModal, setShowInfoModal] = React.useState<boolean>(false);
 
 	React.useEffect(() => {
 		switch (props.chain) {
@@ -130,7 +134,15 @@ export default function RewardsInfo(props: IProps) {
 							<p>{monthlyAO}</p>
 						</S.Amount>
 						<S.AltAmount className={'fade-in'}>
-							<span>Monthly Giga-Armstrongs</span>
+							<S.TooltipLine>
+								<span>Monthly Giga-Armstrongs</span>
+								<IconButton
+									type={'primary'}
+									src={ASSETS.info}
+									handlePress={() => setShowInfoModal(true)}
+									dimensions={{ icon: 15, wrapper: 25 }}
+								/>
+							</S.TooltipLine>
 							<p>{monthlyArms}</p>
 						</S.AltAmount>
 					</S.AmountLine>
@@ -140,7 +152,15 @@ export default function RewardsInfo(props: IProps) {
 							<p>{yearlyAO}</p>
 						</S.Amount>
 						<S.AltAmount className={'fade-in'}>
-							<span>Yearly Giga-Armstrongs</span>
+							<S.TooltipLine>
+								<span>Yearly Giga-Armstrongs</span>
+								<IconButton
+									type={'primary'}
+									src={ASSETS.info}
+									handlePress={() => setShowInfoModal(true)}
+									dimensions={{ icon: 15, wrapper: 25 }}
+								/>
+							</S.TooltipLine>
 							<p>{yearlyArms}</p>
 						</S.AltAmount>
 					</S.AmountLine>
@@ -153,6 +173,13 @@ export default function RewardsInfo(props: IProps) {
 						<Loader xSm relative />
 					</S.Loader>
 				</S.LoadingWrapper>
+			)}
+			{showInfoModal && (
+				<Modal header={'GIGA-ARMSTRONGS'} handleClose={() => setShowInfoModal(false)}>
+					<div className={'modal-wrapper'}>
+						<p>{language.gigaArmstrongInfo}</p>
+					</div>
+				</Modal>
 			)}
 		</>
 	);
