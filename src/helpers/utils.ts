@@ -19,9 +19,9 @@ export function formatDisplayAmount(amount: number | string | null) {
 		let parts = amount.toString().split('.');
 		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-		// Find the position of the last non-zero digit within the first 4 decimal places
+		// Find the position of the last non-zero digit within the first 6 decimal places
 		let index = 0;
-		for (let i = 0; i < Math.min(parts[1].length, 4); i++) {
+		for (let i = 0; i < Math.min(parts[1].length, 6); i++) {
 			if (parts[1][i] !== '0') {
 				index = i + 1;
 			}
@@ -79,29 +79,27 @@ export function arweaveToEVMBytes(arweaveAddress) {
 	return `0x${hexString}`;
 }
 
-// RewardPerPeriod = 0.000000145
-// EmissionPeriod = 5
+export function getRewardInDays(days: number, currentSupply: number) {
+	const TOTAL_AO_SUPPLY = 21000000000000000000
 
-// function rewardInDays(days) {
-//     reward = 0
-//     periods = (60 / EmissionPeriod) * 24 * days
+	const REWARD_PER_PERIOD = 0.000000145;
+	const EMISSION_PERIOD = 5;
 
-//     for(i = 0; i < periods; i++) {
-//         periodSupply = currentSupply + reward
-//         reward += (21000000 - periodSupply) * RewardPerPeriod
-//     }
+	let reward = 0;
+	const periods = (60 / EMISSION_PERIOD) * 24 * days
 
-//     return reward
-// }
+	for (let i = 0; i < periods; i++) {
+		const periodSupply = currentSupply + reward;
+		reward += (TOTAL_AO_SUPPLY - periodSupply) * REWARD_PER_PERIOD
+	}
 
-// function ethReward(days, userBalance, totalBalances) {
-//     return rewardInDays(days) * (2/3) * (userBalance / totalBalances)
-// }
+	return reward;
+}
 
-// function arReward(days, userBalance, totalBalances) {
-//     return rewardInDays(days) * (1/3) * (userBalance / totalBalances)
-// }
+export function getArReward(days: number, userBalance: number, totalBalances: number, currentAOSupply: number) {
+	return getRewardInDays(days, currentAOSupply) * (1 / 3) * (userBalance / totalBalances)
+}
 
-export function getRewardInDays(days: number) {
-	return 0
+export function getEthReward(days: number, userBalance: number, totalBalances: number, currentAOSupply: number) {
+	return getRewardInDays(days, currentAOSupply) * (2 / 3) * (userBalance / totalBalances)
 }

@@ -55,7 +55,6 @@ export default function Cred() {
 		}
 	}, [showWallet, arProvider.walletAddress, credBalance]);
 
-	// TODO: daily arms
 	React.useEffect(() => {
 		(async function () {
 			if (arProvider.walletAddress) {
@@ -139,7 +138,9 @@ export default function Cred() {
 	const depositedCredBalanceDisplay = React.useMemo(() => {
 		if (depositedCred === null) return `${formatDisplayAmount(null)} AO`;
 		if (depositedCred === 'Error') return depositedCred;
-		return `${formatDisplayAmount(depositedCred)} AO`;
+
+		const calcAmount = Number(depositedCred) / DENOMINATION;
+		return `${formatDisplayAmount(calcAmount)} AO`;
 	}, [depositedCred, arProvider.walletAddress]);
 
 	const action = React.useMemo(() => {

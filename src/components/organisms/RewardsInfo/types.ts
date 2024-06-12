@@ -1,4 +1,3 @@
 export interface IProps {
-	fetchingReward: boolean;
-	dailyReward: number | null;
+	chain: 'arweave' | 'ethereum'
 }

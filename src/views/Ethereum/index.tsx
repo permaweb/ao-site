@@ -7,7 +7,6 @@ import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
 import { Loader } from 'components/atoms/Loader';
 import { Notification } from 'components/atoms/Notification';
-// import { Modal } from 'components/molecules/Modal';
 import { PreBridgeInfo } from 'components/organisms/PreBridgeInfo';
 import { RewardsInfo } from 'components/organisms/RewardsInfo';
 import { AO_ABI, ASSETS, ETH_CONTRACTS, REDIRECTS, STETH_ABI } from 'helpers/config';
@@ -19,7 +18,6 @@ import * as S from './styles';
 
 const DENOMINATION = Math.pow(10, 18);
 
-// TODO: conversion link
 export default function Ethereum() {
 	const TABS = [{ name: 'Deposit' }, { name: 'Withdraw' }];
 
@@ -33,11 +31,8 @@ export default function Ethereum() {
 	const [label, setLabel] = React.useState<string | null>(null);
 	const [stethBalance, setStethBalance] = React.useState<number | null>(null);
 	const [depositedStethBalance, setDespositedStethBalance] = React.useState<number | null>(null);
-	const [fetchingReward, setFetchingReward] = React.useState<boolean>(false);
-	const [dailyReward, setDailyReward] = React.useState<number | null>(null);
 	const [amount, setAmount] = React.useState<number>(0);
 	const [recipient, setRecipient] = React.useState<string | null>('');
-	// const [showRecipientModal, setShowRecipientModal] = React.useState<boolean>(false);
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [response, setResponse] = React.useState<{ message: string | null; status: 'success' | 'warning' } | null>(
 		null
@@ -73,14 +68,14 @@ export default function Ethereum() {
 		if (invalid || loading || !ethProvider.walletAddress || amount <= 0 || response !== null) setDisabled(true);
 		else {
 			if (currentTab.name === 'Deposit') {
-				setDisabled(Number(amount) * DENOMINATION > stethBalance);
+				setDisabled((Number(amount) * DENOMINATION > stethBalance) || !checkValidAddress(recipient));
 			} else if (currentTab.name === 'Withdraw') {
 				setDisabled(Number(amount) * DENOMINATION > depositedStethBalance);
 			} else {
 				setDisabled(false);
 			}
 		}
-	}, [loading, ethProvider.walletAddress, invalid, amount, response, stethBalance, depositedStethBalance, currentTab]);
+	}, [loading, ethProvider.walletAddress, invalid, amount, response, stethBalance, depositedStethBalance, currentTab, recipient]);
 
 	React.useEffect(() => {
 		setTimeout(() => {
@@ -99,20 +94,6 @@ export default function Ethereum() {
 			}
 		}
 	}, [showWallet, ethProvider.walletAddress]);
-
-	// TODO: daily arms
-	React.useEffect(() => {
-		(async function () {
-			if (ethProvider.walletAddress) {
-				setFetchingReward(true);
-				await new Promise((resolve) => setTimeout(resolve, 1000));
-				setDailyReward(2627964529);
-				setFetchingReward(false);
-			} else {
-				setDailyReward(null);
-			}
-		})();
-	}, [ethProvider.walletAddress]);
 
 	React.useEffect(() => {
 		(async function () {
@@ -370,7 +351,7 @@ export default function Ethereum() {
 							)}
 						</S.PrimaryAmount>
 					</S.S1Content>
-					<RewardsInfo fetchingReward={fetchingReward} dailyReward={dailyReward} />
+					<RewardsInfo chain={'ethereum'} />
 				</S.Content>
 				<PreBridgeInfo chain={'ethereum'} />
 			</S.Wrapper>

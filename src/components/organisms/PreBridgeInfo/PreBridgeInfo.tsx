@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 import parse from 'html-react-parser';
 
@@ -25,6 +26,16 @@ const CONFIG = {
 		tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed
 		risus. Maecenas eget condimentum velit, <a href="#" target="_blank">Visit docs for more info</a>.`,
 	},
+};
+
+const REDIRECTIS = {
+	ncc: 'https://arweave.net/jZHVGxxxVpjGxD_uwpp-NSsezf9_z0r0evhDnV2hFNs',
+	morpheus:
+		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Internal%20Audit.md',
+	codehawks:
+		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Code%20Hawks%20Public%20Audit.md',
+	renascence:
+		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Renascence%20Morpheus%20Audit%20v2.pdf',
 };
 
 export default function PreBridgeInfo(props: IProps) {
@@ -85,7 +96,7 @@ export default function PreBridgeInfo(props: IProps) {
 		})();
 	}, []);
 
-	// TODO - get arweave addresses by eth address
+	// TODO - get eth address current balance
 	React.useEffect(() => {
 		(async function () {
 			if (provider && provider.walletAddress) {
@@ -147,16 +158,36 @@ export default function PreBridgeInfo(props: IProps) {
 			</S.Section>
 			<S.Section>
 				<S.IconsWrapper className={'fade-in'}>
-					<S.IconLine>
+					<S.IconGroup>
 						<p>{language.baseContractAudits}</p>
-						<ReactSVG src={ASSETS.morpheusAudit} />
-					</S.IconLine>
-					<S.IconLine>
+						<S.IconsLine>
+							<Link to={REDIRECTIS.morpheus} target={'_blank'}>
+								<div className={'morpheus-audit'}>
+									<ReactSVG src={ASSETS.morpheusAudit} />
+								</div>
+							</Link>
+							<Link to={REDIRECTIS.renascence} target={'_blank'}>
+								<div className={'renascence-audit'}>
+									<ReactSVG src={ASSETS.renascenseAudit} />
+								</div>
+							</Link>
+							<Link to={REDIRECTIS.codehawks} target={'_blank'}>
+								<div className={'codehawks-audit'}>
+									<ReactSVG src={ASSETS.codehawksAudit} />
+								</div>
+							</Link>
+						</S.IconsLine>
+					</S.IconGroup>
+					<S.IconGroup>
 						<p>{language.aoAudit}</p>
-						<div className={'ncc-audit'}>
-							<ReactSVG src={ASSETS.nccAudit} />
-						</div>
-					</S.IconLine>
+						<S.IconsLine>
+							<Link to={REDIRECTIS.ncc} target={'_blank'}>
+							<div className={'ncc-audit'}>
+								<ReactSVG src={ASSETS.nccAudit} />
+							</div>
+							</Link>
+						</S.IconsLine>
+					</S.IconGroup>
 				</S.IconsWrapper>
 				{provider.walletAddress !== null && (
 					<S.DisconnectWrapper>
