@@ -57,6 +57,10 @@ export const AltAmount = styled(Amount)`
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		text-transform: uppercase;
 	}
+
+	.primary-text {
+		color: ${(props) => props.theme.colors.font.primary};
+	}
 `;
 
 export const TooltipLine = styled.div`

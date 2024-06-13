@@ -1,12 +1,10 @@
 import React from 'react';
 import Web3 from 'web3';
 
-import { readHandler } from 'api';
-
 import { IconButton } from 'components/atoms/IconButton';
 import { Loader } from 'components/atoms/Loader';
 import { Modal } from 'components/molecules/Modal';
-import { AO, AO_ABI, ASSETS, ETH_CONTRACTS, STETH_ABI, TOKEN_DENOMINATION } from 'helpers/config';
+import { AO_ABI, ASSETS, ETH_CONTRACTS, TOKEN_DENOMINATION } from 'helpers/config';
 import { formatDisplayAmount, getArReward, getEthReward } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -25,6 +23,8 @@ export default function RewardsInfo(props: IProps) {
 	const [provider, setProvider] = React.useState<any>(null);
 
 	const [fetchingReward, setFetchingReward] = React.useState<boolean>(false);
+
+	const [aoSupply, setAoSupply] = React.useState<number | null>(null);
 
 	const [monthlyReward, setMonthlyReward] = React.useState<number | null>(null);
 	const [yearlyReward, setYearlyReward] = React.useState<number | null>(null);
@@ -47,21 +47,34 @@ export default function RewardsInfo(props: IProps) {
 
 	React.useEffect(() => {
 		(async function () {
-			if (provider && provider.walletAddress) {
+			try {
+				let aoSupplyFetch: number;
+				// TODO
+				// aoSupplyFetch = await readHandler({
+				// 	processId: AO.token,
+				// 	action: 'Minted-Supply',
+				// });
+
+				aoSupplyFetch = 1037726128444802400;
+
+				if (aoSupplyFetch) {
+					setAoSupply(aoSupplyFetch / TOKEN_DENOMINATION);
+				}
+			} catch (e: any) {
+				console.error(e);
+			}
+		})();
+	}, []);
+
+	React.useEffect(() => {
+		(async function () {
+			if (provider && provider.walletAddress && aoSupply) {
 				if (provider.balance !== null && provider.balance !== 'Error') {
 					setFetchingReward(true);
 					try {
 						let balance: number;
-						let aoSupply: number;
 						let tokenSupply: number;
 						let rewardFn: (days: number, userBalance: number, totalBalances: number, currentAOSupply: number) => number;
-
-						aoSupply = await readHandler({
-							processId: AO.token,
-							action: 'Minted-Supply',
-						});
-
-						if (aoSupply) aoSupply = aoSupply / TOKEN_DENOMINATION
 
 						switch (props.chain) {
 							case 'arweave':
@@ -70,7 +83,7 @@ export default function RewardsInfo(props: IProps) {
 								balance = Number(provider.balance);
 								break;
 							case 'ethereum':
-								const DENOMINATION = Math.pow(10, 18);
+								const ETH_DENOMINATION = Math.pow(10, 18);
 
 								rewardFn = getEthReward;
 
@@ -78,13 +91,12 @@ export default function RewardsInfo(props: IProps) {
 								await window.ethereum.enable();
 
 								const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
-								const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
 
 								const usersData = await aoContract.methods.usersData(ethProvider.walletAddress, 0).call();
-								const totalSupply = await stethContract.methods.totalSupply().call();
+								const totalDeposited = await aoContract.methods.totalDepositedInPublicPools().call();
 
-								tokenSupply = Number((Web3.utils.toWei(totalSupply as any, 'wei') as any) / DENOMINATION);
-								balance = Number((usersData as any).deposited) / DENOMINATION;
+								tokenSupply = Number(totalDeposited) / ETH_DENOMINATION;
+								balance = Number((usersData as any).deposited) / ETH_DENOMINATION;
 								break;
 						}
 
@@ -93,8 +105,6 @@ export default function RewardsInfo(props: IProps) {
 
 						const calcYearlyReward = rewardFn(365, balance, tokenSupply, aoSupply);
 						setYearlyReward(calcYearlyReward);
-
-						setYearlyRewardDisplay(rewardFn(365, 1, tokenSupply, aoSupply));
 					} catch (e: any) {
 						console.error(e);
 					}
@@ -105,21 +115,28 @@ export default function RewardsInfo(props: IProps) {
 				setYearlyReward(null);
 			}
 		})();
-	}, [provider]);
+	}, [provider, aoSupply]);
 
 	React.useEffect(() => {
 		(async function () {
-			if (provider && provider.walletAddress && props.chain === 'ethereum') {
+			if (props.chain === 'ethereum' && aoSupply) {
+				const ETH_DENOMINATION = Math.pow(10, 18);
+
 				const web3 = new Web3(window.ethereum);
 				await window.ethereum.enable();
 
 				const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
+				
 				const totalDeposited = await aoContract.methods.totalDepositedInPublicPools().call();
+				const formattedDepositsAmount = Number(totalDeposited) / ETH_DENOMINATION
 
-				if (totalDeposited && Number(totalDeposited) > 0) setTotalBridged(Number(totalDeposited));
+				if (totalDeposited && Number(totalDeposited) > 0) {
+					setTotalBridged(formattedDepositsAmount);
+					setYearlyRewardDisplay(getEthReward(365, 1, formattedDepositsAmount, aoSupply));
+				}
 			}
 		})();
-	}, [provider, props.chain]);
+	}, [aoSupply, props.chain]);
 
 	const monthlyAO = React.useMemo(() => {
 		if (monthlyReward && monthlyReward > 0) {
@@ -160,7 +177,7 @@ export default function RewardsInfo(props: IProps) {
 
 	const totalBridgedDisplay = React.useMemo(() => {
 		if (totalBridged && totalBridged > 0) {
-			const calcAmount = totalBridged / Math.pow(10, 18);
+			const calcAmount = totalBridged;
 			return `${formatDisplayAmount(calcAmount)} stETH`;
 		}
 		return '- stETH';
@@ -216,12 +233,10 @@ export default function RewardsInfo(props: IProps) {
 								<span>Yearly AO for 1 stETH</span>
 								<p>{yearlyDisplay}</p>
 							</S.Amount>
-						</S.AmountLine>
-						<S.AmountLine>
-							<S.Amount className={'fade-in'}>
+							<S.AltAmount className={'fade-in'}>
 								<span>Total bridged stETH</span>
-								<p>{totalBridgedDisplay}</p>
-							</S.Amount>
+								<p className={'primary-text'}>{totalBridgedDisplay}</p>
+							</S.AltAmount>
 						</S.AmountLine>
 					</S.Amounts>
 				</S.Wrapper>
