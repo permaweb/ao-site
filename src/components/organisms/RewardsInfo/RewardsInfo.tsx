@@ -61,6 +61,8 @@ export default function RewardsInfo(props: IProps) {
 							action: 'Minted-Supply',
 						});
 
+						if (aoSupply) aoSupply = aoSupply / TOKEN_DENOMINATION
+
 						switch (props.chain) {
 							case 'arweave':
 								rewardFn = getArReward;
