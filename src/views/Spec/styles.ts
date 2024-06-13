@@ -28,7 +28,7 @@ export const Wrapper = styled.div`
 	p a,
 	li a {
 		color: var(--accent-color);
-		font-weight: 600;
+		font-weight: 300;
 	}
 
 	p a:hover,
@@ -38,9 +38,9 @@ export const Wrapper = styled.div`
 
 	h1 {
 		font-family: 'DM Sans';
-		font-size: clamp(28px, 5vw, 48px);
+		font-size: clamp(24px, 5vw, 32px);
 		font-style: normal;
-		font-weight: 400;
+		font-weight: 300;
 		line-height: normal;
 		margin: 0;
 	}
@@ -49,7 +49,7 @@ export const Wrapper = styled.div`
 		font-family: 'Roboto Mono Variable';
 		font-size: clamp(10px, 2vw, 18px);
 		font-style: normal;
-		font-weight: 500;
+		font-weight: 300;
 		line-height: 150%;
 		letter-spacing: 0.18px;
 	}
@@ -71,7 +71,7 @@ export const Wrapper = styled.div`
 		font-family: 'Roboto Mono Variable';
 		font-size: clamp(10px, 2vw, 14px);
 		font-style: normal;
-		font-weight: 500;
+		font-weight: 300;
 		line-height: 150%;
 		letter-spacing: 0.18px;
 	}
@@ -80,7 +80,7 @@ export const Wrapper = styled.div`
 		font-family: 'Roboto Mono Variable';
 		font-size: clamp(8px, 2vw, 12px);
 		font-style: normal;
-		font-weight: 400;
+		font-weight: 300;
 		line-height: 150%;
 		letter-spacing: 0.18px;
 	}
@@ -89,7 +89,7 @@ export const Wrapper = styled.div`
 		font-family: 'Roboto Mono Variable';
 		font-size: clamp(8px, 2vw, 12px);
 		font-style: normal;
-		font-weight: 400;
+		font-weight: 300;
 		line-height: 1 50%;
 		letter-spacing: 0.18px;
 		margin-bottom: -20px;
@@ -100,7 +100,7 @@ export const Wrapper = styled.div`
 		font-family: 'Roboto Mono Variable';
 		font-size: clamp(8px, 2vw, 12px);
 		font-style: normal;
-		font-weight: 400;
+		font-weight: 300;
 		line-height: 150%;
 		letter-spacing: 0.18px;
 		margin-top: -20px;
