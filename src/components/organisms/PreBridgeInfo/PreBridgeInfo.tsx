@@ -95,7 +95,6 @@ export default function PreBridgeInfo(props: IProps) {
 					processId: AO.token,
 					action: 'Minted-Supply',
 				});
-				console.log(mintedSupply)
 				if (mintedSupply !== null) setCurrentSupply(Number(mintedSupply) / TOKEN_DENOMINATION);
 			} catch (e: any) {
 				console.error(e);
