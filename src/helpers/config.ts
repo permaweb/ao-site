@@ -20,7 +20,7 @@ import walletConnect from 'assets/wallet-connect.png';
 import { ArWalletEnum, EthWalletEnum } from './types';
 
 export const AO = {
-	token: 'BJj8sNao3XPqsoJnea4DnJyPzHnKhkhcY1HtWBxHcLs', // TODO - AO Token Process
+	token: 'BJj8sNao3XPqsoJnea4DnJyPzHnKhkhcY1HtWBxHcLs',
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
 };
