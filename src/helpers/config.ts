@@ -20,9 +20,20 @@ import walletConnect from 'assets/wallet-connect.png';
 import { ArWalletEnum, EthWalletEnum } from './types';
 
 export const AO = {
-	token: 'svecLZdTXeqb477mwcaBUEPwJXG4-gj_09k-R9rj3pg', // TODO - AO Token Process
+	token: 'BJj8sNao3XPqsoJnea4DnJyPzHnKhkhcY1HtWBxHcLs', // TODO - AO Token Process
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
+};
+
+// Sepolia Contracts
+// export const ETH_CONTRACTS = {
+// 	steth: '0x967EcD21d550634733f9cA5223d7Ad1668f4bB02',
+// 	ao: '0x36579d15efaD8eEa20c1F7aB1FCC314f9081246C',
+// };
+
+export const ETH_CONTRACTS = {
+	steth: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
+	ao: '0xfE08D40Eee53d64936D3128838867c867602665c',
 };
 
 export const TOKEN_DENOMINATION = Math.pow(10, 12);
@@ -108,12 +119,6 @@ export const URLS = createURLs();
 export const WALLET_PERMISSIONS = ['ACCESS_ADDRESS', 'ACCESS_PUBLIC_KEY', 'SIGN_TRANSACTION', 'DISPATCH', 'SIGNATURE'];
 
 export const IP_TOKEN = '04c286535ab4dc';
-
-// TODO - Mainnet Contracts
-export const ETH_CONTRACTS = {
-	steth: '0x967EcD21d550634733f9cA5223d7Ad1668f4bB02',
-	ao: '0x36579d15efaD8eEa20c1F7aB1FCC314f9081246C',
-};
 
 export const AO_ABI = [
 	{ inputs: [], stateMutability: 'nonpayable', type: 'constructor' },

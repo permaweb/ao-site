@@ -24,7 +24,7 @@ export function formatDisplayAmount(amount: number | string | null) {
 		if (firstTwoDecimals === '00') {
 			parts[1] = parts[1].substring(0, 6);
 		} else {
-			parts[1] = parts[1].substring(0, 2);
+			parts[1] = parts[1].substring(0, 4);
 		}
 
 		return parts.join('.');
@@ -72,7 +72,7 @@ export function arweaveToEVMBytes(arweaveAddress) {
 }
 
 export function getRewardInDays(days: number, currentSupply: number) {
-	const TOTAL_AO_SUPPLY = 21000000000000000000;
+	const TOTAL_AO_SUPPLY = 21000000;
 
 	const REWARD_PER_PERIOD = 0.000001647321875;
 	const EMISSION_PERIOD = 5;

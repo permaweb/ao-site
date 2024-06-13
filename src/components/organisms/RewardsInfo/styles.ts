@@ -26,7 +26,7 @@ export const Amount = styled.div`
 	p {
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xLg};
-		font-weight: ${(props) => props.theme.typography.weight.xBold};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		text-transform: uppercase;
 	}
@@ -53,7 +53,7 @@ export const AltAmount = styled(Amount)`
 
 	p {
 		color: ${(props) => props.theme.colors.indicator.number};
-		font-weight: ${(props) => props.theme.typography.weight.xBold};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		text-transform: uppercase;
 	}

@@ -256,9 +256,9 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		size: {
 			xxxSmall: '10px',
 			xxSmall: '11px',
-			xSmall: '12px',
-			small: '12px',
-			base: '12px',
+			xSmall: 'clamp(10px,1.75vw,14px)',
+			small: 'clamp(10px,1.75vw,14px)',
+			base: 'clamp(10px,1.75vw,14px)',
 			lg: '16px',
 			xLg: '28px',
 			h1: 'clamp(24px, 4.5vw, 48px)',
@@ -269,8 +269,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			regular: '200',
 			medium: '300',
 			bold: '400',
-			xBold: '300',
-			xxBold: '600',
+			xBold: '500',
 		},
 	},
 });
