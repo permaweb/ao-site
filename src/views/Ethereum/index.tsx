@@ -29,8 +29,10 @@ export default function Ethereum() {
 	const [currentTab, setCurrentTab] = React.useState<any>(TABS[0]);
 	const [showWallet, setShowWallet] = React.useState<boolean>(false);
 	const [label, setLabel] = React.useState<string | null>(null);
+
 	const [stethBalance, setStethBalance] = React.useState<number | null>(null);
 	const [depositedStethBalance, setDespositedStethBalance] = React.useState<number | null>(null);
+
 	const [amount, setAmount] = React.useState<number>(0);
 	const [recipient, setRecipient] = React.useState<string | null>('');
 	const [loading, setLoading] = React.useState<boolean>(false);
@@ -115,8 +117,9 @@ export default function Ethereum() {
 					const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
 
 					const balanceOf = await stethContract.methods.balanceOf(ethProvider.walletAddress).call();
+					const formattedBalance = Web3.utils.toWei(balanceOf as any, 'ether') as any;
 
-					setStethBalance((Web3.utils.toWei(balanceOf as any, 'ether') as any) / DENOMINATION);
+					setStethBalance(formattedBalance / DENOMINATION);
 				} catch (e: any) {
 					console.error(e);
 					setStethBalance('Error' as any);
@@ -152,7 +155,7 @@ export default function Ethereum() {
 		}
 	};
 
-	async function checkTransactionReceipt(txHash) {
+	async function checkTransactionReceipt(txHash: string) {
 		const web3 = new Web3(window.ethereum);
 		let receipt = null;
 		const maxTries = 100;
@@ -176,6 +179,24 @@ export default function Ethereum() {
 		return receipt;
 	}
 
+	function getSendAmount(amount: string) {
+		if (/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(amount)) {
+			amount = amount.replace(/\./g, '').replace(',', '.');
+		} else if (/^\d{1,3}(,\d{3})*(\.\d+)?$/.test(amount)) {
+			amount = amount.replace(/,/g, '');
+		} else if (/^\d{1,3}(\.\d{3})*(\.\d+)?$/.test(amount)) {
+			amount = amount.replace(/\./g, '');
+		} else if (/^\d{1,3}(,\d{3})*(,\d+)?$/.test(amount)) {
+			amount = amount.replace(/,/g, '').replace(/\./g, '');
+		}
+		
+		let numberAmount = parseFloat(amount);
+		let formattedAmount = numberAmount.toString();
+		const sendAmount = Web3.utils.toWei(formattedAmount, 'ether');
+	
+		return sendAmount;
+	}
+
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amount > 0) {
 			setLoading(true);
@@ -187,7 +208,7 @@ export default function Ethereum() {
 				const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
 
 				const poolId = 0;
-				const sendAmount = Web3.utils.toWei(amount, 'ether');
+				const sendAmount = getSendAmount(amount.toString());
 
 				let arweaveRecipient = '0x0000000000000000000000000000000000000000000000000000000000000000';
 				if (recipient && checkValidAddress(recipient)) {
@@ -202,7 +223,6 @@ export default function Ethereum() {
 
 						console.log('Approval transaction:', approval);
 
-						// Check for approval receipt
 						const approvalReceipt = await checkTransactionReceipt(approval.transactionHash);
 						if (approvalReceipt && approvalReceipt.status) {
 							const stake = await aoContract.methods.stake(poolId, sendAmount, arweaveRecipient).send({
@@ -237,64 +257,6 @@ export default function Ethereum() {
 			setLoading(false);
 		}
 	}
-
-	// async function handleSubmit() {
-	// 	if (ethProvider.walletAddress && amount && amount > 0) {
-	// 		setLoading(true);
-	// 		try {
-	// 			const web3 = new Web3(window.ethereum);
-	// 			await window.ethereum.enable();
-
-	// 			const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
-	// 			const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
-
-	// 			const poolId = 0;
-	// 			const sendAmount = Web3.utils.toWei(amount, 'ether');
-
-	// 			let arweaveRecipient = '0x0000000000000000000000000000000000000000000000000000000000000000';
-	// 			if (recipient && checkValidAddress(recipient)) {
-	// 				arweaveRecipient = arweaveToEVMBytes(recipient);
-	// 			}
-
-	// 			switch (currentTab.name) {
-	// 				case 'Deposit':
-	// 					const approval = await stethContract.methods.approve(ETH_CONTRACTS.ao, sendAmount).send({
-	// 						from: ethProvider.walletAddress,
-	// 					});
-
-	// 					console.log(approval);
-
-	// 					const stake = await aoContract.methods.stake(poolId, sendAmount, arweaveRecipient).send({
-	// 						from: ethProvider.walletAddress,
-	// 					});
-
-	// 					console.log(stake);
-	// 					break;
-	// 				case 'Withdraw':
-	// 					const withdraw = await aoContract.methods.withdraw(poolId, sendAmount, arweaveRecipient).send({
-	// 						from: ethProvider.walletAddress,
-	// 					});
-
-	// 					console.log(withdraw);
-	// 					break;
-	// 			}
-
-	// 			setToggleUpdate(!toggleUpdate);
-	// 			setAmount(0);
-	// 			setResponse({
-	// 				message: `Successful ${currentTab.name}`,
-	// 				status: 'success',
-	// 			});
-	// 		} catch (e: any) {
-	// 			console.error(e);
-	// 			setResponse({
-	// 				message: e.message ?? 'Error occurred',
-	// 				status: 'warning',
-	// 			});
-	// 		}
-	// 		setLoading(false);
-	// 	}
-	// }
 
 	const depositedBalance = React.useMemo(() => {
 		if ((depositedStethBalance as any) === 'Error') return depositedStethBalance;
