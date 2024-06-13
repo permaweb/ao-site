@@ -1,3 +1,15 @@
+# The AO Protocol: A Decentralized Open-Access Supercomputer.
+## Status: DRAFT-8
+## Published: June 13, 2024.
+
+### Abstract
+
+This paper delineates the protocol of the AO computer, a decentralized computing system inspired by the actor-oriented paradigm. It establishes a single system image capable of supporting numerous parallel processes without the constraints typical of current decentralized computation models, emphasizing network verifiability and minimized trust requirements. The architecture of AO is extremely modular, facilitating seamless integration with existing smart contract platforms and allowing customization across computational resources, virtual machines, security mechanics, and payment mechanisms. Key functionalities include unrestricted resource utilization for hosted processes, direct integration with Arweave's data storage capabilities, autonomous activation of contracts, and a comprehensive message-passing layer for inter-process coordination. This protocol focuses on providing a terse overview of the computer's mechanics, in order to accompany its formal protocol specification.
+
+[**Read it on the permaweb. TODO**](LINK)
+
+
+
 # Protocol Specification of the `ao` Computer.
 
 **Status:** Draft 5
@@ -640,12 +652,12 @@ ANS-104 DataItem Binary Format [See Spec](https://specs.arweave.dev/?tx=xwOgX-Mm
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "error": {
-      "type": "string"
-    }
-  }
+	"type": "object",
+	"properties": {
+		"error": {
+			"type": "string"
+		}
+	}
 }
 ```
 
@@ -730,90 +742,90 @@ In each `node` there is a `message` object with the following properties:
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "page_info": {
-      "type": "object",
-      "properties": {
-        "has_next_page": {
-          "type": "boolean"
-        }
-      }
-    },
-    "edges": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "node": {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string"
-                  },
-                  "tags": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string"
-                        },
-                        "value": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  },
-                  "signature": {
-                    "type": "string"
-                  }
-                }
-              },
-              "block": {
-                "type": "string"
-              },
-              "owner": {
-                "type": "object",
-                "properties": {
-                  "address": {
-                    "type": "string"
-                  },
-                  "key": {
-                    "type": "string"
-                  }
-                }
-              },
-              "process_id": {
-                "type": "string"
-              },
-              "data": {
-                "type": "string"
-              },
-              "epoch": {
-                "type": "integer"
-              },
-              "nonce": {
-                "type": "integer"
-              },
-              "timestamp": {
-                "type": "integer"
-              },
-              "hash_chain": {
-                "type": "string"
-              }
-            }
-          },
-          "cursor": {
-            "type": "string"
-          }
-        }
-      }
-    }
-  }
+	"type": "object",
+	"properties": {
+		"page_info": {
+			"type": "object",
+			"properties": {
+				"has_next_page": {
+					"type": "boolean"
+				}
+			}
+		},
+		"edges": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"node": {
+						"type": "object",
+						"properties": {
+							"message": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string"
+									},
+									"tags": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"name": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"signature": {
+										"type": "string"
+									}
+								}
+							},
+							"block": {
+								"type": "string"
+							},
+							"owner": {
+								"type": "object",
+								"properties": {
+									"address": {
+										"type": "string"
+									},
+									"key": {
+										"type": "string"
+									}
+								}
+							},
+							"process_id": {
+								"type": "string"
+							},
+							"data": {
+								"type": "string"
+							},
+							"epoch": {
+								"type": "integer"
+							},
+							"nonce": {
+								"type": "integer"
+							},
+							"timestamp": {
+								"type": "integer"
+							},
+							"hash_chain": {
+								"type": "string"
+							}
+						}
+					},
+					"cursor": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
 }
 ```
 
@@ -885,58 +897,58 @@ When receiving a 200 response, the body of the response contains a JSON document
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "message": {
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string" },
-              "value": { "type": "string" }
-            }
-          }
-        },
-        "signature": { "type": "string" }
-      }
-    },
-    "block": {
-      "type": "string"
-    },
-    "owner": {
-      "type": "object",
-      "properties": {
-        "address": {
-          "type": "string"
-        },
-        "key": {
-          "type": "string"
-        }
-      }
-    },
-    "process_id": {
-      "type": "string"
-    },
-    "data": {
-      "type": "string"
-    },
-    "epoch": {
-      "type": "integer"
-    },
-    "nonce": {
-      "type": "integer"
-    },
-    "timestamp": {
-      "type": "integer"
-    },
-    "hash_chain": {
-      "type": "string"
-    }
-  }
+	"type": "object",
+	"properties": {
+		"message": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "string" },
+				"tags": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": { "type": "string" },
+							"value": { "type": "string" }
+						}
+					}
+				},
+				"signature": { "type": "string" }
+			}
+		},
+		"block": {
+			"type": "string"
+		},
+		"owner": {
+			"type": "object",
+			"properties": {
+				"address": {
+					"type": "string"
+				},
+				"key": {
+					"type": "string"
+				}
+			}
+		},
+		"process_id": {
+			"type": "string"
+		},
+		"data": {
+			"type": "string"
+		},
+		"epoch": {
+			"type": "integer"
+		},
+		"nonce": {
+			"type": "integer"
+		},
+		"timestamp": {
+			"type": "integer"
+		},
+		"hash_chain": {
+			"type": "string"
+		}
+	}
 }
 ```
 
@@ -944,51 +956,51 @@ When receiving a 200 response, the body of the response contains a JSON document
 
 ```json
 {
-  "message": {
-    "id": "ZLc9hjPCFK6bCWwu_VM4gv-7adZEHMlJIJ4zqXruP_E",
-    "tags": [
-      {
-        "name": "Action",
-        "value": "ping"
-      },
-      {
-        "name": "friend",
-        "value": "Uv4aUd7E3PLjcC13Md29v5F-7iTmosJrsJVxQct-7ts"
-      },
-      {
-        "name": "Data-Protocol",
-        "value": "ao"
-      },
-      {
-        "name": "Variant",
-        "value": "ao.TN.1"
-      },
-      {
-        "name": "Type",
-        "value": "Message"
-      },
-      {
-        "name": "SDK",
-        "value": "ao"
-      },
-      {
-        "name": "Content-Type",
-        "value": "text/plain"
-      }
-    ],
-    "signature": "aFNVuU0ymp7-Z9zrEC2alHYwWNk5gnOWQHCkFXLFyka8Vx1z9DiysbtArq9NYigGJrSeICEAseQeBSnGWR2IAOklQw_D60_rRPXLQhbW9e0-o7EZju79eCl9PjjWlpSMDkezN6SCui64VWxqQU3A9ciBuL4hrkpGNvYbXmDGaN64eO9rBahw_Sku836nd0WwmtbSSdCJSSTOiB91t_1VmzPE20hCvBPRBTUnhjHsMEmw7N7jAc0m7pnIvlDq90wic-C6QbydFgTZqIUL0_ga2qFJjgy0sZup_XFzdpQPlIMf41VaAfCOVcZN4_xaTPf7Qjxs30o22X2l1u74QNwILY742h7fqvCfodHYUlmYIZnvfl2-KsS1IQDY8SMyCYopd7TbPC-JOHDNKXyhGzXfgjF1nzbbuOqbOgzLQH3CBKAsjDImAnm0ApJpc856ymqb27htJ3bsJAmRo7NKac6uPrDXAdaXEeV_5OeoAxPVrxmBdZAav5Cq_o47JLk2gvPSQupv2SBvafkO89pPHHHL2XxHtmbfHhNTcgT7Zjd35WomULRYR1M0FiBkXSEETTFe8M3AFEmM8-IzpSqGhzJtiIboy22NqU-apUMhu-flzq3fn9dcCDlgZdkiKQ-P21yoIDs8ROZv4CbJv71OM07248G9kRH_ZVJkvQlUnHYDXOE"
-  },
-  "block": "000001327795",
-  "owner": {
-    "address": "4QKhXnyl1z3HEPprMKfTeXrWPRuQjK6O99k5SFKGuck",
-    "key": "goGuTJ-Qzcnz1bUY2-twI0dI3OEXyg8i1ThCejv7HnZkg4CN90VxdNgtBhTtd-voYppEHJ6Y-uRuSsml0HxFBES3etBEM0ZFDSOds-frY9C6C-yz3wlmf0PhJw26xtuAoyKGPgyp9cTaa3sBv17DHl3TV34zB_cPqYbP8REEmAmjxvXX1tFd02-BQMkLnw0V3hyEQ5QXiZvKPalkH0_t_HbbIS9XvLoM3O4q-TTZhC3tPAvux3EfU9PrcJgnHS2VUYYO8mEYpRDA58NpccUyO65SVdr-SVMlPnARvvxoDKHfevDSf3Ck5qRMiTYqB6RskDNVYJPQF8uus6Eqzfnnr9377aYuZws442iwGNIuiS6-3KtM5ftu0pF_pmXmXfC3GwVo-A7ozdDL1RHjoC0rvpdIVB32RwN_9CPUXKuiclL96dAVZiflSb3uYOdhP1InAykMVL8VgFMqWw2GxXLXURbmQq6jqZNGV95slr0JC_43NtRqN3u6UBwzhU1Zi34ptuFVm1RRTGAO9cl2XBFJhHlTwnBLN7ex9q1vmZt2z4QBL61PuCvCu9NvjBHPbR70BG0GDqQL_HxC6MeYU5En3vOsWWee6c9uxaDBbPxt9P1EwXLnFQTUoMK2cmqn4zcWhbBBzixEQjIKXtDolOr-yU975fC30Lmiq6Ph79Kg65M"
-  },
-  "process_id": "xvOf_LbJFOBNxRWdIeXQiJjgnoFRsXYCPW0YZY-mqWI",
-  "data": "MTQxMg",
-  "epoch": 0,
-  "nonce": 0,
-  "timestamp": 1703272053604,
-  "hash_chain": "aoGxvPlUsliUoZ4n4EkpaZnYL_vrVVs19l1ami_ZnQY"
+	"message": {
+		"id": "ZLc9hjPCFK6bCWwu_VM4gv-7adZEHMlJIJ4zqXruP_E",
+		"tags": [
+			{
+				"name": "Action",
+				"value": "ping"
+			},
+			{
+				"name": "friend",
+				"value": "Uv4aUd7E3PLjcC13Md29v5F-7iTmosJrsJVxQct-7ts"
+			},
+			{
+				"name": "Data-Protocol",
+				"value": "ao"
+			},
+			{
+				"name": "Variant",
+				"value": "ao.TN.1"
+			},
+			{
+				"name": "Type",
+				"value": "Message"
+			},
+			{
+				"name": "SDK",
+				"value": "ao"
+			},
+			{
+				"name": "Content-Type",
+				"value": "text/plain"
+			}
+		],
+		"signature": "aFNVuU0ymp7-Z9zrEC2alHYwWNk5gnOWQHCkFXLFyka8Vx1z9DiysbtArq9NYigGJrSeICEAseQeBSnGWR2IAOklQw_D60_rRPXLQhbW9e0-o7EZju79eCl9PjjWlpSMDkezN6SCui64VWxqQU3A9ciBuL4hrkpGNvYbXmDGaN64eO9rBahw_Sku836nd0WwmtbSSdCJSSTOiB91t_1VmzPE20hCvBPRBTUnhjHsMEmw7N7jAc0m7pnIvlDq90wic-C6QbydFgTZqIUL0_ga2qFJjgy0sZup_XFzdpQPlIMf41VaAfCOVcZN4_xaTPf7Qjxs30o22X2l1u74QNwILY742h7fqvCfodHYUlmYIZnvfl2-KsS1IQDY8SMyCYopd7TbPC-JOHDNKXyhGzXfgjF1nzbbuOqbOgzLQH3CBKAsjDImAnm0ApJpc856ymqb27htJ3bsJAmRo7NKac6uPrDXAdaXEeV_5OeoAxPVrxmBdZAav5Cq_o47JLk2gvPSQupv2SBvafkO89pPHHHL2XxHtmbfHhNTcgT7Zjd35WomULRYR1M0FiBkXSEETTFe8M3AFEmM8-IzpSqGhzJtiIboy22NqU-apUMhu-flzq3fn9dcCDlgZdkiKQ-P21yoIDs8ROZv4CbJv71OM07248G9kRH_ZVJkvQlUnHYDXOE"
+	},
+	"block": "000001327795",
+	"owner": {
+		"address": "4QKhXnyl1z3HEPprMKfTeXrWPRuQjK6O99k5SFKGuck",
+		"key": "goGuTJ-Qzcnz1bUY2-twI0dI3OEXyg8i1ThCejv7HnZkg4CN90VxdNgtBhTtd-voYppEHJ6Y-uRuSsml0HxFBES3etBEM0ZFDSOds-frY9C6C-yz3wlmf0PhJw26xtuAoyKGPgyp9cTaa3sBv17DHl3TV34zB_cPqYbP8REEmAmjxvXX1tFd02-BQMkLnw0V3hyEQ5QXiZvKPalkH0_t_HbbIS9XvLoM3O4q-TTZhC3tPAvux3EfU9PrcJgnHS2VUYYO8mEYpRDA58NpccUyO65SVdr-SVMlPnARvvxoDKHfevDSf3Ck5qRMiTYqB6RskDNVYJPQF8uus6Eqzfnnr9377aYuZws442iwGNIuiS6-3KtM5ftu0pF_pmXmXfC3GwVo-A7ozdDL1RHjoC0rvpdIVB32RwN_9CPUXKuiclL96dAVZiflSb3uYOdhP1InAykMVL8VgFMqWw2GxXLXURbmQq6jqZNGV95slr0JC_43NtRqN3u6UBwzhU1Zi34ptuFVm1RRTGAO9cl2XBFJhHlTwnBLN7ex9q1vmZt2z4QBL61PuCvCu9NvjBHPbR70BG0GDqQL_HxC6MeYU5En3vOsWWee6c9uxaDBbPxt9P1EwXLnFQTUoMK2cmqn4zcWhbBBzixEQjIKXtDolOr-yU975fC30Lmiq6Ph79Kg65M"
+	},
+	"process_id": "xvOf_LbJFOBNxRWdIeXQiJjgnoFRsXYCPW0YZY-mqWI",
+	"data": "MTQxMg",
+	"epoch": 0,
+	"nonce": 0,
+	"timestamp": 1703272053604,
+	"hash_chain": "aoGxvPlUsliUoZ4n4EkpaZnYL_vrVVs19l1ami_ZnQY"
 }
 ```
 
@@ -1013,15 +1025,15 @@ Format: JSON
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "block_height": {
-      "type": "string"
-    },
-    "timestamp": {
-      "type": "string"
-    }
-  }
+	"type": "object",
+	"properties": {
+		"block_height": {
+			"type": "string"
+		},
+		"timestamp": {
+			"type": "string"
+		}
+	}
 }
 ```
 
@@ -1047,29 +1059,29 @@ When receiving a 200 response, the body of the response contains a JSON document
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "process_id": { "type": "string" },
-    "block": { "type": "string" },
-    "owner": {
-      "type": "object",
-      "properties": {
-        "address": { "type": "string" },
-        "key": { "type": "string" }
-      }
-    },
-    "tags": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "value": { "type": "string" }
-        }
-      }
-    },
-    "timestamp": { "type": "integer" }
-  }
+	"type": "object",
+	"properties": {
+		"process_id": { "type": "string" },
+		"block": { "type": "string" },
+		"owner": {
+			"type": "object",
+			"properties": {
+				"address": { "type": "string" },
+				"key": { "type": "string" }
+			}
+		},
+		"tags": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": { "type": "string" },
+					"value": { "type": "string" }
+				}
+			}
+		},
+		"timestamp": { "type": "integer" }
+	}
 }
 ```
 
@@ -1077,43 +1089,43 @@ When receiving a 200 response, the body of the response contains a JSON document
 
 ```json
 {
-  "process_id": "xvOf_LbJFOBNxRWdIeXQiJjgnoFRsXYCPW0YZY-mqWI",
-  "block": "000001327795",
-  "owner": {
-    "address": "4QKhXnyl1z3HEPprMKfTeXrWPRuQjK6O99k5SFKGuck",
-    "key": "goGuTJ-Qzcnz1bUY2-twI0dI3OEXyg8i1ThCejv7HnZkg4CN90VxdNgtBhTtd-voYppEHJ6Y-uRuSsml0HxFBES3etBEM0ZFDSOds-frY9C6C-yz3wlmf0PhJw26xtuAoyKGPgyp9cTaa3sBv17DHl3TV34zB_cPqYbP8REEmAmjxvXX1tFd02-BQMkLnw0V3hyEQ5QXiZvKPalkH0_t_HbbIS9XvLoM3O4q-TTZhC3tPAvux3EfU9PrcJgnHS2VUYYO8mEYpRDA58NpccUyO65SVdr-SVMlPnARvvxoDKHfevDSf3Ck5qRMiTYqB6RskDNVYJPQF8uus6Eqzfnnr9377aYuZws442iwGNIuiS6-3KtM5ftu0pF_pmXmXfC3GwVo-A7ozdDL1RHjoC0rvpdIVB32RwN_9CPUXKuiclL96dAVZiflSb3uYOdhP1InAykMVL8VgFMqWw2GxXLXURbmQq6jqZNGV95slr0JC_43NtRqN3u6UBwzhU1Zi34ptuFVm1RRTGAO9cl2XBFJhHlTwnBLN7ex9q1vmZt2z4QBL61PuCvCu9NvjBHPbR70BG0GDqQL_HxC6MeYU5En3vOsWWee6c9uxaDBbPxt9P1EwXLnFQTUoMK2cmqn4zcWhbBBzixEQjIKXtDolOr-yU975fC30Lmiq6Ph79Kg65M"
-  },
-  "tags": [
-    {
-      "name": "Data-Protocol",
-      "value": "ao"
-    },
-    {
-      "name": "Variant",
-      "value": "ao.TN.1"
-    },
-    {
-      "name": "Type",
-      "value": "Process"
-    },
-    {
-      "name": "Module",
-      "value": "6xSB_-rcVEc8znlSe3JZBYHRsFw5lcgjhLyR8b6leLA"
-    },
-    {
-      "name": "Scheduler",
-      "value": "4QKhXnyl1z3HEPprMKfTeXrWPRuQjK6O99k5SFKGuck"
-    },
-    {
-      "name": "SDK",
-      "value": "ao"
-    },
-    {
-      "name": "Content-Type",
-      "value": "text/plain"
-    }
-  ],
-  "timestamp": 1703272008154
+	"process_id": "xvOf_LbJFOBNxRWdIeXQiJjgnoFRsXYCPW0YZY-mqWI",
+	"block": "000001327795",
+	"owner": {
+		"address": "4QKhXnyl1z3HEPprMKfTeXrWPRuQjK6O99k5SFKGuck",
+		"key": "goGuTJ-Qzcnz1bUY2-twI0dI3OEXyg8i1ThCejv7HnZkg4CN90VxdNgtBhTtd-voYppEHJ6Y-uRuSsml0HxFBES3etBEM0ZFDSOds-frY9C6C-yz3wlmf0PhJw26xtuAoyKGPgyp9cTaa3sBv17DHl3TV34zB_cPqYbP8REEmAmjxvXX1tFd02-BQMkLnw0V3hyEQ5QXiZvKPalkH0_t_HbbIS9XvLoM3O4q-TTZhC3tPAvux3EfU9PrcJgnHS2VUYYO8mEYpRDA58NpccUyO65SVdr-SVMlPnARvvxoDKHfevDSf3Ck5qRMiTYqB6RskDNVYJPQF8uus6Eqzfnnr9377aYuZws442iwGNIuiS6-3KtM5ftu0pF_pmXmXfC3GwVo-A7ozdDL1RHjoC0rvpdIVB32RwN_9CPUXKuiclL96dAVZiflSb3uYOdhP1InAykMVL8VgFMqWw2GxXLXURbmQq6jqZNGV95slr0JC_43NtRqN3u6UBwzhU1Zi34ptuFVm1RRTGAO9cl2XBFJhHlTwnBLN7ex9q1vmZt2z4QBL61PuCvCu9NvjBHPbR70BG0GDqQL_HxC6MeYU5En3vOsWWee6c9uxaDBbPxt9P1EwXLnFQTUoMK2cmqn4zcWhbBBzixEQjIKXtDolOr-yU975fC30Lmiq6Ph79Kg65M"
+	},
+	"tags": [
+		{
+			"name": "Data-Protocol",
+			"value": "ao"
+		},
+		{
+			"name": "Variant",
+			"value": "ao.TN.1"
+		},
+		{
+			"name": "Type",
+			"value": "Process"
+		},
+		{
+			"name": "Module",
+			"value": "6xSB_-rcVEc8znlSe3JZBYHRsFw5lcgjhLyR8b6leLA"
+		},
+		{
+			"name": "Scheduler",
+			"value": "4QKhXnyl1z3HEPprMKfTeXrWPRuQjK6O99k5SFKGuck"
+		},
+		{
+			"name": "SDK",
+			"value": "ao"
+		},
+		{
+			"name": "Content-Type",
+			"value": "text/plain"
+		}
+	],
+	"timestamp": 1703272008154
 }
 ```
 
@@ -1142,11 +1154,11 @@ The health check endpoint for the Compute Unit service provides the `Wallet` add
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "address": { "type": "string" },
-    "timestamp": { "type": "integer" }
-  }
+	"type": "object",
+	"properties": {
+		"address": { "type": "string" },
+		"timestamp": { "type": "integer" }
+	}
 }
 ```
 
@@ -1191,28 +1203,28 @@ Format: JSON
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "Output": {
-      "type": "any"
-    },
-    "Messages": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
-    },
-    "Spawns": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
-    },
-    "Error": {
-      "type": "string",
-      "optional": true
-    }
-  }
+	"type": "object",
+	"properties": {
+		"Output": {
+			"type": "any"
+		},
+		"Messages": {
+			"type": "array",
+			"items": {
+				"type": "object"
+			}
+		},
+		"Spawns": {
+			"type": "array",
+			"items": {
+				"type": "object"
+			}
+		},
+		"Error": {
+			"type": "string",
+			"optional": true
+		}
+	}
 }
 ```
 
@@ -1222,33 +1234,33 @@ Format: JSON
 
 ```json
 {
-  "Messages": [
-    {
-      "Target": "mMmwJ_mpiLTgMvSB1kdcPyvpIz_J5vwHzpUbkkjoW3k",
-      "Tags": [
-        {
-          "name": "Data-Protocol",
-          "value": "ao"
-        },
-        {
-          "name": "Type",
-          "value": "Message"
-        },
-        {
-          "name": "Action",
-          "value": "pong"
-        },
-        {
-          "name": "friend",
-          "value": "2gUxSxHT6JSxS0sI_QNHrkVVWckFa2sya0zyLcCenRM"
-        }
-      ]
-    }
-  ],
-  "Spawns": [],
-  "Output": {
-    "friendlyMessage": "sending ping to mMmwJ_mpiLTgMvSB1kdcPyvpIz_J5vwHzpUbkkjoW3k"
-  }
+	"Messages": [
+		{
+			"Target": "mMmwJ_mpiLTgMvSB1kdcPyvpIz_J5vwHzpUbkkjoW3k",
+			"Tags": [
+				{
+					"name": "Data-Protocol",
+					"value": "ao"
+				},
+				{
+					"name": "Type",
+					"value": "Message"
+				},
+				{
+					"name": "Action",
+					"value": "pong"
+				},
+				{
+					"name": "friend",
+					"value": "2gUxSxHT6JSxS0sI_QNHrkVVWckFa2sya0zyLcCenRM"
+				}
+			]
+		}
+	],
+	"Spawns": [],
+	"Output": {
+		"friendlyMessage": "sending ping to mMmwJ_mpiLTgMvSB1kdcPyvpIz_J5vwHzpUbkkjoW3k"
+	}
 }
 ```
 
@@ -1471,10 +1483,10 @@ When posting to the root endpoint, the request body should have a valid DataItem
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": { "type": "string" }
-  }
+	"type": "object",
+	"properties": {
+		"id": { "type": "string" }
+	}
 }
 ```
 
@@ -1520,10 +1532,10 @@ When posting to the this endpoint, the request body should have a valid DataItem
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "message": { "type": "string" }
-  }
+	"type": "object",
+	"properties": {
+		"message": { "type": "string" }
+	}
 }
 ```
 
@@ -1569,10 +1581,10 @@ When calling this endpoint, the request body should have a valid DataItem that c
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "message": { "type": "string" }
-  }
+	"type": "object",
+	"properties": {
+		"message": { "type": "string" }
+	}
 }
 ```
 

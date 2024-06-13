@@ -1,42 +1,42 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow: hidden;
-  animation: fadeIn 2s ease-out;
-  opacity: 1;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	overflow: hidden;
+	animation: fadeIn 2s ease-out;
+	opacity: 1;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 
 .glitch {
-  position: relative;
-  margin: 0 auto;
+	position: relative;
+	margin: 0 auto;
 }
 
 .link-terminal-red:hover {
-  color: var(--terminal-red);
+	color: var(--terminal-red);
 }
 .link-terminal-green:hover {
-  color: var(--terminal-green);
+	color: var(--terminal-green);
 }
 .link-terminal-blue:hover {
-  color: var(--terminal-blue);
+	color: var(--terminal-blue);
 }
 
 .equilibria-wrapper {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 .equilibria {
-  margin-top: 20px;
-  width: 30%;
+	margin-top: 20px;
+	width: 30%;
 }

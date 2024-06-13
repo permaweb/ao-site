@@ -47,19 +47,17 @@ To get started with the ao project, follow these steps:
    ```bash
    git clone https://github.com/your-repo/ao.git
    cd ao
-
    ```
 
 2. **Install Dependencies**
 
    ```bash
    npm install
-
    ```
 
-3. **Run Dev Server**
+3. **Run**
    ```bash
-   npm install
+   npm start
    ```
 
 ## Contributing
