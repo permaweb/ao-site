@@ -95,7 +95,7 @@ function createURLs() {
 	return {
 		base: base,
 		mint: mint,
-		spec: `${base}spec/`,
+		read: `${base}read/`,
 		ethereum: ethereum,
 		arweave: `${mint}arweave/`,
 		cred: `${mint}cred/`,

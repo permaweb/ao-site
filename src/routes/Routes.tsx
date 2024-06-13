@@ -12,7 +12,7 @@ export default function _Routes() {
 		<Suspense fallback={null}>
 			<Routes>
 				<Route path={URLS.base} element={<Home />} />
-				<Route path={URLS.spec} element={<Spec />} />
+				<Route path={URLS.read} element={<Spec />} />
 				<Route path={URLS.mint} element={<Mint />} />
 				<Route path={`${URLS.mint}:active`} element={<Mint />} />
 			</Routes>

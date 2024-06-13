@@ -163,9 +163,9 @@ export default function PreBridgeInfo(props: IProps) {
 					<S.IconGroup>
 						<p>{language.baseContractAudits}</p>
 						<S.IconsLine>
-							<Link to={REDIRECTIS.morpheus} target={'_blank'}>
-								<div className={'morpheus-audit'}>
-									<ReactSVG src={ASSETS.morpheusAudit} />
+							<Link to={REDIRECTIS.codehawks} target={'_blank'}>
+								<div className={'codehawks-audit'}>
+									<ReactSVG src={ASSETS.codehawksAudit} />
 								</div>
 							</Link>
 							<Link to={REDIRECTIS.renascence} target={'_blank'}>
@@ -173,9 +173,9 @@ export default function PreBridgeInfo(props: IProps) {
 									<ReactSVG src={ASSETS.renascenseAudit} />
 								</div>
 							</Link>
-							<Link to={REDIRECTIS.codehawks} target={'_blank'}>
-								<div className={'codehawks-audit'}>
-									<ReactSVG src={ASSETS.codehawksAudit} />
+							<Link to={REDIRECTIS.morpheus} target={'_blank'}>
+								<div className={'morpheus-audit'}>
+									<ReactSVG src={ASSETS.morpheusAudit} />
 								</div>
 							</Link>
 						</S.IconsLine>

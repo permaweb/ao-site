@@ -79,7 +79,7 @@ export const Form = styled.div<{ invalid: boolean }>`
 
 export const FormFieldAction = styled.div`
 	position: absolute;
-	top: -10px;
+	top: -13.5px;
 	right: 0;
 	display: flex;
 	align-items: center;
@@ -120,8 +120,8 @@ export const FormFieldAction = styled.div`
 	}
 `;
 
-export const FormFieldLabel = styled.div`
-	height: 75px;
+export const FormFieldLabel = styled.div<{ disabled: boolean }>`
+	height: 67.5px;
 	display: flex;
 	align-items: center;
 	position: absolute;
@@ -129,9 +129,8 @@ export const FormFieldLabel = styled.div`
 	right: 0;
 	transform: translate(0, -50%);
 	padding: 0 15px;
-	margin: 5px 0px 0 0;
+	margin: 2.5px 2.5px 0 0;
 	background: ${(props) => props.theme.colors.container.primary.background};
-	border: 1px solid ${(props) => props.theme.colors.border.primary};
 	border-top-right-radius: ${STYLING.dimensions.radius.primary};
 	border-bottom-right-radius: ${STYLING.dimensions.radius.primary};
 	svg {
@@ -140,19 +139,20 @@ export const FormFieldLabel = styled.div`
 		margin: 3.5px 12.5px 0 0;
 	}
 	p {
-		color: ${(props) => props.theme.colors.font.primary};
+		color: ${(props) => props.disabled ? props.theme.colors.button.primary.disabled.color  : props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xLg};
-		font-weight: ${(props) => props.theme.typography.weight.bold};
+		font-weight: ${(props) => props.theme.typography.weight.xBold};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 	}
 `;
 
-export const DropdownArrow = styled.div`
+export const DropdownArrow = styled.div<{ disabled: boolean }>`
 	svg {
 		height: 25px;
 		width: 25px;
 		margin: 5px 0 0 10px;
 		transform: rotate(90deg);
+		color: ${(props) => props.disabled ? props.theme.colors.button.primary.disabled.color  : props.theme.colors.font.primary};
 	}
 `;
 
