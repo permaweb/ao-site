@@ -116,8 +116,6 @@ export default function Ethereum() {
 
 					const balanceOf = await stethContract.methods.balanceOf(ethProvider.walletAddress).call();
 
-					console.log(balanceOf);
-
 					setStethBalance((Web3.utils.toWei(balanceOf as any, 'ether') as any) / DENOMINATION);
 				} catch (e: any) {
 					console.error(e);
@@ -157,14 +155,14 @@ export default function Ethereum() {
 	async function checkTransactionReceipt(txHash) {
 		const web3 = new Web3(window.ethereum);
 		let receipt = null;
-		const maxTries = 100; // Maximum number of tries
+		const maxTries = 100;
 		let tries = 0;
 
 		while (!receipt && tries < maxTries) {
 			receipt = await web3.eth.getTransactionReceipt(txHash);
 			if (!receipt) {
 				console.log('Transaction is still pending...');
-				await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second
+				await new Promise((resolve) => setTimeout(resolve, 1000));
 				tries++;
 			}
 		}
