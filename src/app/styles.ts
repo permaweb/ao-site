@@ -45,7 +45,7 @@ export const GlobalStyle = createGlobalStyle`
 	font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
 		'Open Sans', 'Helvetica Neue', sans-serif;
 	line-height: 1.5;
-	font-weight: 300;
+	font-weight: 200;
 	color-scheme: light;
 	color: var(--main-dark-color);
 	background-color: var(--background-color);
