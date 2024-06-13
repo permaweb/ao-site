@@ -129,7 +129,7 @@ export default function Ethereum() {
 					setDespositedStethBalance((Web3.utils.toWei((usersData as any).deposited, 'ether') as any) / DENOMINATION);
 				} catch (e: any) {
 					console.error(e);
-					setDespositedStethBalance('Error' as any)
+					setDespositedStethBalance('Error' as any);
 				}
 			} else {
 				setStethBalance(null);
@@ -211,7 +211,7 @@ export default function Ethereum() {
 	}
 
 	const depositedBalance = React.useMemo(() => {
-		if (depositedStethBalance as any === 'Error') return depositedStethBalance;
+		if ((depositedStethBalance as any) === 'Error') return depositedStethBalance;
 		if (depositedStethBalance && depositedStethBalance > 0) {
 			const calcAmount = depositedStethBalance / DENOMINATION;
 			return `${formatDisplayAmount(calcAmount)} ${language.steth}`;
@@ -282,19 +282,26 @@ export default function Ethereum() {
 											hideErrorMessage
 										/>
 										{formFieldAction}
-										<S.FormFieldLabel>
+										<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
 											<ReactSVG src={ASSETS.eth} />
 											<p>{language.steth}</p>
-											<S.DropdownArrow>
+											<S.DropdownArrow disabled={loading || !ethProvider.walletAddress}>
 												<ReactSVG src={ASSETS.arrow} />
 											</S.DropdownArrow>
 										</S.FormFieldLabel>
 									</S.Form>
 									{currentTab.name === 'Deposit' && (
 										<>
+											<S.FormEndWrapper>
+												<S.ConversionLink>
+													<Link to={REDIRECTS.stethConversion} target={'_blank'}>
+														{language.stethConversion}
+													</Link>
+												</S.ConversionLink>
+											</S.FormEndWrapper>
 											<FormField
 												value={recipient}
-												label={language.arweaveRecipient}
+												label={language.arweaveAddress}
 												onChange={(e: any) => setRecipient(e.target.value)}
 												invalid={{ status: recipient && !checkValidAddress(recipient), message: null }}
 												disabled={loading || !ethProvider.walletAddress}
@@ -310,14 +317,6 @@ export default function Ethereum() {
 													height={35}
 												/>
 											</S.RecipientActions>
-
-											<S.FormEndWrapper>
-												<S.ConversionLink>
-													<Link to={REDIRECTS.stethConversion} target={'_blank'}>
-														{language.stethConversion}
-													</Link>
-												</S.ConversionLink>
-											</S.FormEndWrapper>
 										</>
 									)}
 								</S.ActionWrapper>

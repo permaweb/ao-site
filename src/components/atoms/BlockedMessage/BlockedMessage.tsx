@@ -10,7 +10,7 @@ export default function BlockedMessage() {
 		<S.Wrapper className={'fade-in'}>
 			<S.Message>
 				<p>
-					Unfortunately, persons in the US will not be able to mint <b>$AO</b> tokens via bridging to the network.{' '}
+					Unfortunately, persons in the US will not be able to mint <b>$AO</b> tokens via bridging to the network.<br /><br />
 					<a href={REDIRECTS.ipBlock} target={'_blank'}>
 						contact your representatives to stop this madness
 					</a>

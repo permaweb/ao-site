@@ -53,7 +53,6 @@ export const AltAmount = styled(Amount)`
 
 	p {
 		color: ${(props) => props.theme.colors.indicator.number};
-		font-size: ${(props) => props.theme.typography.size.base};
 		font-weight: ${(props) => props.theme.typography.weight.xBold};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		text-transform: uppercase;

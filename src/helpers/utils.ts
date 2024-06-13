@@ -19,20 +19,12 @@ export function formatDisplayAmount(amount: number | string | null) {
 		let parts = amount.toString().split('.');
 		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-		// Find the position of the last non-zero digit within the first 6 decimal places
-		let index = 0;
-		for (let i = 0; i < Math.min(parts[1].length, 6); i++) {
-			if (parts[1][i] !== '0') {
-				index = i + 1;
-			}
-		}
+		let firstTwoDecimals = parts[1].substring(0, 2);
 
-		if (index === 0) {
-			// If all decimals are zeros, keep two decimal places
-			parts[1] = '00';
+		if (firstTwoDecimals === '00') {
+			parts[1] = parts[1].substring(0, 6);
 		} else {
-			// Otherwise, truncate to the last non-zero digit
-			parts[1] = parts[1].substring(0, index);
+			parts[1] = parts[1].substring(0, 2);
 		}
 
 		return parts.join('.');
@@ -79,11 +71,10 @@ export function arweaveToEVMBytes(arweaveAddress) {
 	return `0x${hexString}`;
 }
 
-// TODO - Confirm RewardPerPeriod
 export function getRewardInDays(days: number, currentSupply: number) {
 	const TOTAL_AO_SUPPLY = 21000000000000000000;
 
-	const REWARD_PER_PERIOD = 0.000000145;
+	const REWARD_PER_PERIOD = 0.000001647321875;
 	const EMISSION_PERIOD = 5;
 
 	let reward = 0;

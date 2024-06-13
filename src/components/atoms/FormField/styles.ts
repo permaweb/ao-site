@@ -46,13 +46,13 @@ export const Input = styled.input<{
 	disabled: boolean;
 	invalid: boolean;
 }>`
-	height: 45px;
+	height: 50px;
 	color: ${(props) =>
 		props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
 	font-family: ${(props) => props.theme.typography.family.primary};
 	font-size: ${(props) => props.theme.typography.size.base};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
-	margin: 10px 0 0 0;
+	margin: 5px 0 0 0;
 	background: ${(props) => props.theme.colors.form.background};
 	border: 1px solid
 		${(props) => (props.invalid ? props.theme.colors.form.invalid.outline : props.theme.colors.form.border)};
