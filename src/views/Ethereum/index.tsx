@@ -179,6 +179,20 @@ export default function Ethereum() {
 		return receipt;
 	}
 
+	function truncateAmount(amount: number) {
+		const num = Number(amount);
+		if (isNaN(num)) return amount;
+
+		const parts = num.toString().split('.');
+		if (parts.length === 1) return parts[0];
+
+		if (parts[1].length > 8) {
+			return num.toFixed(8);
+		}
+
+		return amount.toString();
+	}
+
 	function getSendAmount(amount: string) {
 		if (/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(amount)) {
 			amount = amount.replace(/\./g, '').replace(',', '.');
@@ -189,11 +203,12 @@ export default function Ethereum() {
 		} else if (/^\d{1,3}(,\d{3})*(,\d+)?$/.test(amount)) {
 			amount = amount.replace(/,/g, '').replace(/\./g, '');
 		}
+
+		let numberAmount = truncateAmount(parseFloat(amount));
 		
-		let numberAmount = parseFloat(amount);
 		let formattedAmount = numberAmount.toString();
 		const sendAmount = Web3.utils.toWei(formattedAmount, 'ether');
-	
+
 		return sendAmount;
 	}
 
@@ -276,11 +291,11 @@ export default function Ethereum() {
 		switch (currentTab.name) {
 			case 'Deposit':
 				balance = stethBalance;
-				action = () => setAmount(stethBalance / DENOMINATION);
+				action = () => setAmount(Number(truncateAmount((stethBalance / DENOMINATION))));
 				break;
 			case 'Withdraw':
 				balance = depositedStethBalance;
-				action = () => setAmount(depositedStethBalance / DENOMINATION);
+				action = () => setAmount(Number(truncateAmount((depositedStethBalance / DENOMINATION))));
 				break;
 		}
 
