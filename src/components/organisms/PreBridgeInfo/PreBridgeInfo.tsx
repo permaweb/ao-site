@@ -150,13 +150,15 @@ export default function PreBridgeInfo(props: IProps) {
 						<ReactSVG src={ASSETS.ao} />
 					</S.TotalSupplyAmount>
 				</S.TotalSupply>
-				<S.CurrentEarningsWrapper>
-					<span>{language.currentBalance}</span>
-					<S.CurrentEarnings>
-						<h2>{formatDisplayAmount(currentBalance)}</h2>
-						<ReactSVG src={ASSETS.ao} />
-					</S.CurrentEarnings>
-				</S.CurrentEarningsWrapper>
+				{props.chain !== 'ethereum' && (
+					<S.CurrentEarningsWrapper>
+						<span>{language.currentBalance}</span>
+						<S.CurrentEarnings>
+							<h2>{formatDisplayAmount(currentBalance)}</h2>
+							<ReactSVG src={ASSETS.ao} />
+						</S.CurrentEarnings>
+					</S.CurrentEarningsWrapper>
+				)}
 			</S.Section>
 			<S.Section>
 				<S.IconsWrapper className={'fade-in'}>
