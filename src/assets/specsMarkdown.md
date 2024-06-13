@@ -6,7 +6,7 @@
 
 This paper delineates the protocol of the AO computer, a decentralized computing system inspired by the actor-oriented paradigm. It establishes a single system image capable of supporting numerous parallel processes without the constraints typical of current decentralized computation models, emphasizing network verifiability and minimized trust requirements. The architecture of AO is extremely modular, facilitating seamless integration with existing smart contract platforms and allowing customization across computational resources, virtual machines, security mechanics, and payment mechanisms. Key functionalities include unrestricted resource utilization for hosted processes, direct integration with Arweave's data storage capabilities, autonomous activation of contracts, and a comprehensive message-passing layer for inter-process coordination. This protocol focuses on providing a terse overview of the computer's mechanics, in order to accompany its formal protocol specification.
 
-**Read it on the permaweb [coming June 13 2024]**
+[**Read it on the permaweb.**](https://arweave.net/7n6ySzBAkzD4KZoTviHtskVlbdab_yylEQuuy1BvHqc)
 
 ## What is `ao`?
 
