@@ -116,6 +116,8 @@ export default function Ethereum() {
 
 					const balanceOf = await stethContract.methods.balanceOf(ethProvider.walletAddress).call();
 
+					console.log(balanceOf);
+
 					setStethBalance((Web3.utils.toWei(balanceOf as any, 'ether') as any) / DENOMINATION);
 				} catch (e: any) {
 					console.error(e);
@@ -152,6 +154,30 @@ export default function Ethereum() {
 		}
 	};
 
+	async function checkTransactionReceipt(txHash) {
+		const web3 = new Web3(window.ethereum);
+		let receipt = null;
+		const maxTries = 100; // Maximum number of tries
+		let tries = 0;
+
+		while (!receipt && tries < maxTries) {
+			receipt = await web3.eth.getTransactionReceipt(txHash);
+			if (!receipt) {
+				console.log('Transaction is still pending...');
+				await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second
+				tries++;
+			}
+		}
+
+		if (receipt && receipt.status) {
+			console.log('Transaction was successful!', receipt);
+		} else {
+			console.warn('Transaction failed or not confirmed after maximum attempts');
+		}
+
+		return receipt;
+	}
+
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amount > 0) {
 			setLoading(true);
@@ -176,20 +202,24 @@ export default function Ethereum() {
 							from: ethProvider.walletAddress,
 						});
 
-						console.log(approval);
+						console.log('Approval transaction:', approval);
 
-						const stake = await aoContract.methods.stake(poolId, sendAmount, arweaveRecipient).send({
-							from: ethProvider.walletAddress,
-						});
-
-						console.log(stake);
+						// Check for approval receipt
+						const approvalReceipt = await checkTransactionReceipt(approval.transactionHash);
+						if (approvalReceipt && approvalReceipt.status) {
+							const stake = await aoContract.methods.stake(poolId, sendAmount, arweaveRecipient).send({
+								from: ethProvider.walletAddress,
+							});
+							console.log('Stake transaction:', stake);
+						} else {
+							throw new Error('Approval failed');
+						}
 						break;
 					case 'Withdraw':
 						const withdraw = await aoContract.methods.withdraw(poolId, sendAmount, arweaveRecipient).send({
 							from: ethProvider.walletAddress,
 						});
-
-						console.log(withdraw);
+						console.log('Withdraw transaction:', withdraw);
 						break;
 				}
 
@@ -199,7 +229,7 @@ export default function Ethereum() {
 					message: `Successful ${currentTab.name}`,
 					status: 'success',
 				});
-			} catch (e: any) {
+			} catch (e) {
 				console.error(e);
 				setResponse({
 					message: e.message ?? 'Error occurred',
@@ -209,6 +239,64 @@ export default function Ethereum() {
 			setLoading(false);
 		}
 	}
+
+	// async function handleSubmit() {
+	// 	if (ethProvider.walletAddress && amount && amount > 0) {
+	// 		setLoading(true);
+	// 		try {
+	// 			const web3 = new Web3(window.ethereum);
+	// 			await window.ethereum.enable();
+
+	// 			const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
+	// 			const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
+
+	// 			const poolId = 0;
+	// 			const sendAmount = Web3.utils.toWei(amount, 'ether');
+
+	// 			let arweaveRecipient = '0x0000000000000000000000000000000000000000000000000000000000000000';
+	// 			if (recipient && checkValidAddress(recipient)) {
+	// 				arweaveRecipient = arweaveToEVMBytes(recipient);
+	// 			}
+
+	// 			switch (currentTab.name) {
+	// 				case 'Deposit':
+	// 					const approval = await stethContract.methods.approve(ETH_CONTRACTS.ao, sendAmount).send({
+	// 						from: ethProvider.walletAddress,
+	// 					});
+
+	// 					console.log(approval);
+
+	// 					const stake = await aoContract.methods.stake(poolId, sendAmount, arweaveRecipient).send({
+	// 						from: ethProvider.walletAddress,
+	// 					});
+
+	// 					console.log(stake);
+	// 					break;
+	// 				case 'Withdraw':
+	// 					const withdraw = await aoContract.methods.withdraw(poolId, sendAmount, arweaveRecipient).send({
+	// 						from: ethProvider.walletAddress,
+	// 					});
+
+	// 					console.log(withdraw);
+	// 					break;
+	// 			}
+
+	// 			setToggleUpdate(!toggleUpdate);
+	// 			setAmount(0);
+	// 			setResponse({
+	// 				message: `Successful ${currentTab.name}`,
+	// 				status: 'success',
+	// 			});
+	// 		} catch (e: any) {
+	// 			console.error(e);
+	// 			setResponse({
+	// 				message: e.message ?? 'Error occurred',
+	// 				status: 'warning',
+	// 			});
+	// 		}
+	// 		setLoading(false);
+	// 	}
+	// }
 
 	const depositedBalance = React.useMemo(() => {
 		if ((depositedStethBalance as any) === 'Error') return depositedStethBalance;
@@ -238,8 +326,13 @@ export default function Ethereum() {
 
 		return (
 			<S.FormFieldAction>
-				<span>{`Balance: ${balance ? formatDisplayAmount(balance / DENOMINATION) : '-'}`}</span>
-				<button disabled={loading || !ethProvider.walletAddress} onClick={action}>
+				<span>{`Balance: ${
+					balance && (balance as any) !== 'Error' ? formatDisplayAmount(balance / DENOMINATION) : '-'
+				}`}</span>
+				<button
+					disabled={loading || !ethProvider.walletAddress || !balance || (balance as any) === 'Error'}
+					onClick={action}
+				>
 					<span>{language.max}</span>
 				</button>
 			</S.FormFieldAction>

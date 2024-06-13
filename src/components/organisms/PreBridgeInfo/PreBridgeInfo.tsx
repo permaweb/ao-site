@@ -17,13 +17,21 @@ import { IProps } from './types';
 // TODO - Add Links
 const CONFIG = {
 	arweave: {
-		description: `Wallets holding AR generate AO continuously since genesis. Every Arweave wallet with a positive balance is generating AO proportionate to the AR circulating supply and the volume of external yield generating assets. Learn more in the <a href="#" target="_blank">blog post</a>.`,
+		description: `Owners of AR generate AO continuously, proportionate to their holdings. You do not need to perform any form of activation in order to receive these tokens.
+This page will help you keep track of your AO rewards and future projections. Simply connect your Arweave wallet to view your balance.
+AO tokens will become transferrable after 15% of the supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ" target="_blank">blog post</a>.`,
 	},
 	ethereum: {
-		description: `Two thirds of newly minted AO are distributed to accounts who deposit eligible external assets into the AO network. AO token allocation is proportional to the TVL of deposited assets and their native yield. Your deposited assets remain secure in <a href="#" target="_blank">our audited Ethereum contract</a> and can be withdrawn anytime, while the yield is allocated to the AO ecosystem to bootstrap the further development and security of the network. As AO opens to more ecosystems, other proof-of-stake assets will also be eligible. Learn more in the <a href="#" target="_blank">blog post</a>.`,
+		description: `66.6% of AO tokens are minted to users that bridge their assets to the network. Simply connect your wallet, deposit staked Ethereum, and earn AO.
+You can remove your deposited tokens at any time. You will begin to accrue AO 24 hours after your deposit has been confirmed.
+Bridging rewards go live at 11 AM EST June 17th, 2024.
+AO tokens will become transferrable after 15% of the supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ" target="_blank">blog post</a>.`,
 	},
 	cred: {
-		description: `If you own AOCRED, you can claim AO tokens at a 1000 AOCRED to 1 AO ratio, available only to non-US persons. Deposit your AOCRED here, then starting January 2025, you will be able to claim your AO tokens into your Arweave wallet within 365 days. Unclaimed tokens by January 2026 will be forfeited.`,
+		description: `Users that took part in AO testnet quests are able to convert their CRED tokens for AO-CLAIMs, at a rate of 1:1000.
+AO tokens have a 100% fair launch, with zero pre-allocations of any kind. As a consequence, the AO provided to those that convert their CRED will be purchased or earned via holding AR by ecosystem parties that have volunteered to do so.
+AO-claims will become redeemable after 15% of the AO supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/ydfvlhml1NI9DdTps3nEX634AY5JaQD4WmFGtRBryzk" target="_blank">blog post</a>.
+`,
 	},
 };
 
@@ -138,7 +146,7 @@ export default function PreBridgeInfo(props: IProps) {
 				{CONFIG[currentTab] && (
 					<S.Description>
 						<ReactSVG src={ASSETS.info} />
-						<p>{parse(CONFIG[props.chain].description)}</p>
+						<p>{parse(CONFIG[currentTab].description)}</p>
 					</S.Description>
 				)}
 			</S.Section>

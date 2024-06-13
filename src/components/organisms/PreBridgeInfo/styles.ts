@@ -51,7 +51,7 @@ export const WalletAction = styled.button<{ connected: boolean }>`
 
 export const Description = styled.div`
 	display: flex;
-	margin: 20px 0 0 0;
+	margin: 30px 0;
 	svg {
 		height: 15px;
 		width: 15px;
@@ -94,7 +94,7 @@ export const TotalSupplyAmount = styled.div`
 	p {
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xLg};
-		font-weight: ${(props) => props.theme.typography.weight.xBold};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		text-transform: uppercase;
 		margin: 2.5px 0 0 0;
@@ -125,7 +125,7 @@ export const CurrentEarnings = styled.div`
 	margin: 5px 0 0 0;
 	h2 {
 		line-height: 1;
-		font-weight: ${(props) => props.theme.typography.weight.xBold};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 	}
 	svg {
 		height: 38.5px;

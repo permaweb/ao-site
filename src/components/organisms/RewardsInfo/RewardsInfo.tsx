@@ -6,7 +6,7 @@ import { readHandler } from 'api';
 import { IconButton } from 'components/atoms/IconButton';
 import { Loader } from 'components/atoms/Loader';
 import { Modal } from 'components/molecules/Modal';
-import { AO, AO_ABI, ASSETS, ENDPOINTS, ETH_CONTRACTS, STETH_ABI, TOKEN_DENOMINATION } from 'helpers/config';
+import { AO, AO_ABI, ASSETS, ETH_CONTRACTS, STETH_ABI, TOKEN_DENOMINATION } from 'helpers/config';
 import { formatDisplayAmount, getArReward, getEthReward } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -64,13 +64,12 @@ export default function RewardsInfo(props: IProps) {
 						switch (props.chain) {
 							case 'arweave':
 								rewardFn = getArReward;
-
-								const arSupplyResponse = await fetch(ENDPOINTS.arTotalSupply);
-
-								tokenSupply = Number(await arSupplyResponse.text());
+								tokenSupply = 66000000;
 								balance = Number(provider.balance);
 								break;
 							case 'ethereum':
+								const DENOMINATION = Math.pow(10, 18);
+
 								rewardFn = getEthReward;
 
 								const web3 = new Web3(window.ethereum);
@@ -82,20 +81,17 @@ export default function RewardsInfo(props: IProps) {
 								const usersData = await aoContract.methods.usersData(ethProvider.walletAddress, 0).call();
 								const totalSupply = await stethContract.methods.totalSupply().call();
 
-								tokenSupply = Number(totalSupply);
-								balance = Number((usersData as any).deposited)  / Math.pow(10, 18);
+								tokenSupply = Number((Web3.utils.toWei(totalSupply as any, 'wei') as any) / DENOMINATION);
+								balance = Number((usersData as any).deposited) / DENOMINATION;
 								break;
 						}
 
-						// TODO - balance or balance * (10 ^ 18)
-						const calcMonthlyReward = rewardFn(30, balance, tokenSupply, aoSupply);
+						const calcMonthlyReward = rewardFn(30.4, balance, tokenSupply, aoSupply);
 						setMonthlyReward(calcMonthlyReward);
 
-						// TODO - balance or balance * (10 ^ 18)
 						const calcYearlyReward = rewardFn(365, balance, tokenSupply, aoSupply);
 						setYearlyReward(calcYearlyReward);
 
-						// TODO - 1 or 1 * (10 ^ 18)
 						setYearlyRewardDisplay(rewardFn(365, 1, tokenSupply, aoSupply));
 					} catch (e: any) {
 						console.error(e);
@@ -130,7 +126,6 @@ export default function RewardsInfo(props: IProps) {
 		return `${formatDisplayAmount(monthlyReward)} AO`;
 	}, [monthlyReward]);
 
-	// TODO - confirm division
 	const monthlyArms = React.useMemo(() => {
 		if (monthlyReward && monthlyReward > 0) {
 			const calcAmount = (monthlyReward * TOKEN_DENOMINATION) / 1000000000;
@@ -146,7 +141,6 @@ export default function RewardsInfo(props: IProps) {
 		return `${formatDisplayAmount(yearlyReward)} AO`;
 	}, [yearlyReward]);
 
-	// TODO - confirm division
 	const yearlyArms = React.useMemo(() => {
 		if (yearlyReward && yearlyReward > 0) {
 			const calcAmount = (yearlyReward * TOKEN_DENOMINATION) / 1000000000;
@@ -155,11 +149,9 @@ export default function RewardsInfo(props: IProps) {
 		return '-';
 	}, [yearlyReward]);
 
-	// TODO - confirm divison
 	const yearlyDisplay = React.useMemo(() => {
 		if (yearlyRewardDisplay && yearlyRewardDisplay > 0) {
-			const calcAmount = (yearlyRewardDisplay * TOKEN_DENOMINATION) / 1000000000;
-			return `~ ${formatDisplayAmount(calcAmount)} AO`;
+			return `~ ${formatDisplayAmount(yearlyRewardDisplay)} AO`;
 		}
 		return '- AO';
 	}, [yearlyRewardDisplay]);
@@ -243,7 +235,9 @@ export default function RewardsInfo(props: IProps) {
 			{showInfoModal && (
 				<Modal header={'GIGA-ARMSTRONGS'} handleClose={() => setShowInfoModal(false)}>
 					<div className={'modal-wrapper'}>
-						<p>{language.gigaArmstrongInfo}</p>
+						<S.InfoModalBody>
+							<p>{language.gigaArmstrongInfo}</p>
+						</S.InfoModalBody>
 					</div>
 				</Modal>
 			)}

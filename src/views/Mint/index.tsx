@@ -73,7 +73,7 @@ export default function Mint() {
 								),
 							},
 							{
-								label: 'CRED',
+								label: 'AOCRED',
 								icon: null,
 								disabled: false,
 								url: URLS.cred,

@@ -129,9 +129,9 @@ export default function Cred() {
 	}
 
 	const credBalanceDisplay = React.useMemo(() => {
-		if (credBalance === null) return `${formatDisplayAmount(null)} CRED`;
+		if (credBalance === null) return `${formatDisplayAmount(null)} AOCRED`;
 		if (credBalance === 'Error') return credBalance;
-		return `${formatDisplayAmount(credBalance)} CRED`;
+		return `${formatDisplayAmount(credBalance)} AOCRED`;
 	}, [credBalance, arProvider.walletAddress]);
 
 	const depositedCredBalanceDisplay = React.useMemo(() => {

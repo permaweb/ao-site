@@ -109,14 +109,20 @@ export function EthereumProvider({ children }: EthereumProviderProps) {
 				default:
 					alert('Unsupported wallet type');
 			}
-
-			const signer = provider.getSigner();
-			const address = await signer.getAddress();
-			setWalletAddress(address);
-
-			const balance = await signer.getBalance();
-			setBalance(formatEther(balance));
-			setWalletModalVisible(false);
+			
+			const network = await provider.getNetwork();
+			if (network.name === 'homestead') {
+				const signer = provider.getSigner();
+				const address = await signer.getAddress();
+				setWalletAddress(address);
+	
+				const balance = await signer.getBalance();
+				setBalance(formatEther(balance));
+				setWalletModalVisible(false);
+			}
+			else {
+				alert('Your wallet must be connected to ETH Mainnet!')
+			}
 		} catch (error) {
 			setErrorMessage(error.message);
 			setWalletAddress(null);

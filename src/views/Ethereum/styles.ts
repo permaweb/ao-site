@@ -141,7 +141,7 @@ export const FormFieldLabel = styled.div<{ disabled: boolean }>`
 	p {
 		color: ${(props) => props.disabled ? props.theme.colors.button.primary.disabled.color  : props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xLg};
-		font-weight: ${(props) => props.theme.typography.weight.xBold};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 	}
 `;
@@ -225,7 +225,7 @@ export const PrimaryAmount = styled.div`
 	}
 	h2 {
 		margin: 10px 0;
-		font-weight: ${(props) => props.theme.typography.weight.xBold};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 	}
 `;
 
