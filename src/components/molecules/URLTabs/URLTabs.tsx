@@ -1,0 +1,91 @@
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { Button } from 'components/atoms/Button';
+import NotFound from 'views/NotFound';
+
+import * as S from './styles';
+import { ICProps, ITProps, IUProps } from './types';
+
+function Tab(props: ITProps) {
+	function handlePress(e: any) {
+		e.preventDefault();
+		props.handlePress(props.url);
+	}
+
+	return (
+		<Button
+			type={'primary'}
+			label={props.label}
+			handlePress={handlePress}
+			active={props.active}
+			disabled={props.disabled}
+			height={45}
+			width={150}
+		/>
+	);
+}
+
+function TabContent(props: ICProps) {
+	const { id, active, subActive } = useParams();
+
+	let TabView: React.ComponentType<any> | null = null;
+	for (let i = 0; i < props.tabs.length; i++) {
+		const url = typeof props.tabs[i].url === 'function' ? props.tabs[i].url(id) : props.tabs[i].url;
+		if (url.includes(active)) {
+			TabView = props.tabs[i].view;
+			break;
+		}
+	}
+
+	if (!TabView) {
+		TabView = NotFound;
+	}
+
+	return <S.View>{TabView && <TabView subActive={subActive} />}</S.View>;
+}
+
+export default function URLTabs(props: IUProps) {
+	const navigate = useNavigate();
+	const { id, active } = useParams();
+
+	React.useEffect(() => {
+		if (!active) {
+			navigate(props.activeUrl);
+		}
+	}, [active, navigate, props.activeUrl, props.tabs]);
+
+	const handleRedirect = (url: string) => {
+		if (active !== url) {
+			navigate(url);
+		}
+	};
+
+	return (
+		<S.Wrapper>
+			<S.TabsHeader useFixed={props.useFixed ? props.useFixed : false}>
+				<S.Tabs>
+					{props.tabs.map((elem, index) => {
+						const url = typeof elem.url === 'function' ? elem.url(id) : elem.url;
+						let isActive = url.includes(active);
+
+						return (
+							<Tab
+								key={index}
+								url={url}
+								label={elem.label}
+								icon={elem.icon}
+								disabled={elem.disabled}
+								active={isActive}
+								handlePress={() => handleRedirect(url)}
+							/>
+						);
+					})}
+				</S.Tabs>
+			</S.TabsHeader>
+			<S.Content>
+				<TabContent tabs={props.tabs} />
+			</S.Content>
+		</S.Wrapper>
+	);
+}
