@@ -117,9 +117,12 @@ export default function Ethereum() {
 					const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
 
 					const balanceOf = await stethContract.methods.balanceOf(ethProvider.walletAddress).call();
-					const formattedBalance = Web3.utils.toWei(balanceOf as any, 'ether') as any;
+					if ((Number(balanceOf) / DENOMINATION) > 1e-8) {
+						const formattedBalance = Web3.utils.toWei(balanceOf as any, 'ether') as any;
+						setStethBalance(formattedBalance / DENOMINATION);
+					}
+					else setStethBalance(0);
 
-					setStethBalance(formattedBalance / DENOMINATION);
 				} catch (e: any) {
 					console.error(e);
 					setStethBalance('Error' as any);
