@@ -1,10 +1,12 @@
 import React from 'react';
 import Web3 from 'web3';
 
+import { readHandler } from 'api';
+
 import { IconButton } from 'components/atoms/IconButton';
 import { Loader } from 'components/atoms/Loader';
 import { Modal } from 'components/molecules/Modal';
-import { AO_ABI, ASSETS, ETH_CONTRACTS, TOKEN_DENOMINATION } from 'helpers/config';
+import { AO, AO_ABI, ASSETS, ETH_CONTRACTS, TOKEN_DENOMINATION } from 'helpers/config';
 import { formatDisplayAmount, getArReward, getEthReward } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -49,13 +51,10 @@ export default function RewardsInfo(props: IProps) {
 		(async function () {
 			try {
 				let aoSupplyFetch: number;
-				// TODO
-				// aoSupplyFetch = await readHandler({
-				// 	processId: AO.token,
-				// 	action: 'Minted-Supply',
-				// });
-
-				aoSupplyFetch = 1037726128444802400;
+				aoSupplyFetch = await readHandler({
+					processId: AO.token,
+					action: 'Minted-Supply',
+				});
 
 				if (aoSupplyFetch) {
 					setAoSupply(aoSupplyFetch / TOKEN_DENOMINATION);

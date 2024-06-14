@@ -182,14 +182,15 @@ export default function Ethereum() {
 	function truncateAmount(amount: number) {
 		const num = Number(amount);
 		if (isNaN(num)) return amount;
-
+	
 		const parts = num.toString().split('.');
 		if (parts.length === 1) return parts[0];
-
+	
 		if (parts[1].length > 8) {
-			return num.toFixed(8);
+			const factor = Math.pow(10, 8);
+			return (Math.floor(num * factor) / factor).toFixed(8);
 		}
-
+	
 		return amount.toString();
 	}
 
