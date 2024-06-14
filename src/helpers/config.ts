@@ -20,16 +20,10 @@ import walletConnect from 'assets/wallet-connect.png';
 import { ArWalletEnum, EthWalletEnum } from './types';
 
 export const AO = {
-	token: 'BJj8sNao3XPqsoJnea4DnJyPzHnKhkhcY1HtWBxHcLs',
+	token: 'm3PaWzK4PTG9lAaqYQPaPdOcXdO8hYqi5Fe9NWqXd0w',
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
 };
-
-// Sepolia Contracts
-// export const ETH_CONTRACTS = {
-// 	steth: '0x967EcD21d550634733f9cA5223d7Ad1668f4bB02',
-// 	ao: '0x36579d15efaD8eEa20c1F7aB1FCC314f9081246C',
-// };
 
 export const ETH_CONTRACTS = {
 	steth: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',

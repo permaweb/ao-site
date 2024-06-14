@@ -1,5 +1,3 @@
-import BALANCES from 'helpers/balances.json';
-
 export function checkValidAddress(address: string | null) {
 	if (!address) return false;
 	return /^[a-z0-9_-]{43}$/i.test(address);
@@ -96,9 +94,4 @@ export function getArReward(days: number, userBalance: number, totalBalances: nu
 
 export function getEthReward(days: number, userBalance: number, totalBalances: number, currentAOSupply: number) {
 	return getRewardInDays(days, currentAOSupply) * (2 / 3) * (userBalance / totalBalances);
-}
-
-export function getBalance(address: string) {
-	if (BALANCES[address]) return BALANCES[address];
-	return null;
 }

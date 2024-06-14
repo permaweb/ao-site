@@ -6,7 +6,7 @@ import parse from 'html-react-parser';
 import { readHandler } from 'api';
 
 import { AO, ASSETS, TOKEN_DENOMINATION } from 'helpers/config';
-import { formatAddress, formatDisplayAmount, getBalance } from 'helpers/utils';
+import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -91,12 +91,10 @@ export default function PreBridgeInfo(props: IProps) {
 	React.useEffect(() => {
 		(async function () {
 			try {
-				// TODO
-				// const mintedSupply = await readHandler({
-				// 	processId: AO.token,
-				// 	action: 'Minted-Supply',
-				// });
-				const mintedSupply = 1037726128444802400
+				const mintedSupply = await readHandler({
+					processId: AO.token,
+					action: 'Minted-Supply',
+				});
 				if (mintedSupply !== null) setCurrentSupply(Number(mintedSupply) / TOKEN_DENOMINATION);
 			} catch (e: any) {
 				console.error(e);
@@ -111,13 +109,11 @@ export default function PreBridgeInfo(props: IProps) {
 				switch (props.chain) {
 					case 'arweave':
 						try {
-							// TODO
-							// const tokenBalance = await readHandler({
-							// 	processId: AO.token,
-							// 	action: 'Balance',
-							// 	tags: [{ name: 'Recipient', value: provider.walletAddress }],
-							// });
-							const tokenBalance = getBalance(provider.walletAddress)
+							const tokenBalance = await readHandler({
+								processId: AO.token,
+								action: 'Balance',
+								tags: [{ name: 'Recipient', value: provider.walletAddress }],
+							});
 							if (tokenBalance != null) setCurrentBalance(tokenBalance / TOKEN_DENOMINATION);
 						} catch (e: any) {
 							console.error(e);
