@@ -125,6 +125,8 @@ module.exports = {
 		}),
 		new CopyWebpackPlugin({
 			patterns: [
+				{ from: 'public/ao_meta.png', to: 'images/ao_meta.png' },
+				{ from: 'public/ao_black.svg', to: 'images/ao_black.svg' },
 				{ from: 'public/favicon.svg', to: 'favicon.svg' },
 				{ from: 'public/manifest.json', to: 'manifest.json' },
 			],
