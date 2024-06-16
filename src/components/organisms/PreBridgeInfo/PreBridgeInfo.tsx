@@ -23,7 +23,7 @@ AO tokens will become transferrable after 15% of the supply has been minted, on 
 	ethereum: {
 		description: `66.6% of AO tokens are minted to users that bridge their assets to the network. Simply connect your wallet, deposit staked Ethereum, and earn AO.
 You can remove your deposited tokens at any time. You will begin to accrue AO 24 hours after your deposit has been confirmed.
-Bridging rewards go live at 11 AM EST June 17th, 2024.
+Bridging rewards go live at 11 AM EST June 18th, 2024.
 AO tokens will become transferrable after 15% of the supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ" target="_blank">blog post</a>.`,
 	},
 	cred: {
