@@ -6,7 +6,7 @@ import { readHandler } from 'api';
 import { IconButton } from 'components/atoms/IconButton';
 import { Loader } from 'components/atoms/Loader';
 import { Modal } from 'components/molecules/Modal';
-import { AO, AO_ABI, ASSETS, ETH_CONTRACTS, TOKEN_DENOMINATION } from 'helpers/config';
+import { AO, AO_ABI, ASSETS, ENDPOINTS, ETH_CONTRACTS, TOKEN_DENOMINATION } from 'helpers/config';
 import { formatDisplayAmount, getArReward, getEthReward } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -25,6 +25,8 @@ export default function RewardsInfo(props: IProps) {
 	const [provider, setProvider] = React.useState<any>(null);
 
 	const [fetchingReward, setFetchingReward] = React.useState<boolean>(false);
+	const [fetchingAoSupply, setFetchingAoSupply] = React.useState<boolean>(false);
+	const [fetchingTotal, setFetchingTotal] = React.useState<boolean>(false);
 
 	const [aoSupply, setAoSupply] = React.useState<number | null>(null);
 
@@ -49,6 +51,7 @@ export default function RewardsInfo(props: IProps) {
 
 	React.useEffect(() => {
 		(async function () {
+			setFetchingAoSupply(true);
 			try {
 				let aoSupplyFetch: number;
 				aoSupplyFetch = await readHandler({
@@ -62,6 +65,7 @@ export default function RewardsInfo(props: IProps) {
 			} catch (e: any) {
 				console.error(e);
 			}
+			setFetchingAoSupply(false);
 		})();
 	}, []);
 
@@ -119,20 +123,26 @@ export default function RewardsInfo(props: IProps) {
 	React.useEffect(() => {
 		(async function () {
 			if (props.chain === 'ethereum' && aoSupply) {
-				const ETH_DENOMINATION = Math.pow(10, 18);
+				setFetchingTotal(true);
+				try {
+					const ETH_DENOMINATION = Math.pow(10, 18);
 
-				const web3 = new Web3(window.ethereum);
-				await window.ethereum.enable();
+					const web3 = new Web3(ENDPOINTS.mainnetRpc);
 
-				const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
-				
-				const totalDeposited = await aoContract.methods.totalDepositedInPublicPools().call();
-				const formattedDepositsAmount = Number(totalDeposited) / ETH_DENOMINATION
-
-				if (totalDeposited && Number(totalDeposited) > 0) {
-					setTotalBridged(formattedDepositsAmount);
-					setYearlyRewardDisplay(getEthReward(365, 1, formattedDepositsAmount, aoSupply));
+					const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
+					
+					const totalDeposited = await aoContract.methods.totalDepositedInPublicPools().call();
+					const formattedDepositsAmount = Number(totalDeposited) / ETH_DENOMINATION
+	
+					if (totalDeposited && Number(totalDeposited) > 0) {
+						setTotalBridged(formattedDepositsAmount);
+						setYearlyRewardDisplay(getEthReward(365, 1, formattedDepositsAmount, aoSupply));
+					}
 				}
+				catch (e: any) {
+					console.error(e);
+				}
+				setFetchingTotal(false);
 			}
 		})();
 	}, [aoSupply, props.chain]);
@@ -243,6 +253,22 @@ export default function RewardsInfo(props: IProps) {
 			{fetchingReward && (
 				<S.LoadingWrapper>
 					<span>{`${language.fetchingRewards}...`}</span>
+					<S.Loader>
+						<Loader xSm relative />
+					</S.Loader>
+				</S.LoadingWrapper>
+			)}
+			{fetchingTotal && (
+				<S.LoadingWrapper>
+					<span>{`${language.fetchingTotalSteth}...`}</span>
+					<S.Loader>
+						<Loader xSm relative />
+					</S.Loader>
+				</S.LoadingWrapper>
+			)}
+			{fetchingAoSupply && (
+				<S.LoadingWrapper>
+					<span>{`${language.fetchingAoSupply}...`}</span>
 					<S.Loader>
 						<Loader xSm relative />
 					</S.Loader>
