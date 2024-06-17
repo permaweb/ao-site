@@ -3,11 +3,11 @@ import { Web3Provider } from '@ethersproject/providers';
 import { formatEther } from '@ethersproject/units';
 import coinbaseWalletModule from '@web3-onboard/coinbase';
 import Onboard from '@web3-onboard/core';
-// import gnosisSafeModule from '@web3-onboard/gnosis';
+import gnosisSafeModule from '@web3-onboard/gnosis';
 import injectedModule from '@web3-onboard/injected-wallets';
 // import portisModule from '@web3-onboard/portis';
 import torusModule from '@web3-onboard/torus';
-// import trezorModule from '@web3-onboard/trezor';
+import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 // import walletConnectModule from '@web3-onboard/walletconnect';
 
@@ -15,15 +15,15 @@ const injected = injectedModule();
 const trust = trustModule();
 const torus = torusModule();
 const coinbaseWalletSdk = coinbaseWalletModule();
+const trezor = trezorModule({
+	email: '<EMAIL_CONTACT>', // TODO
+	appUrl: 'https://ao.arweave.dev',
+});
+const gnosisSafe = gnosisSafeModule({
+	whitelistedDomains: [new RegExp('/localhost/'), new RegExp('/ao\\.arweave\\.dev/')], // TESTME
+});
 // const walletConnect = walletConnectModule({
 // 	projectId: '<PROJECT_ID>', // TODO
-// });
-// const trezor = trezorModule({
-// 	email: '<EMAIL_CONTACT>', // TODO
-// 	appUrl: '<APP_URL>', // TODO
-// });
-// const gnosisSafe = gnosisSafeModule({
-// 	whitelistedDomains: [new RegExp('^http://localhost:3000$')], // TODO
 // });
 // const portis = portisModule({
 // 	apiKey: '<API_KEY>', // TODO
@@ -35,8 +35,8 @@ const wallets = [
 	coinbaseWalletSdk,
 	torus,
 	// walletConnect,
-	// trezor,
-	// gnosisSafe,
+	trezor,
+	gnosisSafe,
 	// portis,
 ];
 
