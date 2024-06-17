@@ -66,10 +66,12 @@ export const AltAmount = styled(Amount)`
 export const TooltipLine = styled.div`
 	display: flex;
 	align-items: center;
+	justify-content: flex-end;
 	gap: 5px;
 	margin: 0 -6.5px 0 0;
 	button {
 		width: 25px !important;
+		padding: 2.5px 0 0 0;
 	}
 `;
 
