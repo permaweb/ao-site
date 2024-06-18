@@ -690,7 +690,7 @@ export const STETH_ABI = [
 export const ENDPOINTS = {
 	arTotalSupply: `https://arweave.net/total_supply`,
 	ipCheck: `https://ipinfo.io?token=${IP_TOKEN}`,
-	mainnetRpc: `https://eth.llamarpc.com`
+	mainnetRpc: `https://eth.llamarpc.com`,
 };
 
 export const REDIRECTS = {

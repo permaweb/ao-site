@@ -117,12 +117,10 @@ export default function Ethereum() {
 					const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
 
 					const balanceOf = await stethContract.methods.balanceOf(ethProvider.walletAddress).call();
-					if ((Number(balanceOf) / DENOMINATION) > 1e-8) {
+					if (Number(balanceOf) / DENOMINATION > 1e-8) {
 						const formattedBalance = Web3.utils.toWei(balanceOf as any, 'ether') as any;
 						setStethBalance(formattedBalance / DENOMINATION);
-					}
-					else setStethBalance(0);
-
+					} else setStethBalance(0);
 				} catch (e: any) {
 					console.error(e);
 					setStethBalance('Error' as any);
@@ -185,15 +183,15 @@ export default function Ethereum() {
 	function truncateAmount(amount: number) {
 		const num = Number(amount);
 		if (isNaN(num)) return amount;
-	
+
 		const parts = num.toString().split('.');
 		if (parts.length === 1) return parts[0];
-	
+
 		if (parts[1].length > 8) {
 			const factor = Math.pow(10, 8);
 			return (Math.floor(num * factor) / factor).toFixed(8);
 		}
-	
+
 		return amount.toString();
 	}
 
@@ -209,7 +207,7 @@ export default function Ethereum() {
 		}
 
 		let numberAmount = truncateAmount(parseFloat(amount));
-		
+
 		let formattedAmount = numberAmount.toString();
 		const sendAmount = Web3.utils.toWei(formattedAmount, 'ether');
 
@@ -295,11 +293,11 @@ export default function Ethereum() {
 		switch (currentTab.name) {
 			case 'Deposit':
 				balance = stethBalance;
-				action = () => setAmount(Number(truncateAmount((stethBalance / DENOMINATION))));
+				action = () => setAmount(Number(truncateAmount(stethBalance / DENOMINATION)));
 				break;
 			case 'Withdraw':
 				balance = depositedStethBalance;
-				action = () => setAmount(Number(truncateAmount((depositedStethBalance / DENOMINATION))));
+				action = () => setAmount(Number(truncateAmount(depositedStethBalance / DENOMINATION)));
 				break;
 		}
 
