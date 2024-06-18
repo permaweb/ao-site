@@ -11,6 +11,7 @@ import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
 
 import gnosisModule from './ethereum/customGnosis';
+import { customBrave } from './ethereum/customInjected';
 
 const injected = injectedModule();
 const trust = trustModule();
@@ -24,6 +25,7 @@ const gnosisSafe = gnosisModule();
 const walletConnect = walletConnectModule({
 	projectId: '1854ae39b9f92e1c56b858cb425e9a7e',
 });
+const brave = () => customBrave;
 // const portis = portisModule({
 // 	apiKey: '<API_KEY>', // TODO
 // });
@@ -36,6 +38,7 @@ const wallets = [
 	walletConnect,
 	trezor,
 	gnosisSafe,
+	brave,
 	// portis,
 ];
 
@@ -54,6 +57,11 @@ const onboard = Onboard({
 		icon: '/images/ao_black.svg',
 		logo: '/images/ao_black.svg',
 		description: 'AO Staking',
+		recommendedInjectedWallets: [
+      { name: 'Coinbase', url: 'https://wallet.coinbase.com/' },
+      { name: 'MetaMask', url: 'https://metamask.io' },
+      { name: 'Brave Wallet', url: 'https://brave.com/wallet/' },
+    ],
 	},
 	connect: {
 		autoConnectLastWallet: true,
