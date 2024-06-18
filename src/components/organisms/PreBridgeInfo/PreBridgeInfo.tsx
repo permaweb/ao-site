@@ -93,7 +93,7 @@ export default function PreBridgeInfo(props: IProps) {
 		(async function () {
 			try {
 				const mintedSupply = await readHandler({
-					processId: AO.token,
+					processId: AO.tokenMirror,
 					action: 'Minted-Supply',
 				});
 				if (mintedSupply !== null) setCurrentSupply(Number(mintedSupply) / TOKEN_DENOMINATION);
@@ -111,7 +111,7 @@ export default function PreBridgeInfo(props: IProps) {
 					case 'arweave':
 						try {
 							const tokenBalance = await readHandler({
-								processId: AO.token,
+								processId: AO.tokenMirror,
 								action: 'Balance',
 								tags: [{ name: 'Recipient', value: provider.walletAddress }],
 							});
@@ -121,7 +121,17 @@ export default function PreBridgeInfo(props: IProps) {
 						}
 						break;
 					case 'ethereum':
-						setCurrentBalance(1748736745614 / TOKEN_DENOMINATION);
+						// TODO
+						// const tokenBalances = await readHandler({
+						// 	processId: AO.token,
+						// 	action: 'Get-Balances-By-User',
+						// 	tags: [{ name: 'User', value: provider.walletAddress }],
+						// });
+						// if (tokenBalances && tokenBalances.length) {
+						// 	setCurrentBalance(1748736745614 / TOKEN_DENOMINATION);
+						// } else {
+						// 	setCurrentBalance(0);
+						// }
 						break;
 				}
 			} else {

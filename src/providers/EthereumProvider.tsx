@@ -58,10 +58,10 @@ const onboard = Onboard({
 		logo: '/images/ao_black.svg',
 		description: 'AO Staking',
 		recommendedInjectedWallets: [
-      { name: 'Coinbase', url: 'https://wallet.coinbase.com/' },
-      { name: 'MetaMask', url: 'https://metamask.io' },
-      { name: 'Brave Wallet', url: 'https://brave.com/wallet/' },
-    ],
+			{ name: 'Coinbase', url: 'https://wallet.coinbase.com/' },
+			{ name: 'MetaMask', url: 'https://metamask.io' },
+			{ name: 'Brave Wallet', url: 'https://brave.com/wallet/' },
+		],
 	},
 	connect: {
 		autoConnectLastWallet: true,
