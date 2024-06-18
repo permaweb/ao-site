@@ -15,7 +15,7 @@ import * as S from './styles';
 export default function Mint() {
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [isBlocked, setIsBlocked] = React.useState<boolean>(false);
-	
+
 	React.useEffect(() => {
 		const checkLocation = async () => {
 			setLoading(true);

@@ -1,5 +1,7 @@
 # The AO Protocol: A Decentralized Open-Access Supercomputer.
+
 ## Status: DRAFT-8
+
 ## Published: June 13, 2024.
 
 ### Abstract

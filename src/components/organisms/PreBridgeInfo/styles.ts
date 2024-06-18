@@ -3,8 +3,13 @@ import styled from 'styled-components';
 import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+`;
+
+export const SectionWrapper = styled.div`
 	height: fit-content;
-	width: 500px;
 	padding: 20px;
 	position: relative;
 	display: flex;
@@ -14,6 +19,11 @@ export const Wrapper = styled.div`
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		width: 100%;
 	}
+`;
+
+export const ChartWrapper = styled(SectionWrapper)`
+	// padding: 15px 20px 72.5px 10px;
+	padding: 0;
 `;
 
 export const Section = styled.div`
