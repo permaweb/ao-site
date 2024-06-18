@@ -297,7 +297,7 @@ export const GlobalStyle = createGlobalStyle`
 		height: 40px;
 		width: 100%;
 		overflow: hidden;
-		z-index: 1000;
+		z-index: 1;
 		background: #FFFFFF;
 	}
 
