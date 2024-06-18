@@ -72,6 +72,11 @@ export const GlobalStyle = createGlobalStyle`
 	--terminal-red: #d50e0e;
 	--terminal-green: #45cc05;
 	--terminal-blue: #054bfe;
+
+  // web3 onboard
+  --onboard-modal-z-index: 1000;
+  --onboard-modal-backdrop: rgba(130, 130, 130, 0.25);
+  --onboard-font-family-normal: "DM Sans";
 }
 
   ol, ul {

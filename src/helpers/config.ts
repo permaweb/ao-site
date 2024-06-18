@@ -19,8 +19,12 @@ import walletConnect from 'assets/wallet-connect.png';
 
 import { ArWalletEnum, EthWalletEnum } from './types';
 
+// TODO
+// Mirror: F-EvpwmZXIlndrEqXOXSSifUeyn-LMBdeJKI6Gflk1g
+// Prod: m3PaWzK4PTG9lAaqYQPaPdOcXdO8hYqi5Fe9NWqXd0w
 export const AO = {
 	token: 'm3PaWzK4PTG9lAaqYQPaPdOcXdO8hYqi5Fe9NWqXd0w',
+	tokenMirror: 'F-EvpwmZXIlndrEqXOXSSifUeyn-LMBdeJKI6Gflk1g',
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
 };
@@ -687,6 +691,7 @@ export const STETH_ABI = [
 export const ENDPOINTS = {
 	arTotalSupply: `https://arweave.net/total_supply`,
 	ipCheck: `https://ipinfo.io?token=${IP_TOKEN}`,
+	mainnetRpc: `https://eth.llamarpc.com`,
 };
 
 export const REDIRECTS = {

@@ -5,6 +5,7 @@ import parse from 'html-react-parser';
 
 import { readHandler } from 'api';
 
+// import { SupplyChart } from 'components/molecules/SupplyChart';
 import { AO, ASSETS, TOKEN_DENOMINATION } from 'helpers/config';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
@@ -92,7 +93,7 @@ export default function PreBridgeInfo(props: IProps) {
 		(async function () {
 			try {
 				const mintedSupply = await readHandler({
-					processId: AO.token,
+					processId: AO.tokenMirror,
 					action: 'Minted-Supply',
 				});
 				if (mintedSupply !== null) setCurrentSupply(Number(mintedSupply) / TOKEN_DENOMINATION);
@@ -110,7 +111,7 @@ export default function PreBridgeInfo(props: IProps) {
 					case 'arweave':
 						try {
 							const tokenBalance = await readHandler({
-								processId: AO.token,
+								processId: AO.tokenMirror,
 								action: 'Balance',
 								tags: [{ name: 'Recipient', value: provider.walletAddress }],
 							});
@@ -120,7 +121,17 @@ export default function PreBridgeInfo(props: IProps) {
 						}
 						break;
 					case 'ethereum':
-						setCurrentBalance(1748736745614 / TOKEN_DENOMINATION);
+						// TODO
+						// const tokenBalances = await readHandler({
+						// 	processId: AO.token,
+						// 	action: 'Get-Balances-By-User',
+						// 	tags: [{ name: 'User', value: provider.walletAddress }],
+						// });
+						// if (tokenBalances && tokenBalances.length) {
+						// 	setCurrentBalance(1748736745614 / TOKEN_DENOMINATION);
+						// } else {
+						// 	setCurrentBalance(0);
+						// }
 						break;
 				}
 			} else {
@@ -132,82 +143,89 @@ export default function PreBridgeInfo(props: IProps) {
 	const urlSegments = window.location.hash.split('/');
 	const currentTab = urlSegments[urlSegments.length - 2];
 
-	return provider ? (
-		<S.Wrapper className={'border-wrapper-alt1 fade-in'}>
-			<S.Section>
-				<S.WalletAction
-					connected={provider.walletAddress !== null}
-					onClick={() => (provider.walletAddress !== null ? {} : provider.setWalletModalVisible(true))}
-				>
-					<div className={'indicator'} />
-					<span>{label}</span>
-				</S.WalletAction>
-				{CONFIG[currentTab] && (
-					<S.Description>
-						<ReactSVG src={ASSETS.info} />
-						<p>{parse(CONFIG[currentTab].description)}</p>
-					</S.Description>
-				)}
-			</S.Section>
-			<S.Section>
-				<S.TotalSupply>
-					<span>{language.circulatingSupply}</span>
-					<S.TotalSupplyAmount>
-						<p>{`${formatDisplayAmount(currentSupply)}`}</p>
-						<ReactSVG src={ASSETS.ao} />
-					</S.TotalSupplyAmount>
-				</S.TotalSupply>
-				{props.chain !== 'ethereum' && (
-					<S.CurrentEarningsWrapper>
-						<span>{language.currentBalance}</span>
-						<S.CurrentEarnings>
-							<h2>{formatDisplayAmount(currentBalance)}</h2>
+	return (
+		<S.Wrapper className={'pre-bridge-content'}>
+			<S.SectionWrapper className={'border-wrapper-alt1 fade-in'}>
+				<S.Section>
+					{provider && (
+						<S.WalletAction
+							connected={provider.walletAddress !== null}
+							onClick={() => (provider.walletAddress !== null ? {} : provider.setWalletModalVisible(true))}
+						>
+							<div className={'indicator'} />
+							<span>{label}</span>
+						</S.WalletAction>
+					)}
+					{CONFIG[currentTab] && (
+						<S.Description>
+							<ReactSVG src={ASSETS.info} />
+							<p>{parse(CONFIG[currentTab].description)}</p>
+						</S.Description>
+					)}
+				</S.Section>
+				<S.Section>
+					<S.TotalSupply>
+						<span>{language.circulatingSupply}</span>
+						<S.TotalSupplyAmount>
+							<p>{`${formatDisplayAmount(currentSupply)}`}</p>
 							<ReactSVG src={ASSETS.ao} />
-						</S.CurrentEarnings>
-					</S.CurrentEarningsWrapper>
-				)}
-			</S.Section>
-			<S.Section>
-				<S.IconsWrapper className={'fade-in'}>
-					<S.IconGroup>
-						<p>{language.baseContractAudits}</p>
-						<S.IconsLine>
-							<Link to={REDIRECTIS.codehawks} target={'_blank'}>
-								<div className={'codehawks-audit'}>
-									<ReactSVG src={ASSETS.codehawksAudit} />
-								</div>
-							</Link>
-							<Link to={REDIRECTIS.renascence} target={'_blank'}>
-								<div className={'renascence-audit'}>
-									<ReactSVG src={ASSETS.renascenseAudit} />
-								</div>
-							</Link>
-							<Link to={REDIRECTIS.morpheus} target={'_blank'}>
-								<div className={'morpheus-audit'}>
-									<ReactSVG src={ASSETS.morpheusAudit} />
-								</div>
-							</Link>
-						</S.IconsLine>
-					</S.IconGroup>
-					<S.IconGroup>
-						<p>{language.aoAudit}</p>
-						<S.IconsLine>
-							<Link to={REDIRECTIS.ncc} target={'_blank'}>
-								<div className={'ncc-audit'}>
-									<ReactSVG src={ASSETS.nccAudit} />
-								</div>
-							</Link>
-						</S.IconsLine>
-					</S.IconGroup>
-				</S.IconsWrapper>
-				{provider.walletAddress !== null && (
-					<S.DisconnectWrapper>
-						<button onClick={() => provider.handleDisconnect()}>
-							<span>Disconnect wallet</span>
-						</button>
-					</S.DisconnectWrapper>
-				)}
-			</S.Section>
+						</S.TotalSupplyAmount>
+					</S.TotalSupply>
+					{props.chain !== 'ethereum' && (
+						<S.CurrentEarningsWrapper>
+							<span>{language.currentBalance}</span>
+							<S.CurrentEarnings>
+								<h2>{formatDisplayAmount(currentBalance)}</h2>
+								<ReactSVG src={ASSETS.ao} />
+							</S.CurrentEarnings>
+						</S.CurrentEarningsWrapper>
+					)}
+				</S.Section>
+				<S.Section>
+					<S.IconsWrapper className={'fade-in'}>
+						<S.IconGroup>
+							<p>{language.baseContractAudits}</p>
+							<S.IconsLine>
+								<Link to={REDIRECTIS.codehawks} target={'_blank'}>
+									<div className={'codehawks-audit'}>
+										<ReactSVG src={ASSETS.codehawksAudit} />
+									</div>
+								</Link>
+								<Link to={REDIRECTIS.renascence} target={'_blank'}>
+									<div className={'renascence-audit'}>
+										<ReactSVG src={ASSETS.renascenseAudit} />
+									</div>
+								</Link>
+								<Link to={REDIRECTIS.morpheus} target={'_blank'}>
+									<div className={'morpheus-audit'}>
+										<ReactSVG src={ASSETS.morpheusAudit} />
+									</div>
+								</Link>
+							</S.IconsLine>
+						</S.IconGroup>
+						<S.IconGroup>
+							<p>{language.aoAudit}</p>
+							<S.IconsLine>
+								<Link to={REDIRECTIS.ncc} target={'_blank'}>
+									<div className={'ncc-audit'}>
+										<ReactSVG src={ASSETS.nccAudit} />
+									</div>
+								</Link>
+							</S.IconsLine>
+						</S.IconGroup>
+					</S.IconsWrapper>
+					{provider && provider.walletAddress !== null && (
+						<S.DisconnectWrapper>
+							<button onClick={() => provider.handleDisconnect()}>
+								<span>Disconnect wallet</span>
+							</button>
+						</S.DisconnectWrapper>
+					)}
+				</S.Section>
+			</S.SectionWrapper>
+			{/* <S.ChartWrapper className={'fade-in'}>
+				<SupplyChart />
+			</S.ChartWrapper> */}
 		</S.Wrapper>
-	) : null;
+	);
 }

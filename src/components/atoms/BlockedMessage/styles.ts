@@ -3,15 +3,15 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
 	width: 540px;
 	max-width: 85vw;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 
 	img {
-		width: 100%;
-		margin: 40px 0;
+		width: 65%;
+		margin: 60px 0;
 	}
 	.button-wrapper {
 		display: flex;
