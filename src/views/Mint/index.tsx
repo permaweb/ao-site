@@ -16,6 +16,7 @@ export default function Mint() {
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [isBlocked, setIsBlocked] = React.useState<boolean>(false);
 
+	// TODO
 	React.useEffect(() => {
 		const checkLocation = async () => {
 			setLoading(true);
