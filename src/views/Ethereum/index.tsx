@@ -426,7 +426,7 @@ export default function Ethereum() {
 							)}
 						</S.PrimaryAmount>
 					</S.S1Content>
-					<RewardsInfo chain={'ethereum'} />
+					<RewardsInfo chain={'ethereum'} toggleUpdate={toggleUpdate} />
 				</S.Content>
 				<PreBridgeInfo chain={'ethereum'} />
 			</S.Wrapper>
