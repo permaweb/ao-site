@@ -55,7 +55,7 @@ export default function RewardsInfo(props: IProps) {
 			try {
 				let aoSupplyFetch: number;
 				aoSupplyFetch = await readHandler({
-					processId: AO.token,
+					processId: AO.tokenMirror,
 					action: 'Minted-Supply',
 				});
 
