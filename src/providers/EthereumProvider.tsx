@@ -9,7 +9,7 @@ import injectedModule from '@web3-onboard/injected-wallets';
 import torusModule from '@web3-onboard/torus';
 import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
-// import walletConnectModule from '@web3-onboard/walletconnect';
+import walletConnectModule from '@web3-onboard/walletconnect';
 
 const injected = injectedModule();
 const trust = trustModule();
@@ -22,9 +22,9 @@ const trezor = trezorModule({
 const gnosisSafe = gnosisSafeModule({
 	whitelistedDomains: [new RegExp('/localhost/'), new RegExp('/ao\\.arweave\\.dev/')], // TESTME
 });
-// const walletConnect = walletConnectModule({
-// 	projectId: '<PROJECT_ID>', // TODO
-// });
+const walletConnect = walletConnectModule({
+	projectId: '1854ae39b9f92e1c56b858cb425e9a7e',
+});
 // const portis = portisModule({
 // 	apiKey: '<API_KEY>', // TODO
 // });
@@ -34,7 +34,7 @@ const wallets = [
 	trust,
 	coinbaseWalletSdk,
 	torus,
-	// walletConnect,
+	walletConnect,
 	trezor,
 	gnosisSafe,
 	// portis,
