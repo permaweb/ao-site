@@ -118,7 +118,7 @@ export default function RewardsInfo(props: IProps) {
 				setYearlyReward(null);
 			}
 		})();
-	}, [provider, aoSupply]);
+	}, [provider, aoSupply, props.toggleUpdate]);
 
 	React.useEffect(() => {
 		(async function () {
@@ -144,7 +144,7 @@ export default function RewardsInfo(props: IProps) {
 				setFetchingTotal(false);
 			}
 		})();
-	}, [aoSupply, props.chain]);
+	}, [aoSupply, props.chain, props.toggleUpdate]);
 
 	const monthlyAO = React.useMemo(() => {
 		if (monthlyReward && monthlyReward > 0) {
