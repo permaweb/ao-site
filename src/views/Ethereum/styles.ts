@@ -139,7 +139,8 @@ export const FormFieldLabel = styled.div<{ disabled: boolean }>`
 		margin: 3.5px 12.5px 0 0;
 	}
 	p {
-		color: ${(props) => props.disabled ? props.theme.colors.button.primary.disabled.color  : props.theme.colors.font.primary};
+		color: ${(props) =>
+			props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xLg};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-family: ${(props) => props.theme.typography.family.alt1};
@@ -152,7 +153,8 @@ export const DropdownArrow = styled.div<{ disabled: boolean }>`
 		width: 25px;
 		margin: 5px 0 0 10px;
 		transform: rotate(90deg);
-		color: ${(props) => props.disabled ? props.theme.colors.button.primary.disabled.color  : props.theme.colors.font.primary};
+		color: ${(props) =>
+			props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
 	}
 `;
 

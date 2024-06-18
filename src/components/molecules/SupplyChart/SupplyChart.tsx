@@ -52,7 +52,7 @@ const chartData = {
 			pointBorderColor: '#D9A73E',
 			pointRadius: 1,
 			lineTension: 0.1,
-		}
+		},
 	],
 };
 

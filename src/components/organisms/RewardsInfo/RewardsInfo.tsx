@@ -130,16 +130,15 @@ export default function RewardsInfo(props: IProps) {
 					const web3 = new Web3(ENDPOINTS.mainnetRpc);
 
 					const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
-					
+
 					const totalDeposited = await aoContract.methods.totalDepositedInPublicPools().call();
-					const formattedDepositsAmount = Number(totalDeposited) / ETH_DENOMINATION
-	
+					const formattedDepositsAmount = Number(totalDeposited) / ETH_DENOMINATION;
+
 					if (totalDeposited && Number(totalDeposited) > 0) {
 						setTotalBridged(formattedDepositsAmount);
 						setYearlyRewardDisplay(getEthReward(365, 1, formattedDepositsAmount, aoSupply));
 					}
-				}
-				catch (e: any) {
+				} catch (e: any) {
 					console.error(e);
 				}
 				setFetchingTotal(false);
