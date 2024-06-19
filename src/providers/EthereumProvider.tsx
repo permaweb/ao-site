@@ -174,6 +174,37 @@ export function EthereumProvider({ children }: EthereumProviderProps) {
 		}
 	}, [walletModalVisible]);
 
+	// Subscribe to wallet address changes
+	useEffect(() => {
+		if (walletAddress === null) return;
+
+		const wallets = onboard.state.select('wallets');
+		const { unsubscribe } = wallets.subscribe(async (update) => {
+			const [primaryWallet] = update;
+			if (primaryWallet) {
+				const success = await onboard.setChain({ chainId: '0x1' });
+				if (!success) return;
+
+				const provider = new Web3Provider(primaryWallet.provider);
+				const signer = provider.getSigner();
+				const address = await signer.getAddress();
+				setWalletAddress(address);
+
+				const balance = await signer.getBalance();
+				setBalance(formatEther(balance));
+			} else {
+				setWalletAddress(null);
+				setBalance(null);
+			}
+		});
+
+		return () => {
+			try {
+				unsubscribe();
+			} catch {}
+		};
+	}, [walletAddress]);
+
 	return (
 		<>
 			<EthereumContext.Provider
