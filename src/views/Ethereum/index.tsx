@@ -110,8 +110,7 @@ export default function Ethereum() {
 	React.useEffect(() => {
 		(async function () {
 			if (ethProvider.walletAddress) {
-				const web3 = new Web3(window.ethereum);
-				await window.ethereum.enable();
+				const web3 = new Web3(ethProvider.web3Provider);
 
 				try {
 					const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
@@ -157,7 +156,7 @@ export default function Ethereum() {
 	};
 
 	async function checkTransactionReceipt(txHash: string) {
-		const web3 = new Web3(window.ethereum);
+		const web3 = new Web3(ethProvider.web3Provider);
 		let receipt = null;
 		const maxTries = 100;
 		let tries = 0;
@@ -218,8 +217,8 @@ export default function Ethereum() {
 		if (ethProvider.walletAddress && amount && amount > 0) {
 			setLoading(true);
 			try {
-				const web3 = new Web3(window.ethereum);
-				await window.ethereum.enable();
+				const web3 = new Web3(ethProvider.web3Provider);
+				await ethProvider.ensureMainnet();
 
 				const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
 				const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
