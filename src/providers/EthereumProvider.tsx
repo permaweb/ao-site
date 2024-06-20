@@ -18,8 +18,9 @@ const trust = trustModule();
 const torus = torusModule();
 const coinbaseWalletSdk = coinbaseWalletModule();
 const trezor = trezorModule({
-	email: '<EMAIL_CONTACT>', // TODO
-	appUrl: 'https://ao.arweave.dev',
+	email: 'team@arweave.org',
+	// appUrl: 'https://ao.arweave.dev', TODO
+	appUrl: 'https://ao-staging.arweave.dev',
 });
 const gnosisSafe = gnosisModule();
 const walletConnect = walletConnectModule({
