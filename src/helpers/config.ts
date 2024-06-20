@@ -695,6 +695,7 @@ export const ENDPOINTS = {
 };
 
 export const REDIRECTS = {
+	stethMinting: 'https://stake.lido.fi/',
 	stethConversion:
 		'https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
 	ipBlock: 'https://www.standwithcrypto.org/action/call?action=call-your-representative',
