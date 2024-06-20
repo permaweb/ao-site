@@ -233,21 +233,22 @@ export default function Ethereum() {
 
 				switch (currentTab.name) {
 					case 'Deposit':
-						const approval = await stethContract.methods.approve(ETH_CONTRACTS.ao, sendAmount).send({
-							from: ethProvider.walletAddress,
-						});
-
-						console.log('Approval transaction:', approval);
-
-						const approvalReceipt = await checkTransactionReceipt(approval.transactionHash);
-						if (approvalReceipt && approvalReceipt.status) {
-							const stake = await aoContract.methods.stake(poolId, sendAmount, arweaveRecipient).send({
+						const allowance = await stethContract.methods.allowance(ethProvider.walletAddress, ETH_CONTRACTS.ao).call();
+						if (Number(allowance) < Number(sendAmount)) {
+							const approval = await stethContract.methods.approve(ETH_CONTRACTS.ao, sendAmount).send({
 								from: ethProvider.walletAddress,
 							});
-							console.log('Stake transaction:', stake);
-						} else {
-							throw new Error('Approval failed');
+							console.log('Approval transaction:', approval);
+							const approvalReceipt = await checkTransactionReceipt(approval.transactionHash);
+							if (!approvalReceipt || !approvalReceipt.status) {
+								throw new Error('Approval failed');
+							}
 						}
+
+						const stake = await aoContract.methods.stake(poolId, sendAmount, arweaveRecipient).send({
+							from: ethProvider.walletAddress,
+						});
+						console.log('Stake transaction:', stake);
 						break;
 					case 'Withdraw':
 						const withdraw = await aoContract.methods.withdraw(poolId, sendAmount, arweaveRecipient).send({
