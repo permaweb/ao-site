@@ -16,7 +16,7 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 
-const DENOMINATION = Math.pow(10, 18);
+const { fromWei, toWei, toBigInt } = Web3.utils;
 
 export default function Ethereum() {
 	const TABS = [{ name: 'Deposit' }, { name: 'Withdraw' }];
@@ -30,10 +30,17 @@ export default function Ethereum() {
 	const [showWallet, setShowWallet] = React.useState<boolean>(false);
 	const [label, setLabel] = React.useState<string | null>(null);
 
-	const [stethBalance, setStethBalance] = React.useState<number | null>(null);
-	const [depositedStethBalance, setDespositedStethBalance] = React.useState<number | null>(null);
+	const [stethBalance, setStethBalance] = React.useState<bigint | null>(null);
+	const [depositedStethBalance, setDespositedStethBalance] = React.useState<bigint | null>(null);
 
-	const [amount, setAmount] = React.useState<number>(0);
+	const [amount, setAmount] = React.useState<string>('0');
+	const amountInWei = React.useMemo(() => {
+		try {
+			return toBigInt(toWei(amount, 'ether'));
+		} catch {
+			return BigInt(0);
+		}
+	}, [amount]);
 	const [recipient, setRecipient] = React.useState<string | null>('');
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [response, setResponse] = React.useState<{ message: string | null; status: 'success' | 'warning' } | null>(
@@ -44,7 +51,7 @@ export default function Ethereum() {
 	const [toggleUpdate, setToggleUpdate] = React.useState<boolean>(false);
 
 	function handleClear() {
-		setAmount(0);
+		setAmount('0');
 		setLoading(false);
 		setResponse(null);
 	}
@@ -54,12 +61,12 @@ export default function Ethereum() {
 	}, [currentTab]);
 
 	React.useEffect(() => {
-		if (amount < 0) setInvalid(true);
+		if (amountInWei < 0) setInvalid(true);
 		else {
 			if (currentTab.name === 'Deposit') {
-				setInvalid(Number(amount) * DENOMINATION > stethBalance);
+				setInvalid(amountInWei > stethBalance);
 			} else if (currentTab.name === 'Withdraw') {
-				setInvalid(Number(amount) * DENOMINATION > depositedStethBalance);
+				setInvalid(amountInWei > depositedStethBalance);
 			} else {
 				setDisabled(false);
 			}
@@ -67,12 +74,12 @@ export default function Ethereum() {
 	}, [amount, stethBalance, depositedStethBalance, currentTab]);
 
 	React.useEffect(() => {
-		if (invalid || loading || !ethProvider.walletAddress || amount <= 0 || response !== null) setDisabled(true);
+		if (invalid || loading || !ethProvider.walletAddress || amountInWei <= 0 || response !== null) setDisabled(true);
 		else {
 			if (currentTab.name === 'Deposit') {
-				setDisabled(Number(amount) * DENOMINATION > stethBalance || !checkValidAddress(recipient));
+				setDisabled(amountInWei > stethBalance || !checkValidAddress(recipient));
 			} else if (currentTab.name === 'Withdraw') {
-				setDisabled(Number(amount) * DENOMINATION > depositedStethBalance);
+				setDisabled(amountInWei > depositedStethBalance);
 			} else {
 				setDisabled(false);
 			}
@@ -116,10 +123,7 @@ export default function Ethereum() {
 					const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
 
 					const balanceOf = await stethContract.methods.balanceOf(ethProvider.walletAddress).call();
-					if (Number(balanceOf) / DENOMINATION > 1e-8) {
-						const formattedBalance = Web3.utils.toWei(balanceOf as any, 'ether') as any;
-						setStethBalance(formattedBalance / DENOMINATION);
-					} else setStethBalance(0);
+					setStethBalance(balanceOf as unknown as bigint);
 				} catch (e: any) {
 					console.error(e);
 					setStethBalance('Error' as any);
@@ -129,7 +133,7 @@ export default function Ethereum() {
 					const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
 
 					const usersData = await aoContract.methods.usersData(ethProvider.walletAddress, 0).call();
-					setDespositedStethBalance((Web3.utils.toWei((usersData as any).deposited, 'ether') as any) / DENOMINATION);
+					setDespositedStethBalance((usersData as any).deposited as bigint);
 				} catch (e: any) {
 					console.error(e);
 					setDespositedStethBalance('Error' as any);
@@ -179,42 +183,11 @@ export default function Ethereum() {
 		return receipt;
 	}
 
-	function truncateAmount(amount: number) {
-		const num = Number(amount);
-		if (isNaN(num)) return amount;
-
-		const parts = num.toString().split('.');
-		if (parts.length === 1) return parts[0];
-
-		if (parts[1].length > 8) {
-			const factor = Math.pow(10, 8);
-			return (Math.floor(num * factor) / factor).toFixed(8);
-		}
-
-		return amount.toString();
-	}
-
-	function getSendAmount(amount: string) {
-		if (/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(amount)) {
-			amount = amount.replace(/\./g, '').replace(',', '.');
-		} else if (/^\d{1,3}(,\d{3})*(\.\d+)?$/.test(amount)) {
-			amount = amount.replace(/,/g, '');
-		} else if (/^\d{1,3}(\.\d{3})*(\.\d+)?$/.test(amount)) {
-			amount = amount.replace(/\./g, '');
-		} else if (/^\d{1,3}(,\d{3})*(,\d+)?$/.test(amount)) {
-			amount = amount.replace(/,/g, '').replace(/\./g, '');
-		}
-
-		let numberAmount = truncateAmount(parseFloat(amount));
-
-		let formattedAmount = numberAmount.toString();
-		const sendAmount = Web3.utils.toWei(formattedAmount, 'ether');
-
-		return sendAmount;
-	}
-
 	async function handleSubmit() {
-		if (ethProvider.walletAddress && amount && amount > 0) {
+		if (ethProvider.walletAddress && amount && amountInWei > 0) {
+			// console.log("📜 LOG > handleSubmit > amount:", typeof amount, amount);
+			// console.log("📜 LOG > handleSubmit > amountInWei:", typeof amountInWei, amountInWei);
+
 			setLoading(true);
 			try {
 				const web3 = new Web3(ethProvider.web3Provider);
@@ -224,7 +197,6 @@ export default function Ethereum() {
 				const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
 
 				const poolId = 0;
-				const sendAmount = getSendAmount(amount.toString());
 
 				let arweaveRecipient = '0x0000000000000000000000000000000000000000000000000000000000000000';
 				if (recipient && checkValidAddress(recipient)) {
@@ -234,8 +206,8 @@ export default function Ethereum() {
 				switch (currentTab.name) {
 					case 'Deposit':
 						const allowance = await stethContract.methods.allowance(ethProvider.walletAddress, ETH_CONTRACTS.ao).call();
-						if (Number(allowance) < Number(sendAmount)) {
-							const approval = await stethContract.methods.approve(ETH_CONTRACTS.ao, sendAmount).send({
+						if (Number(allowance) < Number(amountInWei)) {
+							const approval = await stethContract.methods.approve(ETH_CONTRACTS.ao, amountInWei).send({
 								from: ethProvider.walletAddress,
 							});
 							console.log('Approval transaction:', approval);
@@ -245,13 +217,13 @@ export default function Ethereum() {
 							}
 						}
 
-						const stake = await aoContract.methods.stake(poolId, sendAmount, arweaveRecipient).send({
+						const stake = await aoContract.methods.stake(poolId, amountInWei, arweaveRecipient).send({
 							from: ethProvider.walletAddress,
 						});
 						console.log('Stake transaction:', stake);
 						break;
 					case 'Withdraw':
-						const withdraw = await aoContract.methods.withdraw(poolId, sendAmount, arweaveRecipient).send({
+						const withdraw = await aoContract.methods.withdraw(poolId, amountInWei, arweaveRecipient).send({
 							from: ethProvider.walletAddress,
 						});
 						console.log('Withdraw transaction:', withdraw);
@@ -259,7 +231,7 @@ export default function Ethereum() {
 				}
 
 				setToggleUpdate(!toggleUpdate);
-				setAmount(0);
+				setAmount('0');
 				setResponse({
 					message: `Successful ${currentTab.name}`,
 					status: 'success',
@@ -276,35 +248,35 @@ export default function Ethereum() {
 	}
 
 	const depositedBalance = React.useMemo(() => {
-		if ((depositedStethBalance as any) === 'Error') return depositedStethBalance;
+		if ((depositedStethBalance as any) === 'Error') return String(depositedStethBalance);
 		if (depositedStethBalance && depositedStethBalance > 0) {
-			const calcAmount = depositedStethBalance / DENOMINATION;
+			const calcAmount = fromWei(depositedStethBalance, 'ether');
 			return `${formatDisplayAmount(calcAmount)} ${language.steth}`;
 		}
-		return `${formatDisplayAmount(depositedStethBalance)} ${language.steth}`;
+		return `0 ${language.steth}`;
 	}, [depositedStethBalance, language]);
 
 	const formFieldAction = React.useMemo(() => {
 		if (!currentTab) return null;
 
-		let balance: number;
+		let balance: bigint;
 		let action: () => void;
 
 		switch (currentTab.name) {
 			case 'Deposit':
 				balance = stethBalance;
-				action = () => setAmount(Number(truncateAmount(stethBalance / DENOMINATION)));
+				action = () => setAmount(fromWei(stethBalance, 'ether'));
 				break;
 			case 'Withdraw':
 				balance = depositedStethBalance;
-				action = () => setAmount(Number(truncateAmount(depositedStethBalance / DENOMINATION)));
+				action = () => setAmount(fromWei(stethBalance, 'ether'));
 				break;
 		}
 
 		return (
 			<S.FormFieldAction>
 				<span>{`Balance: ${
-					balance && (balance as any) !== 'Error' ? formatDisplayAmount(balance / DENOMINATION) : '-'
+					balance && (balance as any) !== 'Error' ? formatDisplayAmount(fromWei(balance, 'ether')) : '-'
 				}`}</span>
 				<button
 					disabled={loading || !ethProvider.walletAddress || !balance || (balance as any) === 'Error'}
