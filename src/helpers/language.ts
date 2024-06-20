@@ -29,6 +29,7 @@ export const language = {
 		walletBalance: `Wallet balance`,
 		walletNotConnected: `Wallet not connected`,
 		steth: `stETH`,
-		stethConversion: `Convert ETH to stETH here`,
+		stethConversion: `Buy stETH`,
+		stethMinting: `Mint stETH`,
 	},
 };

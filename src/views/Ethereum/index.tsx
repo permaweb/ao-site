@@ -367,6 +367,10 @@ export default function Ethereum() {
 													<Link to={REDIRECTS.stethConversion} target={'_blank'}>
 														{language.stethConversion}
 													</Link>
+													•
+													<Link to={REDIRECTS.stethMinting} target={'_blank'}>
+														{language.stethMinting}
+													</Link>
 												</S.ConversionLink>
 											</S.FormEndWrapper>
 											<FormField
