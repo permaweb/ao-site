@@ -25,7 +25,7 @@ export const language = {
 		pageNotFound: `Page not found`,
 		pasteFromClipboard: `Paste from clipboard`,
 		recipient: `Recipient`,
-		submit: `Submit`,
+		withdraw: `Withdraw`,
 		walletBalance: `Wallet balance`,
 		walletNotConnected: `Wallet not connected`,
 		steth: `stETH`,
