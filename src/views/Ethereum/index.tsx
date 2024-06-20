@@ -100,12 +100,12 @@ export default function Ethereum() {
 			setLabel(`${language.fetching}...`);
 		} else {
 			if (ethProvider.walletAddress) {
-				setLabel(language.submit);
+				setLabel(currentTab.name === 'Deposit' ? language.deposit : language.withdraw);
 			} else {
 				setLabel(language.connectWallet);
 			}
 		}
-	}, [showWallet, ethProvider.walletAddress]);
+	}, [currentTab, showWallet, ethProvider.walletAddress]);
 
 	React.useEffect(() => {
 		(async function () {
