@@ -269,7 +269,7 @@ export default function Ethereum() {
 				break;
 			case 'Withdraw':
 				balance = depositedStethBalance;
-				action = () => setAmount(fromWei(stethBalance, 'ether'));
+				action = () => setAmount(fromWei(depositedStethBalance, 'ether'));
 				break;
 		}
 
