@@ -74,7 +74,6 @@ export const GlobalStyle = createGlobalStyle`
 	--terminal-blue: #054bfe;
 
   // web3 onboard
-  --onboard-modal-z-index: 1000;
   --onboard-modal-backdrop: rgba(130, 130, 130, 0.25);
   --onboard-font-family-normal: "DM Sans";
 }
