@@ -10,6 +10,8 @@ import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
 
+import { ENDPOINTS } from 'helpers/config';
+
 import gnosisModule from './ethereum/customGnosis';
 import { customBrave } from './ethereum/customInjected';
 
@@ -50,7 +52,7 @@ const onboard = Onboard({
 			id: '0x1', // Chain ID in hexadecimal for Ethereum Mainnet
 			token: 'ETH',
 			label: 'Ethereum Mainnet',
-			// rpcUrl: 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID', // Replace with your Infura project ID or use a public RPC URL
+			rpcUrl: ENDPOINTS.mainnetRpc,
 		},
 	],
 	appMetadata: {
