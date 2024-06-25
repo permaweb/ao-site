@@ -5,7 +5,6 @@ import parse from 'html-react-parser';
 
 import { readHandler } from 'api';
 
-// import { SupplyChart } from 'components/molecules/SupplyChart';
 import { AO, ASSETS, TOKEN_DENOMINATION } from 'helpers/config';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
@@ -122,11 +121,12 @@ export default function PreBridgeInfo(props: IProps) {
 						break;
 					case 'ethereum':
 						// TODO
-						// const tokenBalances = await readHandler({
-						// 	processId: AO.token,
-						// 	action: 'Get-Balances-By-User',
-						// 	tags: [{ name: 'User', value: provider.walletAddress }],
-						// });
+						const tokenBalances = await readHandler({
+							processId: AO.token,
+							action: 'Get-Balances-By-User',
+							tags: [{ name: 'User', value: provider.walletAddress }],
+						});
+						console.log(tokenBalances);
 						// if (tokenBalances && tokenBalances.length) {
 						// 	setCurrentBalance(1748736745614 / TOKEN_DENOMINATION);
 						// } else {
@@ -223,9 +223,6 @@ export default function PreBridgeInfo(props: IProps) {
 					)}
 				</S.Section>
 			</S.SectionWrapper>
-			{/* <S.ChartWrapper className={'fade-in'}>
-				<SupplyChart />
-			</S.ChartWrapper> */}
 		</S.Wrapper>
 	);
 }

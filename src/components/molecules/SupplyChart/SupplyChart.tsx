@@ -81,7 +81,7 @@ const options = {
 				},
 			},
 			min: 0,
-			max: 300,
+			max: 160,
 		},
 		y: {
 			title: {
@@ -169,7 +169,7 @@ export default function SupplyChart() {
 			</S.YLabel>
 			<Line data={chartData} options={options} />
 			<S.XLabel>
-				<span>Years</span>
+				<span>Months</span>
 			</S.XLabel>
 		</S.Wrapper>
 	);
