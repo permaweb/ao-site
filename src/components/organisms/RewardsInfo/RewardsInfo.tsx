@@ -90,8 +90,7 @@ export default function RewardsInfo(props: IProps) {
 
 								rewardFn = getEthReward;
 
-								const web3 = new Web3(window.ethereum);
-								await window.ethereum.enable();
+								const web3 = new Web3(ethProvider.web3Provider);
 
 								const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
 

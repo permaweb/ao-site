@@ -154,7 +154,6 @@ module.exports = {
 			fs: false,
 			tls: false,
 			net: false,
-			path: false,
 			zlib: require.resolve('browserify-zlib'),
 			http: require.resolve('stream-http'),
 			https: require.resolve('https-browserify'),
@@ -172,6 +171,14 @@ module.exports = {
 			timers: require.resolve('timers-browserify'),
 		},
 		alias: {
+			assert: path.resolve(__dirname, 'node_modules/assert'),
+			buffer: path.resolve(__dirname, 'node_modules/buffer'),
+			crypto: path.resolve(__dirname, 'node_modules/crypto-browserify'),
+			http: path.resolve(__dirname, 'node_modules/stream-http'),
+			https: path.resolve(__dirname, 'node_modules/https-browserify'),
+			os: path.resolve(__dirname, 'node_modules/os-browserify/browser'),
+			stream: path.resolve(__dirname, 'node_modules/stream-browserify'),
+			util: path.resolve(__dirname, 'node_modules/util'),
 			react: path.resolve(__dirname, 'node_modules/react'),
 			process: 'process/browser',
 			api: path.resolve(__dirname, 'src/api/'),
@@ -192,6 +199,9 @@ module.exports = {
 			'asn1.js': path.resolve(__dirname, 'node_modules/asn1.js'),
 			elliptic: path.resolve(__dirname, 'node_modules/elliptic'),
 		},
+	},
+	experiments: {
+		asyncWebAssembly: true,
 	},
 	output: {
 		filename: 'bundle.js',

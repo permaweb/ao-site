@@ -6,6 +6,8 @@ import { GlobalStyle } from 'app/styles';
 import { CustomThemeProvider } from 'providers/CustomThemeProvider';
 import { LanguageProvider } from 'providers/LanguageProvider';
 
+import 'zlib'; // Ensure this is bundled, as web3-onboard depends on it
+import 'path'; // Ensure this is bundled, as web3-onboard depends on it
 import '@fontsource-variable/roboto-mono';
 import '@fontsource-variable/dm-sans';
 
