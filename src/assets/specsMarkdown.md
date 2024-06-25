@@ -10,6 +10,8 @@ This paper delineates the protocol of the AO computer, a decentralized computing
 
 [**Read it on the permaweb.**](https://arweave.net/7n6ySzBAkzD4KZoTviHtskVlbdab_yylEQuuy1BvHqc)
 
+<br>
+
 ## What is `ao`?
 
 The `ao` computer is the [actor oriented](https://en.wikipedia.org/wiki/Actor_model) machine that emerges from the network of nodes that adhere to its core data protocol, running on the [Arweave](https://arweave.org) network. This document gives a brief introduction to the protocol and its functionality, as well as its technical details, such that builders can create new implementations and services that integrate with it.
