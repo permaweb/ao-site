@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ButtonType } from 'helpers/types';
 
-export interface IProps {
+export interface IProps extends Omit<React.HTMLProps<HTMLButtonElement>, 'label'> {
 	type: ButtonType;
 	label: string | number | React.ReactNode;
 	handlePress: (e: React.MouseEvent) => void;

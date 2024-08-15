@@ -42,9 +42,7 @@ export default function Mint() {
 
 		return (
 			<S.Wrapper>
-				<EthereumProvider>
-					<Ethereum />
-				</EthereumProvider>
+				<Ethereum />
 			</S.Wrapper>
 		);
 	}

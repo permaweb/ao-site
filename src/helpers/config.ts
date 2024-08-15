@@ -1,4 +1,5 @@
 import ao from 'assets/ao.svg';
+import aoPict from 'assets/ao-pictograph.svg';
 import arconnect from 'assets/arconnect.png';
 import arrow from 'assets/arrow.svg';
 import arweave from 'assets/arweave.svg';
@@ -7,6 +8,7 @@ import calculator from 'assets/calculator.svg';
 import checkmark from 'assets/checkmark.svg';
 import close from 'assets/close.svg';
 import codehawksAudit from 'assets/codehawks-audit.svg';
+import dai from 'assets/dai.svg';
 import eth from 'assets/eth.svg';
 import ethereum from 'assets/ethereum.svg';
 import info from 'assets/info.svg';
@@ -15,6 +17,7 @@ import metamask from 'assets/metamask.png';
 import morpheusAudit from 'assets/morpheus-audit.svg';
 import nccAudit from 'assets/ncc-audit.svg';
 import othent from 'assets/othent.svg';
+import plus from 'assets/plus.svg';
 import rabby from 'assets/rabby.png';
 import renascenseAudit from 'assets/renascense-audit.svg';
 import walletConnect from 'assets/wallet-connect.png';
@@ -37,14 +40,17 @@ export const TOKEN_DENOMINATION = Math.pow(10, 12);
 
 export const ASSETS = {
 	ao,
+	aoPict,
 	arconnect,
 	arrow,
 	arweaveApp,
 	calculator,
 	checkmark,
 	close,
+	plus,
 	codehawksAudit,
 	eth,
+	dai,
 	info,
 	ipBlock,
 	metamask,

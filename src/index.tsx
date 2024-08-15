@@ -3,7 +3,9 @@ import { HashRouter } from 'react-router-dom';
 
 import { App } from 'app';
 import { GlobalStyle } from 'app/styles';
+import { ArweaveProvider } from 'providers/ArweaveProvider';
 import { CustomThemeProvider } from 'providers/CustomThemeProvider';
+import { EthereumProvider } from 'providers/EthereumProvider';
 import { LanguageProvider } from 'providers/LanguageProvider';
 
 import 'zlib'; // Ensure this is bundled, as web3-onboard depends on it
@@ -16,7 +18,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 		<LanguageProvider>
 			<HashRouter>
 				<GlobalStyle />
-				<App />
+				<EthereumProvider>
+					<ArweaveProvider>
+						<App />
+					</ArweaveProvider>
+				</EthereumProvider>
 			</HashRouter>
 		</LanguageProvider>
 	</CustomThemeProvider>

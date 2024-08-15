@@ -46,6 +46,7 @@
 		"better-react-mathjax": "^2.0.3",
 		"chart.js": "^4.4.3",
 		"ethers": "^6.12.2",
+		"framer-motion": "^11.3.28",
 		"html-react-parser": "^5.1.10",
 		"jwt-decode": "^4.0.0",
 		"katex": "^0.13.3",
