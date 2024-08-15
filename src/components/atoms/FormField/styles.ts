@@ -29,7 +29,7 @@ export const TWrapper = styled.div`
 export const Label = styled.label`
 	color: ${(props) => props.theme.colors.font.alt1};
 	font-size: ${(props) => props.theme.typography.size.xSmall};
-	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-weight: ${(props) => props.theme.typography.weight.regular};
 `;
 
 export const Tooltip = styled.div`
@@ -51,12 +51,12 @@ export const Input = styled.input<{
 		props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
 	font-family: ${(props) => props.theme.typography.family.primary};
 	font-size: ${(props) => props.theme.typography.size.base};
-	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-weight: ${(props) => props.theme.typography.weight.regular};
 	margin: 5px 0 0 0;
 	background: ${(props) => props.theme.colors.form.background};
 	border: 1px solid
 		${(props) => (props.invalid ? props.theme.colors.form.invalid.outline : props.theme.colors.form.border)};
-	border-radius: ${STYLING.dimensions.radius.alt2};
+	border-radius: 0px;
 	&:focus {
 		outline: 0;
 		border: 1px solid
@@ -95,7 +95,7 @@ export const EndTextContainer = styled.div<{
 export const EndText = styled.span<{ sm: boolean | undefined }>`
 	color: ${(props) => props.theme.colors.font.primary.alt4};
 	font-size: ${(props) => (props.sm ? props.theme.typography.size.small : '19px')};
-	font-weight: ${(props) => props.theme.typography.weight.regular};
+	font-weight: ${(props) => props.theme.typography.weight.light};
 	width: 100%;
 `;
 
@@ -109,7 +109,7 @@ export const ErrorContainer = styled.div`
 
 export const Error = styled.span`
 	font-size: ${(props) => props.theme.typography.size.xSmall};
-	font-weight: ${(props) => props.theme.typography.weight.regular};
+	font-weight: ${(props) => props.theme.typography.weight.light};
 	border-left: 2.75px solid ${(props) => props.theme.colors.warning.primary};
 	padding-left: 5px;
 `;

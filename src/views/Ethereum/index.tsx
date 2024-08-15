@@ -9,6 +9,7 @@ import { Loader } from 'components/atoms/Loader';
 import { Notification } from 'components/atoms/Notification';
 import { PreBridgeInfo } from 'components/organisms/PreBridgeInfo';
 import { RewardsInfo } from 'components/organisms/RewardsInfo';
+import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
 import { AO_ABI, ASSETS, ETH_CONTRACTS, REDIRECTS, STETH_ABI } from 'helpers/config';
 import { arweaveToEVMBytes, checkValidAddress, formatDisplayAmount } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -289,62 +290,63 @@ export default function Ethereum() {
 	}, [currentTab, stethBalance, depositedStethBalance]);
 
 	return (
-		<>
+		<S.PageWrapper>
+			<WalletConnectionStatus />
 			<S.Wrapper className={'pre-bridge-wrapper'}>
 				<S.Content className={'pre-bridge-content'}>
-					<S.S1Content className={'border-wrapper-alt2'}>
-						<S.TabsWrapper>
-							<S.TabsHeader>
-								<Button
-									type={'primary'}
-									label={TABS[0].name}
-									handlePress={() => setCurrentTab(TABS[0])}
-									active={currentTab.name === TABS[0].name}
-									disabled={loading}
-									height={40}
-								/>
-								<Button
-									type={'primary'}
-									label={TABS[1].name}
-									handlePress={() => setCurrentTab(TABS[1])}
-									active={currentTab.name === TABS[1].name}
-									disabled={loading}
-									height={40}
-								/>
-							</S.TabsHeader>
-							<S.TabContent>
-								<S.ActionWrapper>
-									<S.Form invalid={invalid}>
-										<FormField
-											type={'number'}
-											value={amount}
-											onChange={(e: any) => setAmount(e.target.value)}
-											invalid={{ status: invalid, message: null }}
-											disabled={loading || !ethProvider.walletAddress}
-											hideErrorMessage
-										/>
-										{formFieldAction}
-										<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
-											<ReactSVG src={ASSETS.eth} />
-											<p>{language.steth}</p>
-											<S.DropdownArrow disabled={loading || !ethProvider.walletAddress}>
-												<ReactSVG src={ASSETS.arrow} />
-											</S.DropdownArrow>
-										</S.FormFieldLabel>
-									</S.Form>
-									{currentTab.name === 'Deposit' && (
-										<>
-											<S.FormEndWrapper>
-												<S.ConversionLink>
-													<Link to={REDIRECTS.stethConversion} target={'_blank'}>
-														{language.stethConversion}
-													</Link>
-													•
-													<Link to={REDIRECTS.stethMinting} target={'_blank'}>
-														{language.stethMinting}
-													</Link>
-												</S.ConversionLink>
-											</S.FormEndWrapper>
+					<S.TabsWrapper>
+						<S.TabsHeader>
+							<Button
+								type={'primary'}
+								label={TABS[0].name}
+								handlePress={() => setCurrentTab(TABS[0])}
+								active={currentTab.name === TABS[0].name}
+								disabled={loading}
+								height={40}
+							/>
+							<Button
+								type={'primary'}
+								label={TABS[1].name}
+								handlePress={() => setCurrentTab(TABS[1])}
+								active={currentTab.name === TABS[1].name}
+								disabled={loading}
+								height={40}
+							/>
+						</S.TabsHeader>
+						<S.TabContent>
+							<S.ActionWrapper>
+								<S.Form invalid={invalid}>
+									<FormField
+										type={'number'}
+										value={amount}
+										onChange={(e: any) => setAmount(e.target.value)}
+										invalid={{ status: invalid, message: null }}
+										disabled={loading || !ethProvider.walletAddress}
+										hideErrorMessage
+									/>
+									{formFieldAction}
+									<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
+										<ReactSVG src={ASSETS.eth} />
+										<p>{language.steth}</p>
+										<S.DropdownArrow disabled={loading || !ethProvider.walletAddress}>
+											<ReactSVG src={ASSETS.arrow} />
+										</S.DropdownArrow>
+									</S.FormFieldLabel>
+								</S.Form>
+								{currentTab.name === 'Deposit' && (
+									<>
+										<S.FormEndWrapper>
+											<S.ConversionLink>
+												<Link to={REDIRECTS.stethConversion} target={'_blank'}>
+													{language.stethConversion}
+												</Link>
+												•
+												<Link to={REDIRECTS.stethMinting} target={'_blank'}>
+													{language.stethMinting}
+												</Link>
+											</S.ConversionLink>
+										</S.FormEndWrapper>
+										<S.FormFieldWrapper>
 											<FormField
 												value={recipient}
 												label={language.arweaveAddress}
@@ -363,33 +365,32 @@ export default function Ethereum() {
 													height={35}
 												/>
 											</S.RecipientActions>
-										</>
-									)}
-								</S.ActionWrapper>
-							</S.TabContent>
-						</S.TabsWrapper>
-						<S.Action>
-							<Button
-								type={'alt1'}
-								label={label}
-								handlePress={() =>
-									ethProvider.walletAddress ? handleSubmit() : ethProvider.setWalletModalVisible(true)
-								}
-								disabled={ethProvider.walletAddress ? disabled : false}
-								loading={loading}
-								height={52.5}
-								width={350}
-							/>
-						</S.Action>
-						{loading && (
+										</S.FormFieldWrapper>
+									</>
+								)}
+							</S.ActionWrapper>
+						</S.TabContent>
+					</S.TabsWrapper>
+					<S.Action>
+						<Button
+							type={'accent'}
+							label={label}
+							handlePress={() => (ethProvider.walletAddress ? handleSubmit() : ethProvider.setWalletModalVisible(true))}
+							disabled={ethProvider.walletAddress ? disabled : false}
+							loading={loading}
+							height={52.5}
+							width={350}
+						/>
+					</S.Action>
+					{/* {loading && (
 							<S.LoadingWrapper>
 								<span>{`${language.executing} ${currentTab.name}...`}</span>
 								<S.Loader>
 									<Loader xSm relative />
 								</S.Loader>
 							</S.LoadingWrapper>
-						)}
-						<S.PrimaryAmount className={'border-wrapper-alt1'}>
+						)} */}
+					{/* <S.PrimaryAmount className={'border-wrapper-alt1'}>
 							<span>{language.depositedSteth}</span>
 							<h2 className={'fade-in'}>{depositedBalance}</h2>
 							{ethProvider.walletAddress !== null && depositedStethBalance === null && (
@@ -400,13 +401,12 @@ export default function Ethereum() {
 									</S.Loader>
 								</S.WalletLoadingWrapper>
 							)}
-						</S.PrimaryAmount>
-					</S.S1Content>
-					<RewardsInfo chain={'ethereum'} toggleUpdate={toggleUpdate} />
+						</S.PrimaryAmount> */}
+					{/* <RewardsInfo chain={'ethereum'} toggleUpdate={toggleUpdate} /> */}
+					<PreBridgeInfo />
 				</S.Content>
-				<PreBridgeInfo chain={'ethereum'} />
 			</S.Wrapper>
 			{response && <Notification message={response.message} type={response.status} callback={handleClear} />}
-		</>
+		</S.PageWrapper>
 	);
 }
