@@ -366,6 +366,7 @@ export default function Ethereum() {
 												/>
 											</S.RecipientActions>
 										</S.FormFieldWrapper>
+										{/* <RewardsInfo chain={'ethereum'} toggleUpdate={toggleUpdate} /> */}
 									</>
 								)}
 							</S.ActionWrapper>
@@ -378,31 +379,10 @@ export default function Ethereum() {
 							handlePress={() => (ethProvider.walletAddress ? handleSubmit() : ethProvider.setWalletModalVisible(true))}
 							disabled={ethProvider.walletAddress ? disabled : false}
 							loading={loading}
-							height={52.5}
+							height={74}
 							width={350}
 						/>
 					</S.Action>
-					{/* {loading && (
-							<S.LoadingWrapper>
-								<span>{`${language.executing} ${currentTab.name}...`}</span>
-								<S.Loader>
-									<Loader xSm relative />
-								</S.Loader>
-							</S.LoadingWrapper>
-						)} */}
-					{/* <S.PrimaryAmount className={'border-wrapper-alt1'}>
-							<span>{language.depositedSteth}</span>
-							<h2 className={'fade-in'}>{depositedBalance}</h2>
-							{ethProvider.walletAddress !== null && depositedStethBalance === null && (
-								<S.WalletLoadingWrapper>
-									<span>{`${language.fetching}...`}</span>
-									<S.Loader>
-										<Loader xSm relative />
-									</S.Loader>
-								</S.WalletLoadingWrapper>
-							)}
-						</S.PrimaryAmount> */}
-					{/* <RewardsInfo chain={'ethereum'} toggleUpdate={toggleUpdate} /> */}
 					<PreBridgeInfo />
 				</S.Content>
 			</S.Wrapper>

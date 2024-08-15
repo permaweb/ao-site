@@ -240,10 +240,6 @@ export default function RewardsInfo(props: IProps) {
 								<span>Yearly AO for 1 stETH</span>
 								<p>{yearlyDisplay}</p>
 							</S.Amount>
-							<S.AltAmount className={'fade-in'}>
-								<span>Total bridged stETH</span>
-								<p className={'primary-text'}>{totalBridgedDisplay}</p>
-							</S.AltAmount>
 						</S.AmountLine>
 					</S.Amounts>
 				</S.Wrapper>

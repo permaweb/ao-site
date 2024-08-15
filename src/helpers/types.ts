@@ -20,3 +20,5 @@ export type ValidationType = {
 };
 
 export type TagType = { name: string; value: string };
+
+export type ButtonType = 'primary' | 'accent' | 'alt1' | 'alt2';

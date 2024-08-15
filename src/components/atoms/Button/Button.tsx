@@ -81,6 +81,7 @@ export default function Button(props: IProps) {
 	function getAction() {
 		return (
 			<StyledButton
+				style={props.style}
 				tabIndex={props.noFocus ? -1 : 0}
 				type={props.formSubmit ? 'submit' : 'button'}
 				onClick={props.handlePress}
