@@ -3,13 +3,11 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
 	width: 100%;
 	display: flex;
-	flex-direction: column;
 	justify-content: center;
 	padding: 20px;
 	position: relative;
 	top: 60px;
-	margin: 0 auto;
-	max-width: 1200px;
+	margin: 0 0 100px 0;
 `;
 
 export const TabsWrapper = styled.div`
@@ -26,11 +24,4 @@ export const Divider = styled.div`
 export const BlockMessage = styled.div`
 	width: fit-content;
 	margin: 40px auto;
-`;
-
-export const Subheading = styled.h6`
-	font-family: 'Roboto Mono', monospace;
-	font-weight: 400;
-	font-size: ${(props) => props.theme.typography.size.base};
-	text-transform: uppercase;
 `;

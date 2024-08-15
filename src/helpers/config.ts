@@ -1,12 +1,14 @@
 import ao from 'assets/ao.svg';
 import arconnect from 'assets/arconnect.png';
 import arrow from 'assets/arrow.svg';
+import arweave from 'assets/arweave.svg';
 import arweaveApp from 'assets/arweave-app.svg';
 import calculator from 'assets/calculator.svg';
 import checkmark from 'assets/checkmark.svg';
 import close from 'assets/close.svg';
 import codehawksAudit from 'assets/codehawks-audit.svg';
 import eth from 'assets/eth.svg';
+import ethereum from 'assets/ethereum.svg';
 import info from 'assets/info.svg';
 import ipBlock from 'assets/ip-block.png';
 import metamask from 'assets/metamask.png';
@@ -49,9 +51,11 @@ export const ASSETS = {
 	morpheusAudit,
 	nccAudit,
 	othent,
+	arweave,
 	rabby,
 	renascenseAudit,
 	walletConnect,
+	ethereum,
 };
 
 export const AR_WALLETS = [
@@ -97,14 +101,12 @@ export const STYLING = {
 function createURLs() {
 	const base = `/`;
 	const mint = `${base}mint/`;
-	const ethereum = `${mint}ethereum/`;
 	return {
 		base: base,
 		mint: mint,
 		read: `${base}read/`,
-		ethereum: ethereum,
-		arweave: `${mint}arweave/`,
-		cred: `${mint}cred/`,
+		deposit: `${mint}deposit/`,
+		withdraw: `${mint}withdraw/`,
 		notFound: `${base}404`,
 	};
 }

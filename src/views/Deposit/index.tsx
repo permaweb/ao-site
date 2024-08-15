@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { Loader } from 'components/atoms/Loader';
@@ -43,9 +42,9 @@ export default function Mint() {
 
 		return (
 			<S.Wrapper>
-				<S.Subheading>[+] Your Dashboard</S.Subheading>
-
-				<Link to="/mint/deposit">Deposit</Link>
+				<EthereumProvider>
+					<Ethereum />
+				</EthereumProvider>
 			</S.Wrapper>
 		);
 	}

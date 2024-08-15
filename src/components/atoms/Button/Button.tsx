@@ -26,6 +26,12 @@ export default function Button(props: IProps) {
 					icon: S.IconPrimary,
 				};
 				break;
+			case 'accent':
+				buttonObj = {
+					wrapper: S.Accent,
+					icon: S.IconAlt1,
+				};
+				break;
 			case 'alt1':
 				buttonObj = {
 					wrapper: S.Alt1,
