@@ -71,6 +71,7 @@ export function StETHSection(props: StETHSectionProps) {
 	const [monthlyReward, setMonthlyReward] = React.useState<number | null>(null);
 	const [yearlyReward, setYearlyReward] = React.useState<number | null>(null);
 
+	const [monthlyRewardDisplay, setMonthlyRewardDisplay] = React.useState<number | null>(null);
 	const [yearlyRewardDisplay, setYearlyRewardDisplay] = React.useState<number | null>(null);
 	const [totalBridged, setTotalBridged] = React.useState<number | null>(null);
 
@@ -120,7 +121,7 @@ export function StETHSection(props: StETHSectionProps) {
 						tokenSupply = Number(totalDeposited) / ETH_DENOMINATION;
 						balance = Number((usersData as any).deposited) / ETH_DENOMINATION;
 
-						const calcMonthlyReward = rewardFn(30.4, balance, tokenSupply, aoSupply);
+						const calcMonthlyReward = rewardFn(30, balance, tokenSupply, aoSupply);
 						setMonthlyReward(calcMonthlyReward);
 
 						const calcYearlyReward = rewardFn(365, balance, tokenSupply, aoSupply);
@@ -154,6 +155,7 @@ export function StETHSection(props: StETHSectionProps) {
 					if (totalDeposited && Number(totalDeposited) > 0) {
 						setTotalBridged(formattedDepositsAmount);
 						setYearlyRewardDisplay(getEthReward(365, 1, formattedDepositsAmount, aoSupply));
+						setMonthlyRewardDisplay(getEthReward(30, 1, formattedDepositsAmount, aoSupply));
 					}
 				} catch (e: any) {
 					console.error(e);
@@ -178,6 +180,22 @@ export function StETHSection(props: StETHSectionProps) {
 		}
 		return 'Loading...';
 	}, [yearlyReward]);
+
+	const yearlyDisplay = React.useMemo(() => {
+		if (yearlyRewardDisplay && yearlyRewardDisplay > 0) {
+			const calcAmount = (yearlyRewardDisplay * TOKEN_DENOMINATION) / 1000000000;
+			return `1 STETH = ${formatDisplayAmount(calcAmount)}`;
+		}
+		return 'Loading...';
+	}, [yearlyRewardDisplay]);
+
+	const monthlyDisplay = React.useMemo(() => {
+		if (monthlyRewardDisplay && monthlyRewardDisplay > 0) {
+			const calcAmount = (monthlyRewardDisplay * TOKEN_DENOMINATION) / 1000000000;
+			return `1 STETH = ${formatDisplayAmount(calcAmount)}`;
+		}
+		return 'Loading...';
+	}, [monthlyRewardDisplay]);
 
 	const navigate = useNavigate();
 
@@ -243,7 +261,7 @@ export function StETHSection(props: StETHSectionProps) {
 				) : (
 					'-'
 				)}
-				<S.Label size="small">1 STETH = 300</S.Label>
+				<S.Label size="small">{monthlyDisplay}</S.Label>
 			</S.Column>
 			<S.Column>
 				<S.Label>1 year projection</S.Label>
@@ -263,7 +281,7 @@ export function StETHSection(props: StETHSectionProps) {
 				) : (
 					'-'
 				)}
-				<S.Label size="small">1 STETH = 300k</S.Label>
+				<S.Label size="small">{yearlyDisplay}</S.Label>
 			</S.Column>
 			<S.Column>
 				<S.Label>
