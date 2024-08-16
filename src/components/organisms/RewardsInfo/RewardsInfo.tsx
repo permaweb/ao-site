@@ -102,7 +102,7 @@ export default function RewardsInfo(props: IProps) {
 								break;
 						}
 
-						const calcMonthlyReward = rewardFn(30.4, balance, tokenSupply, aoSupply);
+						const calcMonthlyReward = rewardFn(30, balance, tokenSupply, aoSupply);
 						setMonthlyReward(calcMonthlyReward);
 
 						const calcYearlyReward = rewardFn(365, balance, tokenSupply, aoSupply);
