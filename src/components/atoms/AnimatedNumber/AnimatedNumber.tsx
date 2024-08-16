@@ -12,11 +12,10 @@ const AnimatedNumber = (props: AnimatedNumberProps) => {
 	const { startValue, increment } = props;
 
 	const [number, setNumber] = useState<number | null | undefined>(startValue);
-	console.log('📜 LOG > AnimatedNumber > number:', number);
 
 	useEffect(() => {
 		setNumber(startValue);
-	}, [startValue]);
+	}, [startValue, increment]);
 
 	useEffect(() => {
 		if (typeof number !== 'number') return;

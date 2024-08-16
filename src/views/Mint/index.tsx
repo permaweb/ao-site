@@ -59,11 +59,11 @@ export default function Mint() {
 	}, []);
 
 	const arProvider = useArweaveProvider();
-	const [aoBalance, setAoBalance] = React.useState<number | null>(null);
-
 	const ethProvider = useEthereumProvider();
 
-	// TODO - Current Balance by ETH Address
+	const [armsBalanceForArWallet, setArmsBalanceForArWallet] = React.useState<number | null>(null);
+	const [armsBalancesForEthWallet, setArmsBalancesForEthWallet] = React.useState<Record<string, string>>(null);
+
 	React.useEffect(() => {
 		(async function () {
 			if (arProvider && arProvider.walletAddress) {
@@ -73,15 +73,53 @@ export default function Mint() {
 						action: 'Balance',
 						tags: [{ name: 'Recipient', value: arProvider.walletAddress }],
 					});
-					if (tokenBalance != null) setAoBalance(tokenBalance / TOKEN_DENOMINATION);
+					if (tokenBalance != null) setArmsBalanceForArWallet(tokenBalance / (TOKEN_DENOMINATION / 1_000));
 				} catch (e: any) {
 					console.error(e);
 				}
 			} else {
-				setAoBalance(null);
+				setArmsBalanceForArWallet(null);
 			}
 		})();
 	}, [arProvider]);
+
+	React.useEffect(() => {
+		(async function () {
+			if (ethProvider && ethProvider.walletAddress) {
+				try {
+					const tokenBalances = await readHandler({
+						processId: AO.token,
+						action: 'Get-Balances-By-User',
+						tags: [{ name: 'User', value: ethProvider.walletAddress }],
+					});
+
+					setArmsBalancesForEthWallet(tokenBalances);
+				} catch (e: any) {
+					console.error(e);
+				}
+			} else {
+				setArmsBalancesForEthWallet(null);
+			}
+		})();
+	}, [ethProvider]);
+
+	const armsBalance = React.useMemo<number | null>(() => {
+		let calcAmount = null;
+
+		if (armsBalanceForArWallet && armsBalanceForArWallet > 0) {
+			calcAmount += armsBalanceForArWallet;
+		}
+
+		if (armsBalancesForEthWallet) {
+			for (const wallet of Object.keys(armsBalancesForEthWallet)) {
+				if (arProvider.walletAddress === wallet) continue;
+
+				calcAmount += parseInt(armsBalancesForEthWallet[wallet]) / (TOKEN_DENOMINATION / 1_000);
+			}
+		}
+
+		return calcAmount;
+	}, [armsBalanceForArWallet, armsBalancesForEthWallet, arProvider]);
 
 	const [arweaveMonthlyReward, setArweaveMonthlyReward] = React.useState<number | null>(null);
 	const [arweaveYearlyReward, setArweaveYearlyReward] = React.useState<number | null>(null);
@@ -159,7 +197,7 @@ export default function Mint() {
 							<S.Column>
 								<S.Label>Your AO (G-Armstrongs)</S.Label>
 								{connected ? (
-									aoBalance === null ? (
+									armsBalance === null ? (
 										<S.LoadingWrapper>
 											<S.Loader>
 												<Loader xSm relative />
@@ -168,7 +206,7 @@ export default function Mint() {
 									) : (
 										<S.AssetAmount>
 											<ReactSVG src={ASSETS.aoPict} />
-											<AnimatedNumber startValue={aoBalance} increment={realtimeRewardArms} />
+											<AnimatedNumber startValue={armsBalance} increment={realtimeRewardArms} />
 										</S.AssetAmount>
 									)
 								) : (
