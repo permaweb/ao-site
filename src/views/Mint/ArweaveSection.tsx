@@ -38,6 +38,9 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 	const [fetchingAoSupply, setFetchingAoSupply] = React.useState<boolean>(false);
 	const [yearlyReward, setYearlyReward] = React.useState<number | null>(null);
 
+	const [monthlyRewardDisplay, setMonthlyRewardDisplay] = React.useState<number | null>(null);
+	const [yearlyRewardDisplay, setYearlyRewardDisplay] = React.useState<number | null>(null);
+
 	React.useEffect(() => {
 		(async function () {
 			setFetchingAoSupply(true);
@@ -77,6 +80,9 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 
 						const calcYearlyReward = rewardFn(365, balance, tokenSupply, aoSupply);
 						setYearlyReward(calcYearlyReward);
+
+						setYearlyRewardDisplay(rewardFn(365, 1, tokenSupply, aoSupply));
+						setMonthlyRewardDisplay(rewardFn(30, 1, tokenSupply, aoSupply));
 					} catch (e: any) {
 						console.error(e);
 					}
@@ -104,6 +110,22 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 		}
 		return 'Loading...';
 	}, [yearlyReward]);
+
+	const yearlyDisplay = React.useMemo(() => {
+		if (yearlyRewardDisplay && yearlyRewardDisplay > 0) {
+			const calcAmount = (yearlyRewardDisplay * TOKEN_DENOMINATION) / 1000000000;
+			return `1 AR = ${formatDisplayAmount(calcAmount)}`;
+		}
+		return 'Loading...';
+	}, [yearlyRewardDisplay]);
+
+	const monthlyDisplay = React.useMemo(() => {
+		if (monthlyRewardDisplay && monthlyRewardDisplay > 0) {
+			const calcAmount = (monthlyRewardDisplay * TOKEN_DENOMINATION) / 1000000000;
+			return `1 AR = ${formatDisplayAmount(calcAmount)}`;
+		}
+		return 'Loading...';
+	}, [monthlyRewardDisplay]);
 
 	return (
 		<S.Section className="border-wrapper-alt1" columns={4}>
@@ -167,7 +189,7 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 				) : (
 					'-'
 				)}
-				<S.Label size="small">1 AR = 300</S.Label>
+				<S.Label size="small">{monthlyDisplay}</S.Label>
 			</S.Column>
 			<S.Column>
 				<S.Label>1 year projection</S.Label>
@@ -187,7 +209,7 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 				) : (
 					'-'
 				)}
-				<S.Label size="small">1 AR = 300k</S.Label>
+				<S.Label size="small">{yearlyDisplay}</S.Label>
 			</S.Column>
 		</S.Section>
 	);
