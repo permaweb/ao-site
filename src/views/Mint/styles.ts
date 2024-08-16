@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
 	position: relative;
 	top: 60px;
 	margin: 0 auto;
-	max-width: 1200px;
+	max-width: 1600px;
 	gap: 20px;
 `;
 
@@ -132,3 +132,17 @@ export const Divider = styled.div`
 	width: 100%;
 	border-bottom: 1px solid ${(props) => props.theme.colors.border.alt3};
 `;
+
+export const LoadingWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	margin: 0 0 0 -15px;
+	span {
+		color: ${(props) => props.theme.colors.font.alt1};
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		text-transform: uppercase;
+	}
+`;
+
+export const Loader = styled.div``;

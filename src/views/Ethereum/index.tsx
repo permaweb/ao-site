@@ -1,16 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 import Web3 from 'web3';
 
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
-import { Loader } from 'components/atoms/Loader';
 import { Notification } from 'components/atoms/Notification';
 import { PreBridgeInfo } from 'components/organisms/PreBridgeInfo';
-import { RewardsInfo } from 'components/organisms/RewardsInfo';
 import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
-import { AO_ABI, ASSETS, ETH_CONTRACTS, REDIRECTS, STETH_ABI } from 'helpers/config';
+import { AO_ABI, ASSETS, ETH_CONTRACTS, REDIRECTS, STETH_ABI, URLS } from 'helpers/config';
 import { arweaveToEVMBytes, checkValidAddress, formatDisplayAmount } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -27,7 +25,9 @@ export default function Ethereum() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
-	const [currentTab, setCurrentTab] = React.useState<any>(TABS[0]);
+	const location = useLocation();
+
+	const [currentTab, setCurrentTab] = React.useState<any>(location.pathname.includes(URLS.deposit) ? TABS[0] : TABS[1]);
 	const [showWallet, setShowWallet] = React.useState<boolean>(false);
 	const [label, setLabel] = React.useState<string | null>(null);
 
@@ -186,9 +186,6 @@ export default function Ethereum() {
 
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amountInWei > 0) {
-			// console.log("📜 LOG > handleSubmit > amount:", typeof amount, amount);
-			// console.log("📜 LOG > handleSubmit > amountInWei:", typeof amountInWei, amountInWei);
-
 			setLoading(true);
 			try {
 				const web3 = new Web3(ethProvider.web3Provider);
@@ -248,15 +245,6 @@ export default function Ethereum() {
 		}
 	}
 
-	const depositedBalance = React.useMemo(() => {
-		if ((depositedStethBalance as any) === 'Error') return String(depositedStethBalance);
-		if (depositedStethBalance && depositedStethBalance > 0) {
-			const calcAmount = fromWei(depositedStethBalance, 'ether');
-			return `${formatDisplayAmount(calcAmount)} ${language.steth}`;
-		}
-		return `0 ${language.steth}`;
-	}, [depositedStethBalance, language]);
-
 	const formFieldAction = React.useMemo(() => {
 		if (!currentTab) return null;
 
@@ -289,6 +277,8 @@ export default function Ethereum() {
 		);
 	}, [currentTab, stethBalance, depositedStethBalance]);
 
+	const navigate = useNavigate();
+
 	return (
 		<S.PageWrapper>
 			<WalletConnectionStatus />
@@ -299,7 +289,10 @@ export default function Ethereum() {
 							<Button
 								type={'primary'}
 								label={TABS[0].name}
-								handlePress={() => setCurrentTab(TABS[0])}
+								handlePress={() => {
+									setCurrentTab(TABS[0]);
+									navigate(URLS.deposit, { replace: true });
+								}}
 								active={currentTab.name === TABS[0].name}
 								disabled={loading}
 								height={40}
@@ -307,7 +300,10 @@ export default function Ethereum() {
 							<Button
 								type={'primary'}
 								label={TABS[1].name}
-								handlePress={() => setCurrentTab(TABS[1])}
+								handlePress={() => {
+									setCurrentTab(TABS[1]);
+									navigate(URLS.withdraw, { replace: true });
+								}}
 								active={currentTab.name === TABS[1].name}
 								disabled={loading}
 								height={40}
