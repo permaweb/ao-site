@@ -16,7 +16,7 @@ export default function _Routes() {
 				<Route path={URLS.read} element={<Spec />} />
 				<Route path={URLS.mint} element={<Mint />} />
 				<Route path={URLS.deposit} element={<Deposit />} />
-				<Route path={URLS.withdraw} element={<Mint />} />
+				<Route path={URLS.withdraw} element={<Deposit />} />
 			</Routes>
 		</Suspense>
 	);

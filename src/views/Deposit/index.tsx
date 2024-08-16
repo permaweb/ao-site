@@ -3,12 +3,11 @@ import React from 'react';
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { Loader } from 'components/atoms/Loader';
 import { ENDPOINTS } from 'helpers/config';
-import { EthereumProvider } from 'providers/EthereumProvider';
 import Ethereum from 'views/Ethereum';
 
 import * as S from './styles';
 
-export default function Mint() {
+export default function Deposit() {
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [isBlocked, setIsBlocked] = React.useState<boolean>(false);
 
