@@ -1,35 +1,32 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 import Web3 from 'web3';
 
 import { readHandler } from 'api';
 
-import artwork from 'assets/dashboard-artwork.png';
-import AnimatedNumber from 'components/atoms/AnimatedNumber/AnimatedNumber';
-import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { Button } from 'components/atoms/Button';
 import { Loader } from 'components/atoms/Loader';
-import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
 import { AO, AO_ABI, ASSETS, ENDPOINTS, ETH_CONTRACTS, STETH_ABI, TOKEN_DENOMINATION, URLS } from 'helpers/config';
-import { formatDisplayAmount, getArReward, getEthReward } from 'helpers/utils';
-import { useArweaveProvider } from 'providers/ArweaveProvider';
-import { EthereumProvider, useEthereumProvider } from 'providers/EthereumProvider';
-import { useLanguageProvider } from 'providers/LanguageProvider';
-import Ethereum from 'views/Ethereum';
+import { formatDisplayAmount, getEthReward } from 'helpers/utils';
+import { useEthereumProvider } from 'providers/EthereumProvider';
 
 import * as S from './styles';
 
 type StETHSectionProps = {
 	loading: boolean;
+	aoSupply: number | null;
+	onMonthlyReward?: (value: number) => void;
+	onYearlyReward?: (value: number) => void;
+	onTotalBridged?: (value: number) => void;
 };
 
 export function StETHSection(props: StETHSectionProps) {
-	const { loading } = props;
+	const { loading, aoSupply, onMonthlyReward, onYearlyReward, onTotalBridged } = props;
 
 	const ethProvider = useEthereumProvider();
-	const [stethBalance, setStethBalance] = React.useState<bigint | null>(null);
-	const [depositedStethBalance, setDespositedStethBalance] = React.useState<bigint | null>(null);
+	const [stEthBalance, setStEthBalance] = React.useState<bigint | null>(null);
+	const [depositedStEthBalance, setDepositedStEthBalance] = React.useState<bigint | null>(null);
 
 	React.useEffect(() => {
 		(async function () {
@@ -40,79 +37,45 @@ export function StETHSection(props: StETHSectionProps) {
 					const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
 
 					const balanceOf = await stethContract.methods.balanceOf(ethProvider.walletAddress).call();
-					setStethBalance(balanceOf as unknown as bigint);
+					setStEthBalance(balanceOf as unknown as bigint);
 				} catch (e: any) {
 					console.error(e);
-					setStethBalance('Error' as any);
+					setStEthBalance('Error' as any);
 				}
 
 				try {
 					const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
 
 					const usersData = await aoContract.methods.usersData(ethProvider.walletAddress, 0).call();
-					setDespositedStethBalance((usersData as any).deposited as bigint);
+					setDepositedStEthBalance((usersData as any).deposited as bigint);
 				} catch (e: any) {
 					console.error(e);
-					setDespositedStethBalance('Error' as any);
+					setDepositedStEthBalance('Error' as any);
 				}
 			} else {
-				setStethBalance(null);
-				setDespositedStethBalance(null);
+				setStEthBalance(null);
+				setDepositedStEthBalance(null);
 			}
 		})();
 	}, [ethProvider.walletAddress]);
 
-	const [fetchingReward, setFetchingReward] = React.useState<boolean>(false);
-	const [fetchingAoSupply, setFetchingAoSupply] = React.useState<boolean>(false);
-	const [fetchingTotal, setFetchingTotal] = React.useState<boolean>(false);
-
-	const [aoSupply, setAoSupply] = React.useState<number | null>(null);
-
 	const [monthlyReward, setMonthlyReward] = React.useState<number | null>(null);
 	const [yearlyReward, setYearlyReward] = React.useState<number | null>(null);
 
-	const [monthlyRewardDisplay, setMonthlyRewardDisplay] = React.useState<number | null>(null);
-	const [yearlyRewardDisplay, setYearlyRewardDisplay] = React.useState<number | null>(null);
-	const [totalBridged, setTotalBridged] = React.useState<number | null>(null);
-
-	const [showInfoModal, setShowInfoModal] = React.useState<boolean>(false);
-
-	React.useEffect(() => {
-		(async function () {
-			setFetchingAoSupply(true);
-			try {
-				let aoSupplyFetch: number;
-				aoSupplyFetch = await readHandler({
-					processId: AO.tokenMirror,
-					action: 'Minted-Supply',
-				});
-
-				if (aoSupplyFetch) {
-					setAoSupply(aoSupplyFetch / TOKEN_DENOMINATION);
-				}
-			} catch (e: any) {
-				console.error(e);
-			}
-			setFetchingAoSupply(false);
-		})();
-	}, []);
+	const [monthlyRewardRatio, setMonthlyRewardRatio] = React.useState<number | null>(null);
+	const [yearlyRewardRatio, setYearlyRewardRatio] = React.useState<number | null>(null);
 
 	React.useEffect(() => {
 		(async function () {
 			if (ethProvider && ethProvider.walletAddress && aoSupply) {
 				if (ethProvider.balance !== null && ethProvider.balance !== 'Error') {
-					setFetchingReward(true);
 					try {
 						let balance: number;
 						let tokenSupply: number;
-						let rewardFn: (days: number, userBalance: number, totalBalances: number, currentAOSupply: number) => number;
 
 						const ETH_DENOMINATION = Math.pow(10, 18);
 
-						rewardFn = getEthReward;
-
 						const web3 = new Web3(ethProvider.web3Provider);
-
 						const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
 
 						const usersData = await aoContract.methods.usersData(ethProvider.walletAddress, 0).call();
@@ -121,19 +84,22 @@ export function StETHSection(props: StETHSectionProps) {
 						tokenSupply = Number(totalDeposited) / ETH_DENOMINATION;
 						balance = Number((usersData as any).deposited) / ETH_DENOMINATION;
 
-						const calcMonthlyReward = rewardFn(30, balance, tokenSupply, aoSupply);
+						const calcMonthlyReward = getEthReward(30, balance, tokenSupply, aoSupply);
 						setMonthlyReward(calcMonthlyReward);
+						onMonthlyReward?.(calcMonthlyReward);
 
-						const calcYearlyReward = rewardFn(365, balance, tokenSupply, aoSupply);
+						const calcYearlyReward = getEthReward(365, balance, tokenSupply, aoSupply);
 						setYearlyReward(calcYearlyReward);
+						onYearlyReward?.(calcYearlyReward);
 					} catch (e: any) {
 						console.error(e);
 					}
-					setFetchingReward(false);
 				}
 			} else {
 				setMonthlyReward(null);
+				onMonthlyReward?.(null);
 				setYearlyReward(null);
+				onYearlyReward?.(null);
 			}
 		})();
 	}, [ethProvider, aoSupply]);
@@ -141,31 +107,26 @@ export function StETHSection(props: StETHSectionProps) {
 	React.useEffect(() => {
 		(async function () {
 			if (aoSupply) {
-				setFetchingTotal(true);
 				try {
 					const ETH_DENOMINATION = Math.pow(10, 18);
-
 					const web3 = new Web3(ENDPOINTS.mainnetRpc);
-
 					const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
-
 					const totalDeposited = await aoContract.methods.totalDepositedInPublicPools().call();
 					const formattedDepositsAmount = Number(totalDeposited) / ETH_DENOMINATION;
 
 					if (totalDeposited && Number(totalDeposited) > 0) {
-						setTotalBridged(formattedDepositsAmount);
-						setYearlyRewardDisplay(getEthReward(365, 1, formattedDepositsAmount, aoSupply));
-						setMonthlyRewardDisplay(getEthReward(30, 1, formattedDepositsAmount, aoSupply));
+						onTotalBridged?.(formattedDepositsAmount);
+						setYearlyRewardRatio(getEthReward(365, 1, formattedDepositsAmount, aoSupply));
+						setMonthlyRewardRatio(getEthReward(30, 1, formattedDepositsAmount, aoSupply));
 					}
 				} catch (e: any) {
 					console.error(e);
 				}
-				setFetchingTotal(false);
 			}
 		})();
 	}, [aoSupply]);
 
-	const monthlyArms = React.useMemo(() => {
+	const monthlyRewardArms = React.useMemo(() => {
 		if (monthlyReward && monthlyReward > 0) {
 			const calcAmount = (monthlyReward * TOKEN_DENOMINATION) / 1000000000;
 			return formatDisplayAmount(calcAmount);
@@ -173,7 +134,7 @@ export function StETHSection(props: StETHSectionProps) {
 		return 'Loading...';
 	}, [monthlyReward]);
 
-	const yearlyArms = React.useMemo(() => {
+	const yearlyRewardArms = React.useMemo(() => {
 		if (yearlyReward && yearlyReward > 0) {
 			const calcAmount = (yearlyReward * TOKEN_DENOMINATION) / 1000000000;
 			return formatDisplayAmount(calcAmount);
@@ -181,33 +142,33 @@ export function StETHSection(props: StETHSectionProps) {
 		return 'Loading...';
 	}, [yearlyReward]);
 
-	const yearlyDisplay = React.useMemo(() => {
-		if (yearlyRewardDisplay && yearlyRewardDisplay > 0) {
-			const calcAmount = (yearlyRewardDisplay * TOKEN_DENOMINATION) / 1000000000;
-			return `1 STETH = ${formatDisplayAmount(calcAmount)}`;
+	const yearlyRewardRatioArms = React.useMemo(() => {
+		if (yearlyRewardRatio && yearlyRewardRatio > 0) {
+			const calcAmount = (yearlyRewardRatio * TOKEN_DENOMINATION) / 1000000000;
+			return `1 stETH = ${formatDisplayAmount(calcAmount)}`;
 		}
 		return 'Loading...';
-	}, [yearlyRewardDisplay]);
+	}, [yearlyRewardRatio]);
 
-	const monthlyDisplay = React.useMemo(() => {
-		if (monthlyRewardDisplay && monthlyRewardDisplay > 0) {
-			const calcAmount = (monthlyRewardDisplay * TOKEN_DENOMINATION) / 1000000000;
+	const monthlyRewardRatioArms = React.useMemo(() => {
+		if (monthlyRewardRatio && monthlyRewardRatio > 0) {
+			const calcAmount = (monthlyRewardRatio * TOKEN_DENOMINATION) / 1000000000;
 			return `1 STETH = ${formatDisplayAmount(calcAmount)}`;
 		}
 		return 'Loading...';
-	}, [monthlyRewardDisplay]);
+	}, [monthlyRewardRatio]);
 
 	const navigate = useNavigate();
 
 	return (
-		<S.Section>
+		<S.Section columns={4}>
 			<S.Column>
 				<S.Label>Your STETH Bridged</S.Label>
 				{!!ethProvider.walletAddress ? (
 					<>
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.eth} />
-							<span>{depositedStethBalance ? Web3.utils.fromWei(depositedStethBalance, 'ether') : ''}</span>
+							<span>{depositedStEthBalance ? Web3.utils.fromWei(depositedStEthBalance, 'ether') : ''}</span>
 						</S.AssetAmount>
 						<S.Label
 							size="small"
@@ -232,7 +193,7 @@ export function StETHSection(props: StETHSectionProps) {
 					/>
 				)}
 			</S.Column>
-			<S.Column>
+			{/* <S.Column>
 				<S.Label>AO Earnings</S.Label>
 				{!!ethProvider.walletAddress ? (
 					<S.AssetAmount>
@@ -242,11 +203,11 @@ export function StETHSection(props: StETHSectionProps) {
 				) : (
 					'-'
 				)}
-			</S.Column>
+			</S.Column> */}
 			<S.Column>
 				<S.Label>30 day projection</S.Label>
 				{!!ethProvider.walletAddress ? (
-					monthlyArms === 'Loading...' ? (
+					monthlyRewardArms === 'Loading...' ? (
 						<S.LoadingWrapper>
 							<S.Loader>
 								<Loader xSm relative />
@@ -255,18 +216,18 @@ export function StETHSection(props: StETHSectionProps) {
 					) : (
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{monthlyArms}</span>
+							<span>{monthlyRewardArms}</span>
 						</S.AssetAmount>
 					)
 				) : (
 					'-'
 				)}
-				<S.Label size="small">{monthlyDisplay}</S.Label>
+				<S.Label size="small">{monthlyRewardRatioArms}</S.Label>
 			</S.Column>
 			<S.Column>
 				<S.Label>1 year projection</S.Label>
 				{!!ethProvider.walletAddress ? (
-					yearlyArms === 'Loading...' ? (
+					yearlyRewardArms === 'Loading...' ? (
 						<S.LoadingWrapper>
 							<S.Loader>
 								<Loader xSm relative />
@@ -275,17 +236,26 @@ export function StETHSection(props: StETHSectionProps) {
 					) : (
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{yearlyArms}</span>
+							<span>{yearlyRewardArms}</span>
 						</S.AssetAmount>
 					)
 				) : (
 					'-'
 				)}
-				<S.Label size="small">{yearlyDisplay}</S.Label>
+				<S.Label size="small">{yearlyRewardRatioArms}</S.Label>
 			</S.Column>
 			<S.Column>
 				<S.Label>
-					<span>{stethBalance ? Web3.utils.fromWei(stethBalance, 'ether') : ''} Available</span>
+					<ReactSVG
+						src={ASSETS.eth}
+						style={{
+							width: 12,
+							display: 'inline-block',
+							marginRight: 8,
+							verticalAlign: 'middle',
+						}}
+					/>
+					<span>{stEthBalance ? Web3.utils.fromWei(stEthBalance, 'ether') : '0'} Available</span>
 				</S.Label>
 				<S.Row>
 					<Button

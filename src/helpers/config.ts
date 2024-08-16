@@ -36,7 +36,8 @@ export const ETH_CONTRACTS = {
 	ao: '0xfE08D40Eee53d64936D3128838867c867602665c',
 };
 
-export const TOKEN_DENOMINATION = Math.pow(10, 12);
+export const TOKEN_DECIMALS = 12;
+export const TOKEN_DENOMINATION = Math.pow(10, TOKEN_DECIMALS);
 
 export const ASSETS = {
 	ao,

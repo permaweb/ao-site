@@ -74,7 +74,7 @@ export const Label = styled.h6<{ size?: 'small' | 'default' }>`
 `;
 
 export const AssetAmount = styled.h6<{
-	variant?: 'alt1' | 'default';
+	variant?: 'alt1' | 'alt2' | 'default';
 }>`
 	font-weight: ${(props) => props.theme.typography.weight.regular};
 	font-size: ${(props) => props.theme.typography.size.xLg};
@@ -103,6 +103,17 @@ export const AssetAmount = styled.h6<{
 		svg {
 			width: 30px;
 			height: 30px;
+			margin-bottom: -4px;
+		}
+	`}
+
+	${(props) =>
+		props.variant === 'alt2' &&
+		`
+		font-size: ${props.theme.typography.size.lg2};
+		svg {
+			width: 20px;
+			height: 20px;
 			margin-bottom: -4px;
 		}
 	`}
