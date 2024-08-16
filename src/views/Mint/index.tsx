@@ -1,21 +1,17 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
 import { ReactSVG } from 'react-svg';
-import Web3 from 'web3';
 
 import { readHandler } from 'api';
 
 import artwork from 'assets/dashboard-artwork.png';
 import AnimatedNumber from 'components/atoms/AnimatedNumber/AnimatedNumber';
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
-import { Button } from 'components/atoms/Button';
 import { Loader } from 'components/atoms/Loader';
 import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
-import { AO, AO_ABI, ASSETS, ENDPOINTS, ETH_CONTRACTS, STETH_ABI, TOKEN_DENOMINATION } from 'helpers/config';
-import { formatDisplayAmount, getArReward } from 'helpers/utils';
+import { AO, ASSETS, ENDPOINTS, TOKEN_DENOMINATION } from 'helpers/config';
+import { formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
-import { EthereumProvider, useEthereumProvider } from 'providers/EthereumProvider';
-import Ethereum from 'views/Ethereum';
+import { useEthereumProvider } from 'providers/EthereumProvider';
 
 import { ArweaveSection } from './ArweaveSection';
 import { StETHSection } from './StETHSection';
@@ -43,41 +39,103 @@ export default function Mint() {
 		checkLocation();
 	}, []);
 
-	const navigate = useNavigate();
-
-	const ethProvider = useEthereumProvider();
-	const [stethBalance, setStethBalance] = React.useState<bigint | null>(null);
+	const [aoSupply, setAoSupply] = React.useState<number | null>(null);
 	React.useEffect(() => {
 		(async function () {
-			if (ethProvider.walletAddress) {
-				const web3 = new Web3(ethProvider.web3Provider);
+			try {
+				let aoSupplyFetch: number;
+				aoSupplyFetch = await readHandler({
+					processId: AO.tokenMirror,
+					action: 'Minted-Supply',
+				});
 
-				try {
-					const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
-
-					const balanceOf = await stethContract.methods.balanceOf(ethProvider.walletAddress).call();
-					setStethBalance(balanceOf as unknown as bigint);
-				} catch (e: any) {
-					console.error(e);
-					setStethBalance('Error' as any);
+				if (aoSupplyFetch) {
+					setAoSupply(aoSupplyFetch / TOKEN_DENOMINATION);
 				}
-
-				try {
-					const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
-
-					// const usersData = await aoContract.methods.usersData(ethProvider.walletAddress, 0).call();
-					// setDespositedStethBalance((usersData as any).deposited as bigint);
-				} catch (e: any) {
-					console.error(e);
-					// setDespositedStethBalance('Error' as any);
-				}
-			} else {
-				setStethBalance(null);
-				// setDespositedStethBalance(null);
-				// handleClear();
+			} catch (e: any) {
+				console.error(e);
 			}
 		})();
-	}, [ethProvider.walletAddress]);
+	}, []);
+
+	const arProvider = useArweaveProvider();
+	const [aoBalance, setAoBalance] = React.useState<number | null>(null);
+
+	const ethProvider = useEthereumProvider();
+
+	// TODO - Current Balance by ETH Address
+	React.useEffect(() => {
+		(async function () {
+			if (arProvider && arProvider.walletAddress) {
+				try {
+					const tokenBalance = await readHandler({
+						processId: AO.tokenMirror,
+						action: 'Balance',
+						tags: [{ name: 'Recipient', value: arProvider.walletAddress }],
+					});
+					if (tokenBalance != null) setAoBalance(tokenBalance / TOKEN_DENOMINATION);
+				} catch (e: any) {
+					console.error(e);
+				}
+			} else {
+				setAoBalance(null);
+			}
+		})();
+	}, [arProvider]);
+
+	const [arweaveMonthlyReward, setArweaveMonthlyReward] = React.useState<number | null>(null);
+	const [arweaveYearlyReward, setArweaveYearlyReward] = React.useState<number | null>(null);
+
+	const [ethMonthlyReward, setEthMonthlyReward] = React.useState<number | null>(null);
+	const [ethYearlyReward, setEthYearlyReward] = React.useState<number | null>(null);
+
+	const monthlyRewardArms = React.useMemo(() => {
+		let calcAmount = null;
+
+		if (arweaveMonthlyReward && arweaveMonthlyReward > 0) {
+			calcAmount += (arweaveMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+		}
+
+		if (ethMonthlyReward && ethMonthlyReward > 0) {
+			calcAmount += (ethMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+		}
+
+		return calcAmount === null ? 'Loading...' : formatDisplayAmount(calcAmount);
+	}, [arweaveMonthlyReward, ethMonthlyReward]);
+
+	const yearlyRewardArms = React.useMemo(() => {
+		let calcAmount = null;
+
+		if (arweaveYearlyReward && arweaveYearlyReward > 0) {
+			calcAmount += (arweaveYearlyReward * TOKEN_DENOMINATION) / 1000000000;
+		}
+
+		if (ethYearlyReward && ethYearlyReward > 0) {
+			calcAmount += (ethYearlyReward * TOKEN_DENOMINATION) / 1000000000;
+		}
+
+		return calcAmount === null ? 'Loading...' : formatDisplayAmount(calcAmount);
+	}, [arweaveYearlyReward, ethYearlyReward]);
+
+	const realtimeRewardArms = React.useMemo<number | null>(() => {
+		let calcAmount = null;
+
+		if (arweaveMonthlyReward && arweaveMonthlyReward > 0) {
+			calcAmount += (arweaveMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+		}
+
+		if (ethMonthlyReward && ethMonthlyReward > 0) {
+			calcAmount += (ethMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+		}
+
+		calcAmount = calcAmount / 30 / 24 / 60 / 60;
+
+		return calcAmount;
+	}, [arweaveMonthlyReward, ethMonthlyReward]);
+
+	const [totalStETHBridged, setTotalStETHBridged] = React.useState<number | null>(null);
+
+	const connected = useMemo(() => !!ethProvider.walletAddress || !!arProvider.walletAddress, [arProvider, ethProvider]);
 
 	function getView() {
 		if (loading) return <Loader />;
@@ -100,34 +158,114 @@ export default function Mint() {
 						<S.Section columns={1}>
 							<S.Column>
 								<S.Label>Your AO (G-Armstrongs)</S.Label>
-								<S.AssetAmount>
-									<ReactSVG src={ASSETS.aoPict} />
-									<AnimatedNumber />
-								</S.AssetAmount>
+								{connected ? (
+									aoBalance === null ? (
+										<S.LoadingWrapper>
+											<S.Loader>
+												<Loader xSm relative />
+											</S.Loader>
+										</S.LoadingWrapper>
+									) : (
+										<S.AssetAmount>
+											<ReactSVG src={ASSETS.aoPict} />
+											<AnimatedNumber startValue={aoBalance} increment={realtimeRewardArms} />
+										</S.AssetAmount>
+									)
+								) : (
+									'-'
+								)}
 							</S.Column>
 						</S.Section>
 						<S.Divider />
 						<S.Section columns={2}>
 							<S.Column>
 								<S.Label>30 day projection</S.Label>
-								<S.AssetAmount variant="alt1">
-									<ReactSVG src={ASSETS.aoPict} />
-									+100.004k
-								</S.AssetAmount>
+								{connected ? (
+									monthlyRewardArms === 'Loading...' ? (
+										<S.LoadingWrapper>
+											<S.Loader>
+												<Loader xSm relative />
+											</S.Loader>
+										</S.LoadingWrapper>
+									) : (
+										<S.AssetAmount variant="alt1">
+											<ReactSVG src={ASSETS.aoPict} />+{monthlyRewardArms}
+										</S.AssetAmount>
+									)
+								) : (
+									'-'
+								)}
 							</S.Column>
 							<S.Column>
 								<S.Label>1 year projection</S.Label>
-								<S.AssetAmount variant="alt1">
-									<ReactSVG src={ASSETS.aoPict} />
-									+10.023m
-								</S.AssetAmount>
+								{connected ? (
+									yearlyRewardArms === 'Loading...' ? (
+										<S.LoadingWrapper>
+											<S.Loader>
+												<Loader xSm relative />
+											</S.Loader>
+										</S.LoadingWrapper>
+									) : (
+										<S.AssetAmount variant="alt1">
+											<ReactSVG src={ASSETS.aoPict} />+{yearlyRewardArms}
+										</S.AssetAmount>
+									)
+								) : (
+									'-'
+								)}
 							</S.Column>
 						</S.Section>
 					</S.Column>
 					<S.Artwork src={artwork} alt="artwork" />
 				</S.Hero>
-				<ArweaveSection loading={loading} />
-				<StETHSection loading={loading} />
+				<ArweaveSection
+					loading={loading}
+					aoSupply={aoSupply}
+					onYearlyReward={setArweaveYearlyReward}
+					onMonthlyReward={setArweaveMonthlyReward}
+				/>
+				<StETHSection
+					loading={loading}
+					aoSupply={aoSupply}
+					onYearlyReward={setEthYearlyReward}
+					onMonthlyReward={setEthMonthlyReward}
+					onTotalBridged={setTotalStETHBridged}
+				/>
+				<S.Heading>
+					<S.Subheading>[+] Network</S.Subheading>
+				</S.Heading>
+				<S.Section columns={4}>
+					<S.Column>
+						<S.Label>Total AO Supply</S.Label>
+						{aoSupply === null ? (
+							<S.LoadingWrapper>
+								<S.Loader>
+									<Loader xSm relative />
+								</S.Loader>
+							</S.LoadingWrapper>
+						) : (
+							<S.AssetAmount variant="alt2">
+								<ReactSVG src={ASSETS.aoPict} />
+								{formatDisplayAmount(aoSupply.toFixed(2))}
+							</S.AssetAmount>
+						)}
+					</S.Column>
+					<S.Column>
+						<S.Label>Total StETH Bridged</S.Label>
+						{totalStETHBridged === null ? (
+							<S.LoadingWrapper>
+								<S.Loader>
+									<Loader xSm relative />
+								</S.Loader>
+							</S.LoadingWrapper>
+						) : (
+							<S.AssetAmount variant="alt2">
+								<ReactSVG src={ASSETS.eth} />
+								{formatDisplayAmount(totalStETHBridged.toFixed(2))}
+							</S.AssetAmount>
+						)}
+					</S.Column>
+				</S.Section>
 			</S.Wrapper>
 		);
 	}

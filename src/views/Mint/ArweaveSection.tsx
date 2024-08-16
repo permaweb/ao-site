@@ -1,131 +1,110 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
-import Web3 from 'web3';
 
-import { readHandler } from 'api';
-
-import artwork from 'assets/dashboard-artwork.png';
-import AnimatedNumber from 'components/atoms/AnimatedNumber/AnimatedNumber';
-import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { Button } from 'components/atoms/Button';
 import { Loader } from 'components/atoms/Loader';
-import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
-import { AO, AO_ABI, ASSETS, ENDPOINTS, ETH_CONTRACTS, STETH_ABI, TOKEN_DENOMINATION } from 'helpers/config';
+import { ASSETS, TOKEN_DENOMINATION } from 'helpers/config';
 import { formatDisplayAmount, getArReward } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
-import { EthereumProvider, useEthereumProvider } from 'providers/EthereumProvider';
-import Ethereum from 'views/Ethereum';
 
 import * as S from './styles';
 
 type ArweaveSectionProps = {
 	loading: boolean;
+	aoSupply: number | null;
+	onMonthlyReward?: (value: number) => void;
+	onYearlyReward?: (value: number) => void;
 };
 
 export function ArweaveSection(props: ArweaveSectionProps) {
-	const { loading } = props;
+	const { loading, aoSupply, onYearlyReward, onMonthlyReward } = props;
 
 	const arProvider = useArweaveProvider();
-	const arWalletBalance = React.useMemo(() => {
-		if (!arProvider.walletAddress) return `${formatDisplayAmount(null)}`;
-		if (arProvider.balance === 'Error') return arProvider.balance;
-		return `${formatDisplayAmount(arProvider.balance)}`;
-	}, [arProvider.balance, arProvider.walletAddress]);
 	const [monthlyReward, setMonthlyReward] = React.useState<number | null>(null);
-	const [aoSupply, setAoSupply] = React.useState<number | null>(null);
-	const [fetchingReward, setFetchingReward] = React.useState<boolean>(false);
-	const [fetchingAoSupply, setFetchingAoSupply] = React.useState<boolean>(false);
+	const [monthlyRewardRatio, setMonthlyRewardRatio] = React.useState<number | null>(null);
 	const [yearlyReward, setYearlyReward] = React.useState<number | null>(null);
-
-	const [monthlyRewardDisplay, setMonthlyRewardDisplay] = React.useState<number | null>(null);
-	const [yearlyRewardDisplay, setYearlyRewardDisplay] = React.useState<number | null>(null);
-
-	React.useEffect(() => {
-		(async function () {
-			setFetchingAoSupply(true);
-			try {
-				let aoSupplyFetch: number;
-				aoSupplyFetch = await readHandler({
-					processId: AO.tokenMirror,
-					action: 'Minted-Supply',
-				});
-
-				if (aoSupplyFetch) {
-					setAoSupply(aoSupplyFetch / TOKEN_DENOMINATION);
-				}
-			} catch (e: any) {
-				console.error(e);
-			}
-			setFetchingAoSupply(false);
-		})();
-	}, []);
+	const [yearlyRewardRatio, setYearlyRewardRatio] = React.useState<number | null>(null);
 
 	React.useEffect(() => {
 		(async function () {
 			if (arProvider && arProvider.walletAddress && aoSupply) {
 				if (arProvider.balance !== null && arProvider.balance !== 'Error') {
-					setFetchingReward(true);
 					try {
-						let balance: number;
-						let tokenSupply: number;
-						let rewardFn: (days: number, userBalance: number, totalBalances: number, currentAOSupply: number) => number;
+						let balance = Number(arProvider.balance);
+						let tokenSupply = 66000000;
 
-						rewardFn = getArReward;
-						tokenSupply = 66000000;
-						balance = Number(arProvider.balance);
-
-						const calcMonthlyReward = rewardFn(30, balance, tokenSupply, aoSupply);
+						const calcMonthlyReward = getArReward(30, balance, tokenSupply, aoSupply);
 						setMonthlyReward(calcMonthlyReward);
+						onMonthlyReward?.(calcMonthlyReward);
 
-						const calcYearlyReward = rewardFn(365, balance, tokenSupply, aoSupply);
+						const calcYearlyReward = getArReward(365, balance, tokenSupply, aoSupply);
 						setYearlyReward(calcYearlyReward);
-
-						setYearlyRewardDisplay(rewardFn(365, 1, tokenSupply, aoSupply));
-						setMonthlyRewardDisplay(rewardFn(30, 1, tokenSupply, aoSupply));
+						onYearlyReward?.(calcYearlyReward);
 					} catch (e: any) {
 						console.error(e);
 					}
-					setFetchingReward(false);
 				}
 			} else {
 				setMonthlyReward(null);
+				onMonthlyReward?.(null);
 				setYearlyReward(null);
+				onYearlyReward?.(null);
 			}
 		})();
 	}, [arProvider, aoSupply]);
 
-	const monthlyArms = React.useMemo(() => {
+	React.useEffect(() => {
+		(async function () {
+			if (aoSupply) {
+				try {
+					let tokenSupply = 66000000;
+
+					setYearlyRewardRatio(getArReward(365, 1, tokenSupply, aoSupply));
+					setMonthlyRewardRatio(getArReward(30, 1, tokenSupply, aoSupply));
+				} catch (e: any) {
+					console.error(e);
+				}
+			}
+		})();
+	}, [arProvider, aoSupply]);
+
+	const monthlyRewardArms = React.useMemo(() => {
 		if (monthlyReward && monthlyReward > 0) {
 			const calcAmount = (monthlyReward * TOKEN_DENOMINATION) / 1000000000;
-			return calcAmount;
+			return formatDisplayAmount(calcAmount);
 		}
 		return 'Loading...';
 	}, [monthlyReward]);
 
-	const yearlyArms = React.useMemo(() => {
+	const yearlyRewardArms = React.useMemo(() => {
 		if (yearlyReward && yearlyReward > 0) {
 			const calcAmount = (yearlyReward * TOKEN_DENOMINATION) / 1000000000;
-			return `${formatDisplayAmount(calcAmount)}`;
+			return formatDisplayAmount(calcAmount);
 		}
 		return 'Loading...';
 	}, [yearlyReward]);
 
-	const yearlyDisplay = React.useMemo(() => {
-		if (yearlyRewardDisplay && yearlyRewardDisplay > 0) {
-			const calcAmount = (yearlyRewardDisplay * TOKEN_DENOMINATION) / 1000000000;
+	const yearlyRewardRatioArms = React.useMemo(() => {
+		if (yearlyRewardRatio && yearlyRewardRatio > 0) {
+			const calcAmount = (yearlyRewardRatio * TOKEN_DENOMINATION) / 1000000000;
 			return `1 AR = ${formatDisplayAmount(calcAmount)}`;
 		}
 		return 'Loading...';
-	}, [yearlyRewardDisplay]);
+	}, [yearlyRewardRatio]);
 
-	const monthlyDisplay = React.useMemo(() => {
-		if (monthlyRewardDisplay && monthlyRewardDisplay > 0) {
-			const calcAmount = (monthlyRewardDisplay * TOKEN_DENOMINATION) / 1000000000;
+	const monthlyRewardRatioArms = React.useMemo(() => {
+		if (monthlyRewardRatio && monthlyRewardRatio > 0) {
+			const calcAmount = (monthlyRewardRatio * TOKEN_DENOMINATION) / 1000000000;
 			return `1 AR = ${formatDisplayAmount(calcAmount)}`;
 		}
 		return 'Loading...';
-	}, [monthlyRewardDisplay]);
+	}, [monthlyRewardRatio]);
+
+	const arWalletBalance = React.useMemo(() => {
+		if (!arProvider.walletAddress) return `${formatDisplayAmount(null)}`;
+		if (arProvider.balance === 'Error') return arProvider.balance;
+		return formatDisplayAmount(arProvider.balance);
+	}, [arProvider.balance, arProvider.walletAddress]);
 
 	return (
 		<S.Section className="border-wrapper-alt1" columns={4}>
@@ -160,7 +139,7 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 					/>
 				)}
 			</S.Column>
-			<S.Column>
+			{/* <S.Column>
 				<S.Label>AO Earnings</S.Label>
 				{!!arProvider.walletAddress ? (
 					<S.AssetAmount>
@@ -170,11 +149,11 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 				) : (
 					'-'
 				)}
-			</S.Column>
+			</S.Column> */}
 			<S.Column>
 				<S.Label>30 day projection</S.Label>
 				{!!arProvider.walletAddress ? (
-					monthlyArms === 'Loading...' ? (
+					monthlyRewardArms === 'Loading...' ? (
 						<S.LoadingWrapper>
 							<S.Loader>
 								<Loader xSm relative />
@@ -183,18 +162,18 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 					) : (
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{monthlyArms}</span>
+							<span>{monthlyRewardArms}</span>
 						</S.AssetAmount>
 					)
 				) : (
 					'-'
 				)}
-				<S.Label size="small">{monthlyDisplay}</S.Label>
+				<S.Label size="small">{monthlyRewardRatioArms}</S.Label>
 			</S.Column>
 			<S.Column>
 				<S.Label>1 year projection</S.Label>
 				{!!arProvider.walletAddress ? (
-					yearlyArms === 'Loading...' ? (
+					yearlyRewardArms === 'Loading...' ? (
 						<S.LoadingWrapper>
 							<S.Loader>
 								<Loader xSm relative />
@@ -203,13 +182,13 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 					) : (
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{yearlyArms}</span>
+							<span>{yearlyRewardArms}</span>
 						</S.AssetAmount>
 					)
 				) : (
 					'-'
 				)}
-				<S.Label size="small">{yearlyDisplay}</S.Label>
+				<S.Label size="small">{yearlyRewardRatioArms}</S.Label>
 			</S.Column>
 		</S.Section>
 	);

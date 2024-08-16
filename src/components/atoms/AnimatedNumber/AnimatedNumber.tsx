@@ -1,30 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
+import { TOKEN_DECIMALS } from 'helpers/config';
+
 type AnimatedNumberProps = {
-	height?: string;
+	startValue?: number | null;
+	increment?: number | null;
 };
 
 const AnimatedNumber = (props: AnimatedNumberProps) => {
-	const { height = 50 } = props;
+	const { startValue, increment } = props;
 
-	const [number, setNumber] = useState(1_000);
+	const [number, setNumber] = useState<number | null | undefined>(startValue);
+	console.log('📜 LOG > AnimatedNumber > number:', number);
 
 	useEffect(() => {
+		setNumber(startValue);
+	}, [startValue]);
+
+	useEffect(() => {
+		if (typeof number !== 'number') return;
+
 		const interval = setInterval(() => {
-			setNumber((prev) => parseFloat((100 * Math.random()).toFixed(2)) + prev);
+			setNumber((prev) => increment + prev);
 		}, 1_000);
 
 		return () => clearInterval(interval);
-	}, []);
+	}, [number, increment]);
 
 	const renderDigits = () => {
 		const formattedNumber = number.toLocaleString(undefined, {
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2,
-		}); // Format number with thousand separators and two decimal places
+			minimumFractionDigits: TOKEN_DECIMALS,
+			maximumFractionDigits: TOKEN_DECIMALS,
+		});
 
-		const digits = formattedNumber.split(''); // Split into individual characters, including commas and decimal point
+		const digits = formattedNumber.split('');
 
 		return digits.map((char, index) => <Digit key={index} digit={char} index={index} />);
 	};
@@ -34,12 +44,12 @@ const AnimatedNumber = (props: AnimatedNumberProps) => {
 			style={{
 				display: 'flex',
 				gap: '0px',
-				height,
+				height: 50,
 				marginTop: -10,
 				marginBottom: -10,
 			}}
 		>
-			{renderDigits()}
+			{typeof number !== 'number' ? '-' : renderDigits()}
 		</div>
 	);
 };
