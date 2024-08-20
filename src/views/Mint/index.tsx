@@ -75,6 +75,7 @@ export default function Mint() {
 						tags: [{ name: 'Recipient', value: arProvider.walletAddress }],
 					});
 					if (tokenBalance != null) setArmsBalanceForArWallet(tokenBalance / (TOKEN_DENOMINATION / 1_000));
+					else setArmsBalanceForArWallet(0);
 				} catch (e: any) {
 					console.error(e);
 				}
@@ -107,11 +108,11 @@ export default function Mint() {
 	const armsBalance = React.useMemo<number | null>(() => {
 		let calcAmount = null;
 
-		if (armsBalanceForArWallet && armsBalanceForArWallet > 0) {
+		if (typeof armsBalanceForArWallet === 'number') {
 			calcAmount += armsBalanceForArWallet;
 		}
 
-		if (armsBalancesForEthWallet) {
+		if (typeof armsBalancesForEthWallet === 'number') {
 			for (const wallet of Object.keys(armsBalancesForEthWallet)) {
 				if (arProvider.walletAddress === wallet) continue;
 

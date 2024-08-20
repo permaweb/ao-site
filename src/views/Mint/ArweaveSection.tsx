@@ -69,7 +69,7 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 	}, [arProvider, aoSupply]);
 
 	const monthlyRewardArms = React.useMemo(() => {
-		if (monthlyReward && monthlyReward > 0) {
+		if (typeof monthlyReward === 'number') {
 			const calcAmount = (monthlyReward * TOKEN_DENOMINATION) / 1000000000;
 			return formatDisplayAmount(calcAmount);
 		}
@@ -77,7 +77,7 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 	}, [monthlyReward]);
 
 	const yearlyRewardArms = React.useMemo(() => {
-		if (yearlyReward && yearlyReward > 0) {
+		if (typeof yearlyReward === 'number') {
 			const calcAmount = (yearlyReward * TOKEN_DENOMINATION) / 1000000000;
 			return formatDisplayAmount(calcAmount);
 		}
@@ -152,7 +152,7 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 			</S.Column> */}
 			<S.Column>
 				<S.Label>30 day projection</S.Label>
-				{!!arProvider.walletAddress ? (
+				{!!arProvider.walletAddress && monthlyRewardArms !== '0' ? (
 					monthlyRewardArms === 'Loading...' ? (
 						<S.LoadingWrapper>
 							<S.Loader>
@@ -166,13 +166,13 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 						</S.AssetAmount>
 					)
 				) : (
-					'-'
+					<S.AssetAmount>-</S.AssetAmount>
 				)}
 				<S.Label size="small">{monthlyRewardRatioArms}</S.Label>
 			</S.Column>
 			<S.Column>
 				<S.Label>1 year projection</S.Label>
-				{!!arProvider.walletAddress ? (
+				{!!arProvider.walletAddress && yearlyRewardArms !== '0' ? (
 					yearlyRewardArms === 'Loading...' ? (
 						<S.LoadingWrapper>
 							<S.Loader>
@@ -186,7 +186,7 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 						</S.AssetAmount>
 					)
 				) : (
-					'-'
+					<S.AssetAmount>-</S.AssetAmount>
 				)}
 				<S.Label size="small">{yearlyRewardRatioArms}</S.Label>
 			</S.Column>
