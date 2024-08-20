@@ -1,3 +1,5 @@
+import React from 'react';
+
 export enum ArWalletEnum {
 	arConnect = 'arconnect',
 	othent = 'othent',
@@ -10,7 +12,7 @@ export enum EthWalletEnum {
 	rabby = 'Rabby',
 }
 
-export type SelectOptionType = { id: string; label: string };
+export type SelectOptionType = { id: string; label: string; icon?: React.ReactNode };
 
 export type FormFieldType = 'number' | 'password';
 

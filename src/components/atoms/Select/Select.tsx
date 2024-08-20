@@ -20,8 +20,11 @@ export default function Select(props: IProps) {
 					</S.Label>
 				)}
 				<S.Dropdown active={active} disabled={props.disabled} onClick={() => setActive(!active)}>
+					{props.activeOption.icon}
 					<span>{props.activeOption.label}</span>
-					<ReactSVG src={ASSETS.arrow} />
+					<S.DropdownArrow disabled={props.disabled}>
+						<ReactSVG src={ASSETS.arrow} />
+					</S.DropdownArrow>
 				</S.Dropdown>
 				{active && (
 					<S.Options className={'border-wrapper-alt1'}>
@@ -35,6 +38,7 @@ export default function Select(props: IProps) {
 										setActive(false);
 									}}
 								>
+									{option.icon}
 									{option.label}
 								</S.Option>
 							);

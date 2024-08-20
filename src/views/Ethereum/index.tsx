@@ -6,9 +6,11 @@ import Web3 from 'web3';
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
 import { Notification } from 'components/atoms/Notification';
+import { Select } from 'components/atoms/Select';
 import { PreBridgeInfo } from 'components/organisms/PreBridgeInfo';
 import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
-import { AO_ABI, ASSETS, ETH_CONTRACTS, REDIRECTS, STETH_ABI, URLS } from 'helpers/config';
+import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, REDIRECTS, StEthBridge_ABI, URLS } from 'helpers/config';
+import { SelectOptionType } from 'helpers/types';
 import { arweaveToEVMBytes, checkValidAddress, formatDisplayAmount } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -16,6 +18,19 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 import * as S from './styles';
 
 const { fromWei, toWei, toBigInt } = Web3.utils;
+
+const selectOptions: SelectOptionType[] = [
+	{
+		id: 'stETH',
+		label: 'stETH',
+		icon: <ReactSVG src={ASSETS.stEth} />,
+	},
+	{
+		id: 'DAI',
+		label: 'DAI',
+		icon: <ReactSVG src={ASSETS.dai} />,
+	},
+];
 
 export default function Ethereum() {
 	const TABS = [{ name: 'Deposit' }, { name: 'Withdraw' }];
@@ -31,8 +46,13 @@ export default function Ethereum() {
 	const [showWallet, setShowWallet] = React.useState<boolean>(false);
 	const [label, setLabel] = React.useState<string | null>(null);
 
-	const [stethBalance, setStethBalance] = React.useState<bigint | null>(null);
-	const [depositedStethBalance, setDespositedStethBalance] = React.useState<bigint | null>(null);
+	const [daiBalance, setDaiBalance] = React.useState<bigint | null>(null);
+	const [depositedDaiBalance, setDepositedDaiBalance] = React.useState<bigint | null>(null);
+
+	const [stEthBalance, setStEthBalance] = React.useState<bigint | null>(null);
+	const [depositedStEthBalance, setDepositedStEthBalance] = React.useState<bigint | null>(null);
+
+	const [selectedAsset, setSelectedAsset] = React.useState<SelectOptionType>(selectOptions[0]);
 
 	const [amount, setAmount] = React.useState<string>('0');
 	const amountInWei = React.useMemo(() => {
@@ -65,22 +85,26 @@ export default function Ethereum() {
 		if (amountInWei < 0) setInvalid(true);
 		else {
 			if (currentTab.name === 'Deposit') {
-				setInvalid(amountInWei > stethBalance);
+				const balance = selectedAsset.id === 'stETH' ? stEthBalance : daiBalance;
+				setInvalid(amountInWei > balance);
 			} else if (currentTab.name === 'Withdraw') {
-				setInvalid(amountInWei > depositedStethBalance);
+				const balance = selectedAsset.id === 'stETH' ? depositedStEthBalance : depositedDaiBalance;
+				setInvalid(amountInWei > balance);
 			} else {
 				setDisabled(false);
 			}
 		}
-	}, [amount, stethBalance, depositedStethBalance, currentTab]);
+	}, [amount, stEthBalance, depositedStEthBalance, currentTab, selectedAsset, daiBalance, depositedDaiBalance]);
 
 	React.useEffect(() => {
 		if (invalid || loading || !ethProvider.walletAddress || amountInWei <= 0 || response !== null) setDisabled(true);
 		else {
 			if (currentTab.name === 'Deposit') {
-				setDisabled(amountInWei > stethBalance || !checkValidAddress(recipient));
+				const balance = selectedAsset.id === 'stETH' ? stEthBalance : daiBalance;
+				setDisabled(amountInWei > balance || !checkValidAddress(recipient));
 			} else if (currentTab.name === 'Withdraw') {
-				setDisabled(amountInWei > depositedStethBalance);
+				const balance = selectedAsset.id === 'stETH' ? depositedStEthBalance : depositedDaiBalance;
+				setDisabled(amountInWei > balance);
 			} else {
 				setDisabled(false);
 			}
@@ -91,10 +115,13 @@ export default function Ethereum() {
 		invalid,
 		amount,
 		response,
-		stethBalance,
-		depositedStethBalance,
+		stEthBalance,
+		depositedStEthBalance,
 		currentTab,
 		recipient,
+		selectedAsset,
+		daiBalance,
+		depositedDaiBalance,
 	]);
 
 	React.useEffect(() => {
@@ -116,35 +143,63 @@ export default function Ethereum() {
 	}, [currentTab, showWallet, ethProvider.walletAddress]);
 
 	React.useEffect(() => {
-		(async function () {
-			if (ethProvider.walletAddress) {
-				const web3 = new Web3(ethProvider.web3Provider);
+		if (ethProvider.walletAddress) {
+			const web3 = new Web3(ethProvider.web3Provider);
 
-				try {
-					const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
-
-					const balanceOf = await stethContract.methods.balanceOf(ethProvider.walletAddress).call();
-					setStethBalance(balanceOf as unknown as bigint);
-				} catch (e: any) {
+			const stEthContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.stEth);
+			stEthContract.methods
+				.balanceOf(ethProvider.walletAddress)
+				.call()
+				.then((balance) => {
+					setStEthBalance(balance as unknown as bigint);
+				})
+				.catch((e: any) => {
 					console.error(e);
-					setStethBalance('Error' as any);
-				}
+					setStEthBalance('Error' as any);
+				});
 
-				try {
-					const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
-
-					const usersData = await aoContract.methods.usersData(ethProvider.walletAddress, 0).call();
-					setDespositedStethBalance((usersData as any).deposited as bigint);
-				} catch (e: any) {
+			const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
+			stEthBridgeContract.methods
+				.usersData(ethProvider.walletAddress, 0)
+				.call()
+				.then((usersData) => {
+					setDepositedStEthBalance((usersData as any).deposited as bigint);
+				})
+				.catch((e: any) => {
 					console.error(e);
-					setDespositedStethBalance('Error' as any);
-				}
-			} else {
-				setStethBalance(null);
-				setDespositedStethBalance(null);
-				handleClear();
-			}
-		})();
+					setDepositedStEthBalance('Error' as any);
+				});
+
+			const daiContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
+			daiContract.methods
+				.balanceOf(ethProvider.walletAddress)
+				.call()
+				.then((balance) => {
+					setDaiBalance(balance as unknown as bigint);
+				})
+				.catch((e: any) => {
+					console.error(e);
+					setDaiBalance('Error' as any);
+				});
+
+			const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
+			daiBridgeContract.methods
+				.usersData(ethProvider.walletAddress, 0)
+				.call()
+				.then((usersData) => {
+					setDepositedDaiBalance((usersData as any).deposited as bigint);
+				})
+				.catch((e: any) => {
+					console.error(e);
+					setDepositedDaiBalance('Error' as any);
+				});
+		} else {
+			setStEthBalance(null);
+			setDepositedStEthBalance(null);
+			setDaiBalance(null);
+			setDepositedDaiBalance(null);
+			handleClear();
+		}
 	}, [ethProvider.walletAddress, toggleUpdate]);
 
 	const handleRecipientPaste = async () => {
@@ -191,8 +246,15 @@ export default function Ethereum() {
 				const web3 = new Web3(ethProvider.web3Provider);
 				await ethProvider.ensureMainnet();
 
-				const aoContract = new web3.eth.Contract(AO_ABI, ETH_CONTRACTS.ao);
-				const stethContract = new web3.eth.Contract(STETH_ABI, ETH_CONTRACTS.steth);
+				let bridgeAddress = ETH_CONTRACTS.stEthBridge;
+				let bridgeContract = new web3.eth.Contract(StEthBridge_ABI, bridgeAddress);
+				let tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.stEth);
+
+				if (selectedAsset.id === 'DAI') {
+					bridgeAddress = ETH_CONTRACTS.daiBridge;
+					bridgeContract = new web3.eth.Contract(DaiBridge_ABI, bridgeAddress);
+					tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
+				}
 
 				const poolId = 0;
 
@@ -203,9 +265,9 @@ export default function Ethereum() {
 
 				switch (currentTab.name) {
 					case 'Deposit':
-						const allowance = await stethContract.methods.allowance(ethProvider.walletAddress, ETH_CONTRACTS.ao).call();
+						const allowance = await tokenContract.methods.allowance(ethProvider.walletAddress, bridgeAddress).call();
 						if (Number(allowance) < Number(amountInWei)) {
-							const approval = await stethContract.methods.approve(ETH_CONTRACTS.ao, amountInWei).send({
+							const approval = await tokenContract.methods.approve(bridgeAddress, amountInWei).send({
 								from: ethProvider.walletAddress,
 							});
 							console.log('Approval transaction:', approval);
@@ -215,13 +277,13 @@ export default function Ethereum() {
 							}
 						}
 
-						const stake = await aoContract.methods.stake(poolId, amountInWei, arweaveRecipient).send({
+						const stake = await bridgeContract.methods.stake(poolId, amountInWei, arweaveRecipient).send({
 							from: ethProvider.walletAddress,
 						});
 						console.log('Stake transaction:', stake);
 						break;
 					case 'Withdraw':
-						const withdraw = await aoContract.methods.withdraw(poolId, amountInWei, arweaveRecipient).send({
+						const withdraw = await bridgeContract.methods.withdraw(poolId, amountInWei, arweaveRecipient).send({
 							from: ethProvider.walletAddress,
 						});
 						console.log('Withdraw transaction:', withdraw);
@@ -253,12 +315,12 @@ export default function Ethereum() {
 
 		switch (currentTab.name) {
 			case 'Deposit':
-				balance = stethBalance;
-				action = () => setAmount(fromWei(stethBalance, 'ether'));
+				balance = selectedAsset.id === 'stETH' ? stEthBalance : daiBalance;
+				action = () => setAmount(fromWei(balance, 'ether'));
 				break;
 			case 'Withdraw':
-				balance = depositedStethBalance;
-				action = () => setAmount(fromWei(depositedStethBalance, 'ether'));
+				balance = selectedAsset.id === 'stETH' ? depositedStEthBalance : depositedDaiBalance;
+				action = () => setAmount(fromWei(balance, 'ether'));
 				break;
 		}
 
@@ -275,7 +337,7 @@ export default function Ethereum() {
 				</button>
 			</S.FormFieldAction>
 		);
-	}, [currentTab, stethBalance, depositedStethBalance]);
+	}, [currentTab, stEthBalance, depositedStEthBalance, selectedAsset, daiBalance, depositedDaiBalance]);
 
 	const navigate = useNavigate();
 
@@ -322,11 +384,7 @@ export default function Ethereum() {
 									/>
 									{formFieldAction}
 									<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
-										<ReactSVG src={ASSETS.eth} />
-										<p>{language.steth}</p>
-										<S.DropdownArrow disabled={loading || !ethProvider.walletAddress}>
-											<ReactSVG src={ASSETS.arrow} />
-										</S.DropdownArrow>
+										<Select setActiveOption={setSelectedAsset} activeOption={selectedAsset} options={selectOptions} />
 									</S.FormFieldLabel>
 								</S.Form>
 								{currentTab.name === 'Deposit' && (
