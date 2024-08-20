@@ -14,6 +14,7 @@ import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 
 import { ArweaveSection } from './ArweaveSection';
+import { DaiSection } from './DaiSection';
 import { StETHSection } from './StETHSection';
 import * as S from './styles';
 
@@ -127,51 +128,67 @@ export default function Mint() {
 	const [ethMonthlyReward, setEthMonthlyReward] = React.useState<number | null>(null);
 	const [ethYearlyReward, setEthYearlyReward] = React.useState<number | null>(null);
 
+	const [daiMonthlyReward, setDaiMonthlyReward] = React.useState<number | null>(null);
+	const [daiYearlyReward, setDaiYearlyReward] = React.useState<number | null>(null);
+
 	const monthlyRewardArms = React.useMemo(() => {
 		let calcAmount = null;
 
-		if (arweaveMonthlyReward && arweaveMonthlyReward > 0) {
+		if (typeof arweaveMonthlyReward === 'number') {
 			calcAmount += (arweaveMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
 		}
 
-		if (ethMonthlyReward && ethMonthlyReward > 0) {
+		if (typeof ethMonthlyReward === 'number') {
 			calcAmount += (ethMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
 		}
 
+		if (typeof daiMonthlyReward === 'number') {
+			calcAmount += (daiMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+		}
+
 		return calcAmount === null ? 'Loading...' : formatDisplayAmount(calcAmount);
-	}, [arweaveMonthlyReward, ethMonthlyReward]);
+	}, [arweaveMonthlyReward, ethMonthlyReward, daiMonthlyReward]);
 
 	const yearlyRewardArms = React.useMemo(() => {
 		let calcAmount = null;
 
-		if (arweaveYearlyReward && arweaveYearlyReward > 0) {
+		if (typeof arweaveYearlyReward === 'number') {
 			calcAmount += (arweaveYearlyReward * TOKEN_DENOMINATION) / 1000000000;
 		}
 
-		if (ethYearlyReward && ethYearlyReward > 0) {
+		if (typeof ethYearlyReward === 'number') {
 			calcAmount += (ethYearlyReward * TOKEN_DENOMINATION) / 1000000000;
 		}
 
+		if (typeof daiYearlyReward === 'number') {
+			calcAmount += (daiYearlyReward * TOKEN_DENOMINATION) / 1000000000;
+		}
+
 		return calcAmount === null ? 'Loading...' : formatDisplayAmount(calcAmount);
-	}, [arweaveYearlyReward, ethYearlyReward]);
+	}, [arweaveYearlyReward, ethYearlyReward, daiYearlyReward]);
 
 	const realtimeRewardArms = React.useMemo<number | null>(() => {
 		let calcAmount = null;
 
-		if (arweaveMonthlyReward && arweaveMonthlyReward > 0) {
+		if (typeof arweaveMonthlyReward === 'number') {
 			calcAmount += (arweaveMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
 		}
 
-		if (ethMonthlyReward && ethMonthlyReward > 0) {
+		if (typeof ethMonthlyReward === 'number') {
 			calcAmount += (ethMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+		}
+
+		if (typeof daiMonthlyReward === 'number') {
+			calcAmount += (daiMonthlyReward * TOKEN_DENOMINATION) / 100000000;
 		}
 
 		calcAmount = calcAmount / 30 / 24 / 60 / 60;
 
 		return calcAmount;
-	}, [arweaveMonthlyReward, ethMonthlyReward]);
+	}, [arweaveMonthlyReward, ethMonthlyReward, daiMonthlyReward]);
 
 	const [totalStETHBridged, setTotalStETHBridged] = React.useState<number | null>(null);
+	const [totalDaiBridged, setTotalDaiBridged] = React.useState<number | null>(null);
 
 	const connected = useMemo(() => !!ethProvider.walletAddress || !!arProvider.walletAddress, [arProvider, ethProvider]);
 
@@ -269,6 +286,13 @@ export default function Mint() {
 					onMonthlyReward={setEthMonthlyReward}
 					onTotalBridged={setTotalStETHBridged}
 				/>
+				<DaiSection
+					loading={loading}
+					aoSupply={aoSupply}
+					onYearlyReward={setDaiYearlyReward}
+					onMonthlyReward={setDaiMonthlyReward}
+					onTotalBridged={setTotalDaiBridged}
+				/>
 				<S.Heading>
 					<S.Subheading>[+] Network</S.Subheading>
 				</S.Heading>
@@ -289,7 +313,7 @@ export default function Mint() {
 						)}
 					</S.Column>
 					<S.Column>
-						<S.Label>Total StETH Bridged</S.Label>
+						<S.Label>Total stETH Bridged</S.Label>
 						{totalStETHBridged === null ? (
 							<S.LoadingWrapper>
 								<S.Loader>
@@ -298,8 +322,23 @@ export default function Mint() {
 							</S.LoadingWrapper>
 						) : (
 							<S.AssetAmount variant="alt2">
-								<ReactSVG src={ASSETS.eth} />
+								<ReactSVG src={ASSETS.stEth} />
 								{formatDisplayAmount(totalStETHBridged.toFixed(2))}
+							</S.AssetAmount>
+						)}
+					</S.Column>
+					<S.Column>
+						<S.Label>Total DAI Bridged</S.Label>
+						{totalDaiBridged === null ? (
+							<S.LoadingWrapper>
+								<S.Loader>
+									<Loader xSm relative />
+								</S.Loader>
+							</S.LoadingWrapper>
+						) : (
+							<S.AssetAmount variant="alt2">
+								<ReactSVG src={ASSETS.dai} />
+								{formatDisplayAmount(totalDaiBridged.toFixed(2))}
 							</S.AssetAmount>
 						)}
 					</S.Column>
