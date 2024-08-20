@@ -56,6 +56,7 @@ export const Action = styled.div`
 export const Form = styled.div<{ invalid: boolean }>`
 	display: flex;
 	align-items: center;
+	z-index: 20;
 	position: relative;
 	input {
 		height: 75px;
