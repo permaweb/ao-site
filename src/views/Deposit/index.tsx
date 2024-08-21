@@ -21,7 +21,7 @@ export default function Deposit() {
 					setIsBlocked(true);
 				}
 			} catch (error) {
-				console.error('Error fetching location data', error);
+				console.error('Error fetching location data', error.message);
 			}
 			setLoading(false);
 		};

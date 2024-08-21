@@ -32,7 +32,7 @@ export default function Mint() {
 					setIsBlocked(true);
 				}
 			} catch (error) {
-				console.error('Error fetching location data', error);
+				console.error('Error fetching location data', error.message);
 			}
 			setLoading(false);
 		};
@@ -88,12 +88,15 @@ export default function Mint() {
 	React.useEffect(() => {
 		(async function () {
 			if (ethProvider && ethProvider.walletAddress) {
+				console.log('Fetching ao balance for eth address', ethProvider.walletAddress);
 				try {
 					const tokenBalances = await readHandler({
 						processId: AO.token,
 						action: 'Get-Balances-By-User',
 						tags: [{ name: 'User', value: ethProvider.walletAddress }],
+						replyTag: { name: 'Action', value: 'Get-Balances-By-User-Response' },
 					});
+					console.log('Fetched ao balance for eth address', tokenBalances);
 
 					setArmsBalancesForEthWallet(tokenBalances);
 				} catch (e: any) {
@@ -112,7 +115,7 @@ export default function Mint() {
 			calcAmount += armsBalanceForArWallet;
 		}
 
-		if (typeof armsBalancesForEthWallet === 'number') {
+		if (armsBalancesForEthWallet !== null) {
 			for (const wallet of Object.keys(armsBalancesForEthWallet)) {
 				if (arProvider.walletAddress === wallet) continue;
 
