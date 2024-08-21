@@ -28,7 +28,8 @@ AO-claims will become redeemable after 15% of the AO supply has been minted, on 
 };
 
 const REDIRECTS = {
-	ncc: 'https://arweave.net/jZHVGxxxVpjGxD_uwpp-NSsezf9_z0r0evhDnV2hFNs',
+	ncc1: 'https://arweave.net/jZHVGxxxVpjGxD_uwpp-NSsezf9_z0r0evhDnV2hFNs',
+	ncc2: 'https://arweave.net/qWdHQIGjeAjc5U5O9gk_o2k4jRYO6khL1vOAGQzkd9Y',
 	morpheus:
 		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Distribution%20V1%20Audit%20%7C%20Community.md',
 	codehawks:
@@ -73,7 +74,12 @@ export default function PreBridgeInfo() {
 						<S.IconGroup>
 							<p>{language.aoAudit}</p>
 							<S.IconsLine>
-								<Link to={REDIRECTS.ncc} target={'_blank'}>
+								<Link to={REDIRECTS.ncc1} target={'_blank'}>
+									<div className={'ncc-audit'}>
+										<ReactSVG src={ASSETS.nccAudit} />
+									</div>
+								</Link>
+								<Link to={REDIRECTS.ncc2} target={'_blank'}>
 									<div className={'ncc-audit'}>
 										<ReactSVG src={ASSETS.nccAudit} />
 									</div>

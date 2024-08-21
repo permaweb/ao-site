@@ -282,7 +282,7 @@ export const GlobalStyle = createGlobalStyle`
 
 	.pre-bridge-content {
 		height: fit-content;
-		width: 620px;
+		width: 720px;
 		display: flex;
 		flex: 1;
 	}
