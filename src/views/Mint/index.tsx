@@ -3,7 +3,6 @@ import { ReactSVG } from 'react-svg';
 
 import { readHandler } from 'api';
 
-import artwork from 'assets/dashboard-artwork.png';
 import AnimatedNumber from 'components/atoms/AnimatedNumber/AnimatedNumber';
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { Loader } from 'components/atoms/Loader';
@@ -13,6 +12,7 @@ import { formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 
+import { Artwork } from './Artwork';
 import { ArweaveSection } from './ArweaveSection';
 import { DaiSection } from './DaiSection';
 import { StETHSection } from './StETHSection';
@@ -272,7 +272,7 @@ export default function Mint() {
 							</S.Column>
 						</S.Section>
 					</S.Column>
-					<S.Artwork src={artwork} alt="artwork" />
+					<Artwork />
 				</S.Hero>
 				<ArweaveSection
 					loading={loading}

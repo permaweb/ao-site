@@ -125,12 +125,6 @@ export const AssetAmount = styled.h6<{
 	}
 `;
 
-export const Artwork = styled.img`
-	width: 225px;
-	height: 225px;
-	margin: 0 auto;
-`;
-
 export const Hero = styled(Section)`
 	align-items: center;
 
