@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
 
 export const SectionWrapper = styled.div`
 	height: fit-content;
-	padding: 20px;
+	padding: 5px 20px;
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -29,39 +29,13 @@ export const ChartWrapper = styled(SectionWrapper)`
 export const Section = styled.div`
 	display: flex;
 	flex-direction: column;
-`;
-
-export const WalletAction = styled.button<{ connected: boolean }>`
-	display: flex;
-	align-items: center;
-	gap: 10px;
-
-	span {
-		color: ${(props) => props.theme.colors.font.primary};
-		font-size: ${(props) => props.theme.typography.size.small};
-		font-weight: ${(props) => props.theme.typography.weight.bold};
-		font-family: ${(props) => props.theme.typography.family.primary};
-		text-transform: uppercase;
-
-		&:hover {
-			color: ${(props) => props.theme.colors.font.alt1};
-		}
-	}
-
-	pointer-events: ${(props) => (props.connected ? 'none' : 'default')};
-
-	.indicator {
-		height: 15px;
-		width: 15px;
-		border-radius: 50%;
-		background: ${(props) =>
-			props.connected ? props.theme.colors.indicator.active : props.theme.colors.warning.primary};
-	}
+	gap: 35px;
+	padding: 20px;
 `;
 
 export const Description = styled.div`
 	display: flex;
-	margin: 30px 0;
+	margin-left: -15px;
 	svg {
 		height: 15px;
 		width: 15px;
@@ -146,7 +120,8 @@ export const CurrentEarnings = styled.div`
 
 export const IconsWrapper = styled.div`
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	justify-content: space-between;
 	gap: 20px;
 `;
 
@@ -157,7 +132,7 @@ export const IconGroup = styled.div`
 	p {
 		color: ${(props) => props.theme.colors.font.alt1};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-weight: ${(props) => props.theme.typography.weight.light};
 		font-family: ${(props) => props.theme.typography.family.primary};
 		text-transform: uppercase;
 	}
@@ -208,25 +183,6 @@ export const IconsLine = styled.div`
 		&:hover {
 			svg {
 				opacity: 0.75;
-			}
-		}
-	}
-`;
-
-export const DisconnectWrapper = styled.div`
-	width: fit-content;
-	margin: 40px 0 0 auto;
-	button {
-		span {
-			color: ${(props) => props.theme.colors.warning.primary};
-			font-size: ${(props) => props.theme.typography.size.small};
-			font-weight: ${(props) => props.theme.typography.weight.bold};
-			font-family: ${(props) => props.theme.typography.family.primary};
-			text-transform: uppercase;
-		}
-		&:hover {
-			span {
-				color: ${(props) => props.theme.colors.warning.alt1};
 			}
 		}
 	}

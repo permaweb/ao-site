@@ -165,26 +165,36 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 	}
 
 	async function handleArweaveApp() {
-		const wallet = new ArweaveWebWallet({
-			name: language.appName,
-			logo: ASSETS.arweaveApp,
-		});
-		wallet.setUrl(ArWalletEnum.arweaveApp);
-		await wallet.connect();
-		wallet.on('disconnect', () => {
-			handleDisconnect();
-		});
-		setWalletAddress(await global.window.arweaveWallet.getActiveAddress());
-		setWallet(wallet);
-		setWalletType(ArWalletEnum.arweaveApp);
-		localStorage.setItem('walletType', ArWalletEnum.arweaveApp);
+		try {
+			const wallet = new ArweaveWebWallet({
+				name: language.appName,
+				logo: ASSETS.arweaveApp,
+			});
+			wallet.setUrl(ArWalletEnum.arweaveApp);
+			await wallet.connect();
+			wallet.on('disconnect', () => {
+				setWallet(null);
+				setWalletAddress(null);
+				if (localStorage.getItem('walletType')) localStorage.removeItem('walletType');
+			});
+			setWalletAddress(await global.window.arweaveWallet.getActiveAddress());
+			setWallet(wallet);
+			setWalletType(ArWalletEnum.arweaveApp);
+			localStorage.setItem('walletType', ArWalletEnum.arweaveApp);
+		} catch (e: any) {
+			console.error('Arweave.app connection failure', e);
+		}
 	}
 
 	async function handleDisconnect() {
-		await global.window?.arweaveWallet?.disconnect();
-		setWallet(null);
-		setWalletAddress(null);
-		if (localStorage.getItem('walletType')) localStorage.removeItem('walletType');
+		try {
+			setWallet(null);
+			setWalletAddress(null);
+			if (localStorage.getItem('walletType')) localStorage.removeItem('walletType');
+			await global.window?.arweaveWallet?.disconnect();
+		} catch (e: any) {
+			console.error('ArweaveProvider disconnect error', e);
+		}
 	}
 
 	async function getARBalance(walletAddress: string) {

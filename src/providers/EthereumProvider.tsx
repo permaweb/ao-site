@@ -136,7 +136,9 @@ export function EthereumProvider({ children }: EthereumProviderProps) {
 	}, []);
 
 	useEffect(() => {
-		recoverConnection();
+		setTimeout(() => {
+			recoverConnection();
+		}, 500);
 	}, []);
 
 	const handleConnect = async () => {

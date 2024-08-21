@@ -95,3 +95,8 @@ export function getArReward(days: number, userBalance: number, totalBalances: nu
 export function getEthReward(days: number, userBalance: number, totalBalances: number, currentAOSupply: number) {
 	return getRewardInDays(days, currentAOSupply) * (2 / 3) * (userBalance / totalBalances);
 }
+
+// TODO
+export function getDaiReward(days: number, userBalance: number, totalBalances: number, currentAOSupply: number) {
+	return getRewardInDays(days, currentAOSupply) * (0.1 / 3) * (userBalance / totalBalances);
+}

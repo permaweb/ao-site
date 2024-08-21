@@ -1,18 +1,11 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 import parse from 'html-react-parser';
 
-import { readHandler } from 'api';
-
-import { AO, ASSETS, TOKEN_DENOMINATION } from 'helpers/config';
-import { formatAddress, formatDisplayAmount } from 'helpers/utils';
-import { useArweaveProvider } from 'providers/ArweaveProvider';
-import { useEthereumProvider } from 'providers/EthereumProvider';
+import { ASSETS } from 'helpers/config';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
-import { IProps } from './types';
 
 const CONFIG = {
 	arweave: {
@@ -34,7 +27,7 @@ AO-claims will become redeemable after 15% of the AO supply has been minted, on 
 	},
 };
 
-const REDIRECTIS = {
+const REDIRECTS = {
 	ncc: 'https://arweave.net/jZHVGxxxVpjGxD_uwpp-NSsezf9_z0r0evhDnV2hFNs',
 	morpheus:
 		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Internal%20Audit.md',
@@ -44,159 +37,33 @@ const REDIRECTIS = {
 		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Renascence%20Morpheus%20Audit%20v2.pdf',
 };
 
-export default function PreBridgeInfo(props: IProps) {
+export default function PreBridgeInfo() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
-
-	const arProvider = useArweaveProvider();
-	const ethProvider = useEthereumProvider();
-
-	const [provider, setProvider] = React.useState<any>(null);
-
-	const [showWallet, setShowWallet] = React.useState<boolean>(false);
-	const [label, setLabel] = React.useState<string | null>(null);
-
-	const [currentSupply, setCurrentSupply] = React.useState<number | null>(null);
-	const [currentBalance, setCurrentBalance] = React.useState<number | null>(null);
-
-	React.useEffect(() => {
-		switch (props.chain) {
-			case 'arweave':
-				setProvider(arProvider);
-				break;
-			case 'ethereum':
-				setProvider(ethProvider);
-				break;
-		}
-	}, [props.chain, arProvider, ethProvider]);
-
-	React.useEffect(() => {
-		setTimeout(() => {
-			setShowWallet(true);
-		}, 200);
-	}, [provider]);
-
-	React.useEffect(() => {
-		if (!showWallet) {
-			setLabel(`${language.fetching}...`);
-		} else {
-			if (provider.walletAddress) {
-				setLabel(formatAddress(provider.walletAddress, false));
-			} else {
-				setLabel(language.walletNotConnected);
-			}
-		}
-	}, [showWallet, provider]);
-
-	React.useEffect(() => {
-		(async function () {
-			try {
-				const mintedSupply = await readHandler({
-					processId: AO.tokenMirror,
-					action: 'Minted-Supply',
-				});
-				if (mintedSupply !== null) setCurrentSupply(Number(mintedSupply) / TOKEN_DENOMINATION);
-			} catch (e: any) {
-				console.error(e);
-			}
-		})();
-	}, []);
-
-	// TODO - Current Balance by ETH Address
-	React.useEffect(() => {
-		(async function () {
-			if (provider && provider.walletAddress) {
-				switch (props.chain) {
-					case 'arweave':
-						try {
-							const tokenBalance = await readHandler({
-								processId: AO.tokenMirror,
-								action: 'Balance',
-								tags: [{ name: 'Recipient', value: provider.walletAddress }],
-							});
-							if (tokenBalance != null) setCurrentBalance(tokenBalance / TOKEN_DENOMINATION);
-						} catch (e: any) {
-							console.error(e);
-						}
-						break;
-					case 'ethereum':
-						// TODO
-						const tokenBalances = await readHandler({
-							processId: AO.token,
-							action: 'Get-Balances-By-User',
-							tags: [{ name: 'User', value: provider.walletAddress }],
-						});
-						console.log(tokenBalances);
-						// if (tokenBalances && tokenBalances.length) {
-						// 	setCurrentBalance(1748736745614 / TOKEN_DENOMINATION);
-						// } else {
-						// 	setCurrentBalance(0);
-						// }
-						break;
-				}
-			} else {
-				setCurrentBalance(null);
-			}
-		})();
-	}, [props.chain, provider]);
-
-	const urlSegments = window.location.hash.split('/');
-	const currentTab = urlSegments[urlSegments.length - 2];
 
 	return (
 		<S.Wrapper className={'pre-bridge-content'}>
 			<S.SectionWrapper className={'border-wrapper-alt1 fade-in'}>
 				<S.Section>
-					{provider && (
-						<S.WalletAction
-							connected={provider.walletAddress !== null}
-							onClick={() => (provider.walletAddress !== null ? {} : provider.setWalletModalVisible(true))}
-						>
-							<div className={'indicator'} />
-							<span>{label}</span>
-						</S.WalletAction>
-					)}
-					{CONFIG[currentTab] && (
-						<S.Description>
-							<ReactSVG src={ASSETS.info} />
-							<p>{parse(CONFIG[currentTab].description)}</p>
-						</S.Description>
-					)}
-				</S.Section>
-				<S.Section>
-					<S.TotalSupply>
-						<span>{language.circulatingSupply}</span>
-						<S.TotalSupplyAmount>
-							<p>{`${formatDisplayAmount(currentSupply)}`}</p>
-							<ReactSVG src={ASSETS.ao} />
-						</S.TotalSupplyAmount>
-					</S.TotalSupply>
-					{props.chain !== 'ethereum' && (
-						<S.CurrentEarningsWrapper>
-							<span>{language.currentBalance}</span>
-							<S.CurrentEarnings>
-								<h2>{formatDisplayAmount(currentBalance)}</h2>
-								<ReactSVG src={ASSETS.ao} />
-							</S.CurrentEarnings>
-						</S.CurrentEarningsWrapper>
-					)}
-				</S.Section>
-				<S.Section>
+					<S.Description>
+						<ReactSVG src={ASSETS.info} />
+						<p>{parse(CONFIG.ethereum.description)}</p>
+					</S.Description>
 					<S.IconsWrapper className={'fade-in'}>
 						<S.IconGroup>
 							<p>{language.baseContractAudits}</p>
 							<S.IconsLine>
-								<Link to={REDIRECTIS.codehawks} target={'_blank'}>
+								<Link to={REDIRECTS.codehawks} target={'_blank'}>
 									<div className={'codehawks-audit'}>
 										<ReactSVG src={ASSETS.codehawksAudit} />
 									</div>
 								</Link>
-								<Link to={REDIRECTIS.renascence} target={'_blank'}>
+								<Link to={REDIRECTS.renascence} target={'_blank'}>
 									<div className={'renascence-audit'}>
 										<ReactSVG src={ASSETS.renascenseAudit} />
 									</div>
 								</Link>
-								<Link to={REDIRECTIS.morpheus} target={'_blank'}>
+								<Link to={REDIRECTS.morpheus} target={'_blank'}>
 									<div className={'morpheus-audit'}>
 										<ReactSVG src={ASSETS.morpheusAudit} />
 									</div>
@@ -206,7 +73,7 @@ export default function PreBridgeInfo(props: IProps) {
 						<S.IconGroup>
 							<p>{language.aoAudit}</p>
 							<S.IconsLine>
-								<Link to={REDIRECTIS.ncc} target={'_blank'}>
+								<Link to={REDIRECTS.ncc} target={'_blank'}>
 									<div className={'ncc-audit'}>
 										<ReactSVG src={ASSETS.nccAudit} />
 									</div>
@@ -214,13 +81,6 @@ export default function PreBridgeInfo(props: IProps) {
 							</S.IconsLine>
 						</S.IconGroup>
 					</S.IconsWrapper>
-					{provider && provider.walletAddress !== null && (
-						<S.DisconnectWrapper>
-							<button onClick={() => provider.handleDisconnect()}>
-								<span>Disconnect wallet</span>
-							</button>
-						</S.DisconnectWrapper>
-					)}
 				</S.Section>
 			</S.SectionWrapper>
 		</S.Wrapper>
