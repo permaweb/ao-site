@@ -4,10 +4,16 @@ import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div``;
 
+export const PageWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin-top: 60px;
+`;
+
 export const Content = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 30px;
 `;
 
 export const S1Content = styled.div`
@@ -25,7 +31,6 @@ export const TabsHeader = styled.div`
 	width: 100%;
 	display: flex;
 	align-items: center;
-	gap: 20px;
 	justify-content: space-between;
 	button {
 		flex: 1;
@@ -51,6 +56,7 @@ export const Action = styled.div`
 export const Form = styled.div<{ invalid: boolean }>`
 	display: flex;
 	align-items: center;
+	z-index: 20;
 	position: relative;
 	input {
 		height: 75px;
@@ -59,7 +65,7 @@ export const Form = styled.div<{ invalid: boolean }>`
 		color: ${(props) =>
 			!props.invalid ? props.theme.colors.font.primary : props.theme.colors.warning.primary} !important;
 		padding: 15px;
-		border-radius: ${STYLING.dimensions.radius.primary};
+		border-radius: 0px;
 		&:disabled {
 			background: transparent !important;
 			color: ${(props) => props.theme.colors.button.alt1.disabled.color} !important;
@@ -87,7 +93,7 @@ export const FormFieldAction = styled.div`
 	span {
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xxSmall};
-		font-weight: ${(props) => props.theme.typography.weight.bold};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 		text-transform: uppercase;
 	}
 	button {
@@ -100,7 +106,7 @@ export const FormFieldAction = styled.div`
 		span {
 			color: ${(props) => props.theme.colors.font.primary};
 			font-size: 11px;
-			font-weight: ${(props) => props.theme.typography.weight.bold};
+			font-weight: ${(props) => props.theme.typography.weight.regular};
 			text-transform: uppercase;
 		}
 		&:disabled {
@@ -136,26 +142,23 @@ export const FormFieldLabel = styled.div<{ disabled: boolean }>`
 	svg {
 		height: 32.5px;
 		width: 32.5px;
-		margin: 3.5px 12.5px 0 0;
 	}
 	p {
 		color: ${(props) =>
 			props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xLg};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-weight: ${(props) => props.theme.typography.weight.light};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 	}
 `;
 
-export const DropdownArrow = styled.div<{ disabled: boolean }>`
-	svg {
-		height: 25px;
-		width: 25px;
-		margin: 5px 0 0 10px;
-		transform: rotate(90deg);
-		color: ${(props) =>
-			props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
-	}
+export const FormFieldWrapper = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 20px;
 `;
 
 export const FormEndWrapper = styled.div`
@@ -186,13 +189,14 @@ export const RecipientWrapper = styled.div`
 `;
 
 export const RecipientActions = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	gap: 20px;
-	margin: 20px 0;
+	align-self: flex-end;
+	margin: 10px 0;
+
 	button {
-		width: fit-content !important;
+		height: 50px;
+	}
+	button span {
+		font-size: ${(props) => props.theme.typography.size.xxSmall} !important;
 	}
 `;
 
@@ -200,10 +204,14 @@ export const ConversionLink = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	margin: 0 0 0 auto;
+	font-size: ${(props) => props.theme.typography.size.xxSmall};
+	gap: 4px;
+
 	a {
+		font-family: 'Roboto Mono', monospace !important;
 		color: ${(props) => props.theme.colors.font.alt1};
-		font-size: ${(props) => props.theme.typography.size.small};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		text-decoration: underline;
 		&:hover {

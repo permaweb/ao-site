@@ -1,18 +1,23 @@
 import ao from 'assets/ao.svg';
+import aoPict from 'assets/ao-pictograph.svg';
 import arconnect from 'assets/arconnect.png';
 import arrow from 'assets/arrow.svg';
+import arweave from 'assets/arweave.svg';
 import arweaveApp from 'assets/arweave-app.svg';
 import calculator from 'assets/calculator.svg';
 import checkmark from 'assets/checkmark.svg';
 import close from 'assets/close.svg';
 import codehawksAudit from 'assets/codehawks-audit.svg';
-import eth from 'assets/eth.svg';
+import dai from 'assets/dai.svg';
+import stEth from 'assets/eth.svg';
+import ethereum from 'assets/ethereum.svg';
 import info from 'assets/info.svg';
 import ipBlock from 'assets/ip-block.png';
 import metamask from 'assets/metamask.png';
 import morpheusAudit from 'assets/morpheus-audit.svg';
 import nccAudit from 'assets/ncc-audit.svg';
 import othent from 'assets/othent.svg';
+import plus from 'assets/plus.svg';
 import rabby from 'assets/rabby.png';
 import renascenseAudit from 'assets/renascense-audit.svg';
 import walletConnect from 'assets/wallet-connect.png';
@@ -27,31 +32,39 @@ export const AO = {
 };
 
 export const ETH_CONTRACTS = {
-	steth: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
-	ao: '0xfE08D40Eee53d64936D3128838867c867602665c',
+	stEth: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
+	stEthBridge: '0xfE08D40Eee53d64936D3128838867c867602665c',
+	dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
+	daiBridge: '0xc5421c9ef96317743571c3db7fa4dbaef432092d',
 };
 
-export const TOKEN_DENOMINATION = Math.pow(10, 12);
+export const TOKEN_DECIMALS = 12;
+export const TOKEN_DENOMINATION = Math.pow(10, TOKEN_DECIMALS);
 
 export const ASSETS = {
 	ao,
+	aoPict,
 	arconnect,
 	arrow,
 	arweaveApp,
 	calculator,
 	checkmark,
 	close,
+	plus,
 	codehawksAudit,
-	eth,
+	stEth,
+	dai,
 	info,
 	ipBlock,
 	metamask,
 	morpheusAudit,
 	nccAudit,
 	othent,
+	arweave,
 	rabby,
 	renascenseAudit,
 	walletConnect,
+	ethereum,
 };
 
 export const AR_WALLETS = [
@@ -97,14 +110,12 @@ export const STYLING = {
 function createURLs() {
 	const base = `/`;
 	const mint = `${base}mint/`;
-	const ethereum = `${mint}ethereum/`;
 	return {
 		base: base,
 		mint: mint,
 		read: `${base}read/`,
-		ethereum: ethereum,
-		arweave: `${mint}arweave/`,
-		cred: `${mint}cred/`,
+		deposit: `${mint}deposit/`,
+		withdraw: `${mint}withdraw/`,
 		notFound: `${base}404`,
 	};
 }
@@ -115,7 +126,7 @@ export const WALLET_PERMISSIONS = ['ACCESS_ADDRESS', 'ACCESS_PUBLIC_KEY', 'SIGN_
 
 export const IP_TOKEN = '04c286535ab4dc';
 
-export const AO_ABI = [
+export const StEthBridge_ABI = [
 	{ inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
 	{
 		anonymous: false,
@@ -468,7 +479,546 @@ export const AO_ABI = [
 	},
 ];
 
-export const STETH_ABI = [
+export const DaiBridge_ABI = [
+	{ inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: 'address',
+				name: 'previousAdmin',
+				type: 'address',
+			},
+			{
+				indexed: false,
+				internalType: 'address',
+				name: 'newAdmin',
+				type: 'address',
+			},
+		],
+		name: 'AdminChanged',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: 'address',
+				name: 'beacon',
+				type: 'address',
+			},
+		],
+		name: 'BeaconUpgraded',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: 'uint256',
+				name: 'dsrDaiBalance',
+				type: 'uint256',
+			},
+			{
+				indexed: false,
+				internalType: 'uint256',
+				name: 'currentOverplus',
+				type: 'uint256',
+			},
+		],
+		name: 'CalculateOverplusResult',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: 'uint8',
+				name: 'version',
+				type: 'uint8',
+			},
+		],
+		name: 'Initialized',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
+		],
+		name: 'OverplusBridged',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: 'address',
+				name: 'previousOwner',
+				type: 'address',
+			},
+			{
+				indexed: true,
+				internalType: 'address',
+				name: 'newOwner',
+				type: 'address',
+			},
+		],
+		name: 'OwnershipTransferred',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: 'uint256',
+				name: 'poolId',
+				type: 'uint256',
+			},
+			{
+				components: [
+					{
+						internalType: 'uint128',
+						name: 'withdrawLockPeriodAfterStake',
+						type: 'uint128',
+					},
+					{
+						internalType: 'uint256',
+						name: 'minimalStake',
+						type: 'uint256',
+					},
+					{ internalType: 'bool', name: 'isPublic', type: 'bool' },
+				],
+				indexed: false,
+				internalType: 'struct IDistribution.Pool',
+				name: 'pool',
+				type: 'tuple',
+			},
+		],
+		name: 'PoolCreated',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: 'uint256',
+				name: 'poolId',
+				type: 'uint256',
+			},
+			{
+				components: [
+					{
+						internalType: 'uint128',
+						name: 'withdrawLockPeriodAfterStake',
+						type: 'uint128',
+					},
+					{
+						internalType: 'uint256',
+						name: 'minimalStake',
+						type: 'uint256',
+					},
+					{ internalType: 'bool', name: 'isPublic', type: 'bool' },
+				],
+				indexed: false,
+				internalType: 'struct IDistribution.Pool',
+				name: 'pool',
+				type: 'tuple',
+			},
+		],
+		name: 'PoolEdited',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: 'address',
+				name: 'implementation',
+				type: 'address',
+			},
+		],
+		name: 'Upgraded',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: 'uint256',
+				name: 'poolId',
+				type: 'uint256',
+			},
+			{
+				indexed: true,
+				internalType: 'address',
+				name: 'user',
+				type: 'address',
+			},
+			{
+				indexed: false,
+				internalType: 'address',
+				name: 'receiver',
+				type: 'address',
+			},
+			{
+				indexed: false,
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
+		],
+		name: 'UserClaimed',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: 'uint256',
+				name: 'poolId',
+				type: 'uint256',
+			},
+			{
+				indexed: true,
+				internalType: 'address',
+				name: 'user',
+				type: 'address',
+			},
+			{
+				indexed: false,
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
+			{
+				indexed: false,
+				internalType: 'bytes32',
+				name: 'arweaveAddress',
+				type: 'bytes32',
+			},
+		],
+		name: 'UserStaked',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: 'uint256',
+				name: 'poolId',
+				type: 'uint256',
+			},
+			{
+				indexed: true,
+				internalType: 'address',
+				name: 'user',
+				type: 'address',
+			},
+			{
+				indexed: false,
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
+			{
+				indexed: false,
+				internalType: 'bytes32',
+				name: 'arweaveAddress',
+				type: 'bytes32',
+			},
+		],
+		name: 'UserWithdrawn',
+		type: 'event',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'address',
+				name: 'aoDistributionWallet_',
+				type: 'address',
+			},
+			{
+				components: [
+					{
+						internalType: 'uint128',
+						name: 'withdrawLockPeriodAfterStake',
+						type: 'uint128',
+					},
+					{
+						internalType: 'uint256',
+						name: 'minimalStake',
+						type: 'uint256',
+					},
+					{ internalType: 'bool', name: 'isPublic', type: 'bool' },
+				],
+				internalType: 'struct IDistribution.Pool[]',
+				name: 'poolsInfo_',
+				type: 'tuple[]',
+			},
+			{
+				internalType: 'address',
+				name: 'refunderAddress_',
+				type: 'address',
+			},
+			{
+				internalType: 'address',
+				name: 'fallbackAddress_',
+				type: 'address',
+			},
+		],
+		name: 'Distribution_init',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'aoDistributionWallet',
+		outputs: [{ internalType: 'address', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'bridgeOverplus',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'calculateOverplus',
+		outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				components: [
+					{
+						internalType: 'uint128',
+						name: 'withdrawLockPeriodAfterStake',
+						type: 'uint128',
+					},
+					{
+						internalType: 'uint256',
+						name: 'minimalStake',
+						type: 'uint256',
+					},
+					{ internalType: 'bool', name: 'isPublic', type: 'bool' },
+				],
+				internalType: 'struct IDistribution.Pool',
+				name: 'pool_',
+				type: 'tuple',
+			},
+		],
+		name: 'createPool',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'daiDsrManager',
+		outputs: [
+			{
+				internalType: 'contract IDaiDsrManager',
+				name: '',
+				type: 'address',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'daiDsrManagerAddress',
+		outputs: [{ internalType: 'address', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'depositToken',
+		outputs: [{ internalType: 'address', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'uint256', name: 'poolId', type: 'uint256' },
+			{ internalType: 'address', name: 'user', type: 'address' },
+		],
+		name: 'ejectStakedFunds',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'isNotUpgradeable',
+		outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'owner',
+		outputs: [{ internalType: 'address', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+		name: 'pools',
+		outputs: [
+			{
+				internalType: 'uint128',
+				name: 'withdrawLockPeriodAfterStake',
+				type: 'uint128',
+			},
+			{ internalType: 'uint256', name: 'minimalStake', type: 'uint256' },
+			{ internalType: 'bool', name: 'isPublic', type: 'bool' },
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+		name: 'poolsData',
+		outputs: [
+			{ internalType: 'uint128', name: 'lastUpdate', type: 'uint128' },
+			{ internalType: 'uint256', name: 'totalDeposited', type: 'uint256' },
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'proxiableUUID',
+		outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'removeUpgradeability',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'renounceOwnership',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'uint256', name: 'poolId_', type: 'uint256' },
+			{ internalType: 'uint256', name: 'amount_', type: 'uint256' },
+			{
+				internalType: 'bytes32',
+				name: 'arweaveAddress_',
+				type: 'bytes32',
+			},
+		],
+		name: 'stake',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'totalDepositedInPublicPools',
+		outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
+		name: 'transferOwnership',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'address',
+				name: 'newImplementation',
+				type: 'address',
+			},
+		],
+		name: 'upgradeTo',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'address',
+				name: 'newImplementation',
+				type: 'address',
+			},
+			{ internalType: 'bytes', name: 'data', type: 'bytes' },
+		],
+		name: 'upgradeToAndCall',
+		outputs: [],
+		stateMutability: 'payable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'address', name: '', type: 'address' },
+			{ internalType: 'uint256', name: '', type: 'uint256' },
+		],
+		name: 'usersData',
+		outputs: [
+			{ internalType: 'uint128', name: 'lastStake', type: 'uint128' },
+			{ internalType: 'uint256', name: 'deposited', type: 'uint256' },
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'uint256', name: 'poolId_', type: 'uint256' },
+			{ internalType: 'uint256', name: 'amount_', type: 'uint256' },
+			{
+				internalType: 'bytes32',
+				name: 'arweaveAddress_',
+				type: 'bytes32',
+			},
+		],
+		name: 'withdraw',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+];
+
+export const Erc20_ABI = [
 	{ inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
 	{
 		anonymous: false,
