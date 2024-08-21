@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
 	padding: 20px;
 	position: relative;
 	top: 60px;
-	margin: 0 0 100px 0;
+	margin-bottom: 100px;
 `;
 
 export const TabsWrapper = styled.div`
