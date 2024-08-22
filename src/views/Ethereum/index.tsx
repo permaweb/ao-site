@@ -42,7 +42,13 @@ export default function Ethereum() {
 
 	const location = useLocation();
 
-	const [currentTab, setCurrentTab] = React.useState<any>(location.pathname.includes(URLS.deposit) ? TABS[0] : TABS[1]);
+	const [currentTab, setCurrentTab] = React.useState<(typeof TABS)[number]>(
+		location.pathname.includes(URLS.deposit) ? TABS[0] : TABS[1]
+	);
+	const [selectedAsset, setSelectedAsset] = React.useState<SelectOptionType>(
+		location.search.toLowerCase().includes('dai') ? selectOptions[1] : selectOptions[0]
+	);
+
 	const [showWallet, setShowWallet] = React.useState<boolean>(false);
 	const [label, setLabel] = React.useState<string | null>(null);
 
@@ -51,8 +57,6 @@ export default function Ethereum() {
 
 	const [stEthBalance, setStEthBalance] = React.useState<bigint | null>(null);
 	const [depositedStEthBalance, setDepositedStEthBalance] = React.useState<bigint | null>(null);
-
-	const [selectedAsset, setSelectedAsset] = React.useState<SelectOptionType>(selectOptions[0]);
 
 	const [amount, setAmount] = React.useState<string>('0');
 	const amountInWei = React.useMemo(() => {
@@ -353,7 +357,7 @@ export default function Ethereum() {
 								label={TABS[0].name}
 								handlePress={() => {
 									setCurrentTab(TABS[0]);
-									navigate(URLS.deposit, { replace: true });
+									navigate(`${URLS.deposit}?asset=${selectedAsset.id}`, { replace: true });
 								}}
 								active={currentTab.name === TABS[0].name}
 								disabled={loading}
@@ -364,7 +368,7 @@ export default function Ethereum() {
 								label={TABS[1].name}
 								handlePress={() => {
 									setCurrentTab(TABS[1]);
-									navigate(URLS.withdraw, { replace: true });
+									navigate(`${URLS.withdraw}?asset=${selectedAsset.id}`, { replace: true });
 								}}
 								active={currentTab.name === TABS[1].name}
 								disabled={loading}
@@ -384,7 +388,16 @@ export default function Ethereum() {
 									/>
 									{formFieldAction}
 									<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
-										<Select setActiveOption={setSelectedAsset} activeOption={selectedAsset} options={selectOptions} />
+										<Select
+											setActiveOption={(option) => {
+												setSelectedAsset(option);
+												navigate(`${currentTab.name === 'Deposit' ? URLS.deposit : URLS.withdraw}?asset=${option.id}`, {
+													replace: true,
+												});
+											}}
+											activeOption={selectedAsset}
+											options={selectOptions}
+										/>
 									</S.FormFieldLabel>
 								</S.Form>
 								{currentTab.name === 'Deposit' && (

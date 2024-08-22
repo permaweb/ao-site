@@ -5,12 +5,15 @@ import { readHandler } from 'api';
 
 import AnimatedNumber from 'components/atoms/AnimatedNumber/AnimatedNumber';
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
+import { IconButton } from 'components/atoms/IconButton';
 import { Loader } from 'components/atoms/Loader';
+import { Modal } from 'components/molecules/Modal';
 import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
 import { AO, ASSETS, ENDPOINTS, TOKEN_DENOMINATION } from 'helpers/config';
 import { formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
+import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { Artwork } from './Artwork';
 import { ArweaveSection } from './ArweaveSection';
@@ -196,6 +199,10 @@ export default function Mint() {
 
 	const connected = useMemo(() => !!ethProvider.walletAddress || !!arProvider.walletAddress, [arProvider, ethProvider]);
 
+	const [showInfoModal, setShowInfoModal] = React.useState<boolean>(false);
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
+
 	function getView() {
 		if (loading) return <Loader />;
 		if (isBlocked) {
@@ -216,7 +223,18 @@ export default function Mint() {
 					<S.Column>
 						<S.Section columns={1}>
 							<S.Column>
-								<S.Label>Your AO (G-Armstrongs)</S.Label>
+								<S.Label>
+									<S.TooltipLine>
+										<span>Your AO (Giga-Armstrongs)</span>
+										<IconButton
+											type={'primary'}
+											src={ASSETS.info}
+											handlePress={() => setShowInfoModal(true)}
+											dimensions={{ icon: 15, wrapper: 25 }}
+										/>
+									</S.TooltipLine>
+								</S.Label>
+
 								{connected ? (
 									armsBalance === null ? (
 										<S.LoadingWrapper>
@@ -347,6 +365,15 @@ export default function Mint() {
 						)}
 					</S.Column>
 				</S.Section>
+				{showInfoModal && (
+					<Modal header={'GIGA-ARMSTRONGS'} handleClose={() => setShowInfoModal(false)}>
+						<div className={'modal-wrapper'}>
+							<S.InfoModalBody>
+								<p>{language.gigaArmstrongInfo}</p>
+							</S.InfoModalBody>
+						</div>
+					</Modal>
+				)}
 			</S.Wrapper>
 		);
 	}

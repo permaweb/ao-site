@@ -260,7 +260,7 @@ export function DaiSection(props: DaiSectionProps) {
 						style={{ width: 'fit-content' }}
 						type={'accent'}
 						label={'Deposit'}
-						handlePress={() => navigate(URLS.deposit)}
+						handlePress={() => navigate(`${URLS.deposit}?asset=DAI`)}
 						loading={loading}
 						height={40}
 					/>
@@ -268,7 +268,7 @@ export function DaiSection(props: DaiSectionProps) {
 						style={{ width: 'fit-content' }}
 						type={'alt1'}
 						label={'Withdraw'}
-						handlePress={() => navigate(URLS.withdraw)}
+						handlePress={() => navigate(`${URLS.withdraw}?asset=DAI`)}
 						loading={loading}
 						height={40}
 					/>
