@@ -315,11 +315,13 @@ export default function Ethereum() {
 		if (!currentTab) return null;
 
 		let balance: bigint;
+		let deposited: bigint = BigInt(0);
 		let action: () => void;
 
 		switch (currentTab.name) {
 			case 'Deposit':
 				balance = selectedAsset.id === 'stETH' ? stEthBalance : daiBalance;
+				deposited = selectedAsset.id === 'stETH' ? depositedStEthBalance : depositedDaiBalance;
 				action = () => setAmount(fromWei(balance, 'ether'));
 				break;
 			case 'Withdraw':
@@ -329,17 +331,26 @@ export default function Ethereum() {
 		}
 
 		return (
-			<S.FormFieldAction>
-				<span>{`Balance: ${
-					balance && (balance as any) !== 'Error' ? formatDisplayAmount(fromWei(balance, 'ether')) : '-'
-				}`}</span>
-				<button
-					disabled={loading || !ethProvider.walletAddress || !balance || (balance as any) === 'Error'}
-					onClick={action}
-				>
-					<span>{language.max}</span>
-				</button>
-			</S.FormFieldAction>
+			<>
+				<S.FormFieldAction>
+					<span>{`Balance: ${
+						balance && (balance as any) !== 'Error' ? formatDisplayAmount(fromWei(balance, 'ether')) : '-'
+					}`}</span>
+					<button
+						disabled={loading || !ethProvider.walletAddress || !balance || (balance as any) === 'Error'}
+						onClick={action}
+					>
+						<span>{language.max}</span>
+					</button>
+				</S.FormFieldAction>
+				{currentTab.name === 'Deposit' && (
+					<S.FormFieldInfo>
+						<span>{`Deposited: ${
+							deposited && (deposited as any) !== 'Error' ? formatDisplayAmount(fromWei(deposited, 'ether')) : '0'
+						}`}</span>
+					</S.FormFieldInfo>
+				)}
+			</>
 		);
 	}, [currentTab, stEthBalance, depositedStEthBalance, selectedAsset, daiBalance, depositedDaiBalance]);
 

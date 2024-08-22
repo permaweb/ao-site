@@ -83,6 +83,21 @@ export const Form = styled.div<{ invalid: boolean }>`
 	}
 `;
 
+export const FormFieldInfo = styled.div`
+	position: absolute;
+	top: -13.5px;
+	left: 0;
+	display: flex;
+	align-items: center;
+	gap: 12.5px;
+	span {
+		color: ${(props) => props.theme.colors.font.primary};
+		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		text-transform: uppercase;
+	}
+`;
+
 export const FormFieldAction = styled.div`
 	position: absolute;
 	top: -13.5px;
