@@ -165,7 +165,9 @@ export function DaiSection(props: DaiSectionProps) {
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.dai} />
 							<span>
-								{typeof depositedDaiBalance === 'bigint' ? Web3.utils.fromWei(depositedDaiBalance, 'ether') : ''}
+								{typeof depositedDaiBalance === 'bigint'
+									? formatDisplayAmount(Web3.utils.fromWei(depositedDaiBalance, 'ether'))
+									: ''}
 							</span>
 						</S.AssetAmount>
 						<S.Label
@@ -253,7 +255,7 @@ export function DaiSection(props: DaiSectionProps) {
 							verticalAlign: 'middle',
 						}}
 					/>
-					<span>{daiBalance ? Web3.utils.fromWei(daiBalance, 'ether') : '0'} Available</span>
+					<span>{daiBalance ? formatDisplayAmount(Web3.utils.fromWei(daiBalance, 'ether')) : '0'} Available</span>
 				</S.Label>
 				<S.Row>
 					<Button

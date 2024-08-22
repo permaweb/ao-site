@@ -167,7 +167,9 @@ export function StETHSection(props: StETHSectionProps) {
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.stEth} />
 							<span>
-								{typeof depositedStEthBalance === 'bigint' ? Web3.utils.fromWei(depositedStEthBalance, 'ether') : ''}
+								{typeof depositedStEthBalance === 'bigint'
+									? formatDisplayAmount(Web3.utils.fromWei(depositedStEthBalance, 'ether'))
+									: ''}
 							</span>
 						</S.AssetAmount>
 						<S.Label
@@ -255,7 +257,7 @@ export function StETHSection(props: StETHSectionProps) {
 							verticalAlign: 'middle',
 						}}
 					/>
-					<span>{stEthBalance ? Web3.utils.fromWei(stEthBalance, 'ether') : '0'} Available</span>
+					<span>{stEthBalance ? formatDisplayAmount(Web3.utils.fromWei(stEthBalance, 'ether')) : '0'} Available</span>
 				</S.Label>
 				<S.Row>
 					<Button
