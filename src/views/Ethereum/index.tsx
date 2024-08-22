@@ -279,22 +279,27 @@ export default function Ethereum() {
 							if (!approvalReceipt || !approvalReceipt.status) {
 								throw new Error('Approval failed');
 							}
+							console.log('Approval transaction confirmed:', approval);
 						}
 
 						const stake = await bridgeContract.methods.stake(poolId, amountInWei, arweaveRecipient).send({
 							from: ethProvider.walletAddress,
 						});
 						console.log('Stake transaction:', stake);
+						await checkTransactionReceipt(stake.transactionHash);
+						console.log('Stake transaction confirmed:', stake);
 						break;
 					case 'Withdraw':
 						const withdraw = await bridgeContract.methods.withdraw(poolId, amountInWei, arweaveRecipient).send({
 							from: ethProvider.walletAddress,
 						});
 						console.log('Withdraw transaction:', withdraw);
+						await checkTransactionReceipt(withdraw.transactionHash);
+						console.log('Withdraw transaction confirmed:', withdraw);
 						break;
 				}
 
-				setToggleUpdate(!toggleUpdate);
+				setToggleUpdate((prev) => !prev);
 				setAmount('0');
 				setResponse({
 					message: `Successful ${currentTab.name}`,
@@ -444,7 +449,6 @@ export default function Ethereum() {
 												/>
 											</S.RecipientActions>
 										</S.FormFieldWrapper>
-										{/* <RewardsInfo chain={'ethereum'} toggleUpdate={toggleUpdate} /> */}
 									</>
 								)}
 							</S.ActionWrapper>
