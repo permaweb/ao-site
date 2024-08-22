@@ -152,3 +152,23 @@ export const LoadingWrapper = styled.div`
 `;
 
 export const Loader = styled.div``;
+
+export const TooltipLine = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 5px;
+	button {
+		width: 25px !important;
+		padding: 2.5px 0 0 0;
+	}
+`;
+
+export const InfoModalBody = styled.div`
+	p {
+		color: ${(props) => props.theme.colors.font.alt1};
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+	}
+`;

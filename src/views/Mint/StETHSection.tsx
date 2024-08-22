@@ -262,7 +262,7 @@ export function StETHSection(props: StETHSectionProps) {
 						style={{ width: 'fit-content' }}
 						type={'accent'}
 						label={'Deposit'}
-						handlePress={() => navigate(URLS.deposit)}
+						handlePress={() => navigate(`${URLS.deposit}?asset=stETH`)}
 						loading={loading}
 						height={40}
 					/>
@@ -270,7 +270,7 @@ export function StETHSection(props: StETHSectionProps) {
 						style={{ width: 'fit-content' }}
 						type={'alt1'}
 						label={'Withdraw'}
-						handlePress={() => navigate(URLS.withdraw)}
+						handlePress={() => navigate(`${URLS.withdraw}?asset=stETH`)}
 						loading={loading}
 						height={40}
 					/>
