@@ -120,6 +120,16 @@ export default function Mint() {
 		})();
 	}, [ethProvider]);
 
+	const aoBalanceForEthWalletLoading = useMemo(
+		() => ethProvider && ethProvider.walletAddress && armsBalancesForEthWallet === null,
+		[ethProvider, armsBalancesForEthWallet]
+	);
+
+	const aoBalanceForArWalletLoading = useMemo(
+		() => arProvider && arProvider.walletAddress && armsBalanceForArWallet === null,
+		[arProvider, armsBalanceForArWallet]
+	);
+
 	const armsBalance = React.useMemo<number | null>(() => {
 		let calcAmount = null;
 
@@ -223,7 +233,7 @@ export default function Mint() {
 					stEthBridgeContract.methods.totalDepositedInPublicPools().call() as any,
 					daiBridgeContract.methods.totalDepositedInPublicPools().call() as any,
 				]);
-				console.log('📜 LOG > totalStEthDeposited, totalDaiDeposited:', totalStEthDeposited, totalDaiDeposited);
+				console.log('LOG: totalStEthDeposited, totalDaiDeposited:', totalStEthDeposited, totalDaiDeposited);
 
 				totalStEthDeposited = Number(totalStEthDeposited) / Math.pow(10, 18);
 				totalDaiDeposited = Number(totalDaiDeposited) / Math.pow(10, 18);
@@ -257,14 +267,14 @@ export default function Mint() {
 						action: 'Info',
 					}),
 				]);
-				console.log('📜 LOG > daiResp, stEthResp:', daiResp, stEthResp);
+				console.log('LOG: daiResp, stEthResp:', daiResp, stEthResp);
 
 				const daiPrice = Number(daiResp.LastPrice) / 10_000;
 				const daiYield = Number(daiResp.LastYield) / 10_000;
 				const stEthPrice = Number(stEthResp.LastPrice) / 10_000;
 				const stEthYield = Number(stEthResp.LastYield) / 10_000;
 
-				console.log('📜 LOG > daiPrice, daiYield, stEthPrice, stEthYield:', daiPrice, daiYield, stEthPrice, stEthYield);
+				console.log('LOG: daiPrice, daiYield, stEthPrice, stEthYield:', daiPrice, daiYield, stEthPrice, stEthYield);
 
 				setDaiPrice(daiPrice);
 				setDaiYield(daiYield);
@@ -319,6 +329,13 @@ export default function Mint() {
 										<S.AssetAmount>
 											<ReactSVG src={ASSETS.aoPict} />
 											<AnimatedNumber startValue={armsBalance} increment={realtimeRewardArms} />
+											{(aoBalanceForEthWalletLoading || aoBalanceForArWalletLoading) && (
+												<S.LoadingWrapper>
+													<S.Loader>
+														<Loader xSm relative />
+													</S.Loader>
+												</S.LoadingWrapper>
+											)}
 										</S.AssetAmount>
 									)
 								) : (
