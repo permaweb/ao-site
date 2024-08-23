@@ -5,7 +5,7 @@ import Web3 from 'web3';
 
 import { Button } from 'components/atoms/Button';
 import { Loader } from 'components/atoms/Loader';
-import { ASSETS, ENDPOINTS, Erc20_ABI, ETH_CONTRACTS, StEthBridge_ABI, TOKEN_DENOMINATION, URLS } from 'helpers/config';
+import { ASSETS, Erc20_ABI, ETH_CONTRACTS, StEthBridge_ABI, TOKEN_DENOMINATION, URLS } from 'helpers/config';
 import { formatDisplayAmount, getEthReward } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 
@@ -16,11 +16,27 @@ type StETHSectionProps = {
 	aoSupply: number | null;
 	onMonthlyReward?: (value: number) => void;
 	onYearlyReward?: (value: number) => void;
-	onTotalBridged?: (value: number) => void;
+	totalStEthBridged: number | null;
+	totalDaiBridged: number | null;
+	stEthPrice: number | null;
+	stEthYield: number | null;
+	daiPrice: number | null;
+	daiYield: number | null;
 };
 
 export function StETHSection(props: StETHSectionProps) {
-	const { loading, aoSupply, onMonthlyReward, onYearlyReward, onTotalBridged } = props;
+	const {
+		loading,
+		aoSupply,
+		onMonthlyReward,
+		onYearlyReward,
+		totalStEthBridged,
+		totalDaiBridged,
+		stEthPrice,
+		stEthYield,
+		daiPrice,
+		daiYield,
+	} = props;
 
 	const ethProvider = useEthereumProvider();
 	const [stEthBalance, setStEthBalance] = React.useState<bigint | null>(null);
@@ -65,24 +81,29 @@ export function StETHSection(props: StETHSectionProps) {
 
 	React.useEffect(() => {
 		(async function () {
-			if (ethProvider && ethProvider.walletAddress && aoSupply) {
+			if (
+				ethProvider &&
+				ethProvider.walletAddress &&
+				aoSupply !== null &&
+				totalStEthBridged !== null &&
+				totalDaiBridged !== null &&
+				stEthPrice !== null &&
+				stEthYield !== null &&
+				daiPrice !== null &&
+				daiYield !== null
+			) {
 				if (ethProvider.balance !== null && ethProvider.balance !== 'Error') {
 					try {
-						let balance: number;
-						let tokenSupply: number;
+						let stEthBridgedByUser: number;
 
 						const ETH_DENOMINATION = Math.pow(10, 18);
-
 						const web3 = new Web3(ethProvider.web3Provider);
 						const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
-
 						const usersData = await stEthBridgeContract.methods.usersData(ethProvider.walletAddress, 0).call();
-						const totalDeposited = await stEthBridgeContract.methods.totalDepositedInPublicPools().call();
 
-						tokenSupply = Number(totalDeposited) / ETH_DENOMINATION;
-						balance = Number((usersData as any).deposited) / ETH_DENOMINATION;
+						stEthBridgedByUser = Number((usersData as any).deposited) / ETH_DENOMINATION;
 
-						if (isNaN(tokenSupply)) {
+						if (isNaN(stEthBridgedByUser)) {
 							setMonthlyReward(0);
 							onMonthlyReward?.(0);
 							setYearlyReward(0);
@@ -90,11 +111,31 @@ export function StETHSection(props: StETHSectionProps) {
 							return;
 						}
 
-						const calcMonthlyReward = getEthReward(30, balance, tokenSupply, aoSupply);
+						const calcMonthlyReward = getEthReward(
+							30,
+							stEthBridgedByUser,
+							aoSupply,
+							totalStEthBridged,
+							totalDaiBridged,
+							stEthPrice,
+							stEthYield,
+							daiPrice,
+							daiYield
+						);
 						setMonthlyReward(calcMonthlyReward);
 						onMonthlyReward?.(calcMonthlyReward);
 
-						const calcYearlyReward = getEthReward(365, balance, tokenSupply, aoSupply);
+						const calcYearlyReward = getEthReward(
+							365,
+							stEthBridgedByUser,
+							aoSupply,
+							totalStEthBridged,
+							totalDaiBridged,
+							stEthPrice,
+							stEthYield,
+							daiPrice,
+							daiYield
+						);
 						setYearlyReward(calcYearlyReward);
 						onYearlyReward?.(calcYearlyReward);
 					} catch (e: any) {
@@ -108,33 +149,32 @@ export function StETHSection(props: StETHSectionProps) {
 				onYearlyReward?.(null);
 			}
 		})();
-	}, [ethProvider, aoSupply]);
+	}, [ethProvider, aoSupply, totalStEthBridged, totalDaiBridged, stEthPrice, stEthYield, daiPrice, daiYield]);
 
 	React.useEffect(() => {
-		(async function () {
-			if (aoSupply) {
-				try {
-					const ETH_DENOMINATION = Math.pow(10, 18);
-					const web3 = new Web3(ENDPOINTS.mainnetRpc);
-					const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
-					const totalDeposited = await stEthBridgeContract.methods.totalDepositedInPublicPools().call();
-					const formattedDepositsAmount = Number(totalDeposited) / ETH_DENOMINATION;
-
-					if (totalDeposited && Number(totalDeposited) > 0) {
-						onTotalBridged?.(formattedDepositsAmount);
-						setYearlyRewardRatio(getEthReward(365, 1, formattedDepositsAmount, aoSupply));
-						setMonthlyRewardRatio(getEthReward(30, 1, formattedDepositsAmount, aoSupply));
-					} else {
-						onTotalBridged?.(0);
-						setYearlyRewardRatio(0);
-						setMonthlyRewardRatio(0);
-					}
-				} catch (e: any) {
-					console.error(e);
-				}
+		if (
+			aoSupply !== null &&
+			totalStEthBridged !== null &&
+			totalDaiBridged !== null &&
+			stEthPrice !== null &&
+			stEthYield !== null &&
+			daiPrice !== null &&
+			daiYield !== null
+		) {
+			try {
+				setYearlyRewardRatio(
+					getEthReward(365, 1, aoSupply, totalStEthBridged, totalDaiBridged, stEthPrice, stEthYield, daiPrice, daiYield)
+				);
+				setMonthlyRewardRatio(
+					getEthReward(30, 1, aoSupply, totalStEthBridged, totalDaiBridged, stEthPrice, stEthYield, daiPrice, daiYield)
+				);
+			} catch (e: any) {
+				console.error(e);
+				setYearlyRewardRatio(0);
+				setMonthlyRewardRatio(0);
 			}
-		})();
-	}, [aoSupply]);
+		}
+	}, [aoSupply, totalStEthBridged, totalDaiBridged, stEthPrice, stEthYield, daiPrice, daiYield]);
 
 	const monthlyRewardArms = React.useMemo(() => {
 		if (typeof monthlyReward === 'number') {
