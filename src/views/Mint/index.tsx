@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ReactSVG } from 'react-svg';
+import Web3 from 'web3';
 
 import { readHandler } from 'api';
 
@@ -9,7 +10,15 @@ import { IconButton } from 'components/atoms/IconButton';
 import { Loader } from 'components/atoms/Loader';
 import { Modal } from 'components/molecules/Modal';
 import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
-import { AO, ASSETS, ENDPOINTS, TOKEN_DENOMINATION } from 'helpers/config';
+import {
+	AO,
+	ASSETS,
+	DaiBridge_ABI,
+	ENDPOINTS,
+	ETH_CONTRACTS,
+	StEthBridge_ABI,
+	TOKEN_DENOMINATION,
+} from 'helpers/config';
 import { formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -194,7 +203,7 @@ export default function Mint() {
 		return calcAmount;
 	}, [arweaveMonthlyReward, ethMonthlyReward, daiMonthlyReward]);
 
-	const [totalStETHBridged, setTotalStETHBridged] = React.useState<number | null>(null);
+	const [totalStEthBridged, setTotalStEthBridged] = React.useState<number | null>(null);
 	const [totalDaiBridged, setTotalDaiBridged] = React.useState<number | null>(null);
 
 	const connected = useMemo(() => !!ethProvider.walletAddress || !!arProvider.walletAddress, [arProvider, ethProvider]);
@@ -202,6 +211,70 @@ export default function Mint() {
 	const [showInfoModal, setShowInfoModal] = React.useState<boolean>(false);
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
+
+	useEffect(() => {
+		(async function () {
+			try {
+				const web3 = new Web3(ENDPOINTS.mainnetRpc);
+				const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
+				const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
+
+				let [totalStEthDeposited, totalDaiDeposited] = await Promise.all([
+					stEthBridgeContract.methods.totalDepositedInPublicPools().call() as any,
+					daiBridgeContract.methods.totalDepositedInPublicPools().call() as any,
+				]);
+				console.log('📜 LOG > totalStEthDeposited, totalDaiDeposited:', totalStEthDeposited, totalDaiDeposited);
+
+				totalStEthDeposited = Number(totalStEthDeposited) / Math.pow(10, 18);
+				totalDaiDeposited = Number(totalDaiDeposited) / Math.pow(10, 18);
+
+				if (isNaN(totalStEthDeposited)) throw new Error('Invalid totalStEthDeposited');
+				if (isNaN(totalDaiDeposited)) throw new Error('Invalid totalDaiDeposited');
+
+				setTotalStEthBridged(totalStEthDeposited);
+				setTotalDaiBridged(totalDaiDeposited);
+			} catch (e: any) {
+				console.error(e);
+			}
+		})();
+	}, []);
+
+	const [stEthPrice, setStEthPrice] = React.useState<number | null>(null);
+	const [stEthYield, setStEthYield] = React.useState<number | null>(null);
+	const [daiPrice, setDaiPrice] = React.useState<number | null>(null);
+	const [daiYield, setDaiYield] = React.useState<number | null>(null);
+
+	useEffect(() => {
+		(async function () {
+			try {
+				const [daiResp, stEthResp] = await Promise.all([
+					readHandler({
+						processId: AO.daiPriceOracle,
+						action: 'Info',
+					}),
+					readHandler({
+						processId: AO.stEthPriceOracle,
+						action: 'Info',
+					}),
+				]);
+				console.log('📜 LOG > daiResp, stEthResp:', daiResp, stEthResp);
+
+				const daiPrice = Number(daiResp.LastPrice) / 10_000;
+				const daiYield = Number(daiResp.LastYield) / 10_000;
+				const stEthPrice = Number(stEthResp.LastPrice) / 10_000;
+				const stEthYield = Number(stEthResp.LastYield) / 10_000;
+
+				console.log('📜 LOG > daiPrice, daiYield, stEthPrice, stEthYield:', daiPrice, daiYield, stEthPrice, stEthYield);
+
+				setDaiPrice(daiPrice);
+				setDaiYield(daiYield);
+				setStEthPrice(stEthPrice);
+				setStEthYield(stEthYield);
+			} catch (e: any) {
+				console.error(e);
+			}
+		})();
+	}, []);
 
 	function getView() {
 		if (loading) return <Loader />;
@@ -306,14 +379,24 @@ export default function Mint() {
 					aoSupply={aoSupply}
 					onYearlyReward={setEthYearlyReward}
 					onMonthlyReward={setEthMonthlyReward}
-					onTotalBridged={setTotalStETHBridged}
+					totalStEthBridged={totalStEthBridged}
+					totalDaiBridged={totalDaiBridged}
+					stEthPrice={stEthPrice}
+					stEthYield={stEthYield}
+					daiPrice={daiPrice}
+					daiYield={daiYield}
 				/>
 				<DaiSection
 					loading={loading}
 					aoSupply={aoSupply}
 					onYearlyReward={setDaiYearlyReward}
 					onMonthlyReward={setDaiMonthlyReward}
-					onTotalBridged={setTotalDaiBridged}
+					totalStEthBridged={totalStEthBridged}
+					totalDaiBridged={totalDaiBridged}
+					stEthPrice={stEthPrice}
+					stEthYield={stEthYield}
+					daiPrice={daiPrice}
+					daiYield={daiYield}
 				/>
 				<S.Heading>
 					<S.Subheading>[+] Network</S.Subheading>
@@ -336,7 +419,7 @@ export default function Mint() {
 					</S.Column>
 					<S.Column>
 						<S.Label>Total stETH Bridged</S.Label>
-						{totalStETHBridged === null ? (
+						{totalStEthBridged === null ? (
 							<S.LoadingWrapper>
 								<S.Loader>
 									<Loader xSm relative />
@@ -345,7 +428,7 @@ export default function Mint() {
 						) : (
 							<S.AssetAmount variant="alt2">
 								<ReactSVG src={ASSETS.stEth} />
-								{formatDisplayAmount(totalStETHBridged.toFixed(2))}
+								{formatDisplayAmount(totalStEthBridged.toFixed(2))}
 							</S.AssetAmount>
 						)}
 					</S.Column>

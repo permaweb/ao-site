@@ -26,46 +26,42 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 	const [yearlyRewardRatio, setYearlyRewardRatio] = React.useState<number | null>(null);
 
 	React.useEffect(() => {
-		(async function () {
-			if (arProvider && arProvider.walletAddress && aoSupply) {
-				if (arProvider.balance !== null && arProvider.balance !== 'Error') {
-					try {
-						let balance = Number(arProvider.balance);
-						let tokenSupply = 66000000;
-
-						const calcMonthlyReward = getArReward(30, balance, tokenSupply, aoSupply);
-						setMonthlyReward(calcMonthlyReward);
-						onMonthlyReward?.(calcMonthlyReward);
-
-						const calcYearlyReward = getArReward(365, balance, tokenSupply, aoSupply);
-						setYearlyReward(calcYearlyReward);
-						onYearlyReward?.(calcYearlyReward);
-					} catch (e: any) {
-						console.error(e);
-					}
-				}
-			} else {
-				setMonthlyReward(null);
-				onMonthlyReward?.(null);
-				setYearlyReward(null);
-				onYearlyReward?.(null);
-			}
-		})();
-	}, [arProvider, aoSupply]);
-
-	React.useEffect(() => {
-		(async function () {
-			if (aoSupply) {
+		if (arProvider && arProvider.walletAddress && aoSupply) {
+			if (arProvider.balance !== null && arProvider.balance !== 'Error') {
 				try {
-					let tokenSupply = 66000000;
+					let arBalance = Number(arProvider.balance);
+					let arSupply = 66000000;
 
-					setYearlyRewardRatio(getArReward(365, 1, tokenSupply, aoSupply));
-					setMonthlyRewardRatio(getArReward(30, 1, tokenSupply, aoSupply));
+					const calcMonthlyReward = getArReward(30, arBalance, arSupply, aoSupply);
+					setMonthlyReward(calcMonthlyReward);
+					onMonthlyReward?.(calcMonthlyReward);
+
+					const calcYearlyReward = getArReward(365, arBalance, arSupply, aoSupply);
+					setYearlyReward(calcYearlyReward);
+					onYearlyReward?.(calcYearlyReward);
 				} catch (e: any) {
 					console.error(e);
 				}
 			}
-		})();
+		} else {
+			setMonthlyReward(null);
+			onMonthlyReward?.(null);
+			setYearlyReward(null);
+			onYearlyReward?.(null);
+		}
+	}, [arProvider, aoSupply]);
+
+	React.useEffect(() => {
+		if (aoSupply) {
+			try {
+				let arSupply = 66000000;
+
+				setYearlyRewardRatio(getArReward(365, 1, arSupply, aoSupply));
+				setMonthlyRewardRatio(getArReward(30, 1, arSupply, aoSupply));
+			} catch (e: any) {
+				console.error(e);
+			}
+		}
 	}, [arProvider, aoSupply]);
 
 	const monthlyRewardArms = React.useMemo(() => {

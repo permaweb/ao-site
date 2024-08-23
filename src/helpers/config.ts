@@ -29,6 +29,8 @@ export const AO = {
 	tokenMirror: 'Pi-WmAQp2-mh-oWH9lWpz5EthlUDj_W0IusAv-RXhRk',
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
+	stEthPriceOracle: 'rwxd1EuSzEVoy3qTlDRm7eMYPbOMrmQMajynVrA-ikk',
+	daiPriceOracle: '85mzbkyxBVqbKyF8oW1szOwFR7vpy662EG5qZbegsFE',
 };
 
 export const ETH_CONTRACTS = {
