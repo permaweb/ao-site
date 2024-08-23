@@ -82,6 +82,14 @@ export function StETHSection(props: StETHSectionProps) {
 						tokenSupply = Number(totalDeposited) / ETH_DENOMINATION;
 						balance = Number((usersData as any).deposited) / ETH_DENOMINATION;
 
+						if (isNaN(tokenSupply)) {
+							setMonthlyReward(0);
+							onMonthlyReward?.(0);
+							setYearlyReward(0);
+							onYearlyReward?.(0);
+							return;
+						}
+
 						const calcMonthlyReward = getEthReward(30, balance, tokenSupply, aoSupply);
 						setMonthlyReward(calcMonthlyReward);
 						onMonthlyReward?.(calcMonthlyReward);
@@ -116,6 +124,10 @@ export function StETHSection(props: StETHSectionProps) {
 						onTotalBridged?.(formattedDepositsAmount);
 						setYearlyRewardRatio(getEthReward(365, 1, formattedDepositsAmount, aoSupply));
 						setMonthlyRewardRatio(getEthReward(30, 1, formattedDepositsAmount, aoSupply));
+					} else {
+						onTotalBridged?.(0);
+						setYearlyRewardRatio(0);
+						setMonthlyRewardRatio(0);
 					}
 				} catch (e: any) {
 					console.error(e);
