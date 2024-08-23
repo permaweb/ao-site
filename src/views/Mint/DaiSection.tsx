@@ -80,6 +80,14 @@ export function DaiSection(props: DaiSectionProps) {
 						tokenSupply = Number(totalDeposited) / ETH_DENOMINATION;
 						balance = Number((usersData as any).deposited) / ETH_DENOMINATION;
 
+						if (isNaN(tokenSupply)) {
+							setMonthlyReward(0);
+							onMonthlyReward?.(0);
+							setYearlyReward(0);
+							onYearlyReward?.(0);
+							return;
+						}
+
 						const calcMonthlyReward = getDaiReward(30, balance, tokenSupply, aoSupply);
 						setMonthlyReward(calcMonthlyReward);
 						onMonthlyReward?.(calcMonthlyReward);
@@ -114,6 +122,10 @@ export function DaiSection(props: DaiSectionProps) {
 						onTotalBridged?.(formattedDepositsAmount);
 						setYearlyRewardRatio(getDaiReward(365, 1, formattedDepositsAmount, aoSupply));
 						setMonthlyRewardRatio(getDaiReward(30, 1, formattedDepositsAmount, aoSupply));
+					} else {
+						onTotalBridged?.(0);
+						setYearlyRewardRatio(0);
+						setMonthlyRewardRatio(0);
 					}
 				} catch (e: any) {
 					console.error(e);
