@@ -103,10 +103,10 @@ export default function Mint() {
 				console.log('Fetching ao balance for eth address', ethProvider.walletAddress);
 				try {
 					const tokenBalances = await readHandler({
-						processId: AO.token,
-						action: 'Get-Balances-By-User',
+						processId: AO.tokenMirror,
+						action: 'Balances-By-User',
 						tags: [{ name: 'User', value: ethProvider.walletAddress }],
-						replyTag: { name: 'Action', value: 'Get-Balances-By-User-Response' },
+						// replyTag: { name: 'Action', value: 'Get-Balances-By-User-Response' },
 					});
 					console.log('Fetched ao balance for eth address', tokenBalances);
 
