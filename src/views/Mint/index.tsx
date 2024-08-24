@@ -74,8 +74,8 @@ export default function Mint() {
 	const arProvider = useArweaveProvider();
 	const ethProvider = useEthereumProvider();
 
-	const [armsBalanceForArWallet, setArmsBalanceForArWallet] = React.useState<number | null>(null);
-	const [armsBalancesForEthWallet, setArmsBalancesForEthWallet] = React.useState<Record<string, string>>(null);
+	const [aoBalanceForArWallet, setAoBalanceForArWallet] = React.useState<number | null>(null);
+	const [aoBalancesForEthWallet, setAoBalancesForEthWallet] = React.useState<Record<string, string>>(null);
 
 	React.useEffect(() => {
 		(async function () {
@@ -86,13 +86,13 @@ export default function Mint() {
 						action: 'Balance',
 						tags: [{ name: 'Recipient', value: arProvider.walletAddress }],
 					});
-					if (tokenBalance != null) setArmsBalanceForArWallet(tokenBalance / (TOKEN_DENOMINATION / 1_000));
-					else setArmsBalanceForArWallet(0);
+					if (tokenBalance != null) setAoBalanceForArWallet(tokenBalance / TOKEN_DENOMINATION);
+					else setAoBalanceForArWallet(0);
 				} catch (e: any) {
 					console.error(e);
 				}
 			} else {
-				setArmsBalanceForArWallet(null);
+				setAoBalanceForArWallet(null);
 			}
 		})();
 	}, [arProvider]);
@@ -110,43 +110,43 @@ export default function Mint() {
 					});
 					console.log('Fetched ao balance for eth address', tokenBalances);
 
-					setArmsBalancesForEthWallet(tokenBalances);
+					setAoBalancesForEthWallet(tokenBalances);
 				} catch (e: any) {
 					console.error(e);
 				}
 			} else {
-				setArmsBalancesForEthWallet(null);
+				setAoBalancesForEthWallet(null);
 			}
 		})();
 	}, [ethProvider]);
 
 	const aoBalanceForEthWalletLoading = useMemo(
-		() => ethProvider && ethProvider.walletAddress && armsBalancesForEthWallet === null,
-		[ethProvider, armsBalancesForEthWallet]
+		() => ethProvider && ethProvider.walletAddress && aoBalancesForEthWallet === null,
+		[ethProvider, aoBalancesForEthWallet]
 	);
 
 	const aoBalanceForArWalletLoading = useMemo(
-		() => arProvider && arProvider.walletAddress && armsBalanceForArWallet === null,
-		[arProvider, armsBalanceForArWallet]
+		() => arProvider && arProvider.walletAddress && aoBalanceForArWallet === null,
+		[arProvider, aoBalanceForArWallet]
 	);
 
-	const armsBalance = React.useMemo<number | null>(() => {
+	const aoBalance = React.useMemo<number | null>(() => {
 		let calcAmount = null;
 
-		if (typeof armsBalanceForArWallet === 'number') {
-			calcAmount += armsBalanceForArWallet;
+		if (typeof aoBalanceForArWallet === 'number') {
+			calcAmount += aoBalanceForArWallet;
 		}
 
-		if (armsBalancesForEthWallet !== null) {
-			for (const wallet of Object.keys(armsBalancesForEthWallet)) {
+		if (aoBalancesForEthWallet !== null) {
+			for (const wallet of Object.keys(aoBalancesForEthWallet)) {
 				if (arProvider.walletAddress === wallet) continue;
 
-				calcAmount += parseInt(armsBalancesForEthWallet[wallet]) / (TOKEN_DENOMINATION / 1_000);
+				calcAmount += parseInt(aoBalancesForEthWallet[wallet]) / TOKEN_DENOMINATION;
 			}
 		}
 
 		return calcAmount;
-	}, [armsBalanceForArWallet, armsBalancesForEthWallet, arProvider]);
+	}, [aoBalanceForArWallet, aoBalancesForEthWallet, arProvider]);
 
 	const [arweaveMonthlyReward, setArweaveMonthlyReward] = React.useState<number | null>(null);
 	const [arweaveYearlyReward, setArweaveYearlyReward] = React.useState<number | null>(null);
@@ -157,55 +157,55 @@ export default function Mint() {
 	const [daiMonthlyReward, setDaiMonthlyReward] = React.useState<number | null>(null);
 	const [daiYearlyReward, setDaiYearlyReward] = React.useState<number | null>(null);
 
-	const monthlyRewardArms = React.useMemo(() => {
+	const monthlyReward = React.useMemo(() => {
 		let calcAmount = null;
 
 		if (typeof arweaveMonthlyReward === 'number') {
-			calcAmount += (arweaveMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+			calcAmount += arweaveMonthlyReward;
 		}
 
 		if (typeof ethMonthlyReward === 'number') {
-			calcAmount += (ethMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+			calcAmount += ethMonthlyReward;
 		}
 
 		if (typeof daiMonthlyReward === 'number') {
-			calcAmount += (daiMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+			calcAmount += daiMonthlyReward;
 		}
 
-		return calcAmount === null ? 'Loading...' : formatDisplayAmount(calcAmount);
+		return calcAmount;
 	}, [arweaveMonthlyReward, ethMonthlyReward, daiMonthlyReward]);
 
-	const yearlyRewardArms = React.useMemo(() => {
+	const yearlyReward = React.useMemo(() => {
 		let calcAmount = null;
 
 		if (typeof arweaveYearlyReward === 'number') {
-			calcAmount += (arweaveYearlyReward * TOKEN_DENOMINATION) / 1000000000;
+			calcAmount += arweaveYearlyReward;
 		}
 
 		if (typeof ethYearlyReward === 'number') {
-			calcAmount += (ethYearlyReward * TOKEN_DENOMINATION) / 1000000000;
+			calcAmount += ethYearlyReward;
 		}
 
 		if (typeof daiYearlyReward === 'number') {
-			calcAmount += (daiYearlyReward * TOKEN_DENOMINATION) / 1000000000;
+			calcAmount += daiYearlyReward;
 		}
 
-		return calcAmount === null ? 'Loading...' : formatDisplayAmount(calcAmount);
+		return calcAmount;
 	}, [arweaveYearlyReward, ethYearlyReward, daiYearlyReward]);
 
-	const realtimeRewardArms = React.useMemo<number | null>(() => {
+	const realtimeReward = React.useMemo<number | null>(() => {
 		let calcAmount = null;
 
 		if (typeof arweaveMonthlyReward === 'number') {
-			calcAmount += (arweaveMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+			calcAmount += arweaveMonthlyReward;
 		}
 
 		if (typeof ethMonthlyReward === 'number') {
-			calcAmount += (ethMonthlyReward * TOKEN_DENOMINATION) / 1000000000;
+			calcAmount += ethMonthlyReward;
 		}
 
 		if (typeof daiMonthlyReward === 'number') {
-			calcAmount += (daiMonthlyReward * TOKEN_DENOMINATION) / 100000000;
+			calcAmount += daiMonthlyReward;
 		}
 
 		calcAmount = calcAmount / 30 / 24 / 60 / 60;
@@ -217,10 +217,6 @@ export default function Mint() {
 	const [totalDaiBridged, setTotalDaiBridged] = React.useState<number | null>(null);
 
 	const connected = useMemo(() => !!ethProvider.walletAddress || !!arProvider.walletAddress, [arProvider, ethProvider]);
-
-	const [showInfoModal, setShowInfoModal] = React.useState<boolean>(false);
-	const languageProvider = useLanguageProvider();
-	const language = languageProvider.object[languageProvider.current];
 
 	useEffect(() => {
 		(async function () {
@@ -307,19 +303,10 @@ export default function Mint() {
 						<S.Section columns={1}>
 							<S.Column>
 								<S.Label>
-									<S.TooltipLine>
-										<span>Your AO (Giga-Armstrongs)</span>
-										<IconButton
-											type={'primary'}
-											src={ASSETS.info}
-											handlePress={() => setShowInfoModal(true)}
-											dimensions={{ icon: 15, wrapper: 25 }}
-										/>
-									</S.TooltipLine>
+									<span>Your AO</span>
 								</S.Label>
-
 								{connected ? (
-									armsBalance === null ? (
+									aoBalance === null ? (
 										<S.LoadingWrapper>
 											<S.Loader>
 												<Loader xSm relative />
@@ -328,7 +315,7 @@ export default function Mint() {
 									) : (
 										<S.AssetAmount>
 											<ReactSVG src={ASSETS.aoPict} />
-											<AnimatedNumber startValue={armsBalance} increment={realtimeRewardArms} />
+											<AnimatedNumber startValue={aoBalance} increment={realtimeReward} />
 											{(aoBalanceForEthWalletLoading || aoBalanceForArWalletLoading) && (
 												<S.LoadingWrapper>
 													<S.Loader>
@@ -348,7 +335,7 @@ export default function Mint() {
 							<S.Column>
 								<S.Label>30 day projection</S.Label>
 								{connected ? (
-									monthlyRewardArms === 'Loading...' ? (
+									monthlyReward === null ? (
 										<S.LoadingWrapper>
 											<S.Loader>
 												<Loader xSm relative />
@@ -356,7 +343,7 @@ export default function Mint() {
 										</S.LoadingWrapper>
 									) : (
 										<S.AssetAmount variant="alt1">
-											<ReactSVG src={ASSETS.aoPict} />+{monthlyRewardArms}
+											<ReactSVG src={ASSETS.aoPict} />+{formatDisplayAmount(monthlyReward)}
 										</S.AssetAmount>
 									)
 								) : (
@@ -366,7 +353,7 @@ export default function Mint() {
 							<S.Column>
 								<S.Label>1 year projection</S.Label>
 								{connected ? (
-									yearlyRewardArms === 'Loading...' ? (
+									yearlyReward === null ? (
 										<S.LoadingWrapper>
 											<S.Loader>
 												<Loader xSm relative />
@@ -374,7 +361,7 @@ export default function Mint() {
 										</S.LoadingWrapper>
 									) : (
 										<S.AssetAmount variant="alt1">
-											<ReactSVG src={ASSETS.aoPict} />+{yearlyRewardArms}
+											<ReactSVG src={ASSETS.aoPict} />+{formatDisplayAmount(yearlyReward)}
 										</S.AssetAmount>
 									)
 								) : (
@@ -465,15 +452,6 @@ export default function Mint() {
 						)}
 					</S.Column>
 				</S.Section>
-				{showInfoModal && (
-					<Modal header={'GIGA-ARMSTRONGS'} handleClose={() => setShowInfoModal(false)}>
-						<div className={'modal-wrapper'}>
-							<S.InfoModalBody>
-								<p>{language.gigaArmstrongInfo}</p>
-							</S.InfoModalBody>
-						</div>
-					</Modal>
-				)}
 			</S.Wrapper>
 		);
 	}
