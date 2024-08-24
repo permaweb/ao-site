@@ -8,7 +8,6 @@ import AnimatedNumber from 'components/atoms/AnimatedNumber/AnimatedNumber';
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { IconButton } from 'components/atoms/IconButton';
 import { Loader } from 'components/atoms/Loader';
-import { Modal } from 'components/molecules/Modal';
 import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
 import {
 	AO,
@@ -22,7 +21,6 @@ import {
 import { formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
-import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { Artwork } from './Artwork';
 import { ArweaveSection } from './ArweaveSection';
@@ -328,6 +326,21 @@ export default function Mint() {
 								) : (
 									'-'
 								)}
+								<S.Label>
+									<S.TooltipLine>
+										<span>/ {formatDisplayAmount(21_000_000)}</span>
+										<IconButton
+											type={'primary'}
+											src={ASSETS.info}
+											handlePress={() => {
+												const url =
+													'https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ';
+												window.open(url, '_blank');
+											}}
+											dimensions={{ icon: 15, wrapper: 25 }}
+										/>
+									</S.TooltipLine>
+								</S.Label>
 							</S.Column>
 						</S.Section>
 						<S.Divider />
