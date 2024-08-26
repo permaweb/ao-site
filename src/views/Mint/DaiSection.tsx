@@ -5,7 +5,7 @@ import Web3 from 'web3';
 
 import { Button } from 'components/atoms/Button';
 import { Loader } from 'components/atoms/Loader';
-import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, TOKEN_DENOMINATION, URLS } from 'helpers/config';
+import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, URLS } from 'helpers/config';
 import { formatDisplayAmount, getDaiReward } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 
@@ -236,7 +236,7 @@ export function DaiSection(props: DaiSectionProps) {
 					) : (
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{monthlyReward}</span>
+							<span>{formatDisplayAmount(monthlyReward)}</span>
 						</S.AssetAmount>
 					)
 				) : (
@@ -258,7 +258,7 @@ export function DaiSection(props: DaiSectionProps) {
 					) : (
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{yearlyReward}</span>
+							<span>{formatDisplayAmount(yearlyReward)}</span>
 						</S.AssetAmount>
 					)
 				) : (
