@@ -177,43 +177,44 @@ export function DaiSection(props: DaiSectionProps) {
 	const navigate = useNavigate();
 
 	return (
-		<S.Section columns={4}>
-			<S.Column>
-				<S.Label>Your DAI Bridged</S.Label>
-				{!!ethProvider.walletAddress ? (
-					<>
-						<S.AssetAmount>
-							<ReactSVG src={ASSETS.dai} />
-							<span>
-								{typeof depositedDaiBalance === 'bigint'
-									? formatDisplayAmount(Web3.utils.fromWei(depositedDaiBalance, 'ether'))
-									: ''}
-							</span>
-						</S.AssetAmount>
-						<S.Label
-							size="small"
-							className="button"
-							onClick={() => {
-								ethProvider.handleDisconnect();
+		<div>
+			<S.Section columns={4}>
+				<S.Column>
+					<S.Label>Your DAI Bridged</S.Label>
+					{!!ethProvider.walletAddress ? (
+						<>
+							<S.AssetAmount>
+								<ReactSVG src={ASSETS.dai} />
+								<span>
+									{typeof depositedDaiBalance === 'bigint'
+										? formatDisplayAmount(Web3.utils.fromWei(depositedDaiBalance, 'ether'))
+										: ''}
+								</span>
+							</S.AssetAmount>
+							<S.Label
+								size="small"
+								className="button"
+								onClick={() => {
+									ethProvider.handleDisconnect();
+								}}
+							>
+								Disconnect Wallet
+							</S.Label>
+						</>
+					) : (
+						<Button
+							style={{ width: 'fit-content' }}
+							type={'alt1'}
+							label={'Connect Wallet'}
+							handlePress={() => {
+								ethProvider.setWalletModalVisible(true);
 							}}
-						>
-							Disconnect Wallet
-						</S.Label>
-					</>
-				) : (
-					<Button
-						style={{ width: 'fit-content' }}
-						type={'alt1'}
-						label={'Connect Wallet'}
-						handlePress={() => {
-							ethProvider.setWalletModalVisible(true);
-						}}
-						loading={loading}
-						height={40}
-					/>
-				)}
-			</S.Column>
-			{/* <S.Column>
+							loading={loading}
+							height={40}
+						/>
+					)}
+				</S.Column>
+				{/* <S.Column>
 				<S.Label>AO Earnings</S.Label>
 				{!!ethProvider.walletAddress ? (
 					<S.AssetAmount>
@@ -224,82 +225,89 @@ export function DaiSection(props: DaiSectionProps) {
 					'-'
 				)}
 			</S.Column> */}
-			<S.Column>
-				<S.Label>30 day projection</S.Label>
-				{!!ethProvider.walletAddress && monthlyReward !== 0 ? (
-					monthlyReward === null ? (
-						<S.LoadingWrapper>
-							<S.Loader>
-								<Loader xSm relative />
-							</S.Loader>
-						</S.LoadingWrapper>
+				<S.Column>
+					<S.Label>30 day projection</S.Label>
+					{!!ethProvider.walletAddress && monthlyReward !== 0 ? (
+						monthlyReward === null ? (
+							<S.LoadingWrapper>
+								<S.Loader>
+									<Loader xSm relative />
+								</S.Loader>
+							</S.LoadingWrapper>
+						) : (
+							<S.AssetAmount>
+								<ReactSVG src={ASSETS.plus} className="small" />
+								<span>{formatDisplayAmount(monthlyReward)}</span>
+							</S.AssetAmount>
+						)
 					) : (
-						<S.AssetAmount>
-							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{formatDisplayAmount(monthlyReward)}</span>
-						</S.AssetAmount>
-					)
-				) : (
-					<S.AssetAmount>-</S.AssetAmount>
-				)}
-				<S.Label size="small">
-					{monthlyRewardRatio === null ? 'Loading...' : `1 DAI = ${formatDisplayAmount(monthlyRewardRatio)} AO`}
-				</S.Label>
-			</S.Column>
-			<S.Column>
-				<S.Label>1 year projection</S.Label>
-				{!!ethProvider.walletAddress && yearlyReward !== 0 ? (
-					yearlyReward === null ? (
-						<S.LoadingWrapper>
-							<S.Loader>
-								<Loader xSm relative />
-							</S.Loader>
-						</S.LoadingWrapper>
+						<S.AssetAmount>-</S.AssetAmount>
+					)}
+					<S.Label size="small">
+						{monthlyRewardRatio === null ? 'Loading...' : `1 DAI = ${formatDisplayAmount(monthlyRewardRatio)} AO`}
+					</S.Label>
+				</S.Column>
+				<S.Column>
+					<S.Label>1 year projection</S.Label>
+					{!!ethProvider.walletAddress && yearlyReward !== 0 ? (
+						yearlyReward === null ? (
+							<S.LoadingWrapper>
+								<S.Loader>
+									<Loader xSm relative />
+								</S.Loader>
+							</S.LoadingWrapper>
+						) : (
+							<S.AssetAmount>
+								<ReactSVG src={ASSETS.plus} className="small" />
+								<span>{formatDisplayAmount(yearlyReward)}</span>
+							</S.AssetAmount>
+						)
 					) : (
-						<S.AssetAmount>
-							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{formatDisplayAmount(yearlyReward)}</span>
-						</S.AssetAmount>
-					)
-				) : (
-					<S.AssetAmount>-</S.AssetAmount>
-				)}
-				<S.Label size="small">
-					{yearlyRewardRatio === null ? 'Loading...' : `1 DAI = ${formatDisplayAmount(yearlyRewardRatio)} AO`}
-				</S.Label>
-			</S.Column>
-			<S.Column>
-				<S.Label>
-					<ReactSVG
-						src={ASSETS.dai}
-						style={{
-							width: 12,
-							display: 'inline-block',
-							marginRight: 8,
-							verticalAlign: 'middle',
-						}}
-					/>
-					<span>{daiBalance ? formatDisplayAmount(Web3.utils.fromWei(daiBalance, 'ether')) : '0'} Available</span>
-				</S.Label>
-				<S.Row>
-					<Button
-						style={{ width: 'fit-content' }}
-						type={'accent'}
-						label={'Deposit'}
-						handlePress={() => navigate(`${URLS.deposit}?asset=DAI`)}
-						loading={loading}
-						height={40}
-					/>
-					<Button
-						style={{ width: 'fit-content' }}
-						type={'alt1'}
-						label={'Withdraw'}
-						handlePress={() => navigate(`${URLS.withdraw}?asset=DAI`)}
-						loading={loading}
-						height={40}
-					/>
-				</S.Row>
-			</S.Column>
-		</S.Section>
+						<S.AssetAmount>-</S.AssetAmount>
+					)}
+					<S.Label size="small">
+						{yearlyRewardRatio === null ? 'Loading...' : `1 DAI = ${formatDisplayAmount(yearlyRewardRatio)} AO`}
+					</S.Label>
+				</S.Column>
+				<S.Column>
+					<S.Label>
+						<ReactSVG
+							src={ASSETS.dai}
+							style={{
+								width: 12,
+								display: 'inline-block',
+								marginRight: 8,
+								verticalAlign: 'middle',
+							}}
+						/>
+						<span>{daiBalance ? formatDisplayAmount(Web3.utils.fromWei(daiBalance, 'ether')) : '0'} Available</span>
+					</S.Label>
+					<S.Row>
+						<Button
+							style={{ width: 'fit-content' }}
+							type={'accent'}
+							label={'Deposit'}
+							handlePress={() => navigate(`${URLS.deposit}?asset=DAI`)}
+							loading={loading}
+							height={40}
+						/>
+						<Button
+							style={{ width: 'fit-content' }}
+							type={'alt1'}
+							label={'Withdraw'}
+							handlePress={() => navigate(`${URLS.withdraw}?asset=DAI`)}
+							loading={loading}
+							height={40}
+						/>
+					</S.Row>
+				</S.Column>
+			</S.Section>
+			<S.Label>
+				<S.InfoSection>
+					<ReactSVG src={ASSETS.info} />
+					<span>Dai rewards go live at 11 AM EST September 2nd, 2024</span>
+				</S.InfoSection>
+			</S.Label>
+		</div>
 	);
 }
