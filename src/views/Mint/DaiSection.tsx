@@ -5,7 +5,7 @@ import Web3 from 'web3';
 
 import { Button } from 'components/atoms/Button';
 import { Loader } from 'components/atoms/Loader';
-import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, TOKEN_DENOMINATION, URLS } from 'helpers/config';
+import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, URLS } from 'helpers/config';
 import { formatDisplayAmount, getDaiReward } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 
@@ -174,38 +174,6 @@ export function DaiSection(props: DaiSectionProps) {
 		}
 	}, [aoSupply, totalStEthBridged, totalDaiBridged, stEthPrice, stEthYield, daiPrice, daiYield]);
 
-	const monthlyRewardArms = React.useMemo(() => {
-		if (typeof monthlyReward === 'number') {
-			const calcAmount = (monthlyReward * TOKEN_DENOMINATION) / 1000000000;
-			return formatDisplayAmount(calcAmount);
-		}
-		return 'Loading...';
-	}, [monthlyReward]);
-
-	const yearlyRewardArms = React.useMemo(() => {
-		if (typeof yearlyReward === 'number') {
-			const calcAmount = (yearlyReward * TOKEN_DENOMINATION) / 1000000000;
-			return formatDisplayAmount(calcAmount);
-		}
-		return 'Loading...';
-	}, [yearlyReward]);
-
-	const yearlyRewardRatioArms = React.useMemo(() => {
-		if (yearlyRewardRatio && yearlyRewardRatio > 0) {
-			const calcAmount = (yearlyRewardRatio * TOKEN_DENOMINATION) / 1000000000;
-			return `1 DAI = ${formatDisplayAmount(calcAmount)}`;
-		}
-		return 'Loading...';
-	}, [yearlyRewardRatio]);
-
-	const monthlyRewardRatioArms = React.useMemo(() => {
-		if (monthlyRewardRatio && monthlyRewardRatio > 0) {
-			const calcAmount = (monthlyRewardRatio * TOKEN_DENOMINATION) / 1000000000;
-			return `1 DAI = ${formatDisplayAmount(calcAmount)}`;
-		}
-		return 'Loading...';
-	}, [monthlyRewardRatio]);
-
 	const navigate = useNavigate();
 
 	return (
@@ -258,8 +226,8 @@ export function DaiSection(props: DaiSectionProps) {
 			</S.Column> */}
 			<S.Column>
 				<S.Label>30 day projection</S.Label>
-				{!!ethProvider.walletAddress && monthlyRewardArms !== '0' ? (
-					monthlyRewardArms === 'Loading...' ? (
+				{!!ethProvider.walletAddress && monthlyReward !== 0 ? (
+					monthlyReward === null ? (
 						<S.LoadingWrapper>
 							<S.Loader>
 								<Loader xSm relative />
@@ -268,18 +236,20 @@ export function DaiSection(props: DaiSectionProps) {
 					) : (
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{monthlyRewardArms}</span>
+							<span>{formatDisplayAmount(monthlyReward)}</span>
 						</S.AssetAmount>
 					)
 				) : (
 					<S.AssetAmount>-</S.AssetAmount>
 				)}
-				<S.Label size="small">{monthlyRewardRatioArms}</S.Label>
+				<S.Label size="small">
+					{monthlyRewardRatio === null ? 'Loading...' : `1 DAI = ${formatDisplayAmount(monthlyRewardRatio)} AO`}
+				</S.Label>
 			</S.Column>
 			<S.Column>
 				<S.Label>1 year projection</S.Label>
-				{!!ethProvider.walletAddress && yearlyRewardArms !== '0' ? (
-					yearlyRewardArms === 'Loading...' ? (
+				{!!ethProvider.walletAddress && yearlyReward !== 0 ? (
+					yearlyReward === null ? (
 						<S.LoadingWrapper>
 							<S.Loader>
 								<Loader xSm relative />
@@ -288,13 +258,15 @@ export function DaiSection(props: DaiSectionProps) {
 					) : (
 						<S.AssetAmount>
 							<ReactSVG src={ASSETS.plus} className="small" />
-							<span>{yearlyRewardArms}</span>
+							<span>{formatDisplayAmount(yearlyReward)}</span>
 						</S.AssetAmount>
 					)
 				) : (
 					<S.AssetAmount>-</S.AssetAmount>
 				)}
-				<S.Label size="small">{yearlyRewardRatioArms}</S.Label>
+				<S.Label size="small">
+					{yearlyRewardRatio === null ? 'Loading...' : `1 DAI = ${formatDisplayAmount(yearlyRewardRatio)} AO`}
+				</S.Label>
 			</S.Column>
 			<S.Column>
 				<S.Label>
