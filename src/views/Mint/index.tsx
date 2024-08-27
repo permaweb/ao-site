@@ -106,6 +106,7 @@ export default function Mint() {
 						tags: [{ name: 'User', value: ethProvider.walletAddress }],
 					});
 					console.log('Fetched ao balance for eth address', tokenBalances);
+					if (!tokenBalances) return;
 
 					setAoBalancesForEthWallet(tokenBalances);
 				} catch (e: any) {
