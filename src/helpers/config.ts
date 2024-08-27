@@ -37,7 +37,7 @@ export const ETH_CONTRACTS = {
 	stEth: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
 	stEthBridge: '0xfE08D40Eee53d64936D3128838867c867602665c',
 	dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
-	daiBridge: '0xc7b80ce29ae7a553c655c4Fec09A5791D3DFe2C6',
+	daiBridge: '0x6A1B588B0684dACE1f53C5820111F400B3dbfeBf',
 };
 
 export const TOKEN_DECIMALS = 12;
