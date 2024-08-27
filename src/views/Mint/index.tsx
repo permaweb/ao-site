@@ -104,7 +104,6 @@ export default function Mint() {
 						processId: AO.tokenMirror,
 						action: 'Balances-By-User',
 						tags: [{ name: 'User', value: ethProvider.walletAddress }],
-						// replyTag: { name: 'Action', value: 'Get-Balances-By-User-Response' },
 					});
 					console.log('Fetched ao balance for eth address', tokenBalances);
 
