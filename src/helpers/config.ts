@@ -26,7 +26,7 @@ import { ArWalletEnum, EthWalletEnum } from './types';
 
 export const AO = {
 	token: 'm3PaWzK4PTG9lAaqYQPaPdOcXdO8hYqi5Fe9NWqXd0w',
-	tokenMirror: 'yeoVbmATBB951KP0dU2qRUIhtpUFt1lnZ4UKpSOL5dw',
+	tokenMirror: 'ptCu-Un-3FF8sZ5zNMYg43zRgSYAGVkjz2Lb0HZmx2M',
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
 	stEthPriceOracle: 'rwxd1EuSzEVoy3qTlDRm7eMYPbOMrmQMajynVrA-ikk',
