@@ -1,3 +1,7 @@
+html {
+	--onboard-modal-z-index: 1000;
+}
+
 .container {
 	display: flex;
 	flex-direction: column;
