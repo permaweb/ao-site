@@ -57,6 +57,7 @@ export default function Ethereum() {
 
 	const [stEthBalance, setStEthBalance] = React.useState<bigint | null>(null);
 	const [depositedStEthBalance, setDepositedStEthBalance] = React.useState<bigint | null>(null);
+	const [daiLastStake, setDaiLastStake] = React.useState<number | null>(null);
 
 	const [amount, setAmount] = React.useState<string>('0');
 	const amountInWei = React.useMemo(() => {
@@ -192,6 +193,7 @@ export default function Ethereum() {
 				.call()
 				.then((usersData) => {
 					setDepositedDaiBalance((usersData as any).deposited as bigint);
+					setDaiLastStake(Number((usersData as any).lastStake as bigint));
 				})
 				.catch((e: any) => {
 					console.error(e);
@@ -290,6 +292,15 @@ export default function Ethereum() {
 						console.log('Stake transaction confirmed:', stake);
 						break;
 					case 'Withdraw':
+						if (selectedAsset.id === 'DAI') {
+							console.log('Dai last stake:', daiLastStake);
+							const timeLeft = daiLastStake + 64800 - Date.now() / 1000;
+							console.log('Time left before user can withdraw:', timeLeft);
+							if (timeLeft > 0) {
+								throw new Error('Dai has 18h lockup period.');
+							}
+						}
+
 						const withdraw = await bridgeContract.methods.withdraw(poolId, amountInWei, arweaveRecipient).send({
 							from: ethProvider.walletAddress,
 						});
@@ -465,7 +476,7 @@ export default function Ethereum() {
 							width={350}
 						/>
 					</S.Action>
-					<PreBridgeInfo />
+					<PreBridgeInfo asset={selectedAsset.id} />
 				</S.Content>
 			</S.Wrapper>
 			{response && <Notification message={response.message} type={response.status} callback={handleClear} />}
