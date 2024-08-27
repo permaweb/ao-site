@@ -120,16 +120,6 @@ export function getDaiReward(
 	daiPrice: number,
 	daiYield: number
 ) {
-	console.log({
-		days,
-		daiBridgedByUser,
-		currentAoSupply,
-		totalStEthBridged,
-		stEthPrice,
-		stEthYield,
-		daiPrice,
-		daiYield,
-	});
 	const bridgeRewards = getRewardInDays(days, currentAoSupply) * (2 / 3);
 
 	const totalStEthYield = totalStEthBridged * stEthPrice * stEthYield;
@@ -137,9 +127,5 @@ export function getDaiReward(
 	const totalYield = totalStEthYield + totalDaiYield;
 
 	const userYield = daiBridgedByUser * daiPrice * daiYield;
-	console.log('userYield', userYield);
-	console.log('totalYield', totalYield);
-	console.log('bridgeRewards', bridgeRewards);
-	console.log('reward', bridgeRewards * (userYield / totalYield));
 	return bridgeRewards * (userYield / totalYield);
 }
