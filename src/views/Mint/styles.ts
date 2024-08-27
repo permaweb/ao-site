@@ -27,6 +27,14 @@ export const Section = styled.div<{ columns?: number }>`
 	grid-template-columns: repeat(${(props) => props.columns || 5}, 1fr);
 `;
 
+export const InfoSection = styled.div`
+	padding: 24px 32px;
+	padding-top: 0px;
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+`;
+
 export const Column = styled.div`
 	display: flex;
 	flex-direction: column;
