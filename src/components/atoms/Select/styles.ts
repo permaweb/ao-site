@@ -1,13 +1,10 @@
 import styled from 'styled-components';
 
-import { STYLING } from 'helpers/config';
-
 export const Wrapper = styled.div`
-	height: fit-content;
-	width: 100%;
 	position: relative;
-	width: 315px;
-	max-width: 90vw;
+	display: flex;
+	height: 100%;
+	align-items: center;
 `;
 
 export const Label = styled.div<{ disabled: boolean }>`
@@ -22,41 +19,17 @@ export const Label = styled.div<{ disabled: boolean }>`
 `;
 
 export const Dropdown = styled.button<{ active: boolean }>`
-	height: 32.5px;
-	width: 100%;
+	height: 42px;
 	text-align: left;
 	padding: 0 12.5px;
 	display: flex;
+	gap: 4px;
 	align-items: center;
-	justify-content: space-between;
 	background: ${(props) =>
 		props.active ? props.theme.colors.button.primary.active.background : props.theme.colors.button.primary.background};
-	border: 1px solid ${(props) => (props.active ? props.theme.colors.border.primary : props.theme.colors.border.primary)};
-	border-radius: ${STYLING.dimensions.radius.primary};
 	transition: all 100ms;
-	&:hover {
-		background: ${(props) => props.theme.colors.button.primary.active.background};
-		border: 1px solid ${(props) => props.theme.colors.button.primary.active.border};
-		span {
-			color: ${(props) => props.theme.colors.font.light1} !important;
-		}
-		svg {
-			color: ${(props) => props.theme.colors.font.light1} !important;
-		}
-	}
-	&:focus {
-		background: ${(props) => props.theme.colors.button.primary.active.background};
-		border: 1px solid ${(props) => props.theme.colors.button.primary.active.border};
-		span {
-			color: ${(props) => props.theme.colors.font.light1} !important;
-		}
-		svg {
-			color: ${(props) => props.theme.colors.font.light1} !important;
-		}
-	}
 	&:disabled {
 		background: ${(props) => props.theme.colors.button.primary.disabled.background};
-		border: 1px solid ${(props) => props.theme.colors.button.primary.disabled.border};
 		span {
 			color: ${(props) => props.theme.colors.button.primary.disabled.color} !important;
 		}
@@ -66,30 +39,33 @@ export const Dropdown = styled.button<{ active: boolean }>`
 	}
 
 	span {
+		margin-right: 8px;
 		width: fit-content;
 		text-overflow: ellipsis;
 		overflow: hidden;
-		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
-		color: ${(props) =>
-			props.active ? props.theme.colors.font.light1 : props.theme.colors.button.primary.color} !important;
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-size: ${(props) => props.theme.typography.size.xLg} !important;
+		font-weight: ${(props) => props.theme.typography.weight.light} !important;
+		color: ${(props) => props.theme.colors.button.primary.color} !important;
 	}
+`;
 
+export const DropdownArrow = styled.div<{ disabled: boolean }>`
 	svg {
-		height: 17.5px;
-		width: 17.5px;
-		margin: 5px 0 0 0;
+		margin-top: 5px;
+		height: 25px !important;
+		width: 25px !important;
 		transform: rotate(90deg);
 		color: ${(props) =>
-			props.active ? props.theme.colors.font.light1 : props.theme.colors.button.primary.color} !important;
+			props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
 	}
 `;
 
 export const Options = styled.ul`
 	width: 100%;
 	position: absolute;
-	top: 40px;
-	z-index: 2;
+	top: 50px;
+	z-index: 20;
 	padding: 10px 0;
 `;
 
@@ -98,18 +74,24 @@ export const Option = styled.li<{ active: boolean }>`
 	height: 37.5px;
 	display: flex;
 	align-items: center;
+	gap: 10px;
 	cursor: ${(props) => (props.active ? 'default' : 'pointer')};
 	pointer-events: ${(props) => (props.active ? 'none' : 'all')};
 	color: ${(props) => (props.active ? props.theme.colors.font.light1 : props.theme.colors.font.primary)};
 	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
 	background: ${(props) =>
-		props.active ? props.theme.colors.container.alt9.background : props.theme.colors.container.primary.active};
+		props.active ? props.theme.colors.container.alt7.background : props.theme.colors.container.primary.active};
 	border: 1px solid transparent;
-	padding: 0 15px;
+	padding: 5px 15px;
 	transition: all 100ms;
 	&:hover {
 		color: ${(props) => props.theme.colors.font.light1};
-		background: ${(props) => props.theme.colors.container.alt9.background};
+		background: ${(props) => props.theme.colors.container.alt7.background};
+	}
+	svg {
+		width: 20px !important;
+		height: 20px !important;
+		vertical-align: bottom;
 	}
 `;

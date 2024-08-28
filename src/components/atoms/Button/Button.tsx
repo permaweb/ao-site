@@ -26,6 +26,12 @@ export default function Button(props: IProps) {
 					icon: S.IconPrimary,
 				};
 				break;
+			case 'accent':
+				buttonObj = {
+					wrapper: S.Accent,
+					icon: S.IconAlt1,
+				};
+				break;
 			case 'alt1':
 				buttonObj = {
 					wrapper: S.Alt1,
@@ -75,6 +81,7 @@ export default function Button(props: IProps) {
 	function getAction() {
 		return (
 			<StyledButton
+				style={props.style}
 				tabIndex={props.noFocus ? -1 : 0}
 				type={props.formSubmit ? 'submit' : 'button'}
 				onClick={props.handlePress}
