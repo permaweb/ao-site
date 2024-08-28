@@ -11,6 +11,12 @@ export const PageWrapper = styled.div`
 	margin-top: 60px;
 `;
 
+export const DepositWithdrawTopWrapper = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+`;
+
 export const Content = styled.div`
 	display: flex;
 	flex-direction: column;
