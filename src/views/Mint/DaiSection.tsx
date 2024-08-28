@@ -305,7 +305,7 @@ export function DaiSection(props: DaiSectionProps) {
 			<S.Label>
 				<S.InfoSection>
 					<ReactSVG src={ASSETS.info} />
-					<span>Dai rewards go live at 11 AM EST September 2nd, 2024</span>
+					<span>Dai rewards go live at 11 AM EST September 4th, 2024</span>
 				</S.InfoSection>
 			</S.Label>
 		</div>
