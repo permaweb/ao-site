@@ -12,6 +12,12 @@ export const Wrapper = styled.div`
 	margin-bottom: 100px;
 	max-width: 1600px;
 	gap: 20px;
+	overflow-x: auto;
+
+	@media (max-width: 1200px) {
+		width: 1440px;
+		overflow-x: auto;
+	}
 `;
 
 export const Heading = styled.div`
@@ -135,7 +141,11 @@ export const AssetAmount = styled.h6<{
 `;
 
 export const Hero = styled(Section)`
-	align-items: center;
+	align-items: flex-start;
+	padding: 24px 0px 24px 0px;
+	display: grid;
+	gap: 40px;
+	grid-template-columns: 40% calc(60% - 40px);
 
 	${Column} {
 		align-items: center;
@@ -178,5 +188,49 @@ export const InfoModalBody = styled.div`
 		font-size: ${(props) => props.theme.typography.size.base};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-family: ${(props) => props.theme.typography.family.alt1};
+	}
+`;
+
+export const InfoWrapper = styled.div`
+	display: flex;
+	gap: 60px;
+	padding: 20px 30px;
+	position: relative;
+	border: 1px solid ${(props) => props.theme.colors.border.alt3};
+`;
+
+export const InfoWrapperSection = styled.div`
+	p {
+		color: ${(props) => props.theme.colors.font.alt1};
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-weight: ${(props) => props.theme.typography.weight.light};
+		font-family: ${(props) => props.theme.typography.family.primary};
+		text-transform: uppercase;
+
+		a {
+			font-weight: ${(props) => props.theme.typography.weight.medium};
+			color: ${(props) => props.theme.colors.button.accent.active.background};
+			text-decoration: underline;
+
+			&:hover {
+				color: ${(props) => props.theme.colors.button.accent.background};
+			}
+		}
+	}
+
+	img {
+		height: 310px;
+		width: 310px;
+	}
+`;
+
+export const InfoHeader = styled.div`
+	h4 {
+		color: ${(props) => props.theme.colors.font.primary};
+		font-size: ${(props) => props.theme.typography.size.h4};
+		font-weight: ${(props) => props.theme.typography.weight.light};
+		font-family: ${(props) => props.theme.typography.family.primary};
+		text-transform: uppercase;
+		margin: 0 0 40px 0;
 	}
 `;
