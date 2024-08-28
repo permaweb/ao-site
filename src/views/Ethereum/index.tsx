@@ -413,7 +413,7 @@ export default function Ethereum() {
 				<Button
 					style={{ width: 'fit-content' }}
 					type={'alt1'}
-					label={'BACK'}
+					label={language.backToMint}
 					iconLeftAlign
 					icon={ASSETS.arrowBack}
 					handlePress={() => navigate(`${URLS.mint}`)}

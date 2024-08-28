@@ -3,6 +3,7 @@ export const language = {
 		aoAudit: `AO Specific Audits`,
 		aoClaim: `AO Claim`,
 		arweaveAddress: `Arweave address`,
+		backToMint: `Back to Mint`,
 		calculator: `Calculator`,
 		circulatingSupply: `Circulating AO Supply`,
 		close: `Close`,
