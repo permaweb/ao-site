@@ -2,6 +2,7 @@ import ao from 'assets/ao.svg';
 import aoPict from 'assets/ao-pictograph.svg';
 import arconnect from 'assets/arconnect.png';
 import arrow from 'assets/arrow.svg';
+import arrowBack from 'assets/arrowBack.svg';
 import arweave from 'assets/arweave.svg';
 import arweaveApp from 'assets/arweave-app.svg';
 import calculator from 'assets/calculator.svg';
@@ -48,6 +49,7 @@ export const ASSETS = {
 	aoPict,
 	arconnect,
 	arrow,
+	arrowBack,
 	arweaveApp,
 	calculator,
 	checkmark,

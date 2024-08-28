@@ -409,7 +409,19 @@ export default function Ethereum() {
 
 	return (
 		<S.PageWrapper>
-			<WalletConnectionStatus />
+			<S.DepositWithdrawTopWrapper>
+				<Button
+					style={{ width: 'fit-content' }}
+					type={'alt1'}
+					label={language.backToMint}
+					iconLeftAlign
+					icon={ASSETS.arrowBack}
+					handlePress={() => navigate(`${URLS.mint}`)}
+					loading={loading}
+					height={40}
+				/>
+				<WalletConnectionStatus />
+			</S.DepositWithdrawTopWrapper>
 			<S.Wrapper className={'pre-bridge-wrapper'}>
 				<S.Content className={'pre-bridge-content'}>
 					<S.TabsWrapper>
