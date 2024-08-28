@@ -12,6 +12,7 @@ import 'zlib'; // Ensure this is bundled, as web3-onboard depends on it
 import 'path'; // Ensure this is bundled, as web3-onboard depends on it
 import '@fontsource-variable/roboto-mono';
 import '@fontsource-variable/dm-sans';
+import './App.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<CustomThemeProvider>

@@ -106,9 +106,11 @@ export default function Mint() {
 						tags: [{ name: 'User', value: ethProvider.walletAddress }],
 					});
 					console.log('Fetched ao balance for eth address', tokenBalances);
-					if (!tokenBalances) return;
-
-					setAoBalancesForEthWallet(tokenBalances);
+					if (!tokenBalances) {
+						setAoBalancesForEthWallet({});
+					} else {
+						setAoBalancesForEthWallet(tokenBalances);
+					}
 				} catch (e: any) {
 					console.error(e);
 				}
@@ -305,11 +307,15 @@ export default function Mint() {
 								</S.Label>
 								{connected ? (
 									aoBalance === null ? (
-										<S.LoadingWrapper>
-											<S.Loader>
-												<Loader xSm relative />
-											</S.Loader>
-										</S.LoadingWrapper>
+										!aoBalanceForEthWalletLoading && !aoBalanceForArWalletLoading ? (
+											'-'
+										) : (
+											<S.LoadingWrapper>
+												<S.Loader>
+													<Loader xSm relative />
+												</S.Loader>
+											</S.LoadingWrapper>
+										)
 									) : (
 										<S.AssetAmount>
 											<ReactSVG src={ASSETS.aoPict} />

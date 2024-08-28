@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 import Web3 from 'web3';
@@ -18,6 +18,26 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 import * as S from './styles';
 
 const { fromWei, toWei, toBigInt } = Web3.utils;
+
+function formatDuration(seconds: number) {
+	const hours = Math.floor(seconds / 3600);
+	const minutes = Math.floor((seconds % 3600) / 60);
+	const remainingSeconds = seconds % 60;
+
+	let result = '';
+
+	if (hours > 0) {
+		result += `${hours}h `;
+	}
+
+	if (minutes > 0 || hours > 0) {
+		result += `${minutes}m `;
+	}
+
+	result += `${remainingSeconds}s`;
+
+	return result.trim();
+}
 
 const selectOptions: SelectOptionType[] = [
 	{
@@ -244,6 +264,30 @@ export default function Ethereum() {
 
 		return receipt;
 	}
+	const [layoutRefresh, setLayoutRefresh] = React.useState<number>(0);
+
+	const validationError = useMemo(() => {
+		if (selectedAsset.id === 'DAI' && daiLastStake !== null && currentTab.name === 'Withdraw') {
+			// console.log('Dai last stake:', daiLastStake);
+			const timeLeft = daiLastStake + 64800 - Date.now() / 1000;
+			// console.log('Time left before user can withdraw:', timeLeft);
+			if (timeLeft > 0) {
+				return 'You can withdraw in ' + formatDuration(Math.ceil(timeLeft));
+			}
+		}
+
+		return '';
+	}, [selectedAsset, daiLastStake, currentTab, layoutRefresh]);
+
+	useEffect(() => {
+		if (!validationError) return;
+
+		const intervalId = setInterval(() => {
+			setLayoutRefresh(Math.random());
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, [validationError, setLayoutRefresh]);
 
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amountInWei > 0) {
@@ -292,15 +336,6 @@ export default function Ethereum() {
 						console.log('Stake transaction confirmed:', stake);
 						break;
 					case 'Withdraw':
-						if (selectedAsset.id === 'DAI') {
-							console.log('Dai last stake:', daiLastStake);
-							const timeLeft = daiLastStake + 64800 - Date.now() / 1000;
-							console.log('Time left before user can withdraw:', timeLeft);
-							if (timeLeft > 0) {
-								throw new Error('Dai has 18h lockup period.');
-							}
-						}
-
 						const withdraw = await bridgeContract.methods.withdraw(poolId, amountInWei, arweaveRecipient).send({
 							from: ethProvider.walletAddress,
 						});
@@ -468,9 +503,9 @@ export default function Ethereum() {
 					<S.Action>
 						<Button
 							type={'accent'}
-							label={label}
+							label={validationError || label}
 							handlePress={() => (ethProvider.walletAddress ? handleSubmit() : ethProvider.setWalletModalVisible(true))}
-							disabled={ethProvider.walletAddress ? disabled : false}
+							disabled={ethProvider.walletAddress ? disabled || !!validationError : false}
 							loading={loading}
 							height={74}
 							width={350}
