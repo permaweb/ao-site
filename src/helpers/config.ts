@@ -12,6 +12,7 @@ import codehawksAudit from 'assets/codehawks-audit.svg';
 import dai from 'assets/dai.svg';
 import stEth from 'assets/eth.svg';
 import ethereum from 'assets/ethereum.svg';
+import heroGraphic from 'assets/hero-graphic.svg';
 import info from 'assets/info.svg';
 import ipBlock from 'assets/ip-block.png';
 import metamask from 'assets/metamask.png';
@@ -58,6 +59,7 @@ export const ASSETS = {
 	codehawksAudit,
 	stEth,
 	dai,
+	heroGraphic,
 	info,
 	ipBlock,
 	metamask,

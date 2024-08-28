@@ -389,7 +389,38 @@ export default function Mint() {
 							</S.Column>
 						</S.Section>
 					</S.Column>
-					<Artwork />
+					<S.InfoWrapper className={'border-wrapper-primary'}>
+						<S.InfoWrapperSection>
+							<S.InfoHeader>
+								<h4>AO: 100% Fair Launch.</h4>
+							</S.InfoHeader>
+							<p>
+								21 million tokens. 4 year halving.
+								<br />
+								<br />
+								Just like bitcoin.
+								<br />
+								<br />
+								every single $AO minted by the community.
+								<br />
+								<br />
+								hold ar or pre-bridge your assets to participate.
+								<br />
+								<br />
+								<a
+									href={
+										'https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ'
+									}
+									target="_blank"
+								>
+									Learn more.
+								</a>
+							</p>
+						</S.InfoWrapperSection>
+						<S.InfoWrapperSection>
+							<img src={ASSETS.heroGraphic} />
+						</S.InfoWrapperSection>
+					</S.InfoWrapper>
 				</S.Hero>
 				<ArweaveSection
 					loading={loading}
