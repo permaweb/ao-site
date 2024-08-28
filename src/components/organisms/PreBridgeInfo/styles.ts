@@ -158,6 +158,17 @@ export const IconsLine = styled.div`
 		}
 	}
 
+	.ncc-audit-wrapper {
+		display: flex;
+		align-items: flex-end;
+
+		span {
+			display: inline-block;
+			font-size: 0.75rem;
+			color: ${(props) => props.theme.colors.font.alt1};
+		}
+	}
+
 	.renascence-audit {
 		svg {
 			height: 30px;
