@@ -152,6 +152,7 @@ export async function readHandler(args: {
 	action: string;
 	tags?: TagType[];
 	data?: any;
+	replyTag?: TagType;
 }): Promise<any> {
 	const tags = [{ name: 'Action', value: args.action }];
 	if (args.tags) tags.push(...args.tags);
@@ -163,11 +164,18 @@ export async function readHandler(args: {
 	});
 
 	if (response.Messages && response.Messages.length) {
-		if (response.Messages[0].Data) {
-			return JSON.parse(response.Messages[0].Data);
+		let message = response.Messages[0];
+		if (args.replyTag) {
+			message = response.Messages.find((msg: any) => {
+				return msg.Tags.some((tag: any) => tag.name === args.replyTag.name && tag.value === args.replyTag.value);
+			});
+		}
+
+		if (message.Data) {
+			return JSON.parse(message.Data);
 		} else {
-			if (response.Messages[0].Tags) {
-				return response.Messages[0].Tags.reduce((acc: any, item: any) => {
+			if (message.Tags) {
+				return message.Tags.reduce((acc: any, item: any) => {
 					acc[item.name] = item.value;
 					return acc;
 				}, {});

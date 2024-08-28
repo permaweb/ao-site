@@ -73,25 +73,59 @@ export function arweaveToEVMBytes(arweaveAddress) {
 
 export function getRewardInDays(days: number, currentSupply: number) {
 	const TOTAL_AO_SUPPLY = 21000000;
-
+	//  AO_MINTED is the % of AO tokens already minted
+	const AO_MINTED = currentSupply / TOTAL_AO_SUPPLY;
+	// BLOCKS is the number of 5 minute blocks within the reward period
+	const BLOCKS = 288 * days;
 	const REWARD_PER_PERIOD = 0.000001647321875;
-	const EMISSION_PERIOD = 5;
 
-	let reward = 0;
-	const periods = (60 / EMISSION_PERIOD) * 24 * days;
-
-	for (let i = 0; i < periods; i++) {
-		const periodSupply = currentSupply + reward;
-		reward += (TOTAL_AO_SUPPLY - periodSupply) * REWARD_PER_PERIOD;
-	}
-
+	const reward = (1 - AO_MINTED) * (1 - (1 - REWARD_PER_PERIOD) ** BLOCKS) * TOTAL_AO_SUPPLY;
 	return reward;
 }
 
-export function getArReward(days: number, userBalance: number, totalBalances: number, currentAOSupply: number) {
-	return getRewardInDays(days, currentAOSupply) * (1 / 3) * (userBalance / totalBalances);
+export function getArReward(days: number, arBalance: number, arSupply: number, currentAOSupply: number) {
+	const arRewards = getRewardInDays(days, currentAOSupply) * (1 / 3);
+	return arRewards * (arBalance / arSupply);
 }
 
-export function getEthReward(days: number, userBalance: number, totalBalances: number, currentAOSupply: number) {
-	return getRewardInDays(days, currentAOSupply) * (2 / 3) * (userBalance / totalBalances);
+export function getEthReward(
+	days: number,
+	stEthBridgedByUser: number,
+	currentAoSupply: number,
+	totalStEthBridged: number,
+	totalDaiBridged: number,
+	stEthPrice: number,
+	stEthYield: number,
+	daiPrice: number,
+	daiYield: number
+) {
+	const bridgeRewards = getRewardInDays(days, currentAoSupply) * (2 / 3);
+
+	const totalStEthYield = totalStEthBridged * stEthPrice * stEthYield;
+	const totalDaiYield = totalDaiBridged * daiPrice * daiYield;
+	const totalYield = totalStEthYield + totalDaiYield;
+
+	const userYield = stEthBridgedByUser * stEthPrice * stEthYield;
+	return bridgeRewards * (userYield / totalYield);
+}
+
+export function getDaiReward(
+	days: number,
+	daiBridgedByUser: number,
+	currentAoSupply: number,
+	totalStEthBridged: number,
+	totalDaiBridged: number,
+	stEthPrice: number,
+	stEthYield: number,
+	daiPrice: number,
+	daiYield: number
+) {
+	const bridgeRewards = getRewardInDays(days, currentAoSupply) * (2 / 3);
+
+	const totalStEthYield = totalStEthBridged * stEthPrice * stEthYield;
+	const totalDaiYield = totalDaiBridged * daiPrice * daiYield;
+	const totalYield = totalStEthYield + totalDaiYield;
+
+	const userYield = daiBridgedByUser * daiPrice * daiYield;
+	return bridgeRewards * (userYield / totalYield);
 }
