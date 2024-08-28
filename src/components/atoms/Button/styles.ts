@@ -62,7 +62,6 @@ export const Primary = styled.button<{
 	border: 1px solid
 		${(props) =>
 			props.active ? props.theme.colors.button.primary.active.border : props.theme.colors.button.primary.border};
-	border-radius: 36px;
 	&:hover {
 		background: ${(props) => props.theme.colors.button.primary.active.background};
 		border: 1px solid ${(props) => props.theme.colors.button.primary.active.border};
@@ -100,7 +99,7 @@ export const Primary = styled.button<{
 		overflow: hidden;
 		font-family: ${(props) => props.theme.typography.family.primary};
 		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.medium} !important;
+		font-weight: ${(props) => props.theme.typography.weight.light} !important;
 		text-transform: uppercase;
 		line-height: 1;
 		color: ${(props) =>
@@ -126,6 +125,50 @@ export const IconPrimary = styled.div<{
 				: props.active
 				? props.theme.colors.button.primary.active.color
 				: props.theme.colors.button.primary.color};
+	}
+`;
+
+export const Accent = styled(Primary)`
+	background: ${(props) =>
+		props.active ? props.theme.colors.button.accent.active.background : props.theme.colors.button.accent.background};
+	border: 1px solid
+		${(props) =>
+			props.active ? props.theme.colors.button.accent.active.border : props.theme.colors.button.accent.border};
+	&:hover {
+		background: ${(props) => props.theme.colors.button.accent.active.background};
+		border: 1px solid ${(props) => props.theme.colors.button.accent.active.border};
+		span {
+			color: ${(props) => props.theme.colors.button.accent.active.color} !important;
+		}
+	}
+	&:focus {
+		background: ${(props) =>
+			props.active
+				? props.theme.colors.button.accent.active.background
+				: props.theme.colors.button.accent.active.background};
+		border: 1px solid ${(props) => props.theme.colors.button.accent.active.border};
+		span {
+			color: ${(props) => props.theme.colors.button.accent.active.color} !important;
+		}
+	}
+	&:disabled {
+		background: ${(props) => props.theme.colors.button.accent.disabled.background};
+		border: 1px solid ${(props) => props.theme.colors.button.accent.disabled.border};
+		span {
+			color: ${(props) => props.theme.colors.button.accent.disabled.color} !important;
+		}
+		svg {
+			color: ${(props) => props.theme.colors.button.accent.disabled.color} !important;
+		}
+	}
+
+	span {
+		width: fit-content;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+		color: ${(props) => props.theme.colors.button.accent.color} !important;
 	}
 `;
 
@@ -161,7 +204,7 @@ export const Alt1 = styled(Primary)`
 		text-overflow: ellipsis;
 		overflow: hidden;
 		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
 		color: ${(props) => props.theme.colors.button.alt1.color} !important;
 	}
 `;

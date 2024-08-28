@@ -13,8 +13,8 @@
 		"test:coverage": "CI=true npm test -- --env=jsdom --coverage",
 		"prepare": "husky install",
 		"build": "NODE_ENV=production webpack",
-		"deploy-staging": "npm run build && permaweb-deploy --ant-contract aqfzYcdqvG7OdhcTZUyuvzuwBr2RXfF0lnUHdb35KtQ",
-		"deploy-main": "npm run build && permaweb-deploy --ant-contract uOf4TMgQxdaSXgcZ778PZR13UQPKJoZVK2ZvLAE90Xg"
+		"deploy-staging": "npm run build && permaweb-deploy --ant-process Gu5XiFhZZO_Pc6vRb6eoR3DxQi2P_1SzAVkHDbsPtbc",
+		"deploy-main": "npm run build && permaweb-deploy --ant-process uOf4TMgQxdaSXgcZ778PZR13UQPKJoZVK2ZvLAE90Xg"
 	},
 	"dependencies": {
 		"@ethersproject/providers": "^5.7.2",
@@ -46,6 +46,7 @@
 		"better-react-mathjax": "^2.0.3",
 		"chart.js": "^4.4.3",
 		"ethers": "^6.12.2",
+		"framer-motion": "^11.3.28",
 		"html-react-parser": "^5.1.10",
 		"jwt-decode": "^4.0.0",
 		"katex": "^0.13.3",
@@ -111,7 +112,7 @@
 		"image-webpack-loader": "^8.1.0",
 		"os-browserify": "^0.3.0",
 		"path-browserify": "^1.0.1",
-		"permaweb-deploy": "1.0.1",
+		"permaweb-deploy": "^1.1.7",
 		"prettier": "^2.8.3",
 		"process": "^0.11.10",
 		"raw-loader": "^4.0.2",
