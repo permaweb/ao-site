@@ -13,8 +13,8 @@
 		"test:coverage": "CI=true npm test -- --env=jsdom --coverage",
 		"prepare": "husky install",
 		"build": "NODE_ENV=production webpack",
-		"deploy-staging": "npm run build && permaweb-deploy --ant-process YFbfeqZMbPVGFjQ-PHJY-Y99JQu7O3Jdet06pJnD5iI",
-		"deploy-main": "npm run build && permaweb-deploy --ant-process uOf4TMgQxdaSXgcZ778PZR13UQPKJoZVK2ZvLAE90Xg"
+		"deploy-staging": "npm run build && permaweb-deploy --ant-process Gu5XiFhZZO_Pc6vRb6eoR3DxQi2P_1SzAVkHDbsPtbc",
+		"deploy-main": "npm run build && permaweb-deploy --ant-process YFbfeqZMbPVGFjQ-PHJY-Y99JQu7O3Jdet06pJnD5iI"
 	},
 	"dependencies": {
 		"@ethersproject/providers": "^5.7.2",
