@@ -192,8 +192,6 @@ export const GlobalStyle = createGlobalStyle`
 
   .border-wrapper-alt1 {
     background: ${(props) => props.theme.colors.container.alt3.background};
-    border: 1px solid ${(props) => props.theme.colors.container.alt3.background};
-    border-radius: ${STYLING.dimensions.radius.primary};
   }
 
 	.border-wrapper-alt2 {
@@ -284,7 +282,7 @@ export const GlobalStyle = createGlobalStyle`
 
 	.pre-bridge-content {
 		height: fit-content;
-		width: 100%;
+		width: 720px;
 		display: flex;
 		flex: 1;
 	}

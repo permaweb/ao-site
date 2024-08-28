@@ -1,5 +1,3 @@
-import '../../App.css';
-
 import HomeMain from './sections/02-main/HomeMain';
 
 function Home() {

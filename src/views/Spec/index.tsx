@@ -1,5 +1,3 @@
-import '../../App.css';
-
 import SpecMain from './02-main/SpecMain';
 import * as S from './styles';
 
