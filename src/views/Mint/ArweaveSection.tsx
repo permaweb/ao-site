@@ -92,9 +92,9 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 					</>
 				) : (
 					<Button
-						style={{ width: 'fit-content' }}
+						style={{ width: 'fit-content', boxShadow: '0px 4px 0px 0px #797979', border: '1px solid black' }}
 						type={'alt1'}
-						label={'Connect Wallet'}
+						label={'Connect Arweave Wallet'}
 						handlePress={() => {
 							arProvider.setWalletModalVisible(true);
 						}}
@@ -130,7 +130,7 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 						</S.AssetAmount>
 					)
 				) : (
-					<S.AssetAmount>-</S.AssetAmount>
+					<S.AssetAmount>0</S.AssetAmount>
 				)}
 				<S.Label size="small">
 					{monthlyRewardRatio === null ? 'Loading...' : `1 AR = ${formatDisplayAmount(monthlyRewardRatio)} AO`}
@@ -152,7 +152,7 @@ export function ArweaveSection(props: ArweaveSectionProps) {
 						</S.AssetAmount>
 					)
 				) : (
-					<S.AssetAmount>-</S.AssetAmount>
+					<S.AssetAmount>0</S.AssetAmount>
 				)}
 				<S.Label size="small">
 					{yearlyRewardRatio === null ? 'Loading...' : `1 AR = ${formatDisplayAmount(yearlyRewardRatio)} AO`}

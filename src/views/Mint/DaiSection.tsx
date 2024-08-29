@@ -203,9 +203,9 @@ export function DaiSection(props: DaiSectionProps) {
 						</>
 					) : (
 						<Button
-							style={{ width: 'fit-content' }}
+							style={{ width: 'fit-content', boxShadow: '0px 4px 0px 0px #797979', border: '1px solid black' }}
 							type={'alt1'}
-							label={'Connect Wallet'}
+							label={'Connect ETH Wallet'}
 							handlePress={() => {
 								ethProvider.setWalletModalVisible(true);
 							}}
@@ -241,7 +241,7 @@ export function DaiSection(props: DaiSectionProps) {
 							</S.AssetAmount>
 						)
 					) : (
-						<S.AssetAmount>-</S.AssetAmount>
+						<S.AssetAmount>0</S.AssetAmount>
 					)}
 					<S.Label size="small">
 						{monthlyRewardRatio === null ? 'Loading...' : `1 DAI = ${formatDisplayAmount(monthlyRewardRatio)} AO`}
@@ -263,7 +263,7 @@ export function DaiSection(props: DaiSectionProps) {
 							</S.AssetAmount>
 						)
 					) : (
-						<S.AssetAmount>-</S.AssetAmount>
+						<S.AssetAmount>0</S.AssetAmount>
 					)}
 					<S.Label size="small">
 						{yearlyRewardRatio === null ? 'Loading...' : `1 DAI = ${formatDisplayAmount(yearlyRewardRatio)} AO`}
@@ -290,6 +290,7 @@ export function DaiSection(props: DaiSectionProps) {
 							handlePress={() => navigate(`${URLS.deposit}?asset=DAI`)}
 							loading={loading}
 							height={40}
+							width={170}
 						/>
 						<Button
 							style={{ width: 'fit-content' }}
@@ -298,6 +299,7 @@ export function DaiSection(props: DaiSectionProps) {
 							handlePress={() => navigate(`${URLS.withdraw}?asset=DAI`)}
 							loading={loading}
 							height={40}
+							width={170}
 						/>
 					</S.Row>
 				</S.Column>
