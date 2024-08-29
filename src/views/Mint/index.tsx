@@ -330,7 +330,7 @@ export default function Mint() {
 										</S.AssetAmount>
 									)
 								) : (
-									'-'
+									<span style={{ fontSize: '28px', fontFamily: 'DM Sans' }}>0 </span>
 								)}
 								<S.Label>
 									<S.TooltipLine>
@@ -366,7 +366,7 @@ export default function Mint() {
 										</S.AssetAmount>
 									)
 								) : (
-									'-'
+									<span style={{ fontSize: '28px', fontFamily: 'DM Sans' }}>0 </span>
 								)}
 							</S.Column>
 							<S.Column>
@@ -384,7 +384,7 @@ export default function Mint() {
 										</S.AssetAmount>
 									)
 								) : (
-									'-'
+									<span style={{ fontSize: '28px', fontFamily: 'DM Sans' }}>0 </span>
 								)}
 							</S.Column>
 						</S.Section>
@@ -392,19 +392,20 @@ export default function Mint() {
 					<S.InfoWrapper className={'border-wrapper-primary'}>
 						<S.InfoWrapperSection>
 							<S.InfoHeader>
-								<h4>AO: 100% Fair Launch.</h4>
+								<img style={{ width: '40px' }} src={ASSETS.aoPict} />
+								<h4>: 100% Fair Launch.</h4>
 							</S.InfoHeader>
-							<p>
+							<p style={{ fontFamily: 'DM Sans', textTransform: 'none' }}>
 								21 million tokens. 4 year halving.
 								<br />
 								<br />
-								Just like bitcoin.
+								Just like Bitcoin.
 								<br />
 								<br />
-								every single $AO minted by the community.
+								Every single $AO minted by the community.
 								<br />
 								<br />
-								hold ar or pre-bridge your assets to participate.
+								Hold ar or pre-bridge your assets to participate.
 								<br />
 								<br />
 								<a
@@ -418,7 +419,7 @@ export default function Mint() {
 							</p>
 						</S.InfoWrapperSection>
 						<S.InfoWrapperSection>
-							<img src={ASSETS.heroGraphic} />
+							<img className="pie-chart" src={ASSETS.heroGraphic} />
 						</S.InfoWrapperSection>
 					</S.InfoWrapper>
 				</S.Hero>

@@ -204,9 +204,9 @@ export function StETHSection(props: StETHSectionProps) {
 					</>
 				) : (
 					<Button
-						style={{ width: 'fit-content' }}
+						style={{ width: 'fit-content', boxShadow: '0px 4px 0px 0px #797979', border: '1px solid black' }}
 						type={'alt1'}
-						label={'Connect Wallet'}
+						label={'Connect ETH Wallet'}
 						handlePress={() => {
 							ethProvider.setWalletModalVisible(true);
 						}}
@@ -242,7 +242,7 @@ export function StETHSection(props: StETHSectionProps) {
 						</S.AssetAmount>
 					)
 				) : (
-					<S.AssetAmount>-</S.AssetAmount>
+					<S.AssetAmount>0</S.AssetAmount>
 				)}
 				<S.Label size="small">
 					{monthlyRewardRatio === null ? 'Loading...' : `1 stETH = ${formatDisplayAmount(monthlyRewardRatio)} AO`}
@@ -264,7 +264,7 @@ export function StETHSection(props: StETHSectionProps) {
 						</S.AssetAmount>
 					)
 				) : (
-					<S.AssetAmount>-</S.AssetAmount>
+					<S.AssetAmount>0</S.AssetAmount>
 				)}
 				<S.Label size="small">
 					{yearlyRewardRatio === null ? 'Loading...' : `1 stETH = ${formatDisplayAmount(yearlyRewardRatio)} AO`}
@@ -291,6 +291,7 @@ export function StETHSection(props: StETHSectionProps) {
 						handlePress={() => navigate(`${URLS.deposit}?asset=stETH`)}
 						loading={loading}
 						height={40}
+						width={170}
 					/>
 					<Button
 						style={{ width: 'fit-content' }}
@@ -299,6 +300,7 @@ export function StETHSection(props: StETHSectionProps) {
 						handlePress={() => navigate(`${URLS.withdraw}?asset=stETH`)}
 						loading={loading}
 						height={40}
+						width={170}
 					/>
 				</S.Row>
 			</S.Column>

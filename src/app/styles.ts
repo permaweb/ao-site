@@ -190,6 +190,12 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: ${STYLING.dimensions.radius.primary};
   }
 
+    .border-wrapper-secondary {
+    background: ${(props) => props.theme.colors.container.primary.background};
+    border-left: 1px solid black;
+    border-radius: ${STYLING.dimensions.radius.primary};
+  }
+
   .border-wrapper-alt1 {
     background: ${(props) => props.theme.colors.container.alt3.background};
   }
