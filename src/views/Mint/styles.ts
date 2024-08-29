@@ -219,8 +219,8 @@ export const InfoWrapperSection = styled.div`
 	}
 
 	img {
-		height: 310px;
-		width: 310px;
+		height: 300px;
+		width: 300px;
 	}
 `;
 
@@ -231,6 +231,7 @@ export const InfoHeader = styled.div`
 		font-weight: ${(props) => props.theme.typography.weight.light};
 		font-family: ${(props) => props.theme.typography.family.primary};
 		text-transform: uppercase;
+		white-space: nowrap;
 		margin: 0 0 40px 0;
 	}
 `;
