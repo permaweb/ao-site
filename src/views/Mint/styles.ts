@@ -145,7 +145,6 @@ export const Hero = styled(Section)`
 	padding: 24px 0px 24px 0px;
 	display: grid;
 	gap: 40px;
-	grid-template-columns: 40% calc(60% - 40px);
 
 	${Column} {
 		align-items: center;
@@ -193,7 +192,9 @@ export const InfoModalBody = styled.div`
 
 export const InfoWrapper = styled.div`
 	display: flex;
-	gap: 60px;
+	gap: 20px;
+	align-items: center;
+	justify-content: center;
 	padding: 20px 30px;
 	position: relative;
 	border: 1px solid ${(props) => props.theme.colors.border.alt3};
@@ -218,7 +219,7 @@ export const InfoWrapperSection = styled.div`
 		}
 	}
 
-	img {
+	img .pie-chart {
 		height: 300px;
 		width: 300px;
 	}
@@ -228,10 +229,14 @@ export const InfoHeader = styled.div`
 	h4 {
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.h4};
-		font-weight: ${(props) => props.theme.typography.weight.light};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 		font-family: ${(props) => props.theme.typography.family.primary};
 		text-transform: uppercase;
 		white-space: nowrap;
-		margin: 0 0 40px 0;
 	}
+
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	margin: 0 0 40px 0;
 `;
