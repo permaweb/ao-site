@@ -27,7 +27,7 @@ export const lightTheme = {
 	alt1: '#0350E7',
 	alt2: '#0350E7',
 	blueColor1: '#091DFF',
-	blueColor2: '#0a19c9',
+	blueColor2: '#091DFF',
 	blueColor3: '#959eff',
 	greenColor: '#06C516',
 	semiTransparent1: 'rgba(255, 255, 255, 0.575)',
@@ -284,7 +284,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			xLg: '28px',
 			h1: 'clamp(24px, 4.5vw, 48px)',
 			h2: 'clamp(30px, 3.5vw, 38px)',
-			h4: 'clamp(28px, 2vw, 36px)',
+			h4: 'clamp(18px, 2vw, 24px)',
 		},
 		weight: {
 			thin: '200',

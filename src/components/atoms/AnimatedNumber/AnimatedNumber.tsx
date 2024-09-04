@@ -42,7 +42,7 @@ const AnimatedNumber = (props: AnimatedNumberProps) => {
 		<div
 			style={{
 				display: 'flex',
-				gap: '0px',
+
 				height: 50,
 				marginTop: -10,
 				marginBottom: -10,
@@ -61,6 +61,7 @@ const Digit = ({ digit, index }) => {
 				width: ['.', ','].includes(digit) ? '10px' : '20px',
 				height: '100%',
 				overflow: 'hidden',
+				marginLeft: '-1px',
 			}}
 		>
 			<AnimatePresence initial={false}>
@@ -77,6 +78,7 @@ const Digit = ({ digit, index }) => {
 						justifyContent: 'center',
 						alignItems: 'center',
 						position: 'absolute',
+						fontSize: '32px',
 					}}
 				>
 					{digit}
