@@ -1244,7 +1244,7 @@ export const Erc20_ABI = [
 export const ENDPOINTS = {
 	arTotalSupply: `https://arweave.net/total_supply`,
 	ipCheck: `https://ipinfo.io?token=${IP_TOKEN}`,
-	mainnetRpc: `https://eth.llamarpc.com`,
+	mainnetRpc: `https://rpc.ankr.com/eth`,
 };
 
 export const REDIRECTS = {
