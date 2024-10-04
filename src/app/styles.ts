@@ -300,7 +300,7 @@ export const GlobalStyle = createGlobalStyle`
 		height: 40px;
 		width: 100%;
 		overflow: hidden;
-		z-index: 2;
+    z-index: 60;
 		background: #FFFFFF;
 	}
 

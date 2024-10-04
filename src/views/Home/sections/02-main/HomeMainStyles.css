@@ -9,9 +9,18 @@ main {
 
 .main-wrapper {
 	width: 100%;
+	scroll-snap-type: y mandatory;
+	overflow-y: scroll;
+	height: 100vh;
+}
+
+.main-wrapper > section {
+	scroll-snap-align: start;
+	z-index: 10;
 }
 
 .hero-main-wrapper {
+	position: relative;
 	display: flex;
 	width: 100%;
 	flex-direction: column;
@@ -20,7 +29,6 @@ main {
 	align-self: stretch;
 	height: 100vh;
 	justify-content: center;
-	overflow: hidden;
 }
 
 .hero-main-wrapper canvas {
@@ -32,12 +40,13 @@ main {
 
 .full-section {
 	display: flex;
+	height: 100vh;
 	width: 100%;
 	flex-direction: column;
 	align-items: center;
 	flex: 1 0 0;
 	align-self: stretch;
-	height: 100vh;
+	padding: 140px 0;
 	justify-content: center;
 }
 
@@ -108,6 +117,11 @@ main {
 
 .content-build-wrapper {
 	max-width: 1000px;
+	width: 100%;
+}
+
+.content-community-wrapper {
+	max-width: 1200px;
 	width: 100%;
 }
 

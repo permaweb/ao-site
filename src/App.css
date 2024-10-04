@@ -15,6 +15,7 @@ html {
 	from {
 		opacity: 0;
 	}
+
 	to {
 		opacity: 1;
 	}
@@ -28,9 +29,11 @@ html {
 .link-terminal-red:hover {
 	color: var(--terminal-red);
 }
+
 .link-terminal-green:hover {
 	color: var(--terminal-green);
 }
+
 .link-terminal-blue:hover {
 	color: var(--terminal-blue);
 }

@@ -8,6 +8,7 @@ import './HomeMainStyles.css';
 import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt';
 
 import Build from './Build';
+import Community from './Community';
 import Ecosystem from './Ecosystem';
 import Hero from './Hero';
 
@@ -66,6 +67,7 @@ const HomeMain = () => {
 					<Hero />
 					<Ecosystem />
 					<Build />
+					<Community />
 					<Footer />
 				</div>
 			</main>

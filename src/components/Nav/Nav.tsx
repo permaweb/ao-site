@@ -21,12 +21,12 @@ const Nav = () => {
 							</button>
 						</Link>
 						<Link to={'/read'}>
-							<button className="glitch link-terminal-red" data-text="Read">
+							<button className="glitch link-terminal-blue" data-text="Read">
 								<HyperTextLoad word={'Read'} textType={'span'} speed={1} triggerOnLoad />
 							</button>
 						</Link>
 						<Link to={'https://cookbook_ao.g8way.io/'} target={'_blank'}>
-							<button className="glitch link-terminal-red" data-text="Build">
+							<button className="glitch link-terminal-green" data-text="Build">
 								<HyperTextLoad word={'Build'} textType={'span'} speed={1} triggerOnLoad />
 							</button>
 						</Link>

@@ -102,7 +102,7 @@ const Build = () => {
 	});
 
 	return (
-		<div className="full-section build">
+		<section className="full-section build">
 			<div className="content-build-wrapper">
 				{/* Top Navigation Buttons */}
 				<div style={buttonWrapper}>
@@ -167,7 +167,7 @@ const Build = () => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</section>
 	);
 };
 

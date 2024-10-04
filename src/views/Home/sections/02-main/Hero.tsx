@@ -11,7 +11,7 @@ const Hero = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	return (
-		<div className="hero-main-wrapper" ref={containerRef}>
+		<section className="hero-main-wrapper" ref={containerRef}>
 			<div className="hero">
 				<HexocetAnimationComponent containerRef={containerRef} />
 				<div className="content-hero-wrapper">
@@ -32,7 +32,7 @@ const Hero = () => {
 					<span>Explore</span> <img className="floating" src={chevronDown} alt="chevron-down" />
 				</div>
 			</div>
-		</div>
+		</section>
 	);
 };
 
