@@ -7,9 +7,14 @@ main {
 	width: 100%;
 }
 
-.home-main-wrapper {
+.main-wrapper {
+	width: 100%;
+}
+
+.hero-main-wrapper {
 	display: flex;
-	flex-direction: row;
+	width: 100%;
+	flex-direction: column;
 	align-items: center;
 	flex: 1 0 0;
 	align-self: stretch;
@@ -18,12 +23,22 @@ main {
 	overflow: hidden;
 }
 
-.home-main-wrapper canvas {
-	position: fixed;
+.hero-main-wrapper canvas {
+	position: absolute;
 	z-index: 1;
-	width: 100%;
 	transition: transform 3s ease-in-out;
 	animation: pulse 3s infinite;
+}
+
+.full-section {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
+	flex: 1 0 0;
+	align-self: stretch;
+	height: 100vh;
+	justify-content: center;
 }
 
 @keyframes pulse {
@@ -31,9 +46,25 @@ main {
 	100% {
 		opacity: 1;
 	}
+
 	50% {
 		opacity: 0.7;
 	}
+}
+
+@keyframes alt-pulse {
+	0%,
+	100% {
+		opacity: 0.6;
+	}
+
+	50% {
+		opacity: 0.2;
+	}
+}
+
+.count-up-num {
+	font-variant-numeric: tabular-nums;
 }
 
 .text-hero-wrapper {
@@ -60,22 +91,83 @@ main {
 	border: 1px solid black;
 }
 
+.background-transition:hover {
+	transition: background 500ms;
+	animation: backgroundTransition 3s ease-in-out infinite;
+}
+
+.background-transition:hover h3 {
+	color: var(--terminal-blue);
+	transition: color ease-in-out 300ms;
+}
+
+.content-ecosystem-wrapper {
+	max-width: 1000px;
+	width: 100%;
+}
+
+.content-build-wrapper {
+	max-width: 1000px;
+	width: 100%;
+}
+
+.explore-wrapper {
+	z-index: 2;
+	position: absolute;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	bottom: 80px;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Roboto Mono', monospace;
+	letter-spacing: -0.1px;
+	text-transform: uppercase;
+	font-size: 14px;
+}
+
+.floating {
+	animation: floating 1s linear infinite;
+}
+
+@keyframes floating {
+	0% {
+		transform: translate(0, 0px);
+	}
+
+	20% {
+		transform: translate(0, 4px);
+	}
+
+	100% {
+		transform: translate(0, 0px);
+	}
+}
+
 @keyframes backgroundTransition {
 	0% {
 		background-color: var(--background-color);
 	}
+
 	20% {
 		background-color: var(--background-color-2);
 	}
+
 	40% {
 		background-color: var(--background-color-3);
 	}
+
 	60% {
 		background-color: var(--background-color-4);
 	}
+
 	80% {
 		background-color: var(--background-color-5);
 	}
+
 	100% {
 		background-color: var(--background-color);
 	}
