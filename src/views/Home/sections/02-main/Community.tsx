@@ -7,7 +7,7 @@ import HyperTextLoad from 'components/hyperTextLoad';
 
 import './HomeMainStyles.css';
 
-const Build = () => {
+const Community = () => {
 	const stats = {
 		Processes: { name: 'Processes', amount: 204000 },
 		Users: { name: 'Users', amount: 50000 },
@@ -102,8 +102,8 @@ const Build = () => {
 	});
 
 	return (
-		<div className="full-section build">
-			<div className="content-build-wrapper">
+		<div className="full-section community">
+			<div className="content-community-wrapper">
 				{/* Top Navigation Buttons */}
 				<div style={buttonWrapper}>
 					<button className="link-terminal-red" style={buttonStyle}>
@@ -130,7 +130,7 @@ const Build = () => {
 						<video width={'100%'} src={hexagonVideo} autoPlay loop muted />
 					</div>
 					<div style={h1Wrapper}>
-						<h1 style={h1Style}>Start to build anything you want, </h1>
+						<h1 style={h1Style}>Start to Community anything you want, </h1>
 						<h1 style={h1Style} className={'count-up-num'} ref={countUpRef}>
 							<span style={{ color: 'var(--terminal-green)' }}>
 								{countUpInView && <CountUp start={0} end={100} duration={3} suffix="%" />}
@@ -171,4 +171,4 @@ const Build = () => {
 	);
 };
 
-export default Build;
+export default Community;

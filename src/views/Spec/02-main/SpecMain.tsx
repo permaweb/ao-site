@@ -1,4 +1,5 @@
 import specsMarkdown from 'assets/specsMarkdown.md';
+import Footer from 'components/Footer/Footer';
 
 import './SpecMainStyles.css';
 
@@ -12,6 +13,7 @@ const SpecMain = () => {
 					<div className="text-content-wrapper">
 						<MarkdownRenderer markdown={specsMarkdown} />
 					</div>
+					<Footer />
 				</div>
 			</main>
 		</>

@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import Footer from 'components/Footer/Footer';
+
 import './HomeMainStyles.css';
 
 import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt';
@@ -64,6 +66,7 @@ const HomeMain = () => {
 					<Hero />
 					<Ecosystem />
 					<Build />
+					<Footer />
 				</div>
 			</main>
 		</>

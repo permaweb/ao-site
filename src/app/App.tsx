@@ -1,4 +1,3 @@
-import Footer from 'components/Footer/Footer';
 import Nav from 'components/Nav/Nav';
 import { Routes } from 'routes';
 
@@ -12,7 +11,6 @@ export default function App() {
 			<div className={'view-wrapper'}>
 				<Routes />
 			</div>
-			<Footer />
 		</>
 	);
 }

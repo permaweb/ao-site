@@ -367,13 +367,15 @@ footer {
 }
 
 .footer-container {
+  position: fixed;
+  bottom: 12px;
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
   padding-left: 32px;
-  padding-right: 0px;
+  padding-right: 32px;
 }
 
 .nav-left {
@@ -416,7 +418,7 @@ footer {
 }
 
 .arweave-badge button {
-  padding-right: 32px;
+
   padding-left: 32px;
 }
 
