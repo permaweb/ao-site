@@ -120,6 +120,7 @@ function createURLs() {
 		base: base,
 		mint: mint,
 		read: `${base}read/`,
+		explore: `${base}explore/`,
 		deposit: `${mint}deposit/`,
 		withdraw: `${mint}withdraw/`,
 		notFound: `${base}404`,

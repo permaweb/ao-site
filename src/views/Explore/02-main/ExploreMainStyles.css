@@ -1,0 +1,77 @@
+.explore {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+	align-self: stretch;
+	scroll-snap-type: y mandatory;
+	overflow-y: scroll;
+	height: 100vh;
+}
+
+.explore section {
+	scroll-snap-align: start;
+	height: 100vh;
+	padding-top: 100px;
+}
+
+section p {
+	margin-bottom: 20px;
+}
+
+.explore-main-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex: 1 0 0;
+	align-self: stretch;
+	gap: 80px;
+	width: 100%;
+}
+
+.explore-content-wrapper {
+	display: flex;
+	max-width: 1200px;
+	flex-direction: column;
+	width: 100%;
+	transition: max-width 1s;
+	padding-inline: 50px;
+}
+
+.explore-content-wrapper p {
+	margin-bottom: 40px;
+	font-size: clamp(16px, 2.5vw, 28px);
+}
+
+.explore-content-wrapper h1 {
+	font-family: 'Roboto Mono';
+	font-size: clamp(12px, 2.5vw, 20px);
+	text-transform: uppercase;
+	margin-bottom: 40px;
+}
+
+.diagram {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
+}
+
+@media only screen and (max-width: 1200px) {
+	.text-content-wrapper {
+		max-width: 500px;
+	}
+}
+
+@media only screen and (max-width: 1000px) {
+	.text-content-wrapper {
+		max-width: 400px;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	.text-content-wrapper {
+		max-width: 365px;
+	}
+}

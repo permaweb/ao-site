@@ -37,7 +37,7 @@ const Community = () => {
 		fontFamily: 'Roboto Mono',
 		letterSpacing: '-0.8px',
 		fontWeight: 400,
-		fontSize: '14px',
+		fontSize: '18px',
 		textTransform: 'uppercase',
 		color: '#7F7F7F',
 	};
@@ -103,7 +103,7 @@ const Community = () => {
 				<div style={wrapper}>
 					<div style={textWrapper}>
 						<p style={pStyle}>
-							{countUpInView && <CountUp start={0} end={100} duration={3} suffix="%" style={{ marginRight: '5px' }} />}
+							{countUpInView && <CountUp start={0} end={100} duration={3} suffix="%" style={{ marginRight: '8px' }} />}
 							Fair Launch
 						</p>
 						<h1 style={h1Style}>A truly fair and transparent token economy. </h1>

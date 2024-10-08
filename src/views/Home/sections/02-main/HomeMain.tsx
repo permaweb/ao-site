@@ -11,6 +11,7 @@ import Build from './Build';
 import Community from './Community';
 import Ecosystem from './Ecosystem';
 import Hero from './Hero';
+import Permaweb from './Permaweb';
 
 const HomeMain = () => {
 	useEffect(() => {
@@ -68,6 +69,7 @@ const HomeMain = () => {
 					<Ecosystem />
 					<Build />
 					<Community />
+					<Permaweb />
 					<Footer />
 				</div>
 			</main>

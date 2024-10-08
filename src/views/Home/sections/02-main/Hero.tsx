@@ -21,7 +21,11 @@ const Hero = () => {
 						</div>
 					</div>
 					<div className="button-wrapper">
-						<Link to={'https://cookbook_ao.g8way.io/'} target="_blank" rel="noopener noreferrer">
+						<Link
+							to={'https://cookbook_ao.g8way.io/tutorials/begin/index.html'}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							<button className="glitch primary link-terminal-blue" data-text="→ Boot Up Testnet">
 								<HyperTextLoad word={'→ Boot Up The TestNet'} textType="span" speed={1} />
 							</button>

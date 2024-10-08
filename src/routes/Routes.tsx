@@ -7,6 +7,7 @@ const Home = getLazyImport('Home');
 const Spec = getLazyImport('Spec');
 const Mint = getLazyImport('Mint');
 const Deposit = getLazyImport('Deposit');
+const Explore = getLazyImport('Explore');
 
 export default function _Routes() {
 	return (
@@ -14,6 +15,7 @@ export default function _Routes() {
 			<Routes>
 				<Route path={URLS.base} element={<Home />} />
 				<Route path={URLS.read} element={<Spec />} />
+				<Route path={URLS.explore} element={<Explore />} />
 				<Route path={URLS.mint} element={<Mint />} />
 				<Route path={URLS.deposit} element={<Deposit />} />
 				<Route path={URLS.withdraw} element={<Deposit />} />

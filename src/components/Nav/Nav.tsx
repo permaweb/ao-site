@@ -15,14 +15,19 @@ const Nav = () => {
 						</div>
 					</Link>
 					<div className="nav-buttons-header">
+						<Link to={'/explore'}>
+							<button className="glitch link-terminal-green" data-text="Explore">
+								<HyperTextLoad word={'Explore'} textType={'span'} speed={1} triggerOnLoad />
+							</button>
+						</Link>
 						<Link to={'/mint'}>
 							<button className="glitch link-terminal-red" data-text="Mint">
 								<HyperTextLoad word={'Mint'} textType={'span'} speed={1} triggerOnLoad />
 							</button>
 						</Link>
 						<Link to={'/read'}>
-							<button className="glitch link-terminal-blue" data-text="Read">
-								<HyperTextLoad word={'Read'} textType={'span'} speed={1} triggerOnLoad />
+							<button className="glitch link-terminal-blue" data-text="Paper">
+								<HyperTextLoad word={'Paper'} textType={'span'} speed={1} triggerOnLoad />
 							</button>
 						</Link>
 						<Link to={'https://cookbook_ao.g8way.io/'} target={'_blank'}>

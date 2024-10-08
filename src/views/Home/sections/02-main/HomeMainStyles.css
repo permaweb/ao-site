@@ -125,6 +125,11 @@ main {
 	width: 100%;
 }
 
+.content-permaweb-wrapper {
+	max-width: 1200px;
+	width: 100%;
+}
+
 .explore-wrapper {
 	z-index: 2;
 	position: absolute;
