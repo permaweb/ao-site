@@ -1,0 +1,195 @@
+import { Link } from 'react-router-dom';
+
+import arconnect from '../../../assets/arconnect.svg';
+import arrowUpRight from '../../../assets/ArrowUpRight.svg'; // Import your arrow icon
+import bazar from '../../../assets/bazar.svg';
+import llamaland from '../../../assets/llamaland.svg';
+import permaswap from '../../../assets/permaswap.jpg';
+import warDepot from '../../../assets/warDepot.svg';
+
+const Ecosystem1 = () => {
+	// Define initial styles for the wallet wrapper and arrow
+	const projectWrapper: React.CSSProperties = {
+		width: '50%',
+		height: '232px',
+		display: 'flex',
+		flexDirection: 'column',
+		borderRadius: '20px',
+		background: 'rgb(249, 249, 249)',
+		paddingInline: '20px',
+		paddingBlock: '20px',
+		gap: '30px',
+		transition: 'all 300ms',
+		position: 'relative',
+		justifyContent: 'space-between',
+	};
+
+	const multipleProjectWrapper: React.CSSProperties = {
+		width: '100%',
+		height: '232px',
+		justifyContent: 'space-between',
+		display: 'flex',
+		flexDirection: 'column',
+		borderRadius: '20px',
+		background: 'rgb(249, 249, 249)',
+		paddingInline: '20px',
+		paddingBlock: '20px',
+		gap: '30px',
+		transition: 'all 300ms',
+		position: 'relative',
+	};
+
+	const arrowInitialStyle: React.CSSProperties = {
+		position: 'absolute',
+		top: '30px',
+		right: '20px',
+		width: '5%',
+	};
+
+	const bulletSquare = (
+		<div style={{ width: '12px', height: '12px', background: '#EAEAEA', marginTop: '15px', borderRadius: '2px' }}></div>
+	);
+
+	const divider = <div style={{ height: '1px', width: '100%', marginBlock: '100px' }}></div>;
+
+	return (
+		<section>
+			<h1 style={{ marginBottom: '0' }}>Ecosystem</h1>
+			<span
+				style={{ fontSize: 'clamp(12px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300', marginBottom: '100px' }}
+			>
+				Follow these steps to onboard into the AO and Arweave ecosystem:
+			</span>
+			<div style={{ display: 'flex', gap: '30px' }}>
+				{bulletSquare}
+				<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+					<p style={{ marginBottom: '0' }}>
+						<b>Obtain an Arweave wallet.</b>
+					</p>
+
+					<p>We recommend Arconnect, the most popular wallet that supports Arweave and AO tokens. </p>
+					<Link to={'https://arconnect.io/download'} style={{ width: '100%' }}>
+						<div className="wallet-wrapper" style={projectWrapper}>
+							<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+								<img src={arconnect} alt="arconnect" width={'8%'} />
+								<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Arconnect</p>
+							</div>
+							<span style={{ fontSize: 'clamp(10px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
+								Your gateway to Arweave and AO A non-custodial Arweave and AO native wallet with extensive features all
+								in your favorite browser and mobile device
+							</span>
+							{/* Arrow icon */}
+							<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
+						</div>
+					</Link>
+				</div>
+			</div>
+			{divider}{' '}
+			<div style={{ display: 'flex', gap: '30px' }}>
+				{bulletSquare}
+				<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+					<p style={{ marginBottom: '0' }}>
+						<b>Enter the token economy.</b>
+					</p>
+					<p>To use AO apps, obtain wrapped $AR ($wAR) using Permaswap or Wrapped AR Depot.</p>
+					<div style={{ display: 'flex', width: '100%', gap: '10px' }}>
+						<Link to={'https://permaswap.network'} style={{ width: '100%' }}>
+							<div className="wallet-wrapper" style={multipleProjectWrapper}>
+								<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+									<img src={permaswap} alt="permaswap" width={'8%'} />
+									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Permaswap</p>
+								</div>
+								<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
+									FusionFi Portal, A Unified Financial Protocol on Permaweb.
+								</span>
+								{/* Arrow icon */}
+								<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
+							</div>
+						</Link>
+						<Link to={'https://wardepot.arweave.net'} style={{ width: '100%' }}>
+							<div className="wallet-wrapper" style={multipleProjectWrapper}>
+								<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+									<img src={warDepot} alt="wardepot" width={'8%'} />
+									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Wrapped Ar Depot</p>
+								</div>
+								<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
+									Powered by Everpay.
+								</span>
+								{/* Arrow icon */}
+								<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
+							</div>
+						</Link>
+					</div>
+				</div>
+			</div>
+			{divider}
+			<div style={{ display: 'flex', gap: '30px' }}>
+				{bulletSquare}
+				<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+					<p style={{ marginBottom: '0' }}>
+						<b>Get vouched. </b>
+					</p>
+					<p>
+						Vouching is a proof of humanity mechanism that will grant your wallet access to all the app experiences on
+						AO. There are multiple ways to get vouched.
+					</p>
+
+					<Link to={'https://permaswap.network'} style={{ width: '100%' }}>
+						<div className="wallet-wrapper" style={projectWrapper}>
+							<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+								<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Vouch Portal</p>
+							</div>
+							<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
+								Vouch to access your favorite Permaweb Apps!
+							</span>
+							{/* Arrow icon */}
+							<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
+						</div>
+					</Link>
+				</div>
+			</div>
+			{divider}
+			<div style={{ display: 'flex', gap: '30px' }}>
+				{bulletSquare}
+				<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+					<p style={{ marginBottom: '0' }}>
+						<b>Use apps.</b>
+					</p>
+					<p>Check out a digital marketplace or a 100% onchain game.</p>
+					<div style={{ display: 'flex', width: '100%', gap: '10px' }}>
+						<Link to={'https://bazar.arweave.net'} style={{ width: '100%' }}>
+							<div className="wallet-wrapper" style={multipleProjectWrapper}>
+								<div style={{ display: 'flex', alignItems: 'center', marginInline: '-18px' }}>
+									<img src={bazar} alt="bazar" width={'15%'} />
+
+									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Bazar</p>
+								</div>
+								<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
+									Empowers creators and collectors to interact, trade, and transact with digital content{' '}
+								</span>
+								{/* Arrow icon */}
+								<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
+							</div>
+						</Link>
+						<Link to={'https://llamaland.arweave.net'} style={{ width: '100%' }}>
+							<div className="wallet-wrapper" style={multipleProjectWrapper}>
+								<div style={{ display: 'flex', alignItems: 'center', marginInline: '-10px' }}>
+									<img src={llamaland} alt="llamaland" width={'13%'} />
+
+									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Llamaland</p>
+								</div>
+								<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
+									AI powered MMO game built on AO. Petition the Llama King for Llama Coin! 100% onchain.
+								</span>
+								{/* Arrow icon */}
+								<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
+							</div>
+						</Link>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
+};
+
+export default Ecosystem1;

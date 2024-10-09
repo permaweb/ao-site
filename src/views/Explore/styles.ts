@@ -42,12 +42,13 @@ export const Wrapper = styled.div`
 		font-style: normal;
 		font-weight: 300;
 		line-height: normal;
+
 		margin: 0;
 	}
 
 	h2 {
 		font-family: 'Roboto Mono Variable';
-		font-size: clamp(10px, 2vw, 18px);
+		font-size: clamp(12px, 2vw, 20px);
 		font-style: normal;
 		font-weight: 300;
 		line-height: 150%;

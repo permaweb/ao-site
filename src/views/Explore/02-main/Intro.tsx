@@ -3,7 +3,7 @@ import './ExploreMainStyles.css';
 const Intro = () => {
 	return (
 		<section>
-			<h1>Introduction</h1>
+			<h1 style={{ marginBottom: '100px' }}>Introduction</h1>
 			<p>
 				AO is a decentralized computing system inspired by the actor-oriented paradigm. It’s a single system image
 				capable of supporting numerous parallel processes without the constraints of current decentralized computation

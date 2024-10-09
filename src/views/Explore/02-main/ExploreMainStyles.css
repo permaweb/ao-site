@@ -6,13 +6,9 @@
 	flex-shrink: 0;
 	align-self: stretch;
 	scroll-snap-type: y mandatory;
-	overflow-y: scroll;
-	height: 100vh;
 }
 
 .explore section {
-	scroll-snap-align: start;
-	height: 100vh;
 	padding-top: 100px;
 }
 
@@ -40,13 +36,25 @@ section p {
 }
 
 .explore-content-wrapper p {
+	font-family: 'DM Sans';
+
 	margin-bottom: 40px;
 	font-size: clamp(16px, 2.5vw, 28px);
 }
 
 .explore-content-wrapper h1 {
+	font-family: 'DM Sans';
+	font-size: clamp(24px, 5vw, 38px);
+	font-style: normal;
+	font-weight: 300;
+	line-height: normal;
+	letter-spacing: 1;
+	margin: 0;
+}
+
+.explore-content-wrapper h2 {
 	font-family: 'Roboto Mono';
-	font-size: clamp(12px, 2.5vw, 20px);
+	font-size: clamp(12px, 2.5vw, 24px);
 	text-transform: uppercase;
 	margin-bottom: 40px;
 }
@@ -56,6 +64,10 @@ section p {
 	flex-direction: column;
 	gap: 12px;
 	width: 100%;
+}
+
+.wallet-wrapper:hover {
+	opacity: 0.5;
 }
 
 @media only screen and (max-width: 1200px) {
