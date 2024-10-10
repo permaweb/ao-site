@@ -16,7 +16,7 @@ const Ecosystem = () => {
 		margin: '10px 0 50px 0',
 	};
 	return (
-		<section className="full-section ecosystem">
+		<section className="full-section ecosystem" style={{ paddingInline: '40px' }}>
 			<div className="content-ecosystem-wrapper">
 				<h1 style={h1Style}>Hyper parallel execution means </h1>
 				<h1 style={h1Style}>unlimited horizontal scalability </h1>

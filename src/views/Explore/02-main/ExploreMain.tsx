@@ -10,10 +10,8 @@ import Tokenomics from './Tokenomics';
 
 export const Divider = ({ showBorder = false }) => (
 	<div
+		className="divider"
 		style={{
-			height: '1px',
-			width: '100%',
-			marginBlock: '7vh',
 			border: showBorder ? '1px solid #F2F2F2' : 'none', // Conditionally apply the border
 		}}
 	></div>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
+import '../../../views/Home/sections/02-main/HomeMainStyles.css';
+
 type AnimatedNumberAltProps = {
 	startValue?: number | null;
 	increment?: number | null;
@@ -58,14 +60,19 @@ const AnimatedNumberAlt = (props: AnimatedNumberAltProps) => {
 };
 
 const Digit = ({ digit, index }) => {
+	const isSmallDigit = ['.', ','].includes(digit);
+
+	// Use window.innerWidth to adjust the margin based on screen width
+	const marginLeft = window.innerWidth <= 500 ? '-8px' : '-5px';
+
 	return (
 		<div
 			style={{
 				position: 'relative',
-				width: ['.', ','].includes(digit) ? '10px' : '20px',
+				width: isSmallDigit ? '10px' : '20px',
 				height: '100%',
 				overflow: 'hidden',
-				marginLeft: '-5px',
+				marginLeft: marginLeft, // Dynamic margin adjustment
 			}}
 		>
 			<AnimatePresence initial={false}>
@@ -82,7 +89,7 @@ const Digit = ({ digit, index }) => {
 						justifyContent: 'center',
 						alignItems: 'center',
 						position: 'absolute',
-						fontSize: '24px',
+						fontSize: 'clamp(16px, 2vw, 24px)',
 						fontFamily: 'DM Sans',
 					}}
 				>

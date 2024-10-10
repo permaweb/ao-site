@@ -59,6 +59,36 @@ section p {
 	margin-bottom: 40px;
 }
 
+.project-wrapper {
+	width: 50%;
+	height: 232px;
+	display: flex;
+	flex-direction: column;
+	border-radius: 20px;
+	background: rgb(249, 249, 249);
+	padding-inline: 20px;
+	padding-block: 20px;
+	gap: 30px;
+	transition: all 300ms;
+	position: relative;
+	justify-content: space-between;
+}
+
+.multiple-project-wrapper {
+	width: 100%;
+	height: 232px;
+	display: flex;
+	flex-direction: column;
+	border-radius: 20px;
+	background: rgb(249, 249, 249);
+	padding-inline: 20px;
+	padding-block: 20px;
+	gap: 30px;
+	transition: all 300ms;
+	position: relative;
+	justify-content: space-between;
+}
+
 .diagram {
 	display: flex;
 	flex-direction: column;
@@ -70,9 +100,27 @@ section p {
 	opacity: 0.5;
 }
 
+.project-container {
+	display: flex;
+	width: 100%;
+	gap: 15px;
+}
+
+.divider {
+	height: 1px;
+	width: 100%;
+	margin-block: 7vh;
+}
+
 @media only screen and (max-width: 1500px) {
 	.text-content-wrapper {
 		max-width: 450px;
+	}
+}
+
+@media only screen and (max-width: 1200px) {
+	.project-wrapper {
+		width: 100%;
 	}
 }
 
@@ -80,10 +128,37 @@ section p {
 	.text-content-wrapper {
 		max-width: 400px;
 	}
+
+	.project-container {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	.divider {
+		margin-block: 3vh;
+	}
+
+	.intro {
+		height: fit-content;
+	}
+
+	.intro h1 {
+		margin-bottom: 0px;
+	}
 }
 
 @media only screen and (max-width: 400px) {
 	.text-content-wrapper {
 		max-width: 365px;
+	}
+
+	#intro {
+		height: 100%;
+	}
+
+	#intro {
+		height: 100%;
 	}
 }

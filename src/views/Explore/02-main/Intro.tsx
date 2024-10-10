@@ -2,7 +2,7 @@ import './ExploreMainStyles.css';
 
 const Intro = () => {
 	return (
-		<section id="intro" style={{ height: '100vh' }}>
+		<section className="intro" id="intro" style={{ height: '100vh' }}>
 			<h1 style={{ marginBottom: '100px' }}>Introduction</h1>
 			<p>
 				AO is a decentralized computing system inspired by the actor-oriented paradigm. It’s a single system image

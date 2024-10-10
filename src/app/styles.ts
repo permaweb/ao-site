@@ -344,7 +344,7 @@ nav {
   font-family: 'Roboto Mono', monospace;
   letter-spacing: -0.1px;
   text-transform: uppercase;
-  font-size: (8px, 5vw, 12px);
+  font-size: (8px, 2vw, 12px);
 }
 
 .main-cta-wrapper {
@@ -406,7 +406,7 @@ footer {
   font-family: 'Roboto Mono', monospace;
   letter-spacing: -0.1px;
   text-transform: uppercase;
-  font-size: (8px, 5vw, 12px);
+  font-size: (8px, 2vw, 12px);
 }
 
 .arweave-badge {

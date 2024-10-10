@@ -75,3 +75,9 @@ aside {
 .active .nav-link {
 	color: #000;
 }
+
+@media only screen and (max-width: 975px) {
+	aside {
+		display: none;
+	}
+}

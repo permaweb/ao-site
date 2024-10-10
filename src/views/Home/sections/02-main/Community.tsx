@@ -28,15 +28,15 @@ const Community = () => {
 
 	const h2Style: React.CSSProperties = {
 		fontWeight: 400,
-		fontSize: '18px',
+
 		letterSpacing: '-0.8px',
 	};
 
 	const pStyle: React.CSSProperties = {
 		fontFamily: 'Roboto Mono',
-		letterSpacing: '-0.8px',
+		letterSpacing: '-0.5px',
 		fontWeight: 400,
-		fontSize: '18px',
+		fontSize: 'clamp(15px, 2vw, 20px)',
 		textTransform: 'uppercase',
 		color: '#7F7F7F',
 	};
@@ -96,7 +96,7 @@ const Community = () => {
 	};
 
 	return (
-		<section className="full-section community">
+		<section className="full-section community" style={{ paddingInline: '40px' }}>
 			<div className="content-community-wrapper">
 				{/* Header Section */}
 				<div style={wrapper}>
@@ -115,9 +115,10 @@ const Community = () => {
 				</div>
 
 				{/* Pie Chart Section */}
-				<div style={{ margin: '50px 0', display: 'flex', justifyContent: 'center', width: '100%' }}>
+				<div className="pie-container" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
 					<div
-						style={{ position: 'relative', display: 'flex', justifyContent: 'center', height: '50vh', width: '50vw' }}
+						className="pie-wrapper"
+						style={{ position: 'relative', display: 'flex', justifyContent: 'center', width: '50vw' }}
 						ref={pieChartRef}
 					>
 						{/* Only render the chart when it's in view */}

@@ -22,37 +22,6 @@ export const bulletSquare = (
 	></div>
 );
 const Ecosystem1 = () => {
-	// Define initial styles for the wallet wrapper and arrow
-	const projectWrapper: React.CSSProperties = {
-		width: '50%',
-		height: '232px',
-		display: 'flex',
-		flexDirection: 'column',
-		borderRadius: '20px',
-		background: 'rgb(249, 249, 249)',
-		paddingInline: '20px',
-		paddingBlock: '20px',
-		gap: '30px',
-		transition: 'all 300ms',
-		position: 'relative',
-		justifyContent: 'space-between',
-	};
-
-	const multipleProjectWrapper: React.CSSProperties = {
-		width: '100%',
-		height: '232px',
-		justifyContent: 'space-between',
-		display: 'flex',
-		flexDirection: 'column',
-		borderRadius: '20px',
-		background: 'rgb(249, 249, 249)',
-		paddingInline: '20px',
-		paddingBlock: '20px',
-		gap: '30px',
-		transition: 'all 300ms',
-		position: 'relative',
-	};
-
 	const arrowInitialStyle: React.CSSProperties = {
 		position: 'absolute',
 		top: '30px',
@@ -85,12 +54,12 @@ const Ecosystem1 = () => {
 
 						<p>We recommend Arconnect, the most popular wallet that supports Arweave and AO tokens. </p>
 						<Link to={'https://arconnect.io/download'} style={{ width: '100%' }}>
-							<div className="wallet-wrapper" style={projectWrapper}>
+							<div className="wallet-wrapper project-wrapper">
 								<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
 									<img src={arconnect} alt="arconnect" width={'8%'} />
 									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Arconnect</p>
 								</div>
-								<span style={{ fontSize: 'clamp(10px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
+								<span style={{ fontSize: 'clamp(14px, 2vw, 18px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
 									Your gateway to Arweave and AO A non-custodial Arweave and AO native wallet with extensive features
 									all in your favorite browser and mobile device
 								</span>
@@ -111,9 +80,9 @@ const Ecosystem1 = () => {
 						<b>Enter the token economy.</b>
 					</p>
 					<p>To use AO apps, obtain wrapped $AR ($wAR) using Permaswap or Wrapped AR Depot.</p>
-					<div style={{ display: 'flex', width: '100%', gap: '10px' }}>
+					<div className="project-container">
 						<Link to={'https://permaswap.network'} style={{ width: '100%' }}>
-							<div className="wallet-wrapper" style={multipleProjectWrapper}>
+							<div className="wallet-wrapper multiple-project-wrapper">
 								<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
 									<img src={permaswap} alt="permaswap" width={'8%'} />
 									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Permaswap</p>
@@ -126,7 +95,7 @@ const Ecosystem1 = () => {
 							</div>
 						</Link>
 						<Link to={'https://wardepot.arweave.net'} style={{ width: '100%' }}>
-							<div className="wallet-wrapper" style={multipleProjectWrapper}>
+							<div className="wallet-wrapper multiple-project-wrapper">
 								<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
 									<img src={warDepot} alt="wardepot" width={'8%'} />
 									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Wrapped Ar Depot</p>
@@ -156,7 +125,7 @@ const Ecosystem1 = () => {
 					</p>
 
 					<Link to={'https://permaswap.network'} style={{ width: '100%' }}>
-						<div className="wallet-wrapper" style={projectWrapper}>
+						<div className="wallet-wrapper project-wrapper">
 							<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
 								<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Vouch Portal</p>
 							</div>
@@ -179,9 +148,9 @@ const Ecosystem1 = () => {
 						<b>Use apps.</b>
 					</p>
 					<p>Check out a digital marketplace or a 100% onchain game.</p>
-					<div style={{ display: 'flex', width: '100%', gap: '10px' }}>
+					<div className="project-container">
 						<Link to={'https://bazar.arweave.net'} style={{ width: '100%' }}>
-							<div className="wallet-wrapper" style={multipleProjectWrapper}>
+							<div className="wallet-wrapper multiple-project-wrapper">
 								<div style={{ display: 'flex', alignItems: 'center', marginInline: '-18px' }}>
 									<img src={bazar} alt="bazar" width={'15%'} />
 
@@ -195,7 +164,7 @@ const Ecosystem1 = () => {
 							</div>
 						</Link>
 						<Link to={'https://llamaland.arweave.net'} style={{ width: '100%' }}>
-							<div className="wallet-wrapper" style={multipleProjectWrapper}>
+							<div className="wallet-wrapper multiple-project-wrapper">
 								<div style={{ display: 'flex', alignItems: 'center', marginInline: '-10px' }}>
 									<img src={llamaland} alt="llamaland" width={'13%'} />
 

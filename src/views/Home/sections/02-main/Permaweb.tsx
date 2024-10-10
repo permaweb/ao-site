@@ -27,7 +27,7 @@ const Permaweb = () => {
 
 	const h2Style: React.CSSProperties = {
 		fontWeight: 400,
-		fontSize: '24px',
+
 		letterSpacing: '-0.8px',
 		textAlign: 'center',
 	};

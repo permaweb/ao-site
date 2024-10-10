@@ -65,7 +65,7 @@ const Build = () => {
 		border: 'none',
 		display: 'flex',
 		gap: '10px',
-		fontSize: '16px',
+		fontSize: 'clamp(14px, 2.5vw, 18px);',
 		cursor: 'pointer',
 		textTransform: 'uppercase',
 
@@ -79,7 +79,7 @@ const Build = () => {
 	const videoWrapper: React.CSSProperties = {
 		position: 'absolute',
 		left: '0',
-		width: '900px',
+		width: '100%',
 		zIndex: '1',
 		transform: 'translateX(-300px)',
 		animation: 'alt-pulse 5s ease-in-out infinite',
@@ -88,9 +88,9 @@ const Build = () => {
 	const statTextStyle: React.CSSProperties = {
 		fontFamily: 'Roboto Mono',
 		textTransform: 'uppercase',
-		fontSize: '18px',
 		letterSpacing: '-0.52px',
 		color: '#808080',
+
 		fontWeight: '400',
 	};
 
@@ -101,7 +101,7 @@ const Build = () => {
 	});
 
 	return (
-		<section className="full-section build">
+		<section className="full-section build" style={{ paddingInline: '40px' }}>
 			<div className="content-build-wrapper">
 				{/* Top Navigation Buttons */}
 				<div style={buttonWrapper}>
