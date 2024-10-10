@@ -29,7 +29,6 @@ const Build = () => {
 	const h1Style: React.CSSProperties = {
 		textAlign: 'right',
 		fontWeight: 400,
-		fontSize: '44px',
 	};
 
 	const wrapper: React.CSSProperties = {

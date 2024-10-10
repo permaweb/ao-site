@@ -7,11 +7,9 @@ const Ecosystem = () => {
 		textAlign: 'center',
 		margin: '10px 0',
 		fontWeight: 400,
-		fontSize: '44px',
 	};
 
 	const h2Style: React.CSSProperties = {
-		fontSize: '28px',
 		letterSpacing: '-0.76px',
 		textAlign: 'center',
 		fontWeight: 400,

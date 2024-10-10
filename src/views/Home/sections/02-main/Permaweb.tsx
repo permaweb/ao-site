@@ -1,11 +1,5 @@
 import React from 'react';
-import { Pie } from 'react-chartjs-2';
-import CountUp from 'react-countup';
-import { useInView } from 'react-intersection-observer';
-import { Link } from 'react-router-dom';
 import { ArcElement, Chart, Legend, Tooltip } from 'chart.js';
-
-import HyperTextLoad from 'components/hyperTextLoad';
 
 import './HomeMainStyles.css';
 
@@ -27,7 +21,7 @@ const Permaweb = () => {
 
 	const h1Style: React.CSSProperties = {
 		fontWeight: 400,
-		fontSize: '44px',
+
 		textAlign: 'center',
 	};
 

@@ -24,7 +24,6 @@ const Community = () => {
 
 	const h1Style: React.CSSProperties = {
 		fontWeight: 400,
-		fontSize: '44px',
 	};
 
 	const h2Style: React.CSSProperties = {

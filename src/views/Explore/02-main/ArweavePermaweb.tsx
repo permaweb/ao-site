@@ -5,10 +5,13 @@ import { Divider } from './ExploreMain';
 const ArweavePermaweb = () => {
 	return (
 		<section id="arweave">
-			<h1>Arweave & the Permaweb</h1>
+			<h1 style={{ marginBottom: '100px' }}>Arweave & the Permaweb</h1>
 			<p>
-				AO and Arweave are pillars of the Permaweb, the new decentralized internet where users’ rights are immutable and
-				guaranteed. Explore and build on a vast number of new use cases, 100% onchain.
+				<b>AO and Arweave are pillars of the Permaweb</b>
+			</p>
+			<p>
+				The new decentralized internet where users’ rights are immutable and guaranteed. Explore and build on a vast
+				number of new use cases, 100% onchain.
 			</p>
 			<div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
 				<iframe

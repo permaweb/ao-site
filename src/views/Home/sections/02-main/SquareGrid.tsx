@@ -62,13 +62,15 @@ const SquareGrid = () => {
 
 	const headerStyle: React.CSSProperties = {
 		font: 'DM Sans',
-		fontSize: '18px',
+		fontSize: 'clamp(10px, 2vw, 18px)',
+
 		margin: '10px 0',
 	};
 
 	const altHeaderStyle: React.CSSProperties = {
 		font: 'DM Sans',
-		fontSize: '18px',
+		fontSize: 'clamp(10px, 2vw, 18px)',
+
 		width: '50%',
 		textAlign: 'center',
 		marginTop: '20px',
@@ -76,7 +78,7 @@ const SquareGrid = () => {
 
 	const imageStyle: React.CSSProperties = {
 		maxWidth: '150px',
-		width: '100%',
+		width: '50%',
 	};
 
 	const plusStyle: React.CSSProperties = {

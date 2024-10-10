@@ -19,6 +19,14 @@ main {
 	z-index: 10;
 }
 
+.main-wrapper h1 {
+	font-size: clamp(24px, 5vw, 42px);
+}
+
+.main-wrapper h2 {
+	font-size: clamp(10px, 4vw, 28px);
+}
+
 .hero-main-wrapper {
 	position: relative;
 	display: flex;
