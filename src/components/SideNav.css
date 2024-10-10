@@ -1,0 +1,74 @@
+aside {
+	padding-block: 50px;
+	position: sticky;
+	top: 50px;
+	max-height: calc(100vh - 4rem);
+	z-index: 100000;
+	height: 100%;
+}
+
+.side-nav {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+.side-nav ul {
+	list-style: none;
+	padding: 0;
+	position: relative;
+	gap: 5px;
+}
+
+.box {
+	margin-top: 1rem;
+}
+
+.side-nav li {
+	margin-top: 8px;
+}
+
+.side-nav li:first-child {
+	margin-top: 0;
+	/* Remove margin-top for the first list item */
+}
+
+.nav-link {
+	text-decoration: none;
+	color: #131313;
+	display: flex;
+	align-items: center;
+	transition: color 0.3s;
+	position: relative;
+}
+
+/* Skeleton path */
+.side-nav::before {
+	content: '';
+	position: absolute;
+	left: -15px;
+
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background-color: #d3d3d3;
+	z-index: 0;
+}
+
+/* Moving indicator */
+.moving-indicator {
+	position: absolute;
+	left: -15px;
+
+	width: 1px;
+	height: 20px;
+	background-color: #000000;
+
+	z-index: 1;
+	transition: top 0.3s ease;
+}
+
+/* Active state for links */
+.active .nav-link {
+	color: #000;
+}

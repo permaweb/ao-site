@@ -429,6 +429,7 @@ footer {
 .view-wrapper {
 	min-height: calc(100vh - 40px);
 	width: 100%;
+  height: 100%
 }
 
   .scroll-wrapper {

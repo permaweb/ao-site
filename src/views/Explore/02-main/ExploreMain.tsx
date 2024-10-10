@@ -1,14 +1,23 @@
 import Footer from 'components/Footer/Footer';
+import SideNav from 'components/SideNav';
 
 import './ExploreMainStyles.css';
 
 import ArweavePermaweb from './ArweavePermaweb';
 import Ecosystem1 from './Ecosystem1';
-import Ecosystem2 from './Ecosystem2';
-import Ecosystem3 from './Ecosystem3';
-import Ecosystem4 from './Ecosystem4';
 import Intro from './Intro';
 import Tokenomics from './Tokenomics';
+
+export const Divider = ({ showBorder = false }) => (
+	<div
+		style={{
+			height: '1px',
+			width: '100%',
+			marginBlock: '7vh',
+			border: showBorder ? '1px solid #F2F2F2' : 'none', // Conditionally apply the border
+		}}
+	></div>
+);
 
 const ExploreMain = () => {
 	return (
@@ -17,10 +26,16 @@ const ExploreMain = () => {
 				<div className="explore-main-wrapper">
 					<div className="explore-content-wrapper">
 						<Intro />
+						<Divider showBorder />
+
 						<Ecosystem1 />
+						<Divider showBorder />
+
 						<Tokenomics />
+						<Divider showBorder />
 						<ArweavePermaweb />
 					</div>
+					<SideNav />
 					<Footer />
 				</div>
 			</main>

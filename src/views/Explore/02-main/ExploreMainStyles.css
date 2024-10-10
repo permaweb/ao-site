@@ -2,10 +2,9 @@
 	display: flex;
 	width: 100%;
 	justify-content: center;
-	align-items: center;
+
 	flex-shrink: 0;
 	align-self: stretch;
-	scroll-snap-type: y mandatory;
 }
 
 .explore section {
@@ -18,8 +17,8 @@ section p {
 
 .explore-main-wrapper {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	justify-content: center;
+
 	flex: 1 0 0;
 	align-self: stretch;
 	gap: 80px;
@@ -27,6 +26,7 @@ section p {
 }
 
 .explore-content-wrapper {
+	position: relative;
 	display: flex;
 	max-width: 1200px;
 	flex-direction: column;
@@ -39,12 +39,12 @@ section p {
 	font-family: 'DM Sans';
 
 	margin-bottom: 40px;
-	font-size: clamp(16px, 2.5vw, 28px);
+	font-size: clamp(14px, 2.5vw, 20px);
 }
 
 .explore-content-wrapper h1 {
 	font-family: 'DM Sans';
-	font-size: clamp(24px, 5vw, 38px);
+	font-size: clamp(24px, 5vw, 42px);
 	font-style: normal;
 	font-weight: 300;
 	line-height: normal;
@@ -70,9 +70,9 @@ section p {
 	opacity: 0.5;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1500px) {
 	.text-content-wrapper {
-		max-width: 500px;
+		max-width: 450px;
 	}
 }
 

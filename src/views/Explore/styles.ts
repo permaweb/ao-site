@@ -27,7 +27,6 @@ export const Wrapper = styled.div`
 
 	p a,
 	li a {
-		color: var(--accent-color);
 		font-weight: 300;
 	}
 
@@ -38,7 +37,7 @@ export const Wrapper = styled.div`
 
 	h1 {
 		font-family: 'DM Sans';
-		font-size: clamp(24px, 5vw, 32px);
+		font-size: clamp(20px, 5vw, 36px);
 		font-style: normal;
 		font-weight: 300;
 		line-height: normal;
@@ -55,19 +54,6 @@ export const Wrapper = styled.div`
 		letter-spacing: 0.18px;
 	}
 
-	pre {
-		overflow: hidden;
-		background: #ededed;
-		padding: 50px;
-		border-radius: 10px;
-		overflow-x: scroll;
-	}
-
-	pre code {
-		font-size: clamp(10px, 1.75vw, 14px);
-		color: #606060;
-	}
-
 	h3 {
 		font-family: 'Roboto Mono Variable';
 		font-size: clamp(10px, 2vw, 14px);
@@ -75,37 +61,6 @@ export const Wrapper = styled.div`
 		font-weight: 300;
 		line-height: 150%;
 		letter-spacing: 0.18px;
-	}
-
-	h4 {
-		font-family: 'Roboto Mono Variable';
-		font-size: clamp(8px, 2vw, 12px);
-		font-style: normal;
-		font-weight: 300;
-		line-height: 150%;
-		letter-spacing: 0.18px;
-	}
-
-	h5 {
-		font-family: 'Roboto Mono Variable';
-		font-size: clamp(8px, 2vw, 12px);
-		font-style: normal;
-		font-weight: 300;
-		line-height: 1 50%;
-		letter-spacing: 0.18px;
-		margin-bottom: -20px;
-		text-transform: uppercase;
-	}
-
-	h6 {
-		font-family: 'Roboto Mono Variable';
-		font-size: clamp(8px, 2vw, 12px);
-		font-style: normal;
-		font-weight: 300;
-		line-height: 150%;
-		letter-spacing: 0.18px;
-		margin-top: -20px;
-		text-transform: uppercase;
 	}
 
 	li,
@@ -127,11 +82,6 @@ export const Wrapper = styled.div`
 
 	th {
 		background: white;
-	}
-
-	ul li {
-		margin-bottom: 32px;
-		list-style-type: none;
 	}
 
 	blockquote {

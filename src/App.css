@@ -1,12 +1,13 @@
 html {
 	--onboard-modal-z-index: 1000;
+	scroll-behavior: smooth;
 }
 
 .container {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	overflow: hidden;
+
 	animation: fadeIn 2s ease-out;
 	opacity: 1;
 }
