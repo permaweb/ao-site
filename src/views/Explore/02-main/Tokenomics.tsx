@@ -55,6 +55,11 @@ const Tokenomics = () => {
 			maintainAspectRatio: false,
 		},
 	};
+
+	const videoWrapper: React.CSSProperties = {
+		display: 'flex',
+		width: '100%',
+	};
 	return (
 		<section id="tokenomics">
 			<h1 style={{ marginBottom: '100px' }}>Tokenomics</h1>
@@ -100,11 +105,11 @@ const Tokenomics = () => {
 				</div>
 			</div>
 			<Divider showBorder />{' '}
-			<div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
+			<div style={videoWrapper}>
 				<iframe
-					src="https://player.vimeo.com/video/955284031?h=85f787894e&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+					src="https://odysee.com/$/embed/@AO:4/ao_tokenomics-(1440p)_v1:9?r=GovBscmXVLs3avGjcR1f5ktd6X8Ehgqo"
 					allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
-					style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}
+					style={{ width: '100%', aspectRatio: '16/9' }}
 					title="AO Tokenomics"
 				></iframe>
 			</div>

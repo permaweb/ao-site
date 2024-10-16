@@ -20,11 +20,11 @@ main {
 }
 
 .main-wrapper h1 {
-	font-size: clamp(24px, 5vw, 42px);
+	font-size: clamp(24px, 5vw, 32px);
 }
 
 .main-wrapper h2 {
-	font-size: clamp(10px, 3vw, 28px);
+	font-size: clamp(10px, 3vw, 22px);
 }
 
 .main-wrapper h3 {
@@ -151,7 +151,7 @@ main {
 
 .background-transition:hover {
 	transition: background 500ms;
-	animation: backgroundTransition 3s ease-in-out infinite;
+	animation: backgroundTransition 2s ease-in-out infinite;
 }
 
 .background-transition:hover h3 {

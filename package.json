@@ -8,6 +8,7 @@
 	"scripts": {
 		"start": "NODE_ENV=development webpack serve --port 3000",
 		"format": "eslint --fix . && npx prettier --write .",
+		"deploy-share": "npm run build && arx upload-dir dist -w ./wallet.json --index-file index.html -t arweave -h https://turbo.ardrive.io",
 		"test": "npm test",
 		"test:verbose": "npm test -- --verbose",
 		"test:coverage": "CI=true npm test -- --env=jsdom --coverage",

@@ -1,6 +1,7 @@
 import React from 'react';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router-dom';
 
 import AnimatedNumberAlt from 'components/atoms/AnimatedNumber/AnimatedNumberAlt';
 import HyperTextLoad from 'components/hyperTextLoad';
@@ -105,22 +106,30 @@ const Build = () => {
 			<div className="content-build-wrapper">
 				{/* Top Navigation Buttons */}
 				<div style={buttonWrapper}>
-					<button className="link-terminal-red" style={buttonStyle}>
-						&gt;
-						<HyperTextLoad word={'Discord'} textType="span" speed={1} triggerOnView />
-					</button>
-					<button className="link-terminal-green" style={buttonStyle}>
-						&gt;
-						<HyperTextLoad word={'ao docs'} textType="span" speed={1} triggerOnView />
-					</button>
-					<button className="link-terminal-blue" style={buttonStyle}>
-						&gt;
-						<HyperTextLoad word={'cookbook'} textType="span" speed={1} triggerOnView />
-					</button>
-					<button className="link-terminal-green" style={buttonStyle}>
-						&gt;
-						<HyperTextLoad word={'ao paper'} textType="span" speed={1} triggerOnView />
-					</button>
+					<Link replace={false} to={'https://discord.gg/dYXtHwc9dc'}>
+						<button className="link-terminal-red" style={buttonStyle}>
+							&gt;
+							<HyperTextLoad word={'Discord'} textType="span" speed={1} triggerOnView />
+						</button>
+					</Link>
+					<Link replace={false} to={'https://cookbook_ao.g8way.io/tutorials/begin/index.html'}>
+						<button className="link-terminal-green" style={buttonStyle}>
+							&gt;
+							<HyperTextLoad word={'ao docs'} textType="span" speed={1} triggerOnView />
+						</button>
+					</Link>
+					<Link replace={false} to={'https://cookbook_ao.g8way.io/tutorials/begin/index.html'}>
+						<button className="link-terminal-blue" style={buttonStyle}>
+							&gt;
+							<HyperTextLoad word={'cookbook'} textType="span" speed={1} triggerOnView />
+						</button>
+					</Link>
+					<Link replace={false} to={'/read'}>
+						<button className="link-terminal-green" style={buttonStyle}>
+							&gt;
+							<HyperTextLoad word={'ao paper'} textType="span" speed={1} triggerOnView />
+						</button>
+					</Link>
 				</div>
 
 				{/* Video and Header Section */}

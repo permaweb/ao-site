@@ -28,6 +28,7 @@ const Community = () => {
 
 	const h2Style: React.CSSProperties = {
 		fontWeight: 400,
+		fontSize: 'clamp(10px, 3vw, 18px)',
 
 		letterSpacing: '-0.8px',
 	};
@@ -36,7 +37,7 @@ const Community = () => {
 		fontFamily: 'Roboto Mono',
 		letterSpacing: '-0.5px',
 		fontWeight: 400,
-		fontSize: 'clamp(15px, 2vw, 20px)',
+		fontSize: 'clamp(15px, 2vw, 16px)',
 		textTransform: 'uppercase',
 		color: '#7F7F7F',
 	};
@@ -129,14 +130,14 @@ const Community = () => {
 				{/* Statistics Section */}
 				<div style={buttonWrapper}>
 					<div className="button-wrapper">
-						<Link to={'https://cookbook_ao.g8way.io/'} target="_blank" rel="noopener noreferrer">
+						<Link to={'/explore#tokenomics'} replace={false} target="_blank" rel="noopener noreferrer">
 							<button className="glitch primary link-terminal-red">
 								<HyperTextLoad word={'Learn More'} textType="span" speed={1} />
 							</button>
 						</Link>
 					</div>
 					<div className="button-wrapper">
-						<Link to={'https://cookbook_ao.g8way.io/'} target="_blank" rel="noopener noreferrer">
+						<Link to={'/mint'} replace={false} rel="noopener noreferrer ">
 							<button className="glitch primary link-terminal-green">
 								<HyperTextLoad word={'→ Start Minting'} textType="span" speed={1} />
 							</button>

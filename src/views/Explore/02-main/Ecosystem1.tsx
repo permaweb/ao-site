@@ -46,9 +46,16 @@ const Ecosystem1 = () => {
 					Follow these steps to onboard into the AO and Arweave ecosystem:
 				</span>
 				<div style={{ display: 'flex', gap: '30px' }} id="ecosystem-wallet">
-					{bulletSquare}
+					<p
+						style={{
+							fontSize: 'clamp(24px, 2vw, 28px)',
+							marginTop: '-2px',
+						}}
+					>
+						1.
+					</p>
 					<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-						<p style={{ marginBottom: '0' }}>
+						<p style={{ marginBottom: '0', fontSize: 'clamp(18px, 2vw, 24px)' }}>
 							<b>Obtain an Arweave wallet.</b>
 						</p>
 
@@ -74,9 +81,16 @@ const Ecosystem1 = () => {
 			<Divider showBorder />
 			<Divider />
 			<div style={{ display: 'flex', gap: '30px' }} id="ecosystem-token-economy">
-				{bulletSquare}
+				<p
+					style={{
+						fontSize: 'clamp(24px, 2vw, 28px)',
+						marginTop: '-2px',
+					}}
+				>
+					2.
+				</p>
 				<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-					<p style={{ marginBottom: '0' }}>
+					<p style={{ marginBottom: '0', fontSize: 'clamp(18px, 2vw, 24px)' }}>
 						<b>Enter the token economy.</b>
 					</p>
 					<p>To use AO apps, obtain wrapped $AR ($wAR) using Permaswap or Wrapped AR Depot.</p>
@@ -114,9 +128,16 @@ const Ecosystem1 = () => {
 			<Divider showBorder />
 			<Divider />
 			<div style={{ display: 'flex', gap: '30px' }} id="ecosystem-vouch">
-				{bulletSquare}
+				<p
+					style={{
+						fontSize: 'clamp(24px, 2vw, 28px)',
+						marginTop: '-2px',
+					}}
+				>
+					3.
+				</p>
 				<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-					<p style={{ marginBottom: '0' }}>
+					<p style={{ marginBottom: '0', fontSize: 'clamp(18px, 2vw, 24px)' }}>
 						<b>Get vouched. </b>
 					</p>
 					<p>
@@ -142,9 +163,16 @@ const Ecosystem1 = () => {
 			<Divider showBorder />
 			<Divider />
 			<div style={{ display: 'flex', gap: '30px' }} id="ecosystem-apps">
-				{bulletSquare}
+				<p
+					style={{
+						fontSize: 'clamp(24px, 2vw, 28px)',
+						marginTop: '-2px',
+					}}
+				>
+					4.
+				</p>
 				<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-					<p style={{ marginBottom: '0' }}>
+					<p style={{ marginBottom: '0', fontSize: 'clamp(18px, 2vw, 24px)' }}>
 						<b>Use apps.</b>
 					</p>
 					<p>Check out a digital marketplace or a 100% onchain game.</p>

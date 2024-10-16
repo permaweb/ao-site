@@ -40,6 +40,8 @@ const Permaweb = () => {
 	const videoWrapper: React.CSSProperties = {
 		display: 'flex',
 		width: '100%',
+		justifyContent: 'center',
+		alignItems: 'center',
 	};
 
 	return (
@@ -58,7 +60,12 @@ const Permaweb = () => {
 				{/* Permaweb Video Section */}
 
 				<div style={videoWrapper}>
-					<video src={permawebVideo} autoPlay loop muted width={'100%'} />
+					<iframe
+						src="https://odysee.com/$/embed/@AO:4/the_permaweb-(1440p)-(1):9?r=GovBscmXVLs3avGjcR1f5ktd6X8Ehgqo"
+						title="Permaweb"
+						allow="autoplay; muted; fullscreen; picture-in-picture; clipboard-write"
+						style={{ width: '80%', aspectRatio: '16/9' }}
+					></iframe>
 				</div>
 			</div>
 		</section>

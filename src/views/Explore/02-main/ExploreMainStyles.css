@@ -39,12 +39,12 @@ section p {
 	font-family: 'DM Sans';
 
 	margin-bottom: 40px;
-	font-size: clamp(14px, 2.5vw, 20px);
+	font-size: clamp(12px, 2.5vw, 15px);
 }
 
 .explore-content-wrapper h1 {
 	font-family: 'DM Sans';
-	font-size: clamp(24px, 5vw, 42px);
+	font-size: clamp(24px, 5vw, 32px);
 	font-style: normal;
 	font-weight: 300;
 	line-height: normal;

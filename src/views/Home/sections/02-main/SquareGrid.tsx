@@ -15,61 +15,71 @@ const SquareGrid = () => {
 			name: 'Llamaland',
 			image: llamaLand,
 			subtitle: '',
+			link: 'https://llamaland.arweave.net',
 		},
 		{
 			name: 'Dexi',
 			image: dexi,
 			subtitle: '',
+			link: 'https://dexi.arweave.net',
 		},
 		{
 			name: 'Arfleet',
 			image: arfleet,
 			subtitle: '',
+			link: 'https://arfleet.arweave.net',
 		},
 		{
 			name: 'Permaverse',
 			image: permaverse,
 			subtitle: '',
+			link: 'https://permaverse.arweave.net',
 		},
 		{
 			name: 'BazAR',
 			image: bazar,
 			subtitle: '',
+			link: 'https://bazar.arweave.net',
 		},
 		{
 			name: 'View All Ecosystem dApps',
 			image: plusBlue, // Use plusBlue image here
 			subtitle: '',
+			link: '/#/explore#ecosystem-apps',
 		},
 	];
 
 	const squareStyle: React.CSSProperties = {
 		aspectRatio: '1 / 1',
-		backgroundColor: '#f9f9f9',
+		backgroundColor: '#fcfcfc',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'column',
 		cursor: 'pointer',
+		border: '1px solid #C3C3C3',
 	};
 
 	const gridStyle: React.CSSProperties = {
 		display: 'grid',
-		gridTemplateColumns: 'repeat(3, 1fr)',
+		gridTemplateColumns: 'repeat(4, 1fr)',
 		gap: '10px',
 		width: '100%',
 	};
 
 	const headerStyle: React.CSSProperties = {
-		font: 'DM Sans',
-		fontSize: 'clamp(10px, 2vw, 18px)',
-
+		fontFamily: 'Roboto Mono',
+		fontSize: 'clamp(10px, 2vw, 14px)',
+		textTransform: 'uppercase',
+		fontWeight: '400',
 		margin: '10px 0',
 	};
 
 	const altHeaderStyle: React.CSSProperties = {
-		font: 'DM Sans',
-		fontSize: 'clamp(10px, 2vw, 18px)',
+		fontFamily: 'Roboto Mono',
+		fontSize: 'clamp(10px, 2vw, 14px)',
+		textTransform: 'uppercase',
+		fontWeight: '400',
 
 		width: '50%',
 		textAlign: 'center',
@@ -89,20 +99,26 @@ const SquareGrid = () => {
 	return (
 		<div style={gridStyle}>
 			{dapps.map((dapp, index) => (
-				<div className="background-transition" key={index} style={squareStyle}>
-					{dapp.name === 'View All Ecosystem dApps' && ( // Conditionally render plusBlue image above the header for the last item
+				<a
+					href={dapp.link}
+					target={dapp.link.startsWith('http') ? '_blank' : '_self'}
+					rel={dapp.link.startsWith('http') ? 'noopener noreferrer' : ''}
+					key={index}
+					style={squareStyle}
+					className="background-transition"
+				>
+					{dapp.name === 'View All Ecosystem dApps' ? (
 						<>
 							<img src={dapp.image} alt={dapp.name} style={plusStyle} />
 							<h3 style={altHeaderStyle}>{dapp.name}</h3>
 						</>
-					)}
-
-					{dapp.name !== 'View All Ecosystem dApps' && (
+					) : (
 						<>
-							<h3 style={headerStyle}>{dapp.name}</h3> <img src={dapp.image} alt={dapp.name} style={imageStyle} />
+							<h3 style={headerStyle}>{dapp.name}</h3>
+							<img src={dapp.image} alt={dapp.name} style={imageStyle} />
 						</>
 					)}
-				</div>
+				</a>
 			))}
 		</div>
 	);
