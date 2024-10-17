@@ -107,7 +107,7 @@ const Build = () => {
 				{/* Video and Header Section */}
 				<div style={relativeWrapper}>
 					<div style={videoWrapper}>
-						<video width={'100%'} src={hexagonVideo} autoPlay loop muted />
+						<video width={'100%'} src={hexagonVideo} autoPlay loop muted playsInline />
 					</div>
 					<div style={h1Wrapper}>
 						<h1 style={h1Style}>Start to build anything you want, </h1>

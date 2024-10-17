@@ -148,6 +148,7 @@ export const GlobalStyle = createGlobalStyle`
     &:disabled {
       cursor: default;
     }
+    color: #000;
   }
 
   a {
@@ -156,6 +157,7 @@ export const GlobalStyle = createGlobalStyle`
     &:hover {
       color: ${(props) => props.theme.colors.link.active};
     }
+    color: inherit;
   }
 
   input, textarea {
