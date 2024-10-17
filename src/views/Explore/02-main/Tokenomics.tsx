@@ -19,7 +19,7 @@ const Tokenomics = () => {
 		gap: '40px',
 		justifyContent: 'space-between',
 	};
-	const flexBullet: React.CSSProperties = { display: 'flex', width: '100%', alignItems: 'center', gap: '20px' };
+	const flexBullet: React.CSSProperties = { display: 'flex', width: '100%', alignItems: 'start', gap: '10px' };
 	const flexCol: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: '20px', width: '60%' };
 
 	const paragraph: React.CSSProperties = { marginBottom: '0' };
@@ -73,23 +73,10 @@ const Tokenomics = () => {
 						<b>Minting:</b> 4 year halving cycle
 					</p>
 				</div>
-				<img src={tokenEmissions} alt="token-emissions" width={'45%'} />
+				<img src={tokenEmissions} alt="token-emissions" width={'50%'} />
 			</div>
 			<Divider />{' '}
 			<div style={flex}>
-				<div
-					style={{
-						position: 'relative',
-						display: 'flex',
-						justifyContent: 'start',
-						width: '30vw',
-						height: '30vh',
-					}}
-					ref={pieChartRef}
-				>
-					{/* Only render the chart when it's in view */}
-					{pieChartInView && <Pie data={pieData} options={pieOptions} />}
-				</div>
 				<div style={flexCol}>
 					<p style={paragraph}>
 						<b>100% Fair Launch</b>
@@ -103,8 +90,20 @@ const Tokenomics = () => {
 						<p style={paragraph}>66% minted to depositors of staked assets currently staked ETH $stETH and $DAI. </p>
 					</div>
 				</div>
+				<div
+					style={{
+						position: 'relative',
+						display: 'flex',
+						justifyContent: 'start',
+						width: '50%',
+					}}
+					ref={pieChartRef}
+				>
+					{/* Only render the chart when it's in view */}
+					{pieChartInView && <Pie data={pieData} options={pieOptions} />}
+				</div>
 			</div>
-			<Divider showBorder />{' '}
+			<Divider />{' '}
 			<div style={videoWrapper}>
 				<iframe
 					src="https://odysee.com/$/embed/@AO:4/ao_tokenomics-(1440p)_v1:9?r=GovBscmXVLs3avGjcR1f5ktd6X8Ehgqo"

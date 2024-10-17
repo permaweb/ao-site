@@ -9,10 +9,8 @@ const ArweavePermaweb = () => {
 	};
 	return (
 		<section id="arweave">
-			<h1 style={{ marginBottom: '100px' }}>Arweave & the Permaweb</h1>
-			<p>
-				<b>AO and Arweave are pillars of the Permaweb</b>
-			</p>
+			<h1 style={{ marginBottom: '0px' }}>Arweave & the Permaweb</h1>
+			<p>AO and Arweave are pillars of the Permaweb</p>
 			<p>
 				The new decentralized internet where users’ rights are immutable and guaranteed. Explore and build on a vast
 				number of new use cases, 100% onchain.

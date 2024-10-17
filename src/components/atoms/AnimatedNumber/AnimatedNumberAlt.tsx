@@ -63,7 +63,7 @@ const Digit = ({ digit, index }) => {
 	const isSmallDigit = ['.', ','].includes(digit);
 
 	// Use window.innerWidth to adjust the margin based on screen width
-	const marginLeft = window.innerWidth <= 500 ? '-8px' : '-5px';
+	const marginLeft = window.innerWidth <= 900 ? '-8px' : '-5px';
 
 	return (
 		<div

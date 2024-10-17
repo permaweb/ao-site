@@ -9,18 +9,20 @@ main {
 
 .main-wrapper {
 	width: 100%;
-	scroll-snap-type: y mandatory;
-	overflow-y: scroll;
-	height: 100vh;
 }
 
 .main-wrapper > section {
-	scroll-snap-align: start;
 	z-index: 10;
 }
 
 .main-wrapper h1 {
 	font-size: clamp(24px, 5vw, 32px);
+	letter-spacing: -0.75px;
+}
+
+.square-logo:hover {
+	border: 1px solid rgb(194, 194, 194);
+	transform: scale(1.1);
 }
 
 .main-wrapper h2 {
@@ -39,7 +41,7 @@ main {
 	align-items: center;
 	flex: 1 0 0;
 	align-self: stretch;
-	height: 100vh;
+	height: 90vh;
 	justify-content: center;
 }
 
@@ -59,10 +61,6 @@ main {
 	margin: 50px 0;
 }
 
-.digit {
-	margin-left: '20px';
-}
-
 @media only screen and (max-width: 600px) {
 	aside {
 		display: none;
@@ -74,10 +72,6 @@ main {
 }
 
 @media only screen and (max-width: 900px) {
-	.digit {
-		margin-left: '-12px';
-	}
-
 	.pie-wrapper {
 		height: 30vh;
 	}
@@ -89,13 +83,13 @@ main {
 
 .full-section {
 	display: flex;
-	height: 100vh;
+
 	width: 100%;
 	flex-direction: column;
 	align-items: center;
 	flex: 1 0 0;
 	align-self: stretch;
-	padding: 140px 0;
+	padding: 80px 0;
 	justify-content: center;
 }
 
@@ -147,35 +141,35 @@ main {
 	gap: 10px;
 	background: var(--background-color);
 	border: 1px solid black;
+	border-radius: 1000px;
 }
 
-.background-transition:hover {
+.button-wrapper:hover {
 	transition: background 500ms;
-	animation: backgroundTransition 2s ease-in-out infinite;
+	background: var(--terminal-green);
 }
 
-.background-transition:hover h3 {
-	color: var(--terminal-blue);
-	transition: color ease-in-out 300ms;
+.button-wrapper:hover span {
+	color: white;
 }
 
 .content-ecosystem-wrapper {
-	max-width: 1000px;
+	max-width: 700px;
 	width: 100%;
 }
 
 .content-build-wrapper {
-	max-width: 1000px;
+	max-width: 700px;
 	width: 100%;
 }
 
 .content-community-wrapper {
-	max-width: 1200px;
+	max-width: 700px;
 	width: 100%;
 }
 
 .content-permaweb-wrapper {
-	max-width: 1200px;
+	max-width: 700px;
 	width: 100%;
 }
 
@@ -250,15 +244,9 @@ main {
 	padding-left: 20px;
 	padding-top: 15px;
 	padding-bottom: 15px;
-	box-shadow: 3px 3px black, 6px 6px gray, 9px 9px var(--triangle-color);
+	border-radius: 1000px;
 	transition: all 100ms;
-}
-
-.button-wrapper button:hover {
-	background: var(--triangle-color);
-	font-weight: 600;
-	transition: background 500ms;
-	animation: backgroundTransition 6s ease infinite;
+	box-shadow: var(--shadow);
 }
 
 .main-heading {

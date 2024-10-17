@@ -1,5 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArcElement, Chart, Legend, Tooltip } from 'chart.js';
+
+import HyperTextLoad from 'components/hyperTextLoad';
+import { Divider } from 'views/Explore/02-main/ExploreMain';
 
 import './HomeMainStyles.css';
 
@@ -27,7 +31,7 @@ const Permaweb = () => {
 
 	const h2Style: React.CSSProperties = {
 		fontWeight: 400,
-
+		fontFamily: 'DM Sans',
 		letterSpacing: '-0.8px',
 		textAlign: 'center',
 	};
@@ -53,7 +57,7 @@ const Permaweb = () => {
 					<div style={textWrapper}>
 						<div>
 							<h1 style={h1Style}>Dawn of the decentralized web.</h1>
-							<h2 style={h2Style}>AO is the decentralized supercomputer powering the permaweb. </h2>
+							<p style={h2Style}>AO is the decentralized supercomputer powering the permaweb. </p>
 						</div>
 					</div>
 				</div>
@@ -67,7 +71,17 @@ const Permaweb = () => {
 						style={{ width: '80%', aspectRatio: '16/9' }}
 					></iframe>
 				</div>
+				<div style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+					<div className="button-wrapper">
+						<Link to={'/explore#permaweb'} replace={false} target="_blank" rel="noopener noreferrer">
+							<button className="glitch primary link-terminal-red">
+								<HyperTextLoad word={'Learn More'} textType="span" speed={1} />
+							</button>
+						</Link>
+					</div>
+				</div>
 			</div>
+			<Divider />
 		</section>
 	);
 };

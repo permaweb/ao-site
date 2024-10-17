@@ -12,11 +12,11 @@ import { Divider } from './ExploreMain';
 export const bulletSquare = (
 	<div
 		style={{
-			width: '12px',
-			height: '12px',
-			background: '#EAEAEA',
+			width: '5px',
+			height: '5px',
+			background: '#000',
 			marginTop: '15px',
-			marginLeft: '15px',
+			marginLeft: '5px',
 			borderRadius: '2px',
 		}}
 	></div>
@@ -24,8 +24,8 @@ export const bulletSquare = (
 const Ecosystem1 = () => {
 	const arrowInitialStyle: React.CSSProperties = {
 		position: 'absolute',
-		top: '30px',
-		right: '20px',
+		top: '10px',
+		right: '10px',
 		width: '5%',
 	};
 
@@ -35,16 +35,7 @@ const Ecosystem1 = () => {
 				<h1 id="ecosystem" style={{ marginBottom: '0' }}>
 					Ecosystem
 				</h1>
-				<span
-					style={{
-						fontSize: 'clamp(12px, 2vw, 20px)',
-						fontFamily: 'DM Sans',
-						fontWeight: '300',
-						marginBottom: '100px',
-					}}
-				>
-					Follow these steps to onboard into the AO and Arweave ecosystem:
-				</span>
+				<p>Follow these steps to onboard into the AO and Arweave ecosystem:</p>
 				<div style={{ display: 'flex', gap: '30px' }} id="ecosystem-wallet">
 					<p
 						style={{
@@ -64,12 +55,12 @@ const Ecosystem1 = () => {
 							<div className="wallet-wrapper project-wrapper">
 								<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
 									<img src={arconnect} alt="arconnect" width={'8%'} />
-									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Arconnect</p>
+									<h3 className="wrapper-title">Arconnect</h3>
 								</div>
-								<span style={{ fontSize: 'clamp(14px, 2vw, 18px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
+								<p>
 									Your gateway to Arweave and AO A non-custodial Arweave and AO native wallet with extensive features
 									all in your favorite browser and mobile device
-								</span>
+								</p>
 								{/* Arrow icon */}
 								<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
 							</div>
@@ -77,9 +68,9 @@ const Ecosystem1 = () => {
 					</div>
 				</div>
 			</div>
+
 			<Divider />
-			<Divider showBorder />
-			<Divider />
+
 			<div style={{ display: 'flex', gap: '30px' }} id="ecosystem-token-economy">
 				<p
 					style={{
@@ -99,24 +90,20 @@ const Ecosystem1 = () => {
 							<div className="wallet-wrapper multiple-project-wrapper">
 								<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
 									<img src={permaswap} alt="permaswap" width={'8%'} />
-									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Permaswap</p>
+									<h3 className="wrapper-title">Permaswap</h3>
 								</div>
-								<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
-									FusionFi Portal, A Unified Financial Protocol on Permaweb.
-								</span>
+								<p>FusionFi Portal, A Unified Financial Protocol on Permaweb.</p>
 								{/* Arrow icon */}
 								<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
 							</div>
 						</Link>
 						<Link to={'https://wardepot.arweave.net'} style={{ width: '100%' }}>
 							<div className="wallet-wrapper multiple-project-wrapper">
-								<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+								<div style={{ display: 'flex', gap: '10px' }}>
 									<img src={warDepot} alt="wardepot" width={'8%'} />
-									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Wrapped Ar Depot</p>
+									<h3 className="wrapper-title">Wrapped Ar Depot</h3>
 								</div>
-								<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
-									Powered by Everpay.
-								</span>
+								<p>Powered by Everpay.</p>
 								{/* Arrow icon */}
 								<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
 							</div>
@@ -124,9 +111,9 @@ const Ecosystem1 = () => {
 					</div>
 				</div>
 			</div>
+
 			<Divider />
-			<Divider showBorder />
-			<Divider />
+
 			<div style={{ display: 'flex', gap: '30px' }} id="ecosystem-vouch">
 				<p
 					style={{
@@ -148,20 +135,18 @@ const Ecosystem1 = () => {
 					<Link to={'https://permaswap.network'} style={{ width: '100%' }}>
 						<div className="wallet-wrapper project-wrapper">
 							<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-								<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Vouch Portal</p>
+								<h3 className="wrapper-title">Vouch Portal</h3>
 							</div>
-							<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
-								Vouch to access your favorite Permaweb Apps!
-							</span>
+							<p>Vouch to access your favorite Permaweb Apps!</p>
 							{/* Arrow icon */}
 							<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
 						</div>
 					</Link>
 				</div>
 			</div>
+
 			<Divider />
-			<Divider showBorder />
-			<Divider />
+
 			<div style={{ display: 'flex', gap: '30px' }} id="ecosystem-apps">
 				<p
 					style={{
@@ -179,28 +164,24 @@ const Ecosystem1 = () => {
 					<div className="project-container">
 						<Link to={'https://bazar.arweave.net'} style={{ width: '100%' }}>
 							<div className="wallet-wrapper multiple-project-wrapper">
-								<div style={{ display: 'flex', alignItems: 'center', marginInline: '-18px' }}>
+								<div style={{ display: 'flex', alignItems: 'center', marginInline: '-8px' }}>
 									<img src={bazar} alt="bazar" width={'15%'} />
 
-									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Bazar</p>
+									<h3 className="wrapper-title">Bazar</h3>
 								</div>
-								<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
-									Empowers creators and collectors to interact, trade, and transact with digital content{' '}
-								</span>
+								<p>Empowers creators and collectors to interact, trade, and transact with digital content </p>
 								{/* Arrow icon */}
 								<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
 							</div>
 						</Link>
 						<Link to={'https://llamaland.arweave.net'} style={{ width: '100%' }}>
 							<div className="wallet-wrapper multiple-project-wrapper">
-								<div style={{ display: 'flex', alignItems: 'center', marginInline: '-10px' }}>
+								<div style={{ display: 'flex', alignItems: 'center', marginInline: '-8px' }}>
 									<img src={llamaland} alt="llamaland" width={'13%'} />
 
-									<p style={{ marginBottom: '-4px', fontSize: 'clamp(20px, 2vw, 28px)' }}>Llamaland</p>
+									<h3 className="wrapper-title">Llamaland</h3>
 								</div>
-								<span style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontFamily: 'DM Sans', fontWeight: '300' }}>
-									AI powered MMO game built on AO. Petition the Llama King for Llama Coin! 100% onchain.
-								</span>
+								<p>AI powered MMO game built on AO. Petition the Llama King for Llama Coin! 100% onchain.</p>
 								{/* Arrow icon */}
 								<img src={arrowUpRight} alt="Arrow" style={arrowInitialStyle} />
 							</div>

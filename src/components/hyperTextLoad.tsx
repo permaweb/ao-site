@@ -2,9 +2,10 @@ import React, { createElement, useEffect, useRef, useState } from 'react';
 
 interface HyperTextLoadProps {
 	word: string;
-	textType: 'h1' | 'h2' | 'p' | 'span';
+	textType: 'h1' | 'h2' | 'h3' | 'p' | 'span';
 	triggerOnLoad?: boolean;
 	triggerOnView?: boolean;
+	triggerOnParentHover?: boolean;
 	speed: number;
 	style?: React.CSSProperties;
 }
@@ -14,11 +15,13 @@ const HyperTextLoad: React.FC<HyperTextLoadProps> = ({
 	textType,
 	triggerOnLoad = false,
 	triggerOnView = false,
+	triggerOnParentHover = false,
 	speed,
 	style,
 }) => {
 	const [text, setText] = useState(word);
 	const [inView, setInView] = useState(false);
+	const [animationStarted, setAnimationStarted] = useState(false); // Track if animation has started
 	const letters = 'abcdefghijklmnopqrstuvwxyz.';
 	const textRef = useRef<HTMLElement>(null);
 	let interval: number | null = null;
@@ -26,6 +29,8 @@ const HyperTextLoad: React.FC<HyperTextLoadProps> = ({
 	const getRandomDelay = () => Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
 
 	const startAnimation = () => {
+		if (animationStarted) return; // Avoid restarting if animation is already running
+		setAnimationStarted(true); // Mark animation as started
 		let iteration = 0;
 
 		interval = window.setInterval(() => {
@@ -43,6 +48,7 @@ const HyperTextLoad: React.FC<HyperTextLoadProps> = ({
 
 			if (iteration >= word.length && interval) {
 				clearInterval(interval);
+				setAnimationStarted(false); // Reset once animation is complete
 			}
 
 			iteration += 1 / speed;
@@ -82,6 +88,19 @@ const HyperTextLoad: React.FC<HyperTextLoadProps> = ({
 			};
 		}
 	}, [triggerOnView]);
+
+	// Trigger animation based on hover
+	useEffect(() => {
+		if (triggerOnParentHover) {
+			startAnimation();
+		}
+
+		return () => {
+			if (interval) {
+				clearInterval(interval);
+			}
+		};
+	}, [triggerOnParentHover]); // Add triggerOnHover as dependency
 
 	useEffect(() => {
 		if (triggerOnLoad || (triggerOnView && inView)) {

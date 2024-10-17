@@ -1,3 +1,7 @@
+import { Link } from 'react-router-dom';
+
+import HyperTextLoad from 'components/hyperTextLoad';
+
 import './HomeMainStyles.css';
 
 import SquareGrid from './SquareGrid';
@@ -9,21 +13,41 @@ const Ecosystem = () => {
 		fontWeight: 400,
 	};
 
-	const h2Style: React.CSSProperties = {
-		letterSpacing: '-0.76px',
+	const h1AltStyle: React.CSSProperties = {
 		textAlign: 'center',
+
 		fontWeight: 400,
-		margin: '10px 0 50px 0',
+		marginTop: '=5px',
 	};
+	const h2Style: React.CSSProperties = {
+		fontWeight: 400,
+		fontFamily: 'DM Sans',
+		letterSpacing: '-0.8px',
+		textAlign: 'center',
+	};
+
 	return (
 		<section className="full-section ecosystem" style={{ paddingInline: '40px' }}>
 			<div className="content-ecosystem-wrapper">
 				<h1 style={h1Style}>Hyper parallel execution means </h1>
-				<h1 style={h1Style}>unlimited horizontal scalability </h1>
-				<h2 style={h2Style}>
+				<h1 style={h1AltStyle}>
+					unlimited <i>horizontal</i> scalability{' '}
+				</h1>
+				<p style={h2Style}>
 					Live in production, <span style={{ color: '#0013F6' }}>right now.</span>
-				</h2>
+				</p>
 				<SquareGrid />
+				<div
+					style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', marginTop: '40px' }}
+				>
+					<div className="button-wrapper">
+						<Link to={'/mint'} replace={false} rel="noopener noreferrer ">
+							<button className="glitch primary link-terminal-green">
+								<HyperTextLoad word={'See All Of the Ecosystem'} textType="span" speed={1} />
+							</button>
+						</Link>
+					</div>
+				</div>
 			</div>
 		</section>
 	);

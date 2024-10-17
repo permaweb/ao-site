@@ -116,7 +116,7 @@ export const Wrapper = styled.div`
 
 	.text-content-wrapper {
 		display: flex;
-		max-width: 1000px;
+		max-width: 700px;
 		gap: 32px;
 		flex-direction: column;
 		width: 100%;

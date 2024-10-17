@@ -28,9 +28,9 @@ const Community = () => {
 
 	const h2Style: React.CSSProperties = {
 		fontWeight: 400,
-		fontSize: 'clamp(10px, 3vw, 18px)',
-
+		fontFamily: 'DM Sans',
 		letterSpacing: '-0.8px',
+		textAlign: 'center',
 	};
 
 	const pStyle: React.CSSProperties = {
@@ -102,16 +102,12 @@ const Community = () => {
 				{/* Header Section */}
 				<div style={wrapper}>
 					<div style={textWrapper}>
-						<p style={pStyle}>
-							{countUpInView && <CountUp start={0} end={100} duration={3} suffix="%" style={{ marginRight: '8px' }} />}
-							Fair Launch
-						</p>
 						<h1 style={h1Style}>A truly fair and transparent token economy. </h1>
-						<h2 style={h2Style} ref={countUpRef}>
+						<p style={h2Style} ref={countUpRef}>
 							The AO token is{' '}
 							<b>{countUpInView && <CountUp start={0} end={100} duration={3} suffix="%" />} fair launch</b> with no
 							insiders. <b>21 million supply.</b> 4 year halving cycle.
-						</h2>
+						</p>
 					</div>
 				</div>
 
@@ -119,7 +115,7 @@ const Community = () => {
 				<div className="pie-container" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
 					<div
 						className="pie-wrapper"
-						style={{ position: 'relative', display: 'flex', justifyContent: 'center', width: '50vw' }}
+						style={{ position: 'relative', display: 'flex', justifyContent: 'center', width: '40vw' }}
 						ref={pieChartRef}
 					>
 						{/* Only render the chart when it's in view */}

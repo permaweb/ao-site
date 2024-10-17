@@ -15,6 +15,13 @@ section p {
 	margin-bottom: 20px;
 }
 
+.wrapper-title {
+	font-size: 'clamp(16px, 2vw, 18px)';
+	margin: '0';
+	font-family: 'Roboto Mono';
+	text-transform: uppercase;
+}
+
 .explore-main-wrapper {
 	display: flex;
 	justify-content: center;
@@ -28,7 +35,7 @@ section p {
 .explore-content-wrapper {
 	position: relative;
 	display: flex;
-	max-width: 1200px;
+	max-width: 700px;
 	flex-direction: column;
 	width: 100%;
 	transition: max-width 1s;
@@ -60,33 +67,43 @@ section p {
 }
 
 .project-wrapper {
-	width: 50%;
-	height: 232px;
+	width: 100%;
+	height: 175px;
 	display: flex;
 	flex-direction: column;
-	border-radius: 20px;
-	background: rgb(249, 249, 249);
-	padding-inline: 20px;
-	padding-block: 20px;
+	border-radius: 10px;
+	border: 1px solid rgb(249, 249, 249);
+	padding-inline: 15px;
+	padding-block: 10px;
 	gap: 30px;
 	transition: all 300ms;
 	position: relative;
 	justify-content: space-between;
+	box-shadow: var(--shadow);
 }
 
 .multiple-project-wrapper {
 	width: 100%;
-	height: 232px;
+	height: 190px;
+	box-shadow: var(--shadow);
 	display: flex;
 	flex-direction: column;
-	border-radius: 20px;
-	background: rgb(249, 249, 249);
-	padding-inline: 20px;
-	padding-block: 20px;
+	border-radius: 10px;
+	border: 1px solid rgb(249, 249, 249);
+	padding-inline: 10px;
+	padding-block: 10px;
 	gap: 30px;
-	transition: all 300ms;
+	transition: all 200ms;
 	position: relative;
 	justify-content: space-between;
+}
+
+.project-wrapper p {
+	margin: 0;
+}
+
+.multiple-project-wrapper p {
+	margin: 0;
 }
 
 .diagram {

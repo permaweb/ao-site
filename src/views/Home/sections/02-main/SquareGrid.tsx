@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 import HyperTextLoad from 'components/hyperTextLoad';
 
@@ -10,6 +10,9 @@ import permaverse from '../../../../assets/permaverse.svg';
 import plusBlue from '../../../../assets/plus-blue.svg'; // Import plusBlue image
 
 const SquareGrid = () => {
+	const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Track the hovered dApp index
+	const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Reference to the debounce timeout
+
 	const dapps = [
 		{
 			name: 'Llamaland',
@@ -41,28 +44,20 @@ const SquareGrid = () => {
 			subtitle: '',
 			link: 'https://bazar.arweave.net',
 		},
-		{
-			name: 'View All Ecosystem dApps',
-			image: plusBlue, // Use plusBlue image here
-			subtitle: '',
-			link: '/#/explore#ecosystem-apps',
-		},
 	];
 
 	const squareStyle: React.CSSProperties = {
 		aspectRatio: '1 / 1',
-		backgroundColor: '#fcfcfc',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'column',
 		cursor: 'pointer',
-		border: '1px solid #C3C3C3',
 	};
 
 	const gridStyle: React.CSSProperties = {
 		display: 'grid',
-		gridTemplateColumns: 'repeat(4, 1fr)',
+		gridTemplateColumns: 'repeat(2, 1fr)',
 		gap: '10px',
 		width: '100%',
 	};
@@ -80,7 +75,6 @@ const SquareGrid = () => {
 		fontSize: 'clamp(10px, 2vw, 14px)',
 		textTransform: 'uppercase',
 		fontWeight: '400',
-
 		width: '50%',
 		textAlign: 'center',
 		marginTop: '20px',
@@ -96,28 +90,55 @@ const SquareGrid = () => {
 		width: '100%',
 	};
 
+	const handleMouseEnter = (index: number) => {
+		// Clear any existing timeout
+		if (hoverTimeoutRef.current) {
+			clearTimeout(hoverTimeoutRef.current);
+		}
+
+		// Set the hovered index after a short delay
+		hoverTimeoutRef.current = setTimeout(() => {
+			setHoveredIndex(index);
+		}, 2); // Adjust the delay as needed (200ms debounce)
+	};
+
+	const handleMouseLeave = () => {
+		// Clear any existing timeout
+		if (hoverTimeoutRef.current) {
+			clearTimeout(hoverTimeoutRef.current);
+		}
+
+		// Debounce the state reset to avoid flickering on rapid mouse movements
+		hoverTimeoutRef.current = setTimeout(() => {
+			setHoveredIndex(null);
+		}, 2);
+	};
+
 	return (
 		<div style={gridStyle}>
 			{dapps.map((dapp, index) => (
 				<a
+					className="square-logo"
 					href={dapp.link}
 					target={dapp.link.startsWith('http') ? '_blank' : '_self'}
 					rel={dapp.link.startsWith('http') ? 'noopener noreferrer' : ''}
 					key={index}
 					style={squareStyle}
-					className="background-transition"
+					onMouseEnter={() => handleMouseEnter(index)}
+					onMouseLeave={handleMouseLeave}
 				>
-					{dapp.name === 'View All Ecosystem dApps' ? (
-						<>
-							<img src={dapp.image} alt={dapp.name} style={plusStyle} />
-							<h3 style={altHeaderStyle}>{dapp.name}</h3>
-						</>
-					) : (
-						<>
-							<h3 style={headerStyle}>{dapp.name}</h3>
-							<img src={dapp.image} alt={dapp.name} style={imageStyle} />
-						</>
-					)}
+					<>
+						<HyperTextLoad
+							word={dapp.name}
+							textType="h3"
+							speed={1}
+							triggerOnLoad={false}
+							triggerOnView={true}
+							style={headerStyle}
+							triggerOnParentHover={hoveredIndex === index}
+						/>
+						<img src={dapp.image} alt={dapp.name} style={imageStyle} />
+					</>
 				</a>
 			))}
 		</div>

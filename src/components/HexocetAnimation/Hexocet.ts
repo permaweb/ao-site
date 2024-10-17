@@ -16,8 +16,8 @@ class Hexocet {
 	canvasBase: number = 0;
 	xC: number = 0;
 	yC: number = 0;
-	maxSeeds: number = 1000;
-	maxSeedAge: number = 1000;
+	maxSeeds: number = 750;
+	maxSeedAge: number = 500;
 	initialSeedAge: number = 0; // Starting age for new seeds
 	shouldUseSecondaryColor = Math.random() < 1;
 	secondaryColor = [0, 255, 112];

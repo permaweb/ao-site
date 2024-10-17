@@ -72,6 +72,8 @@ export const GlobalStyle = createGlobalStyle`
 	--terminal-red: #d50e0e;
 	--terminal-green: #45cc05;
 	--terminal-blue: #054bfe;
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
 
   // web3 onboard
   --onboard-modal-backdrop: rgba(130, 130, 130, 0.25);

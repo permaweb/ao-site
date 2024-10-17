@@ -26,14 +26,21 @@ const Hero = () => {
 							target="_blank"
 							rel="noopener noreferrer"
 						>
-							<button className="glitch primary link-terminal-blue" data-text="→ Boot Up Testnet">
+							<button className="glitch primary" data-text="→ Boot Up Testnet">
 								<HyperTextLoad word={'→ Boot Up The TestNet'} textType="span" speed={1} />
 							</button>
 						</Link>
 					</div>
 				</div>
 				<div className="explore-wrapper">
-					<span>Explore</span> <img className="floating" src={chevronDown} alt="chevron-down" />
+					<span
+						style={{
+							fontSize: 'clamp(8px, 2vw, 12px)',
+						}}
+					>
+						Explore
+					</span>{' '}
+					<img className="floating" src={chevronDown} alt="chevron-down" />
 				</div>
 			</div>
 		</section>

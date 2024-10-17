@@ -3,7 +3,7 @@ import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 
-import AnimatedNumberAlt from 'components/atoms/AnimatedNumber/AnimatedNumberAlt';
+// import AnimatedNumberAlt from 'components/atoms/AnimatedNumber/AnimatedNumberAlt';
 import HyperTextLoad from 'components/hyperTextLoad';
 
 import './HomeMainStyles.css';
@@ -19,7 +19,8 @@ const Build = () => {
 		'https://ewt3hbxdv5im273zdsy4j2hbnavkf4zkittqffreevxvelqdhifa.arweave.net/JaezhuOvUM1_eRyxxOjhaCqi8ypE5wKWJCVvUi4DOgo';
 
 	const h1Wrapper: React.CSSProperties = {
-		margin: '200px 0',
+		position: 'absolute',
+
 		zIndex: '2',
 		width: '100%',
 		display: 'flex',
@@ -28,16 +29,16 @@ const Build = () => {
 	};
 
 	const h1Style: React.CSSProperties = {
-		textAlign: 'right',
+		textAlign: 'center',
 		fontWeight: 400,
 	};
 
-	const wrapper: React.CSSProperties = {
-		display: 'flex',
-		width: '100%',
-		justifyContent: 'space-between',
-		marginBottom: '20px',
-	};
+	// const wrapper: React.CSSProperties = {
+	// 	display: 'flex',
+	// 	width: '100%',
+	// 	justifyContent: 'space-between',
+	// 	marginBottom: '20px',
+	// };
 
 	const relativeWrapper: React.CSSProperties = {
 		position: 'relative',
@@ -47,12 +48,13 @@ const Build = () => {
 		marginBottom: '20px',
 	};
 
-	const statWrapper: React.CSSProperties = {
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		justifyContent: 'center',
-	};
+	// const statWrapper: React.CSSProperties = {
+	// 	display: 'flex',
+	// 	flexDirection: 'column',
+	// 	alignItems: 'center',
+	// 	justifyContent: 'center',
+	// 	zIndex: '2',
+	// };
 
 	const buttonWrapper: React.CSSProperties = {
 		display: 'flex',
@@ -78,11 +80,9 @@ const Build = () => {
 	};
 
 	const videoWrapper: React.CSSProperties = {
-		position: 'absolute',
-		left: '0',
 		width: '100%',
 		zIndex: '1',
-		transform: 'translateX(-300px)',
+
 		animation: 'alt-pulse 5s ease-in-out infinite',
 	};
 
@@ -104,6 +104,21 @@ const Build = () => {
 	return (
 		<section className="full-section build" style={{ paddingInline: '40px' }}>
 			<div className="content-build-wrapper">
+				{/* Video and Header Section */}
+				<div style={relativeWrapper}>
+					<div style={videoWrapper}>
+						<video width={'100%'} src={hexagonVideo} autoPlay loop muted />
+					</div>
+					<div style={h1Wrapper}>
+						<h1 style={h1Style}>Start to build anything you want, </h1>
+						<h1 style={h1Style} className={'count-up-num'} ref={countUpRef}>
+							<span style={{ color: 'var(--terminal-green)' }}>
+								{countUpInView && <CountUp start={0} end={100} duration={3} suffix="%" />}
+							</span>
+							<span style={{ color: 'var(--terminal-green)', marginLeft: '5px' }}>onchain.</span>
+						</h1>
+					</div>
+				</div>
 				{/* Top Navigation Buttons */}
 				<div style={buttonWrapper}>
 					<Link replace={false} to={'https://discord.gg/dYXtHwc9dc'}>
@@ -132,23 +147,7 @@ const Build = () => {
 					</Link>
 				</div>
 
-				{/* Video and Header Section */}
-				<div style={relativeWrapper}>
-					<div style={videoWrapper}>
-						<video width={'100%'} src={hexagonVideo} autoPlay loop muted />
-					</div>
-					<div style={h1Wrapper}>
-						<h1 style={h1Style}>Start to build anything you want, </h1>
-						<h1 style={h1Style} className={'count-up-num'} ref={countUpRef}>
-							<span style={{ color: 'var(--terminal-green)' }}>
-								{countUpInView && <CountUp start={0} end={100} duration={3} suffix="%" />}
-							</span>
-							<span style={{ color: 'var(--terminal-green)', marginLeft: '5px' }}>onchain.</span>
-						</h1>
-					</div>
-				</div>
-
-				{/* Statistics Section */}
+				{/* Statistics Section
 				<div style={wrapper}>
 					<div style={statWrapper}>
 						<h3 style={statTextStyle}>{stats.Users.name}</h3>
@@ -173,7 +172,7 @@ const Build = () => {
 							targetValue={stats.Messages.amount}
 						/>
 					</div>
-				</div>
+				</div> */}
 			</div>
 		</section>
 	);
