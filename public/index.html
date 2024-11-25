@@ -18,6 +18,22 @@
 			rel="stylesheet"
 		/>
 		<title>AO</title>
+
+		<script>
+			!(function (w, d) {
+				w.__adrsbl = {
+					queue: [],
+					run: function () {
+						this.queue.push(arguments);
+					},
+				};
+				var s = d.createElement('script');
+				s.async = true;
+				s.src = 'https://tag.adrsbl.io/p.js?tid=a2bacbf20a434064b372ffb0ab1a4648';
+				var b = d.getElementsByTagName('script')[0];
+				b.parentNode.insertBefore(s, b);
+			})(window, document);
+		</script>
 	</head>
 	<body>
 		<div id="root"></div>
