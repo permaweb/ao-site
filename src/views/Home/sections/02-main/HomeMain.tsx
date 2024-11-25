@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import './HomeMainStyles.css';
@@ -9,6 +9,7 @@ import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt';
 
 const HomeMain = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
+	const [countdown, setCountdown] = useState<string>('');
 
 	useEffect(() => {
 		morpheusAsciiArt();
@@ -57,6 +58,31 @@ const HomeMain = () => {
 		return () => document.removeEventListener('mousemove', handleMouseMove);
 	}, []);
 
+	useEffect(() => {
+		const targetDate = new Date('2025-02-09T17:00:00Z'); // 12 PM EST in UTC (5 PM UTC)
+		const updateCountdown = () => {
+			const now = new Date();
+			const timeDifference = targetDate.getTime() - now.getTime();
+
+			if (timeDifference <= 0) {
+				setCountdown('Time is up!');
+				return;
+			}
+
+			const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+			const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+			const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+			setCountdown(`${days}d, ${hours}h, ${minutes}m, ${seconds}s`);
+		};
+
+		updateCountdown(); // Initial call
+		const interval = setInterval(updateCountdown, 1000); // Update every second
+
+		return () => clearInterval(interval); // Cleanup interval on component unmount
+	}, []);
+
 	return (
 		<>
 			<main>
@@ -65,7 +91,7 @@ const HomeMain = () => {
 					<div className="content-hero-wrapper">
 						<div className="text-hero-wrapper">
 							<div className="main-heading">
-								<h1>Hyper. Parallel. Computer.</h1>
+								<h1>{countdown}</h1>
 							</div>
 						</div>
 						<div className="button-wrapper">
