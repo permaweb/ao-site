@@ -17,7 +17,13 @@ const Hero = () => {
 				<div className="content-hero-wrapper">
 					<div className="text-hero-wrapper">
 						<div className="main-heading">
-							<h1>Hyper. Parallel. Computer.</h1>
+							<h1
+								style={{
+									fontSize: 'clamp(48px, 2vw, 64px)',
+								}}
+							>
+								Hyper. Parallel. Computer.
+							</h1>
 						</div>
 					</div>
 					<div className="button-wrapper">

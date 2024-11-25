@@ -33,15 +33,6 @@ const Community = () => {
 		textAlign: 'center',
 	};
 
-	const pStyle: React.CSSProperties = {
-		fontFamily: 'Roboto Mono',
-		letterSpacing: '-0.5px',
-		fontWeight: 400,
-		fontSize: 'clamp(15px, 2vw, 16px)',
-		textTransform: 'uppercase',
-		color: '#7F7F7F',
-	};
-
 	const wrapper: React.CSSProperties = {
 		display: 'flex',
 		width: '100%',

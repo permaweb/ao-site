@@ -34,6 +34,7 @@ const Permaweb = () => {
 		fontFamily: 'DM Sans',
 		letterSpacing: '-0.8px',
 		textAlign: 'center',
+		fontSize: 'clamp(12px, 2.5vw, 16px)',
 	};
 
 	const wrapper: React.CSSProperties = {
@@ -68,7 +69,7 @@ const Permaweb = () => {
 						src="https://odysee.com/$/embed/@AO:4/the_permaweb-(1440p)-(1):9?r=GovBscmXVLs3avGjcR1f5ktd6X8Ehgqo"
 						title="Permaweb"
 						allow="autoplay; muted; fullscreen; picture-in-picture; clipboard-write"
-						style={{ width: '80%', aspectRatio: '16/9' }}
+						style={{ width: '80%', aspectRatio: '16/9', borderRadius: '20px' }}
 					></iframe>
 				</div>
 				<div style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center' }}>

@@ -24,6 +24,7 @@ const Ecosystem = () => {
 		fontFamily: 'DM Sans',
 		letterSpacing: '-0.8px',
 		textAlign: 'center',
+		fontSize: 'clamp(12px, 2.5vw, 16px)',
 	};
 
 	return (

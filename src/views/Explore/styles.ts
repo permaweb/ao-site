@@ -127,6 +127,10 @@ export const Wrapper = styled.div`
 		font-size: clamp(20px, 3.5vw, 36px);
 	}
 
+	iframe {
+		border-radius: 20px;
+	}
+
 	.diagram {
 		display: flex;
 		flex-direction: column;

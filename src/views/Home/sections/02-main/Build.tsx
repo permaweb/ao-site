@@ -3,7 +3,6 @@ import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 
-// import AnimatedNumberAlt from 'components/atoms/AnimatedNumber/AnimatedNumberAlt';
 import HyperTextLoad from 'components/hyperTextLoad';
 
 import './HomeMainStyles.css';
@@ -33,12 +32,12 @@ const Build = () => {
 		fontWeight: 400,
 	};
 
-	// const wrapper: React.CSSProperties = {
-	// 	display: 'flex',
-	// 	width: '100%',
-	// 	justifyContent: 'space-between',
-	// 	marginBottom: '20px',
-	// };
+	const wrapper: React.CSSProperties = {
+		display: 'flex',
+		width: '100%',
+		justifyContent: 'space-between',
+		marginBottom: '20px',
+	};
 
 	const relativeWrapper: React.CSSProperties = {
 		position: 'relative',
@@ -48,13 +47,13 @@ const Build = () => {
 		marginBottom: '20px',
 	};
 
-	// const statWrapper: React.CSSProperties = {
-	// 	display: 'flex',
-	// 	flexDirection: 'column',
-	// 	alignItems: 'center',
-	// 	justifyContent: 'center',
-	// 	zIndex: '2',
-	// };
+	const statWrapper: React.CSSProperties = {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		zIndex: '2',
+	};
 
 	const buttonWrapper: React.CSSProperties = {
 		display: 'flex',
@@ -68,7 +67,7 @@ const Build = () => {
 		border: 'none',
 		display: 'flex',
 		gap: '10px',
-		fontSize: 'clamp(14px, 2.5vw, 18px);',
+		fontSize: 'clamp(14px, 2.5vw, 18px)',
 		cursor: 'pointer',
 		textTransform: 'uppercase',
 
@@ -119,36 +118,60 @@ const Build = () => {
 						</h1>
 					</div>
 				</div>
-				{/* Top Navigation Buttons */}
+				{/* bottom Navigation Buttons */}
 				<div style={buttonWrapper}>
 					<Link replace={false} to={'https://discord.gg/dYXtHwc9dc'}>
 						<button className="link-terminal-red" style={buttonStyle}>
 							&gt;
-							<HyperTextLoad word={'Discord'} textType="span" speed={1} triggerOnView />
+							<HyperTextLoad
+								word={'Discord'}
+								textType="span"
+								speed={1}
+								triggerOnView
+								style={{ fontSize: 'clamp(10px, 2vw, 14px)' }}
+							/>
 						</button>
 					</Link>
 					<Link replace={false} to={'https://cookbook_ao.g8way.io/tutorials/begin/index.html'}>
 						<button className="link-terminal-green" style={buttonStyle}>
 							&gt;
-							<HyperTextLoad word={'ao docs'} textType="span" speed={1} triggerOnView />
+							<HyperTextLoad
+								word={'ao docs'}
+								textType="span"
+								speed={1}
+								triggerOnView
+								style={{ fontSize: 'clamp(10px, 2vw, 14px)' }}
+							/>
 						</button>
 					</Link>
 					<Link replace={false} to={'https://cookbook_ao.g8way.io/tutorials/begin/index.html'}>
 						<button className="link-terminal-blue" style={buttonStyle}>
 							&gt;
-							<HyperTextLoad word={'cookbook'} textType="span" speed={1} triggerOnView />
+							<HyperTextLoad
+								word={'cookbook'}
+								textType="span"
+								speed={1}
+								triggerOnView
+								style={{ fontSize: 'clamp(10px, 2vw, 14px)' }}
+							/>
 						</button>
 					</Link>
 					<Link replace={false} to={'/read'}>
 						<button className="link-terminal-green" style={buttonStyle}>
 							&gt;
-							<HyperTextLoad word={'ao paper'} textType="span" speed={1} triggerOnView />
+							<HyperTextLoad
+								word={'ao paper'}
+								textType="span"
+								speed={1}
+								triggerOnView
+								style={{ fontSize: 'clamp(10px, 2vw, 14px)' }}
+							/>
 						</button>
 					</Link>
 				</div>
 
-				{/* Statistics Section
-				<div style={wrapper}>
+				{/* Statistics Section */}
+				{/* <div style={wrapper}>
 					<div style={statWrapper}>
 						<h3 style={statTextStyle}>{stats.Users.name}</h3>
 
