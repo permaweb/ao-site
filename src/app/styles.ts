@@ -297,12 +297,11 @@ export const GlobalStyle = createGlobalStyle`
 		position: fixed;
 		top: 0;
 		display: flex;
-		height: 40px;
+		height: 100px;
 		width: 100%;
 		overflow: hidden;
 		z-index: 2;
-		background: #FFFFFF;
-	}
+  }
 
 nav {
   display: flex;
@@ -318,6 +317,7 @@ nav {
   display: flex;
   flex-direction: row;
   gap: 32px;
+  margin-bottom: 20px;
 }
 
 .nav-left a {
@@ -347,6 +347,8 @@ nav {
   font-size: (8px, 5vw, 12px);
 }
 
+
+
 .main-cta-wrapper {
   position: relative;
 }
@@ -356,6 +358,7 @@ nav {
   letter-spacing: -0.1px;
   text-transform: uppercase;
   font-size: (8px, 5vw, 12px);
+  background: transparent;
 }
 
 footer {

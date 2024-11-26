@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import './HomeMainStyles.css';
 
+import placeholderVideo from '../../../../assets/ao-launch-v2.mp4';
 import HexocetAnimationComponent from '../../../../components/HexocetAnimation/HexocetAnimationComponent';
 import HyperTextLoad from '../../../../components/hyperTextLoad';
 import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt';
@@ -74,7 +75,7 @@ const HomeMain = () => {
 			const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 			const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-			setCountdown(`${days}d, ${hours}h, ${minutes}m, ${seconds}s`);
+			setCountdown(`${days}d : ${hours}h : ${minutes}m : ${seconds}s`);
 		};
 
 		updateCountdown(); // Initial call
@@ -85,21 +86,31 @@ const HomeMain = () => {
 
 	return (
 		<>
-			<main>
+			<main style={{ background: 'black' }}>
 				<div className="home-main-wrapper" ref={containerRef}>
-					<HexocetAnimationComponent containerRef={containerRef} />
+					<video className="background-video" src={placeholderVideo} autoPlay muted loop playsInline></video>{' '}
 					<div className="content-hero-wrapper">
-						<div className="text-hero-wrapper">
+						<div className="text-hero-wrapper" style={{ justifyContent: 'center' }}>
 							<div className="main-heading">
-								<h1>{countdown}</h1>
+								<p style={{ textTransform: 'uppercase', fontSize: '18px' }}>Countdown To Mainnet</p>
+								<h1 style={{ fontVariantNumeric: 'tabular-nums', fontSize: '150px' }}>{countdown}</h1>
 							</div>
 						</div>
-						<div className="button-wrapper">
-							<Link to={'https://cookbook_ao.g8way.io/'} target="_blank" rel="noopener noreferrer">
-								<button className="glitch primary link-terminal-blue" data-text="→ Boot Up Testnet">
-									<HyperTextLoad word={'→ Boot Up The TestNet'} textType="span" speed={1} />
-								</button>
-							</Link>
+						<div style={{ display: 'flex', gap: '16px' }}>
+							<div className="button-wrapper">
+								<Link to={'https://cookbook_ao.g8way.io/'} target="_blank" rel="noopener noreferrer">
+									<button className="glitch primary link-terminal-green" data-text="→ Boot Up Testnet">
+										<HyperTextLoad word={'Mint'} textType="span" speed={1} />
+									</button>
+								</Link>
+							</div>
+							<div className="button-wrapper">
+								<Link to={'https://cookbook_ao.g8way.io/'} target="_blank" rel="noopener noreferrer">
+									<button className="glitch primary link-terminal-green" data-text="→ Boot Up Testnet">
+										<HyperTextLoad word={'Build'} textType="span" speed={1} />
+									</button>
+								</Link>
+							</div>
 						</div>
 					</div>
 				</div>
