@@ -1,19 +1,46 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
+
 import './HomeMainStyles.css';
 
 import placeholderVideo from '../../../../assets/ao-launch-v2.mp4';
-import HexocetAnimationComponent from '../../../../components/HexocetAnimation/HexocetAnimationComponent';
 import HyperTextLoad from '../../../../components/hyperTextLoad';
-import morpheusAsciiArt from '../../../../components/MorpheusAsciiArt';
 
 const HomeMain = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [countdown, setCountdown] = useState<string>('');
 
+	// Update Countdown Logic
+	const updateCountdown = () => {
+		const now = Date.now();
+		const targetDate = new Date('2025-02-08T23:20:00Z').getTime();
+		const timeDifference = targetDate - now;
+
+		if (timeDifference <= 0) {
+			setCountdown('Time is up!');
+			return;
+		}
+
+		const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+		const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+		const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+		setCountdown(`${days}d : ${hours}h : ${minutes}m : ${seconds}s`);
+	};
+
 	useEffect(() => {
-		morpheusAsciiArt();
+		updateCountdown();
+
+		const intervalId = setInterval(updateCountdown, 1000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+
+	useEffect(() => {
+		MorpheusAsciiArt();
 
 		const debounce = <T extends (...args: any[]) => any>(
 			func: T,
@@ -59,36 +86,11 @@ const HomeMain = () => {
 		return () => document.removeEventListener('mousemove', handleMouseMove);
 	}, []);
 
-	useEffect(() => {
-		const targetDate = new Date('2025-02-09T17:00:00Z'); // 12 PM EST in UTC (5 PM UTC)
-		const updateCountdown = () => {
-			const now = new Date();
-			const timeDifference = targetDate.getTime() - now.getTime();
-
-			if (timeDifference <= 0) {
-				setCountdown('Time is up!');
-				return;
-			}
-
-			const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-			const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-			const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-			const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-			setCountdown(`${days}d : ${hours}h : ${minutes}m : ${seconds}s`);
-		};
-
-		updateCountdown(); // Initial call
-		const interval = setInterval(updateCountdown, 1000); // Update every second
-
-		return () => clearInterval(interval); // Cleanup interval on component unmount
-	}, []);
-
 	return (
 		<>
 			<main style={{ background: 'black' }}>
 				<div className="home-main-wrapper" ref={containerRef}>
-					<video className="background-video" src={placeholderVideo} autoPlay muted loop playsInline></video>{' '}
+					<video className="background-video" src={placeholderVideo} autoPlay muted loop playsInline></video>
 					<div className="content-hero-wrapper">
 						<div className="text-hero-wrapper" style={{ justifyContent: 'center' }}>
 							<div className="main-heading">
