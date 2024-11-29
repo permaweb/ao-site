@@ -1,3 +1,10 @@
+@font-face {
+	font-family: 'MatrixFont';
+	src: url('./assets/CSCalebMono-Regular.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
 html {
 	--onboard-modal-z-index: 1000;
 }
@@ -11,10 +18,18 @@ html {
 	opacity: 1;
 }
 
+::selection {
+	background-color: #96cc9e76;
+	/* Light gray background */
+	color: #333333;
+	/* Dark text color */
+}
+
 @keyframes fadeIn {
 	from {
 		opacity: 0;
 	}
+
 	to {
 		opacity: 1;
 	}
@@ -28,9 +43,11 @@ html {
 .link-terminal-red:hover {
 	color: var(--terminal-red);
 }
+
 .link-terminal-green:hover {
 	color: var(--terminal-green);
 }
+
 .link-terminal-blue:hover {
 	color: var(--terminal-blue);
 }

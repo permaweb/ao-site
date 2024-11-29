@@ -70,7 +70,7 @@ export const GlobalStyle = createGlobalStyle`
 	--main-dark-color: #222326;
 	--triangle-color: #e6e7ea;
 	--terminal-red: #d50e0e;
-	--terminal-green: #45cc05;
+	--terminal-green: #18a32f;
 	--terminal-blue: #054bfe;
 
   // web3 onboard
@@ -337,14 +337,14 @@ nav {
 .nav-buttons-header {
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 30px;
 }
 
 .nav-buttons-header button {
   font-family: 'Roboto Mono', monospace;
   letter-spacing: -0.1px;
   text-transform: uppercase;
-  font-size: (8px, 5vw, 12px);
+  font-size: (12px, 6vw, 16px);
 }
 
 
@@ -395,7 +395,7 @@ footer {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
 .nav-buttons button {

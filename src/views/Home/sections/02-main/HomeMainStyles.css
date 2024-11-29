@@ -56,7 +56,6 @@ main {
 .button-wrapper {
 	display: flex;
 	flex-direction: row;
-	gap: 10px;
 }
 
 @keyframes backgroundTransition {
@@ -89,21 +88,23 @@ main {
 	font-family: 'Roboto Mono', monospace;
 	letter-spacing: -0.1px;
 	text-transform: uppercase;
-	font-size: 18px;
-	padding-right: 40px;
-	padding-left: 40px;
-	padding-top: 25px;
-	padding-bottom: 25px;
+	font-size: 'clamp(8px, 8vw, 12px';
+	padding-right: 100px;
+	padding-left: 100px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	transition: all 300ms;
-	background: #ffffff12;
-	border: 1px solid fff;
+	background: #021a0e;
+	border: 1px solid #18a32f;
 	border-radius: 12px;
 	color: white;
 }
 
 .button-wrapper button:hover {
-	background: #ffffff4a;
+	background: #0005024a;
 	font-weight: 600;
+	padding-right: 120px;
+	padding-left: 120px;
 }
 
 .main-heading {
@@ -117,10 +118,6 @@ main {
 	color: #fff;
 
 	overflow: hidden;
-}
-
-.main-heading h1 {
-	color: #f5cd19;
 }
 
 .ao-wrapper-hero {
@@ -154,5 +151,36 @@ main {
 	height: 100%;
 	object-fit: cover;
 	z-index: 1;
-	filter: grayscale(1) brightness(20%);
+	filter: grayscale(1) brightness(40%);
+}
+
+.text-layer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	z-index: 1;
+	-webkit-mask-image: radial-gradient(circle, white 50%, transparent 50%);
+	mask-image: radial-gradient(circle, white 50%, transparent 50%);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: 0 0;
+	mask-position: 0 0;
+	transition: mask-position 0.2s;
+	pointer-events: none;
+}
+
+.text-layer p {
+	mix-blend-mode: multiply;
+	color: white;
+	opacity: 10%;
+}
+
+@media only screen and (max-width: 1000px) {
+	.button-wrapper button {
+		padding-right: 50px;
+		padding-left: 50px;
+	}
 }

@@ -5,7 +5,7 @@ import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
 
 import './HomeMainStyles.css';
 
-import placeholderVideo from '../../../../assets/ao-launch-v2.mp4';
+import mainnetCountdownVideo from '../../../../assets/MAINNET-V1.mp4';
 import HyperTextLoad from '../../../../components/hyperTextLoad';
 
 const HomeMain = () => {
@@ -28,7 +28,7 @@ const HomeMain = () => {
 		const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 		const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-		setCountdown(`${days}d : ${hours}h : ${minutes}m : ${seconds}s`);
+		setCountdown(`${days}d:${hours}h:${minutes}m:${seconds}s`);
 	};
 
 	useEffect(() => {
@@ -42,73 +42,66 @@ const HomeMain = () => {
 	useEffect(() => {
 		MorpheusAsciiArt();
 
-		const debounce = <T extends (...args: any[]) => any>(
-			func: T,
-			delay: number
-		): ((...args: Parameters<T>) => void) => {
-			let debounceTimer: number | NodeJS.Timeout;
-			return (...args: Parameters<T>) => {
-				clearTimeout(debounceTimer as number);
-				debounceTimer = setTimeout(() => {
-					func(...args);
-				}, delay) as unknown as number;
-			};
+		const handleMouseMove = (event: MouseEvent) => {
+			if (!containerRef.current) return;
+
+			const rect = containerRef.current.getBoundingClientRect();
+
+			const x = event.clientX - rect.left;
+			const y = event.clientY - rect.top;
 		};
 
-		const handleMouseMove = (e: MouseEvent) => {
-			const { clientX, clientY } = e;
-			const centerX = window.innerWidth / 2;
-			const centerY = window.innerHeight / 2;
-			const deltaX = (clientX - centerX) * 0.02;
-			const deltaY = (clientY - centerY) * 0.02;
+		window.addEventListener('mousemove', handleMouseMove);
 
-			const distanceX = Math.abs(clientX - centerX);
-			const distanceY = Math.abs(clientY - centerY);
-
-			const normalizedDistanceX = distanceX / centerX;
-			const normalizedDistanceY = distanceY / centerY;
-
-			const scaleFactor = 1 + 0.075 * Math.max(normalizedDistanceX, normalizedDistanceY);
-
-			if (containerRef.current) {
-				const hexocet = containerRef.current.querySelector('canvas');
-				if (hexocet) {
-					hexocet.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleFactor})`;
-				}
-			}
-		};
-
-		const debouncedHandleMouseMove = debounce(handleMouseMove, 100);
-
-		document.addEventListener('mousemove', debouncedHandleMouseMove);
-
-		// Clean up the event listener when the component unmounts
-		return () => document.removeEventListener('mousemove', handleMouseMove);
+		return () => window.removeEventListener('mousemove', handleMouseMove);
 	}, []);
 
 	return (
 		<>
 			<main style={{ background: 'black' }}>
 				<div className="home-main-wrapper" ref={containerRef}>
-					<video className="background-video" src={placeholderVideo} autoPlay muted loop playsInline></video>
+					<video className="background-video" src={mainnetCountdownVideo} autoPlay muted loop playsInline></video>
+
 					<div className="content-hero-wrapper">
 						<div className="text-hero-wrapper" style={{ justifyContent: 'center' }}>
 							<div className="main-heading">
-								<p style={{ textTransform: 'uppercase', fontSize: '18px' }}>Countdown To Mainnet</p>
-								<h1 style={{ fontVariantNumeric: 'tabular-nums', fontSize: '150px' }}>{countdown}</h1>
+								<p
+									style={{
+										fontSize: 'clamp(18px, 3vw, 30px',
+										fontFamily: 'MatrixFont',
+										textShadow: '0px 0px 30px #95E18E',
+									}}
+								>
+									Countdown To Mainnet
+								</p>
+								<h1
+									style={{
+										fontVariantNumeric: 'tabular-nums',
+										fontSize: 'clamp(50px, 8vw, 200px',
+										fontFamily: 'MatrixFont',
+										textShadow: '0px 0px 50px #8FFF85',
+										color: 'white',
+									}}
+								>
+									{countdown}
+								</h1>
 							</div>
 						</div>
-						<div style={{ display: 'flex', gap: '16px' }}>
+						<div style={{ display: 'flex', gap: '40px' }}>
 							<div className="button-wrapper">
-								<Link to={'https://cookbook_ao.g8way.io/'} target="_blank" rel="noopener noreferrer">
-									<button className="glitch primary link-terminal-green" data-text="→ Boot Up Testnet">
+								<Link to={'/mint'} target="_blank" rel="noopener noreferrer">
+									<button className="glitch primary" data-text="→ Boot Up Testnet">
 										<HyperTextLoad word={'Mint'} textType="span" speed={1} />
 									</button>
 								</Link>
 							</div>
 							<div className="button-wrapper">
 								<Link to={'https://cookbook_ao.g8way.io/'} target="_blank" rel="noopener noreferrer">
-									<button className="glitch primary link-terminal-green" data-text="→ Boot Up Testnet">
+									<button
+										className="glitch primary"
+										data-text="→ Boot Up Testnet"
+										style={{ background: '#0005024a', border: '1px solid #9a9a9a' }}
+									>
 										<HyperTextLoad word={'Build'} textType="span" speed={1} />
 									</button>
 								</Link>
