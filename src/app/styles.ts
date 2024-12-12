@@ -398,6 +398,21 @@ footer {
   gap: 15px;
 }
 
+@media only screen and (max-width: 500px) {
+
+  .nav-buttons {
+    gap: 10px;
+  }
+
+  .nav-buttons-header {
+    gap: 10px;
+  }
+
+  .nav-left {
+    gap: 20px;
+  }
+}
+
 .nav-buttons button {
   display: flex;
   align-items: center;

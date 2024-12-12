@@ -232,3 +232,10 @@ main {
 		padding-left: 50px;
 	}
 }
+
+@media only screen and (max-width: 500px) {
+	.button-wrapper button {
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+}

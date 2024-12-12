@@ -77,7 +77,7 @@ const HomeMain = () => {
 								<h1
 									style={{
 										fontVariantNumeric: 'tabular-nums',
-										fontSize: 'clamp(50px, 8vw, 200px',
+										fontSize: 'clamp(40px, 8vw, 200px',
 										fontFamily: 'MatrixFont',
 										textShadow: '0px 0px 50px #8FFF85',
 										color: 'white',
