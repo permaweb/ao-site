@@ -5,7 +5,6 @@ import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
 
 import './HomeMainStyles.css';
 
-import mainnetCountdownVideo from '../../../../assets/MAINNET-COUNTDOWN-v3.mp4';
 import HyperTextLoad from '../../../../components/hyperTextLoad';
 
 const HomeMain = () => {
@@ -60,8 +59,6 @@ const HomeMain = () => {
 		<>
 			<main style={{ background: 'black' }}>
 				<div className="home-main-wrapper" ref={containerRef}>
-					<video className="background-video" src={mainnetCountdownVideo} autoPlay muted loop playsInline></video>
-
 					<div className="content-hero-wrapper">
 						<div className="text-hero-wrapper" style={{ justifyContent: 'center' }}>
 							<div className="main-heading">
