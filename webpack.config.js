@@ -117,8 +117,16 @@ module.exports = {
 					'url-loader',
 				],
 			},
+			{
+				test: /\.(mp4|webm|ogg)$/,
+				type: 'asset/resource',
+				generator: {
+					filename: 'assets/videos/[name][ext]',
+				},
+			},
 		],
 	},
+
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: path.join(__dirname, 'public', 'index.html'),

@@ -14,7 +14,8 @@
 		"prepare": "husky install",
 		"build": "NODE_ENV=production webpack",
 		"deploy-staging": "npm run build && permaweb-deploy --ant-process Gu5XiFhZZO_Pc6vRb6eoR3DxQi2P_1SzAVkHDbsPtbc",
-		"deploy-main": "npm run build && permaweb-deploy --ant-process HY021r2MQL9Zi0qSNFAQ9QRshIc2mNPYf65pZBP04cE"
+		"deploy-main": "npm run build && permaweb-deploy --ant-process HY021r2MQL9Zi0qSNFAQ9QRshIc2mNPYf65pZBP04cE",
+		"deploy-share": "npm run build && arx upload-dir dist -w ./wallet.json --index-file index.html -t arweave -h https://turbo.ardrive.io"
 	},
 	"dependencies": {
 		"@ethersproject/providers": "^5.7.2",

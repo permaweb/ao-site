@@ -13,6 +13,7 @@ export const Wrapper = styled.div`
 	max-width: 1600px;
 	gap: 20px;
 	overflow-x: auto;
+	animation: fadeIn 2s ease-out;
 
 	@media (max-width: 1200px) {
 		width: 1440px;

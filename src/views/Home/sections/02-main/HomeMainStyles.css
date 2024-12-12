@@ -31,6 +31,7 @@ main {
 	100% {
 		opacity: 1;
 	}
+
 	50% {
 		opacity: 0.7;
 	}
@@ -55,62 +56,116 @@ main {
 .button-wrapper {
 	display: flex;
 	flex-direction: row;
-	gap: 10px;
-	background: var(--background-color);
-	border: 1px solid black;
 }
 
 @keyframes backgroundTransition {
 	0% {
 		background-color: var(--background-color);
 	}
+
 	20% {
 		background-color: var(--background-color-2);
 	}
+
 	40% {
 		background-color: var(--background-color-3);
 	}
+
 	60% {
 		background-color: var(--background-color-4);
 	}
+
 	80% {
 		background-color: var(--background-color-5);
 	}
+
 	100% {
 		background-color: var(--background-color);
 	}
 }
 
+@property --gradient-angle {
+	syntax: '<angle>';
+	initial-value: 0deg;
+	inherits: false;
+}
+
 .button-wrapper button {
+	position: relative;
+	--rotate-border-1: rgba(0, 0, 0, 0.16);
+	--rotate-border-2: #18a32f;
+	--rotate-border-3: #083e11;
 	font-family: 'Roboto Mono', monospace;
 	letter-spacing: -0.1px;
 	text-transform: uppercase;
-	font-size: 12px;
-	padding-right: 20px;
-	padding-left: 20px;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	box-shadow: 3px 3px black, 6px 6px gray, 9px 9px var(--triangle-color);
-	transition: all 100ms;
+	font-size: 'clamp(8px, 8vw, 12px';
+	padding-right: 100px;
+	padding-left: 100px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	transition: all 300ms;
+
+	border: 1px solid #18a32f;
+	border-radius: 12px;
+	color: white;
+}
+
+@keyframes rotation {
+	0% {
+		--gradient-angle: 0deg;
+	}
+
+	100% {
+		--gradient-angle: 360deg;
+	}
+}
+
+.button-wrapper .primary {
+	background: #000502a1;
+}
+
+.button-wrapper .secondary {
+	background: #07022ca1;
+}
+
+.button-wrapper button::before,
+.button-wrapper button::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: conic-gradient(
+		from var(--gradient-angle),
+		var(--rotate-border-1),
+		var(--rotate-border-2),
+		var(--rotate-border-3)
+	);
+	border-radius: inherit;
+	animation: rotation 30s linear infinite;
+	z-index: -1;
+}
+
+.button-wrapper button::after {
+	filter: blur(3.5rem);
 }
 
 .button-wrapper button:hover {
-	background: var(--triangle-color);
 	font-weight: 600;
-	transition: background 500ms;
-	animation: backgroundTransition 6s ease infinite;
+	padding-right: 120px;
+	padding-left: 120px;
+	background: #c9c9c917;
 }
 
 .main-heading {
 	display: flex;
 	flex-direction: column;
-	background: rgb(255 255 255 / 85%);
+
 	padding-left: 20px;
 	padding-right: 20px;
 	align-items: center;
 	justify-content: center;
-	backdrop-filter: blur(2px);
-	text-align: center;
+	color: #fff;
+
+	overflow: hidden;
 }
 
 .ao-wrapper-hero {
@@ -134,4 +189,53 @@ main {
 	background: var(--background-color);
 	border-radius: 100px;
 	padding: 2px;
+}
+
+.background-video {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	z-index: 1;
+	filter: grayscale(1) brightness(30%);
+}
+
+.text-layer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	z-index: 1;
+	-webkit-mask-image: radial-gradient(circle, white 50%, transparent 50%);
+	mask-image: radial-gradient(circle, white 50%, transparent 50%);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: 0 0;
+	mask-position: 0 0;
+	transition: mask-position 0.2s;
+	pointer-events: none;
+}
+
+.text-layer p {
+	mix-blend-mode: multiply;
+	color: white;
+	opacity: 10%;
+}
+
+@media only screen and (max-width: 1000px) {
+	.button-wrapper button {
+		padding-right: 50px;
+		padding-left: 50px;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	.button-wrapper button {
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
 }
