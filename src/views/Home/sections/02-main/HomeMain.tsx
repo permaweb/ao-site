@@ -5,7 +5,7 @@ import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
 
 import './HomeMainStyles.css';
 
-import mainnetCountdownVideo from '../../../../assets/MAINNET-V1.mp4';
+import mainnetCountdownVideo from '../../../../assets/MAINNET-COUNTDOWN-v1.mp4';
 import HyperTextLoad from '../../../../components/hyperTextLoad';
 
 const HomeMain = () => {
@@ -97,11 +97,7 @@ const HomeMain = () => {
 							</div>
 							<div className="button-wrapper">
 								<Link to={'https://cookbook_ao.g8way.io/'} target="_blank" rel="noopener noreferrer">
-									<button
-										className="glitch primary"
-										data-text="→ Boot Up Testnet"
-										style={{ background: '#0005024a', border: '1px solid #9a9a9a' }}
-									>
+									<button className="glitch secondary" data-text="→ Boot Up Testnet">
 										<HyperTextLoad word={'Build'} textType="span" speed={1} />
 									</button>
 								</Link>

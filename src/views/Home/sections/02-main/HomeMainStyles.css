@@ -84,7 +84,17 @@ main {
 	}
 }
 
+@property --gradient-angle {
+	syntax: '<angle>';
+	initial-value: 0deg;
+	inherits: false;
+}
+
 .button-wrapper button {
+	position: relative;
+	--rotate-border-1: rgba(0, 0, 0, 0.16);
+	--rotate-border-2: #18a32f;
+	--rotate-border-3: #083e11;
 	font-family: 'Roboto Mono', monospace;
 	letter-spacing: -0.1px;
 	text-transform: uppercase;
@@ -94,17 +104,55 @@ main {
 	padding-top: 20px;
 	padding-bottom: 20px;
 	transition: all 300ms;
-	background: #021a0e;
+
 	border: 1px solid #18a32f;
 	border-radius: 12px;
 	color: white;
 }
 
+@keyframes rotation {
+	0% {
+		--gradient-angle: 0deg;
+	}
+
+	100% {
+		--gradient-angle: 360deg;
+	}
+}
+
+.button-wrapper .primary {
+	background: #000502a1;
+}
+
+.button-wrapper .secondary {
+	background: #07022ca1;
+}
+
+.button-wrapper button::before,
+.button-wrapper button::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: conic-gradient(
+		from var(--gradient-angle),
+		var(--rotate-border-1),
+		var(--rotate-border-2),
+		var(--rotate-border-3)
+	);
+	border-radius: inherit;
+	animation: rotation 30s linear infinite;
+	z-index: -1;
+}
+
+.button-wrapper button::after {
+	filter: blur(3.5rem);
+}
+
 .button-wrapper button:hover {
-	background: #0005024a;
 	font-weight: 600;
 	padding-right: 120px;
 	padding-left: 120px;
+	background: #c9c9c917;
 }
 
 .main-heading {
@@ -151,7 +199,7 @@ main {
 	height: 100%;
 	object-fit: cover;
 	z-index: 1;
-	filter: grayscale(1) brightness(40%);
+	filter: grayscale(1) brightness(10%);
 }
 
 .text-layer {
