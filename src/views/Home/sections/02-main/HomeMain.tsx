@@ -5,7 +5,7 @@ import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
 
 import './HomeMainStyles.css';
 
-import mainnetCountdownVideo from '../../../../assets/MAINNET-COUNTDOWN-v1.mp4';
+import mainnetCountdownVideo from '../../../../assets/MAINNET-COUNTDOWN-v3.mp4';
 import HyperTextLoad from '../../../../components/hyperTextLoad';
 
 const HomeMain = () => {
