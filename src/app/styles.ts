@@ -22,6 +22,7 @@ export const GlobalStyle = createGlobalStyle`
     border: 0;
     font: inherit;
     vertical-align: baseline;
+    var(--background-color)
   }
 
   article, aside, details, figcaption, figure,
@@ -31,7 +32,7 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
 		overflow-x: hidden !important;
-    background: ${(props) => props.theme.colors.view.background};
+    background: var(--background-color);
   }
 
 	#root {
