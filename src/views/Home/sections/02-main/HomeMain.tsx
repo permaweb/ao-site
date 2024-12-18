@@ -57,7 +57,7 @@ const HomeMain = () => {
 
 	return (
 		<>
-			<main style={{ background: 'black' }}>
+			<main style={{ background: 'white' }}>
 				<div className="home-main-wrapper" ref={containerRef}>
 					<div className="content-hero-wrapper">
 						<div className="text-hero-wrapper" style={{ justifyContent: 'center' }}>
@@ -66,7 +66,6 @@ const HomeMain = () => {
 									style={{
 										fontSize: 'clamp(18px, 3vw, 30px',
 										fontFamily: 'MatrixFont',
-										textShadow: '0px 0px 30px #95E18E',
 									}}
 								>
 									Countdown To Mainnet
@@ -76,8 +75,6 @@ const HomeMain = () => {
 										fontVariantNumeric: 'tabular-nums',
 										fontSize: 'clamp(40px, 8vw, 200px',
 										fontFamily: 'MatrixFont',
-										textShadow: '0px 0px 50px #8FFF85',
-										color: 'white',
 									}}
 								>
 									{countdown}
