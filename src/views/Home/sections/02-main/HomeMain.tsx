@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import HexocetAnimationComponent from 'components/HexocetAnimation/HexocetAnimationComponent';
 import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
 
 import './HomeMainStyles.css';
@@ -59,6 +60,8 @@ const HomeMain = () => {
 		<>
 			<main style={{ background: 'white' }}>
 				<div className="home-main-wrapper" ref={containerRef}>
+					<HexocetAnimationComponent containerRef={containerRef} />
+
 					<div className="content-hero-wrapper">
 						<div className="text-hero-wrapper" style={{ justifyContent: 'center' }}>
 							<div className="main-heading">
