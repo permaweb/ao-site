@@ -6,6 +6,7 @@ import { readHandler } from 'api';
 
 import AnimatedNumber from 'components/atoms/AnimatedNumber/AnimatedNumber';
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
+import { Button } from 'components/atoms/Button';
 import { IconButton } from 'components/atoms/IconButton';
 import { Loader } from 'components/atoms/Loader';
 import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
@@ -22,7 +23,6 @@ import { formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 
-import { Artwork } from './Artwork';
 import { ArweaveSection } from './ArweaveSection';
 import { DaiSection } from './DaiSection';
 import { StETHSection } from './StETHSection';
@@ -137,13 +137,22 @@ export default function Mint() {
 			calcAmount += aoBalanceForArWallet;
 		}
 
-		if (aoBalancesForEthWallet !== null) {
+		/* Only check connected arweave wallet balance */
+		if (arProvider.walletAddress && aoBalancesForEthWallet !== null) {
 			for (const wallet of Object.keys(aoBalancesForEthWallet)) {
-				if (arProvider.walletAddress === wallet) continue;
-
-				calcAmount += parseInt(aoBalancesForEthWallet[wallet]) / TOKEN_DENOMINATION;
+				if (aoBalancesForEthWallet[wallet] === arProvider.walletAddress) {
+					calcAmount += parseInt(aoBalancesForEthWallet[wallet]) / TOKEN_DENOMINATION;
+				}
 			}
 		}
+
+		// if (arProvider.walletAddress && aoBalancesForEthWallet !== null) {
+		// 	for (const wallet of Object.keys(aoBalancesForEthWallet)) {
+		// 		if (arProvider.walletAddress === wallet) continue;
+
+		// 		calcAmount += parseInt(aoBalancesForEthWallet[wallet]) / TOKEN_DENOMINATION;
+		// 	}
+		// }
 
 		return calcAmount;
 	}, [aoBalanceForArWallet, aoBalancesForEthWallet, arProvider]);
@@ -305,7 +314,7 @@ export default function Mint() {
 								<S.Label>
 									<span>Your AO</span>
 								</S.Label>
-								{connected ? (
+								{arProvider.walletAddress ? (
 									aoBalance === null ? (
 										!aoBalanceForEthWalletLoading && !aoBalanceForArWalletLoading ? (
 											'-'
@@ -330,7 +339,21 @@ export default function Mint() {
 										</S.AssetAmount>
 									)
 								) : (
-									<span style={{ fontSize: '28px', fontFamily: 'DM Sans' }}>0 </span>
+									<Button
+										style={{
+											width: 'fit-content',
+											margin: '10px 0 15px 0',
+											boxShadow: '0px 4px 0px 0px #797979',
+											border: '1px solid black',
+										}}
+										type={'alt1'}
+										label={'Connect Arweave Wallet'}
+										handlePress={() => {
+											arProvider.setWalletModalVisible(true);
+										}}
+										loading={loading}
+										height={40}
+									/>
 								)}
 								<S.Label>
 									<S.TooltipLine>

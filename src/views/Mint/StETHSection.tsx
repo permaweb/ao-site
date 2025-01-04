@@ -179,7 +179,7 @@ export function StETHSection(props: StETHSectionProps) {
 	const navigate = useNavigate();
 
 	return (
-		<S.Section columns={4}>
+		<S.Section columns={4} style={{ padding: '24px 12px 24px 32px' }}>
 			<S.Column>
 				<S.Label>Your STETH Bridged</S.Label>
 				{!!ethProvider.walletAddress ? (

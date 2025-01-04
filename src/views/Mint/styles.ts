@@ -46,7 +46,6 @@ export const Column = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	overflow: hidden;
 `;
 
 export const Row = styled.div`
