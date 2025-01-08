@@ -35,7 +35,7 @@ const Nav = () => {
 						</Link>
 					</div>
 				</div>
-				<div className="nav-buttons quest-button" style={{ marginBottom: '20px' }}>
+				<div className="nav-buttons quest-button">
 					<Link to={'http://x.com/aoTheComputer'}>
 						<button className="glitch" data-text="100101">
 							<img width={15} src={xLogo} alt={xLogo} />

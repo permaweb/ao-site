@@ -1,7 +1,7 @@
 import React from 'react';
 
 export enum ArWalletEnum {
-	arConnect = 'arconnect',
+	arConnect = 'arConnect',
 	othent = 'othent',
 	arweaveApp = 'arweave.app',
 }

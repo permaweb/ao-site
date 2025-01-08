@@ -22,7 +22,6 @@ export const GlobalStyle = createGlobalStyle`
     border: 0;
     font: inherit;
     vertical-align: baseline;
-    var(--background-color)
   }
 
   article, aside, details, figcaption, figure,
@@ -305,6 +304,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 nav {
+	height: 55px;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -312,13 +312,13 @@ nav {
   align-self: stretch;
   padding-left: 32px;
   padding-right: 32px;
+	background: #FFFFFF;
 }
 
 .nav-left {
   display: flex;
   flex-direction: row;
   gap: 32px;
-  margin-bottom: 20px;
 }
 
 .nav-left a {
