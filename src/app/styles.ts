@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 import { fadeIn1, open } from 'helpers/animations';
 import { STYLING } from 'helpers/config';
@@ -149,11 +149,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   a {
-    color: ${(props) => props.theme.colors.link.color};
+    color: ${(props) => props.theme.colors.font.primary};
     text-decoration: none;
-    &:hover {
-      color: ${(props) => props.theme.colors.link.active};
-    }
   }
 
   input, textarea {
@@ -187,14 +184,13 @@ export const GlobalStyle = createGlobalStyle`
   .border-wrapper-primary {
     background: ${(props) => props.theme.colors.container.primary.background};
     border: 1px solid ${(props) => props.theme.colors.border.primary};
-    border-radius: ${STYLING.dimensions.radius.primary};
   }
 
-    .border-wrapper-secondary {
-    background: ${(props) => props.theme.colors.container.primary.background};
-    border-left: 1px solid black;
-    border-radius: ${STYLING.dimensions.radius.primary};
-  }
+	.border-wrapper-secondary {
+		background: ${(props) => props.theme.colors.container.primary.background};
+		border-left: 1px solid black;
+		border-radius: ${STYLING.dimensions.radius.primary};
+	}
 
   .border-wrapper-alt1 {
     background: ${(props) => props.theme.colors.container.alt3.background};
@@ -221,6 +217,12 @@ export const GlobalStyle = createGlobalStyle`
 
 	.modal-wrapper {
 		padding: 0 20px 20px 20px !important;
+	}
+
+	.primary-text {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+    text-transform: uppercase;
 	}
 
   .info-text {
@@ -348,8 +350,6 @@ nav {
   font-size: (12px, 6vw, 16px);
 }
 
-
-
 .main-cta-wrapper {
   position: relative;
 }
@@ -442,12 +442,6 @@ footer {
 .arweave-badge img {
   margin: 1.5px 0 0 0;
 }
-
-.view-wrapper {
-	min-height: calc(100vh - 40px);
-	width: 100%;
-}
-
   .scroll-wrapper {
     overflow: auto;
     
@@ -468,4 +462,10 @@ footer {
       }
     }
   }
+`;
+
+export const View = styled.main`
+	min-height: calc(100vh - ${STYLING.dimensions.nav.height});
+	width: 100%;
+	padding: 40px 20px 20px 20px;
 `;

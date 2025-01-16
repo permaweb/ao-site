@@ -4,7 +4,7 @@ import arweaveLogo from '../../assets/arweave.svg';
 import discordLogo from '../../assets/DiscordLogo.svg';
 import githubLogo from '../../assets/GithubLogo.svg';
 import xLogo from '../../assets/X_social_media.svg';
-import HyperTextLoad from '../hyperTextLoad';
+import HyperTextLoad from '../atoms/HyperTextLoad/HyperTextLoad';
 
 const Footer = () => {
 	return (

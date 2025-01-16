@@ -6,7 +6,7 @@ import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
 
 import './HomeMainStyles.css';
 
-import HyperTextLoad from '../../../../components/hyperTextLoad';
+import HyperTextLoad from '../../../../components/atoms/HyperTextLoad/HyperTextLoad';
 
 const HomeMain = () => {
 	const containerRef = useRef<HTMLDivElement>(null);

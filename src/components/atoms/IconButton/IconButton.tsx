@@ -40,6 +40,7 @@ export default function IconButton(props: IProps) {
 	function getAction() {
 		return (
 			<StyledButton
+				tabIndex={props.noFocus ? -1 : 0}
 				onMouseDown={handlePress}
 				disabled={props.disabled}
 				active={props.active}
@@ -57,7 +58,7 @@ export default function IconButton(props: IProps) {
 		if (props.tooltip) {
 			return (
 				<S.Wrapper>
-					<S.Tooltip className={'info-text'} useBottom={props.useBottomToolTip ? props.useBottomToolTip : false}>
+					<S.Tooltip className={'info'} position={props.tooltipPosition || 'bottom'}>
 						<span>{props.tooltip}</span>
 					</S.Tooltip>
 					{getAction()}

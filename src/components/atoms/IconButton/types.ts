@@ -13,6 +13,7 @@ export interface IProps {
 		icon: number;
 	};
 	tooltip?: string;
-	useBottomToolTip?: boolean;
+	tooltipPosition?: 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 	className?: string;
+	noFocus?: boolean;
 }

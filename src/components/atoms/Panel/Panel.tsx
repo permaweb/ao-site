@@ -14,15 +14,17 @@ export default function Panel(props: IProps) {
 	const language = languageProvider.object[languageProvider.current];
 
 	React.useEffect(() => {
-		document.body.style.overflow = 'hidden';
-		return () => {
-			document.body.style.overflow = 'auto';
-		};
-	}, []);
+		if (props.open) {
+			hideDocumentBody();
+			return () => {
+				showDocumentBody();
+			};
+		}
+	}, [props.open]);
 
 	const escFunction = React.useCallback(
 		(e: any) => {
-			if (e.key === 'Escape' && props.handleClose) {
+			if (e.key === 'Escape' && props.handleClose && !props.closeHandlerDisabled) {
 				props.handleClose();
 			}
 		},
@@ -37,30 +39,40 @@ export default function Panel(props: IProps) {
 		};
 	}, [escFunction]);
 
+	function getHeader() {
+		switch (typeof props.header) {
+			case 'string':
+				return <S.Title className={'primary-text'}>{props.header}</S.Title>;
+			case 'object':
+				return props.header;
+		}
+	}
+
 	function getBody() {
 		return (
 			<>
-				<S.Container noHeader={!props.header} className={'border-wrapper-primary'}>
-					<CloseHandler active={props.open} disabled={!props.open} callback={() => props.handleClose()}>
+				<S.Container
+					open={props.open}
+					noHeader={!props.header}
+					width={props.width}
+					className={'border-wrapper-primary'}
+				>
+					<CloseHandler
+						active={props.open && !props.closeHandlerDisabled}
+						disabled={!props.open || props.closeHandlerDisabled}
+						callback={() => props.handleClose()}
+					>
 						{props.header && (
 							<S.Header>
-								<S.LT>
-									<S.Title>{props.header}</S.Title>
-								</S.LT>
+								<S.LT>{getHeader()}</S.LT>
 								{props.handleClose && (
 									<S.Close>
 										<IconButton
-											type={'primary'}
-											warning
+											type={'alt1'}
 											src={ASSETS.close}
 											handlePress={() => props.handleClose()}
-											active={false}
-											dimensions={{
-												wrapper: 35,
-												icon: 20,
-											}}
+											dimensions={{ wrapper: 35, icon: 19.5 }}
 											tooltip={language.close}
-											useBottomToolTip
 										/>
 									</S.Close>
 								)}
@@ -75,9 +87,22 @@ export default function Panel(props: IProps) {
 
 	return (
 		<Portal node={DOM.overlay}>
-			<S.Wrapper noHeader={!props.header} top={window ? (window as any).pageYOffset : 0}>
-				{getBody()}
-			</S.Wrapper>
+			{getBody()}
+			<S.PanelOverlay open={props.open} />
 		</Portal>
 	);
 }
+
+let panelOpenCounter = 0;
+
+const showDocumentBody = () => {
+	panelOpenCounter -= 1;
+	if (panelOpenCounter === 0) {
+		document.body.style.overflowY = 'auto';
+	}
+};
+
+const hideDocumentBody = () => {
+	panelOpenCounter += 1;
+	document.body.style.overflowY = 'hidden';
+};

@@ -7,13 +7,11 @@ import arweave from 'assets/arweave.svg';
 import arweaveApp from 'assets/arweave-app.svg';
 import calculator from 'assets/calculator.svg';
 import checkmark from 'assets/checkmark.svg';
-import close from 'assets/close.svg';
 import codehawksAudit from 'assets/codehawks-audit.svg';
 import dai from 'assets/dai.svg';
 import stEth from 'assets/eth.svg';
 import ethereum from 'assets/ethereum.svg';
 import heroGraphic from 'assets/hero-graphic.svg';
-import info from 'assets/info.svg';
 import ipBlock from 'assets/ip-block.png';
 import metamask from 'assets/metamask.png';
 import morpheusAudit from 'assets/morpheus-audit.svg';
@@ -24,6 +22,7 @@ import rabby from 'assets/rabby.png';
 import renascenseAudit from 'assets/renascense-audit.svg';
 import walletConnect from 'assets/wallet-connect.png';
 
+import { getTxEndpoint } from './endpoints';
 import { ArWalletEnum, EthWalletEnum } from './types';
 
 export const AO = {
@@ -54,13 +53,11 @@ export const ASSETS = {
 	arweaveApp,
 	calculator,
 	checkmark,
-	close,
 	plus,
 	codehawksAudit,
 	stEth,
 	dai,
 	heroGraphic,
-	info,
 	ipBlock,
 	metamask,
 	morpheusAudit,
@@ -71,6 +68,13 @@ export const ASSETS = {
 	renascenseAudit,
 	walletConnect,
 	ethereum,
+	close: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
+	discord: getTxEndpoint('3X1BfFleeCZZdVZIx8DKDIblcLw7jzzRBCzSItlBy9E'),
+	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
+	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
+	logo: getTxEndpoint('kKG4pr1WCy9OdiKPe7TKTs_HYUzP0-BPWBMDFCpZtfE'),
+	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
+	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
 };
 
 export const AR_WALLETS = [
@@ -103,6 +107,9 @@ export const STYLING = {
 		button: {
 			height: '40px',
 			width: 'fit-content',
+		},
+		nav: {
+			height: '75px',
 		},
 		radius: {
 			primary: '10px',
@@ -1248,6 +1255,10 @@ export const ENDPOINTS = {
 };
 
 export const REDIRECTS = {
+	cookbook: `https://cookbook_ao.arweave.net`,
+	x: 'http://x.com/aoTheComputer',
+	github: 'https://github.com/permaweb/ao',
+	discord: 'https://discord.gg/dYXtHwc9dc',
 	stethMinting: 'https://stake.lido.fi/',
 	stethConversion:
 		'https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
