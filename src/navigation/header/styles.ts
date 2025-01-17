@@ -10,7 +10,6 @@ export const Wrapper = styled.header`
 	z-index: 2;
 	top: 0;
 	background: ${(props) => props.theme.colors.view.background};
-	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 `;
 
 export const Content = styled.div`
@@ -78,6 +77,11 @@ export const DesktopSocialWrapper = styled.div`
 		height: 20px;
 		width: 20px;
 		fill: ${(props) => props.theme.colors.icon.primary.fill};
+
+		&:hover {
+			color: ${(props) => props.theme.colors.icon.primary.active};
+			fill: ${(props) => props.theme.colors.icon.primary.active};
+		}
 	}
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {

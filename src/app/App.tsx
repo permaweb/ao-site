@@ -11,7 +11,7 @@ export default function App() {
 			<div id={'notification'} />
 			<div id={'overlay'} />
 			<Header />
-			<S.View className={'max-view-wrapper'}>
+			<S.View>
 				<Routes />
 			</S.View>
 		</>

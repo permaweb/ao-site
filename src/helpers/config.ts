@@ -1,9 +1,6 @@
-import ao from 'assets/ao.svg';
 import aoPict from 'assets/ao-pictograph.svg';
 import arconnect from 'assets/arconnect.png';
-import arrow from 'assets/arrow.svg';
 import arrowBack from 'assets/arrowBack.svg';
-import arweave from 'assets/arweave.svg';
 import arweaveApp from 'assets/arweave-app.svg';
 import calculator from 'assets/calculator.svg';
 import checkmark from 'assets/checkmark.svg';
@@ -45,10 +42,8 @@ export const TOKEN_DECIMALS = 12;
 export const TOKEN_DENOMINATION = Math.pow(10, TOKEN_DECIMALS);
 
 export const ASSETS = {
-	ao,
 	aoPict,
 	arconnect,
-	arrow,
 	arrowBack,
 	arweaveApp,
 	calculator,
@@ -63,17 +58,20 @@ export const ASSETS = {
 	morpheusAudit,
 	nccAudit,
 	othent,
-	arweave,
 	rabby,
 	renascenseAudit,
 	walletConnect,
 	ethereum,
+	ao: getTxEndpoint('AzM59q2tcYzkySUUZUN1HCwfKGVHi--71UdoIk5gPUE'),
+	arrow: getTxEndpoint('ghFL1fzQ2C1eEAnqSVvfAMP5Jikx7NKSPP5neoNPALw'),
+	arweave: getTxEndpoint('LeeiCXkCDZKdh9uEfau2a13LziNGnT82anXFDW51Hgw'),
 	close: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
 	discord: getTxEndpoint('3X1BfFleeCZZdVZIx8DKDIblcLw7jzzRBCzSItlBy9E'),
 	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
 	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
 	logo: getTxEndpoint('kKG4pr1WCy9OdiKPe7TKTs_HYUzP0-BPWBMDFCpZtfE'),
 	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
+	pi: getTxEndpoint('n1AM_4usUnh6zj8GzdQDu1KkvC5XFlBLk7sKXgNHtos'),
 	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
 };
 
@@ -98,7 +96,7 @@ export const STYLING = {
 	cutoffs: {
 		desktop: '1200px',
 		initial: '1024px',
-		max: '1440px',
+		max: '1400px',
 		tablet: '840px',
 		tabletSecondary: '768px',
 		secondary: '540px',

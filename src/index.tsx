@@ -3,6 +3,7 @@ import { HashRouter } from 'react-router-dom';
 
 import { App } from 'app';
 import { GlobalStyle } from 'app/styles';
+import { AllocationProvider } from 'providers/AllocationProvider';
 import { ArweaveProvider } from 'providers/ArweaveProvider';
 import { CustomThemeProvider } from 'providers/CustomThemeProvider';
 import { EthereumProvider } from 'providers/EthereumProvider';
@@ -21,7 +22,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 				<GlobalStyle />
 				<EthereumProvider>
 					<ArweaveProvider>
-						<App />
+						<AllocationProvider>
+							<App />
+						</AllocationProvider>
 					</ArweaveProvider>
 				</EthereumProvider>
 			</HashRouter>

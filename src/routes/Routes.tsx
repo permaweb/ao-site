@@ -3,16 +3,16 @@ import { Route, Routes } from 'react-router-dom';
 
 import { URLS } from 'helpers/config';
 
-const Home = getLazyImport('Home');
-const Spec = getLazyImport('Spec');
+const Landing = getLazyImport('Landing');
 const Mint = getLazyImport('Mint');
+const Spec = getLazyImport('Spec');
 const Deposit = getLazyImport('Deposit');
 
 export default function _Routes() {
 	return (
 		<Suspense fallback={null}>
 			<Routes>
-				<Route path={URLS.base} element={<Home />} />
+				<Route path={URLS.base} element={<Landing />} />
 				<Route path={URLS.read} element={<Spec />} />
 				<Route path={URLS.mint} element={<Mint />} />
 				<Route path={URLS.deposit} element={<Deposit />} />

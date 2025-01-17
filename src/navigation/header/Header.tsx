@@ -83,7 +83,7 @@ export default function Header() {
 					</S.SectionEnd>
 				</S.Content>
 			</S.Wrapper>
-			<Panel open={showPanel} header={'Menu'} handleClose={() => setShowPanel(false)}>
+			<Panel open={showPanel} width={450} header={'Menu'} handleClose={() => setShowPanel(false)}>
 				<S.MobilePathsWrapper>
 					{paths.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
 						return (

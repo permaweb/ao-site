@@ -1,5 +1,9 @@
 import React from 'react';
 
+export type AllocationTokenType = 'pi' | 'ao' | 'arweave';
+
+export type AllocationTokenSummaryType = { label: string; value: number | null };
+
 export enum ArWalletEnum {
 	arConnect = 'arConnect',
 	othent = 'othent',

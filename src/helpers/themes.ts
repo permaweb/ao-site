@@ -92,7 +92,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			color: currentTheme.neutralA1,
 		},
 		border: {
-			primary: currentTheme.neutral5,
+			primary: currentTheme.neutral4,
 			alt1: currentTheme.neutral6,
 			alt2: currentTheme.neutral7,
 			alt3: currentTheme.neutral8,
@@ -158,7 +158,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		container: {
 			primary: {
 				background: currentTheme.neutral1,
-				active: currentTheme.neutral3,
+				active: currentTheme.neutral2,
 			},
 			alt1: {
 				background: currentTheme.neutral2,
@@ -229,7 +229,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		icon: {
 			primary: {
 				fill: currentTheme.neutralA1,
-				active: currentTheme.neutral3,
+				active: currentTheme.neutralA2,
 				disabled: currentTheme.neutralA3,
 			},
 			alt1: {
@@ -313,16 +313,16 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			alt1: `'DM Sans', sans-serif;`,
 		},
 		size: {
-			xxxSmall: '10px',
-			xxSmall: '12px',
+			xxxSmall: '12px',
+			xxSmall: '13px',
 			xSmall: '14px',
 			small: '15px',
 			base: '16px',
 			lg: '18px',
 			xLg: '24px',
-			h1: 'clamp(24px, 4.5vw, 48px)',
-			h2: 'clamp(30px, 3.5vw, 38px)',
-			h4: 'clamp(18px, 2vw, 24px)',
+			h1: 'clamp(36px, 3.5vw, 56px)',
+			h2: 'clamp(32px, 3.25vw, 50px)',
+			h4: 'clamp(28px, 3vw, 42px)',
 		},
 		weight: {
 			thin: '200',
