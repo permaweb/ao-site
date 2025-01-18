@@ -22,6 +22,7 @@ export const ChartWrapper = styled.div`
 `;
 
 export const ChartHeader = styled.div`
+	margin: 0 0 20px 0;
 	span {
 		font-size: ${(props) => props.theme.typography.size.xSmall};
 		color: ${(props) => props.theme.colors.font.alt1};
@@ -45,9 +46,10 @@ export const Chart = styled.div`
 export const ChartKeyWrapper = styled.div`
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: 20px 35px;
+	margin: 20px 0 0 0;
 `;
 
 export const ChartKeyLine = styled.div`
@@ -80,4 +82,42 @@ export const Percentage = styled.p`
 	color: ${(props) => props.theme.colors.font.alt1};
 	padding: 0 !important;
 	border: none !important;
+`;
+
+export const SummaryWrapper = styled.div`
+	margin: 30px 0 0 0;
+`;
+
+export const SummaryHeader = styled.div`
+	padding: 0 0 7.5px 0;
+	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+`;
+
+export const SummaryBody = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 12.5px;
+	margin: 12.5px 0 0 0;
+
+	> * {
+		&:not(:last-child) {
+			padding: 0 0 12.5px 0;
+			border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+		}
+	}
+`;
+
+export const SummaryLine = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	P {
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+	}
+
+	span {
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+	}
 `;

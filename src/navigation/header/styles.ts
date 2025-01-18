@@ -27,18 +27,21 @@ export const SectionStart = styled.div`
 `;
 
 export const LogoWrapper = styled.div`
-	height: 35px;
-	width: 35px;
+	height: 23.5px;
+	width: 23.5px;
 	animation: ${open} ${transition2};
 
 	svg {
-		height: 35px;
-		width: 35px;
+		height: 23.5px;
+		width: 23.5px;
+		margin: 2.25px 0 0 0;
 		path {
 			fill: ${(props) => props.theme.colors.icon.primary.fill};
 		}
 		&:hover {
-			fill: ${(props) => props.theme.colors.icon.primary.active};
+			path {
+				fill: ${(props) => props.theme.colors.icon.primary.active};
+			}
 		}
 	}
 `;

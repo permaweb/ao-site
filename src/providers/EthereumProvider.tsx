@@ -11,9 +11,8 @@ import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
 
 import { ENDPOINTS } from 'helpers/config';
-
-import gnosisModule from './ethereum/customGnosis';
-import { customBrave } from './ethereum/customInjected';
+import gnosisModule from 'helpers/customGnosis';
+import { customBrave } from 'helpers/customInjected';
 
 const injected = injectedModule();
 const trust = trustModule();

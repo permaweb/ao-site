@@ -98,6 +98,11 @@ export const TokenBodyFlexWrapper = styled.div`
 export const TokenBodyQuantity = styled.div`
 	display: flex;
 	flex-direction: column;
+`;
+
+export const TokenBodyQuantityHeader = styled.div`
+	display: flex;
+	flex-direction: column;
 
 	span {
 		font-size: ${(props) => props.theme.typography.size.xSmall};
@@ -110,10 +115,14 @@ export const TokenBodyQuantityValue = styled.div`
 	align-items: center;
 	gap: 7.5px;
 
-	p {
+	p,
+	span {
 		font-size: ${(props) => props.theme.typography.size.xLg};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
+	}
+
+	p {
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 
@@ -121,5 +130,9 @@ export const TokenBodyQuantityValue = styled.div`
 		height: 27.5px;
 		width: 27.5px;
 		margin: 6.5px 0 0 0;
+	}
+
+	.indicator {
+		margin: 0 3.5px 0 0;
 	}
 `;

@@ -1,9 +1,16 @@
+import { formatCount, formatUSDAmount } from 'helpers/utils';
+import { useAOProvider } from 'providers/AOProvider';
+
 import * as S from './styles';
 
+// TODO: Language
+// TODO: Values from provider
 export default function Landing() {
+	const aoProvider = useAOProvider();
+
 	return (
 		<S.Wrapper>
-			<S.ContentWrapper>
+			<S.ContentWrapper className={'fade-in'}>
 				<h4>Hyper.</h4>
 				<h4>Parallel.</h4>
 				<h4>Computer.</h4>
@@ -13,44 +20,44 @@ export default function Landing() {
 				</p>
 			</S.ContentWrapper>
 			<S.MetricsWrapper>
-				<S.MetricsSection>
+				<S.MetricsSection className={'fade-in'}>
 					<S.MetricsLine>
 						<span className={'primary-text'}>Phase</span>
 						<S.MetricsValue>
-							<p>Mainnet Early</p>
+							<p>{aoProvider.phase}</p>
 						</S.MetricsValue>
 					</S.MetricsLine>
 					<S.MetricsLine>
 						<span className={'primary-text'}>Status</span>
 						<S.MetricsValue>
 							<S.Indicator />
-							<p> Live</p>
+							<p>{aoProvider.status}</p>
 						</S.MetricsValue>
 					</S.MetricsLine>
 					<S.MetricsLine>
 						<span className={'primary-text'}>Fair Launch Deposits</span>
 						<S.MetricsValue>
-							<p>$5,409,389</p>
+							<p>{formatUSDAmount(aoProvider.deposits)}</p>
 						</S.MetricsValue>
 					</S.MetricsLine>
 				</S.MetricsSection>
-				<S.MetricsSection>
+				<S.MetricsSection className={'fade-in'}>
 					<S.MetricsLine>
 						<span className={'primary-text'}>Nodes</span>
 						<S.MetricsValue>
-							<p>159</p>
+							<p>{formatCount(aoProvider.nodes)}</p>
 						</S.MetricsValue>
 					</S.MetricsLine>
 					<S.MetricsLine>
 						<span className={'primary-text'}>Messages</span>
 						<S.MetricsValue>
-							<p>436,000,000</p>
+							<p>{formatCount(aoProvider.messages)}</p>
 						</S.MetricsValue>
 					</S.MetricsLine>
 					<S.MetricsLine>
 						<span className={'primary-text'}>Processes</span>
 						<S.MetricsValue>
-							<p>340,002</p>
+							<p>{formatCount(aoProvider.processes)}</p>
 						</S.MetricsValue>
 					</S.MetricsLine>
 				</S.MetricsSection>

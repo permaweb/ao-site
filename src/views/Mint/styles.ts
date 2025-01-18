@@ -9,12 +9,14 @@ export const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 40px;
+	padding: 20px 0;
 `;
 
 export const GlobalWrapper = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
+	margin: 0 0 35px 0;
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		flex-direction: column;
@@ -23,7 +25,6 @@ export const GlobalWrapper = styled.div`
 `;
 
 export const GlobalSection = styled.div`
-	height: 350px;
 	width: calc(50% - 20px);
 	padding: 25px;
 
@@ -37,8 +38,63 @@ export const GlobalHeader = styled.div`
 		line-height: 1;
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-size: ${(props) => props.theme.typography.size.xLg};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const MetricsWrapper = styled(GlobalSection)`
+	padding: 0 40px 0 0;
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		padding: 0;
+	}
+`;
+
+export const Metrics = styled.div`
+	display: flex;
+	flex-direction: column;
+	padding: 25px 0 0 0;
+`;
+
+export const MetricsSection = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+`;
+
+export const MetricsValue = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 1.5px;
+
+	p {
+		font-size: ${(props) => props.theme.typography.size.lg};
+		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
+	}
+
+	span {
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+
+	p,
+	span {
+		text-align: center;
+	}
+`;
+
+export const Messages = styled(MetricsSection)`
+	justify-content: center;
+	padding: 0 0 35px 0;
+	margin: 0 0 40px 0;
+	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+
+	p {
+		font-size: ${(props) => props.theme.typography.size.xLg};
 	}
 `;
 
@@ -61,7 +117,7 @@ export const HeaderInfo = styled.div`
 		line-height: 1;
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-size: ${(props) => props.theme.typography.size.xLg};
-		font-weight: ${(props) => props.theme.typography.weight.bold};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;

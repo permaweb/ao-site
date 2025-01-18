@@ -77,27 +77,39 @@ export default function AllocationToken(props: IProps) {
 				<S.TokenBodyWrapper className={'border-wrapper-primary fade-in'}>
 					<S.TokenBodyFlexWrapper>
 						<S.TokenBodyQuantity>
-							<span className={'primary-text'}>Balance</span>
+							<S.TokenBodyQuantityHeader>
+								<span className={'primary-text'}>Balance</span>
+							</S.TokenBodyQuantityHeader>
 							<S.TokenBodyQuantityValue>
 								<p>8.76</p>
 							</S.TokenBodyQuantityValue>
 						</S.TokenBodyQuantity>
 						<S.TokenBodyQuantity>
-							<span className={'primary-text'}>Allocation</span>
+							<S.TokenBodyQuantityHeader>
+								<span className={'primary-text'}>Allocation</span>
+							</S.TokenBodyQuantityHeader>
 							<S.TokenBodyQuantityValue>
 								<p>{formatPercentage(allocationProvider[props.type] ?? 0)}</p>
 							</S.TokenBodyQuantityValue>
 						</S.TokenBodyQuantity>
 						<S.TokenBodyQuantity>
-							<span className={'primary-text'}>30 Day Projection</span>
+							<S.TokenBodyQuantityHeader>
+								<span className={'primary-text'}>30 Day Projection</span>
+							</S.TokenBodyQuantityHeader>
 							<S.TokenBodyQuantityValue>
-								<p>+1.54</p>
+								<p>
+									<span className={'indicator'}>+</span>1.54
+								</p>
 							</S.TokenBodyQuantityValue>
 						</S.TokenBodyQuantity>
 						<S.TokenBodyQuantity>
-							<span className={'primary-text'}>1 Year Projection</span>
+							<S.TokenBodyQuantityHeader>
+								<span className={'primary-text'}>1 Year Projection</span>
+							</S.TokenBodyQuantityHeader>
 							<S.TokenBodyQuantityValue>
-								<p>+400.34</p>
+								<p>
+									<span className={'indicator'}>+</span>400.34
+								</p>
 							</S.TokenBodyQuantityValue>
 						</S.TokenBodyQuantity>
 					</S.TokenBodyFlexWrapper>

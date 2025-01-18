@@ -43,8 +43,8 @@ import { DefaultTheme } from 'styled-components';
 
 export const lightTheme = {
 	scheme: 'light',
-	positive1: '#64B686',
-	positive2: '#4EA673',
+	positive1: '#06C516',
+	positive2: '#06B214',
 	caution1: '#EEB700',
 	negative1: '#F16A82',
 	negative2: '#EE4463',
@@ -229,8 +229,8 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		icon: {
 			primary: {
 				fill: currentTheme.neutralA1,
-				active: currentTheme.neutralA2,
-				disabled: currentTheme.neutralA3,
+				active: currentTheme.neutralA4,
+				disabled: currentTheme.neutralA6,
 			},
 			alt1: {
 				fill: currentTheme.neutral4,

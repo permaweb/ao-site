@@ -1,6 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { open, transition1 } from 'helpers/animations';
+import { open, transition1, transition2 } from 'helpers/animations';
 import { STYLING } from 'helpers/config';
 
 export const GlobalStyle = createGlobalStyle`
@@ -234,6 +234,10 @@ export const GlobalStyle = createGlobalStyle`
 	  }
   }
 
+	.indicator {
+		color: ${(props) => props.theme.colors.indicator.active};	
+	}
+
   .overlay {
     min-height: 100vh;
     height: 100%;
@@ -266,7 +270,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 	.fade-in {
-		animation: ${open} ${transition1};
+		animation: ${open} ${transition2};
 	}
 
 	.pre-bridge-wrapper {

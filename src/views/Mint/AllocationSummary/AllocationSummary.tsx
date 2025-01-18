@@ -52,45 +52,62 @@ export default function AllocationSummary() {
 	return (
 		<S.Wrapper>
 			<S.Header>
-				<span className={'primary-text'}>Allocation</span>
+				<span className={'primary-text'}>{language.allocation}</span>
 			</S.Header>
 			<S.Body>
 				{data && (
-					<S.ChartWrapper>
-						<S.ChartHeader>
-							<span className={'primary-text'}>Below represents how you are currently allocating your AO Yield.</span>
-						</S.ChartHeader>
-						<S.Chart>
-							<Pie
-								data={data}
-								options={{
-									plugins: {
-										legend: {
-											display: false,
-										},
-										tooltip: {
-											callbacks: {
-												label: (tooltipItem) => {
-													return `${formatPercentage(tooltipItem.raw)}`;
+					<>
+						<S.ChartWrapper>
+							<S.ChartHeader>
+								<span className={'primary-text'}>{language.allocationSummaryDescription}</span>
+							</S.ChartHeader>
+							<S.Chart>
+								<Pie
+									data={data}
+									options={{
+										plugins: {
+											legend: {
+												display: false,
+											},
+											tooltip: {
+												callbacks: {
+													label: (tooltipItem) => {
+														return `${formatPercentage(tooltipItem.raw)}`;
+													},
 												},
 											},
 										},
-									},
-								}}
-							/>
-						</S.Chart>
-						<S.ChartKeyWrapper>
-							{ALLOCATION.map((token: AllocationTokenSummaryType, index: number) => {
-								return (
-									<S.ChartKeyLine key={index}>
-										<S.ChartKey background={keys[index] ? keys[index] : null} />
-										<S.ChartKeyText>{token.label}</S.ChartKeyText>
-										<S.Percentage>{`(${formatPercentage(token.value)})`}</S.Percentage>
-									</S.ChartKeyLine>
-								);
-							})}
-						</S.ChartKeyWrapper>
-					</S.ChartWrapper>
+									}}
+								/>
+							</S.Chart>
+							<S.ChartKeyWrapper>
+								{ALLOCATION.map((token: AllocationTokenSummaryType, index: number) => {
+									return (
+										<S.ChartKeyLine key={index}>
+											<S.ChartKey background={keys[index] ? keys[index] : null} />
+											<S.ChartKeyText>{token.label}</S.ChartKeyText>
+											<S.Percentage>{`(${formatPercentage(token.value)})`}</S.Percentage>
+										</S.ChartKeyLine>
+									);
+								})}
+							</S.ChartKeyWrapper>
+						</S.ChartWrapper>
+						<S.SummaryWrapper>
+							<S.SummaryHeader>
+								<span className={'primary-text'}>{language.summary}</span>
+							</S.SummaryHeader>
+							<S.SummaryBody>
+								{ALLOCATION.map((token: AllocationTokenSummaryType) => {
+									return (
+										<S.SummaryLine>
+											<span>{token.label}</span>
+											<p>{formatPercentage(token.value)}</p>
+										</S.SummaryLine>
+									);
+								})}
+							</S.SummaryBody>
+						</S.SummaryWrapper>
+					</>
 				)}
 			</S.Body>
 		</S.Wrapper>
