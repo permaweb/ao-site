@@ -27,13 +27,13 @@ export const SectionStart = styled.div`
 `;
 
 export const LogoWrapper = styled.div`
-	height: 23.5px;
-	width: 23.5px;
+	height: 26.5px;
+	width: 26.5px;
 	animation: ${open} ${transition2};
 
 	svg {
-		height: 23.5px;
-		width: 23.5px;
+		height: 26.5px;
+		width: 26.5px;
 		margin: 2.25px 0 0 0;
 		path {
 			fill: ${(props) => props.theme.colors.icon.primary.fill};
@@ -42,6 +42,17 @@ export const LogoWrapper = styled.div`
 			path {
 				fill: ${(props) => props.theme.colors.icon.primary.active};
 			}
+		}
+	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		height: 32.5px;
+		width: 32.5px;
+
+		svg {
+			height: 32.5px;
+			width: 32.5px;
+			margin: 0;
 		}
 	}
 `;

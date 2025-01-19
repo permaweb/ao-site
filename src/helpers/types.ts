@@ -27,4 +27,4 @@ export type ValidationType = {
 
 export type TagType = { name: string; value: string };
 
-export type ButtonType = 'primary' | 'accent' | 'alt1' | 'alt2';
+export type ButtonType = 'primary' | 'alt1' | 'alt2' | 'alt3' | 'alt4' | 'indicator' | 'warning';

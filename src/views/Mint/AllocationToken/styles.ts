@@ -13,7 +13,7 @@ export const TokenSection = styled.button<{ open: boolean }>`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 35px 25px;
+	padding: 25px;
 
 	border: 1px solid ${(props) => props.theme.colors.border.primary};
 	background: ${(props) =>
@@ -89,15 +89,33 @@ export const TokenBodyWrapper = styled.div`
 	padding: 25px;
 `;
 
-export const TokenBodyFlexWrapper = styled.div`
+export const TokenBodyDescriptionWrapper = styled.div`
+	margin: 0 0 30px 0;
+	p {
+		line-height: 1.75;
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+
+	b {
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+	}
+`;
+
+export const TokenBodyValuesWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 15px 20px;
 `;
 
 export const TokenBodyQuantity = styled.div`
 	display: flex;
 	flex-direction: column;
+	min-width: 165px;
 `;
 
 export const TokenBodyQuantityHeader = styled.div`
@@ -117,7 +135,7 @@ export const TokenBodyQuantityValue = styled.div`
 
 	p,
 	span {
-		font-size: ${(props) => props.theme.typography.size.xLg};
+		font-size: ${(props) => props.theme.typography.size.base};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
@@ -134,5 +152,22 @@ export const TokenBodyQuantityValue = styled.div`
 
 	.indicator {
 		margin: 0 3.5px 0 0;
+	}
+`;
+
+export const TokenBodyActionWrapper = styled.div`
+	width: 100%;
+	margin: 30px 0 0 0;
+
+	button {
+		span {
+			font-size: ${(props) => props.theme.typography.size.base} !important;
+		}
+
+		svg {
+			height: 17.5px !important;
+			width: 17.5px !important;
+			margin: 3.5px 9.5px 0 0 !important;
+		}
 	}
 `;

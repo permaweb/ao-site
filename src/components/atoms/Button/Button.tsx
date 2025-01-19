@@ -26,12 +26,6 @@ export default function Button(props: IProps) {
 					icon: S.IconPrimary,
 				};
 				break;
-			case 'accent':
-				buttonObj = {
-					wrapper: S.Accent,
-					icon: S.IconAlt1,
-				};
-				break;
 			case 'alt1':
 				buttonObj = {
 					wrapper: S.Alt1,
@@ -42,6 +36,18 @@ export default function Button(props: IProps) {
 				buttonObj = {
 					wrapper: S.Alt2,
 					icon: S.IconAlt2,
+				};
+				break;
+			case 'alt3':
+				buttonObj = {
+					wrapper: S.Alt3,
+					icon: S.IconAlt3,
+				};
+				break;
+			case 'alt4':
+				buttonObj = {
+					wrapper: S.Alt4,
+					icon: S.IconAlt4,
 				};
 				break;
 			default:
@@ -58,13 +64,23 @@ export default function Button(props: IProps) {
 		return (
 			<>
 				{props.icon && props.iconLeftAlign && (
-					<StyledIcon disabled={props.disabled} active={props.active} leftAlign={props.iconLeftAlign}>
+					<StyledIcon
+						warning={props.warning || false}
+						disabled={props.disabled}
+						active={props.active}
+						leftAlign={props.iconLeftAlign}
+					>
 						<ReactSVG src={props.icon} />
 					</StyledIcon>
 				)}
 				<span>{props.loading ? `${language.loading}...` : props.label}</span>
 				{props.icon && !props.iconLeftAlign && (
-					<StyledIcon disabled={props.disabled} active={props.active} leftAlign={props.iconLeftAlign}>
+					<StyledIcon
+						warning={props.warning || false}
+						disabled={props.disabled}
+						active={props.active}
+						leftAlign={props.iconLeftAlign}
+					>
 						<ReactSVG src={props.icon} />
 					</StyledIcon>
 				)}
@@ -81,7 +97,6 @@ export default function Button(props: IProps) {
 	function getAction() {
 		return (
 			<StyledButton
-				style={props.style}
 				tabIndex={props.noFocus ? -1 : 0}
 				type={props.formSubmit ? 'submit' : 'button'}
 				onClick={props.handlePress}
@@ -93,6 +108,7 @@ export default function Button(props: IProps) {
 				fullWidth={props.fullWidth}
 				width={props.width}
 				height={props.height}
+				warning={props.warning || false}
 				className={props.className || ''}
 			>
 				{getLabel()}
@@ -104,7 +120,7 @@ export default function Button(props: IProps) {
 		if (props.tooltip) {
 			return (
 				<S.Wrapper>
-					<S.Tooltip className={'info-text'} useBottom={props.useBottomToolTip ? props.useBottomToolTip : false}>
+					<S.Tooltip className={'info'} useBottom={true}>
 						<span>{props.tooltip}</span>
 					</S.Tooltip>
 					{getAction()}

@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	gap: 40px;
+	gap: 60px;
 	padding: 20px 0;
 `;
 
@@ -16,7 +16,6 @@ export const GlobalWrapper = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	margin: 0 0 35px 0;
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		flex-direction: column;
@@ -25,36 +24,72 @@ export const GlobalWrapper = styled.div`
 `;
 
 export const GlobalSection = styled.div`
-	width: calc(50% - 20px);
-	padding: 25px;
+	width: 50%;
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		width: 100%;
 	}
 `;
 
-export const GlobalHeader = styled.div`
+export const InfoWrapper = styled(GlobalSection)`
+	padding: 0 70px 0 0;
+`;
+
+export const InfoHeader = styled.div`
+	margin: 0 0 30px 0;
 	h6 {
 		line-height: 1;
-		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-size: ${(props) => props.theme.typography.size.xLg};
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-size: ${(props) => props.theme.typography.size.xxLg};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;
 
-export const MetricsWrapper = styled(GlobalSection)`
-	padding: 0 40px 0 0;
+export const InfoBody = styled.div`
+	margin: 20px 0 0 0;
+	p {
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
 
-	@media (max-width: ${STYLING.cutoffs.initial}) {
-		padding: 0;
+	b {
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+	}
+
+	a {
+		display: block;
+		margin: 20px 0 0 0;
+		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		color: ${(props) => props.theme.colors.link.color};
+		text-decoration: underline;
+
+		&:hover {
+			color: ${(props) => props.theme.colors.link.active};
+		}
+	}
+
+	#info-body-subheader {
+		font-size: ${(props) => props.theme.typography.size.lg};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 	}
 `;
 
+export const MetricsWrapper = styled(GlobalSection)`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 55px 40px;
+`;
+
 export const Metrics = styled.div`
+	width: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 25px 0 0 0;
+	padding: 0 25px;
 `;
 
 export const MetricsSection = styled.div`
@@ -98,6 +133,20 @@ export const Messages = styled(MetricsSection)`
 	}
 `;
 
+export const BalancesWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+`;
+
+export const YieldAllocationWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+`;
+
 export const HeaderWrapper = styled.div`
 	width: 100%;
 	display: flex;
@@ -106,10 +155,10 @@ export const HeaderWrapper = styled.div`
 	flex-wrap: wrap;
 `;
 
-export const HeaderBalanceWrapper = styled.div`
+export const HeaderInfoWrapper = styled.div`
 	display: flex;
-	flex-direction: column;
-	gap: 10px;
+	align-items: center;
+	gap: 20px;
 `;
 
 export const HeaderInfo = styled.div`
@@ -119,6 +168,32 @@ export const HeaderInfo = styled.div`
 		font-size: ${(props) => props.theme.typography.size.xLg};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const HeaderTooltip = styled.div`
+	button {
+		display: flex;
+		align-items: center;
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-size: ${(props) => props.theme.typography.size.base};
+		color: ${(props) => props.theme.colors.link.color};
+
+		svg {
+			height: 15px;
+			width: 15px;
+			fill: ${(props) => props.theme.colors.link.color};
+			margin: 5.5px 5.5px 0 0;
+		}
+
+		&:hover {
+			color: ${(props) => props.theme.colors.link.active};
+
+			svg {
+				color: ${(props) => props.theme.colors.link.active};
+			}
+		}
 	}
 `;
 
@@ -153,6 +228,138 @@ export const BodyWrapper = styled.div`
 	}
 `;
 
+export const BalancesBodyWrapper = styled(BodyWrapper)`
+	flex-direction: column;
+`;
+
+export const BalancesFlexWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+`;
+
+export const BalanceFlexSection = styled.div`
+	width: calc(50% - 20px);
+`;
+
+export const BalanceSection = styled.div`
+	width: 100%;
+	padding: 20px;
+`;
+
+export const BalanceHeaderWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+`;
+
+export const BalanceHeader = styled.div`
+	span {
+		line-height: 1;
+		font-size: ${(props) => props.theme.typography.size.xLg};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const BalanceBodyWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	margin: 40px 0 0 0;
+`;
+
+export const BalanceQuantitySection = styled.div<{ end?: boolean }>`
+	width: 175px;
+	display: flex;
+	flex-direction: column;
+	align-items: ${(props) => (props.end ? 'flex-end' : 'flex-start')};
+	gap: 2.5px;
+`;
+
+export const BalanceQuantityHeader = styled.div`
+	span {
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+`;
+
+export const BalanceQuantityBody = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 7.5px;
+
+	p,
+	span {
+		font-size: ${(props) => props.theme.typography.size.xLg};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.xBold};
+	}
+
+	p {
+		display: flex;
+		align-items: center;
+		gap: 7.5px;
+	}
+
+	svg {
+		height: 20px;
+		width: 20px;
+		margin: 6.5px 0 0 0;
+	}
+
+	#ao-logo {
+		svg {
+			height: 30px;
+			width: 30px;
+			margin: 6.5px 3.5px 0 0;
+		}
+	}
+`;
+
+export const BalanceQuantityFooter = styled.div`
+	span {
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+
+	button {
+		margin: 3.5px 0 0 0;
+		span {
+			color: ${(props) => props.theme.colors.link.color} !important;
+		}
+
+		&:hover {
+			text-decoration: underline;
+			text-decoration-thickness: 1.25px;
+			text-decoration-color: ${(props) => props.theme.colors.link.active} !important;
+			span {
+				color: ${(props) => props.theme.colors.link.active} !important;
+			}
+		}
+	}
+`;
+
+export const BalancesGlobalWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px;
+`;
+
+export const BalancesGlobalFlexWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 100px;
+`;
+
+export const AllocationBodyWrapper = styled(BodyWrapper)``;
+
 export const TokensSection = styled.div`
 	width: calc(100% - ${ALLOCATION_WIDTH} - 40px);
 	display: flex;
@@ -164,11 +371,35 @@ export const TokensSection = styled.div`
 	}
 `;
 
-export const AllocationWrapper = styled.div`
+export const TokenFlexWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	@media (max-width: ${STYLING.cutoffs.desktop}) {
+		flex-direction: column;
+		gap: 40px;
+	}
+`;
+
+export const TokenFlexSection = styled.div`
+	width: calc(50% - 20px);
+
+	@media (max-width: ${STYLING.cutoffs.desktop}) {
+		width: 100%;
+	}
+`;
+
+export const AllocationSummaryWrapper = styled.div`
 	height: fit-content;
 	width: ${ALLOCATION_WIDTH};
+	position: sticky;
+	top: ${STYLING.dimensions.nav.height};
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		width: 100%;
 	}
 `;
+
+export const ModalWrapper = styled.div``;

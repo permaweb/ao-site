@@ -120,7 +120,7 @@ export const Primary = styled.button<{
 				: props.theme.colors.icon.primary.fill};
 	}
 	&:hover {
-		background: ${(props) => props.theme.colors.icon.primary.active};
+		background: ${(props) => props.theme.colors.container.alt3.background};
 	}
 `;
 

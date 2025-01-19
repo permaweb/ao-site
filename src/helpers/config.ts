@@ -1,12 +1,7 @@
 import aoPict from 'assets/ao-pictograph.svg';
 import arconnect from 'assets/arconnect.png';
-import arrowBack from 'assets/arrowBack.svg';
 import arweaveApp from 'assets/arweave-app.svg';
-import calculator from 'assets/calculator.svg';
-import checkmark from 'assets/checkmark.svg';
 import codehawksAudit from 'assets/codehawks-audit.svg';
-import dai from 'assets/dai.svg';
-import stEth from 'assets/eth.svg';
 import ethereum from 'assets/ethereum.svg';
 import heroGraphic from 'assets/hero-graphic.svg';
 import ipBlock from 'assets/ip-block.png';
@@ -44,14 +39,9 @@ export const TOKEN_DENOMINATION = Math.pow(10, TOKEN_DECIMALS);
 export const ASSETS = {
 	aoPict,
 	arconnect,
-	arrowBack,
 	arweaveApp,
-	calculator,
-	checkmark,
 	plus,
 	codehawksAudit,
-	stEth,
-	dai,
 	heroGraphic,
 	ipBlock,
 	metamask,
@@ -62,16 +52,20 @@ export const ASSETS = {
 	renascenseAudit,
 	walletConnect,
 	ethereum,
+	add: getTxEndpoint('RLWnDhoB0Dd_X-sLnNy4w2S7ds3l9591HcHK8nc3YRw'),
 	ao: getTxEndpoint('AzM59q2tcYzkySUUZUN1HCwfKGVHi--71UdoIk5gPUE'),
 	arrow: getTxEndpoint('ghFL1fzQ2C1eEAnqSVvfAMP5Jikx7NKSPP5neoNPALw'),
 	arweave: getTxEndpoint('LeeiCXkCDZKdh9uEfau2a13LziNGnT82anXFDW51Hgw'),
+	checkmark: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
 	close: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
+	dai: getTxEndpoint('0fH_eBybJYRxjpjhJLiDoj8-7u7wYEHXtNElWEPb5is'),
 	discord: getTxEndpoint('3X1BfFleeCZZdVZIx8DKDIblcLw7jzzRBCzSItlBy9E'),
 	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
 	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
 	logo: getTxEndpoint('kKG4pr1WCy9OdiKPe7TKTs_HYUzP0-BPWBMDFCpZtfE'),
 	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
 	pi: getTxEndpoint('n1AM_4usUnh6zj8GzdQDu1KkvC5XFlBLk7sKXgNHtos'),
+	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
 	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
 };
 

@@ -3,6 +3,7 @@ import { Pie } from 'react-chartjs-2';
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { useTheme } from 'styled-components';
 
+import { Button } from 'components/atoms/Button';
 import { AllocationTokenSummaryType } from 'helpers/types';
 import { formatPercentage } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
@@ -52,7 +53,7 @@ export default function AllocationSummary() {
 	return (
 		<S.Wrapper>
 			<S.Header>
-				<span className={'primary-text'}>{language.allocation}</span>
+				<span>{language.allocation}</span>
 			</S.Header>
 			<S.Body>
 				{data && (
@@ -94,14 +95,26 @@ export default function AllocationSummary() {
 						</S.ChartWrapper>
 						<S.SummaryWrapper>
 							<S.SummaryHeader>
-								<span className={'primary-text'}>{language.summary}</span>
+								<span>{language.summary}</span>
 							</S.SummaryHeader>
 							<S.SummaryBody>
 								{ALLOCATION.map((token: AllocationTokenSummaryType) => {
 									return (
 										<S.SummaryLine>
-											<span>{token.label}</span>
-											<p>{formatPercentage(token.value)}</p>
+											<S.SummaryLineLabel>
+												<span>{token.label}</span>
+											</S.SummaryLineLabel>
+											<S.SummaryLineActionsWrapper>
+												<S.SummaryLineActions>
+													<Button type={'alt3'} label={'None'} handlePress={() => {}} />
+													<Button type={'alt3'} label={'2x'} handlePress={() => {}} active />
+													<Button type={'alt3'} label={'4x'} handlePress={() => {}} active />
+													<Button type={'alt3'} label={'All'} handlePress={() => {}} active />
+												</S.SummaryLineActions>
+												<S.SummaryLinePercentage>
+													<p>{formatPercentage(token.value)}</p>
+												</S.SummaryLinePercentage>
+											</S.SummaryLineActionsWrapper>
 										</S.SummaryLine>
 									);
 								})}

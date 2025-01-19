@@ -31,7 +31,7 @@ export default function Header() {
 	return (
 		<>
 			<S.Wrapper>
-				<S.Content className={'max-view-wrapper'}>
+				<S.Content className={'max-view-wrapper fade-in'}>
 					<S.SectionStart>
 						<S.LogoWrapper>
 							<Link to={URLS.base}>

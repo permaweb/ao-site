@@ -4,7 +4,6 @@ import { useAOProvider } from 'providers/AOProvider';
 import * as S from './styles';
 
 // TODO: Language
-// TODO: Values from provider
 export default function Landing() {
 	const aoProvider = useAOProvider();
 

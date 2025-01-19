@@ -10,6 +10,13 @@ export const Header = styled.div`
 	width: 100%;
 	padding: 0 0 7.5px 0;
 	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+
+	span {
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-size: ${(props) => props.theme.typography.size.lg};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
 `;
 
 export const Body = styled.div`
@@ -75,8 +82,8 @@ export const ChartKeyText = styled.p`
 `;
 
 export const Percentage = styled.p`
-	font-size: ${(props) => props.theme.typography.size.xSmall};
 	line-height: calc(${(props) => props.theme.typography.size.xSmall} + 5px);
+	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-family: ${(props) => props.theme.typography.family.alt1};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
 	color: ${(props) => props.theme.colors.font.alt1};
@@ -91,6 +98,13 @@ export const SummaryWrapper = styled.div`
 export const SummaryHeader = styled.div`
 	padding: 0 0 7.5px 0;
 	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+
+	span {
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
 `;
 
 export const SummaryBody = styled.div`
@@ -111,13 +125,40 @@ export const SummaryLine = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+`;
 
+export const SummaryLineLabel = styled.div`
+	width: 80px;
+	span {
+		width: 100%;
+		display: block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+	}
+`;
+
+export const SummaryLineActionsWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 15px;
+`;
+
+export const SummaryLineActions = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 7.5px;
+`;
+
+export const SummaryLinePercentage = styled.div`
+	width: 40px;
+	display: flex;
+	justify-content: flex-end;
 	P {
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
-	}
-
-	span {
-		font-weight: ${(props) => props.theme.typography.weight.regular};
+		text-align: right;
 	}
 `;

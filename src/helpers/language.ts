@@ -1,5 +1,6 @@
 export const language = {
 	en: {
+		add: `Add`,
 		allocation: `Allocation`,
 		allocationSummaryDescription: `Below represents how you are currently allocating your AO Yield.`,
 		allocateYield: `Allocate Your Yield`,
@@ -7,6 +8,7 @@ export const language = {
 		aoClaim: `AO Claim`,
 		arweaveAddress: `Arweave address`,
 		backToMint: `Back to Mint`,
+		balancesHeader: `Balances`,
 		baseContractAudits: `Base Contract Audits`,
 		build: `Build`,
 		circulatingSupply: `Circulating AO Supply`,
