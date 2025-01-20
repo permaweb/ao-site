@@ -5,11 +5,11 @@ import Web3 from 'web3';
 
 import { Button } from 'components/atoms/Button';
 import { Loader } from 'components/atoms/Loader';
-import { ASSETS, Erc20_ABI, ETH_CONTRACTS, StEthBridge_ABI, TOKEN_DENOMINATION, URLS } from 'helpers/config';
+import { AO_TOKEN_DENOMINATION, ASSETS, Erc20_ABI, ETH_CONTRACTS, StEthBridge_ABI, URLS } from 'helpers/config';
 import { formatDisplayAmount, getEthReward } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 
-import * as S from './styles';
+import * as S from '../styles';
 
 type StETHSectionProps = {
 	loading: boolean;

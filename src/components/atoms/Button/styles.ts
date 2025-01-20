@@ -145,10 +145,10 @@ export const IconPrimary = styled.div<{
 	warning?: boolean;
 }>`
 	svg {
-		height: 15.5px;
-		width: 15.5px;
+		height: 17.5px;
+		width: 17.5px;
 		padding: 1.5px 0 0 0;
-		margin: ${(props) => (props.leftAlign ? '3.5px 7.5px 0 0' : '3.5px 0 0 7.5px')};
+		margin: ${(props) => (props.leftAlign ? '3.5px 11.5px 0 0' : '3.5px 0 0 11.5px')};
 		color: ${(props) =>
 			props.warning
 				? props.theme.colors.font.light1

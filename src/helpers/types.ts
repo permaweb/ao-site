@@ -4,6 +4,43 @@ export type AllocationTokenType = 'pi' | 'ao' | 'arweave';
 
 export type AllocationTokenSummaryType = { label: string; value: number | null };
 
+export type TokenEarningsType = 'arweave' | 'stEth' | 'dai';
+
+export type TokenBigIntType = { value: bigint | null; display: string | null };
+
+export type TokenDepositType = {
+	balance: TokenBigIntType;
+	deposited: TokenBigIntType;
+};
+
+export type EthTotalDepositedType = {
+	stEth: TokenBigIntType;
+	dai: TokenBigIntType;
+};
+
+export type EthTokensType = {
+	stEth: TokenDepositType;
+	dai: TokenDepositType;
+};
+
+export type EthTokensYieldProjectionsType = {
+	stEth: {
+		monthly: TokenProjectionType;
+		yearly: TokenProjectionType;
+	};
+	dai: {
+		monthly: TokenProjectionType;
+		yearly: TokenProjectionType;
+	};
+};
+
+export type TokenProjectionType = { amount: number; ratio: number };
+
+export type TokenYieldProjectionsType = {
+	monthly: TokenProjectionType;
+	yearly: TokenProjectionType;
+};
+
 export enum ArWalletEnum {
 	arConnect = 'arConnect',
 	othent = 'othent',

@@ -20,15 +20,15 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 		<LanguageProvider>
 			<HashRouter>
 				<GlobalStyle />
-				<EthereumProvider>
-					<ArweaveProvider>
-						<AOProvider>
+				<AOProvider>
+					<EthereumProvider>
+						<ArweaveProvider>
 							<AllocationProvider>
 								<App />
 							</AllocationProvider>
-						</AOProvider>
-					</ArweaveProvider>
-				</EthereumProvider>
+						</ArweaveProvider>
+					</EthereumProvider>
+				</AOProvider>
 			</HashRouter>
 		</LanguageProvider>
 	</CustomThemeProvider>

@@ -5,7 +5,7 @@ import { ASSETS } from 'helpers/config';
 
 import * as S from './styles';
 
-export default function CustomAllocation() {
+export default function AllocationCustom() {
 	const [open, setOpen] = React.useState<boolean>(true);
 	const [selectedProjects, setSelectedProjects] = React.useState<string[]>([]); // Track selected project titles
 

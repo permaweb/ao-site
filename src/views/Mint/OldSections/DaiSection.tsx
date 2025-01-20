@@ -9,7 +9,7 @@ import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, URLS } from 'helpers/c
 import { formatDisplayAmount, getDaiReward } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 
-import * as S from './styles';
+import * as S from '../styles';
 
 type DaiSectionProps = {
 	loading: boolean;

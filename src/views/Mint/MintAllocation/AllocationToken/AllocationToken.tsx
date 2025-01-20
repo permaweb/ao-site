@@ -29,6 +29,11 @@ export default function AllocationToken(props: IProps) {
 	const [open, setOpen] = React.useState<boolean>(props.defaultClosed ? !props.defaultClosed : true);
 
 	const TOKENS = {
+		arweave: {
+			label: 'Arweave',
+			description: 'The Harddrive',
+			icon: ASSETS.arweave,
+		},
 		pi: {
 			label: 'PI',
 			description: 'AO + AR + Ecosystem Index',
@@ -39,11 +44,6 @@ export default function AllocationToken(props: IProps) {
 			label: 'AO',
 			description: 'The Security Token',
 			icon: ASSETS.ao,
-		},
-		ar: {
-			label: 'Arweave',
-			description: 'The Harddrive',
-			icon: ASSETS.arweave,
 		},
 	};
 
@@ -56,7 +56,7 @@ export default function AllocationToken(props: IProps) {
 				setToken({ type: 'ao', ...TOKENS.ao });
 				break;
 			case 'arweave':
-				setToken({ type: 'arweave', ...TOKENS.ar });
+				setToken({ type: 'arweave', ...TOKENS.arweave });
 				break;
 			default:
 				break;

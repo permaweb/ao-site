@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import HexocetAnimationComponent from 'components/HexocetAnimation/HexocetAnimationComponent';
-import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
-
+// import HexocetAnimationComponent from 'components/backup/HexocetAnimation/HexocetAnimationComponent';
+// import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
 import './HomeMainStyles.css';
 
 import HyperTextLoad from '../../../../components/atoms/HyperTextLoad/HyperTextLoad';
@@ -39,28 +38,29 @@ const HomeMain = () => {
 		return () => clearInterval(intervalId);
 	}, []);
 
-	useEffect(() => {
-		MorpheusAsciiArt();
+	// TODO
+	// useEffect(() => {
+	// 	MorpheusAsciiArt();
 
-		const handleMouseMove = (event: MouseEvent) => {
-			if (!containerRef.current) return;
+	// 	const handleMouseMove = (event: MouseEvent) => {
+	// 		if (!containerRef.current) return;
 
-			const rect = containerRef.current.getBoundingClientRect();
+	// 		const rect = containerRef.current.getBoundingClientRect();
 
-			const x = event.clientX - rect.left;
-			const y = event.clientY - rect.top;
-		};
+	// 		const x = event.clientX - rect.left;
+	// 		const y = event.clientY - rect.top;
+	// 	};
 
-		window.addEventListener('mousemove', handleMouseMove);
+	// 	window.addEventListener('mousemove', handleMouseMove);
 
-		return () => window.removeEventListener('mousemove', handleMouseMove);
-	}, []);
+	// 	return () => window.removeEventListener('mousemove', handleMouseMove);
+	// }, []);
 
 	return (
 		<>
 			<main style={{ background: 'white' }}>
 				<div className="home-main-wrapper" ref={containerRef}>
-					<HexocetAnimationComponent containerRef={containerRef} />
+					{/* <HexocetAnimationComponent containerRef={containerRef} /> */}
 
 					<div className="content-hero-wrapper">
 						<div className="text-hero-wrapper" style={{ justifyContent: 'center' }}>

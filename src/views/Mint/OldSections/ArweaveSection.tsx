@@ -7,7 +7,7 @@ import { ASSETS } from 'helpers/config';
 import { formatDisplayAmount, getArReward } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 
-import * as S from './styles';
+import * as S from '../styles';
 
 type ArweaveSectionProps = {
 	loading: boolean;

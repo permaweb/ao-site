@@ -5,10 +5,12 @@ import { ArweaveWebWallet } from 'arweave-wallet-connector';
 import { Modal } from 'components/molecules/Modal';
 import { AR_WALLETS, ASSETS, WALLET_PERMISSIONS } from 'helpers/config';
 import { getARBalanceEndpoint } from 'helpers/endpoints';
-import { ArWalletEnum } from 'helpers/types';
+import { ArWalletEnum, TokenYieldProjectionsType } from 'helpers/types';
+import { getArReward } from 'helpers/utils';
 import Othent from 'helpers/wallet';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
+import { useAOProvider } from './AOProvider';
 import * as S from './styles';
 
 interface ArweaveContextState {
@@ -17,6 +19,7 @@ interface ArweaveContextState {
 	walletAddress: string | null;
 	walletType: ArWalletEnum | null;
 	balance: number | string | null;
+	projections: TokenYieldProjectionsType | null;
 	handleConnect: any;
 	handleDisconnect: () => void;
 	walletModalVisible: boolean;
@@ -33,13 +36,11 @@ const DEFAULT_CONTEXT = {
 	walletAddress: null,
 	walletType: null,
 	balance: null,
+	projections: null,
 	handleConnect() {},
 	handleDisconnect() {},
 	walletModalVisible: false,
 	setWalletModalVisible(_open: boolean) {},
-	profile: null,
-	toggleProfileUpdate: false,
-	setToggleProfileUpdate(_toggleUpdate: boolean) {},
 };
 
 const ARContext = React.createContext<ArweaveContextState>(DEFAULT_CONTEXT);
@@ -66,6 +67,7 @@ function WalletList(props: { handleConnect: any }) {
 }
 
 export function ArweaveProvider(props: ArweaveProviderProps) {
+	const aoProvider = useAOProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
@@ -77,6 +79,7 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 	const [walletAddress, setWalletAddress] = React.useState<string | null>(null);
 
 	const [balance, setBalance] = React.useState<number | string | null>(null);
+	const [projections, setProjections] = React.useState<TokenYieldProjectionsType | null>(null);
 
 	React.useEffect(() => {
 		(async function () {
@@ -105,6 +108,30 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 			}
 		})();
 	}, [walletAddress]);
+
+	React.useEffect(() => {
+		(async function () {
+			if (walletAddress && balance && aoProvider.mintedSupply) {
+				try {
+					let arBalance = Number(balance);
+					let arSupply = 66000000;
+
+					setProjections({
+						monthly: {
+							amount: getArReward(30, arBalance, arSupply, aoProvider.mintedSupply),
+							ratio: getArReward(30, 1, arSupply, aoProvider.mintedSupply),
+						},
+						yearly: {
+							amount: getArReward(365, arBalance, arSupply, aoProvider.mintedSupply),
+							ratio: getArReward(365, 1, arSupply, aoProvider.mintedSupply),
+						},
+					});
+				} catch (e: any) {
+					console.error(e);
+				}
+			}
+		})();
+	}, [walletAddress, balance, aoProvider.mintedSupply]);
 
 	async function handleWallet() {
 		if (localStorage.getItem('walletType')) {
@@ -220,6 +247,7 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 					walletAddress,
 					walletType,
 					balance,
+					projections,
 					handleConnect,
 					handleDisconnect,
 					wallets,

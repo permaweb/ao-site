@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { readHandler } from 'api';
+
+import { AO, AO_TOKEN_DENOMINATION } from 'helpers/config';
+
 enum AOPhase {
 	Testnet = 'Testnet',
 	MainnetEarly = 'Mainnet Early',
@@ -16,6 +20,7 @@ interface AOContextState {
 	deposits: string | null;
 	phase: AOPhase | null;
 	status: AONetworkStatus | null;
+	mintedSupply: number | null;
 }
 
 const DEFAULT_CONTEXT = {
@@ -25,6 +30,7 @@ const DEFAULT_CONTEXT = {
 	deposits: null,
 	phase: null,
 	status: null,
+	mintedSupply: null,
 };
 
 const AOContext = React.createContext<AOContextState>(DEFAULT_CONTEXT);
@@ -34,6 +40,26 @@ export function useAOProvider(): AOContextState {
 }
 
 export function AOProvider(props: { children: React.ReactNode }) {
+	const [mintedSupply, setMintedSupply] = React.useState<number | null>(null);
+
+	React.useEffect(() => {
+		(async function () {
+			try {
+				let aoSupplyFetch: number;
+				aoSupplyFetch = await readHandler({
+					processId: AO.tokenMirror,
+					action: 'Minted-Supply',
+				});
+
+				if (aoSupplyFetch) {
+					setMintedSupply(aoSupplyFetch / AO_TOKEN_DENOMINATION);
+				}
+			} catch (e: any) {
+				console.error(e);
+			}
+		})();
+	}, []);
+
 	return (
 		<AOContext.Provider
 			value={{
@@ -43,6 +69,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				deposits: '529830732',
 				phase: AOPhase.MainnetEarly,
 				status: AONetworkStatus.Live,
+				mintedSupply: mintedSupply,
 			}}
 		>
 			{props.children}

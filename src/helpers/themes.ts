@@ -271,7 +271,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 	typography: {
 		family: {
 			primary: `'Roboto Mono', monospace`,
-			alt1: `'DM Sans', sans-serif;`,
+			alt1: `'DM Sans', sans-serif`,
 		},
 		size: {
 			xxxSmall: '12px',

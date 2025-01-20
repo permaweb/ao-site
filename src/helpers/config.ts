@@ -33,8 +33,8 @@ export const ETH_CONTRACTS = {
 	daiBridge: '0x6A1B588B0684dACE1f53C5820111F400B3dbfeBf',
 };
 
-export const TOKEN_DECIMALS = 12;
-export const TOKEN_DENOMINATION = Math.pow(10, TOKEN_DECIMALS);
+export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
+export const ETH_TOKEN_DENOMINATION = Math.pow(10, 18);
 
 export const ASSETS = {
 	aoPict,
@@ -66,6 +66,7 @@ export const ASSETS = {
 	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
 	pi: getTxEndpoint('n1AM_4usUnh6zj8GzdQDu1KkvC5XFlBLk7sKXgNHtos'),
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
+	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
 	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
 };
 
