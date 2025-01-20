@@ -98,9 +98,9 @@ export default function AllocationSummary() {
 								<span>{language.summary}</span>
 							</S.SummaryHeader>
 							<S.SummaryBody>
-								{ALLOCATION.map((token: AllocationTokenSummaryType) => {
+								{ALLOCATION.map((token: AllocationTokenSummaryType, index: number) => {
 									return (
-										<S.SummaryLine>
+										<S.SummaryLine key={index}>
 											<S.SummaryLineLabel>
 												<span>{token.label}</span>
 											</S.SummaryLineLabel>

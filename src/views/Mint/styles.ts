@@ -33,6 +33,10 @@ export const GlobalSection = styled.div`
 
 export const InfoWrapper = styled(GlobalSection)`
 	padding: 0 70px 0 0;
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		padding: 0;
+	}
 `;
 
 export const InfoHeader = styled.div`
@@ -43,6 +47,12 @@ export const InfoHeader = styled.div`
 		font-size: ${(props) => props.theme.typography.size.xxLg};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
+	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		h6 {
+			line-height: 1.5;
+		}
 	}
 `;
 
@@ -83,6 +93,10 @@ export const MetricsWrapper = styled(GlobalSection)`
 	align-items: center;
 	justify-content: center;
 	padding: 55px 40px;
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		padding: 20px;
+	}
 `;
 
 export const Metrics = styled.div`
@@ -90,6 +104,10 @@ export const Metrics = styled.div`
 	display: flex;
 	flex-direction: column;
 	padding: 0 25px;
+
+	@media (max-width: ${STYLING.cutoffs.tablet}) {
+		padding: 0;
+	}
 `;
 
 export const MetricsSection = styled.div`
@@ -97,6 +115,12 @@ export const MetricsSection = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	gap: 10px;
+
+	@media (max-width: ${STYLING.cutoffs.tablet}) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
+	}
 `;
 
 export const MetricsValue = styled.div`
@@ -119,6 +143,13 @@ export const MetricsValue = styled.div`
 	p,
 	span {
 		text-align: center;
+	}
+
+	@media (max-width: ${STYLING.cutoffs.tablet}) {
+		p,
+		span {
+			text-align: left;
+		}
 	}
 `;
 
@@ -153,6 +184,7 @@ export const HeaderWrapper = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	flex-wrap: wrap;
+	gap: 10px;
 `;
 
 export const HeaderInfoWrapper = styled.div`
@@ -237,10 +269,16 @@ export const BalancesFlexWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 20px;
 `;
 
 export const BalanceFlexSection = styled.div`
 	width: calc(50% - 20px);
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		width: 100%;
+	}
 `;
 
 export const BalanceSection = styled.div`
@@ -253,6 +291,8 @@ export const BalanceHeaderWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 20px;
 `;
 
 export const BalanceHeader = styled.div`
@@ -271,14 +311,36 @@ export const BalanceBodyWrapper = styled.div`
 	align-items: flex-start;
 	justify-content: space-between;
 	margin: 40px 0 0 0;
+	flex-wrap: wrap;
+	gap: 20px;
 `;
 
-export const BalanceQuantitySection = styled.div<{ end?: boolean }>`
+export const BalanceQuantitySection = styled.div`
 	width: 175px;
 	display: flex;
 	flex-direction: column;
-	align-items: ${(props) => (props.end ? 'flex-end' : 'flex-start')};
+	align-items: flex-start;
 	gap: 2.5px;
+`;
+
+export const BalanceQuantityEndSection = styled(BalanceQuantitySection)`
+	align-items: flex-end;
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		align-items: flex-start;
+	}
+`;
+
+export const BalancesQuantityFlexSection = styled.div`
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 20px;
+	margin: 0 0 0 auto;
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		margin: 0;
+	}
 `;
 
 export const BalanceQuantityHeader = styled.div`
@@ -295,7 +357,7 @@ export const BalanceQuantityBody = styled.div`
 
 	p,
 	span {
-		font-size: ${(props) => props.theme.typography.size.xLg};
+		font-size: ${(props) => props.theme.typography.size.lg};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.xBold};
 	}
@@ -350,12 +412,21 @@ export const BalancesGlobalWrapper = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	padding: 20px;
+	flex-wrap: wrap;
+	gap: 20px;
+
+	@media (max-width: ${STYLING.cutoffs.tablet}) {
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+	}
 `;
 
 export const BalancesGlobalFlexWrapper = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 100px;
+	flex-wrap: wrap;
+	gap: 20px 100px;
 `;
 
 export const AllocationBodyWrapper = styled(BodyWrapper)``;

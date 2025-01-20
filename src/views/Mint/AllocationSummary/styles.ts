@@ -144,6 +144,10 @@ export const SummaryLineActionsWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 15px;
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		display: none;
+	}
 `;
 
 export const SummaryLineActions = styled.div`

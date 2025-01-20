@@ -109,32 +109,34 @@ export default function Mint() {
 										<Button type={'alt2'} label={'Buy AR'} handlePress={() => {}} />
 									</S.BalanceQuantityFooter>
 								</S.BalanceQuantitySection>
-								<S.BalanceQuantitySection end>
-									<S.BalanceQuantityHeader>
-										<span className={'primary-text'}>30 Day Projection</span>
-									</S.BalanceQuantityHeader>
-									<S.BalanceQuantityBody>
-										<p>
-											<span className={'indicator'}>+</span>0.0023
-										</p>
-									</S.BalanceQuantityBody>
-									<S.BalanceQuantityFooter>
-										<span className={'primary-text'}>1 AR = 0.001283 AO</span>
-									</S.BalanceQuantityFooter>
-								</S.BalanceQuantitySection>
-								<S.BalanceQuantitySection end>
-									<S.BalanceQuantityHeader>
-										<span className={'primary-text'}>1 Year Projection</span>
-									</S.BalanceQuantityHeader>
-									<S.BalanceQuantityBody>
-										<p>
-											<span className={'indicator'}>+</span>0.4870
-										</p>
-									</S.BalanceQuantityBody>
-									<S.BalanceQuantityFooter>
-										<span className={'primary-text'}>1 AR = 0.0144 AO</span>
-									</S.BalanceQuantityFooter>
-								</S.BalanceQuantitySection>
+								<S.BalancesQuantityFlexSection>
+									<S.BalanceQuantityEndSection>
+										<S.BalanceQuantityHeader>
+											<span className={'primary-text'}>30 Day Projection</span>
+										</S.BalanceQuantityHeader>
+										<S.BalanceQuantityBody>
+											<p>
+												<span className={'indicator'}>+</span>0.0023
+											</p>
+										</S.BalanceQuantityBody>
+										<S.BalanceQuantityFooter>
+											<span className={'primary-text'}>1 AR = 0.001283 AO</span>
+										</S.BalanceQuantityFooter>
+									</S.BalanceQuantityEndSection>
+									<S.BalanceQuantityEndSection>
+										<S.BalanceQuantityHeader>
+											<span className={'primary-text'}>1 Year Projection</span>
+										</S.BalanceQuantityHeader>
+										<S.BalanceQuantityBody>
+											<p>
+												<span className={'indicator'}>+</span>0.4870
+											</p>
+										</S.BalanceQuantityBody>
+										<S.BalanceQuantityFooter>
+											<span className={'primary-text'}>1 AR = 0.0144 AO</span>
+										</S.BalanceQuantityFooter>
+									</S.BalanceQuantityEndSection>
+								</S.BalancesQuantityFlexSection>
 							</S.BalanceBodyWrapper>
 						</S.BalanceSection>
 						<S.BalancesFlexWrapper>
@@ -159,32 +161,34 @@ export default function Mint() {
 												<Button type={'alt2'} label={'Deposit stETH'} handlePress={() => {}} />
 											</S.BalanceQuantityFooter>
 										</S.BalanceQuantitySection>
-										<S.BalanceQuantitySection end>
-											<S.BalanceQuantityHeader>
-												<span className={'primary-text'}>30 Day Projection</span>
-											</S.BalanceQuantityHeader>
-											<S.BalanceQuantityBody>
-												<p>
-													<span className={'indicator'}>+</span>0.0023
-												</p>
-											</S.BalanceQuantityBody>
-											<S.BalanceQuantityFooter>
-												<span className={'primary-text'}>1 AR = 0.001283 AO</span>
-											</S.BalanceQuantityFooter>
-										</S.BalanceQuantitySection>
-										<S.BalanceQuantitySection end>
-											<S.BalanceQuantityHeader>
-												<span className={'primary-text'}>1 Year Projection</span>
-											</S.BalanceQuantityHeader>
-											<S.BalanceQuantityBody>
-												<p>
-													<span className={'indicator'}>+</span>0.4870
-												</p>
-											</S.BalanceQuantityBody>
-											<S.BalanceQuantityFooter>
-												<span className={'primary-text'}>1 AR = 0.0144 AO</span>
-											</S.BalanceQuantityFooter>
-										</S.BalanceQuantitySection>
+										<S.BalancesQuantityFlexSection>
+											<S.BalanceQuantityEndSection>
+												<S.BalanceQuantityHeader>
+													<span className={'primary-text'}>30 Day Projection</span>
+												</S.BalanceQuantityHeader>
+												<S.BalanceQuantityBody>
+													<p>
+														<span className={'indicator'}>+</span>0.0023
+													</p>
+												</S.BalanceQuantityBody>
+												<S.BalanceQuantityFooter>
+													<span className={'primary-text'}>1 AR = 0.001283 AO</span>
+												</S.BalanceQuantityFooter>
+											</S.BalanceQuantityEndSection>
+											<S.BalanceQuantityEndSection>
+												<S.BalanceQuantityHeader>
+													<span className={'primary-text'}>1 Year Projection</span>
+												</S.BalanceQuantityHeader>
+												<S.BalanceQuantityBody>
+													<p>
+														<span className={'indicator'}>+</span>0.4870
+													</p>
+												</S.BalanceQuantityBody>
+												<S.BalanceQuantityFooter>
+													<span className={'primary-text'}>1 AR = 0.0144 AO</span>
+												</S.BalanceQuantityFooter>
+											</S.BalanceQuantityEndSection>
+										</S.BalancesQuantityFlexSection>
 									</S.BalanceBodyWrapper>
 								</S.BalanceSection>
 							</S.BalanceFlexSection>
@@ -209,37 +213,38 @@ export default function Mint() {
 												<Button type={'alt2'} label={'Deposit DAI'} handlePress={() => {}} />
 											</S.BalanceQuantityFooter>
 										</S.BalanceQuantitySection>
-										<S.BalanceQuantitySection end>
-											<S.BalanceQuantityHeader>
-												<span className={'primary-text'}>30 Day Projection</span>
-											</S.BalanceQuantityHeader>
-											<S.BalanceQuantityBody>
-												<p>
-													<span className={'indicator'}>+</span>0.0023
-												</p>
-											</S.BalanceQuantityBody>
-											<S.BalanceQuantityFooter>
-												<span className={'primary-text'}>1 AR = 0.001283 AO</span>
-											</S.BalanceQuantityFooter>
-										</S.BalanceQuantitySection>
-										<S.BalanceQuantitySection end>
-											<S.BalanceQuantityHeader>
-												<span className={'primary-text'}>1 Year Projection</span>
-											</S.BalanceQuantityHeader>
-											<S.BalanceQuantityBody>
-												<p>
-													<span className={'indicator'}>+</span>0.4870
-												</p>
-											</S.BalanceQuantityBody>
-											<S.BalanceQuantityFooter>
-												<span className={'primary-text'}>1 AR = 0.0144 AO</span>
-											</S.BalanceQuantityFooter>
-										</S.BalanceQuantitySection>
+										<S.BalancesQuantityFlexSection>
+											<S.BalanceQuantityEndSection>
+												<S.BalanceQuantityHeader>
+													<span className={'primary-text'}>30 Day Projection</span>
+												</S.BalanceQuantityHeader>
+												<S.BalanceQuantityBody>
+													<p>
+														<span className={'indicator'}>+</span>0.0023
+													</p>
+												</S.BalanceQuantityBody>
+												<S.BalanceQuantityFooter>
+													<span className={'primary-text'}>1 AR = 0.001283 AO</span>
+												</S.BalanceQuantityFooter>
+											</S.BalanceQuantityEndSection>
+											<S.BalanceQuantityEndSection>
+												<S.BalanceQuantityHeader>
+													<span className={'primary-text'}>1 Year Projection</span>
+												</S.BalanceQuantityHeader>
+												<S.BalanceQuantityBody>
+													<p>
+														<span className={'indicator'}>+</span>0.4870
+													</p>
+												</S.BalanceQuantityBody>
+												<S.BalanceQuantityFooter>
+													<span className={'primary-text'}>1 AR = 0.0144 AO</span>
+												</S.BalanceQuantityFooter>
+											</S.BalanceQuantityEndSection>
+										</S.BalancesQuantityFlexSection>
 									</S.BalanceBodyWrapper>
 								</S.BalanceSection>
 							</S.BalanceFlexSection>
 						</S.BalancesFlexWrapper>
-
 						<S.BalancesGlobalWrapper className={'border-wrapper-primary'}>
 							<S.BalanceQuantitySection>
 								<S.BalanceQuantityHeader>
@@ -251,7 +256,7 @@ export default function Mint() {
 								</S.BalanceQuantityBody>
 							</S.BalanceQuantitySection>
 							<S.BalancesGlobalFlexWrapper>
-								<S.BalanceQuantitySection end>
+								<S.BalanceQuantityEndSection>
 									<S.BalanceQuantityHeader>
 										<span className={'primary-text'}>Total stETH Bridged</span>
 									</S.BalanceQuantityHeader>
@@ -259,8 +264,8 @@ export default function Mint() {
 										<ReactSVG src={ASSETS.stEth} />
 										<p>{formatCount('128345.34')}</p>
 									</S.BalanceQuantityBody>
-								</S.BalanceQuantitySection>
-								<S.BalanceQuantitySection end>
+								</S.BalanceQuantityEndSection>
+								<S.BalanceQuantityEndSection>
 									<S.BalanceQuantityHeader>
 										<span className={'primary-text'}>Total DAI Bridged</span>
 									</S.BalanceQuantityHeader>
@@ -268,7 +273,7 @@ export default function Mint() {
 										<ReactSVG src={ASSETS.dai} />
 										<p>{formatCount('247255932.78')}</p>
 									</S.BalanceQuantityBody>
-								</S.BalanceQuantitySection>
+								</S.BalanceQuantityEndSection>
 							</S.BalancesGlobalFlexWrapper>
 						</S.BalancesGlobalWrapper>
 					</S.BalancesBodyWrapper>
