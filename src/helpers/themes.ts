@@ -35,12 +35,20 @@ export const lightTheme = {
 	light3: '#B3B3B3',
 	dark1: '#151515',
 	dark2: '#333333',
-	link1: '#0074E4',
-	link2: '#0069CC',
+	link1: '#06BB15',
+	link2: '#059E12',
 	stats: {
 		primary: '#FF8385',
-		alt1: '#46B0B7',
-		alt2: '#8886D9',
+		alt1: '#A3DEE2',
+		alt2: '#B9B8D0',
+		alt3: '#8FC2D3',
+		alt4: '#6CB9D9',
+		alt5: '#8886D9',
+		alt6: '#FFBD9F',
+		alt7: '#A8DDE2',
+		alt8: '#F2A9D3',
+		alt9: '#6D909E',
+		alt10: '#BFBFBF',
 	},
 };
 
@@ -251,8 +259,8 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		tabs: {
 			color: currentTheme.neutralA4,
 			active: {
-				background: currentTheme.primary1,
-				color: currentTheme.neutralA1,
+				background: currentTheme.accent1,
+				color: currentTheme.neutral1,
 			},
 		},
 		tooltip: {

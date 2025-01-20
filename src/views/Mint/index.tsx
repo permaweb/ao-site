@@ -1,3 +1,8 @@
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { URLTabs } from 'components/molecules/URLTabs';
+import { URLS } from 'helpers/config';
 import { formatCount } from 'helpers/utils';
 import { useAOProvider } from 'providers/AOProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -9,14 +14,41 @@ import * as S from './styles';
 // TODO: Language
 // TODO: IP Block
 export default function Mint() {
+	const { active } = useParams();
+	const navigate = useNavigate();
+
 	const aoProvider = useAOProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
+	React.useEffect(() => {
+		if (!active) navigate(URLS.mintDeposits);
+	}, [navigate]);
+
+	const TABS = React.useMemo(
+		() => [
+			{
+				label: language.deposits,
+				icon: null,
+				disabled: false,
+				url: URLS.mintDeposits,
+				view: () => <MintBalances />,
+			},
+			{
+				label: language.yield,
+				icon: null,
+				disabled: false,
+				url: URLS.mintYield,
+				view: () => <MintAllocation />,
+			},
+		],
+		[]
+	);
+
 	return (
 		<>
 			<S.Wrapper>
-				{/* <S.GlobalWrapper>
+				<S.GlobalWrapper>
 					<S.InfoWrapper className={'fade-in'}>
 						<S.InfoHeader>
 							<h6>{language.fairLaunch}</h6>
@@ -64,9 +96,8 @@ export default function Mint() {
 							</S.MetricsSection>
 						</S.Metrics>
 					</S.MetricsWrapper>
-				</S.GlobalWrapper> */}
-				<MintBalances />
-				{/* <MintAllocation /> */}
+				</S.GlobalWrapper>
+				<URLTabs tabs={TABS} activeUrl={TABS[0].url} />
 			</S.Wrapper>
 		</>
 	);

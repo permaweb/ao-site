@@ -110,6 +110,7 @@ export const TokenBodyValuesWrapper = styled.div`
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: 15px 20px;
+	margin: 5px 0 0 0;
 `;
 
 export const TokenBodyQuantity = styled.div`

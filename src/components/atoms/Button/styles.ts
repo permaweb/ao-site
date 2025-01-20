@@ -75,7 +75,6 @@ export const Primary = styled.button<{
 				: props.active
 				? props.theme.colors.button.primary.active.border
 				: props.theme.colors.button.primary.border};
-	border-radius: ${STYLING.dimensions.radius.alt3};
 	&:hover {
 		background: ${(props) =>
 			props.warning ? props.theme.colors.warning.alt1 : props.theme.colors.button.primary.active.background};

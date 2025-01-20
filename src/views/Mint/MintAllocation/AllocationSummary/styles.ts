@@ -52,10 +52,9 @@ export const Chart = styled.div`
 
 export const ChartKeyWrapper = styled.div`
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	flex-direction: column;
 	flex-wrap: wrap;
-	gap: 20px 35px;
+	gap: 20px;
 	margin: 20px 0 0 0;
 `;
 
@@ -128,7 +127,7 @@ export const SummaryLine = styled.div`
 `;
 
 export const SummaryLineLabel = styled.div`
-	width: 80px;
+	width: 130px;
 	span {
 		width: 100%;
 		display: block;

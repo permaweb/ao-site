@@ -90,6 +90,7 @@ export default function BalanceSection(props: IProps) {
 	}
 
 	function getPrimaryBalance() {
+		if (!token.wallet?.provider?.walletAddress) return '-';
 		switch (props.type) {
 			case 'arweave':
 				if (token.wallet?.provider?.balance) return formatDisplayAmount(token.wallet.provider.balance);
@@ -154,7 +155,7 @@ export default function BalanceSection(props: IProps) {
 										{formatDisplayAmount(getTokenProjections().monthly.amount)}
 									</>
 								) : (
-									<EllipsisLoader />
+									<>{token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-'}</>
 								)}
 							</p>
 						</S.BalanceQuantityBody>
@@ -180,7 +181,7 @@ export default function BalanceSection(props: IProps) {
 										{formatDisplayAmount(getTokenProjections().yearly.amount)}
 									</>
 								) : (
-									<EllipsisLoader />
+									<>{token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-'}</>
 								)}
 							</p>
 						</S.BalanceQuantityBody>

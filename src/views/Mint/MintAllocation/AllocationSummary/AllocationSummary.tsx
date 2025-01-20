@@ -21,15 +21,27 @@ export default function AllocationSummary() {
 	const language = languageProvider.object[languageProvider.current];
 
 	const keys = React.useMemo(() => {
-		return [theme.colors.stats.primary, theme.colors.stats.alt1, theme.colors.stats.alt2];
+		return [
+			theme.colors.stats.primary,
+			theme.colors.stats.alt1,
+			theme.colors.stats.alt2,
+			theme.colors.stats.alt3,
+			theme.colors.stats.alt4,
+			theme.colors.stats.alt5,
+			theme.colors.stats.alt6,
+			theme.colors.stats.alt7,
+			theme.colors.stats.alt8,
+			theme.colors.stats.alt9,
+			theme.colors.stats.alt10,
+		];
 	}, [theme]);
 
 	const [data, setData] = React.useState<any>(null);
 
 	const ALLOCATION = [
-		{ label: 'PI', value: allocationProvider.pi },
-		{ label: 'AO', value: allocationProvider.ao },
-		{ label: 'Arweave', value: allocationProvider.arweave },
+		{ label: 'Permaweb Index', value: allocationProvider.records.pi },
+		{ label: 'AO', value: allocationProvider.records.ao },
+		{ label: 'Arweave', value: allocationProvider.records.arweave },
 	];
 
 	React.useEffect(() => {
@@ -42,7 +54,7 @@ export default function AllocationSummary() {
 			pieData.datasets.push({
 				data: ALLOCATION.map((token: AllocationTokenSummaryType) => token.value),
 				backgroundColor: keys,
-				borderColor: [theme.colors.border.alt1],
+				borderColor: [theme.colors.border.alt4],
 				borderWidth: 1,
 			});
 
@@ -105,12 +117,12 @@ export default function AllocationSummary() {
 												<span>{token.label}</span>
 											</S.SummaryLineLabel>
 											<S.SummaryLineActionsWrapper>
-												<S.SummaryLineActions>
+												{/* <S.SummaryLineActions>
 													<Button type={'alt3'} label={'None'} handlePress={() => {}} />
 													<Button type={'alt3'} label={'2x'} handlePress={() => {}} active />
 													<Button type={'alt3'} label={'4x'} handlePress={() => {}} active />
 													<Button type={'alt3'} label={'All'} handlePress={() => {}} active />
-												</S.SummaryLineActions>
+												</S.SummaryLineActions> */}
 												<S.SummaryLinePercentage>
 													<p>{formatPercentage(token.value)}</p>
 												</S.SummaryLinePercentage>

@@ -26,7 +26,7 @@ export default function MintBalances() {
 				<S.HeaderWrapper>
 					<S.HeaderInfoWrapper>
 						<S.HeaderInfo>
-							<h6>{'Earnings'}</h6>
+							<h6>{'View AO metrics and manage your deposits'}</h6>
 						</S.HeaderInfo>
 					</S.HeaderInfoWrapper>
 					<S.HeaderTooltip>

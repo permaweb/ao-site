@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
+import { STYLING } from 'helpers/config';
+
 export const Wrapper = styled.div`
-	min-height: 100vh;
+	min-height: calc(100vh - ${STYLING.dimensions.nav.height});
 	width: 100%;
 	position: relative;
 `;

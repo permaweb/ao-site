@@ -176,33 +176,31 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	/* StETH - DAI Total Deposited */
 	React.useEffect(() => {
 		(async function () {
-			if (web3Provider) {
-				try {
-					const web3 = new Web3(ENDPOINTS.mainnetRpc);
-					const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
-					const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
+			try {
+				const web3 = new Web3(ENDPOINTS.mainnetRpc);
+				const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
+				const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
 
-					let [totalStEthDeposited, totalDaiDeposited] = await Promise.all([
-						stEthBridgeContract.methods.totalDepositedInPublicPools().call() as any,
-						daiBridgeContract.methods.totalDepositedInPublicPools().call() as any,
-					]);
+				let [totalStEthDeposited, totalDaiDeposited] = await Promise.all([
+					stEthBridgeContract.methods.totalDepositedInPublicPools().call() as any,
+					daiBridgeContract.methods.totalDepositedInPublicPools().call() as any,
+				]);
 
-					totalStEthDeposited = Number(totalStEthDeposited) / Math.pow(10, 18);
-					totalDaiDeposited = Number(totalDaiDeposited) / Math.pow(10, 18);
+				totalStEthDeposited = Number(totalStEthDeposited) / Math.pow(10, 18);
+				totalDaiDeposited = Number(totalDaiDeposited) / Math.pow(10, 18);
 
-					if (isNaN(totalStEthDeposited)) throw new Error('Invalid totalStEthDeposited');
-					if (isNaN(totalDaiDeposited)) throw new Error('Invalid totalDaiDeposited');
+				if (isNaN(totalStEthDeposited)) throw new Error('Invalid totalStEthDeposited');
+				if (isNaN(totalDaiDeposited)) throw new Error('Invalid totalDaiDeposited');
 
-					setTotalDeposited({
-						stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited.toFixed(2)) },
-						dai: { value: totalDaiDeposited, display: formatDisplayAmount(totalDaiDeposited.toFixed(2)) },
-					});
-				} catch (e: any) {
-					console.error(e);
-				}
+				setTotalDeposited({
+					stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited.toFixed(2)) },
+					dai: { value: totalDaiDeposited, display: formatDisplayAmount(totalDaiDeposited.toFixed(2)) },
+				});
+			} catch (e: any) {
+				console.error(e);
 			}
 		})();
-	}, [web3Provider]);
+	}, []);
 
 	/* StETH - DAI Balance and Deposited */
 	React.useEffect(() => {

@@ -36,7 +36,7 @@ export default function MintAllocation() {
 				</S.HeaderWrapper>
 				<S.AllocationBodyWrapper>
 					<S.TokensSection>
-						<AllocationToken type={'pi'} defaultClosed />
+						<AllocationToken type={'pi'} />
 						<S.TokenFlexWrapper>
 							<S.TokenFlexSection>
 								<AllocationToken type={'ao'} />

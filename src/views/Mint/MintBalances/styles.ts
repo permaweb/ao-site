@@ -39,7 +39,7 @@ export const HeaderInfo = styled.div`
 	h6 {
 		line-height: 1;
 		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-size: ${(props) => props.theme.typography.size.xLg};
+		font-size: ${(props) => props.theme.typography.size.lg};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
@@ -145,6 +145,10 @@ export const BalancesGlobalWrapper = styled.div`
 		p,
 		span {
 			font-size: ${(props) => props.theme.typography.size.xLg};
+		}
+
+		#text-loader {
+			min-height: 40px;
 		}
 	}
 

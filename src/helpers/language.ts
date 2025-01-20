@@ -17,9 +17,11 @@ export const language = {
 		credBalance: `Wallet CRED Balance`,
 		currentBalance: `Current balance`,
 		deposit: `Deposit`,
+		deposits: `Deposits`,
 		depositedSteth: `Deposited StETH`,
 		dismiss: `Dismiss`,
 		disconnect: `Disconnect`,
+		edit: `Edit`,
 		executing: `Executing`,
 		fairLaunch: `100% Fair Launch`,
 		fetching: `Fetching`,
@@ -47,5 +49,6 @@ export const language = {
 		stethConversion: `Buy stETH`,
 		stethMinting: `Mint stETH`,
 		summary: `Summary`,
+		yield: `Yield`,
 	},
 };

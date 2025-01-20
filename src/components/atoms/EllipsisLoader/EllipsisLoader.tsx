@@ -12,5 +12,9 @@ export default function EllipsisLoader(props: { className?: string }) {
 		return () => clearInterval(interval);
 	}, []);
 
-	return <S.Ellipsis className={props.className ?? ''}>{dots}</S.Ellipsis>;
+	return (
+		<S.Ellipsis id={'text-loader'} className={props.className ?? ''}>
+			{dots}
+		</S.Ellipsis>
+	);
 }

@@ -35,14 +35,14 @@ export default function AllocationToken(props: IProps) {
 			icon: ASSETS.arweave,
 		},
 		pi: {
-			label: 'PI',
+			label: 'Permaweb Index',
 			description: 'AO + AR + Ecosystem Index',
 			summary: '<b>Currency of the Permaweb</b> (33.33% AO, 33.33% AR, 33.33% Ecosystem Projects)',
 			icon: ASSETS.pi,
 		},
 		ao: {
 			label: 'AO',
-			description: 'The Security Token',
+			description: 'The Super Computer',
 			icon: ASSETS.ao,
 		},
 	};
@@ -62,6 +62,23 @@ export default function AllocationToken(props: IProps) {
 				break;
 		}
 	}, [props.type]);
+
+	function getTokenAction() {
+		const currentlyAllocated = allocationProvider.records[props.type] && allocationProvider.records[props.type] > 0;
+
+		return (
+			<Button
+				type={currentlyAllocated ? 'primary' : 'alt1'}
+				label={currentlyAllocated ? language.edit : language.add}
+				handlePress={() => (currentlyAllocated ? console.log() : allocationProvider.handleUpdate(props.type))}
+				disabled={false}
+				icon={currentlyAllocated ? ASSETS.edit : ASSETS.add}
+				iconLeftAlign
+				height={65}
+				fullWidth
+			/>
+		);
+	}
 
 	return token ? (
 		<S.Wrapper>
@@ -83,11 +100,11 @@ export default function AllocationToken(props: IProps) {
 			</S.TokenSection>
 			{open && (
 				<S.TokenBodyWrapper className={'border-wrapper-primary fade-in'}>
-					{token.summary && (
+					{/* {token.summary && (
 						<S.TokenBodyDescriptionWrapper>
 							<p className={'primary-text'}>{parse(token.summary)}</p>
 						</S.TokenBodyDescriptionWrapper>
-					)}
+					)} */}
 					<S.TokenBodyValuesWrapper>
 						{/* <S.TokenBodyQuantity>
 							<S.TokenBodyQuantityHeader>
@@ -102,7 +119,7 @@ export default function AllocationToken(props: IProps) {
 								<span className={'primary-text'}>Allocation</span>
 							</S.TokenBodyQuantityHeader>
 							<S.TokenBodyQuantityValue>
-								<p>{formatPercentage(allocationProvider[props.type] ?? 0)}</p>
+								<p>{formatPercentage(allocationProvider.records[props.type] ?? 0)}</p>
 							</S.TokenBodyQuantityValue>
 						</S.TokenBodyQuantity>
 						{/* <S.TokenBodyQuantity>
@@ -115,7 +132,7 @@ export default function AllocationToken(props: IProps) {
 								</p>
 							</S.TokenBodyQuantityValue>
 						</S.TokenBodyQuantity> */}
-						<S.TokenBodyQuantity>
+						{/* <S.TokenBodyQuantity>
 							<S.TokenBodyQuantityHeader>
 								<span className={'primary-text'}>1 Year Projection</span>
 							</S.TokenBodyQuantityHeader>
@@ -124,19 +141,9 @@ export default function AllocationToken(props: IProps) {
 									<span className={'indicator'}>+</span>400.34
 								</p>
 							</S.TokenBodyQuantityValue>
-						</S.TokenBodyQuantity>
+						</S.TokenBodyQuantity> */}
 					</S.TokenBodyValuesWrapper>
-					<S.TokenBodyActionWrapper>
-						<Button
-							type={'alt1'}
-							label={language.add}
-							handlePress={() => {}}
-							icon={ASSETS.add}
-							iconLeftAlign
-							height={65}
-							fullWidth
-						/>
-					</S.TokenBodyActionWrapper>
+					<S.TokenBodyActionWrapper>{getTokenAction()}</S.TokenBodyActionWrapper>
 				</S.TokenBodyWrapper>
 			)}
 		</S.Wrapper>
