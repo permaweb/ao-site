@@ -3,8 +3,7 @@ import { Pie } from 'react-chartjs-2';
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { useTheme } from 'styled-components';
 
-import { Button } from 'components/atoms/Button';
-import { AllocationTokenSummaryType } from 'helpers/types';
+import { AllocationRecordType } from 'helpers/types';
 import { formatPercentage } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -38,21 +37,15 @@ export default function AllocationSummary() {
 
 	const [data, setData] = React.useState<any>(null);
 
-	const ALLOCATION = [
-		{ label: 'Permaweb Index', value: allocationProvider.records.pi },
-		{ label: 'AO', value: allocationProvider.records.ao },
-		{ label: 'Arweave', value: allocationProvider.records.arweave },
-	];
-
 	React.useEffect(() => {
 		if (allocationProvider) {
 			const pieData: any = {
-				labels: ALLOCATION.map((token: AllocationTokenSummaryType) => token.label),
+				labels: allocationProvider.records?.map((record: AllocationRecordType) => record.label),
 				datasets: [],
 			};
 
 			pieData.datasets.push({
-				data: ALLOCATION.map((token: AllocationTokenSummaryType) => token.value),
+				data: allocationProvider.records?.map((record: AllocationRecordType) => record.value),
 				backgroundColor: keys,
 				borderColor: [theme.colors.border.alt4],
 				borderWidth: 1,
@@ -62,7 +55,7 @@ export default function AllocationSummary() {
 		}
 	}, [allocationProvider, theme]);
 
-	return (
+	return data ? (
 		<S.Wrapper>
 			<S.Header>
 				<span>{language.allocation}</span>
@@ -93,7 +86,7 @@ export default function AllocationSummary() {
 									}}
 								/>
 							</S.Chart>
-							<S.ChartKeyWrapper>
+							{/* <S.ChartKeyWrapper>
 								{ALLOCATION.map((token: AllocationTokenSummaryType, index: number) => {
 									return (
 										<S.ChartKeyLine key={index}>
@@ -103,18 +96,19 @@ export default function AllocationSummary() {
 										</S.ChartKeyLine>
 									);
 								})}
-							</S.ChartKeyWrapper>
+							</S.ChartKeyWrapper> */}
 						</S.ChartWrapper>
 						<S.SummaryWrapper>
 							<S.SummaryHeader>
 								<span>{language.summary}</span>
 							</S.SummaryHeader>
 							<S.SummaryBody>
-								{ALLOCATION.map((token: AllocationTokenSummaryType, index: number) => {
+								{allocationProvider.records?.map((record: AllocationRecordType, index: number) => {
 									return (
 										<S.SummaryLine key={index}>
 											<S.SummaryLineLabel>
-												<span>{token.label}</span>
+												<S.ChartKey background={keys[index] ? keys[index] : null} />
+												<span>{record.label}</span>
 											</S.SummaryLineLabel>
 											<S.SummaryLineActionsWrapper>
 												{/* <S.SummaryLineActions>
@@ -124,7 +118,7 @@ export default function AllocationSummary() {
 													<Button type={'alt3'} label={'All'} handlePress={() => {}} active />
 												</S.SummaryLineActions> */}
 												<S.SummaryLinePercentage>
-													<p>{formatPercentage(token.value)}</p>
+													<p>{formatPercentage(record.value)}</p>
 												</S.SummaryLinePercentage>
 											</S.SummaryLineActionsWrapper>
 										</S.SummaryLine>
@@ -136,5 +130,5 @@ export default function AllocationSummary() {
 				)}
 			</S.Body>
 		</S.Wrapper>
-	);
+	) : null;
 }

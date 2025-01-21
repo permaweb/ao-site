@@ -127,15 +127,19 @@ export const SummaryLine = styled.div`
 `;
 
 export const SummaryLineLabel = styled.div`
-	width: 130px;
+	width: 165px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 	span {
 		width: 100%;
 		display: block;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-size: ${(props) => props.theme.typography.size.small};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
 `;
 

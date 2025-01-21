@@ -41,6 +41,7 @@ export const language = {
 		processes: `Processes`,
 		read: `Read`,
 		recipient: `Recipient`,
+		remove: `Remove`,
 		withdraw: `Withdraw`,
 		walletBalance: `Wallet balance`,
 		walletsConnected: `Wallets connected`,

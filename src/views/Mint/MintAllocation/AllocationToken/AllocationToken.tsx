@@ -4,7 +4,7 @@ import { ReactSVG } from 'react-svg';
 import { Button } from 'components/atoms/Button';
 import { Panel } from 'components/atoms/Panel';
 import { ASSETS } from 'helpers/config';
-import { AllocationTokenType } from 'helpers/types';
+import { AllocationRecordType, AllocationTokenType } from 'helpers/types';
 import { formatPercentage } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -64,16 +64,28 @@ export default function AllocationToken(props: IProps) {
 		}
 	}, [props.type]);
 
-	function getTokenAction() {
-		const currentlyAllocated = allocationProvider.records[props.type] && allocationProvider.records[props.type] > 0;
+	const currentAllocationRecord = allocationProvider.records?.find(
+		(record: AllocationRecordType) => record.id === token?.type
+	);
 
+	function getTokenAction() {
 		return (
 			<Button
-				type={currentlyAllocated ? 'primary' : 'alt1'}
-				label={currentlyAllocated ? language.edit : language.add}
-				handlePress={() => (currentlyAllocated ? setShowPanel(true) : allocationProvider.handleUpdate(props.type))}
+				type={currentAllocationRecord ? 'primary' : 'alt1'}
+				label={currentAllocationRecord ? language.remove : language.add}
+				handlePress={() =>
+					currentAllocationRecord
+						? allocationProvider.removeToken({
+								id: token.type,
+								label: token.label,
+						  })
+						: allocationProvider.addToken({
+								id: token.type,
+								label: token.label,
+						  })
+				}
 				disabled={false}
-				icon={currentlyAllocated ? ASSETS.edit : ASSETS.add}
+				icon={currentAllocationRecord ? ASSETS.remove : ASSETS.add}
 				iconLeftAlign
 				height={65}
 				fullWidth
@@ -83,7 +95,7 @@ export default function AllocationToken(props: IProps) {
 
 	return token ? (
 		<>
-			<S.Wrapper>
+			<S.Wrapper className={'border-wrapper-primary'}>
 				<S.TokenSection open={open} className={'fade-in'} onClick={() => setOpen((prev) => !prev)}>
 					<S.TokenSectionHeaderWrapper>
 						<ReactSVG src={token.icon} />
@@ -101,7 +113,7 @@ export default function AllocationToken(props: IProps) {
 					</S.TokenSectionEndWrapper>
 				</S.TokenSection>
 				{open && (
-					<S.TokenBodyWrapper className={'border-wrapper-primary fade-in'}>
+					<S.TokenBodyWrapper className={'fade-in'}>
 						{/* {token.summary && (
 						<S.TokenBodyDescriptionWrapper>
 							<p className={'primary-text'}>{parse(token.summary)}</p>
@@ -121,7 +133,7 @@ export default function AllocationToken(props: IProps) {
 									<span className={'primary-text'}>Allocation</span>
 								</S.TokenBodyQuantityHeader>
 								<S.TokenBodyQuantityValue>
-									<p>{formatPercentage(allocationProvider.records[props.type] ?? 0)}</p>
+									<p>{formatPercentage(currentAllocationRecord?.value ?? 0)}</p>
 								</S.TokenBodyQuantityValue>
 							</S.TokenBodyQuantity>
 							{/* <S.TokenBodyQuantity>

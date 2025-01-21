@@ -36,7 +36,7 @@ export const HeaderInfoWrapper = styled.div`
 
 export const HeaderInfo = styled.div`
 	h6 {
-		line-height: 1;
+		line-height: 1.5;
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-size: ${(props) => props.theme.typography.size.lg};
 		font-weight: ${(props) => props.theme.typography.weight.bold};

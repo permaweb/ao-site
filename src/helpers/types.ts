@@ -2,8 +2,6 @@ import React from 'react';
 
 export type AllocationTokenType = 'pi' | 'ao' | 'arweave';
 
-export type AllocationTokenSummaryType = { label: string; value: number | null };
-
 export type TokenEarningsType = 'ao' | 'arweave' | EthTokenEnum.StEth | EthTokenEnum.DAI;
 
 export enum EthTokenEnum {
@@ -47,6 +45,13 @@ export type TokenYieldProjectionsType = {
 	monthly: TokenProjectionType;
 	yearly: TokenProjectionType;
 };
+
+export type AllocationTokenRecordType = {
+	id: string;
+	label: string;
+};
+
+export type AllocationRecordType = AllocationTokenRecordType & { value: number };
 
 export enum ArWalletEnum {
 	arConnect = 'arConnect',

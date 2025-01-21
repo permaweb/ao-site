@@ -15,14 +15,11 @@ export const TokenSection = styled.button<{ open: boolean }>`
 	justify-content: space-between;
 	padding: 25px;
 
-	border: 1px solid ${(props) => props.theme.colors.border.primary};
-	background: ${(props) =>
-		props.open
-			? props.theme.colors.container.primary.active
-			: props.theme.colors.container.primary.background} !important;
+	border-bottom: 1px solid transparent;
 
 	&:hover {
 		background: ${(props) => props.theme.colors.container.primary.active} !important;
+		border-bottom: 1px solid ${(props) => (props.open ? props.theme.colors.border.primary : 'transparent')};
 	}
 `;
 
@@ -86,7 +83,7 @@ export const TokenSectionEndWrapper = styled.div<{ open: boolean }>`
 export const TokenBodyWrapper = styled.div`
 	width: 100%;
 	border-top: none !important;
-	padding: 25px;
+	padding: 0 25px 25px 25px;
 `;
 
 export const TokenBodyDescriptionWrapper = styled.div`
