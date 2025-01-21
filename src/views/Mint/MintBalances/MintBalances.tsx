@@ -4,6 +4,7 @@ import { ReactSVG } from 'react-svg';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Modal } from 'components/molecules/Modal';
 import { ASSETS } from 'helpers/config';
+import { EthTokenEnum } from 'helpers/types';
 import { formatCount } from 'helpers/utils';
 import { useAOProvider } from 'providers/AOProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -92,10 +93,10 @@ export default function MintBalances() {
 						<BalanceSection type={'arweave'} />
 						<S.BalancesFlexWrapper>
 							<S.BalanceFlexSection>
-								<BalanceSection type={'stEth'} />
+								<BalanceSection type={EthTokenEnum.StEth} />
 							</S.BalanceFlexSection>
 							<S.BalanceFlexSection>
-								<BalanceSection type={'dai'} />
+								<BalanceSection type={EthTokenEnum.DAI} />
 							</S.BalanceFlexSection>
 						</S.BalancesFlexWrapper>
 					</S.BalancesBreakdownWrapper>

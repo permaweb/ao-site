@@ -1,7 +1,7 @@
 import styled, { DefaultTheme } from 'styled-components';
 
 import { STYLING } from 'helpers/config';
-import { TokenEarningsType } from 'helpers/types';
+import { EthTokenEnum, TokenEarningsType } from 'helpers/types';
 
 function getBalanceWrapper(type: TokenEarningsType, theme: DefaultTheme) {
 	switch (type) {
@@ -9,8 +9,8 @@ function getBalanceWrapper(type: TokenEarningsType, theme: DefaultTheme) {
 			return `
 				background: ${theme.colors.container.alt1.background};
 			`;
-		case 'stEth':
-		case 'dai':
+		case EthTokenEnum.StEth:
+		case EthTokenEnum.DAI:
 			return `
 				background: ${theme.colors.container.primary.background};
 			`;
@@ -40,6 +40,73 @@ export const BalanceHeader = styled.div`
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const BalanceWalletWrapper = styled.div`
+	position: relative;
+`;
+
+export const BalanceWalletDropdown = styled.div`
+	width: 300px;
+	max-width: 90vw;
+	position: absolute;
+	z-index: 1;
+	top: 47.5px;
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 12.5px 20px 13.5px 20px;
+
+	button {
+		width: fit-content;
+		display: flex;
+		align-items: center;
+		gap: 7.5px;
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+		color: ${(props) => props.theme.colors.font.primary};
+
+		svg {
+			height: 15.5px;
+			width: 15.5px;
+			margin: 5.5px 0 0 0;
+			color: ${(props) => props.theme.colors.font.primary};
+			fill: ${(props) => props.theme.colors.font.primary};
+		}
+
+		&:hover {
+			color: ${(props) => props.theme.colors.warning.primary};
+
+			svg {
+				color: ${(props) => props.theme.colors.warning.primary};
+				fill: ${(props) => props.theme.colors.warning.primary};
+			}
+		}
+	}
+`;
+
+export const BalanceWalletDropdownLine = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	padding: 0 0 10px 0;
+	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+	p {
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+
+		b {
+			font-weight: ${(props) => props.theme.typography.weight.xBold};
+		}
+	}
+
+	svg {
+		height: 16.5px;
+		width: 16.5px;
+		margin: 7.5px 0 0 5px;
 	}
 `;
 
@@ -73,7 +140,7 @@ export const BalancesQuantityFlexSection = styled.div`
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	gap: 20px;
+	gap: 25px;
 	margin: 0 0 0 auto;
 
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
@@ -127,29 +194,24 @@ export const BalanceQuantityFooter = styled.div`
 		font-size: ${(props) => props.theme.typography.size.xSmall};
 		color: ${(props) => props.theme.colors.font.alt1};
 	}
+`;
 
+export const BalanceAction = styled.div`
+	width: 100%;
 	button {
-		margin: 3.5px 0 0 0;
 		span {
-			color: ${(props) => props.theme.colors.link.color} !important;
-			font-family: ${(props) => props.theme.typography.family.alt1} !important;
+			font-size: ${(props) => props.theme.typography.size.small} !important;
 		}
 
-		&:hover {
-			text-decoration: underline;
-			text-decoration-thickness: 1.25px;
-			text-decoration-color: ${(props) => props.theme.colors.link.active} !important;
-			span {
-				color: ${(props) => props.theme.colors.link.active} !important;
-			}
-		}
-		&:focus {
-			text-decoration: underline;
-			text-decoration-thickness: 1.25px;
-			text-decoration-color: ${(props) => props.theme.colors.link.active} !important;
-			span {
-				color: ${(props) => props.theme.colors.link.active} !important;
-			}
+		svg {
+			height: 17.5px !important;
+			width: 17.5px !important;
+			margin: 3.5px 9.5px 0 0 !important;
 		}
 	}
+`;
+
+export const ActionWrapper = styled.div`
+	width: 100%;
+	padding: 0 20px 20px 20px;
 `;

@@ -217,6 +217,12 @@ export const IconAlt1 = styled(IconPrimary)`
 				: props.active
 				? props.theme.colors.button.alt1.active.color
 				: props.theme.colors.button.alt1.color};
+		fill: ${(props) =>
+			props.disabled
+				? props.theme.colors.button.alt1.disabled.color
+				: props.active
+				? props.theme.colors.button.alt1.active.color
+				: props.theme.colors.button.alt1.color};
 	}
 `;
 

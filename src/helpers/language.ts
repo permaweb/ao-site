@@ -6,7 +6,7 @@ export const language = {
 		allocateYield: `Allocate Your Yield`,
 		aoAudit: `AO Specific Audits`,
 		aoClaim: `AO Claim`,
-		arweaveAddress: `Arweave address`,
+		arweaveAddress: `Arweave Address`,
 		backToMint: `Back to Mint`,
 		balancesHeader: `Balances`,
 		baseContractAudits: `Base Contract Audits`,

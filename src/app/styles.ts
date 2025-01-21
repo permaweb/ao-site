@@ -192,9 +192,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 	.border-wrapper-alt2 {
-    background: ${(props) => props.theme.colors.container.primary.background};
-    border: 1px solid ${(props) => props.theme.colors.border.alt4};
-    border-radius: ${STYLING.dimensions.radius.primary};
+    background: ${(props) => props.theme.colors.container.alt1.background};
+		border: 1px solid ${(props) => props.theme.colors.border.alt2};
+		box-shadow: 0 1.5px 3.5px 0 ${(props) => props.theme.colors.shadow.primary};
+		border-radius: ${STYLING.dimensions.radius.alt2};
   }
 
   .border-wrapper-alt3 {

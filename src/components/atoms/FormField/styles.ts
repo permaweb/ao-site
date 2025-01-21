@@ -27,9 +27,10 @@ export const TWrapper = styled.div`
 `;
 
 export const Label = styled.label`
-	color: ${(props) => props.theme.colors.font.alt1};
+	color: ${(props) => props.theme.colors.font.primary};
 	font-size: ${(props) => props.theme.typography.size.xSmall};
-	font-weight: ${(props) => props.theme.typography.weight.regular};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
 `;
 
 export const Tooltip = styled.div`
@@ -49,9 +50,9 @@ export const Input = styled.input<{
 	height: 50px;
 	color: ${(props) =>
 		props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
-	font-family: ${(props) => props.theme.typography.family.primary};
-	font-size: ${(props) => props.theme.typography.size.base};
-	font-weight: ${(props) => props.theme.typography.weight.regular};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-size: ${(props) => props.theme.typography.size.lg};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
 	margin: 5px 0 0 0;
 	background: ${(props) => props.theme.colors.form.background};
 	border: 1px solid
@@ -61,9 +62,11 @@ export const Input = styled.input<{
 		outline: 0;
 		border: 1px solid
 			${(props) => (props.invalid ? props.theme.colors.form.invalid.outline : props.theme.colors.form.valid.outline)};
-		box-shadow: 0 0 2.5px
+		outline: 0.5px solid
+			${(props) => (props.invalid ? props.theme.colors.form.invalid.outline : props.theme.colors.form.valid.outline)};
+		box-shadow: 0 0 0.5px
 			${(props) => (props.invalid ? props.theme.colors.form.invalid.shadow : props.theme.colors.form.valid.shadow)};
-		transition: box-shadow, border 225ms ease-in-out;
+		transition: box-shadow, border, outline 225ms ease-in-out;
 	}
 	&:disabled {
 		background: ${(props) => props.theme.colors.form.disabled.background};

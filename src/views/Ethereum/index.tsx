@@ -7,7 +7,7 @@ import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
 import { Notification } from 'components/atoms/Notification';
 import { Select } from 'components/atoms/Select';
-import { PreBridgeInfo } from 'components/organisms/PreBridgeInfo';
+import { ExchangeInfo } from 'components/organisms/ExchangeInfo';
 import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
 import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, REDIRECTS, StEthBridge_ABI, URLS } from 'helpers/config';
 import { SelectOptionType } from 'helpers/types';
@@ -523,7 +523,7 @@ export default function Ethereum() {
 							width={350}
 						/>
 					</S.Action>
-					<PreBridgeInfo asset={selectedAsset.id} />
+					<ExchangeInfo token={selectedAsset.id as any} />
 				</S.Content>
 			</S.Wrapper>
 			{response && <Notification message={response.message} type={response.status} callback={handleClear} />}

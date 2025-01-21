@@ -4,7 +4,14 @@ export type AllocationTokenType = 'pi' | 'ao' | 'arweave';
 
 export type AllocationTokenSummaryType = { label: string; value: number | null };
 
-export type TokenEarningsType = 'ao' | 'arweave' | 'stEth' | 'dai';
+export type TokenEarningsType = 'ao' | 'arweave' | EthTokenEnum.StEth | EthTokenEnum.DAI;
+
+export enum EthTokenEnum {
+	StEth = 'stEth',
+	DAI = 'dai',
+}
+
+export type EthExchangeType = 'deposit' | 'withdraw';
 
 export type TokenBigIntType = { value: bigint | null; display: string | null };
 
@@ -14,21 +21,21 @@ export type TokenDepositType = {
 };
 
 export type EthTotalDepositedType = {
-	stEth: TokenBigIntType;
-	dai: TokenBigIntType;
+	[EthTokenEnum.StEth]: TokenBigIntType;
+	[EthTokenEnum.DAI]: TokenBigIntType;
 };
 
 export type EthTokensType = {
-	stEth: TokenDepositType;
-	dai: TokenDepositType;
+	[EthTokenEnum.StEth]: TokenDepositType;
+	[EthTokenEnum.DAI]: TokenDepositType;
 };
 
 export type EthTokensYieldProjectionsType = {
-	stEth: {
+	[EthTokenEnum.StEth]: {
 		monthly: TokenProjectionType;
 		yearly: TokenProjectionType;
 	};
-	dai: {
+	[EthTokenEnum.DAI]: {
 		monthly: TokenProjectionType;
 		yearly: TokenProjectionType;
 	};

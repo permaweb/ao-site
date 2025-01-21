@@ -84,7 +84,7 @@ export const BalancesBodyWrapper = styled(BodyWrapper)`
 export const BalancesFlexWrapper = styled.div`
 	width: 100%;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: 20px;

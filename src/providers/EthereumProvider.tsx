@@ -81,6 +81,7 @@ const onboard = Onboard({
 
 interface EthereumContextState {
 	walletAddress: string | null;
+	connecting: boolean;
 	balance: string | null;
 	tokens: EthTokensType | null;
 	projections: EthTokensYieldProjectionsType | null;
@@ -100,6 +101,7 @@ interface EthereumProviderProps {
 
 const DEFAULT_CONTEXT: EthereumContextState = {
 	walletAddress: null,
+	connecting: false,
 	balance: null,
 	tokens: null,
 	projections: null,
@@ -128,6 +130,9 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	const [walletModalVisible, setWalletModalVisible] = React.useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 	const [web3Provider, setWeb3Provider] = React.useState<EIP1193Provider | null>(null);
+
+	const [connecting, setConnecting] = React.useState<boolean>(true);
+	const [disconnected, setDisconnected] = React.useState(false);
 
 	React.useEffect(() => {
 		setTimeout(() => {
@@ -228,21 +233,21 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						stEth: {
 							balance: {
 								value: stEthBalanceOf,
-								display: formatDisplayAmount(Web3.utils.fromWei(stEthBalanceOf, 'ether')),
+								display: getBalanceDisplay(stEthBalanceOf),
 							},
 							deposited: {
 								value: stEthUsersData,
-								display: formatDisplayAmount(Web3.utils.fromWei(stEthUsersData, 'ether')),
+								display: getBalanceDisplay(stEthUsersData),
 							},
 						},
 						dai: {
 							balance: {
 								value: daiBalanceOf,
-								display: formatDisplayAmount(Web3.utils.fromWei(daiBalanceOf, 'ether')),
+								display: getBalanceDisplay(daiBalanceOf),
 							},
 							deposited: {
 								value: daiUsersData,
-								display: formatDisplayAmount(Web3.utils.fromWei(daiUsersData, 'ether')),
+								display: getBalanceDisplay(daiUsersData),
 							},
 						},
 					}));
@@ -255,7 +260,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 
 	React.useEffect(() => {
 		(async function () {
-			if (walletAddress && balance && tokens && totalDeposited && aoProvider.mintedSupply && web3Provider) {
+			if (walletAddress && tokens && balance && totalDeposited && aoProvider.mintedSupply && web3Provider) {
 				try {
 					const [daiResp, stEthResp] = await Promise.all([
 						readHandler({
@@ -329,9 +334,11 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				} catch (e: any) {
 					console.error(e);
 				}
+			} else {
+				setProjections(null);
 			}
 		})();
-	}, [walletAddress, balance, tokens, totalDeposited, aoProvider.mintedSupply, web3Provider]);
+	}, [walletAddress, tokens, balance, totalDeposited, aoProvider.mintedSupply, web3Provider]);
 
 	const handleConnect = async () => {
 		try {
@@ -349,7 +356,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 
 			const balance = await signer.getBalance();
 			setBalance(formatEther(balance));
-
+			setDisconnected(false);
 			setWalletModalVisible(false);
 		} catch (error) {
 			setErrorMessage(error.message);
@@ -361,21 +368,36 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	};
 
 	const recoverConnection = React.useCallback(async () => {
-		const [primaryWallet] = onboard.state.get().wallets;
-		if (primaryWallet) {
-			const success = await onboard.setChain({ chainId: '0x1' });
-			if (!success) return;
+		if (disconnected) return;
 
-			setWeb3Provider(primaryWallet.provider);
-			const provider = new Web3Provider(primaryWallet.provider);
-			const signer = provider.getSigner();
-			const address = await signer.getAddress();
-			setWalletAddress(address);
+		const lastConnectedWallet = JSON.parse(localStorage.getItem('onboard.js:last_connected_wallet'));
+		if (lastConnectedWallet && lastConnectedWallet.length > 0) {
+			setConnecting(true);
+			const [primaryWallet] = await onboard.connectWallet({
+				autoSelect: { label: lastConnectedWallet[0], disableModals: true },
+			});
 
-			const balance = await signer.getBalance();
-			setBalance(formatEther(balance));
+			if (primaryWallet) {
+				const success = await onboard.setChain({ chainId: '0x1' });
+				if (!success) return;
+
+				setWeb3Provider(primaryWallet.provider);
+
+				const provider = new Web3Provider(primaryWallet.provider);
+				const signer = provider.getSigner();
+				const address = await signer.getAddress();
+				setWalletAddress(address);
+				setConnecting(false);
+
+				const ethBalance = await signer.getBalance();
+				const formattedEth = formatEther(ethBalance);
+
+				setBalance(formattedEth);
+			}
+		} else {
+			setConnecting(false);
 		}
-	}, []);
+	}, [onboard, disconnected]);
 
 	const handleDisconnect = async () => {
 		const [primaryWallet] = onboard.state.get().wallets;
@@ -385,6 +407,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 			} finally {
 				setWalletAddress(null);
 				setBalance(null);
+				localStorage.removeItem('onboard.js:last_connected_wallet');
+				setDisconnected(true);
 			}
 		}
 	};
@@ -396,6 +420,11 @@ export function EthereumProvider(props: EthereumProviderProps) {
 			if (!success) throw new Error('Please switch to Ethereum Mainnet');
 		}
 	}, []);
+
+	function getBalanceDisplay(amount: bigint) {
+		if (amount === BigInt(0)) return '0';
+		return formatDisplayAmount(Web3.utils.fromWei(amount, 'ether'));
+	}
 
 	return (
 		<>
@@ -413,6 +442,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					errorMessage,
 					web3Provider,
 					ensureMainnet,
+					connecting,
 				}}
 			>
 				{props.children}

@@ -1,6 +1,7 @@
 import React from 'react';
+import { ReactSVG } from 'react-svg';
 
-import { DOM } from 'helpers/config';
+import { ASSETS, DOM } from 'helpers/config';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { Button } from '../Button';
@@ -17,18 +18,31 @@ export default function Notification(props: IProps) {
 
 	function handleClose() {
 		setShow(false);
-		props.callback();
+		if (props.callback) props.callback();
 	}
+
+	React.useEffect(() => {
+		if (show && props.type !== 'warning') {
+			const timer = setTimeout(() => {
+				handleClose();
+			}, 5000);
+
+			return () => clearTimeout(timer);
+		}
+	}, [show, props.type]);
 
 	return show ? (
 		<Portal node={DOM.notification}>
-			<S.Wrapper warning={props.type === 'warning'}>
-				<S.Message>{props.message}</S.Message>
-				{props.callback && (
-					<S.Close>
-						<Button type={'alt2'} label={language.dismiss} handlePress={handleClose} />
-					</S.Close>
-				)}
+			<S.Wrapper warning={props.type === 'warning'} className={'info'}>
+				<S.MessageWrapper>
+					<S.Icon warning={props.type === 'warning'}>
+						<ReactSVG src={props.type === 'warning' ? ASSETS.warning : ASSETS.success} />
+					</S.Icon>
+					<S.Message>{props.message}</S.Message>
+				</S.MessageWrapper>
+				<S.Close>
+					<Button type={'alt2'} label={language.dismiss} handlePress={handleClose} />
+				</S.Close>
 			</S.Wrapper>
 		</Portal>
 	) : null;

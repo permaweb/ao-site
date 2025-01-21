@@ -2,11 +2,11 @@ import { DefaultTheme } from 'styled-components';
 
 export const lightTheme = {
 	scheme: 'light',
-	positive1: '#06C516',
-	positive2: '#06B214',
+	positive1: '#31C53D',
+	positive2: '#29A333',
 	caution1: '#EEB700',
-	negative1: '#F16A82',
-	negative2: '#EE4463',
+	negative1: '#ED254E',
+	negative2: '#E2123C',
 	neutral1: '#FFFFFF',
 	neutral2: '#F9F9F9',
 	neutral3: '#F0F0F0',
@@ -25,11 +25,11 @@ export const lightTheme = {
 	neutralA7: '#707070',
 	overlay1: 'rgb(0, 0, 0, .45)',
 	overlay2: 'rgb(0, 0, 0, .5)',
-	shadow1: 'rgb(220, 220, 220, .5)',
+	shadow1: 'rgb(100, 100, 100, .5)',
 	primary1: '#3344FF',
 	primary2: '#091DFF',
-	accent1: '#51C85B',
-	accent2: '#3BBA45',
+	accent1: '#31C53D',
+	accent2: '#29A333',
 	light1: '#FFFFFF',
 	light2: '#DADADA',
 	light3: '#B3B3B3',
@@ -71,8 +71,8 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		},
 		button: {
 			primary: {
-				background: currentTheme.neutral1,
-				border: currentTheme.neutralA7,
+				background: currentTheme.neutral2,
+				border: currentTheme.neutral6,
 				color: currentTheme.neutralA1,
 				active: {
 					background: currentTheme.neutral3,
@@ -175,14 +175,14 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		},
 		form: {
 			background: currentTheme.neutral1,
-			border: currentTheme.neutral4,
+			border: currentTheme.neutral6,
 			invalid: {
 				outline: currentTheme.negative1,
 				shadow: currentTheme.negative2,
 			},
 			valid: {
-				outline: currentTheme.primary1,
-				shadow: currentTheme.primary2,
+				outline: currentTheme.accent1,
+				shadow: currentTheme.accent2,
 			},
 			disabled: {
 				background: currentTheme.neutral2,
