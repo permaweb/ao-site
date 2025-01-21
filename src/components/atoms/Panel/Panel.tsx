@@ -42,7 +42,7 @@ export default function Panel(props: IProps) {
 	function getHeader() {
 		switch (typeof props.header) {
 			case 'string':
-				return <S.Title className={'primary-text'}>{props.header}</S.Title>;
+				return <S.Title>{props.header}</S.Title>;
 			case 'object':
 				return props.header;
 		}

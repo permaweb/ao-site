@@ -31,7 +31,7 @@ export const HeaderInfo = styled.div`
 		line-height: 1;
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-size: ${(props) => props.theme.typography.size.lg};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;

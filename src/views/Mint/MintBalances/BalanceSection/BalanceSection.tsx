@@ -21,30 +21,36 @@ export default function BalanceSection(props: IProps) {
 		ticker: string;
 		wallet: { label: string; provider: any };
 		balance: { header: string; icon: string };
-		redirect: { label: string; target: string };
+		redirect?: { label: string; target: string };
 	} | null>(null);
 
 	const tokens = React.useMemo(() => {
 		return {
+			ao: {
+				header: 'Your AO',
+				ticker: 'AO',
+				wallet: { label: 'Connect Arweave Wallet', provider: arProvider },
+				balance: { header: 'Current Balance', icon: ASSETS.ao },
+			},
 			arweave: {
-				header: 'Your Arweave',
+				header: 'Arweave',
 				ticker: 'AR',
 				wallet: { label: 'Connect Arweave Wallet', provider: arProvider },
 				balance: { header: 'Current Balance', icon: ASSETS.arweave },
 				redirect: { label: 'Buy AR', target: '#' },
 			},
 			stEth: {
-				header: 'Your stETH Bridged',
+				header: 'Deposited stETH',
 				ticker: 'StETH',
 				wallet: { label: 'Connect ETH Wallet', provider: ethProvider },
-				balance: { header: 'Amount Bridged', icon: ASSETS.stEth },
+				balance: { header: 'Amount Deposited', icon: ASSETS.stEth },
 				redirect: { label: 'Deposit StETH', target: '#' },
 			},
 			dai: {
-				header: 'Your DAI Bridged',
+				header: 'Deposited DAI',
 				ticker: 'DAI',
 				wallet: { label: 'Connect ETH Wallet', provider: ethProvider },
-				balance: { header: 'Amount Bridged', icon: ASSETS.dai },
+				balance: { header: 'Amount Deposited', icon: ASSETS.dai },
 				redirect: { label: 'Desposit DAI', target: '#' },
 			},
 		};
@@ -52,6 +58,9 @@ export default function BalanceSection(props: IProps) {
 
 	React.useEffect(() => {
 		switch (props.type) {
+			case 'ao':
+				setToken({ ...tokens.ao });
+				break;
 			case 'arweave':
 				setToken({ ...tokens.arweave });
 				break;
@@ -92,23 +101,53 @@ export default function BalanceSection(props: IProps) {
 	function getPrimaryBalance() {
 		if (!token.wallet?.provider?.walletAddress) return '-';
 		switch (props.type) {
+			case 'ao':
+				if (token.wallet?.provider?.aoBalance) return formatDisplayAmount(token.wallet.provider.aoBalance);
+				return <EllipsisLoader />;
 			case 'arweave':
 				if (token.wallet?.provider?.balance) return formatDisplayAmount(token.wallet.provider.balance);
 				return <EllipsisLoader />;
 			case 'stEth':
 			case 'dai':
 				return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ?? <EllipsisLoader />;
+			default:
+				return '-';
 		}
 	}
 
 	function getTokenProjections() {
 		switch (props.type) {
+			case 'ao':
+				return mergeTokenProjections();
 			case 'arweave':
 				return token?.wallet?.provider?.projections;
 			case 'stEth':
 			case 'dai':
 				return token?.wallet?.provider?.projections?.[props.type];
+			default:
+				return null;
 		}
+	}
+
+	function mergeTokenProjections() {
+		if (!arProvider.projections && !ethProvider.projections) return null;
+
+		return {
+			monthly: {
+				amount:
+					(arProvider.projections?.monthly?.amount ?? 0) +
+					(ethProvider.projections?.stEth?.monthly?.amount ?? 0) +
+					(ethProvider.projections?.dai?.monthly?.amount ?? 0),
+				ratio: null,
+			},
+			yearly: {
+				amount:
+					(arProvider.projections?.yearly?.amount ?? 0) +
+					(ethProvider.projections?.stEth?.yearly?.amount ?? 0) +
+					(ethProvider.projections?.dai?.yearly?.amount ?? 0),
+				ratio: null,
+			},
+		};
 	}
 
 	return token ? (
@@ -131,16 +170,18 @@ export default function BalanceSection(props: IProps) {
 						<span className={'primary-text'}>{token.balance.header}</span>
 					</S.BalanceQuantityHeader>
 					<S.BalanceQuantityBody>
-						<ReactSVG src={token.balance.icon} />
+						<ReactSVG id={props.type === 'ao' ? 'ao-logo' : ''} src={token.balance.icon} />
 						<p>{getPrimaryBalance()}</p>
 					</S.BalanceQuantityBody>
-					<S.BalanceQuantityFooter>
-						<Button
-							type={'alt2'}
-							label={token.redirect.label}
-							handlePress={() => window.open(token.redirect.target, '_blank')}
-						/>
-					</S.BalanceQuantityFooter>
+					{token.redirect && (
+						<S.BalanceQuantityFooter>
+							<Button
+								type={'alt2'}
+								label={token.redirect.label}
+								handlePress={() => window.open(token.redirect.target, '_blank')}
+							/>
+						</S.BalanceQuantityFooter>
+					)}
 				</S.BalanceQuantitySection>
 				<S.BalancesQuantityFlexSection>
 					<S.BalanceQuantityEndSection>
@@ -159,15 +200,17 @@ export default function BalanceSection(props: IProps) {
 								)}
 							</p>
 						</S.BalanceQuantityBody>
-						<S.BalanceQuantityFooter>
-							{getTokenProjections() ? (
-								<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
-									getTokenProjections().monthly.ratio
-								)} AO`}</span>
-							) : (
-								<span className={'primary-text'}>-</span>
-							)}
-						</S.BalanceQuantityFooter>
+						{props.type !== 'ao' && (
+							<S.BalanceQuantityFooter>
+								{getTokenProjections() ? (
+									<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
+										getTokenProjections().monthly.ratio
+									)} AO`}</span>
+								) : (
+									<span className={'primary-text'}>-</span>
+								)}
+							</S.BalanceQuantityFooter>
+						)}
 					</S.BalanceQuantityEndSection>
 					<S.BalanceQuantityEndSection>
 						<S.BalanceQuantityHeader>
@@ -185,15 +228,17 @@ export default function BalanceSection(props: IProps) {
 								)}
 							</p>
 						</S.BalanceQuantityBody>
-						<S.BalanceQuantityFooter>
-							{getTokenProjections() ? (
-								<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
-									getTokenProjections().yearly.ratio
-								)} AO`}</span>
-							) : (
-								<span className={'primary-text'}>-</span>
-							)}
-						</S.BalanceQuantityFooter>
+						{props.type !== 'ao' && (
+							<S.BalanceQuantityFooter>
+								{getTokenProjections() ? (
+									<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
+										getTokenProjections().yearly.ratio
+									)} AO`}</span>
+								) : (
+									<span className={'primary-text'}>-</span>
+								)}
+							</S.BalanceQuantityFooter>
+						)}
 					</S.BalanceQuantityEndSection>
 				</S.BalancesQuantityFlexSection>
 			</S.BalanceBodyWrapper>

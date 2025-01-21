@@ -59,6 +59,7 @@ export const ASSETS = {
 	checkmark: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
 	close: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
 	dai: getTxEndpoint('0fH_eBybJYRxjpjhJLiDoj8-7u7wYEHXtNElWEPb5is'),
+	deposit: getTxEndpoint('KJtoIHxAHtVRMDgDGF00NYcnz81iUSo2o8odeDB623Q'),
 	discord: getTxEndpoint('3X1BfFleeCZZdVZIx8DKDIblcLw7jzzRBCzSItlBy9E'),
 	edit: getTxEndpoint('SUWTk8Qtcub9EsP5PDF6-vzgKsP5Irg1bB9b8NImDDk'),
 	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
@@ -69,6 +70,7 @@ export const ASSETS = {
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
 	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
 	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
+	yield: getTxEndpoint('RrusyNB6RzmXfYcocp7tG9GSDkrF_z-_NfZMSxVgzOE'),
 };
 
 export const AR_WALLETS = [

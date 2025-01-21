@@ -1,8 +1,8 @@
 import React from 'react';
 import { ReactSVG } from 'react-svg';
-import parse from 'html-react-parser';
 
 import { Button } from 'components/atoms/Button';
+import { Panel } from 'components/atoms/Panel';
 import { ASSETS } from 'helpers/config';
 import { AllocationTokenType } from 'helpers/types';
 import { formatPercentage } from 'helpers/utils';
@@ -27,6 +27,7 @@ export default function AllocationToken(props: IProps) {
 	} | null>(null);
 
 	const [open, setOpen] = React.useState<boolean>(props.defaultClosed ? !props.defaultClosed : true);
+	const [showPanel, setShowPanel] = React.useState<boolean>(false);
 
 	const TOKENS = {
 		arweave: {
@@ -70,7 +71,7 @@ export default function AllocationToken(props: IProps) {
 			<Button
 				type={currentlyAllocated ? 'primary' : 'alt1'}
 				label={currentlyAllocated ? language.edit : language.add}
-				handlePress={() => (currentlyAllocated ? console.log() : allocationProvider.handleUpdate(props.type))}
+				handlePress={() => (currentlyAllocated ? setShowPanel(true) : allocationProvider.handleUpdate(props.type))}
 				disabled={false}
 				icon={currentlyAllocated ? ASSETS.edit : ASSETS.add}
 				iconLeftAlign
@@ -81,32 +82,33 @@ export default function AllocationToken(props: IProps) {
 	}
 
 	return token ? (
-		<S.Wrapper>
-			<S.TokenSection open={open} className={'fade-in'} onClick={() => setOpen((prev) => !prev)}>
-				<S.TokenSectionHeaderWrapper>
-					<ReactSVG src={token.icon} />
-					<S.TokenSectionInfoWrapper>
-						<S.TokenSectionTitle>
-							<p>{token.label}</p>
-						</S.TokenSectionTitle>
-						<S.TokenSectionDescription>
-							<p>{token.description}</p>
-						</S.TokenSectionDescription>
-					</S.TokenSectionInfoWrapper>
-				</S.TokenSectionHeaderWrapper>
-				<S.TokenSectionEndWrapper open={open}>
-					<ReactSVG src={ASSETS.arrow} />
-				</S.TokenSectionEndWrapper>
-			</S.TokenSection>
-			{open && (
-				<S.TokenBodyWrapper className={'border-wrapper-primary fade-in'}>
-					{/* {token.summary && (
+		<>
+			<S.Wrapper>
+				<S.TokenSection open={open} className={'fade-in'} onClick={() => setOpen((prev) => !prev)}>
+					<S.TokenSectionHeaderWrapper>
+						<ReactSVG src={token.icon} />
+						<S.TokenSectionInfoWrapper>
+							<S.TokenSectionTitle>
+								<p>{token.label}</p>
+							</S.TokenSectionTitle>
+							<S.TokenSectionDescription>
+								<p>{token.description}</p>
+							</S.TokenSectionDescription>
+						</S.TokenSectionInfoWrapper>
+					</S.TokenSectionHeaderWrapper>
+					<S.TokenSectionEndWrapper open={open}>
+						<ReactSVG src={ASSETS.arrow} />
+					</S.TokenSectionEndWrapper>
+				</S.TokenSection>
+				{open && (
+					<S.TokenBodyWrapper className={'border-wrapper-primary fade-in'}>
+						{/* {token.summary && (
 						<S.TokenBodyDescriptionWrapper>
 							<p className={'primary-text'}>{parse(token.summary)}</p>
 						</S.TokenBodyDescriptionWrapper>
 					)} */}
-					<S.TokenBodyValuesWrapper>
-						{/* <S.TokenBodyQuantity>
+						<S.TokenBodyValuesWrapper>
+							{/* <S.TokenBodyQuantity>
 							<S.TokenBodyQuantityHeader>
 								<span className={'primary-text'}>Balance</span>
 							</S.TokenBodyQuantityHeader>
@@ -114,15 +116,15 @@ export default function AllocationToken(props: IProps) {
 								<p>8.76</p>
 							</S.TokenBodyQuantityValue>
 						</S.TokenBodyQuantity> */}
-						<S.TokenBodyQuantity>
-							<S.TokenBodyQuantityHeader>
-								<span className={'primary-text'}>Allocation</span>
-							</S.TokenBodyQuantityHeader>
-							<S.TokenBodyQuantityValue>
-								<p>{formatPercentage(allocationProvider.records[props.type] ?? 0)}</p>
-							</S.TokenBodyQuantityValue>
-						</S.TokenBodyQuantity>
-						{/* <S.TokenBodyQuantity>
+							<S.TokenBodyQuantity>
+								<S.TokenBodyQuantityHeader>
+									<span className={'primary-text'}>Allocation</span>
+								</S.TokenBodyQuantityHeader>
+								<S.TokenBodyQuantityValue>
+									<p>{formatPercentage(allocationProvider.records[props.type] ?? 0)}</p>
+								</S.TokenBodyQuantityValue>
+							</S.TokenBodyQuantity>
+							{/* <S.TokenBodyQuantity>
 							<S.TokenBodyQuantityHeader>
 								<span className={'primary-text'}>30 Day Projection</span>
 							</S.TokenBodyQuantityHeader>
@@ -132,7 +134,7 @@ export default function AllocationToken(props: IProps) {
 								</p>
 							</S.TokenBodyQuantityValue>
 						</S.TokenBodyQuantity> */}
-						{/* <S.TokenBodyQuantity>
+							{/* <S.TokenBodyQuantity>
 							<S.TokenBodyQuantityHeader>
 								<span className={'primary-text'}>1 Year Projection</span>
 							</S.TokenBodyQuantityHeader>
@@ -142,10 +144,19 @@ export default function AllocationToken(props: IProps) {
 								</p>
 							</S.TokenBodyQuantityValue>
 						</S.TokenBodyQuantity> */}
-					</S.TokenBodyValuesWrapper>
-					<S.TokenBodyActionWrapper>{getTokenAction()}</S.TokenBodyActionWrapper>
-				</S.TokenBodyWrapper>
-			)}
-		</S.Wrapper>
+						</S.TokenBodyValuesWrapper>
+						<S.TokenBodyActionWrapper>{getTokenAction()}</S.TokenBodyActionWrapper>
+					</S.TokenBodyWrapper>
+				)}
+			</S.Wrapper>
+			<Panel
+				open={showPanel}
+				width={550}
+				header={`Edit ${token.label} Allocation`}
+				handleClose={() => setShowPanel(false)}
+			>
+				<p></p>
+			</Panel>
+		</>
 	) : null;
 }

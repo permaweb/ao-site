@@ -21,11 +21,10 @@ export const HeaderWrapper = styled.div`
 export const BodyWrapper = styled.div`
 	width: 100%;
 	display: flex;
-	gap: 40px;
+	gap: 30px;
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		flex-direction: column;
-		gap: 40px;
 	}
 `;
 
@@ -40,7 +39,7 @@ export const HeaderInfo = styled.div`
 		line-height: 1;
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-size: ${(props) => props.theme.typography.size.lg};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;
@@ -132,14 +131,23 @@ export const BalanceQuantityBody = styled.div`
 	}
 `;
 
+export const BalancesPrimaryWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+`;
+
+export const BalancesBreakdownWrapper = styled(BalancesPrimaryWrapper)``;
+
 export const BalancesGlobalWrapper = styled.div`
 	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 20px;
 	flex-wrap: wrap;
 	gap: 20px;
+	padding: 20px;
 
 	${BalanceQuantityBody} {
 		p,
@@ -159,7 +167,7 @@ export const BalancesGlobalWrapper = styled.div`
 	}
 `;
 
-export const BalancesGlobalFlexWrapper = styled.div`
+export const BalancesPrimaryFlexWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;

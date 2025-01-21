@@ -26,8 +26,8 @@ export const lightTheme = {
 	overlay1: 'rgb(0, 0, 0, .45)',
 	overlay2: 'rgb(0, 0, 0, .5)',
 	shadow1: 'rgb(220, 220, 220, .5)',
-	primary1: '#091DFF',
-	primary2: '#3344FF',
+	primary1: '#3344FF',
+	primary2: '#091DFF',
 	accent1: '#51C85B',
 	accent2: '#3BBA45',
 	light1: '#FFFFFF',
@@ -35,8 +35,8 @@ export const lightTheme = {
 	light3: '#B3B3B3',
 	dark1: '#151515',
 	dark2: '#333333',
-	link1: '#06BB15',
-	link2: '#059E12',
+	link1: '#3344FF',
+	link2: '#091DFF',
 	stats: {
 		primary: '#FF8385',
 		alt1: '#A3DEE2',
@@ -72,7 +72,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		button: {
 			primary: {
 				background: currentTheme.neutral1,
-				border: currentTheme.neutralA1,
+				border: currentTheme.neutralA7,
 				color: currentTheme.neutralA1,
 				active: {
 					background: currentTheme.neutral3,
@@ -289,7 +289,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			base: '16px',
 			lg: '18px',
 			xLg: '24px',
-			xxLg: '28px',
+			xxLg: '32px',
 			h1: 'clamp(36px, 3.5vw, 56px)',
 			h2: 'clamp(32px, 3.25vw, 50px)',
 			h4: 'clamp(28px, 3vw, 42px)',

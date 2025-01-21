@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { URLTabs } from 'components/molecules/URLTabs';
-import { URLS } from 'helpers/config';
+import { ASSETS, URLS } from 'helpers/config';
 import { formatCount } from 'helpers/utils';
 import { useAOProvider } from 'providers/AOProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -29,14 +29,14 @@ export default function Mint() {
 		() => [
 			{
 				label: language.deposits,
-				icon: null,
+				icon: ASSETS.deposit,
 				disabled: false,
 				url: URLS.mintDeposits,
 				view: () => <MintBalances />,
 			},
 			{
 				label: language.yield,
-				icon: null,
+				icon: ASSETS.yield,
 				disabled: false,
 				url: URLS.mintYield,
 				view: () => <MintAllocation />,

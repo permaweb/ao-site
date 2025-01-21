@@ -4,7 +4,7 @@ export type AllocationTokenType = 'pi' | 'ao' | 'arweave';
 
 export type AllocationTokenSummaryType = { label: string; value: number | null };
 
-export type TokenEarningsType = 'arweave' | 'stEth' | 'dai';
+export type TokenEarningsType = 'ao' | 'arweave' | 'stEth' | 'dai';
 
 export type TokenBigIntType = { value: bigint | null; display: string | null };
 

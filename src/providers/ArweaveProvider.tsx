@@ -2,8 +2,10 @@ import React from 'react';
 
 import { ArweaveWebWallet } from 'arweave-wallet-connector';
 
+import { readHandler } from 'api';
+
 import { Modal } from 'components/molecules/Modal';
-import { AR_WALLETS, ASSETS, WALLET_PERMISSIONS } from 'helpers/config';
+import { AO, AO_TOKEN_DENOMINATION, AR_WALLETS, ASSETS, WALLET_PERMISSIONS } from 'helpers/config';
 import { getARBalanceEndpoint } from 'helpers/endpoints';
 import { ArWalletEnum, TokenYieldProjectionsType } from 'helpers/types';
 import { getArReward } from 'helpers/utils';
@@ -19,6 +21,7 @@ interface ArweaveContextState {
 	walletAddress: string | null;
 	walletType: ArWalletEnum | null;
 	balance: number | string | null;
+	aoBalance: string | null;
 	projections: TokenYieldProjectionsType | null;
 	handleConnect: any;
 	handleDisconnect: () => void;
@@ -36,6 +39,7 @@ const DEFAULT_CONTEXT = {
 	walletAddress: null,
 	walletType: null,
 	balance: null,
+	aoBalance: null,
 	projections: null,
 	handleConnect() {},
 	handleDisconnect() {},
@@ -79,6 +83,7 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 	const [walletAddress, setWalletAddress] = React.useState<string | null>(null);
 
 	const [balance, setBalance] = React.useState<number | string | null>(null);
+	const [aoBalance, setAoBalance] = React.useState<string | null>(null);
 	const [projections, setProjections] = React.useState<TokenYieldProjectionsType | null>(null);
 
 	React.useEffect(() => {
@@ -102,6 +107,24 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 			if (walletAddress) {
 				try {
 					setBalance(await getARBalance(walletAddress));
+				} catch (e: any) {
+					console.error(e);
+				}
+			}
+		})();
+	}, [walletAddress]);
+
+	React.useEffect(() => {
+		(async function () {
+			if (walletAddress) {
+				try {
+					const tokenBalance = await readHandler({
+						processId: AO.tokenMirror,
+						action: 'Balance',
+						tags: [{ name: 'Recipient', value: walletAddress }],
+					});
+					if (tokenBalance != null) setAoBalance((tokenBalance / AO_TOKEN_DENOMINATION).toString());
+					else setAoBalance('0');
 				} catch (e: any) {
 					console.error(e);
 				}
@@ -247,6 +270,7 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 					walletAddress,
 					walletType,
 					balance,
+					aoBalance,
 					projections,
 					handleConnect,
 					handleDisconnect,

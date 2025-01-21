@@ -112,6 +112,14 @@ export const BalanceQuantityBody = styled.div`
 		width: 20px;
 		margin: 6.5px 0 0 0;
 	}
+
+	#ao-logo {
+		svg {
+			height: 25px;
+			width: 25px;
+			margin: 6.5px 3.5px 0 0;
+		}
+	}
 `;
 
 export const BalanceQuantityFooter = styled.div`
