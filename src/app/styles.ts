@@ -129,6 +129,10 @@ export const GlobalStyle = createGlobalStyle`
   h4 {
     font-size: ${(props) => props.theme.typography.size.h4};
   }
+  
+	h6 {
+    font-size: ${(props) => props.theme.typography.size.h6};
+  }
 
   a, button {
     transition: all 100ms;

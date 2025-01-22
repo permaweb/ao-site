@@ -3,6 +3,7 @@ import { Pie } from 'react-chartjs-2';
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { useTheme } from 'styled-components';
 
+import { Button } from 'components/atoms/Button';
 import { AllocationRecordType } from 'helpers/types';
 import { formatPercentage } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
@@ -19,6 +20,8 @@ export default function AllocationSummary() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
+	const [data, setData] = React.useState<any>(null);
+
 	const keys = React.useMemo(() => {
 		return [
 			theme.colors.stats.primary,
@@ -34,8 +37,6 @@ export default function AllocationSummary() {
 			theme.colors.stats.alt10,
 		];
 	}, [theme]);
-
-	const [data, setData] = React.useState<any>(null);
 
 	React.useEffect(() => {
 		if (allocationProvider) {
@@ -86,17 +87,6 @@ export default function AllocationSummary() {
 									}}
 								/>
 							</S.Chart>
-							{/* <S.ChartKeyWrapper>
-								{ALLOCATION.map((token: AllocationTokenSummaryType, index: number) => {
-									return (
-										<S.ChartKeyLine key={index}>
-											<S.ChartKey background={keys[index] ? keys[index] : null} />
-											<S.ChartKeyText>{token.label}</S.ChartKeyText>
-											<S.Percentage>{`(${formatPercentage(token.value)})`}</S.Percentage>
-										</S.ChartKeyLine>
-									);
-								})}
-							</S.ChartKeyWrapper> */}
 						</S.ChartWrapper>
 						<S.SummaryWrapper>
 							<S.SummaryHeader>
@@ -111,12 +101,12 @@ export default function AllocationSummary() {
 												<span>{record.label}</span>
 											</S.SummaryLineLabel>
 											<S.SummaryLineActionsWrapper>
-												{/* <S.SummaryLineActions>
+												<S.SummaryLineActions>
 													<Button type={'alt3'} label={'None'} handlePress={() => {}} />
 													<Button type={'alt3'} label={'2x'} handlePress={() => {}} active />
 													<Button type={'alt3'} label={'4x'} handlePress={() => {}} active />
 													<Button type={'alt3'} label={'All'} handlePress={() => {}} active />
-												</S.SummaryLineActions> */}
+												</S.SummaryLineActions>
 												<S.SummaryLinePercentage>
 													<p>{formatPercentage(record.value)}</p>
 												</S.SummaryLinePercentage>

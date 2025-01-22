@@ -9,17 +9,34 @@ export const Wrapper = styled.div`
 	gap: 20px;
 	min-height: calc(100vh - 115px);
 	justify-content: space-between;
+	position: relative;
+	z-index: 3;
+`;
+
+export const GraphicWrapper = styled.div`
+	video {
+		height: calc(100vh - ${STYLING.dimensions.nav.height});
+		width: 100vw;
+		object-fit: cover;
+		position: fixed;
+		top: ${STYLING.dimensions.nav.height};
+		left: 0;
+		z-index: 2;
+	}
 `;
 
 export const ContentWrapper = styled.div`
+	width: fit-content;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
 	justify-content: flex-end;
+	margin: 0 0 0 auto;
 
 	h4 {
 		line-height: 1.35;
 		font-weight: ${(props) => props.theme.typography.weight.regular};
+		background: ${(props) => props.theme.colors.view.background};
 	}
 
 	p {
@@ -29,7 +46,8 @@ export const ContentWrapper = styled.div`
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		text-align: right;
-		margin: 10px 0 0 0;
+		padding: 10px 0 0 0;
+		background: ${(props) => props.theme.colors.view.background};
 	}
 `;
 
@@ -47,8 +65,10 @@ export const MetricsWrapper = styled.div`
 `;
 
 export const MetricsSection = styled.div`
-	width: 385px;
+	width: 425px;
 	max-width: 90vw;
+	backdrop-filter: blur(7.5px);
+	background: ${(props) => props.theme.colors.view.background};
 
 	> * {
 		&:not(:last-child) {

@@ -9,6 +9,7 @@ import { ArweaveProvider } from 'providers/ArweaveProvider';
 import { CustomThemeProvider } from 'providers/CustomThemeProvider';
 import { EthereumProvider } from 'providers/EthereumProvider';
 import { LanguageProvider } from 'providers/LanguageProvider';
+import { LocationProvider } from 'providers/LocationProvider';
 
 import 'zlib'; // Ensure this is bundled, as web3-onboard depends on it
 import 'path'; // Ensure this is bundled, as web3-onboard depends on it
@@ -17,19 +18,21 @@ import '@fontsource-variable/dm-sans';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<CustomThemeProvider>
-		<LanguageProvider>
-			<HashRouter>
-				<GlobalStyle />
-				<AOProvider>
-					<EthereumProvider>
-						<ArweaveProvider>
-							<AllocationProvider>
-								<App />
-							</AllocationProvider>
-						</ArweaveProvider>
-					</EthereumProvider>
-				</AOProvider>
-			</HashRouter>
-		</LanguageProvider>
+		<LocationProvider>
+			<LanguageProvider>
+				<HashRouter>
+					<GlobalStyle />
+					<AOProvider>
+						<EthereumProvider>
+							<ArweaveProvider>
+								<AllocationProvider>
+									<App />
+								</AllocationProvider>
+							</ArweaveProvider>
+						</EthereumProvider>
+					</AOProvider>
+				</HashRouter>
+			</LanguageProvider>
+		</LocationProvider>
 	</CustomThemeProvider>
 );

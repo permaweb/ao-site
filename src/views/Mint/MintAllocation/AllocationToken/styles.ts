@@ -8,18 +8,30 @@ export const Wrapper = styled.div`
 	flex-direction: column;
 `;
 
+export const TokenBodyWrapper = styled.div<{ open: boolean }>`
+	width: calc(100% - 50px);
+	padding: 25px 0;
+	margin: 0 auto;
+	border-top: 1px solid ${(props) => (props.open ? props.theme.colors.border.primary : 'transparent')};
+	transition: border 0.25s ease-out;
+`;
+
 export const TokenSection = styled.button<{ open: boolean }>`
 	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	padding: 25px;
-
 	border-bottom: 1px solid transparent;
+	transition: border-bottom 0.25s ease-out;
 
 	&:hover {
 		background: ${(props) => props.theme.colors.container.primary.active} !important;
 		border-bottom: 1px solid ${(props) => (props.open ? props.theme.colors.border.primary : 'transparent')};
+
+		+ ${TokenBodyWrapper} {
+			border-top: 1px solid transparent !important;
+		}
 	}
 `;
 
@@ -80,12 +92,6 @@ export const TokenSectionEndWrapper = styled.div<{ open: boolean }>`
 	}
 `;
 
-export const TokenBodyWrapper = styled.div`
-	width: 100%;
-	border-top: none !important;
-	padding: 0 25px 25px 25px;
-`;
-
 export const TokenBodyDescriptionWrapper = styled.div`
 	margin: 0 0 30px 0;
 	p {
@@ -107,7 +113,6 @@ export const TokenBodyValuesWrapper = styled.div`
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: 15px 20px;
-	margin: 5px 0 0 0;
 `;
 
 export const TokenBodyQuantity = styled.div`

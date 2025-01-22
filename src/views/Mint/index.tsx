@@ -1,11 +1,13 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { URLTabs } from 'components/molecules/URLTabs';
 import { ASSETS, URLS } from 'helpers/config';
 import { formatCount } from 'helpers/utils';
 import { useAOProvider } from 'providers/AOProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
+import { useLocationProvider } from 'providers/LocationProvider';
 
 import { MintAllocation } from './MintAllocation';
 import { MintBalances } from './MintBalances';
@@ -18,6 +20,7 @@ export default function Mint() {
 	const navigate = useNavigate();
 
 	const aoProvider = useAOProvider();
+	const locationProvider = useLocationProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
@@ -44,6 +47,8 @@ export default function Mint() {
 		],
 		[]
 	);
+
+	if (locationProvider.country === 'US') return <BlockedMessage />;
 
 	return (
 		<>

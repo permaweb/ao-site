@@ -43,11 +43,6 @@ export const Chart = styled.div`
 	justify-content: center;
 	align-items: center;
 	padding: 20px;
-	@media (max-width: ${STYLING.cutoffs.initial}) {
-		width: 100%;
-		margin: 40px 0 20px 0;
-		padding: 0;
-	}
 `;
 
 export const ChartKeyWrapper = styled.div`

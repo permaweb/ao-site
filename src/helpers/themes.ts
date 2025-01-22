@@ -25,7 +25,7 @@ export const lightTheme = {
 	neutralA7: '#707070',
 	overlay1: 'rgb(0, 0, 0, .45)',
 	overlay2: 'rgb(0, 0, 0, .5)',
-	shadow1: 'rgb(100, 100, 100, .5)',
+	shadow1: 'rgb(150, 150, 150, .5)',
 	primary1: '#3344FF',
 	primary2: '#091DFF',
 	accent1: '#31C53D',
@@ -301,6 +301,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			h1: 'clamp(36px, 3.5vw, 56px)',
 			h2: 'clamp(32px, 3.25vw, 50px)',
 			h4: 'clamp(28px, 3vw, 42px)',
+			h6: 'clamp(18px, 2vw, 24px)',
 		},
 		weight: {
 			thin: '200',

@@ -6,24 +6,16 @@ export const Wrapper = styled.div`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	gap: 40px;
+	gap: 25px;
 `;
 
-export const Header = styled.button<{ open: boolean }>`
+export const Header = styled.div`
 	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 25px;
-
-	border: 1px solid ${(props) => props.theme.colors.border.primary};
-	background: ${(props) =>
-		props.open
-			? props.theme.colors.container.primary.active
-			: props.theme.colors.container.primary.background} !important;
 
 	&:hover {
-		background: ${(props) => props.theme.colors.container.primary.active} !important;
 	}
 `;
 
@@ -33,17 +25,6 @@ export const HeaderTitle = styled.div`
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
-	}
-`;
-
-export const HeaderEndWrapper = styled.div<{ open: boolean }>`
-	svg {
-		height: 25px;
-		width: 25px;
-		fill: ${(props) => props.theme.colors.icon.primary.fill};
-		transform: rotate(${(props) => (props.open ? '0deg' : '0deg')});
-		transition: transform 250ms ease-in-out;
-		margin: 5px 0 0 0;
 	}
 `;
 

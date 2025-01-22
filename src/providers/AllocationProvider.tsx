@@ -5,12 +5,14 @@ import { AllocationRecordType, AllocationTokenRecordType } from 'helpers/types';
 interface AllocationContextState {
 	records: AllocationRecordType[];
 	addToken: (token: AllocationTokenRecordType) => void;
+	updateToken: (token: AllocationRecordType) => void;
 	removeToken: (token: AllocationTokenRecordType) => void;
 }
 
 const DEFAULT_CONTEXT: AllocationContextState = {
 	records: [],
 	addToken: () => {},
+	updateToken: () => {},
 	removeToken: () => {},
 };
 
@@ -25,7 +27,8 @@ export function useAllocationProvider(): AllocationContextState {
 }
 
 export function AllocationProvider(props: { children: React.ReactNode }) {
-	const [records, setRecords] = React.useState<any>([{ id: 'pi', label: 'Permaweb Index', value: 1 }]);
+	// const [records, setRecords] = React.useState<AllocationRecordType[]>([{ id: 'ao', label: 'AO', value: 1 }]);
+	const [records, setRecords] = React.useState<AllocationRecordType[]>([]);
 
 	const addToken = (token: AllocationTokenRecordType) => {
 		const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
@@ -39,6 +42,13 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		const updatedRecords = records.map((record: AllocationRecordType) => ({ ...record, value: evenShare }));
 		updatedRecords.push({ ...token, value: evenShare });
 		setRecords(updatedRecords);
+	};
+
+	const updateToken = (token: AllocationRecordType) => {
+		if (!token?.value) {
+			console.error('No value provided');
+			return;
+		}
 	};
 
 	const removeToken = (token: AllocationTokenRecordType) => {
@@ -74,6 +84,8 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	};
 
 	return (
-		<AllocationContext.Provider value={{ records, addToken, removeToken }}>{props.children}</AllocationContext.Provider>
+		<AllocationContext.Provider value={{ records, addToken, updateToken, removeToken }}>
+			{props.children}
+		</AllocationContext.Provider>
 	);
 }

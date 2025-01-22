@@ -113,7 +113,7 @@ export default function AllocationToken(props: IProps) {
 					</S.TokenSectionEndWrapper>
 				</S.TokenSection>
 				{open && (
-					<S.TokenBodyWrapper className={'fade-in'}>
+					<S.TokenBodyWrapper open={open} className={'fade-in'}>
 						{/* {token.summary && (
 						<S.TokenBodyDescriptionWrapper>
 							<p className={'primary-text'}>{parse(token.summary)}</p>

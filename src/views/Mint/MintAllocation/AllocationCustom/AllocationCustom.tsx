@@ -9,7 +9,6 @@ import * as S from './styles';
 export default function AllocationCustom() {
 	const allocationProvider = useAllocationProvider();
 
-	const [open, setOpen] = React.useState<boolean>(true);
 	const [selectedProjects, setSelectedProjects] = React.useState<string[]>([]);
 
 	const PROJECTS = [
@@ -34,62 +33,57 @@ export default function AllocationCustom() {
 
 	return (
 		<S.Wrapper>
-			<S.Header open={open} onClick={() => setOpen((prev) => !prev)}>
+			<S.Header>
 				<S.HeaderTitle>
 					<p>Token Customization</p>
 				</S.HeaderTitle>
-				<S.HeaderEndWrapper open={open}>
-					<ReactSVG src={ASSETS.arrow} />
-				</S.HeaderEndWrapper>
 			</S.Header>
-			{open && (
-				<S.Body>
-					<S.GridWrapper>
-						{PROJECTS.map((project, index) => {
-							const isActive = selectedProjects.includes(project.id);
+			<S.Body>
+				<S.GridWrapper>
+					{PROJECTS.map((project, index) => {
+						const isActive = selectedProjects.includes(project.id);
 
-							return (
-								<S.GridElement key={index} className={'fade-in'}>
-									<S.Project active={isActive} onClick={() => toggleSelection(project)}>
-										<S.ProjectHeader>
-											<S.ProjectTitle>
-												<span>{project.title}</span>
-											</S.ProjectTitle>
-											<S.ProjectIndex active={isActive}>
-												<span className={'indicator'}>{`# ${index + 1}`}</span>
-											</S.ProjectIndex>
-										</S.ProjectHeader>
-										<S.ProjectBody>
-											<S.ProjectDescription>
-												<p className={'primary-text'}>{project.description}</p>
-											</S.ProjectDescription>
-										</S.ProjectBody>
-										<S.ProjectFooter>
-											<S.ProjectMarketCap>
-												<S.ProjectMarketCapHeader>
-													<span className={'primary-text'}>Marketcap</span>
-												</S.ProjectMarketCapHeader>
-												<S.ProjectMarketCapValue>
-													<p>
-														<span className={'indicator'}>$</span>
-														{project.marketCap}
-													</p>
-												</S.ProjectMarketCapValue>
-											</S.ProjectMarketCap>
-											{isActive && (
-												<S.IndicatorWrapper>
-													<span className={'primary-text'}>Added</span>
-													<ReactSVG src={ASSETS.checkmark} />
-												</S.IndicatorWrapper>
-											)}
-										</S.ProjectFooter>
-									</S.Project>
-								</S.GridElement>
-							);
-						})}
-					</S.GridWrapper>
-				</S.Body>
-			)}
+						return (
+							<S.GridElement key={index} className={'fade-in'}>
+								<S.Project active={isActive} onClick={() => toggleSelection(project)}>
+									<S.ProjectHeader>
+										<S.ProjectTitle>
+											<span>{project.title}</span>
+										</S.ProjectTitle>
+										<S.ProjectIndex active={isActive}>
+											<span className={'indicator'}>{`# ${index + 1}`}</span>
+										</S.ProjectIndex>
+									</S.ProjectHeader>
+									<S.ProjectBody>
+										<S.ProjectDescription>
+											<p className={'primary-text'}>{project.description}</p>
+										</S.ProjectDescription>
+									</S.ProjectBody>
+									<S.ProjectFooter>
+										<S.ProjectMarketCap>
+											<S.ProjectMarketCapHeader>
+												<span className={'primary-text'}>Marketcap</span>
+											</S.ProjectMarketCapHeader>
+											<S.ProjectMarketCapValue>
+												<p>
+													<span className={'indicator'}>$</span>
+													{project.marketCap}
+												</p>
+											</S.ProjectMarketCapValue>
+										</S.ProjectMarketCap>
+										{isActive && (
+											<S.IndicatorWrapper>
+												<span className={'primary-text'}>Added</span>
+												<ReactSVG src={ASSETS.checkmark} />
+											</S.IndicatorWrapper>
+										)}
+									</S.ProjectFooter>
+								</S.Project>
+							</S.GridElement>
+						);
+					})}
+				</S.GridWrapper>
+			</S.Body>
 		</S.Wrapper>
 	);
 }

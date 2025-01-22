@@ -15,7 +15,6 @@ import { CloseHandler } from 'wrappers/CloseHandler';
 import * as S from './styles';
 import { IProps } from './types';
 
-// TODO: Handle eth wallet connecting status
 // TODO: Location provider
 export default function BalanceSection(props: IProps) {
 	const arProvider = useArweaveProvider();
