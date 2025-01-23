@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ArweaveWebWallet } from 'arweave-wallet-connector';
 
-import { readHandler } from 'api';
+import { messageResult, readHandler } from 'api';
 
 import { Modal } from 'components/molecules/Modal';
 import { AO, AO_TOKEN_DENOMINATION, AR_WALLETS, ASSETS, WALLET_PERMISSIONS } from 'helpers/config';
@@ -131,6 +131,31 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 			}
 		})();
 	}, [walletAddress]);
+
+	// /* User Allocations */
+	// React.useEffect(() => {
+	// 	(async function () {
+	// 		if (wallet) {
+	// 			try {
+	// 				// Mint Prod: 1OEAToQGhSKV76oa1MFIGZ9bYxCJoxpXqtksApDdcu8
+	// 				// Mint Test: so3C4AUToJfvLu-K7BaGEadmt1S1FYHVmgMVvB3ZSf8
+	// 				// TODO: Take multiple tokens ?
+	// 				console.log('Getting user AR allocation...');
+	// 				const TResult = await messageResult({
+	// 					processId: '1OEAToQGhSKV76oa1MFIGZ9bYxCJoxpXqtksApDdcu8',
+	// 					wallet: wallet,
+	// 					action: 'User.Get-Allocation',
+	// 					tags: [{ name: 'Token', value: 'AR' }],
+	// 					data: null
+	// 				});
+
+	// 				console.log(TResult)
+	// 			} catch (e: any) {
+	// 				console.error(e);
+	// 			}
+	// 		}
+	// 	})();
+	// }, [wallet]);
 
 	React.useEffect(() => {
 		(async function () {

@@ -19,6 +19,7 @@
 		"deploy-share": "npm run build && arx upload-dir dist -w ./wallet.json --index-file index.html -t arweave -h https://turbo.ardrive.io"
 	},
 	"dependencies": {
+		"@dha-team/arbundles": "^1.0.1",
 		"@ethersproject/providers": "^5.7.2",
 		"@ethersproject/units": "^5.7.0",
 		"@fontsource-variable/dm-sans": "^5.0.3",
@@ -76,6 +77,8 @@
 		"typer-js": "^5.5.3",
 		"url": "^0.11.3",
 		"victor": "^1.1.0",
+		"viem": "^2.22.11",
+		"wagmi": "^2.14.9",
 		"web3": "^4.9.0"
 	},
 	"devDependencies": {

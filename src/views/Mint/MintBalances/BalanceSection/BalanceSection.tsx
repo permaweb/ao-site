@@ -56,7 +56,7 @@ export default function BalanceSection(props: IProps) {
 				wallet: { label: 'Connect ETH Wallet', icon: ASSETS.ethereum, provider: ethProvider },
 				balance: { header: 'Amount Deposited', icon: ASSETS.stEth },
 				action: {
-					label: 'Exchange StETH',
+					label: 'Trade StETH',
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
 					component: <EthExchange token={EthTokenEnum.StEth} />,
@@ -68,7 +68,7 @@ export default function BalanceSection(props: IProps) {
 				wallet: { label: 'Connect ETH Wallet', icon: ASSETS.ethereum, provider: ethProvider },
 				balance: { header: 'Amount Deposited', icon: ASSETS.dai },
 				action: {
-					label: 'Exchange DAI',
+					label: 'Trade DAI',
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
 					component: <EthExchange token={EthTokenEnum.DAI} />,

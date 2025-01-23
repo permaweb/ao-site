@@ -8,7 +8,13 @@ import torusModule from '@web3-onboard/torus';
 import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
+import { hashMessage, recoverPublicKey, toBytes } from 'viem';
+import { Config, useConfig } from 'wagmi';
+import { getAccount, signMessage } from 'wagmi/actions';
 import Web3 from 'web3';
+
+import { createData, EthereumSigner, InjectedEthereumSigner } from '@dha-team/arbundles';
+import { connect } from '@permaweb/aoconnect';
 
 import { readHandler } from 'api';
 
@@ -207,6 +213,93 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		})();
 	}, []);
 
+	// const AO_MINT = 'LPK-D_3gZkXtia6ywwU1wRwgFOZ-eLFRMP9pfAFRfuw';
+	// const config = useConfig();
+
+	// async function sendMessage(msg, key) {
+	// 	function createDataItemSigner(wallet) {
+	// 		const signer = async ({ data, tags, target, anchor }) => {
+	// 			const dataItem = createData(data, key, { tags, target, anchor });
+	// 			return dataItem.sign(key).then(async () => ({
+	// 				id: await dataItem.id,
+	// 				raw: await dataItem.getRaw(),
+	// 			}));
+	// 		};
+
+	// 		return signer;
+	// 	}
+
+	// 	const signer = createDataItemSigner(key);
+	// 	const message = await connect().message({
+	// 		process: AO_MINT,
+	// 		signer,
+	// 		data: msg.Data || Date.now().toString(),
+	// 		tags: msg.Tags,
+	// 	});
+	// 	return await connect().result({ process: AO_MINT, message });
+	// }
+
+	// const connector = config.connectors.find((c) => c.name === 'MetaMask');
+
+	// const provider = {
+	// 	getSigner: () => ({
+	// 		signMessage: async (message: any) => {
+	// 			const arg = message instanceof String ? message : { raw: message };
+
+	// 			const ethAccount = getAccount(config);
+
+	// 			return await signMessage(config, {
+	// 				message: arg as any,
+	// 				account: ethAccount.address,
+	// 				connector: connector,
+	// 			});
+	// 		},
+	// 	}),
+	// };
+
+	// const signer = new InjectedEthereumSigner(provider as any);
+	// signer.setPublicKey = async () => {
+	// 	const message = 'Sign this message to connect';
+	// 	const ethAccount = getAccount(config);
+
+	// 	const signature = await signMessage(config, {
+	// 		message: message,
+	// 		account: ethAccount.address,
+	// 		connector: connector,
+	// 	});
+	// 	const hash = await hashMessage(message);
+	// 	const recoveredKey = await recoverPublicKey({
+	// 		hash,
+	// 		signature,
+	// 	});
+	// 	signer.publicKey = Buffer.from(toBytes(recoveredKey));
+	// };
+
+	// React.useEffect(() => {
+	// 	(async function () {
+	// 		await signer.setPublicKey();
+	// 		const TResult = await sendMessage({
+	// 			Tags: [{ name: 'Action', value: 'User.Get-Tokens' }],
+	// 		}, signer);
+	// 		console.log('SendMessage Result:', TResult);
+	// 	})();
+	// }, []);
+
+	// React.useEffect(() => {
+	// 	(async function () {
+	// 		if (walletAddress && web3Provider) {
+	// 			try {
+	// 				const TResult = await sendMessage({
+	// 					Tags: [{ name: 'Action', value: 'User.Get-Tokens' }],
+	// 				});
+	// 				console.log('SendMessage Result:', TResult);
+	// 			} catch (error) {
+	// 				console.error('Error in sendMessage:', error);
+	// 			}
+	// 		}
+	// 	})();
+	// }, [walletAddress, web3Provider]);
+
 	/* StETH - DAI Balance and Deposited */
 	React.useEffect(() => {
 		(async function () {
@@ -256,7 +349,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				}
 			}
 		})();
-	}, [walletAddress, web3Provider, totalDeposited]);
+	}, [walletAddress, web3Provider]);
 
 	React.useEffect(() => {
 		(async function () {
