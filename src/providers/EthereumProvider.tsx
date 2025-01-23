@@ -91,6 +91,7 @@ interface EthereumContextState {
 	connecting: boolean;
 	balance: string | null;
 	tokens: EthTokensType | null;
+	refreshTokens: () => void;
 	projections: EthTokensYieldProjectionsType | null;
 	totalDeposited: EthTotalDepositedType | null;
 	handleConnect: (walletType: string) => void;
@@ -111,6 +112,7 @@ const DEFAULT_CONTEXT: EthereumContextState = {
 	connecting: false,
 	balance: null,
 	tokens: null,
+	refreshTokens: () => {},
 	projections: null,
 	totalDeposited: null,
 	handleConnect: () => {},
@@ -133,6 +135,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	const [balance, setBalance] = React.useState<string | null>(null);
 	const [projections, setProjections] = React.useState<EthTokensYieldProjectionsType | null>(null);
 	const [tokens, setTokens] = React.useState<EthTokensType | null>(null);
+	const [tokenRefreshTrigger, setTokenRefreshTrigger] = React.useState<boolean | null>(null);
 	const [totalDeposited, setTotalDeposited] = React.useState<EthTotalDepositedType | null>(null);
 	const [walletModalVisible, setWalletModalVisible] = React.useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
@@ -352,7 +355,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				}
 			}
 		})();
-	}, [walletAddress, web3Provider]);
+	}, [walletAddress, tokenRefreshTrigger, web3Provider]);
 
 	React.useEffect(() => {
 		(async function () {
@@ -529,6 +532,9 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					walletAddress,
 					balance,
 					tokens,
+					refreshTokens: () => {
+						setTokenRefreshTrigger((prev) => !prev);
+					},
 					projections,
 					totalDeposited,
 					handleConnect,

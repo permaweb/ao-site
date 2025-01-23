@@ -42,7 +42,7 @@ export const Icon = styled.div<{ warning: boolean | undefined }>`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: ${(props) => (props.warning ? props.theme.colors.warning.alt1 : props.theme.colors.indicator.active)};
+	background: ${(props) => (props.warning ? props.theme.colors.warning.alt1 : props.theme.colors.indicator.primary)};
 	border-radius: 50%;
 
 	svg {

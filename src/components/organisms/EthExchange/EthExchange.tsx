@@ -18,9 +18,7 @@ import { IProps } from './types';
 
 const { fromWei, toWei, toBigInt } = Web3.utils;
 
-// TODO: Testing
-// TODO: DAI Countdown
-// TODO: Done action after submit
+// TODO: DAI Withdraw Countdown
 export default function EthExchange(props: IProps) {
 	const ethProvider = useEthereumProvider();
 	const languageProvider = useLanguageProvider();
@@ -33,6 +31,7 @@ export default function EthExchange(props: IProps) {
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [invalid, setInvalid] = React.useState<boolean>(false);
 	const [disabled, setDisabled] = React.useState<boolean>(false);
+	const [processed, setProcessed] = React.useState<boolean>(false);
 	const [response, setResponse] = React.useState<{ message: string | null; status: 'success' | 'warning' } | null>(
 		null
 	);
@@ -62,7 +61,7 @@ export default function EthExchange(props: IProps) {
 	}, [amountInWei, ethProvider.tokens]);
 
 	React.useEffect(() => {
-		if (invalid || loading || !ethProvider.walletAddress || amountInWei <= 0 || response !== null) {
+		if (invalid || loading || !ethProvider.walletAddress || amountInWei <= 0) {
 			setDisabled(true);
 			return;
 		}
@@ -149,7 +148,7 @@ export default function EthExchange(props: IProps) {
 						break;
 				}
 
-				// setToggleUpdate((prev) => !prev); // TODO
+				ethProvider.refreshTokens();
 
 				setResponse({
 					message: `Successful ${exchangeType}`,
@@ -163,6 +162,7 @@ export default function EthExchange(props: IProps) {
 				});
 			}
 			setLoading(false);
+			setProcessed(true);
 		}
 	}
 
@@ -194,6 +194,7 @@ export default function EthExchange(props: IProps) {
 		setAmount('0');
 		setLoading(false);
 		setResponse(null);
+		setProcessed(false);
 	}
 
 	function getMaxDisabled() {
@@ -294,11 +295,11 @@ export default function EthExchange(props: IProps) {
 				<S.ActionWrapper>
 					<Button
 						type={'alt1'}
-						label={exchangeType}
-						handlePress={handleSubmit}
+						label={processed ? 'Done' : exchangeType}
+						handlePress={() => (processed ? handleClear() : handleSubmit())}
 						icon={ASSETS[exchangeType]}
 						iconLeftAlign
-						disabled={disabled}
+						disabled={processed ? false : disabled}
 						loading={loading}
 						height={55}
 						fullWidth
