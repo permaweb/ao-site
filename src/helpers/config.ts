@@ -21,6 +21,7 @@ export const AO = {
 	tokenMirror: 'ptCu-Un-3FF8sZ5zNMYg43zRgSYAGVkjz2Lb0HZmx2M',
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
+	aoMetrics: 'vdpaKV_BQNISuDgtZpLDfDlMJinKHqM3d2NWd3bzeSk',
 	stEthPriceOracle: 'rwxd1EuSzEVoy3qTlDRm7eMYPbOMrmQMajynVrA-ikk',
 	daiPriceOracle: 'SVu0Atwg7FRQfQA1PUvhpTYsdBmXeJK8s_58retkdBg',
 };
@@ -30,6 +31,8 @@ export const ETH_CONTRACTS = {
 	stEthBridge: '0xfE08D40Eee53d64936D3128838867c867602665c',
 	dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
 	daiBridge: '0x6A1B588B0684dACE1f53C5820111F400B3dbfeBf',
+	ethUsdPriceFeed: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
+	daiUsdPriceFeed: '0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9',
 };
 
 export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
@@ -56,6 +59,7 @@ export const ASSETS = {
 	arweave: getTxEndpoint('LeeiCXkCDZKdh9uEfau2a13LziNGnT82anXFDW51Hgw'),
 	checkmark: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
 	close: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
+	copy: getTxEndpoint('au_20PzacCJjUbwjoX85kkzmW0YwH4KrPfP98NOBK8M'),
 	dai: getTxEndpoint('0fH_eBybJYRxjpjhJLiDoj8-7u7wYEHXtNElWEPb5is'),
 	deposit: getTxEndpoint('KJtoIHxAHtVRMDgDGF00NYcnz81iUSo2o8odeDB623Q'),
 	disconnect: getTxEndpoint('eWncZs2hH5oNSsWTIImJhqdZ4-n0P4CfZbduK2ae4L4'),
@@ -71,6 +75,7 @@ export const ASSETS = {
 	remove: getTxEndpoint('aKjWuVXkSeYOKzGP0MnnhHwoYUXqTHFMJfVCbqzYEo0'),
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
 	success: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
+	view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
 	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
 	warning: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
 	withdraw: getTxEndpoint('QOJLKefBz2xCPUbO8dEKB22aWv_zdQ6FYA_UWUriyJw'),
@@ -1251,6 +1256,22 @@ export const Erc20_ABI = [
 	},
 ];
 
+export const PRICE_FEED_ABI = [
+	{
+		inputs: [],
+		name: 'latestRoundData',
+		outputs: [
+			{ internalType: 'uint80', name: 'roundId', type: 'uint80' },
+			{ internalType: 'int256', name: 'answer', type: 'int256' },
+			{ internalType: 'uint256', name: 'startedAt', type: 'uint256' },
+			{ internalType: 'uint256', name: 'updatedAt', type: 'uint256' },
+			{ internalType: 'uint80', name: 'answeredInRound', type: 'uint80' },
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+];
+
 export const ENDPOINTS = {
 	arTotalSupply: `https://arweave.net/total_supply`,
 	ipCheck: `https://ipinfo.io?token=${IP_TOKEN}`,
@@ -1259,13 +1280,14 @@ export const ENDPOINTS = {
 
 export const REDIRECTS = {
 	cookbook: `https://cookbook_ao.arweave.net`,
-	x: 'http://x.com/aoTheComputer',
-	github: 'https://github.com/permaweb/ao',
-	discord: 'https://discord.gg/dYXtHwc9dc',
-	stethMinting: 'https://stake.lido.fi/',
-	stethConversion:
-		'https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
-	ipBlock: 'https://www.standwithcrypto.org/action/call?action=call-your-representative',
+	x: `http://x.com/aoTheComputer`,
+	github: `https://github.com/permaweb/ao`,
+	discord: `https://discord.gg/dYXtHwc9dc`,
+	stethMinting: `https://stake.lido.fi/`,
+	stethConversion: `https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84`,
+	ipBlock: `https://www.standwithcrypto.org/action/call?action=call-your-representative`,
+	viewblock: (address: string) => `https://viewblock.io/arweave/address/${address}`,
+	etherscan: (address: string) => `https://etherscan.io/address/${address}`,
 };
 
 export const ETH_EXCHANGE_CONFIG = {

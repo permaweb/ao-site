@@ -18,6 +18,9 @@ import { IProps } from './types';
 
 const { fromWei, toWei, toBigInt } = Web3.utils;
 
+// TODO: Testing
+// TODO: DAI Countdown
+// TODO: Done action after submit
 export default function EthExchange(props: IProps) {
 	const ethProvider = useEthereumProvider();
 	const languageProvider = useLanguageProvider();

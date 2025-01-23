@@ -1,12 +1,15 @@
-import graphic from 'assets/graphic.mp4';
-import { formatCount, formatUSDAmount } from 'helpers/utils';
+// import graphic from 'assets/graphic.mp4';
+import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
+import { formatCount } from 'helpers/utils';
 import { useAOProvider } from 'providers/AOProvider';
+import { useEthereumProvider } from 'providers/EthereumProvider';
 
 import * as S from './styles';
 
 // TODO: Language
 export default function Landing() {
 	const aoProvider = useAOProvider();
+	const ethProvider = useEthereumProvider();
 
 	return (
 		<>
@@ -38,7 +41,7 @@ export default function Landing() {
 						<S.MetricsLine>
 							<span className={'primary-text'}>Fair Launch Deposits</span>
 							<S.MetricsValue>
-								<p>{formatUSDAmount(aoProvider.deposits)}</p>
+								<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
 							</S.MetricsValue>
 						</S.MetricsLine>
 					</S.MetricsSection>
@@ -52,24 +55,24 @@ export default function Landing() {
 						<S.MetricsLine>
 							<span className={'primary-text'}>Messages</span>
 							<S.MetricsValue>
-								<p>{formatCount(aoProvider.messages)}</p>
+								<p>{aoProvider.messages ? formatCount(aoProvider.messages.toString()) : <EllipsisLoader />}</p>
 							</S.MetricsValue>
 						</S.MetricsLine>
 						<S.MetricsLine>
 							<span className={'primary-text'}>Processes</span>
 							<S.MetricsValue>
-								<p>{formatCount(aoProvider.processes)}</p>
+								<p>{aoProvider.processes ? formatCount(aoProvider.processes.toString()) : <EllipsisLoader />}</p>
 							</S.MetricsValue>
 						</S.MetricsLine>
 					</S.MetricsSection>
 				</S.MetricsWrapper>
 			</S.Wrapper>
-			<S.GraphicWrapper>
+			{/* <S.GraphicWrapper>
 				<video autoPlay muted loop>
 					<source src={graphic} type={'video/mp4'} />
 					Your browser does not support the video tag.
 				</video>
-			</S.GraphicWrapper>
+			</S.GraphicWrapper> */}
 		</>
 	);
 }

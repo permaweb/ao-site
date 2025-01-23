@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ArweaveWebWallet } from 'arweave-wallet-connector';
 
-import { messageResult, readHandler } from 'api';
+import { readHandler } from 'api';
 
 import { Modal } from 'components/molecules/Modal';
 import { AO, AO_TOKEN_DENOMINATION, AR_WALLETS, ASSETS, WALLET_PERMISSIONS } from 'helpers/config';

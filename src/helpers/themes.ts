@@ -218,7 +218,8 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			},
 		},
 		indicator: {
-			active: currentTheme.positive1,
+			primary: currentTheme.positive1,
+			active: currentTheme.positive2,
 		},
 		link: {
 			color: currentTheme.link1,
@@ -297,11 +298,11 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			base: '16px',
 			lg: '18px',
 			xLg: '24px',
-			xxLg: '32px',
+			xxLg: 'clamp(28px, 2.75vw, 34px)',
 			h1: 'clamp(36px, 3.5vw, 56px)',
 			h2: 'clamp(32px, 3.25vw, 50px)',
 			h4: 'clamp(28px, 3vw, 42px)',
-			h6: 'clamp(18px, 2vw, 24px)',
+			h6: 'clamp(18px, 2vw, 22px)',
 		},
 		weight: {
 			thin: '200',

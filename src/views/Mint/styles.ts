@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 60px;
-	padding: 20px 0;
+	padding: 20px 0 40px 0;
 `;
 
 export const GlobalWrapper = styled.div`
@@ -153,13 +153,14 @@ export const MetricsValue = styled.div`
 	}
 `;
 
-export const Messages = styled(MetricsSection)`
+export const MetricsMain = styled(MetricsSection)`
 	justify-content: center;
-	padding: 0 0 35px 0;
-	margin: 0 0 40px 0;
-	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
 	p {
 		font-size: ${(props) => props.theme.typography.size.xLg};
+		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 `;

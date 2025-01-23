@@ -21,6 +21,7 @@ export type TokenDepositType = {
 export type EthTotalDepositedType = {
 	[EthTokenEnum.StEth]: TokenBigIntType;
 	[EthTokenEnum.DAI]: TokenBigIntType;
+	usdTotal: TokenBigIntType;
 };
 
 export type EthTokensType = {

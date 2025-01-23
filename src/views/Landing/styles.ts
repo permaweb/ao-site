@@ -7,10 +7,11 @@ export const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	min-height: calc(100vh - 115px);
+	min-height: calc(100vh - ${STYLING.dimensions.nav.height});
 	justify-content: space-between;
 	position: relative;
 	z-index: 3;
+	padding: 0 0 10px 0;
 `;
 
 export const GraphicWrapper = styled.div`
@@ -22,6 +23,7 @@ export const GraphicWrapper = styled.div`
 		top: ${STYLING.dimensions.nav.height};
 		left: 0;
 		z-index: 2;
+		opacity: 0.65;
 	}
 `;
 
@@ -36,7 +38,9 @@ export const ContentWrapper = styled.div`
 	h4 {
 		line-height: 1.35;
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		background: ${(props) => props.theme.colors.view.background};
+		/* background: ${(props) => props.theme.colors.view.background}; */
+		text-shadow: 0 2.5px 30px ${(props) => props.theme.colors.shadow.primary};
+		/* text-shadow: 0 4.5px 65px rgb(0 0 0); */
 	}
 
 	p {
@@ -47,7 +51,9 @@ export const ContentWrapper = styled.div`
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		text-align: right;
 		padding: 10px 0 0 0;
-		background: ${(props) => props.theme.colors.view.background};
+		text-shadow: 0 2.5px 30px ${(props) => props.theme.colors.shadow.primary};
+		/* text-shadow: 0 4.5px 65px rgb(0 0 0); */
+		/* background: ${(props) => props.theme.colors.view.background}; */
 	}
 `;
 
@@ -67,8 +73,8 @@ export const MetricsWrapper = styled.div`
 export const MetricsSection = styled.div`
 	width: 425px;
 	max-width: 90vw;
-	backdrop-filter: blur(7.5px);
-	background: ${(props) => props.theme.colors.view.background};
+	/* backdrop-filter: blur(7.5px); */
+	/* background: ${(props) => props.theme.colors.view.background}; */
 
 	> * {
 		&:not(:last-child) {
@@ -90,18 +96,20 @@ export const MetricsLine = styled.div`
 
 	span {
 		color: ${(props) => props.theme.colors.font.alt1};
+		text-shadow: 0 2.5px 30px ${(props) => props.theme.colors.shadow.primary};
 	}
 `;
 
 export const MetricsValue = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 7.5px;
+	gap: 10px;
 	p {
 		font-size: ${(props) => props.theme.typography.size.lg};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
+		text-shadow: 0 2.5px 30px ${(props) => props.theme.colors.shadow.primary};
 	}
 `;
 
@@ -110,4 +118,17 @@ export const Indicator = styled.div`
 	width: 12.5px;
 	background: ${(props) => props.theme.colors.indicator.active};
 	border-radius: 50%;
+	animation: pulse 1.15s infinite;
+
+	@keyframes pulse {
+		0%,
+		100% {
+			background: ${(props) => props.theme.colors.indicator.active};
+			transform: scale(1);
+		}
+		50% {
+			background: ${(props) => props.theme.colors.indicator.primary};
+			transform: scale(1.15);
+		}
+	}
 `;

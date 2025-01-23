@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 // import MorpheusAsciiArt from 'components/MorpheusAsciiArt';
 import './HomeMainStyles.css';
 
-import HyperTextLoad from '../../../../components/atoms/HyperTextLoad/HyperTextLoad';
+import HyperTextLoad from '../../../../../components/atoms/HyperTextLoad/HyperTextLoad';
 
 const HomeMain = () => {
 	const containerRef = useRef<HTMLDivElement>(null);

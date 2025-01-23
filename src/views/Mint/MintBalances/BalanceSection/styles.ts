@@ -78,6 +78,17 @@ export const BalanceWalletDropdown = styled.div`
 		}
 
 		&:hover {
+			color: ${(props) => props.theme.colors.font.alt1};
+
+			svg {
+				color: ${(props) => props.theme.colors.font.alt1};
+				fill: ${(props) => props.theme.colors.font.alt1};
+			}
+		}
+	}
+
+	#disconnect-action {
+		&:hover {
 			color: ${(props) => props.theme.colors.warning.primary};
 
 			svg {

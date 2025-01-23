@@ -26,12 +26,13 @@ import {
 	Erc20_ABI,
 	ETH_CONTRACTS,
 	ETH_TOKEN_DENOMINATION,
+	PRICE_FEED_ABI,
 	StEthBridge_ABI,
 } from 'helpers/config';
 import gnosisModule from 'helpers/customGnosis';
 import { customBrave } from 'helpers/customInjected';
 import { EthTokensType, EthTokensYieldProjectionsType, EthTotalDepositedType } from 'helpers/types';
-import { formatDisplayAmount, getDaiReward, getEthReward } from 'helpers/utils';
+import { formatDisplayAmount, formatUSDAmount, getDaiReward, getEthReward } from 'helpers/utils';
 
 import { useAOProvider } from './AOProvider';
 
@@ -152,7 +153,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		}
 	}, [walletModalVisible]);
 
-	// Subscribe to wallet address changes
+	/* Subscribe to wallet address changes */
 	React.useEffect(() => {
 		if (walletAddress === null) return;
 
@@ -203,9 +204,23 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				if (isNaN(totalStEthDeposited)) throw new Error('Invalid totalStEthDeposited');
 				if (isNaN(totalDaiDeposited)) throw new Error('Invalid totalDaiDeposited');
 
+				const ethUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.ethUsdPriceFeed);
+				const daiUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.daiUsdPriceFeed);
+
+				const ethUsdPriceData = await ethUsdFeed.methods.latestRoundData().call();
+				const daiUsdPriceData = await daiUsdFeed.methods.latestRoundData().call();
+
+				const ethUsdPrice = (ethUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
+				const daiUsdPrice = (daiUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
+
+				const usdStEthValue = BigInt(Math.floor(totalStEthDeposited)) * BigInt(ethUsdPrice);
+				const usdDaiValue = BigInt(Math.floor(totalDaiDeposited)) * BigInt(daiUsdPrice);
+				const usdTotal = usdStEthValue + usdDaiValue;
+
 				setTotalDeposited({
 					stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited.toFixed(2)) },
 					dai: { value: totalDaiDeposited, display: formatDisplayAmount(totalDaiDeposited.toFixed(2)) },
+					usdTotal: { value: usdTotal, display: formatUSDAmount(usdTotal.toString()) },
 				});
 			} catch (e: any) {
 				console.error(e);
@@ -279,26 +294,14 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	// 	(async function () {
 	// 		await signer.setPublicKey();
 	// 		const TResult = await sendMessage({
-	// 			Tags: [{ name: 'Action', value: 'User.Get-Tokens' }],
+	// 			Tags: [
+	// 				{ name: 'Action', value: 'User.Get-Tokens' },
+	// 				// { name: 'Token', value: 'DAI' },
+	// 			],
 	// 		}, signer);
 	// 		console.log('SendMessage Result:', TResult);
 	// 	})();
 	// }, []);
-
-	// React.useEffect(() => {
-	// 	(async function () {
-	// 		if (walletAddress && web3Provider) {
-	// 			try {
-	// 				const TResult = await sendMessage({
-	// 					Tags: [{ name: 'Action', value: 'User.Get-Tokens' }],
-	// 				});
-	// 				console.log('SendMessage Result:', TResult);
-	// 			} catch (error) {
-	// 				console.error('Error in sendMessage:', error);
-	// 			}
-	// 		}
-	// 	})();
-	// }, [walletAddress, web3Provider]);
 
 	/* StETH - DAI Balance and Deposited */
 	React.useEffect(() => {

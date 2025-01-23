@@ -3,7 +3,8 @@ import React from 'react';
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { Loader } from 'components/atoms/Loader';
 import { ENDPOINTS } from 'helpers/config';
-import Ethereum from 'views/Ethereum';
+
+import Ethereum from '../Ethereum';
 
 import * as S from './styles';
 

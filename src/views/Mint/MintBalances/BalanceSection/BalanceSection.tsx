@@ -5,7 +5,7 @@ import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Panel } from 'components/atoms/Panel';
 import { EthExchange } from 'components/organisms/EthExchange';
-import { ASSETS } from 'helpers/config';
+import { ASSETS, REDIRECTS } from 'helpers/config';
 import { EthTokenEnum } from 'helpers/types';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
@@ -15,7 +15,6 @@ import { CloseHandler } from 'wrappers/CloseHandler';
 import * as S from './styles';
 import { IProps } from './types';
 
-// TODO: Location provider
 export default function BalanceSection(props: IProps) {
 	const arProvider = useArweaveProvider();
 	const ethProvider = useEthereumProvider();
@@ -23,7 +22,7 @@ export default function BalanceSection(props: IProps) {
 	const [token, setToken] = React.useState<{
 		header: string;
 		ticker: string;
-		wallet: { label: string; icon: string; provider: any };
+		wallet: { label: string; icon: string; provider: any; redirect: (address: string) => string };
 		balance: { header: string; icon: string };
 		action?: {
 			label: string;
@@ -35,25 +34,41 @@ export default function BalanceSection(props: IProps) {
 
 	const [showWalletDropdown, setShowWalletDropdown] = React.useState<boolean>(false);
 	const [showAction, setShowAction] = React.useState<boolean>(false);
+	const [copied, setCopied] = React.useState<boolean>(false);
 
 	const tokens = React.useMemo(() => {
 		return {
 			ao: {
 				header: 'Your AO',
 				ticker: 'AO',
-				wallet: { label: 'Connect Arweave Wallet', icon: ASSETS.arweave, provider: arProvider },
+				wallet: {
+					label: 'Connect Arweave Wallet',
+					icon: ASSETS.arweave,
+					provider: arProvider,
+					redirect: (address: string) => REDIRECTS.viewblock(address),
+				},
 				balance: { header: 'Current Balance', icon: ASSETS.ao },
 			},
 			arweave: {
 				header: 'Arweave',
 				ticker: 'AR',
-				wallet: { label: 'Connect Arweave Wallet', icon: ASSETS.arweave, provider: arProvider },
+				wallet: {
+					label: 'Connect Arweave Wallet',
+					icon: ASSETS.arweave,
+					provider: arProvider,
+					redirect: (address: string) => REDIRECTS.viewblock(address),
+				},
 				balance: { header: 'Current Balance', icon: ASSETS.arweave },
 			},
 			stEth: {
 				header: 'Deposited stETH',
 				ticker: 'StETH',
-				wallet: { label: 'Connect ETH Wallet', icon: ASSETS.ethereum, provider: ethProvider },
+				wallet: {
+					label: 'Connect ETH Wallet',
+					icon: ASSETS.ethereum,
+					provider: ethProvider,
+					redirect: (address: string) => REDIRECTS.etherscan(address),
+				},
 				balance: { header: 'Amount Deposited', icon: ASSETS.stEth },
 				action: {
 					label: 'Trade StETH',
@@ -65,7 +80,12 @@ export default function BalanceSection(props: IProps) {
 			dai: {
 				header: 'Deposited DAI',
 				ticker: 'DAI',
-				wallet: { label: 'Connect ETH Wallet', icon: ASSETS.ethereum, provider: ethProvider },
+				wallet: {
+					label: 'Connect ETH Wallet',
+					icon: ASSETS.ethereum,
+					provider: ethProvider,
+					redirect: (address: string) => REDIRECTS.etherscan(address),
+				},
 				balance: { header: 'Amount Deposited', icon: ASSETS.dai },
 				action: {
 					label: 'Trade DAI',
@@ -192,6 +212,16 @@ export default function BalanceSection(props: IProps) {
 		};
 	}
 
+	const copyAddress = React.useCallback(async (address: string) => {
+		if (address) {
+			if (address.length > 0) {
+				await navigator.clipboard.writeText(address);
+				setCopied(true);
+				setTimeout(() => setCopied(false), 2000);
+			}
+		}
+	}, []);
+
 	return token ? (
 		<>
 			<S.BalanceSection type={props.type} className={'fade-in'}>
@@ -225,7 +255,15 @@ export default function BalanceSection(props: IProps) {
 											<b>{formatDisplayAmount(token.wallet.provider.balance)}</b>
 										</p>
 									</S.BalanceWalletDropdownLine>
-									<button onClick={handleWalletDisconnect}>
+									<button onClick={() => copyAddress(token.wallet?.provider?.walletAddress)}>
+										<ReactSVG src={ASSETS.copy} /> {copied ? `Copied!` : `Copy wallet address`}
+									</button>
+									<button
+										onClick={() => window.open(token.wallet?.redirect(token.wallet?.provider?.walletAddress), '_blank')}
+									>
+										<ReactSVG src={ASSETS.view} /> View in explorer
+									</button>
+									<button id={'disconnect-action'} onClick={handleWalletDisconnect}>
 										<ReactSVG src={ASSETS.disconnect} /> Disconnect
 									</button>
 								</S.BalanceWalletDropdown>

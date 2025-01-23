@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
+import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { URLTabs } from 'components/molecules/URLTabs';
 import { ASSETS, URLS } from 'helpers/config';
-import { formatCount } from 'helpers/utils';
-import { useAOProvider } from 'providers/AOProvider';
+import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 import { useLocationProvider } from 'providers/LocationProvider';
 
@@ -14,12 +14,11 @@ import { MintBalances } from './MintBalances';
 import * as S from './styles';
 
 // TODO: Language
-// TODO: IP Block
 export default function Mint() {
 	const { active } = useParams();
 	const navigate = useNavigate();
 
-	const aoProvider = useAOProvider();
+	const ethProvider = useEthereumProvider();
 	const locationProvider = useLocationProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
@@ -79,26 +78,12 @@ export default function Mint() {
 					</S.InfoWrapper>
 					<S.MetricsWrapper className={'border-wrapper-alt1 fade-in'}>
 						<S.Metrics>
-							<S.Messages>
+							<S.MetricsMain>
 								<S.MetricsValue>
-									<span className={'primary-text'}>{language.messages}</span>
-									<p>{formatCount(aoProvider.messages)}</p>
+									<span className={'primary-text'}>{'Fair Launch Deposits'}</span>
+									<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
 								</S.MetricsValue>
-							</S.Messages>
-							<S.MetricsSection>
-								<S.MetricsValue>
-									<span className={'primary-text'}>{language.nodes}</span>
-									<p>{formatCount(aoProvider.nodes)}</p>
-								</S.MetricsValue>
-								<S.MetricsValue>
-									<span className={'primary-text'}>{language.phase}</span>
-									<p>{aoProvider.phase}</p>
-								</S.MetricsValue>
-								<S.MetricsValue>
-									<span className={'primary-text'}>{language.processes}</span>
-									<p>{formatCount(aoProvider.processes)}</p>
-								</S.MetricsValue>
-							</S.MetricsSection>
+							</S.MetricsMain>
 						</S.Metrics>
 					</S.MetricsWrapper>
 				</S.GlobalWrapper>
