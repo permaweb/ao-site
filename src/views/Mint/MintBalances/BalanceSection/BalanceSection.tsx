@@ -3,10 +3,11 @@ import { ReactSVG } from 'react-svg';
 
 import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
+import { Notification } from 'components/atoms/Notification';
 import { Panel } from 'components/atoms/Panel';
 import { EthExchange } from 'components/organisms/EthExchange';
 import { ASSETS, REDIRECTS } from 'helpers/config';
-import { EthTokenEnum } from 'helpers/types';
+import { EthTokenEnum, NotificationType } from 'helpers/types';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -34,6 +35,7 @@ export default function BalanceSection(props: IProps) {
 
 	const [showWalletDropdown, setShowWalletDropdown] = React.useState<boolean>(false);
 	const [showAction, setShowAction] = React.useState<boolean>(false);
+	const [actionResponse, setActionResponse] = React.useState<NotificationType | null>(null);
 	const [copied, setCopied] = React.useState<boolean>(false);
 
 	const tokens = React.useMemo(() => {
@@ -74,7 +76,7 @@ export default function BalanceSection(props: IProps) {
 					label: 'Trade StETH',
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
-					component: <EthExchange token={EthTokenEnum.StEth} />,
+					component: getEthExchange(EthTokenEnum.StEth),
 				},
 			},
 			dai: {
@@ -91,7 +93,7 @@ export default function BalanceSection(props: IProps) {
 					label: 'Trade DAI',
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
-					component: <EthExchange token={EthTokenEnum.DAI} />,
+					component: getEthExchange(EthTokenEnum.DAI),
 				},
 			},
 		};
@@ -122,6 +124,16 @@ export default function BalanceSection(props: IProps) {
 			provider: token?.wallet?.provider ?? null,
 		}));
 	}, [token?.wallet?.provider]);
+
+	function getEthExchange(token: EthTokenEnum) {
+		return (
+			<EthExchange
+				token={token}
+				setResponse={(response: NotificationType) => setActionResponse(response)}
+				handleClose={() => setShowAction(false)}
+			/>
+		);
+	}
 
 	function handleWalletPress() {
 		if (!token.wallet.provider.walletAddress) {
@@ -365,6 +377,13 @@ export default function BalanceSection(props: IProps) {
 				>
 					<S.ActionWrapper>{token.action.component}</S.ActionWrapper>
 				</Panel>
+			)}
+			{actionResponse && (
+				<Notification
+					message={actionResponse.message}
+					type={actionResponse.status}
+					callback={() => setActionResponse(null)}
+				/>
 			)}
 		</>
 	) : null;

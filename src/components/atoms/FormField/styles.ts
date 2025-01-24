@@ -69,7 +69,6 @@ export const Input = styled.input<{
 		transition: box-shadow, border, outline 225ms ease-in-out;
 	}
 	&:disabled {
-		background: ${(props) => props.theme.colors.form.disabled.background};
 		color: ${(props) => props.theme.colors.form.disabled.label};
 		box-shadow: none;
 		border: 1px solid ${(props) => props.theme.colors.form.disabled.border};

@@ -4,7 +4,6 @@ import Web3 from 'web3';
 
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
-import { Notification } from 'components/atoms/Notification';
 import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, StEthBridge_ABI } from 'helpers/config';
 import { EthExchangeType, EthTokenEnum } from 'helpers/types';
 import { arweaveToEVMBytes, checkValidAddress, formatAddress } from 'helpers/utils';
@@ -18,7 +17,6 @@ import { IProps } from './types';
 
 const { fromWei, toWei, toBigInt } = Web3.utils;
 
-// TODO: DAI Withdraw Countdown
 export default function EthExchange(props: IProps) {
 	const ethProvider = useEthereumProvider();
 	const languageProvider = useLanguageProvider();
@@ -32,9 +30,8 @@ export default function EthExchange(props: IProps) {
 	const [invalid, setInvalid] = React.useState<boolean>(false);
 	const [disabled, setDisabled] = React.useState<boolean>(false);
 	const [processed, setProcessed] = React.useState<boolean>(false);
-	const [response, setResponse] = React.useState<{ message: string | null; status: 'success' | 'warning' } | null>(
-		null
-	);
+	const [lockupTimeRemaining, setLockupTimeRemaining] = React.useState<string | null>(null);
+	const [layoutRefresh, setLayoutRefresh] = React.useState<number>(0);
 
 	const amountInWei = React.useMemo(() => {
 		try {
@@ -60,8 +57,40 @@ export default function EthExchange(props: IProps) {
 		}
 	}, [amountInWei, ethProvider.tokens]);
 
+	/* Check DAI Stake Lockup Period */
 	React.useEffect(() => {
-		if (invalid || loading || !ethProvider.walletAddress || amountInWei <= 0) {
+		if (props.token === EthTokenEnum.DAI && exchangeType === 'withdraw') {
+			const lastStake = BigInt(ethProvider?.tokens?.[props.token]?.deposited?.lastStake);
+			const lockupWindow = BigInt(64800);
+			const currentTime = BigInt(Math.floor(Date.now() / 1000));
+			const timeSinceLastStake = currentTime - lastStake;
+
+			if (timeSinceLastStake <= lockupWindow) {
+				const timeRemaining = lockupWindow - timeSinceLastStake;
+				const hours = Number(timeRemaining / BigInt(3600));
+				const minutes = Number((timeRemaining % BigInt(3600)) / BigInt(60));
+				const seconds = Number(timeRemaining % BigInt(60));
+				setLockupTimeRemaining(`DAI is locked, you can withdraw in (${hours}h:${minutes}m:${seconds}s)`);
+				setDisabled(true);
+				return;
+			}
+		} else {
+			setLockupTimeRemaining(null);
+		}
+	}, [ethProvider.tokens, exchangeType, props.token, layoutRefresh]);
+
+	React.useEffect(() => {
+		if (!lockupTimeRemaining) return;
+
+		const intervalId = setInterval(() => {
+			setLayoutRefresh(Math.random());
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, [lockupTimeRemaining, setLayoutRefresh]);
+
+	React.useEffect(() => {
+		if (invalid || loading || !ethProvider.walletAddress || amountInWei <= 0 || lockupTimeRemaining) {
 			setDisabled(true);
 			return;
 		}
@@ -82,10 +111,10 @@ export default function EthExchange(props: IProps) {
 		ethProvider.tokens,
 		invalid,
 		amount,
-		response,
 		exchangeType,
 		recipient,
 		props.token,
+		lockupTimeRemaining,
 	]);
 
 	React.useEffect(() => {
@@ -149,14 +178,14 @@ export default function EthExchange(props: IProps) {
 				}
 
 				ethProvider.refreshTokens();
-
-				setResponse({
+				props.setResponse({
 					message: `Successful ${exchangeType}`,
 					status: 'success',
 				});
+				props.handleClose();
 			} catch (e) {
 				console.error(e);
-				setResponse({
+				props.setResponse({
 					message: e.message ?? 'Error occurred',
 					status: 'warning',
 				});
@@ -193,12 +222,11 @@ export default function EthExchange(props: IProps) {
 	function handleClear() {
 		setAmount('0');
 		setLoading(false);
-		setResponse(null);
 		setProcessed(false);
 	}
 
 	function getMaxDisabled() {
-		if (loading || !ethProvider.walletAddress) return true;
+		if (loading || !ethProvider.walletAddress || lockupTimeRemaining) return true;
 
 		switch (exchangeType) {
 			case 'deposit':
@@ -272,7 +300,7 @@ export default function EthExchange(props: IProps) {
 							value={amount}
 							onChange={(e: any) => setAmount(e.target.value)}
 							invalid={{ status: invalid, message: null }}
-							disabled={loading || !ethProvider.walletAddress}
+							disabled={loading || !ethProvider.walletAddress || lockupTimeRemaining !== null}
 							hideErrorMessage
 						/>
 						<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
@@ -290,6 +318,11 @@ export default function EthExchange(props: IProps) {
 							required
 							hideErrorMessage
 						/>
+					)}
+					{lockupTimeRemaining && (
+						<S.FormMessage>
+							<p>{lockupTimeRemaining}</p>
+						</S.FormMessage>
 					)}
 				</S.FormWrapper>
 				<S.ActionWrapper>
@@ -309,7 +342,6 @@ export default function EthExchange(props: IProps) {
 					<ExchangeInfo token={props.token} />
 				</S.EndWrapper>
 			</S.Wrapper>
-			{response && <Notification message={response.message} type={response.status} callback={handleClear} />}
 		</>
 	);
 }

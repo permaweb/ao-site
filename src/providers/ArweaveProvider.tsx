@@ -139,7 +139,6 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 	// 			try {
 	// 				// Mint Prod: 1OEAToQGhSKV76oa1MFIGZ9bYxCJoxpXqtksApDdcu8
 	// 				// Mint Test: so3C4AUToJfvLu-K7BaGEadmt1S1FYHVmgMVvB3ZSf8
-	// 				// TODO: Take multiple tokens ?
 	// 				console.log('Getting user AR allocation...');
 	// 				const TResult = await messageResult({
 	// 					processId: '1OEAToQGhSKV76oa1MFIGZ9bYxCJoxpXqtksApDdcu8',

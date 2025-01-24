@@ -1298,7 +1298,7 @@ AO tokens will become transferrable after 15% of the supply has been minted, on 
 	},
 	dai: {
 		description: `66.6% of AO tokens are minted to users that bridge their assets to the network. Simply connect your wallet, deposit Dai, and earn AO.
-You will begin to accrue AO 24 hours after your deposit has been confirmed.<br/><br/>Dai has an 18-hour minimum lockup period. This means that you will not be able to remove your Dai from the bridge for 18 hours after depositing it.
+You will begin to accrue AO 24 hours after your deposit has been confirmed.<br/><br/>DAI has an 18-hour minimum lockup period. This means that you will not be able to remove your DAI from the bridge for 18 hours after depositing it.
 AO tokens will become transferrable after 15% of the supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ" target="_blank">blog post</a>.`,
 	},
 	stEth: {

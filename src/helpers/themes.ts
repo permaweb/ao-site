@@ -187,7 +187,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			disabled: {
 				background: currentTheme.neutral2,
 				border: currentTheme.neutral5,
-				label: currentTheme.neutralA2,
+				label: currentTheme.neutral7,
 			},
 		},
 		gradient: {

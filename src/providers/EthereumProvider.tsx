@@ -320,12 +320,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
 
 					const stEthBalanceOf = (await stEthContract.methods.balanceOf(walletAddress).call()) as any as bigint;
-					const stEthUsersData = ((await stEthBridgeContract.methods.usersData(walletAddress, 0).call()) as any)
-						.deposited as bigint;
+					const stEthUsersData = (await stEthBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
 
 					const daiBalanceOf = (await daiContract.methods.balanceOf(walletAddress).call()) as any as bigint;
-					const daiUsersData = ((await daiBridgeContract.methods.usersData(walletAddress, 0).call()) as any)
-						.deposited as bigint;
+					const daiUsersData = (await daiBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
 
 					setTokens((prev) => ({
 						...prev,
@@ -335,8 +333,9 @@ export function EthereumProvider(props: EthereumProviderProps) {
 								display: getBalanceDisplay(stEthBalanceOf),
 							},
 							deposited: {
-								value: stEthUsersData,
-								display: getBalanceDisplay(stEthUsersData),
+								value: stEthUsersData.deposited,
+								display: getBalanceDisplay(stEthUsersData.deposited),
+								lastStake: stEthUsersData.lastStake,
 							},
 						},
 						dai: {
@@ -345,8 +344,9 @@ export function EthereumProvider(props: EthereumProviderProps) {
 								display: getBalanceDisplay(daiBalanceOf),
 							},
 							deposited: {
-								value: daiUsersData,
-								display: getBalanceDisplay(daiUsersData),
+								value: daiUsersData.deposited,
+								display: getBalanceDisplay(daiUsersData.deposited),
+								lastStake: daiUsersData.lastStake,
 							},
 						},
 					}));
@@ -372,10 +372,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						}),
 					]);
 
-					const daiPrice = Number(daiResp.LastPrice) / 10000;
-					const daiYield = Number(daiResp.LastYield) / 10000;
-					const stEthPrice = Number(stEthResp.LastPrice) / 10000;
-					const stEthYield = Number(stEthResp.LastYield) / 10000;
+					const daiPrice = Number(daiResp?.LastPrice) / 10000;
+					const daiYield = Number(daiResp?.LastYield) / 10000;
+					const stEthPrice = Number(stEthResp?.LastPrice) / 10000;
+					const stEthYield = Number(stEthResp?.LastYield) / 10000;
 
 					const totalDepositedSteth = Number(totalDeposited?.stEth?.value ?? BigInt(0));
 					const totalDepositedDai = Number(totalDeposited?.dai?.value ?? BigInt(0));

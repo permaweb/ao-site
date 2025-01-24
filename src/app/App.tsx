@@ -3,7 +3,6 @@ import { Routes } from 'routes';
 
 import * as S from './styles';
 
-// TODO: 404
 export default function App() {
 	return (
 		<>

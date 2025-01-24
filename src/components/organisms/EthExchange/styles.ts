@@ -59,7 +59,7 @@ export const Form = styled.div<{ invalid: boolean }>`
 		margin: 0 !important;
 		&:disabled {
 			background: transparent !important;
-			color: ${(props) => props.theme.colors.button.alt1.disabled.color} !important;
+			color: ${(props) => props.theme.colors.form.disabled.label} !important;
 			box-shadow: none;
 			border: 1px solid ${(props) => props.theme.colors.form.disabled.border};
 		}
@@ -121,6 +121,15 @@ export const FormFieldLabel = styled.div<{ disabled: boolean }>`
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		text-transform: uppercase;
+	}
+`;
+
+export const FormMessage = styled.div`
+	p {
+		color: ${(props) => props.theme.colors.warning.primary};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+		font-family: ${(props) => props.theme.typography.family.alt1};
 	}
 `;
 

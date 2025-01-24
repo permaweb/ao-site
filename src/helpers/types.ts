@@ -15,7 +15,7 @@ export type TokenBigIntType = { value: bigint | null; display: string | null };
 
 export type TokenDepositType = {
 	balance: TokenBigIntType;
-	deposited: TokenBigIntType;
+	deposited: TokenBigIntType & { lastStake: bigint };
 };
 
 export type EthTotalDepositedType = {
@@ -78,3 +78,5 @@ export type ValidationType = {
 export type TagType = { name: string; value: string };
 
 export type ButtonType = 'primary' | 'alt1' | 'alt2' | 'alt3' | 'alt4' | 'indicator' | 'warning';
+
+export type NotificationType = { message: string | null; status: 'success' | 'warning' };

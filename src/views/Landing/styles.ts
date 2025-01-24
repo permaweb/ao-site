@@ -39,8 +39,7 @@ export const ContentWrapper = styled.div`
 		line-height: 1.35;
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		/* background: ${(props) => props.theme.colors.view.background}; */
-		text-shadow: 0 2.5px 30px ${(props) => props.theme.colors.shadow.primary};
-		/* text-shadow: 0 4.5px 65px rgb(0 0 0); */
+		text-shadow: 2.5px 2.5px 3.5px rgba(170, 170, 170);
 	}
 
 	p {
@@ -51,9 +50,8 @@ export const ContentWrapper = styled.div`
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		text-align: right;
 		padding: 10px 0 0 0;
-		text-shadow: 0 2.5px 30px ${(props) => props.theme.colors.shadow.primary};
-		/* text-shadow: 0 4.5px 65px rgb(0 0 0); */
 		/* background: ${(props) => props.theme.colors.view.background}; */
+		text-shadow: 2.5px 2.5px 3.5px rgba(200, 200, 200);
 	}
 `;
 
