@@ -259,7 +259,7 @@ export default function BalanceSection(props: IProps) {
 								iconLeftAlign
 							/>
 							{showWalletDropdown && (
-								<S.BalanceWalletDropdown className={'border-wrapper-alt2 fade-in'}>
+								<S.BalanceWalletDropdown className={'border-wrapper-primary fade-in'}>
 									<S.BalanceWalletDropdownLine>
 										<p>Balance:</p>
 										<ReactSVG src={token.wallet.icon} />

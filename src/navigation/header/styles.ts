@@ -46,12 +46,12 @@ export const LogoWrapper = styled.div`
 	}
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
-		height: 32.5px;
-		width: 32.5px;
+		height: 30.5px;
+		width: 30.5px;
 
 		svg {
-			height: 32.5px;
-			width: 32.5px;
+			height: 30.5px;
+			width: 30.5px;
 			margin: 0;
 		}
 	}

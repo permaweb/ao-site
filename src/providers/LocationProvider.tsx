@@ -35,7 +35,7 @@ export function LocationProvider(props: LocationProviderProps) {
 			setLoading(false);
 		};
 
-		checkLocation();
+		if (process.env.NODE_ENV !== 'development') checkLocation();
 	}, []);
 
 	return <LocationContext.Provider value={{ country, loading }}>{props.children}</LocationContext.Provider>;

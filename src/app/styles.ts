@@ -114,6 +114,7 @@ export const GlobalStyle = createGlobalStyle`
     font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
     color: ${(props) => props.theme.colors.font.primary};
+		letter-spacing: 1.15px;
 		overflow-wrap: anywhere;
   }
 
@@ -123,7 +124,6 @@ export const GlobalStyle = createGlobalStyle`
 
   h2 {
     font-size: ${(props) => props.theme.typography.size.h2};
-		letter-spacing: 1.5px;
   }
 
   h4 {
@@ -132,6 +132,7 @@ export const GlobalStyle = createGlobalStyle`
   
 	h6 {
     font-size: ${(props) => props.theme.typography.size.h6};
+		letter-spacing: 0;
   }
 
   a, button {
@@ -192,7 +193,6 @@ export const GlobalStyle = createGlobalStyle`
 
   .border-wrapper-alt1 {
     background: ${(props) => props.theme.colors.container.alt1.background};
-		border: 1px solid ${(props) => props.theme.colors.border.primary};
   }
 
 	.border-wrapper-alt2 {

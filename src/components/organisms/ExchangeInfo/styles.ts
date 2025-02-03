@@ -8,7 +8,6 @@ export const Wrapper = styled.div`
 
 export const Description = styled.div`
 	display: flex;
-	padding: 20px;
 	svg {
 		height: 15px;
 		width: 15px;
@@ -33,7 +32,6 @@ export const IconsWrapper = styled.div`
 	flex-direction: column;
 	justify-content: space-between;
 	gap: 25px;
-	padding: 20px;
 `;
 
 export const IconGroup = styled.div`

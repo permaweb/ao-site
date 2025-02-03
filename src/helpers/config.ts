@@ -8,7 +8,6 @@ import metamask from 'assets/metamask.png';
 import morpheusAudit from 'assets/morpheus-audit.svg';
 import nccAudit from 'assets/ncc-audit.svg';
 import othent from 'assets/othent.svg';
-import plus from 'assets/plus.svg';
 import rabby from 'assets/rabby.png';
 import renascenseAudit from 'assets/renascense-audit.svg';
 import walletConnect from 'assets/wallet-connect.png';
@@ -42,7 +41,6 @@ export const ASSETS = {
 	aoPict,
 	arconnect,
 	arweaveApp,
-	plus,
 	codehawksAudit,
 	heroGraphic,
 	ipBlock,
@@ -72,6 +70,7 @@ export const ASSETS = {
 	logo: getTxEndpoint('kKG4pr1WCy9OdiKPe7TKTs_HYUzP0-BPWBMDFCpZtfE'),
 	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
 	pi: getTxEndpoint('n1AM_4usUnh6zj8GzdQDu1KkvC5XFlBLk7sKXgNHtos'),
+	plus: getTxEndpoint('OUryhpUV-y709P_Tr575rN8gS-8c5rzlKXNymR9gsE4'),
 	remove: getTxEndpoint('aKjWuVXkSeYOKzGP0MnnhHwoYUXqTHFMJfVCbqzYEo0'),
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
 	success: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
@@ -104,7 +103,7 @@ export const STYLING = {
 	cutoffs: {
 		desktop: '1200px',
 		initial: '1024px',
-		max: '1400px',
+		max: '1460px',
 		tablet: '840px',
 		tabletSecondary: '768px',
 		secondary: '540px',

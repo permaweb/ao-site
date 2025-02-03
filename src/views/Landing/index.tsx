@@ -26,7 +26,7 @@ export default function Landing() {
 				<S.MetricsWrapper>
 					<S.MetricsSection className={'fade-in'}>
 						<S.MetricsLine>
-							<span className={'primary-text'}>{language.status}</span>
+							<span className={'primary-text'}>{language.phase}</span>
 							<S.MetricsValue>
 								<p>{aoProvider.phase}</p>
 							</S.MetricsValue>
@@ -67,12 +67,12 @@ export default function Landing() {
 					</S.MetricsSection>
 				</S.MetricsWrapper>
 			</S.Wrapper>
-			{/* <S.GraphicWrapper>
+			<S.GraphicWrapper>
 				<video autoPlay muted loop>
 					<source src={graphic} type={'video/mp4'} />
 					Your browser does not support the video tag.
 				</video>
-			</S.GraphicWrapper> */}
+			</S.GraphicWrapper>
 		</>
 	);
 }

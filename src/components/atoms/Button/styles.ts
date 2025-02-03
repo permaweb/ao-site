@@ -295,7 +295,7 @@ export const IconAlt2 = styled(IconAlt1)`
 export const Alt3 = styled(Primary)`
 	min-height: 25px !important;
 	height: 25px !important;
-	padding: 0 10px !important;
+	padding: 0 12.5px !important;
 	border-radius: 20px;
 
 	background: ${(props) =>

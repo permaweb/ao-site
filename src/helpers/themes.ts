@@ -8,7 +8,7 @@ export const lightTheme = {
 	negative1: '#ED254E',
 	negative2: '#E2123C',
 	neutral1: '#FFFFFF',
-	neutral2: '#F9F9F9',
+	neutral2: '#F7F7F7',
 	neutral3: '#F0F0F0',
 	neutral4: '#E4E4E4',
 	neutral5: '#D6D6D6',
@@ -61,7 +61,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			color: currentTheme.neutralA1,
 		},
 		border: {
-			primary: currentTheme.neutral6,
+			primary: currentTheme.neutral3,
 			alt1: currentTheme.neutral7,
 			alt2: currentTheme.neutral8,
 			alt3: currentTheme.neutral9,
@@ -72,7 +72,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		button: {
 			primary: {
 				background: currentTheme.neutral2,
-				border: currentTheme.neutral6,
+				border: currentTheme.neutral4,
 				color: currentTheme.neutralA1,
 				active: {
 					background: currentTheme.neutral3,
@@ -291,17 +291,17 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			alt1: `'DM Sans', sans-serif`,
 		},
 		size: {
-			xxxSmall: '12px',
-			xxSmall: '13px',
-			xSmall: '14px',
-			small: '15px',
-			base: '16px',
-			lg: '18px',
-			xLg: '24px',
+			xxxSmall: 'clamp(11px, 1.15vw, 12px)',
+			xxSmall: 'clamp(12px, 1.25vw, 13px)',
+			xSmall: 'clamp(13px, 1.35vw, 14px)',
+			small: 'clamp(14px, 1.45vw, 15px)',
+			base: 'clamp(15px, 1.5vw, 16px)',
+			lg: 'clamp(16px, 1.65vw, 18px)',
+			xLg: 'clamp(18px, 1.75vw, 24px)',
 			xxLg: 'clamp(28px, 2.75vw, 34px)',
 			h1: 'clamp(36px, 3.5vw, 56px)',
 			h2: 'clamp(32px, 3.25vw, 50px)',
-			h4: 'clamp(28px, 3vw, 42px)',
+			h4: 'clamp(28px, 3vw, 38px)',
 			h6: 'clamp(18px, 2vw, 22px)',
 		},
 		weight: {

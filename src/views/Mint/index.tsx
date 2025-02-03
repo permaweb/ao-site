@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ReactSVG } from 'react-svg';
 
 import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
+import { SupplyChart } from 'components/molecules/SupplyChart';
 import { URLTabs } from 'components/molecules/URLTabs';
 import { ASSETS, URLS } from 'helpers/config';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -14,6 +16,7 @@ import { MintBalances } from './MintBalances';
 import * as S from './styles';
 
 // TODO: Language
+// TODO: Next mint cycle
 export default function Mint() {
 	const { active } = useParams();
 	const navigate = useNavigate();
@@ -53,9 +56,10 @@ export default function Mint() {
 		<>
 			<S.Wrapper>
 				<S.GlobalWrapper>
-					<S.InfoWrapper className={'fade-in'}>
+					<S.InfoWrapper className={'border-wrapper-alt1 fade-in'}>
 						<S.InfoHeader>
-							<h6>{language.fairLaunch}</h6>
+							<ReactSVG src={ASSETS.plus} />
+							<p>{language.fairLaunch}</p>
 						</S.InfoHeader>
 						<S.InfoBody>
 							<p>
@@ -71,20 +75,27 @@ export default function Mint() {
 								<br />
 								<b>No Pre-mine, No Insider Allocation:</b> Ensuring a truly decentralized and equitable distribution.
 							</p>
-							<a href={'#'} target={'_blank'} className={'primary-text'}>
-								Learn More
+							<a href={'#'} target={'_blank'}>
+								{language.learnMore}
 							</a>
 						</S.InfoBody>
 					</S.InfoWrapper>
-					<S.MetricsWrapper className={'border-wrapper-alt1 fade-in'}>
+					<S.MetricsWrapper className={'fade-in'}>
 						<S.Metrics>
-							<S.MetricsMain>
-								<S.MetricsValue>
-									<span className={'primary-text'}>{'Fair Launch Deposits'}</span>
+							<S.MetricsSection>
+								<S.MetricsValueMain>
+									<span className={'primary-text'}>{language.fairLaunchDeposits}</span>
 									<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
+								</S.MetricsValueMain>
+							</S.MetricsSection>
+							<S.MetricsSection>
+								<S.MetricsValue>
+									<span className={'primary-text'}>{language.nextMintCycle}</span>
+									<p>February 6, 2025 10:54 AM</p>
 								</S.MetricsValue>
-							</S.MetricsMain>
+							</S.MetricsSection>
 						</S.Metrics>
+						<SupplyChart />
 					</S.MetricsWrapper>
 				</S.GlobalWrapper>
 				<URLTabs tabs={TABS} activeUrl={TABS[0].url} />

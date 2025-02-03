@@ -40,7 +40,7 @@ export default function MintBalances() {
 				</S.HeaderWrapper>
 				<S.BalancesBodyWrapper>
 					<S.BalancesPrimaryWrapper>
-						<S.BalancesGlobalWrapper className={'border-wrapper-primary'}>
+						<S.BalancesGlobalWrapper>
 							<S.BalanceQuantitySection>
 								<S.BalanceQuantityHeader>
 									<span className={'primary-text'}>Total AO Supply</span>

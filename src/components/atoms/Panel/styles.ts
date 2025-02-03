@@ -30,7 +30,7 @@ export const Container = styled.div<{
 	right: 10px;
 	transform: translateX(${(props) => (props.open ? '0' : 'calc(100% + 10px)')});
 	transition: transform ${transition2};
-	border: 1.25px solid ${(props) => props.theme.colors.border.alt4} !important;
+	border-radius: ${STYLING.dimensions.radius.alt1};
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		min-width: calc(100vw - 20px);
 	}

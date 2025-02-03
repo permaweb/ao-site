@@ -5,6 +5,7 @@ import { EthTokenEnum, TokenEarningsType } from 'helpers/types';
 
 function getBalanceWrapper(type: TokenEarningsType, theme: DefaultTheme) {
 	switch (type) {
+		case 'ao':
 		case 'arweave':
 			return `
 				background: ${theme.colors.container.alt1.background};
@@ -13,6 +14,7 @@ function getBalanceWrapper(type: TokenEarningsType, theme: DefaultTheme) {
 		case EthTokenEnum.DAI:
 			return `
 				background: ${theme.colors.container.primary.background};
+				border: 1px solid ${theme.colors.border.primary};
 			`;
 	}
 }
@@ -20,8 +22,7 @@ function getBalanceWrapper(type: TokenEarningsType, theme: DefaultTheme) {
 export const BalanceSection = styled.div<{ type: TokenEarningsType }>`
 	width: 100%;
 	padding: 20px;
-	border: 1px solid ${(props) => props.theme.colors.border.primary};
-	${(props) => getBalanceWrapper(props.type, props.theme)};
+	${(props) => getBalanceWrapper(props.type, props.theme)}
 `;
 
 export const BalanceHeaderWrapper = styled.div`
@@ -117,7 +118,7 @@ export const BalanceWalletDropdownLine = styled.div`
 	svg {
 		height: 16.5px;
 		width: 16.5px;
-		margin: 7.5px 0 0 5px;
+		margin: 6.5px 2.5px 0 5px;
 	}
 `;
 

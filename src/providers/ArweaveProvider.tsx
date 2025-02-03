@@ -53,6 +53,7 @@ export function useArweaveProvider(): ArweaveContextState {
 	return React.useContext(ARContext);
 }
 
+// TODO: Wallet modal styling
 function WalletList(props: { handleConnect: any }) {
 	return (
 		<S.WalletListContainer>

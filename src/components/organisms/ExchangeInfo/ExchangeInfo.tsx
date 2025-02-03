@@ -14,10 +14,10 @@ export default function ExchangeInfo(props: { token: TokenEarningsType }) {
 
 	return (
 		<S.Wrapper>
-			<S.Description className={'border-wrapper-alt1 fade-in'}>
+			<S.Description className={'fade-in'}>
 				<p>{parse(ETH_EXCHANGE_CONFIG[props.token].description)}</p>
 			</S.Description>
-			<S.IconsWrapper className={'border-wrapper-alt1 fade-in'}>
+			<S.IconsWrapper className={'fade-in'}>
 				<S.IconGroup>
 					<p className={'primary-text'}>{language.baseContractAudits}</p>
 					<S.IconsLine>

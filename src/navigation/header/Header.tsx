@@ -18,7 +18,6 @@ export default function Header() {
 
 	const paths: { path: string; label: string; target?: '_blank' }[] = [
 		{ path: URLS.mintDeposits, label: language.mint },
-		{ path: URLS.read, label: language.read },
 		{ path: REDIRECTS.cookbook, label: language.build, target: '_blank' },
 	];
 

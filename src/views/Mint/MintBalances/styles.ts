@@ -144,7 +144,6 @@ export const BalancesGlobalWrapper = styled.div`
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: 20px;
-	padding: 20px;
 
 	${BalanceQuantityBody} {
 		p,
