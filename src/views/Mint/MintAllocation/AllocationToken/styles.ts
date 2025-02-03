@@ -93,13 +93,14 @@ export const TokenSectionEndWrapper = styled.div<{ open: boolean }>`
 `;
 
 export const TokenBodyDescriptionWrapper = styled.div`
+	min-height: 55px;
 	margin: 0 0 30px 0;
 	p {
 		line-height: 1.75;
 		font-size: ${(props) => props.theme.typography.size.small};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		color: ${(props) => props.theme.colors.font.alt1};
+		color: ${(props) => props.theme.colors.font.primary};
 	}
 
 	b {

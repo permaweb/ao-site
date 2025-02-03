@@ -1,28 +1,24 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
+import parse from 'html-react-parser';
 
-import { BlockedMessage } from 'components/atoms/BlockedMessage';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { SupplyChart } from 'components/molecules/SupplyChart';
 import { URLTabs } from 'components/molecules/URLTabs';
-import { ASSETS, URLS } from 'helpers/config';
+import { ASSETS, REDIRECTS, URLS } from 'helpers/config';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
-import { useLocationProvider } from 'providers/LocationProvider';
 
 import { MintAllocation } from './MintAllocation';
 import { MintBalances } from './MintBalances';
 import * as S from './styles';
 
-// TODO: Language
-// TODO: Next mint cycle
 export default function Mint() {
 	const { active } = useParams();
 	const navigate = useNavigate();
 
 	const ethProvider = useEthereumProvider();
-	const locationProvider = useLocationProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
@@ -50,7 +46,10 @@ export default function Mint() {
 		[]
 	);
 
-	if (locationProvider.country === 'US') return <BlockedMessage />;
+	// TODO: Next mint cycle
+	function getNextMintCycle() {
+		return 'February 6, 2025 10:54 AM';
+	}
 
 	return (
 		<>
@@ -62,20 +61,8 @@ export default function Mint() {
 							<p>{language.fairLaunch}</p>
 						</S.InfoHeader>
 						<S.InfoBody>
-							<p>
-								<span id={'info-body-subheader'}>Just like Bitcoin, every $AO is minted by the community.</span>
-								<br />
-								<br />
-								<b>21 Million Tokens:</b> A fixed supply with a continuous halving emission curve.
-								<br />
-								<br />
-								<b>Bridge Assets to Mint $AO:</b> Participate by bridging qualified assets like stETH and DAI, or by
-								holding AR.
-								<br />
-								<br />
-								<b>No Pre-mine, No Insider Allocation:</b> Ensuring a truly decentralized and equitable distribution.
-							</p>
-							<a href={'#'} target={'_blank'}>
+							<p>{parse(language.mintSubheader)}</p>
+							<a href={REDIRECTS.tokenomics} target={'_blank'}>
 								{language.learnMore}
 							</a>
 						</S.InfoBody>
@@ -91,7 +78,7 @@ export default function Mint() {
 							<S.MetricsSection>
 								<S.MetricsValue>
 									<span className={'primary-text'}>{language.nextMintCycle}</span>
-									<p>February 6, 2025 10:54 AM</p>
+									<p>{getNextMintCycle()}</p>
 								</S.MetricsValue>
 							</S.MetricsSection>
 						</S.Metrics>

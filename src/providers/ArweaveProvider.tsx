@@ -5,7 +5,7 @@ import { ArweaveWebWallet } from 'arweave-wallet-connector';
 import { readHandler } from 'api';
 
 import { Modal } from 'components/molecules/Modal';
-import { AO, AO_TOKEN_DENOMINATION, AR_WALLETS, ASSETS, WALLET_PERMISSIONS } from 'helpers/config';
+import { AO, AO_TOKEN_DENOMINATION, AR_WALLETS, ASSETS, REDIRECTS, WALLET_PERMISSIONS } from 'helpers/config';
 import { getARBalanceEndpoint } from 'helpers/endpoints';
 import { ArWalletEnum, TokenYieldProjectionsType } from 'helpers/types';
 import { getArReward } from 'helpers/utils';
@@ -58,15 +58,19 @@ function WalletList(props: { handleConnect: any }) {
 	return (
 		<S.WalletListContainer>
 			{AR_WALLETS.map((wallet: any, index: number) => (
-				<S.WalletListItem
-					key={index}
-					onClick={() => props.handleConnect(wallet.type)}
-					className={'border-wrapper-alt2'}
-				>
+				<S.WalletListItem key={index} onClick={() => props.handleConnect(wallet.type)}>
 					{wallet.logo && <img src={`${wallet.logo}`} alt={''} />}
 					<span>{wallet.type.charAt(0).toUpperCase() + wallet.type.slice(1)}</span>
 				</S.WalletListItem>
 			))}
+			<S.WalletLink>
+				<span>
+					Don't have an Arweave Wallet? You can create one{' '}
+					<a href={REDIRECTS.arconnect} target={'_blank'}>
+						here.
+					</a>
+				</span>
+			</S.WalletLink>
 		</S.WalletListContainer>
 	);
 }

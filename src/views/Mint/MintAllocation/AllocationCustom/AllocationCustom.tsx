@@ -6,6 +6,7 @@ import { useAllocationProvider } from 'providers/AllocationProvider';
 
 import * as S from './styles';
 
+// TODO: Get projects
 export default function AllocationCustom() {
 	const allocationProvider = useAllocationProvider();
 

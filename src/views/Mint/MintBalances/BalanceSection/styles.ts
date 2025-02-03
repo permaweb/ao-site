@@ -22,7 +22,10 @@ function getBalanceWrapper(type: TokenEarningsType, theme: DefaultTheme) {
 export const BalanceSection = styled.div<{ type: TokenEarningsType }>`
 	width: 100%;
 	padding: 20px;
-	${(props) => getBalanceWrapper(props.type, props.theme)}
+	${(props) => getBalanceWrapper(props.type, props.theme)};
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		padding: 40px 25px;
+	}
 `;
 
 export const BalanceHeaderWrapper = styled.div`
@@ -32,6 +35,10 @@ export const BalanceHeaderWrapper = styled.div`
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: 20px;
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		flex-direction: column;
+	}
 `;
 
 export const BalanceHeader = styled.div`
@@ -46,6 +53,19 @@ export const BalanceHeader = styled.div`
 
 export const BalanceWalletWrapper = styled.div`
 	position: relative;
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		width: 100%;
+	}
+`;
+
+export const BalanceWalletAction = styled.div`
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		button {
+			height: 55px !important;
+			width: 100% !important;
+		}
+	}
 `;
 
 export const BalanceWalletDropdown = styled.div`
@@ -59,6 +79,7 @@ export const BalanceWalletDropdown = styled.div`
 	flex-direction: column;
 	gap: 10px;
 	padding: 12.5px 20px 13.5px 20px;
+	border-radius: ${STYLING.dimensions.radius.primary};
 
 	button {
 		width: fit-content;
@@ -97,6 +118,13 @@ export const BalanceWalletDropdown = styled.div`
 				fill: ${(props) => props.theme.colors.warning.primary};
 			}
 		}
+	}
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		top: 60.5px;
+		right: auto;
+		left: 0;
+		width: 100%;
 	}
 `;
 

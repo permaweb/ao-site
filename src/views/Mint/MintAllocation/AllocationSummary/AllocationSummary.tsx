@@ -13,6 +13,7 @@ import * as S from './styles';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+// TODO: SummaryLineActions
 export default function AllocationSummary() {
 	const theme = useTheme();
 

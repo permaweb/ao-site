@@ -49,7 +49,7 @@ export const ContentWrapper = styled.div`
 			height: 100%;
 			background: ${(props) => props.theme.colors.view.background};
 			z-index: -1;
-			filter: blur(5px);
+			filter: blur(0);
 		}
 	}
 
@@ -61,7 +61,7 @@ export const ContentWrapper = styled.div`
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		text-align: right;
-		padding: 30px 0 5px 20px;
+		padding: 30px 0 20px 20px;
 		margin: -10px 0 0 0;
 		position: relative;
 		transition: ${open} ${fadeIn2};
@@ -90,10 +90,10 @@ export const MetricsWrapper = styled.div`
 
 	> * {
 		&:first-child {
-			padding: 0 20px 0 0;
+			padding: 25px 25px 0 0;
 		}
 		&:last-child {
-			padding: 0 0 0 20px;
+			padding: 25px 0 0 25px;
 		}
 	}
 
@@ -112,7 +112,7 @@ export const MetricsWrapper = styled.div`
 `;
 
 export const MetricsSection = styled.div`
-	width: 450px;
+	width: 465px;
 	position: relative;
 	transition: ${open} ${fadeIn2};
 

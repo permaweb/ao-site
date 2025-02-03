@@ -193,4 +193,10 @@ export const BalanceQuantityHeader = styled.div`
 	}
 `;
 
-export const ModalWrapper = styled.div``;
+export const ModalWrapper = styled.div`
+	span {
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;

@@ -249,15 +249,17 @@ export default function BalanceSection(props: IProps) {
 							active={showWalletDropdown}
 							disabled={!showWalletDropdown}
 						>
-							<Button
-								type={'primary'}
-								label={getWalletLabel()}
-								handlePress={handleWalletPress}
-								active={showWalletDropdown}
-								disabled={token.wallet.provider.connecting}
-								icon={token.wallet.icon}
-								iconLeftAlign
-							/>
+							<S.BalanceWalletAction>
+								<Button
+									type={'primary'}
+									label={getWalletLabel()}
+									handlePress={handleWalletPress}
+									active={showWalletDropdown}
+									disabled={token.wallet.provider.connecting}
+									icon={token.wallet.icon}
+									iconLeftAlign
+								/>
+							</S.BalanceWalletAction>
 							{showWalletDropdown && (
 								<S.BalanceWalletDropdown className={'border-wrapper-primary fade-in'}>
 									<S.BalanceWalletDropdownLine>

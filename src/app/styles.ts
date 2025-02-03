@@ -31,52 +31,8 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
 		overflow-x: hidden !important;
-    background: var(--background-color);
+    background: ${(props) => props.theme.colors.view.background};
   }
-
-	#root {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: 100%;
-}
-
-:root {
-	font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-		'Open Sans', 'Helvetica Neue', sans-serif;
-	line-height: 1.5;
-	font-weight: 200;
-	color-scheme: light;
-	color: var(--main-dark-color);
-	background-color: var(--background-color);
-
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-text-size-adjust: 100%;
-
-	--container-padding: 100px;
-	--header-height: 116px;
-	--nav-background-color: #fefefe;
-	--background-color: #fefefe;
-	--background-color-2: #fef4f4;
-	--background-color-3: #edffec;
-	--background-color-4: #fdf2f2;
-	--background-color-5: #e8eeff;
-	--faded-accent-color: #f8fff8;
-	--table-accent-color: #e1ebea;
-	--accent-color: #054bfe;
-	--main-dark-color: #222326;
-	--triangle-color: #e6e7ea;
-	--terminal-red: #d50e0e;
-	--terminal-green: #18a32f;
-	--terminal-blue: #054bfe;
-
-  // web3 onboard
-  --onboard-modal-backdrop: rgba(130, 130, 130, 0.25);
-  --onboard-font-family-normal: "DM Sans";
-}
 
   ol, ul {
     list-style: none;
@@ -99,7 +55,7 @@ export const GlobalStyle = createGlobalStyle`
 			margin: 0;
 			color-scheme: ${(props) => props.theme.scheme};
 			font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-			"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+			"Ubuntu",
 			sans-serif;
 			font-family: ${(props) => props.theme.typography.family.primary};
 			font-weight: ${(props) => props.theme.typography.weight.medium};
@@ -108,6 +64,22 @@ export const GlobalStyle = createGlobalStyle`
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
 			box-sizing: border-box;
+			
+			scrollbar-color: ${(props) => props.theme.colors.scrollbar.thumb} ${(props) => props.theme.colors.scrollbar.track};
+
+			::-webkit-scrollbar-track {
+				background: ${(props) => props.theme.colors.scrollbar.track};
+			}
+			::-webkit-scrollbar {
+				width: 15px;
+				border-left: 1px solid ${(props) => props.theme.colors.border.primary};
+			}
+			::-webkit-scrollbar-thumb {
+				background-color: ${(props) => props.theme.colors.scrollbar.thumb};
+				border-radius: 36px;
+				border: 3.5px solid transparent;
+				background-clip: padding-box;
+			} 
 	}
 
   h1, h2, h3, h4, h5, h6 {
@@ -275,195 +247,6 @@ export const GlobalStyle = createGlobalStyle`
 	.fade-in {
 		animation: ${open} ${transition2};
 	}
-
-	.pre-bridge-wrapper {
-		display: flex;
-		justify-content: space-between;;
-		flex-wrap: wrap;
-		gap: 20px;
-		button {
-			min-width: 0 !important;
-			width: 100% !important;
-		}
-		@media (max-width: ${STYLING.cutoffs.initial}) {
-			flex-direction: column;
-		}
-	}
-
-	.pre-bridge-content {
-		height: fit-content;
-		width: 720px;
-		display: flex;
-		flex: 1;
-	}
-
-	header {
-		position: fixed;
-		top: 0;
-		display: flex;
-		height: 100px;
-		width: 100%;
-		overflow: hidden;
-		z-index: 2;
-  }
-
-nav {
-	height: 55px;
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  padding-left: 32px;
-  padding-right: 32px;
-	background: #FFFFFF;
-}
-
-.nav-left {
-  display: flex;
-  flex-direction: row;
-  gap: 32px;
-}
-
-.nav-left a {
-  display: flex;
-}
-.ao-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  width: 100%;
-}
-
-.ao-wrapper:hover {
-  opacity: 75%;
-}
-
-.nav-buttons-header {
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-}
-
-.nav-buttons-header button {
-  font-family: 'Roboto Mono', monospace;
-  letter-spacing: -0.1px;
-  text-transform: uppercase;
-  font-size: (12px, 6vw, 16px);
-}
-
-.main-cta-wrapper {
-  position: relative;
-}
-
-.main-cta-button button {
-  font-family: 'Roboto Mono', monospace;
-  letter-spacing: -0.1px;
-  text-transform: uppercase;
-  font-size: (8px, 5vw, 12px);
-  background: transparent;
-}
-
-footer {
-  display: flex;
-  height: 40px;
-  width: 100%;
-  overflow: hidden;
-  z-index: 1000;
-}
-
-.footer-container {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  padding-left: 32px;
-  padding-right: 0px;
-}
-
-.nav-left {
-  display: flex;
-  flex-direction: row;
-  gap: 32px;
-}
-
-.ao-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.nav-buttons {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 15px;
-}
-
-@media only screen and (max-width: 500px) {
-
-  .nav-buttons {
-    gap: 10px;
-  }
-
-  .nav-buttons-header {
-    gap: 10px;
-  }
-
-  .nav-left {
-    gap: 20px;
-  }
-}
-
-.nav-buttons button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
-  flex-direction: row;
-  font-family: 'Roboto Mono', monospace;
-  letter-spacing: -0.1px;
-  text-transform: uppercase;
-  font-size: (8px, 5vw, 12px);
-}
-
-.arweave-badge {
-  height: 100%;
-
-	@media(max-width: 400px) {
-		display: none;
-	}
-}
-
-.arweave-badge button {
-  padding-right: 32px;
-  padding-left: 32px;
-}
-
-.arweave-badge img {
-  margin: 1.5px 0 0 0;
-}
-  .scroll-wrapper {
-    overflow: auto;
-    
-    scrollbar-color: transparent transparent;
-    ::-webkit-scrollbar {
-      width: 12.5px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background-color: transparent;
-    }
-
-    &:hover {
-      scrollbar-color: ${(props) => props.theme.colors.scrollbar.thumb} transparent;
-
-      ::-webkit-scrollbar-thumb {
-        background-color: ${(props) => props.theme.colors.scrollbar.thumb};
-      }
-    }
-  }
 `;
 
 export const View = styled.main`

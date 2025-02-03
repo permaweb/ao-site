@@ -1,5 +1,5 @@
-import graphic from 'assets/graphic.mp4';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
+import { ASSETS } from 'helpers/config';
 import { formatCount } from 'helpers/utils';
 import { useAOProvider } from 'providers/AOProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -7,7 +7,6 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 
-// TODO: Graphic
 export default function Landing() {
 	const aoProvider = useAOProvider();
 	const ethProvider = useEthereumProvider();
@@ -69,7 +68,7 @@ export default function Landing() {
 			</S.Wrapper>
 			<S.GraphicWrapper>
 				<video autoPlay muted loop>
-					<source src={graphic} type={'video/mp4'} />
+					<source src={ASSETS.landingGraphic} type={'video/mp4'} />
 					Your browser does not support the video tag.
 				</video>
 			</S.GraphicWrapper>

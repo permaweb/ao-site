@@ -6,8 +6,12 @@ export const Wrapper = styled.div`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
-	padding: 0 0 40px 0;
+	gap: 60px;
+	padding: 10px 0 40px 0;
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		padding: 0 0 40px 0;
+	}
 `;
 
 export const GlobalWrapper = styled.div`
@@ -109,6 +113,7 @@ export const Metrics = styled.div`
 	gap: 15px;
 	flex-direction: column;
 	position: absolute;
+	z-index: 1;
 	top: 0;
 	left: 0;
 `;
@@ -129,10 +134,10 @@ export const MetricsSection = styled.div`
 export const MetricsValue = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 1.5px;
+	gap: 2.5px;
 
 	p {
-		font-size: ${(props) => props.theme.typography.size.small};
+		font-size: ${(props) => props.theme.typography.size.base};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.xBold};
 		color: ${(props) => props.theme.colors.font.primary};
@@ -140,7 +145,7 @@ export const MetricsValue = styled.div`
 
 	span {
 		line-height: 1;
-		font-size: ${(props) => props.theme.typography.size.small};
+		font-size: ${(props) => props.theme.typography.size.xxSmall};
 		color: ${(props) => props.theme.colors.font.alt1};
 	}
 `;

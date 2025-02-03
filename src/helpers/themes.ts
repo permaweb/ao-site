@@ -35,16 +35,16 @@ export const lightTheme = {
 	light3: '#B3B3B3',
 	dark1: '#151515',
 	dark2: '#333333',
-	link1: '#3344FF',
-	link2: '#091DFF',
+	link1: '#29A333',
+	link2: '#31C53D',
 	stats: {
 		primary: '#31C53D',
 		alt1: '#3344FF',
-		alt2: '#ED254E',
+		alt2: '#FF703B', // FF703B
 		alt3: '#289C9E',
 		alt4: '#1F88A6',
 		alt5: '#4C50D8',
-		alt6: '#FF703B',
+		alt6: '#ED254E',
 		alt7: '#1EADBC',
 		alt8: '#F3408C',
 		alt9: '#296B7D',
@@ -62,7 +62,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		},
 		border: {
 			primary: currentTheme.neutral3,
-			alt1: currentTheme.neutral7,
+			alt1: currentTheme.neutral4,
 			alt2: currentTheme.neutral8,
 			alt3: currentTheme.neutral9,
 			alt4: currentTheme.neutralA7,
@@ -72,7 +72,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		button: {
 			primary: {
 				background: currentTheme.neutral2,
-				border: currentTheme.neutral4,
+				border: currentTheme.neutral5,
 				color: currentTheme.neutralA1,
 				active: {
 					background: currentTheme.neutral3,
@@ -226,7 +226,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			active: currentTheme.link2,
 		},
 		loader: {
-			primary: currentTheme.primary1,
+			primary: currentTheme.accent2,
 		},
 		overlay: {
 			primary: currentTheme.overlay1,

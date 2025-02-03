@@ -114,4 +114,26 @@ export const AllocationSummaryWrapper = styled.div`
 	}
 `;
 
-export const ModalWrapper = styled.div``;
+export const FooterWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 12.5px;
+	padding: 20px;
+	margin: 20px 0 0 0;
+
+	span {
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		color: ${(props) => props.theme.colors.font.primary};
+		line-height: 1.65;
+	}
+`;
+
+export const ModalWrapper = styled.div`
+	span {
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;

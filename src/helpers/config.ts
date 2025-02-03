@@ -37,6 +37,8 @@ export const ETH_CONTRACTS = {
 export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
 export const ETH_TOKEN_DENOMINATION = Math.pow(10, 18);
 
+// TODO: Upload remaining assets
+// TODO: Fetch assets on load
 export const ASSETS = {
 	aoPict,
 	arconnect,
@@ -67,6 +69,7 @@ export const ASSETS = {
 	exchange: getTxEndpoint('KfE6Dh0j2pTLo4Z8U6fmk6mCRsB6O6NgxJpI_Vm0_wY'),
 	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
 	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
+	landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),
 	logo: getTxEndpoint('kKG4pr1WCy9OdiKPe7TKTs_HYUzP0-BPWBMDFCpZtfE'),
 	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
 	pi: getTxEndpoint('n1AM_4usUnh6zj8GzdQDu1KkvC5XFlBLk7sKXgNHtos'),
@@ -1278,12 +1281,14 @@ export const ENDPOINTS = {
 };
 
 export const REDIRECTS = {
+	arconnect: `https://arconnect.io`,
 	cookbook: `https://cookbook_ao.arweave.net`,
 	x: `http://x.com/aoTheComputer`,
 	github: `https://github.com/permaweb/ao`,
 	discord: `https://discord.gg/dYXtHwc9dc`,
 	stethMinting: `https://stake.lido.fi/`,
 	stethConversion: `https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84`,
+	tokenomics: `https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ`,
 	ipBlock: `https://www.standwithcrypto.org/action/call?action=call-your-representative`,
 	viewblock: (address: string) => `https://viewblock.io/arweave/address/${address}`,
 	etherscan: (address: string) => `https://etherscan.io/address/${address}`,

@@ -1,16 +1,20 @@
 export const language = {
 	en: {
 		add: `Add`,
-		allocateYield: `Allocate Your Yield`,
 		allocation: `Allocation`,
 		allocationSummaryDescription: `Below represents how you are currently allocating your AO Yield.`,
+		ao: `AO`,
 		aoAudit: `AO Specific Audits`,
 		aoClaim: `AO Claim`,
+		aoDescription: `Keep earning AO. Your AR holding yield and deposits will continue to accrue AO without any reallocation.`,
+		ar: `AR`,
+		arDescription: `Turn your AO yield into Arweave. Your AO yield will return you back AR tokens for permanant date storage use.`,
 		arweaveAddress: `Arweave Address`,
 		backToMint: `Back to Mint`,
 		balancesHeader: `Balances`,
 		baseContractAudits: `Base Contract Audits`,
 		build: `Build`,
+		chooseYield: `Choose Your Yield`,
 		circulatingSupply: `Circulating AO Supply`,
 		close: `Close`,
 		connectWallet: `Connect Wallet`,
@@ -21,6 +25,7 @@ export const language = {
 		deposits: `Deposits`,
 		dismiss: `Dismiss`,
 		disconnect: `Disconnect`,
+		ecoProjects: `ECO Projects`,
 		edit: `Edit`,
 		executing: `Executing`,
 		fairLaunch: `100% Fair Launch`,
@@ -30,34 +35,59 @@ export const language = {
 		fetchingRewards: `Fetching reward amounts`,
 		fetchingTotalSteth: `Fetching Total Steth`,
 		gigaArmstrongInfo: `AO tokens are ultra scarce. At launch, there are only 1.03m of them. For comparison, there are 120 million Ether, 461 million Solana, and 55 billion Ripple tokens. You may prefer to refer to AO quantities in giga-Armstrongs -- 1,000,000,000 of its smallest units. Armstrongs are similar to Satoshis in Bitcoin.`,
+		infoTooltip: `How does this work?`,
 		landingHeader1: `Hyper.`,
 		landingHeader2: `Parallel.`,
 		landingHeader3: `Computer.`,
-		landingSubheader: `A decentralized super computer inspired by the actor-oriented paradigm, integrated with Arweave's data storage capabilities.`,
+		landingSubheader: `A decentralized super computer integrated with Arweave's permanent data storage.`,
 		learnMore: `Learn More`,
 		loading: `Loading`,
 		max: `Max`,
 		messages: `Messages`,
 		mint: `Mint`,
+		mintSubheader: `
+			<span id={'info-body-subheader'}>Just like Bitcoin, every $AO is minted by the community.</span>
+			<br />
+			<br />
+			<b>21 Million Tokens:</b> A fixed supply with a continuous halving emission curve.
+			<br />
+			<br />
+			<b>Bridge Assets to Mint $AO:</b> Participate by bridging qualified assets like stETH and DAI, or by
+			holding AR.
+			<br />
+			<br />
+			<b>No Pre-mine, No Insider Allocation:</b> Ensuring a truly decentralized and equitable distribution.
+		`,
 		network: `Network`,
+		networkInfo: `Track overall network token emissions, total deposited assets, and your current and projected AO holdings.`,
 		nextMintCycle: `Next Mint Cycle`,
 		noWalletsConnected: `No wallets connected`,
 		nodes: `Nodes`,
 		pageNotFound: `Page not found`,
 		pasteFromClipboard: `Paste from clipboard`,
 		phase: `Phase`,
+		pi: `PI`,
+		piDescription: `Diversify your AO rewards with PI, a token representing the permaweb. PI is composed of 1/3 AO, 1/3 Arweave (AR), and 1/3 ecosystem project tokens.`,
 		processes: `Processes`,
 		read: `Read`,
 		recipient: `Recipient`,
 		remove: `Remove`,
+		saveOptions: `Save Options`,
+		sources: `Sources`,
+		sourcesInfo: `Your AO allocation is calculated based on a combination of your Arweave (AR) holdings and deposited assets, such as stETH and DAI.`,
 		status: `Status`,
 		steth: `stETH`,
 		stethConversion: `Buy stETH`,
 		stethMinting: `Mint stETH`,
 		summary: `Summary`,
+		totalAOSupply: `Total AO Supply`,
+		totalDaiBridged: `Total DAI Bridged`,
+		totalStEthBridged: `Total stETH Bridged`,
 		walletBalance: `Wallet balance`,
 		walletsConnected: `Wallets connected`,
 		withdraw: `Withdraw`,
 		yield: `Yield`,
+		yieldCustomizeInfo: `Tailor your rewards to your preferences. Adjust the mix of PI, AO, and/or AR you earn, and you can also select specific tokens from participating permaweb projects.`,
+		yieldSetupInfo: `Select PI or AO to start. You'll be able to fine-tune your choices on the next page.`,
 	},
 };

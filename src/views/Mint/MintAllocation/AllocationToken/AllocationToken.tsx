@@ -1,5 +1,6 @@
 import React from 'react';
 import { ReactSVG } from 'react-svg';
+import parse from 'html-react-parser';
 
 import { Button } from 'components/atoms/Button';
 import { Panel } from 'components/atoms/Panel';
@@ -33,17 +34,19 @@ export default function AllocationToken(props: IProps) {
 		arweave: {
 			label: 'Arweave',
 			description: 'The Harddrive',
+			summary: language.arDescription,
 			icon: ASSETS.arweave,
 		},
 		pi: {
 			label: 'Permaweb Index',
 			description: 'AO + AR + Ecosystem Index',
-			summary: '<b>Currency of the Permaweb</b> (33.33% AO, 33.33% AR, 33.33% Ecosystem Projects)',
+			summary: language.piDescription,
 			icon: ASSETS.pi,
 		},
 		ao: {
 			label: 'AO',
 			description: 'The Super Computer',
+			summary: language.aoDescription,
 			icon: ASSETS.ao,
 		},
 	};
@@ -114,20 +117,12 @@ export default function AllocationToken(props: IProps) {
 				</S.TokenSection>
 				{open && (
 					<S.TokenBodyWrapper open={open} className={'fade-in'}>
-						{/* {token.summary && (
-						<S.TokenBodyDescriptionWrapper>
-							<p className={'primary-text'}>{parse(token.summary)}</p>
-						</S.TokenBodyDescriptionWrapper>
-					)} */}
+						{token.summary && (
+							<S.TokenBodyDescriptionWrapper>
+								<p>{parse(token.summary)}</p>
+							</S.TokenBodyDescriptionWrapper>
+						)}
 						<S.TokenBodyValuesWrapper>
-							{/* <S.TokenBodyQuantity>
-							<S.TokenBodyQuantityHeader>
-								<span className={'primary-text'}>Balance</span>
-							</S.TokenBodyQuantityHeader>
-							<S.TokenBodyQuantityValue>
-								<p>8.76</p>
-							</S.TokenBodyQuantityValue>
-						</S.TokenBodyQuantity> */}
 							<S.TokenBodyQuantity>
 								<S.TokenBodyQuantityHeader>
 									<span className={'primary-text'}>Allocation</span>
@@ -136,26 +131,6 @@ export default function AllocationToken(props: IProps) {
 									<p>{formatPercentage(currentAllocationRecord?.value ?? 0)}</p>
 								</S.TokenBodyQuantityValue>
 							</S.TokenBodyQuantity>
-							{/* <S.TokenBodyQuantity>
-							<S.TokenBodyQuantityHeader>
-								<span className={'primary-text'}>30 Day Projection</span>
-							</S.TokenBodyQuantityHeader>
-							<S.TokenBodyQuantityValue>
-								<p>
-									<span className={'indicator'}>+</span>1.54
-								</p>
-							</S.TokenBodyQuantityValue>
-						</S.TokenBodyQuantity> */}
-							{/* <S.TokenBodyQuantity>
-							<S.TokenBodyQuantityHeader>
-								<span className={'primary-text'}>1 Year Projection</span>
-							</S.TokenBodyQuantityHeader>
-							<S.TokenBodyQuantityValue>
-								<p>
-									<span className={'indicator'}>+</span>400.34
-								</p>
-							</S.TokenBodyQuantityValue>
-						</S.TokenBodyQuantity> */}
 						</S.TokenBodyValuesWrapper>
 						<S.TokenBodyActionWrapper>{getTokenAction()}</S.TokenBodyActionWrapper>
 					</S.TokenBodyWrapper>

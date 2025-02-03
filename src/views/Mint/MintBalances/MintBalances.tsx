@@ -19,7 +19,7 @@ export default function MintBalances() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
-	const [showInfo, setShowInfo] = React.useState<boolean>(false);
+	const [info, setInfo] = React.useState<string | null>(null);
 
 	return (
 		<>
@@ -27,14 +27,13 @@ export default function MintBalances() {
 				<S.HeaderWrapper>
 					<S.HeaderInfoWrapper>
 						<S.HeaderInfo>
-							<h6>{'View network metrics and manage your deposits'}</h6>
+							<h6>{language.network}</h6>
 						</S.HeaderInfo>
 					</S.HeaderInfoWrapper>
 					<S.HeaderTooltip>
-						<button onClick={() => setShowInfo(true)}>
-							{'('}
+						<button onClick={() => setInfo(language.networkInfo)}>
 							<ReactSVG src={ASSETS.info} />
-							How does this work ?{')'}
+							{language.infoTooltip}
 						</button>
 					</S.HeaderTooltip>
 				</S.HeaderWrapper>
@@ -43,7 +42,7 @@ export default function MintBalances() {
 						<S.BalancesGlobalWrapper>
 							<S.BalanceQuantitySection>
 								<S.BalanceQuantityHeader>
-									<span className={'primary-text'}>Total AO Supply</span>
+									<span className={'primary-text'}>{language.totalAOSupply}</span>
 								</S.BalanceQuantityHeader>
 								<S.BalanceQuantityBody>
 									<ReactSVG id={'ao-logo'} src={ASSETS.ao} />
@@ -55,7 +54,7 @@ export default function MintBalances() {
 							<S.BalancesPrimaryFlexWrapper>
 								<S.BalanceQuantityEndSection>
 									<S.BalanceQuantityHeader>
-										<span className={'primary-text'}>Total stETH Bridged</span>
+										<span className={'primary-text'}>{language.totalStEthBridged}</span>
 									</S.BalanceQuantityHeader>
 									<S.BalanceQuantityBody>
 										<ReactSVG src={ASSETS.stEth} />
@@ -64,7 +63,7 @@ export default function MintBalances() {
 								</S.BalanceQuantityEndSection>
 								<S.BalanceQuantityEndSection>
 									<S.BalanceQuantityHeader>
-										<span className={'primary-text'}>Total DAI Bridged</span>
+										<span className={'primary-text'}>{language.totalDaiBridged}</span>
 									</S.BalanceQuantityHeader>
 									<S.BalanceQuantityBody>
 										<ReactSVG src={ASSETS.dai} />
@@ -79,14 +78,13 @@ export default function MintBalances() {
 						<S.HeaderWrapper>
 							<S.HeaderInfoWrapper>
 								<S.HeaderInfo>
-									<h6>{'Breakdown'}</h6>
+									<h6>{language.sources}</h6>
 								</S.HeaderInfo>
 							</S.HeaderInfoWrapper>
 							<S.HeaderTooltip>
-								<button onClick={() => setShowInfo(true)}>
-									{'('}
+								<button onClick={() => setInfo(language.sourcesInfo)}>
 									<ReactSVG src={ASSETS.info} />
-									How does this work ?{')'}
+									{language.infoTooltip}
 								</button>
 							</S.HeaderTooltip>
 						</S.HeaderWrapper>
@@ -102,10 +100,10 @@ export default function MintBalances() {
 					</S.BalancesBreakdownWrapper>
 				</S.BalancesBodyWrapper>
 			</S.BalancesWrapper>
-			{showInfo && (
-				<Modal header={'Earnings'} handleClose={() => setShowInfo(false)}>
+			{info && (
+				<Modal header={'Earnings'} handleClose={() => setInfo(null)}>
 					<S.ModalWrapper className={'modal-wrapper'}>
-						<span>Description</span>
+						<span>{info}</span>
 					</S.ModalWrapper>
 				</Modal>
 			)}

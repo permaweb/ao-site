@@ -4,7 +4,6 @@ import { ReactSVG } from 'react-svg';
 import { Modal } from 'components/molecules/Modal';
 import { ASSETS } from 'helpers/config';
 import { useAllocationProvider } from 'providers/AllocationProvider';
-import { useAOProvider } from 'providers/AOProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { AllocationCustom } from './AllocationCustom';
@@ -13,14 +12,14 @@ import { AllocationSummary } from './AllocationSummary';
 import { AllocationToken } from './AllocationToken';
 import * as S from './styles';
 
+// TODO: Wallet not connected - allocation disabled
 export default function MintAllocation() {
 	const allocationProvider = useAllocationProvider();
-	const aoProvider = useAOProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
 	const [showSetup, setShowSetup] = React.useState<boolean>(false);
-	const [showInfo, setShowInfo] = React.useState<boolean>(false);
+	const [info, setInfo] = React.useState<string | null>(null);
 
 	React.useEffect(() => {
 		if (allocationProvider.records?.length <= 0) setShowSetup(true);
@@ -33,13 +32,13 @@ export default function MintAllocation() {
 				<S.HeaderWrapper>
 					<S.HeaderInfoWrapper>
 						<S.HeaderInfo>
-							<h6>{language.allocateYield}</h6>
+							<h6>{language.chooseYield}</h6>
 						</S.HeaderInfo>
 					</S.HeaderInfoWrapper>
 					<S.HeaderTooltip>
-						<button onClick={() => setShowInfo(true)}>
-							{'('}
-							<ReactSVG src={ASSETS.info} /> How does this work ?{')'}
+						<button onClick={() => setInfo(showSetup ? language.yieldSetupInfo : language.yieldCustomizeInfo)}>
+							<ReactSVG src={ASSETS.info} />
+							{language.infoTooltip}
 						</button>
 					</S.HeaderTooltip>
 				</S.HeaderWrapper>
@@ -60,17 +59,27 @@ export default function MintAllocation() {
 								</S.TokenFlexWrapper>
 								<AllocationCustom />
 							</S.TokensSection>
-							<S.AllocationSummaryWrapper className={'border-wrapper-primary fade-in'}>
+							<S.AllocationSummaryWrapper className={'border-wrapper-alt1 fade-in'}>
 								<AllocationSummary />
 							</S.AllocationSummaryWrapper>
 						</>
 					)}
 				</S.AllocationBodyWrapper>
+				<S.FooterWrapper className={'border-wrapper-alt1 fade-in'}>
+					<span>
+						· AO lets you choose how you receive yield. You can select to receive just AO tokens, the Permaweb Index (a
+						mix of everything on the permaweb: 1/3 AO, 1/3 AR, 1/3 ecosystem project tokens), or a custom combination.
+					</span>
+					{showSetup && (
+						<span>· Please set your basic preference now. You can customize this further on the next screen.</span>
+					)}
+					<span>· These preferences will take effect on March 14th. Until then, you'll receive AO tokens.</span>
+				</S.FooterWrapper>
 			</S.AllocationWrapper>
-			{showInfo && (
-				<Modal header={'Yield Allocation'} handleClose={() => setShowInfo(false)}>
+			{info && (
+				<Modal header={'Yield Allocation'} handleClose={() => setInfo(null)}>
 					<S.ModalWrapper className={'modal-wrapper'}>
-						<span>Description</span>
+						<span>{info}</span>
 					</S.ModalWrapper>
 				</Modal>
 			)}

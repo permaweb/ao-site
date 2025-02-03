@@ -38,6 +38,7 @@ const simulateTokenDistribution = (
 	return data;
 };
 
+// TODO: Check values
 export default function SupplyChart() {
 	const theme = useTheme();
 
@@ -68,17 +69,9 @@ export default function SupplyChart() {
 				title: {
 					display: false,
 					text: 'Years',
-					font: {
-						size: 11,
-						family: `'Roboto Mono', monospace`,
-					},
 				},
 				ticks: {
 					display: false,
-					font: {
-						size: 11,
-						family: `'Roboto Mono', monospace`,
-					},
 					callback: function (value: number) {
 						const years = (value / 12).toFixed(0);
 						return `${years}`;
@@ -86,11 +79,11 @@ export default function SupplyChart() {
 				},
 				grid: {
 					display: false,
-					drawBorder: false, // Hides axis border
-					drawOnChartArea: false, // Ensures no background grid
+					drawBorder: false,
+					drawOnChartArea: false,
 				},
 				border: {
-					display: false, // Hide x-axis border
+					display: false,
 				},
 				min: 0,
 				max: 160,
@@ -100,18 +93,9 @@ export default function SupplyChart() {
 				max: 21000000,
 				title: {
 					display: false,
-					text: 'Token Supply (in millions)',
-					font: {
-						size: 11,
-						family: `'Roboto Mono', monospace`,
-					},
 				},
 				ticks: {
 					display: false,
-					font: {
-						size: 11,
-						family: `'Roboto Mono', monospace`,
-					},
 					stepSize: 5250000,
 					callback: function (value: number) {
 						switch (value) {
@@ -132,11 +116,11 @@ export default function SupplyChart() {
 				},
 				grid: {
 					display: false,
-					drawBorder: false, // Hides axis border
-					drawOnChartArea: false, // Ensures no background grid
+					drawBorder: false,
+					drawOnChartArea: false,
 				},
 				border: {
-					display: false, // Hide x-axis border
+					display: false,
 				},
 			},
 		},
@@ -149,9 +133,7 @@ export default function SupplyChart() {
 					label: function (context: any) {
 						let label = '';
 						if (context.parsed.y !== null) {
-							label +=
-								new Intl.NumberFormat('en-US', { style: 'decimal' }).format(context.parsed.y / 1e6) +
-								' million tokens minted';
+							label += new Intl.NumberFormat('en-US', { style: 'decimal' }).format(context.parsed.y / 1e6) + 'M';
 						}
 						return label;
 					},

@@ -1,7 +1,9 @@
 import React from 'react';
 
 import { Button } from 'components/atoms/Button';
+import { scrollTo } from 'helpers/window';
 import { useAllocationProvider } from 'providers/AllocationProvider';
+import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { AllocationChart } from '../AllocationChart';
 
@@ -9,6 +11,8 @@ import * as S from './styles';
 
 export default function AllocationSetup() {
 	const allocationProvider = useAllocationProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
 	const [activeAction, setActiveAction] = React.useState<'pi' | 'ao' | null>(null);
 
@@ -23,6 +27,8 @@ export default function AllocationSetup() {
 				allocationProvider.addToken({ id: 'ao', label: 'AO' });
 				break;
 		}
+
+		scrollTo(0, 0, 'smooth');
 	}
 
 	return (
@@ -30,33 +36,27 @@ export default function AllocationSetup() {
 			<S.ActionsWrapper>
 				<S.Action active={activeAction === 'pi'} onClick={() => setActiveAction('pi')} className={'fade-in'}>
 					<S.ActionTitle>
-						<span>PI</span>
+						<span>{language.pi}</span>
 					</S.ActionTitle>
 					<S.ActionDescription>
-						<p>
-							Allocate your AO Yield into a diversified collection of tokens that make up the permaweb including AO,
-							Arweave, and eocsystem project tokens.
-						</p>
+						<p>{language.piDescription}</p>
 					</S.ActionDescription>
 					<S.ActionChart>
 						<AllocationChart
 							records={[
-								{ id: 'ao', label: 'AO', value: 0.33 },
-								{ id: 'arweave', label: 'AR', value: 0.33 },
-								{ id: 'ecosystem', label: 'ECO Projects', value: 0.33 },
+								{ id: 'ao', label: language.ao, value: 0.33 },
+								{ id: 'arweave', label: language.ar, value: 0.33 },
+								{ id: 'ecosystem', label: language.ecoProjects, value: 0.33 },
 							]}
 						/>
 					</S.ActionChart>
 				</S.Action>
 				<S.Action active={activeAction === 'ao'} onClick={() => setActiveAction('ao')} className={'fade-in'}>
 					<S.ActionTitle>
-						<span>AO</span>
+						<span>{language.ao}</span>
 					</S.ActionTitle>
 					<S.ActionDescription>
-						<p>
-							Continue earning AO. All AR holding yield and deposits will continue to accrue AO that will not be
-							re-allocated in any way.
-						</p>
+						<p>{language.aoDescription}</p>
 					</S.ActionDescription>
 					<S.ActionChart>
 						<AllocationChart records={[{ id: 'ao', label: 'AO', value: 1 }]} />
@@ -66,7 +66,7 @@ export default function AllocationSetup() {
 			<S.SubmitWrapper>
 				<Button
 					type={'alt1'}
-					label={'Save Options'}
+					label={language.saveOptions}
 					handlePress={handleSubmit}
 					disabled={!activeAction}
 					height={60}
