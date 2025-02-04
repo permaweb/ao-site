@@ -55,6 +55,7 @@ export const ActionDescription = styled.div`
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		font-size: ${(props) => props.theme.typography.size.base};
 		color: ${(props) => props.theme.colors.font.alt1};
+		line-height: 1.65;
 	}
 `;
 

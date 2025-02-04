@@ -38,6 +38,7 @@ export const BalanceHeaderWrapper = styled.div`
 
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		flex-direction: column;
+		gap: 30px;
 	}
 `;
 

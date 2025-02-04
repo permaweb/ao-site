@@ -11,6 +11,7 @@ import { EthTokenEnum, NotificationType } from 'helpers/types';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
+import { useLanguageProvider } from 'providers/LanguageProvider';
 import { CloseHandler } from 'wrappers/CloseHandler';
 
 import * as S from './styles';
@@ -19,6 +20,8 @@ import { IProps } from './types';
 export default function BalanceSection(props: IProps) {
 	const arProvider = useArweaveProvider();
 	const ethProvider = useEthereumProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
 	const [token, setToken] = React.useState<{
 		header: string;
@@ -41,63 +44,63 @@ export default function BalanceSection(props: IProps) {
 	const tokens = React.useMemo(() => {
 		return {
 			ao: {
-				header: 'Your AO',
-				ticker: 'AO',
+				header: language.yourAO,
+				ticker: language.ao,
 				wallet: {
-					label: 'Connect Arweave Wallet',
+					label: language.connectArWallet,
 					icon: ASSETS.arweave,
 					provider: arProvider,
 					redirect: (address: string) => REDIRECTS.viewblock(address),
 				},
-				balance: { header: 'Current Balance', icon: ASSETS.ao },
+				balance: { header: language.currentBalance, icon: ASSETS.ao },
 			},
 			arweave: {
-				header: 'Arweave',
-				ticker: 'AR',
+				header: language.arLabel,
+				ticker: language.ar,
 				wallet: {
-					label: 'Connect Arweave Wallet',
+					label: language.connectArWallet,
 					icon: ASSETS.arweave,
 					provider: arProvider,
 					redirect: (address: string) => REDIRECTS.viewblock(address),
 				},
-				balance: { header: 'Current Balance', icon: ASSETS.arweave },
+				balance: { header: language.currentBalance, icon: ASSETS.arweave },
 			},
 			stEth: {
-				header: 'Deposited stETH',
-				ticker: 'StETH',
+				header: language.depositedSteth,
+				ticker: language.stEth,
 				wallet: {
-					label: 'Connect ETH Wallet',
+					label: language.connectEthWallet,
 					icon: ASSETS.ethereum,
 					provider: ethProvider,
 					redirect: (address: string) => REDIRECTS.etherscan(address),
 				},
-				balance: { header: 'Amount Deposited', icon: ASSETS.stEth },
+				balance: { header: language.amountDeposited, icon: ASSETS.stEth },
 				action: {
-					label: 'Trade StETH',
+					label: language.tradeStEth,
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
 					component: getEthExchange(EthTokenEnum.StEth),
 				},
 			},
 			dai: {
-				header: 'Deposited DAI',
-				ticker: 'DAI',
+				header: language.depositedDai,
+				ticker: language.dai,
 				wallet: {
-					label: 'Connect ETH Wallet',
+					label: language.connectEthWallet,
 					icon: ASSETS.ethereum,
 					provider: ethProvider,
 					redirect: (address: string) => REDIRECTS.etherscan(address),
 				},
-				balance: { header: 'Amount Deposited', icon: ASSETS.dai },
+				balance: { header: language.amountDeposited, icon: ASSETS.dai },
 				action: {
-					label: 'Trade DAI',
+					label: language.tradeDai,
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
 					component: getEthExchange(EthTokenEnum.DAI),
 				},
 			},
 		};
-	}, [arProvider, ethProvider]);
+	}, [arProvider, ethProvider, language]);
 
 	React.useEffect(() => {
 		switch (props.type) {
@@ -258,27 +261,28 @@ export default function BalanceSection(props: IProps) {
 									disabled={token.wallet.provider.connecting}
 									icon={token.wallet.icon}
 									iconLeftAlign
+									noTextTransform
 								/>
 							</S.BalanceWalletAction>
 							{showWalletDropdown && (
-								<S.BalanceWalletDropdown className={'border-wrapper-primary fade-in'}>
+								<S.BalanceWalletDropdown className={'border-wrapper-alt2 fade-in'}>
 									<S.BalanceWalletDropdownLine>
-										<p>Balance:</p>
+										<p>{`${language.balance}:`}</p>
 										<ReactSVG src={token.wallet.icon} />
 										<p>
 											<b>{formatDisplayAmount(token.wallet.provider.balance)}</b>
 										</p>
 									</S.BalanceWalletDropdownLine>
 									<button onClick={() => copyAddress(token.wallet?.provider?.walletAddress)}>
-										<ReactSVG src={ASSETS.copy} /> {copied ? `Copied!` : `Copy wallet address`}
+										<ReactSVG src={ASSETS.copy} /> {copied ? `${language.copied}!` : language.copyWalletAddress}
 									</button>
 									<button
 										onClick={() => window.open(token.wallet?.redirect(token.wallet?.provider?.walletAddress), '_blank')}
 									>
-										<ReactSVG src={ASSETS.view} /> View in explorer
+										<ReactSVG src={ASSETS.view} /> {language.viewInExplorer}
 									</button>
 									<button id={'disconnect-action'} onClick={handleWalletDisconnect}>
-										<ReactSVG src={ASSETS.disconnect} /> Disconnect
+										<ReactSVG src={ASSETS.disconnect} /> {language.disconnect}
 									</button>
 								</S.BalanceWalletDropdown>
 							)}
@@ -298,7 +302,7 @@ export default function BalanceSection(props: IProps) {
 					<S.BalancesQuantityFlexSection>
 						<S.BalanceQuantityEndSection>
 							<S.BalanceQuantityHeader>
-								<span className={'primary-text'}>30 Day Projection</span>
+								<span className={'primary-text'}>{language.thirtyDayProjection}</span>
 							</S.BalanceQuantityHeader>
 							<S.BalanceQuantityBody>
 								<p>
@@ -326,7 +330,7 @@ export default function BalanceSection(props: IProps) {
 						</S.BalanceQuantityEndSection>
 						<S.BalanceQuantityEndSection>
 							<S.BalanceQuantityHeader>
-								<span className={'primary-text'}>1 Year Projection</span>
+								<span className={'primary-text'}>{language.oneYearProjection}</span>
 							</S.BalanceQuantityHeader>
 							<S.BalanceQuantityBody>
 								<p>

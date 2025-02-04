@@ -1,19 +1,37 @@
 import React from 'react';
 
-import { AllocationRecordType, AllocationTokenRecordType } from 'helpers/types';
+import { createDataItemSigner, dryrun, message, result } from '@permaweb/aoconnect';
+
+import { Notification } from 'components/atoms/Notification';
+import { AO } from 'helpers/config';
+import { AllocationRecordType, AllocationTokenRecordType, NotificationType } from 'helpers/types';
+import { getTagValue } from 'helpers/utils';
+
+import { useArweaveProvider } from './ArweaveProvider';
+import { useLanguageProvider } from './LanguageProvider';
 
 interface AllocationContextState {
 	records: AllocationRecordType[];
 	addToken: (token: AllocationTokenRecordType) => void;
+	addFullToken: (token: AllocationTokenRecordType) => void;
 	updateToken: (token: AllocationRecordType) => void;
 	removeToken: (token: AllocationTokenRecordType) => void;
+	fetchingSetup: boolean;
+	showSetup: boolean;
+	savePreferences: (initialSave?: boolean) => Promise<void>;
+	loading: boolean;
 }
 
 const DEFAULT_CONTEXT: AllocationContextState = {
 	records: [],
 	addToken: () => {},
+	addFullToken: () => {},
 	updateToken: () => {},
 	removeToken: () => {},
+	fetchingSetup: false,
+	showSetup: false,
+	savePreferences: async () => {},
+	loading: false,
 };
 
 const AllocationContext = React.createContext<AllocationContextState>(DEFAULT_CONTEXT);
@@ -26,9 +44,88 @@ export function useAllocationProvider(): AllocationContextState {
 	return context;
 }
 
+// TODO: Disable save if no changes
+// TODO: Select projects by default if allocated
 export function AllocationProvider(props: { children: React.ReactNode }) {
-	// const [records, setRecords] = React.useState<AllocationRecordType[]>([{ id: 'ao', label: 'AO', value: 1 }]);
+	const arProvider = useArweaveProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
+
+	const [fetchingSetup, setFetchingSetup] = React.useState<boolean>(false);
+	const [showSetup, setShowSetup] = React.useState<boolean>(false);
 	const [records, setRecords] = React.useState<AllocationRecordType[]>([]);
+	const [loading, setLoading] = React.useState<boolean>(false);
+	const [response, setResponse] = React.useState<NotificationType | null>(null);
+
+	const getCacheKey = () => {
+		return arProvider.walletAddress ? `allocation_${arProvider.walletAddress}` : null;
+	};
+
+	const getCachedRecords = (): AllocationRecordType[] | null => {
+		const key = getCacheKey();
+		if (key) {
+			const cached = localStorage.getItem(key);
+			if (cached) {
+				try {
+					return JSON.parse(cached);
+				} catch (e) {
+					console.error('Error parsing cached records:', e);
+				}
+			}
+		}
+		return null;
+	};
+
+	const setCachedRecords = (records: AllocationRecordType[]) => {
+		const key = getCacheKey();
+		if (key) {
+			localStorage.setItem(key, JSON.stringify(records));
+		}
+	};
+
+	const updateRecords = (newRecords: AllocationRecordType[]) => {
+		setRecords(newRecords);
+		setCachedRecords(newRecords);
+	};
+
+	const fetchSetup = async () => {
+		setFetchingSetup(true);
+		try {
+			const response = await dryrun({
+				process: AO.yieldPreferences,
+				tags: [
+					{ name: 'Action', value: 'Get-Preferences' },
+					{ name: 'Address', value: arProvider.walletAddress },
+				],
+			});
+
+			if (response?.Messages?.[0].Data) {
+				const remoteRecords = JSON.parse(response.Messages[0].Data);
+				updateRecords(remoteRecords);
+				setShowSetup(false);
+			} else {
+				setShowSetup(true);
+			}
+		} catch (e: any) {
+			console.error(e);
+			setShowSetup(true);
+		}
+		setFetchingSetup(false);
+	};
+
+	React.useEffect(() => {
+		if (arProvider.walletAddress) {
+			const cached = getCachedRecords();
+			if (cached && cached.length > 0) {
+				updateRecords(cached);
+				setShowSetup(false);
+			} else {
+				fetchSetup();
+			}
+		} else {
+			setShowSetup(true);
+		}
+	}, [arProvider.walletAddress]);
 
 	const addToken = (token: AllocationTokenRecordType) => {
 		const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
@@ -39,21 +136,31 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		}
 
 		const evenShare = 1 / (records.length + 1);
-		const updatedRecords = records.map((record: AllocationRecordType) => ({ ...record, value: evenShare }));
+		const updatedRecords = records.map((record: AllocationRecordType) => ({
+			...record,
+			value: evenShare,
+		}));
 		updatedRecords.push({ ...token, value: evenShare });
-		setRecords(updatedRecords);
+
+		updateRecords(updatedRecords);
+	};
+
+	const addFullToken = (token: AllocationTokenRecordType) => {
+		updateRecords([{ ...token, value: 1 }]);
 	};
 
 	const updateToken = (token: AllocationRecordType) => {
-		if (!token?.value) {
+		if (token.value === undefined || token.value === null) {
 			console.error('No value provided');
 			return;
 		}
+		const updatedRecords = records.map((r) => (r.id === token.id ? token : r));
+		updateRecords(updatedRecords);
 	};
 
 	const removeToken = (token: AllocationTokenRecordType) => {
 		if (records.length === 1) {
-			console.error('Can not remove only token');
+			console.error('Cannot remove the only token');
 			return;
 		}
 
@@ -64,28 +171,80 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 			return;
 		}
 
-		// Remove the specified token
 		const updatedRecords = records.filter((record: AllocationRecordType) => record.id !== token.id);
 
-		if (updatedRecords.length === 0) {
-			// If no records remain, just clear the state
-			setRecords([]);
-			return;
+		if (updatedRecords.length > 0) {
+			const evenShare = 1 / updatedRecords.length;
+			const redistributedRecords = updatedRecords.map((record: AllocationRecordType) => ({
+				...record,
+				value: evenShare,
+			}));
+			updateRecords(redistributedRecords);
+		} else {
+			updateRecords([]);
 		}
+	};
 
-		// Redistribute the value of the removed token
-		const evenShare = 1 / updatedRecords.length;
-		const redistributedRecords = updatedRecords.map((record: AllocationRecordType) => ({
-			...record,
-			value: evenShare,
-		}));
+	const savePreferences = async (initialSave?: boolean) => {
+		setLoading(true);
+		try {
+			const prevRecords = [...records];
 
-		setRecords(redistributedRecords);
+			const response = await message({
+				process: AO.yieldPreferences,
+				signer: createDataItemSigner(arProvider.wallet),
+				tags: [{ name: 'Action', value: 'Update-Preferences' }],
+				data: JSON.stringify(records),
+			});
+
+			const updateResult = await result({
+				process: AO.yieldPreferences,
+				message: response,
+			});
+
+			const updateMessage = updateResult?.Messages?.[0];
+			const status = getTagValue(updateMessage.Tags, 'Status') === 'Success' ? 'success' : 'warning';
+			setResponse({ status: status, message: getTagValue(updateMessage.Tags, 'Response') });
+
+			if (status !== 'success') {
+				updateRecords(prevRecords);
+			} else {
+				if (initialSave) await fetchSetup();
+			}
+
+			if (!updateMessage) {
+				setResponse({ status: 'warning', message: language.errorSavingPreferences });
+				return;
+			}
+		} catch (e: any) {
+			setResponse({
+				status: 'warning',
+				message: e.message ?? language.errorSavingPreferences,
+			});
+		}
+		setLoading(false);
 	};
 
 	return (
-		<AllocationContext.Provider value={{ records, addToken, updateToken, removeToken }}>
-			{props.children}
-		</AllocationContext.Provider>
+		<>
+			<AllocationContext.Provider
+				value={{
+					records,
+					addToken,
+					addFullToken,
+					updateToken,
+					removeToken,
+					fetchingSetup,
+					showSetup,
+					savePreferences,
+					loading,
+				}}
+			>
+				{props.children}
+			</AllocationContext.Provider>
+			{response && (
+				<Notification message={response.message} type={response.status} callback={() => setResponse(null)} />
+			)}
+		</>
 	);
 }

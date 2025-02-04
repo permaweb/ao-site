@@ -109,6 +109,7 @@ export default function Button(props: IProps) {
 				width={props.width}
 				height={props.height}
 				warning={props.warning || false}
+				noTextTransform={props.noTextTransform || false}
 				className={props.className || ''}
 			>
 				{getLabel()}

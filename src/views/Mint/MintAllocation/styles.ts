@@ -120,7 +120,6 @@ export const FooterWrapper = styled.div`
 	flex-direction: column;
 	gap: 12.5px;
 	padding: 20px;
-	margin: 20px 0 0 0;
 
 	span {
 		font-size: ${(props) => props.theme.typography.size.small};
@@ -131,6 +130,14 @@ export const FooterWrapper = styled.div`
 `;
 
 export const ModalWrapper = styled.div`
+	span {
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const LoadingWrapper = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.base};
 		font-family: ${(props) => props.theme.typography.family.alt1};

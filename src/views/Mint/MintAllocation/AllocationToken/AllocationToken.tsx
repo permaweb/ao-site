@@ -3,7 +3,6 @@ import { ReactSVG } from 'react-svg';
 import parse from 'html-react-parser';
 
 import { Button } from 'components/atoms/Button';
-import { Panel } from 'components/atoms/Panel';
 import { ASSETS } from 'helpers/config';
 import { AllocationRecordType, AllocationTokenType } from 'helpers/types';
 import { formatPercentage } from 'helpers/utils';
@@ -13,7 +12,6 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 import * as S from './styles';
 import { IProps } from './types';
 
-// TODO: Language
 export default function AllocationToken(props: IProps) {
 	const allocationProvider = useAllocationProvider();
 	const languageProvider = useLanguageProvider();
@@ -28,25 +26,24 @@ export default function AllocationToken(props: IProps) {
 	} | null>(null);
 
 	const [open, setOpen] = React.useState<boolean>(props.defaultClosed ? !props.defaultClosed : true);
-	const [showPanel, setShowPanel] = React.useState<boolean>(false);
 
 	const TOKENS = {
 		arweave: {
-			label: 'Arweave',
-			description: 'The Harddrive',
-			summary: language.arDescription,
+			label: language.arLabel,
+			description: language.arDescription,
+			summary: language.arSummary,
 			icon: ASSETS.arweave,
 		},
 		pi: {
-			label: 'Permaweb Index',
-			description: 'AO + AR + Ecosystem Index',
-			summary: language.piDescription,
+			label: language.piLabel,
+			description: language.piDescription,
+			summary: language.piSummary,
 			icon: ASSETS.pi,
 		},
 		ao: {
-			label: 'AO',
-			description: 'The Super Computer',
-			summary: language.aoDescription,
+			label: language.ao,
+			description: language.aoDescription,
+			summary: language.aoSummary,
 			icon: ASSETS.ao,
 		},
 	};
@@ -125,7 +122,7 @@ export default function AllocationToken(props: IProps) {
 						<S.TokenBodyValuesWrapper>
 							<S.TokenBodyQuantity>
 								<S.TokenBodyQuantityHeader>
-									<span className={'primary-text'}>Allocation</span>
+									<span className={'primary-text'}>{language.allocation}</span>
 								</S.TokenBodyQuantityHeader>
 								<S.TokenBodyQuantityValue>
 									<p>{formatPercentage(currentAllocationRecord?.value ?? 0)}</p>
@@ -136,14 +133,6 @@ export default function AllocationToken(props: IProps) {
 					</S.TokenBodyWrapper>
 				)}
 			</S.Wrapper>
-			<Panel
-				open={showPanel}
-				width={550}
-				header={`Edit ${token.label} Allocation`}
-				handleClose={() => setShowPanel(false)}
-			>
-				<p></p>
-			</Panel>
 		</>
 	) : null;
 }

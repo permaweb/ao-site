@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from 'components/atoms/Button';
 import { scrollTo } from 'helpers/window';
 import { useAllocationProvider } from 'providers/AllocationProvider';
+import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { AllocationChart } from '../AllocationChart';
@@ -10,36 +11,67 @@ import { AllocationChart } from '../AllocationChart';
 import * as S from './styles';
 
 export default function AllocationSetup() {
+	const arProvider = useArweaveProvider();
 	const allocationProvider = useAllocationProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
 	const [activeAction, setActiveAction] = React.useState<'pi' | 'ao' | null>(null);
 
-	function handleSubmit() {
-		if (!activeAction) return;
+	async function handleSubmit() {
+		if (!arProvider.walletAddress || !activeAction) return;
+		await allocationProvider.savePreferences(true);
+		scrollTo(0, 0, 'smooth');
+	}
 
-		switch (activeAction) {
-			case 'pi':
-				allocationProvider.addToken({ id: 'pi', label: 'PI' });
-				break;
-			case 'ao':
-				allocationProvider.addToken({ id: 'ao', label: 'AO' });
-				break;
+	function handleSelect(id: 'pi' | 'ao') {
+		allocationProvider.addFullToken({ id: id, label: language[id] });
+		setActiveAction(id);
+	}
+
+	function getAction() {
+		let label: string;
+		let action: () => void;
+		let disabled = false;
+
+		if (arProvider.walletAddress) {
+			label = language.saveOptions;
+			action = () => handleSubmit();
+			disabled = !activeAction;
+		} else {
+			label = language.connectArWallet;
+			action = () => arProvider.setWalletModalVisible(true);
 		}
 
-		scrollTo(0, 0, 'smooth');
+		if (allocationProvider.loading) disabled = true;
+
+		return (
+			<Button
+				type={'alt1'}
+				label={label}
+				handlePress={action}
+				disabled={disabled}
+				loading={allocationProvider.loading}
+				height={60}
+				width={350}
+			/>
+		);
 	}
 
 	return (
 		<S.Wrapper>
 			<S.ActionsWrapper>
-				<S.Action active={activeAction === 'pi'} onClick={() => setActiveAction('pi')} className={'fade-in'}>
+				<S.Action
+					active={activeAction === 'pi'}
+					onClick={() => handleSelect('pi')}
+					disabled={activeAction === 'pi'}
+					className={'fade-in'}
+				>
 					<S.ActionTitle>
 						<span>{language.pi}</span>
 					</S.ActionTitle>
 					<S.ActionDescription>
-						<p>{language.piDescription}</p>
+						<p>{language.piSummary}</p>
 					</S.ActionDescription>
 					<S.ActionChart>
 						<AllocationChart
@@ -51,28 +83,24 @@ export default function AllocationSetup() {
 						/>
 					</S.ActionChart>
 				</S.Action>
-				<S.Action active={activeAction === 'ao'} onClick={() => setActiveAction('ao')} className={'fade-in'}>
+				<S.Action
+					active={activeAction === 'ao'}
+					onClick={() => handleSelect('ao')}
+					disabled={activeAction === 'ao'}
+					className={'fade-in'}
+				>
 					<S.ActionTitle>
 						<span>{language.ao}</span>
 					</S.ActionTitle>
 					<S.ActionDescription>
-						<p>{language.aoDescription}</p>
+						<p>{language.aoSummary}</p>
 					</S.ActionDescription>
 					<S.ActionChart>
-						<AllocationChart records={[{ id: 'ao', label: 'AO', value: 1 }]} />
+						<AllocationChart records={[{ id: 'ao', label: language.ao, value: 1 }]} />
 					</S.ActionChart>
 				</S.Action>
 			</S.ActionsWrapper>
-			<S.SubmitWrapper>
-				<Button
-					type={'alt1'}
-					label={language.saveOptions}
-					handlePress={handleSubmit}
-					disabled={!activeAction}
-					height={60}
-					width={350}
-				/>
-			</S.SubmitWrapper>
+			<S.SubmitWrapper>{getAction()}</S.SubmitWrapper>
 		</S.Wrapper>
 	);
 }

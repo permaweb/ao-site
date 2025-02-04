@@ -170,7 +170,7 @@ export const GlobalStyle = createGlobalStyle`
 	.border-wrapper-alt2 {
     background: ${(props) => props.theme.colors.container.alt1.background};
 		border: 1px solid ${(props) => props.theme.colors.border.alt2};
-		box-shadow: 1px 1.5px 0 0 ${(props) => props.theme.colors.shadow.primary};
+		box-shadow: 1px 0.5px 7.5px 0 ${(props) => props.theme.colors.shadow.primary};
   }
 
   .border-wrapper-alt3 {
@@ -222,7 +222,6 @@ export const GlobalStyle = createGlobalStyle`
     top: 0;
     left: 0;
     background: ${(props) => props.theme.colors.overlay.primary};
-    backdrop-filter: blur(7.5px);
     animation: ${open} ${transition1};
   }
 

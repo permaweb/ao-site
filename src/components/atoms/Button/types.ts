@@ -21,4 +21,5 @@ export interface IProps {
 	tooltip?: string;
 	warning?: boolean;
 	className?: string;
+	noTextTransform?: boolean;
 }

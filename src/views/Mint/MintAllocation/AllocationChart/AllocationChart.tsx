@@ -42,7 +42,7 @@ export default function AllocationChart(props: IProps) {
 			pieData.datasets.push({
 				data: props.records?.map((record: AllocationRecordType) => record.value),
 				backgroundColor: keys,
-				borderColor: [theme.colors.border.alt4],
+				borderColor: [theme.colors.border.alt1],
 				borderWidth: 1,
 			});
 

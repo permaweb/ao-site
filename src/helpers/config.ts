@@ -23,6 +23,7 @@ export const AO = {
 	aoMetrics: 'vdpaKV_BQNISuDgtZpLDfDlMJinKHqM3d2NWd3bzeSk',
 	stEthPriceOracle: 'rwxd1EuSzEVoy3qTlDRm7eMYPbOMrmQMajynVrA-ikk',
 	daiPriceOracle: 'SVu0Atwg7FRQfQA1PUvhpTYsdBmXeJK8s_58retkdBg',
+	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
 };
 
 export const ETH_CONTRACTS = {

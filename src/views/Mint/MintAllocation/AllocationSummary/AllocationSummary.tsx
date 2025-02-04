@@ -58,68 +58,81 @@ export default function AllocationSummary() {
 	}, [allocationProvider, theme]);
 
 	return data ? (
-		<S.Wrapper>
-			<S.Header>
-				<span>{language.allocation}</span>
-			</S.Header>
-			<S.Body>
-				{data && (
-					<>
-						<S.ChartWrapper>
-							<S.ChartHeader>
-								<span className={'primary-text'}>{language.allocationSummaryDescription}</span>
-							</S.ChartHeader>
-							<S.Chart>
-								<Pie
-									data={data}
-									options={{
-										plugins: {
-											legend: {
-												display: false,
-											},
-											tooltip: {
-												callbacks: {
-													label: (tooltipItem) => {
-														return `${formatPercentage(tooltipItem.raw)}`;
+		<>
+			<S.Wrapper className={'border-wrapper-alt1'}>
+				<S.Header>
+					<span>{language.allocation}</span>
+				</S.Header>
+				<S.Body>
+					{data && (
+						<>
+							<S.ChartWrapper>
+								<S.ChartHeader>
+									<span className={'primary-text'}>{language.allocationSummaryDescription}</span>
+								</S.ChartHeader>
+								<S.Chart>
+									<Pie
+										data={data}
+										options={{
+											plugins: {
+												legend: {
+													display: false,
+												},
+												tooltip: {
+													callbacks: {
+														label: (tooltipItem) => {
+															return `${formatPercentage(tooltipItem.raw)}`;
+														},
 													},
 												},
 											},
-										},
-									}}
-								/>
-							</S.Chart>
-						</S.ChartWrapper>
-						<S.SummaryWrapper>
-							<S.SummaryHeader>
-								<span>{language.summary}</span>
-							</S.SummaryHeader>
-							<S.SummaryBody>
-								{allocationProvider.records?.map((record: AllocationRecordType, index: number) => {
-									return (
-										<S.SummaryLine key={index}>
-											<S.SummaryLineLabel>
-												<S.ChartKey background={keys[index] ? keys[index] : null} />
-												<span>{record.label}</span>
-											</S.SummaryLineLabel>
-											<S.SummaryLineActionsWrapper>
-												<S.SummaryLineActions>
-													<Button type={'alt3'} label={'None'} handlePress={() => {}} />
-													<Button type={'alt3'} label={'2x'} handlePress={() => {}} active />
-													<Button type={'alt3'} label={'4x'} handlePress={() => {}} active />
-													<Button type={'alt3'} label={'All'} handlePress={() => {}} active />
-												</S.SummaryLineActions>
-												<S.SummaryLinePercentage>
-													<p>{formatPercentage(record.value)}</p>
-												</S.SummaryLinePercentage>
-											</S.SummaryLineActionsWrapper>
-										</S.SummaryLine>
-									);
-								})}
-							</S.SummaryBody>
-						</S.SummaryWrapper>
-					</>
-				)}
-			</S.Body>
-		</S.Wrapper>
+										}}
+									/>
+								</S.Chart>
+							</S.ChartWrapper>
+							<S.SummaryWrapper>
+								<S.SummaryHeader>
+									<span>{language.summary}</span>
+								</S.SummaryHeader>
+								<S.SummaryBody>
+									{allocationProvider.records?.map((record: AllocationRecordType, index: number) => {
+										return (
+											<S.SummaryLine key={index}>
+												<S.SummaryLineLabel>
+													<S.ChartKey background={keys[index] ? keys[index] : null} />
+													<span>{record.label}</span>
+												</S.SummaryLineLabel>
+												<S.SummaryLineActionsWrapper>
+													<S.SummaryLineActions>
+														<Button type={'alt3'} label={'None'} handlePress={() => {}} />
+														<Button type={'alt3'} label={'2x'} handlePress={() => {}} active />
+														<Button type={'alt3'} label={'4x'} handlePress={() => {}} active />
+														<Button type={'alt3'} label={'All'} handlePress={() => {}} active />
+													</S.SummaryLineActions>
+													<S.SummaryLinePercentage>
+														<p>{formatPercentage(record.value)}</p>
+													</S.SummaryLinePercentage>
+												</S.SummaryLineActionsWrapper>
+											</S.SummaryLine>
+										);
+									})}
+								</S.SummaryBody>
+							</S.SummaryWrapper>
+						</>
+					)}
+				</S.Body>
+			</S.Wrapper>
+			<S.ActionMain>
+				<Button
+					type={'alt1'}
+					label={language.saveOptions}
+					handlePress={() => allocationProvider.savePreferences()}
+					disabled={allocationProvider.loading}
+					loading={allocationProvider.loading}
+					height={60}
+					fullWidth
+				/>
+			</S.ActionMain>
+		</>
 	) : null;
 }

@@ -72,7 +72,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		button: {
 			primary: {
 				background: currentTheme.neutral2,
-				border: currentTheme.neutral5,
+				border: currentTheme.neutral9,
 				color: currentTheme.neutralA1,
 				active: {
 					background: currentTheme.neutral3,

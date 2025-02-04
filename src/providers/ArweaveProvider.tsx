@@ -53,7 +53,6 @@ export function useArweaveProvider(): ArweaveContextState {
 	return React.useContext(ARContext);
 }
 
-// TODO: Wallet modal styling
 function WalletList(props: { handleConnect: any }) {
 	return (
 		<S.WalletListContainer>
@@ -101,11 +100,13 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 		handleWallet();
 
 		window.addEventListener('arweaveWalletLoaded', handleWallet);
+		window.addEventListener('walletSwitch', handleWallet);
 
 		return () => {
 			window.removeEventListener('arweaveWalletLoaded', handleWallet);
+			window.removeEventListener('walletSwitch', handleWallet);
 		};
-	}, [walletType]);
+	}, []);
 
 	React.useEffect(() => {
 		(async function () {
@@ -136,30 +137,6 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 			}
 		})();
 	}, [walletAddress]);
-
-	// /* User Allocations */
-	// React.useEffect(() => {
-	// 	(async function () {
-	// 		if (wallet) {
-	// 			try {
-	// 				// Mint Prod: 1OEAToQGhSKV76oa1MFIGZ9bYxCJoxpXqtksApDdcu8
-	// 				// Mint Test: so3C4AUToJfvLu-K7BaGEadmt1S1FYHVmgMVvB3ZSf8
-	// 				console.log('Getting user AR allocation...');
-	// 				const TResult = await messageResult({
-	// 					processId: '1OEAToQGhSKV76oa1MFIGZ9bYxCJoxpXqtksApDdcu8',
-	// 					wallet: wallet,
-	// 					action: 'User.Get-Allocation',
-	// 					tags: [{ name: 'Token', value: 'AR' }],
-	// 					data: null
-	// 				});
-
-	// 				console.log(TResult)
-	// 			} catch (e: any) {
-	// 				console.error(e);
-	// 			}
-	// 		}
-	// 	})();
-	// }, [wallet]);
 
 	React.useEffect(() => {
 		(async function () {

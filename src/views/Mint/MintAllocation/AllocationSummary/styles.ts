@@ -164,3 +164,8 @@ export const SummaryLinePercentage = styled.div`
 		text-align: right;
 	}
 `;
+
+export const ActionMain = styled.div`
+	width: 100%;
+	margin: 25px 0 0 0;
+`;

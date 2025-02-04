@@ -49,6 +49,7 @@ export const Primary = styled.button<{
 	height: number | undefined;
 	active: boolean | undefined;
 	warning: boolean | undefined;
+	noTextTransform: boolean | undefined;
 }>`
 	position: relative;
 	background: ${(props) =>
@@ -126,7 +127,7 @@ export const Primary = styled.button<{
 		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
 		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
 		font-family: ${(props) => props.theme.typography.family.primary} !important;
-		text-transform: uppercase;
+		text-transform: ${(props) => (props.noTextTransform ? 'none' : 'uppercase')};
 		letter-spacing: 0.35px;
 		color: ${(props) =>
 			props.warning
