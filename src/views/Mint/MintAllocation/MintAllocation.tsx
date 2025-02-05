@@ -15,7 +15,6 @@ import { AllocationSummary } from './AllocationSummary';
 import { AllocationToken } from './AllocationToken';
 import * as S from './styles';
 
-// TODO: Primary token disclaimers
 export default function MintAllocation() {
 	const arProvder = useArweaveProvider();
 	const allocationProvider = useAllocationProvider();
@@ -48,15 +47,20 @@ export default function MintAllocation() {
 		return (
 			<>
 				<S.TokensSection>
-					<AllocationToken type={'pi'} />
-					<S.TokenFlexWrapper>
-						<S.TokenFlexSection>
-							<AllocationToken type={'ao'} />
-						</S.TokenFlexSection>
-						<S.TokenFlexSection>
-							<AllocationToken type={'arweave'} />
-						</S.TokenFlexSection>
-					</S.TokenFlexWrapper>
+					<S.PrimaryTokens>
+						<AllocationToken type={'pi'} />
+						<S.TokenFlexWrapper>
+							<S.TokenFlexSection>
+								<AllocationToken type={'ao'} />
+							</S.TokenFlexSection>
+							<S.TokenFlexSection>
+								<AllocationToken type={'arweave'} />
+							</S.TokenFlexSection>
+						</S.TokenFlexWrapper>
+						<S.PrimaryTokensInfo className={'border-wrapper-alt1'}>
+							<span>{`· ${language.primaryTokensInfo}`}</span>
+						</S.PrimaryTokensInfo>
+					</S.PrimaryTokens>
 					<AllocationCustom />
 				</S.TokensSection>
 				<S.AllocationSummaryWrapper className={'fade-in'}>

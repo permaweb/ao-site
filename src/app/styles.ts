@@ -237,8 +237,6 @@ export const GlobalStyle = createGlobalStyle`
     svg {
       height: auto;
       width: 50px;
-      margin: 0 0 12.5px 0;
-			fill: ${(props) => props.theme.colors.font.primary};
     }
   }
 

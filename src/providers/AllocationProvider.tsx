@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import { createDataItemSigner, dryrun, message, result } from '@permaweb/aoconnect';
 
@@ -77,7 +78,13 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	}, [arProvider.walletAddress]);
 
 	React.useEffect(() => {
-		if (JSON.stringify(records) === JSON.stringify(originalRecords)) {
+		const normalizeRecords = (arr: AllocationRecordType[]) =>
+			_.sortBy(arr, ['id']).map((record) => ({
+				...record,
+				value: parseFloat(record.value.toFixed(10)),
+			}));
+
+		if (_.isEqual(normalizeRecords(records), normalizeRecords(originalRecords))) {
 			setUnsavedChanges(false);
 		} else {
 			setUnsavedChanges(true);

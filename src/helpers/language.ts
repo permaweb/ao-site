@@ -89,6 +89,7 @@ export const language = {
 		piLabel: `Permaweb Index`,
 		piSummary: `Diversify your AO rewards with PI, a token representing the permaweb. PI is composed of 1/3 AO, 1/3 Arweave (AR), and 1/3 ecosystem project tokens.`,
 		preferencesSaved: `Preferences saved`,
+		primaryTokensInfo: `PI/AO not available in Restricted Jurisdictions. It is your obligation to ensure your acquisition of PI/AO does not violate applicable laws in your jurisdiction.`,
 		processes: `Processes`,
 		read: `Read`,
 		recipient: `Recipient`,

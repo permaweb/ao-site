@@ -5,8 +5,15 @@ import { ArweaveWebWallet } from 'arweave-wallet-connector';
 import { readHandler } from 'api';
 
 import { Modal } from 'components/molecules/Modal';
-import { AO, AO_TOKEN_DENOMINATION, AR_WALLETS, ASSETS, REDIRECTS, WALLET_PERMISSIONS } from 'helpers/config';
-import { getARBalanceEndpoint } from 'helpers/endpoints';
+import {
+	AO,
+	AO_TOKEN_DENOMINATION,
+	AR_WALLETS,
+	ASSETS,
+	ENDPOINTS,
+	REDIRECTS,
+	WALLET_PERMISSIONS,
+} from 'helpers/config';
 import { ArWalletEnum, TokenYieldProjectionsType } from 'helpers/types';
 import { getArReward } from 'helpers/utils';
 import Othent from 'helpers/wallet';
@@ -255,7 +262,7 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 
 	async function getARBalance(walletAddress: string) {
 		try {
-			const rawBalance = await fetch(getARBalanceEndpoint(walletAddress));
+			const rawBalance = await fetch(ENDPOINTS.arBalance(walletAddress));
 			const jsonBalance = await rawBalance.json();
 			return jsonBalance / 1e12;
 		} catch (e: any) {

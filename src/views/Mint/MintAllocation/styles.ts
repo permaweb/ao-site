@@ -83,15 +83,34 @@ export const TokensSection = styled.div`
 	}
 `;
 
+export const PrimaryTokens = styled.div``;
+
 export const TokenFlexWrapper = styled.div`
 	width: 100%;
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
+	margin: 40px 0 0 0;
 
 	@media (max-width: ${STYLING.cutoffs.desktop}) {
 		flex-direction: column;
 		gap: 40px;
+	}
+`;
+
+export const PrimaryTokensInfo = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 12.5px;
+	padding: 20px;
+	margin: 40px 0 0 0;
+
+	span {
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		color: ${(props) => props.theme.colors.font.primary};
+		line-height: 1.65;
 	}
 `;
 

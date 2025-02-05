@@ -61,8 +61,8 @@ export const ChartKeyLine = styled.div`
 `;
 
 export const ChartKey = styled.div<{ background: string }>`
-	height: 15px;
-	width: 15px;
+	min-height: 15px;
+	min-width: 15px;
 	background: ${(props) => props.background};
 	border: 1px solid ${(props) => props.theme.colors.border.alt4};
 	border-radius: 2.5px;

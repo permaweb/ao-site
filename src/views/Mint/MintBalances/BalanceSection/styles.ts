@@ -78,7 +78,7 @@ export const BalanceWalletDropdown = styled.div`
 	right: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 15px;
 	padding: 12.5px 20px 13.5px 20px;
 	border-radius: ${STYLING.dimensions.radius.primary};
 

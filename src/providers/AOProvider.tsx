@@ -3,10 +3,10 @@ import { cacheExchange, Client, fetchExchange, gql } from 'urql';
 
 import { readHandler } from 'api';
 
-import { AO, AO_TOKEN_DENOMINATION } from 'helpers/config';
+import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 
 export const goldsky = new Client({
-	url: 'https://arweave-search.goldsky.com/graphql',
+	url: ENDPOINTS.goldsky,
 	exchanges: [cacheExchange, fetchExchange],
 });
 
@@ -124,7 +124,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 			const { edges } = result.data.transactions;
 			const updateId = edges[0]?.node.id;
 
-			const data = await fetch(`https://arweave.net/${updateId}`);
+			const data = await fetch(ENDPOINTS.arTxEndpoint(updateId));
 			const json = await data.json();
 
 			return json as any[];

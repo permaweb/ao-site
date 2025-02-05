@@ -1,19 +1,4 @@
-import aoPict from 'assets/ao-pictograph.svg';
-import arconnect from 'assets/arconnect.png';
-import arweaveApp from 'assets/arweave-app.svg';
-import codehawksAudit from 'assets/codehawks-audit.svg';
-import heroGraphic from 'assets/hero-graphic.svg';
-import ipBlock from 'assets/ip-block.png';
-import metamask from 'assets/metamask.png';
-import morpheusAudit from 'assets/morpheus-audit.svg';
-import nccAudit from 'assets/ncc-audit.svg';
-import othent from 'assets/othent.svg';
-import rabby from 'assets/rabby.png';
-import renascenseAudit from 'assets/renascense-audit.svg';
-import walletConnect from 'assets/wallet-connect.png';
-
-import { getTxEndpoint } from './endpoints';
-import { ArWalletEnum, EthWalletEnum } from './types';
+import { ArWalletEnum } from './types';
 
 export const AO = {
 	token: 'm3PaWzK4PTG9lAaqYQPaPdOcXdO8hYqi5Fe9NWqXd0w',
@@ -38,22 +23,25 @@ export const ETH_CONTRACTS = {
 export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
 export const ETH_TOKEN_DENOMINATION = Math.pow(10, 18);
 
-// TODO: Upload remaining assets
-// TODO: Fetch assets on load
+export const ENDPOINTS = {
+	arBalance: (address: string) => `https://arweave.net/wallet/${address}/balance`,
+	arTotalSupply: `https://arweave.net/total_supply`,
+	arTxEndpoint: (txId: string) => `https://arweave.net/${txId}`,
+	goldsky: `https://arweave-search.goldsky.com/graphql`,
+	mainnetRpc: `https://rpc.ankr.com/eth`,
+};
+
+const getTxEndpoint = (txId: string) => ENDPOINTS.arTxEndpoint(txId);
+
 export const ASSETS = {
-	aoPict,
-	arconnect,
-	arweaveApp,
-	codehawksAudit,
-	heroGraphic,
-	ipBlock,
-	metamask,
-	morpheusAudit,
-	nccAudit,
-	othent,
-	rabby,
-	renascenseAudit,
-	walletConnect,
+	arconnect: getTxEndpoint('1Q5zOfpHzHnNtD2BS6Rg50WWT2H8aq3GYThDV3x6Qo0'),
+	arweaveApp: getTxEndpoint('CNZKujmn8vo0QM7Ssq18-3d0k6Azv1xsj20yAWt1Vew'),
+	codehawksAudit: getTxEndpoint('rT-u8ijl3BLWDZlrQ3zpSNQ3gCz5GAq-LZRX4Gwo_yA'),
+	morpheusAudit: getTxEndpoint('QbdAzvz1zVMpWw-9x-8W_0uBJt2lMVEryPKAVf0A9fw'),
+	nccAudit: getTxEndpoint('BX5fd9Z4PijeWx7GFwgh-BjJRVNcnD1dPi4qo4vUDcA'),
+	othent: getTxEndpoint('CV4m-XD_SYNKoxm7nh-3pxl_RdG9SdrOB2ibFmwCDPA'),
+	renascenseAudit: getTxEndpoint('oVv6te32GQUC-qidsZZlUOp3nTdfPcGFN-UeW9brau4'),
+	walletConnect: getTxEndpoint('llCUeYuxYxnH6rp2PVrkOR2pkGy0rFPR8wlIBbl-Ols'),
 	add: getTxEndpoint('RLWnDhoB0Dd_X-sLnNy4w2S7ds3l9591HcHK8nc3YRw'),
 	ao: getTxEndpoint('AzM59q2tcYzkySUUZUN1HCwfKGVHi--71UdoIk5gPUE'),
 	arrow: getTxEndpoint('ghFL1fzQ2C1eEAnqSVvfAMP5Jikx7NKSPP5neoNPALw'),
@@ -71,7 +59,6 @@ export const ASSETS = {
 	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
 	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
 	landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),
-	logo: getTxEndpoint('kKG4pr1WCy9OdiKPe7TKTs_HYUzP0-BPWBMDFCpZtfE'),
 	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
 	pi: getTxEndpoint('n1AM_4usUnh6zj8GzdQDu1KkvC5XFlBLk7sKXgNHtos'),
 	plus: getTxEndpoint('OUryhpUV-y709P_Tr575rN8gS-8c5rzlKXNymR9gsE4'),
@@ -90,11 +77,6 @@ export const AR_WALLETS = [
 	{ type: ArWalletEnum.arConnect, logo: ASSETS.arconnect },
 	{ type: ArWalletEnum.othent, logo: ASSETS.othent },
 	{ type: ArWalletEnum.arweaveApp, logo: ASSETS.arweaveApp },
-];
-
-export const ETH_WALLETS = [
-	{ type: EthWalletEnum.metamask, logo: ASSETS.metamask },
-	{ type: EthWalletEnum.rabby, logo: ASSETS.rabby },
 ];
 
 export const DOM = {
@@ -147,8 +129,6 @@ function createURLs() {
 export const URLS = createURLs();
 
 export const WALLET_PERMISSIONS = ['ACCESS_ADDRESS', 'ACCESS_PUBLIC_KEY', 'SIGN_TRANSACTION', 'DISPATCH', 'SIGNATURE'];
-
-export const IP_TOKEN = '04c286535ab4dc';
 
 export const StEthBridge_ABI = [
 	{ inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
@@ -1274,12 +1254,6 @@ export const PRICE_FEED_ABI = [
 		type: 'function',
 	},
 ];
-
-export const ENDPOINTS = {
-	arTotalSupply: `https://arweave.net/total_supply`,
-	ipCheck: `https://ipinfo.io?token=${IP_TOKEN}`,
-	mainnetRpc: `https://rpc.ankr.com/eth`,
-};
 
 export const REDIRECTS = {
 	arconnect: `https://arconnect.io`,

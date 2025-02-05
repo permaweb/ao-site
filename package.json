@@ -14,18 +14,13 @@
 		"test:coverage": "CI=true npm test -- --env=jsdom --coverage",
 		"prepare": "husky install",
 		"build": "NODE_ENV=production webpack",
-		"deploy-staging": "npm run build && permaweb-deploy --ant-process Gu5XiFhZZO_Pc6vRb6eoR3DxQi2P_1SzAVkHDbsPtbc",
-		"deploy-main": "npm run build && permaweb-deploy --ant-process HY021r2MQL9Zi0qSNFAQ9QRshIc2mNPYf65pZBP04cE",
-		"deploy-share": "npm run build && arx upload-dir dist -w ./wallet.json --index-file index.html -t arweave -h https://turbo.ardrive.io"
+		"deploy:staging": "npm run build && permaweb-deploy --ant-process Gu5XiFhZZO_Pc6vRb6eoR3DxQi2P_1SzAVkHDbsPtbc",
+		"deploy:main": "npm run build && permaweb-deploy --ant-process HY021r2MQL9Zi0qSNFAQ9QRshIc2mNPYf65pZBP04cE"
 	},
 	"dependencies": {
 		"@dha-team/arbundles": "^1.0.1",
 		"@ethersproject/providers": "^5.7.2",
 		"@ethersproject/units": "^5.7.0",
-		"@fontsource-variable/dm-sans": "^5.0.3",
-		"@fontsource-variable/roboto-mono": "^5.0.9",
-		"@fontsource/dm-sans": "^5.0.12",
-		"@fontsource/roboto-mono": "^5.0.8",
 		"@othent/kms": "^1.0.7",
 		"@permaweb/aoconnect": "^0.0.45",
 		"@rive-app/react-canvas": "^4.7.0",
@@ -53,6 +48,7 @@
 		"html-react-parser": "^5.1.10",
 		"jwt-decode": "^4.0.0",
 		"katex": "^0.13.3",
+		"localforage": "^1.10.0",
 		"marked": "^11.1.1",
 		"patch-package": "^8.0.0",
 		"postinstall-postinstall": "^2.1.0",

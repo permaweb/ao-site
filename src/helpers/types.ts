@@ -60,12 +60,6 @@ export enum ArWalletEnum {
 	arweaveApp = 'arweave.app',
 }
 
-export enum EthWalletEnum {
-	metamask = 'MetaMask',
-	walletConnect = 'WalletConnect',
-	rabby = 'Rabby',
-}
-
 export type SelectOptionType = { id: string; label: string; icon?: React.ReactNode };
 
 export type FormFieldType = 'number' | 'password';
