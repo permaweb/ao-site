@@ -84,7 +84,7 @@ export default function AllocationToken(props: IProps) {
 								label: token.label,
 						  })
 				}
-				disabled={false}
+				disabled={allocationProvider.isTokenDisabled({ id: token.type, label: token.label })}
 				icon={currentAllocationRecord ? ASSETS.remove : ASSETS.add}
 				iconLeftAlign
 				height={65}

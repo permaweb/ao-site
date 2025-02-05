@@ -32,6 +32,12 @@ export default function AllocationChart(props: IProps) {
 		];
 	}, [theme]);
 
+	const colorMap: Record<string, string> = {
+		pi: theme.colors.stats.primary,
+		ao: theme.colors.stats.alt1,
+		arweave: theme.colors.stats.alt3,
+	};
+
 	React.useEffect(() => {
 		if (props.records) {
 			const pieData: any = {
@@ -39,11 +45,17 @@ export default function AllocationChart(props: IProps) {
 				datasets: [],
 			};
 
+			const assignedColors = new Set(Object.values(colorMap));
+			const availableColors = keys.filter((color) => !assignedColors.has(color));
+			const backgroundColors = props.records.map((record: AllocationRecordType, index: number) => {
+				return colorMap[record.id] || availableColors[index % availableColors.length];
+			});
+
 			pieData.datasets.push({
 				data: props.records?.map((record: AllocationRecordType) => record.value),
-				backgroundColor: keys,
-				borderColor: [theme.colors.border.alt1],
-				borderWidth: 1,
+				backgroundColor: backgroundColors,
+				borderColor: [theme.colors.border.alt4],
+				borderWidth: 1.15,
 			});
 
 			setData(pieData);

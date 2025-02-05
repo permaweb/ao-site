@@ -7,6 +7,7 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 
+// TODO: Legal policies
 export default function Landing() {
 	const aoProvider = useAOProvider();
 	const ethProvider = useEthereumProvider();

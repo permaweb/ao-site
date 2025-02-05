@@ -14,12 +14,14 @@ interface AllocationContextState {
 	records: AllocationRecordType[];
 	addToken: (token: AllocationTokenRecordType) => void;
 	addFullToken: (token: AllocationTokenRecordType) => void;
-	updateToken: (token: AllocationRecordType) => void;
+	updateToken: (token: AllocationRecordType, multiplier: number | 'max') => void;
 	removeToken: (token: AllocationTokenRecordType) => void;
 	fetchingSetup: boolean;
 	showSetup: boolean;
 	savePreferences: (initialSave?: boolean) => Promise<void>;
 	loading: boolean;
+	isTokenDisabled: (token: AllocationTokenRecordType) => boolean;
+	unsavedChanges: boolean;
 }
 
 const DEFAULT_CONTEXT: AllocationContextState = {
@@ -32,6 +34,8 @@ const DEFAULT_CONTEXT: AllocationContextState = {
 	showSetup: false,
 	savePreferences: async () => {},
 	loading: false,
+	isTokenDisabled: () => false,
+	unsavedChanges: false,
 };
 
 const AllocationContext = React.createContext<AllocationContextState>(DEFAULT_CONTEXT);
@@ -44,7 +48,6 @@ export function useAllocationProvider(): AllocationContextState {
 	return context;
 }
 
-// TODO: Disable save if no changes
 // TODO: Select projects by default if allocated
 export function AllocationProvider(props: { children: React.ReactNode }) {
 	const arProvider = useArweaveProvider();
@@ -54,8 +57,60 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	const [fetchingSetup, setFetchingSetup] = React.useState<boolean>(false);
 	const [showSetup, setShowSetup] = React.useState<boolean>(false);
 	const [records, setRecords] = React.useState<AllocationRecordType[]>([]);
+	const [originalRecords, setOriginalRecords] = React.useState<AllocationRecordType[]>([]);
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [response, setResponse] = React.useState<NotificationType | null>(null);
+	const [unsavedChanges, setUnsavedChanges] = React.useState<boolean>(false);
+
+	React.useEffect(() => {
+		if (arProvider.walletAddress) {
+			const cached = getCachedRecords();
+			if (cached && cached.length > 0) {
+				setRecords(cached);
+				setOriginalRecords(cached);
+				setShowSetup(false);
+			}
+			fetchSetup();
+		} else {
+			setShowSetup(true);
+		}
+	}, [arProvider.walletAddress]);
+
+	React.useEffect(() => {
+		if (JSON.stringify(records) === JSON.stringify(originalRecords)) {
+			setUnsavedChanges(false);
+		} else {
+			setUnsavedChanges(true);
+		}
+	}, [records, originalRecords]);
+
+	const fetchSetup = async () => {
+		setFetchingSetup(true);
+		try {
+			const response = await dryrun({
+				process: AO.yieldPreferences,
+				tags: [
+					{ name: 'Action', value: 'Get-Preferences' },
+					{ name: 'Address', value: arProvider.walletAddress },
+				],
+			});
+
+			if (response?.Messages?.[0].Data) {
+				const remoteRecords = JSON.parse(response.Messages[0].Data);
+				setRecords(remoteRecords);
+				setOriginalRecords(remoteRecords);
+				setCachedRecords(remoteRecords);
+				setShowSetup(false);
+				setUnsavedChanges(false);
+			} else {
+				setShowSetup(true);
+			}
+		} catch (e: any) {
+			console.error(e);
+			setShowSetup(true);
+		}
+		setFetchingSetup(false);
+	};
 
 	const getCacheKey = () => {
 		return arProvider.walletAddress ? `allocation_${arProvider.walletAddress}` : null;
@@ -88,45 +143,6 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		setCachedRecords(newRecords);
 	};
 
-	const fetchSetup = async () => {
-		setFetchingSetup(true);
-		try {
-			const response = await dryrun({
-				process: AO.yieldPreferences,
-				tags: [
-					{ name: 'Action', value: 'Get-Preferences' },
-					{ name: 'Address', value: arProvider.walletAddress },
-				],
-			});
-
-			if (response?.Messages?.[0].Data) {
-				const remoteRecords = JSON.parse(response.Messages[0].Data);
-				updateRecords(remoteRecords);
-				setShowSetup(false);
-			} else {
-				setShowSetup(true);
-			}
-		} catch (e: any) {
-			console.error(e);
-			setShowSetup(true);
-		}
-		setFetchingSetup(false);
-	};
-
-	React.useEffect(() => {
-		if (arProvider.walletAddress) {
-			const cached = getCachedRecords();
-			if (cached && cached.length > 0) {
-				updateRecords(cached);
-				setShowSetup(false);
-			} else {
-				fetchSetup();
-			}
-		} else {
-			setShowSetup(true);
-		}
-	}, [arProvider.walletAddress]);
-
 	const addToken = (token: AllocationTokenRecordType) => {
 		const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
 
@@ -149,12 +165,40 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		updateRecords([{ ...token, value: 1 }]);
 	};
 
-	const updateToken = (token: AllocationRecordType) => {
+	const updateToken = (token: AllocationRecordType, multiplier: number | 'max') => {
 		if (token.value === undefined || token.value === null) {
 			console.error('No value provided');
 			return;
 		}
-		const updatedRecords = records.map((r) => (r.id === token.id ? token : r));
+
+		let newAmount: number;
+		if (multiplier === 'max') newAmount = 1;
+		else newAmount = token.value * multiplier;
+
+		if (newAmount < 0 || newAmount > 1) {
+			console.error('Invalid amount provided, must be between 0 and 1');
+			return;
+		}
+
+		const totalTokens = records.length;
+		if (totalTokens === 1) {
+			updateRecords([{ ...token, value: 1 }]);
+			return;
+		}
+
+		const remainingAmount = 1 - newAmount;
+		const newShareForOthers = remainingAmount / (totalTokens - 1);
+
+		const updatedRecords = records
+			.map((record) => {
+				if (token.id === record.id) {
+					return { ...record, value: newAmount };
+				} else {
+					return { ...record, value: newShareForOthers };
+				}
+			})
+			.filter((record: AllocationRecordType) => record.value > 0);
+
 		updateRecords(updatedRecords);
 	};
 
@@ -185,6 +229,14 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		}
 	};
 
+	const isTokenDisabled = (token: AllocationRecordType) => {
+		const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
+
+		if (!existingRecord) return false;
+
+		if (records.length === 1) return true;
+	};
+
 	const savePreferences = async (initialSave?: boolean) => {
 		setLoading(true);
 		try {
@@ -209,6 +261,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 			if (status !== 'success') {
 				updateRecords(prevRecords);
 			} else {
+				setOriginalRecords(records);
 				if (initialSave) await fetchSetup();
 			}
 
@@ -238,6 +291,8 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 					showSetup,
 					savePreferences,
 					loading,
+					isTokenDisabled,
+					unsavedChanges,
 				}}
 			>
 				{props.children}

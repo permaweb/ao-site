@@ -43,6 +43,7 @@ export function useAOProvider(): AOContextState {
 	return React.useContext(AOContext);
 }
 
+// TODO: Nodes
 export function AOProvider(props: { children: React.ReactNode }) {
 	const [mintedSupply, setMintedSupply] = React.useState<number | null>(null);
 	const [messages, setMessages] = React.useState<number | null>(null);

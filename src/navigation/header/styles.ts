@@ -27,13 +27,13 @@ export const SectionStart = styled.div`
 `;
 
 export const LogoWrapper = styled.div`
-	height: 26.5px;
-	width: 26.5px;
+	height: 27.5px;
+	width: 27.5px;
 	animation: ${open} ${transition2};
 
 	svg {
-		height: 26.5px;
-		width: 26.5px;
+		height: 27.5px;
+		width: 27.5px;
 		margin: 2.25px 0 0 0;
 		path {
 			fill: ${(props) => props.theme.colors.icon.primary.fill};

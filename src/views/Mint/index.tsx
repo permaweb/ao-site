@@ -14,7 +14,6 @@ import { MintAllocation } from './MintAllocation';
 import { MintBalances } from './MintBalances';
 import * as S from './styles';
 
-// TODO: Settings process
 export default function Mint() {
 	const { active } = useParams();
 	const navigate = useNavigate();

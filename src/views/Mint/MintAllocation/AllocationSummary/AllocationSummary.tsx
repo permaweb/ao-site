@@ -13,7 +13,6 @@ import * as S from './styles';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// TODO: SummaryLineActions
 export default function AllocationSummary() {
 	const theme = useTheme();
 
@@ -39,6 +38,12 @@ export default function AllocationSummary() {
 		];
 	}, [theme]);
 
+	const colorMap: Record<string, string> = {
+		pi: theme.colors.stats.primary,
+		ao: theme.colors.stats.alt1,
+		arweave: theme.colors.stats.alt3,
+	};
+
 	React.useEffect(() => {
 		if (allocationProvider) {
 			const pieData: any = {
@@ -46,16 +51,34 @@ export default function AllocationSummary() {
 				datasets: [],
 			};
 
+			const assignedColors = new Set(Object.values(colorMap));
+			const availableColors = keys.filter((color) => !assignedColors.has(color));
+			const backgroundColors = allocationProvider.records.map((record: AllocationRecordType, index: number) => {
+				return colorMap[record.id] || availableColors[index % availableColors.length];
+			});
+
 			pieData.datasets.push({
 				data: allocationProvider.records?.map((record: AllocationRecordType) => record.value),
-				backgroundColor: keys,
+				backgroundColor: backgroundColors,
 				borderColor: [theme.colors.border.alt4],
-				borderWidth: 1,
+				borderWidth: 1.15,
 			});
 
 			setData(pieData);
 		}
 	}, [allocationProvider, theme]);
+
+	function getMultiplier(record: AllocationRecordType, amount: number) {
+		return (
+			<Button
+				type={'alt2'}
+				id={'indicator'}
+				label={`${amount}x`}
+				handlePress={() => allocationProvider.updateToken(record, amount)}
+				disabled={allocationProvider.isTokenDisabled(record) || record.value * amount > 1}
+			/>
+		);
+	}
 
 	return data ? (
 		<>
@@ -68,7 +91,7 @@ export default function AllocationSummary() {
 						<>
 							<S.ChartWrapper>
 								<S.ChartHeader>
-									<span className={'primary-text'}>{language.allocationSummaryDescription}</span>
+									<span>{language.allocationSummaryDescription}</span>
 								</S.ChartHeader>
 								<S.Chart>
 									<Pie
@@ -104,10 +127,21 @@ export default function AllocationSummary() {
 												</S.SummaryLineLabel>
 												<S.SummaryLineActionsWrapper>
 													<S.SummaryLineActions>
-														<Button type={'alt3'} label={'None'} handlePress={() => {}} />
-														<Button type={'alt3'} label={'2x'} handlePress={() => {}} active />
-														<Button type={'alt3'} label={'4x'} handlePress={() => {}} active />
-														<Button type={'alt3'} label={'All'} handlePress={() => {}} active />
+														<Button
+															type={'alt2'}
+															label={language.none}
+															handlePress={() => allocationProvider.removeToken(record)}
+															disabled={allocationProvider.isTokenDisabled(record)}
+														/>
+														{getMultiplier(record, 2)}
+														{getMultiplier(record, 4)}
+														<Button
+															type={'alt2'}
+															id={'indicator'}
+															label={language.all}
+															handlePress={() => allocationProvider.updateToken(record, 'max')}
+															disabled={allocationProvider.isTokenDisabled(record)}
+														/>
 													</S.SummaryLineActions>
 													<S.SummaryLinePercentage>
 														<p>{formatPercentage(record.value)}</p>
@@ -125,9 +159,9 @@ export default function AllocationSummary() {
 			<S.ActionMain>
 				<Button
 					type={'alt1'}
-					label={language.saveOptions}
+					label={language.saveChanges}
 					handlePress={() => allocationProvider.savePreferences()}
-					disabled={allocationProvider.loading}
+					disabled={allocationProvider.loading || !allocationProvider.unsavedChanges}
 					loading={allocationProvider.loading}
 					height={60}
 					fullWidth

@@ -3,12 +3,15 @@ import { ReactSVG } from 'react-svg';
 
 import { ASSETS } from 'helpers/config';
 import { useAllocationProvider } from 'providers/AllocationProvider';
+import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 
 // TODO: Get projects
 export default function AllocationCustom() {
 	const allocationProvider = useAllocationProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
 	const [selectedProjects, setSelectedProjects] = React.useState<string[]>([]);
 
@@ -36,7 +39,7 @@ export default function AllocationCustom() {
 		<S.Wrapper>
 			<S.Header>
 				<S.HeaderTitle>
-					<p>Token Customization</p>
+					<p>{language.tokenCustomization}</p>
 				</S.HeaderTitle>
 			</S.Header>
 			<S.Body>

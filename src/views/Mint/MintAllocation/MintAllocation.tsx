@@ -15,6 +15,7 @@ import { AllocationSummary } from './AllocationSummary';
 import { AllocationToken } from './AllocationToken';
 import * as S from './styles';
 
+// TODO: Primary token disclaimers
 export default function MintAllocation() {
 	const arProvder = useArweaveProvider();
 	const allocationProvider = useAllocationProvider();
@@ -23,9 +24,26 @@ export default function MintAllocation() {
 
 	const [info, setInfo] = React.useState<string | null>(null);
 
+	React.useEffect(() => {
+		const handleBeforeUnload = (e: any) => {
+			if (process.env.NODE_ENV === 'development') return;
+			if (allocationProvider.unsavedChanges) {
+				e.preventDefault();
+				e.returnValue = '';
+			}
+		};
+
+		window.addEventListener('beforeunload', handleBeforeUnload);
+
+		return () => {
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+		};
+	}, [allocationProvider.unsavedChanges]);
+
 	function getView() {
 		if (!arProvder.walletAddress) return <WalletBlock />;
-		if (allocationProvider.fetchingSetup) return <Loader message={`${language.gettingPreferences}...`} />;
+		if (allocationProvider.records.length <= 0 && allocationProvider.fetchingSetup)
+			return <Loader message={`${language.gettingPreferences}...`} />;
 		if (allocationProvider.showSetup) return <AllocationSetup />;
 		return (
 			<>
@@ -50,12 +68,13 @@ export default function MintAllocation() {
 
 	return (
 		<>
-			{allocationProvider.fetchingSetup && <Loader message={`${language.gettingPreferences}...`} />}
 			<S.AllocationWrapper>
 				<S.HeaderWrapper>
 					<S.HeaderInfoWrapper>
 						<S.HeaderInfo>
-							<h6>{language.chooseYield}</h6>
+							<h6>{`${language.chooseYield}${
+								allocationProvider.fetchingSetup ? ` (${language.updating}...)` : ''
+							}`}</h6>
 						</S.HeaderInfo>
 					</S.HeaderInfoWrapper>
 					<S.HeaderTooltip>

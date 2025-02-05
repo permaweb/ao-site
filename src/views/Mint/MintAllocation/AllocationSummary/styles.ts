@@ -31,7 +31,8 @@ export const ChartWrapper = styled.div`
 export const ChartHeader = styled.div`
 	margin: 0 0 20px 0;
 	span {
-		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-family: ${(props) => props.theme.typography.family.alt1};
 		color: ${(props) => props.theme.colors.font.alt1};
 	}
 `;
@@ -63,7 +64,7 @@ export const ChartKey = styled.div<{ background: string }>`
 	height: 15px;
 	width: 15px;
 	background: ${(props) => props.background};
-	border: 1px solid ${(props) => props.theme.colors.border.primary};
+	border: 1px solid ${(props) => props.theme.colors.border.alt4};
 	border-radius: 2.5px;
 `;
 
@@ -122,7 +123,7 @@ export const SummaryLine = styled.div`
 `;
 
 export const SummaryLineLabel = styled.div`
-	width: 165px;
+	width: 140px;
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -133,7 +134,7 @@ export const SummaryLineLabel = styled.div`
 		overflow: hidden;
 		text-overflow: ellipsis;
 		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-size: ${(props) => props.theme.typography.size.small};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
 `;
@@ -141,7 +142,7 @@ export const SummaryLineLabel = styled.div`
 export const SummaryLineActionsWrapper = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 15px;
+	gap: 20px;
 
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		display: none;
@@ -151,7 +152,40 @@ export const SummaryLineActionsWrapper = styled.div`
 export const SummaryLineActions = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 7.5px;
+	gap: 17.5px;
+
+	button {
+		span {
+			font-family: ${(props) => props.theme.typography.family.alt1} !important;
+			font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+			text-decoration: underline;
+			text-decoration-thickness: 1.25px;
+		}
+	}
+
+	#indicator {
+		span {
+			color: ${(props) => props.theme.colors.indicator.primary} !important;
+		}
+
+		&:hover {
+			span {
+				color: ${(props) => props.theme.colors.indicator.active} !important;
+			}
+		}
+
+		&:disabled {
+			span {
+				color: ${(props) => props.theme.colors.button.primary.disabled.color} !important;
+			}
+
+			&:hover {
+				span {
+					color: ${(props) => props.theme.colors.button.primary.disabled.color} !important;
+				}
+			}
+		}
+	}
 `;
 
 export const SummaryLinePercentage = styled.div`
@@ -161,6 +195,7 @@ export const SummaryLinePercentage = styled.div`
 	P {
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
 		text-align: right;
 	}
 `;
