@@ -76,7 +76,7 @@ export default function BalanceSection(props: IProps) {
 				},
 				balance: { header: language.amountDeposited, icon: ASSETS.stEth },
 				action: {
-					label: language.tradeStEth,
+					label: language.depositStEth,
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
 					component: getEthExchange(EthTokenEnum.StEth),
@@ -93,7 +93,7 @@ export default function BalanceSection(props: IProps) {
 				},
 				balance: { header: language.amountDeposited, icon: ASSETS.dai },
 				action: {
-					label: language.tradeDai,
+					label: language.depositDai,
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
 					component: getEthExchange(EthTokenEnum.DAI),

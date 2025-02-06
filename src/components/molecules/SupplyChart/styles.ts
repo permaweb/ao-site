@@ -1,19 +1,16 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-	height: 405.5px;
+	height: 398.5px;
 	width: 100%;
 	position: relative;
+	cursor: crosshair;
+	overflow: hidden;
 
-	&:before {
-		content: '';
+	canvas {
+		width: calc(100% + 15px) !important;
 		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: ${(props) => props.theme.colors.view.background};
-		z-index: -1;
-		filter: blur(10px);
+		top: 9.5px;
+		left: -9.5px;
 	}
 `;
