@@ -85,7 +85,7 @@ export const MetricsWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	gap: 20px;
-	align-items: center;
+	align-items: flex-end;
 	justify-content: space-between;
 
 	> * {
@@ -189,5 +189,34 @@ export const Indicator = styled.div`
 			background: ${(props) => props.theme.colors.indicator.primary};
 			transform: scale(1.15);
 		}
+	}
+`;
+
+export const LinksWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 28.5px;
+	position: relative;
+	padding: 20px 20px 0px 20px;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: ${(props) => props.theme.colors.view.background};
+		z-index: -1;
+		filter: blur(5px);
+	}
+
+	a {
+		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		line-height: 1;
+	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		display: none;
 	}
 `;

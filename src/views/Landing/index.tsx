@@ -1,5 +1,8 @@
+import { Link } from 'react-router-dom';
+
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
-import { ASSETS } from 'helpers/config';
+import { HyperTextLoad } from 'components/atoms/HyperTextLoad';
+import { ASSETS, NAV_REDIRECTS, REDIRECTS, URLS } from 'helpers/config';
 import { formatCount } from 'helpers/utils';
 import { useAOProvider } from 'providers/AOProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -45,6 +48,15 @@ export default function Landing() {
 							</S.MetricsValue>
 						</S.MetricsLine>
 					</S.MetricsSection>
+					<S.LinksWrapper>
+						{NAV_REDIRECTS.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
+							return (
+								<Link key={index} to={element.path} target={element.target || ''} className={'primary-text'}>
+									<HyperTextLoad word={element.label} textType={'span'} speed={1} triggerOnLoad />
+								</Link>
+							);
+						})}
+					</S.LinksWrapper>
 					<S.MetricsSection className={'fade-in'}>
 						<S.MetricsLine>
 							<span className={'primary-text'}>{language.nodes}</span>

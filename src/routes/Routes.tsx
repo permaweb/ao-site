@@ -7,6 +7,7 @@ import { URLS } from 'helpers/config';
 const Landing = getLazyImport('Landing');
 const Mint = getLazyImport('Mint');
 const NotFound = getLazyImport('NotFound');
+const Policies = getLazyImport('Policies');
 
 export default function _Routes() {
 	return (
@@ -14,6 +15,7 @@ export default function _Routes() {
 			<Routes>
 				<Route path={URLS.base} element={<Landing />} />
 				<Route path={URLS.mint} element={<Mint />} />
+				<Route path={URLS.policies} element={<Policies />} />
 				<Route path={`${URLS.mint}:active`} element={<Mint />} />
 				<Route path={'*'} element={<NotFound />} />
 			</Routes>

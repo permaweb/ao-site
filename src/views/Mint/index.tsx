@@ -9,6 +9,7 @@ import { SupplyChart } from 'components/molecules/SupplyChart';
 import { URLTabs } from 'components/molecules/URLTabs';
 import { ASSETS, REDIRECTS, URLS } from 'helpers/config';
 import { formatCount } from 'helpers/utils';
+import { Footer } from 'navigation/footer';
 import { useAOProvider } from 'providers/AOProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -70,8 +71,6 @@ export default function Mint() {
 
 		return supplyDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
 	}
-
-	console.log(aoSupply);
 
 	return (
 		<>
@@ -174,6 +173,7 @@ export default function Mint() {
 					<BalanceSection type={'ao'} />
 				</S.BalancesPrimaryWrapper>
 				<URLTabs tabs={TABS} activeUrl={TABS[0].url} />
+				<Footer />
 			</S.Wrapper>
 			{info && (
 				<Modal header={'Earnings'} handleClose={() => setInfo(null)}>

@@ -21,8 +21,10 @@ export const Content = styled.div`
 `;
 
 export const SectionStart = styled.div`
+	width: 100%;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	gap: 30px;
 `;
 

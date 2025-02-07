@@ -33,6 +33,34 @@ export function formatDisplayAmount(amount: number | string | null) {
 	}
 }
 
+export function formatDate(dateArg: string | number | null, dateType: 'dateString' | 'timestamp', fullTime?: boolean) {
+	if (!dateArg) {
+		return null;
+	}
+
+	let date: Date | null = null;
+
+	switch (dateType) {
+		case 'dateString':
+			date = new Date(dateArg);
+			break;
+		case 'timestamp':
+			date = new Date(Number(dateArg));
+			break;
+		default:
+			date = new Date(dateArg);
+			break;
+	}
+
+	return fullTime
+		? `${date.toLocaleString('default', { month: 'long' })} ${date.getDate()}, ${date.getUTCFullYear()} ${
+				date.getHours() % 12 || 12
+		  }:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')} ${
+				date.getHours() >= 12 ? 'PM' : 'AM'
+		  }`
+		: `${date.toLocaleString('default', { month: 'long' })} ${date.getDate()}, ${date.getUTCFullYear()}`;
+}
+
 export function getTagValue(list: { [key: string]: any }[], name: string): string {
 	for (let i = 0; i < list.length; i++) {
 		if (list[i]) {

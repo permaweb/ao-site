@@ -9,6 +9,7 @@ export const AO = {
 	stEthPriceOracle: 'rwxd1EuSzEVoy3qTlDRm7eMYPbOMrmQMajynVrA-ikk',
 	daiPriceOracle: 'SVu0Atwg7FRQfQA1PUvhpTYsdBmXeJK8s_58retkdBg',
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
+	flpFactory: 's7IwHRVvjiRksIr5znqfaGAQj9qB9sulh9qqh7lm80E',
 };
 
 export const ETH_CONTRACTS = {
@@ -59,15 +60,18 @@ export const ASSETS = {
 	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
 	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
 	landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),
+	link: getTxEndpoint('UMfjnj-8e7fb3lYRdcFygu8c4JoBZq3hB-mzycYT4DU'),
 	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
 	pi: getTxEndpoint('n1AM_4usUnh6zj8GzdQDu1KkvC5XFlBLk7sKXgNHtos'),
 	plus: getTxEndpoint('OUryhpUV-y709P_Tr575rN8gS-8c5rzlKXNymR9gsE4'),
 	remove: getTxEndpoint('aKjWuVXkSeYOKzGP0MnnhHwoYUXqTHFMJfVCbqzYEo0'),
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
 	success: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
+	token: getTxEndpoint('f18VARM42GRSDY8UzZtEJrCsakbxluldOAnnED_V_Zk'),
 	view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
 	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
 	warning: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
+	website: getTxEndpoint('YBilSmUhX--T9vffUIDsCCrWoakxaxPqPVw7NCZNNVs'),
 	withdraw: getTxEndpoint('QOJLKefBz2xCPUbO8dEKB22aWv_zdQ6FYA_UWUriyJw'),
 	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
 	yield: getTxEndpoint('RrusyNB6RzmXfYcocp7tG9GSDkrF_z-_NfZMSxVgzOE'),
@@ -119,9 +123,8 @@ function createURLs() {
 		mint: mint,
 		mintDeposits: `${mint}deposits/`,
 		mintYield: `${mint}yield/`,
+		policies: `${base}policies/`,
 		read: `${base}read/`,
-		deposit: `${mint}deposit/`,
-		withdraw: `${mint}withdraw/`,
 		notFound: `${base}404`,
 	};
 }
@@ -1302,3 +1305,10 @@ export const ETH_EXCHANGE_REDIRECTS = {
 	renascence:
 		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Distribution%20V2%20Audit%20%7C%20Renascence.pdf',
 };
+
+export const NAV_REDIRECTS: { path: string; label: string; target?: '_blank' }[] = [
+	{ path: REDIRECTS.x, label: 'X' },
+	{ path: REDIRECTS.github, label: 'GitHub' },
+	{ path: REDIRECTS.discord, label: 'Discord' },
+	// { path: URLS.policies, label: 'Policies' },
+];

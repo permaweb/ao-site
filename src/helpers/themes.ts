@@ -26,6 +26,7 @@ export const lightTheme = {
 	overlay1: 'rgb(0, 0, 0, .45)',
 	overlay2: 'rgb(0, 0, 0, .5)',
 	shadow1: 'rgb(150, 150, 150, .5)',
+	shadow2: 'rgb(75, 75, 75, .5)',
 	primary1: '#3344FF',
 	primary2: '#091DFF',
 	accent1: '#27D735',
@@ -260,6 +261,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		},
 		shadow: {
 			primary: currentTheme.shadow1,
+			alt1: currentTheme.shadow2,
 		},
 		status: {
 			draft: currentTheme.caution1,

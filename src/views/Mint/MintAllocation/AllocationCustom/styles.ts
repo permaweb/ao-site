@@ -43,19 +43,22 @@ export const GridWrapper = styled.div`
 
 export const GridElement = styled.div``;
 
-export const Project = styled.button<{ active: boolean }>`
+export const Project = styled.div<{ active: boolean }>`
 	height: 100%;
 	width: 100%;
 	padding: 20px;
 	display: flex;
 	flex-direction: column;
+	gap: 20px;
 	background: ${(props) =>
 		props.active ? props.theme.colors.container.primary.active : props.theme.colors.container.primary.background};
 	border: 1px solid
 		${(props) => (props.active ? props.theme.colors.indicator.active : props.theme.colors.border.primary)};
 	outline: 1.25px solid ${(props) => (props.active ? props.theme.colors.indicator.active : 'transparent')};
+	transition: all 125ms;
 
 	&:hover {
+		cursor: pointer;
 		background: ${(props) => props.theme.colors.container.primary.active};
 		border: 1px solid
 			${(props) => (props.active ? props.theme.colors.indicator.active : props.theme.colors.border.primary)};
@@ -65,8 +68,23 @@ export const Project = styled.button<{ active: boolean }>`
 export const ProjectHeader = styled.div`
 	width: 100%;
 	display: flex;
+	gap: 10px;
 	align-items: center;
 	justify-content: space-between;
+`;
+
+export const ProjectHeaderDetails = styled.div`
+	display: flex;
+	gap: 12.5px;
+	align-items: center;
+`;
+
+export const ProjectLogo = styled.div`
+	img {
+		height: 25px;
+		width: 25px;
+		margin: 2.5px 2.5px 0 0;
+	}
 `;
 
 export const ProjectTitle = styled.div`
@@ -75,6 +93,78 @@ export const ProjectTitle = styled.div`
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const ProjectId = styled.button`
+	display: flex;
+	gap: 7.5px;
+	align-items: center;
+	margin: 0 0 12.5px 0;
+
+	p,
+	span {
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+	}
+
+	p {
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+
+	span {
+		color: ${(props) => props.theme.colors.font.alt2};
+	}
+
+	svg {
+		height: 16.5px;
+		width: 16.5px;
+		color: ${(props) => props.theme.colors.font.primary};
+		fill: ${(props) => props.theme.colors.font.primary};
+		margin: 2.5px 0 0 0;
+	}
+
+	&:hover {
+		p,
+		svg {
+			color: ${(props) => props.theme.colors.font.alt1};
+		}
+
+		svg {
+			fill: ${(props) => props.theme.colors.font.alt1};
+		}
+	}
+`;
+
+export const ProjectTicker = styled.div`
+	margin: 2.5px 0 0 0;
+	span {
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+		color: ${(props) => props.theme.colors.font.alt2};
+		text-transform: uppercase;
+	}
+`;
+
+export const ProjectLinks = styled.div`
+	display: flex;
+	gap: 15px;
+	align-items: center;
+`;
+
+export const ProjectLink = styled.div`
+	svg {
+		height: 17.5px;
+		width: 17.5px;
+		color: ${(props) => props.theme.colors.font.alt1};
+		fill: ${(props) => props.theme.colors.font.alt1};
+
+		&:hover {
+			color: ${(props) => props.theme.colors.font.primary};
+			fill: ${(props) => props.theme.colors.font.primary};
+		}
 	}
 `;
 
@@ -87,20 +177,86 @@ export const ProjectIndex = styled.div<{ active: boolean }>`
 	}
 `;
 
-export const ProjectBody = styled.div`
-	margin: 20px 0 0 0;
-`;
+export const ProjectBody = styled.div``;
 
-export const ProjectDescription = styled.div`
-	height: 80px;
+export const ProjectShortDescription = styled.div`
+	height: 50px;
 	p {
 		height: 100%;
 		white-space: normal;
 		overflow: hidden;
 		line-height: 1.5;
-		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
 		color: ${(props) => props.theme.colors.font.alt1};
 		text-align: left;
+	}
+`;
+
+export const ProjectLongDescription = styled.div`
+	margin: 0 0 20px 0;
+	p {
+		height: 100%;
+		white-space: normal;
+		overflow: hidden;
+		line-height: 1.5;
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		color: ${(props) => props.theme.colors.font.primary};
+		text-align: left;
+	}
+`;
+
+export const ProjectDisclaimer = styled(ProjectLongDescription)`
+	margin: 0;
+	p {
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+`;
+
+export const ProjectLinesWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin: 20px 0 0 0;
+`;
+
+export const ProjectLineWrapper = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	align-items: center;
+	justify-content: space-between;
+
+	> * {
+		&:first-child {
+			p,
+			span {
+				text-align: left;
+			}
+		}
+		&:last-child {
+			p,
+			span {
+				text-align: right;
+			}
+		}
+	}
+`;
+
+export const ProjectInfoLine = styled.div`
+	display: flex;
+	flex-direction: column;
+
+	span {
+		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+
+	p {
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-size: ${(props) => props.theme.typography.size.base};
+		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;
 
@@ -109,7 +265,6 @@ export const ProjectFooter = styled.div`
 	display: flex;
 	align-items: flex-end;
 	justify-content: space-between;
-	margin: 20px 0 0 0;
 `;
 
 export const ProjectMarketCap = styled.div`
@@ -157,4 +312,41 @@ export const IndicatorWrapper = styled.div`
 		fill: ${(props) => props.theme.colors.indicator.active};
 		margin: 2.5px 0 0 0;
 	}
+`;
+
+export const LoadingWrapper = styled.div`
+	span {
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const EmptyWrapper = styled(LoadingWrapper)``;
+
+export const PanelWrapper = styled.div`
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 20px;
+	padding: 0 20px 20px 20px;
+`;
+
+export const PanelWrapperStart = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+`;
+
+export const PanelWrapperEnd = styled(PanelWrapperStart)``;
+
+export const PanelActionsWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 20px;
 `;

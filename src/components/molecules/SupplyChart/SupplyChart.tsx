@@ -136,18 +136,6 @@ export default function SupplyChart(props: {
 
 	const [currentMonthIndex, setCurrentMonthIndex] = React.useState<number | null>(null);
 
-	React.useEffect(() => {
-		let currentMonth = totalSupply.findIndex((supply) => supply >= aoProvider.mintedSupply);
-		if (currentMonth === -1) {
-			currentMonth = totalSupply.length - 1;
-		}
-		setCurrentMonthIndex(currentMonth);
-	}, [totalSupply, aoProvider.mintedSupply]);
-
-	React.useEffect(() => {
-		props.setCurrentMonth(currentMonthIndex);
-	}, [currentMonthIndex, aoProvider.mintedSupply]);
-
 	const chartData = {
 		labels: Array.from({ length: MONTHS }, (_, i) => i),
 		datasets: [
@@ -164,6 +152,39 @@ export default function SupplyChart(props: {
 		],
 	};
 
+	const handleReset = React.useCallback(() => {
+		if (chartRef.current) {
+			chartRef.current.$activeElement = null;
+			chartRef.current.update();
+		}
+		props.handleReset();
+	}, [props]);
+
+	React.useEffect(() => {
+		let currentMonth = totalSupply.findIndex((supply) => supply >= aoProvider.mintedSupply);
+		if (currentMonth === -1) {
+			currentMonth = totalSupply.length - 1;
+		}
+		setCurrentMonthIndex(currentMonth);
+	}, [totalSupply, aoProvider.mintedSupply]);
+
+	React.useEffect(() => {
+		props.setCurrentMonth(currentMonthIndex);
+	}, [currentMonthIndex, aoProvider.mintedSupply]);
+
+	React.useEffect(() => {
+		const chartInstance = chartRef.current;
+		const canvas = chartInstance?.canvas;
+		if (canvas) {
+			canvas.addEventListener('mouseleave', handleReset);
+		}
+		return () => {
+			if (canvas) {
+				canvas.removeEventListener('mouseleave', handleReset);
+			}
+		};
+	}, [handleReset]);
+
 	const getTokenReleaseDate = React.useCallback(() => {
 		if (currentMonthIndex === null) return new Date();
 		const release = new Date();
@@ -173,6 +194,12 @@ export default function SupplyChart(props: {
 
 	const handleHover = React.useCallback(
 		(_event: any, activeElements: any[], chart: any) => {
+			if (!activeElements || activeElements.length === 0) {
+				chart.$activeElement = null;
+				props.handleReset();
+				return;
+			}
+
 			if (activeElements && activeElements.length > 0) {
 				const activeElem = activeElements[0].element;
 				chart.$activeElement = activeElem;
@@ -277,16 +304,8 @@ export default function SupplyChart(props: {
 		onHover: handleHover,
 	};
 
-	const handleLocalReset = () => {
-		if (chartRef.current) {
-			chartRef.current.$activeElement = null;
-			chartRef.current.update();
-		}
-		props.handleReset();
-	};
-
 	return (
-		<S.Wrapper onMouseLeave={handleLocalReset}>
+		<S.Wrapper>
 			<Line ref={chartRef} data={chartData} options={options} />
 		</S.Wrapper>
 	);

@@ -48,7 +48,7 @@ export default function Header() {
 						</S.DesktopNavWrapper>
 					</S.SectionStart>
 					<S.SectionEnd>
-						<S.DesktopSocialWrapper>
+						{/* <S.DesktopSocialWrapper>
 							{socials.map((element: { redirect: string; icon: string }, index: number) => {
 								return (
 									<Link key={index} to={element.redirect} target={'_blank'}>
@@ -56,7 +56,7 @@ export default function Header() {
 									</Link>
 								);
 							})}
-						</S.DesktopSocialWrapper>
+						</S.DesktopSocialWrapper> */}
 						<S.MobileNavWrapper>
 							<IconButton
 								type={'alt1'}
