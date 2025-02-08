@@ -1,242 +1,357 @@
 import styled from 'styled-components';
 
+import { STYLING } from 'helpers/config';
+
 export const Wrapper = styled.div`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	padding: 20px;
-	position: relative;
-	top: 60px;
-	margin: 0 auto;
-	margin-bottom: 100px;
-	max-width: 1600px;
-	gap: 20px;
-	overflow-x: auto;
-	animation: fadeIn 2s ease-out;
-
-	@media (max-width: 1200px) {
-		width: 1440px;
-		overflow-x: auto;
-	}
-`;
-
-export const Heading = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-`;
-
-export const Section = styled.div<{ columns?: number }>`
-	padding: 24px 32px;
-	display: grid;
-	gap: 20px;
-	grid-template-columns: repeat(${(props) => props.columns || 5}, 1fr);
-`;
-
-export const InfoSection = styled.div`
-	padding: 24px 32px;
-	padding-top: 0px;
-	display: flex;
-	flex-direction: row;
-	gap: 10px;
-`;
-
-export const Column = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-`;
-
-export const Row = styled.div`
-	display: flex;
-	flex-direction: row;
-	gap: 10px;
-`;
-
-export const TabsWrapper = styled.div`
-	width: 100%;
-	max-width: 1240px;
-	margin: 0 0 20px 0;
-`;
-
-export const BlockMessage = styled.div`
-	width: fit-content;
-	margin: 40px auto;
-`;
-
-export const Subheading = styled.h6`
-	font-family: 'Roboto Mono', monospace;
-	font-weight: ${(props) => props.theme.typography.weight.regular};
-	font-size: ${(props) => props.theme.typography.size.base};
-	text-transform: uppercase;
-`;
-
-export const Label = styled.h6<{ size?: 'small' | 'default' }>`
-	font-family: 'Roboto Mono', monospace;
-	font-weight: ${(props) => props.theme.typography.weight.thin};
-	font-size: ${(props) =>
-		props.size === 'small' ? props.theme.typography.size.xxSmall : props.theme.typography.size.base};
-	text-transform: uppercase;
-	color: ${(props) => props.theme.colors.font.alt1};
-
-	&.button {
-		cursor: pointer;
-		&:hover {
-			text-decoration: underline;
-		}
-	}
-`;
-
-export const AssetAmount = styled.h6<{
-	variant?: 'alt1' | 'alt2' | 'default';
-}>`
-	font-weight: ${(props) => props.theme.typography.weight.regular};
-	font-size: ${(props) => props.theme.typography.size.xLg};
-	display: flex;
-	align-items: center;
-	gap: 10px;
-
-	svg {
-		width: 40px;
-		height: 40px;
-		margin-bottom: -8px;
-	}
-
-	.small {
-		margin-left: -20px;
-	}
-	.small svg {
-		padding: 12px 0px 8px 20px;
-	}
-
-	${(props) =>
-		props.variant === 'alt1' &&
-		`
-		color: ${props.theme.colors.font.green};
-		font-size: ${props.theme.typography.size.lg2};
-		svg {
-			width: 30px;
-			height: 30px;
-			margin-bottom: -4px;
-		}
-	`}
-
-	${(props) =>
-		props.variant === 'alt2' &&
-		`
-		font-size: ${props.theme.typography.size.lg2};
-		svg {
-			width: 20px;
-			height: 20px;
-			margin-bottom: -4px;
-		}
-	`}
-
-	span {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		word-wrap: normal;
-	}
-`;
-
-export const Hero = styled(Section)`
-	align-items: flex-start;
-	padding: 24px 0px 24px 0px;
-	display: grid;
 	gap: 40px;
+	padding: 10px 0 35px 0;
 
-	${Column} {
-		align-items: center;
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		padding: 0 0 40px 0;
 	}
 `;
 
-export const Divider = styled.div`
+export const GlobalWrapper = styled.div`
 	width: 100%;
-	border-bottom: 1px solid ${(props) => props.theme.colors.border.alt3};
-`;
-
-export const LoadingWrapper = styled.div`
 	display: flex;
-	align-items: center;
-	margin: 0 0 0 -15px;
-	span {
-		color: ${(props) => props.theme.colors.font.alt1};
-		font-size: ${(props) => props.theme.typography.size.base};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		text-transform: uppercase;
-	}
-`;
-
-export const Loader = styled.div``;
-
-export const TooltipLine = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	gap: 5px;
-	button {
-		width: 25px !important;
-		padding: 2.5px 0 0 0;
-	}
-`;
-
-export const InfoModalBody = styled.div`
-	p {
-		color: ${(props) => props.theme.colors.font.alt1};
-		font-size: ${(props) => props.theme.typography.size.base};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
-		font-family: ${(props) => props.theme.typography.family.alt1};
-	}
-`;
-
-export const InfoWrapper = styled.div`
-	display: flex;
+	justify-content: space-between;
 	gap: 20px;
-	align-items: center;
-	justify-content: center;
-	padding: 20px 30px;
-	position: relative;
-	border: 1px solid ${(props) => props.theme.colors.border.alt3};
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		flex-direction: column;
+		gap: 40px;
+	}
 `;
 
-export const InfoWrapperSection = styled.div`
-	p {
-		color: ${(props) => props.theme.colors.font.alt1};
+export const GlobalSection = styled.div`
+	height: fit-content;
+	width: calc(50% - 20px);
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		width: 100%;
+	}
+`;
+
+export const HeaderWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 10px;
+`;
+
+export const HeaderInfoWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 20px;
+`;
+
+export const HeaderInfo = styled.div`
+	h6 {
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const HeaderTooltip = styled.div`
+	button {
+		display: flex;
+		align-items: center;
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-weight: ${(props) => props.theme.typography.weight.light};
-		font-family: ${(props) => props.theme.typography.family.primary};
-		text-transform: uppercase;
+		color: ${(props) => props.theme.colors.link.color};
 
-		a {
-			font-weight: ${(props) => props.theme.typography.weight.medium};
-			color: ${(props) => props.theme.colors.button.accent.active.background};
-			text-decoration: underline;
+		svg {
+			height: 15px;
+			width: 15px;
+			fill: ${(props) => props.theme.colors.link.color};
+			margin: 5.5px 5.5px 0 0;
+		}
 
-			&:hover {
-				color: ${(props) => props.theme.colors.button.accent.background};
+		&:hover {
+			color: ${(props) => props.theme.colors.link.active};
+
+			svg {
+				color: ${(props) => props.theme.colors.link.active};
+			}
+		}
+		&:focus {
+			color: ${(props) => props.theme.colors.link.active};
+
+			svg {
+				color: ${(props) => props.theme.colors.link.active};
 			}
 		}
 	}
+`;
 
-	img .pie-chart {
-		height: 300px;
-		width: 300px;
+export const InfoWrapper = styled(GlobalSection)``;
+
+export const InfoHeader = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 7.5px;
+	padding: 22.5px 25px;
+	background: ${(props) => props.theme.colors.container.alt2.background};
+
+	p {
+		font-size: clamp(24px, 2.75vw, 28px);
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		color: ${(props) => props.theme.colors.font.primary};
+		text-transform: uppercase;
+	}
+
+	svg {
+		height: 20px;
+		width: 20px;
+		color: ${(props) => props.theme.colors.indicator.primary};
+		fill: ${(props) => props.theme.colors.indicator.primary};
+		margin: 7.5px 0 0 0;
+	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		h6 {
+			line-height: 1.5;
+		}
 	}
 `;
 
-export const InfoHeader = styled.div`
-	h4 {
-		color: ${(props) => props.theme.colors.font.primary};
-		font-size: ${(props) => props.theme.typography.size.h4};
+export const InfoBody = styled.div`
+	padding: 25px;
+	p {
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-family: ${(props) => props.theme.typography.family.primary};
-		text-transform: uppercase;
-		white-space: nowrap;
+		color: ${(props) => props.theme.colors.font.primary};
+
+		b {
+			font-weight: ${(props) => props.theme.typography.weight.xBold};
+		}
 	}
 
+	a {
+		width: fit-content;
+		display: block;
+		margin: 20px 0 0 0;
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		color: ${(props) => props.theme.colors.link.color};
+		text-decoration: underline;
+		text-decoration-thickness: 1.25px;
+
+		&:hover {
+			color: ${(props) => props.theme.colors.link.active};
+		}
+	}
+
+	#info-body-subheader {
+		font-size: ${(props) => props.theme.typography.size.lg};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+	}
+`;
+
+export const MetricsWrapper = styled(GlobalSection)`
+	position: relative;
+`;
+
+export const Metrics = styled.div`
+	width: fit-content;
 	display: flex;
-	gap: 10px;
+	gap: 15px;
+	flex-direction: column;
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	padding: 0 10px 10px 0;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: ${(props) => props.theme.colors.view.background};
+		z-index: -1;
+		filter: blur(5px);
+	}
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		position: relative;
+	}
+`;
+
+export const MetricsSection = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 2.5px;
+
+	@media (max-width: ${STYLING.cutoffs.tablet}) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
+	}
+`;
+
+export const MetricsValue = styled.div`
+	p {
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.xBold};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+
+	span {
+		line-height: 1;
+		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+`;
+
+export const MetricsValueMain = styled(MetricsValue)`
+	display: flex;
 	align-items: center;
-	margin: 0 0 40px 0;
+	gap: 10.5px;
+	p {
+		font-size: ${(props) => props.theme.typography.size.xLg};
+		color: ${(props) => props.theme.colors.font.primary};
+
+		span {
+			font-size: ${(props) => props.theme.typography.size.xLg};
+		}
+	}
+
+	svg {
+		height: 20px;
+		width: 20px;
+		margin: 6.5px 0 0 0;
+	}
+
+	#ao-logo {
+		svg {
+			height: 30px;
+			width: 30px;
+		}
+	}
+
+	#text-loader {
+		min-height: 40px;
+	}
+`;
+
+export const BalancesPrimaryWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+	margin: 0 0 20px 0;
+`;
+
+export const BalancesBreakdownWrapper = styled(BalancesPrimaryWrapper)``;
+
+export const BalanceQuantityBody = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 7.5px;
+
+	p,
+	span {
+		font-size: ${(props) => props.theme.typography.size.lg};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.xBold};
+	}
+
+	p {
+		display: flex;
+		align-items: center;
+		gap: 7.5px;
+	}
+
+	svg {
+		height: 20px;
+		width: 20px;
+		margin: 6.5px 0 0 0;
+	}
+
+	#ao-logo {
+		svg {
+			height: 30px;
+			width: 30px;
+			margin: 6.5px 3.5px 0 0;
+		}
+	}
+`;
+
+export const BalancesGlobalWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 20px;
+	padding: 24.5px 20px 20px 20px;
+
+	${BalanceQuantityBody} {
+		p,
+		span {
+			font-size: ${(props) => props.theme.typography.size.xLg};
+		}
+
+		#text-loader {
+			min-height: 40px;
+		}
+	}
+
+	@media (max-width: ${STYLING.cutoffs.tablet}) {
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+	}
+`;
+
+export const BalancesPrimaryFlexWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 20px 100px;
+`;
+
+export const BalanceQuantitySection = styled.div`
+	width: 175px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 2.5px;
+`;
+
+export const BalanceQuantityEndSection = styled(BalanceQuantitySection)`
+	align-items: flex-end;
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		align-items: flex-start;
+	}
+`;
+
+export const BalanceQuantityHeader = styled.div`
+	span {
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+`;
+
+export const ModalWrapper = styled.div`
+	span {
+		font-size: ${(props) => props.theme.typography.size.base};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
 `;

@@ -53,3 +53,7 @@ export const progressAnimation = keyframes`
 
 export const fadeIn1 = '250ms cubic-bezier(0, 0, 0.2, 1) 0ms';
 export const fadeIn2 = '500ms cubic-bezier(0, 0, 0.2, 1) 0ms';
+
+export const transition1 = '150ms cubic-bezier(0, 0, 0.2, 1) 0ms';
+export const transition2 = '300ms cubic-bezier(0, 0, 0.2, 1) 0ms';
+export const transition3 = '450ms cubic-bezier(0, 0, 0.2, 1) 0ms';

@@ -1,0 +1,90 @@
+import { Link } from 'react-router-dom';
+import parse from 'html-react-parser';
+
+import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
+import { HyperTextLoad } from 'components/atoms/HyperTextLoad';
+import { ASSETS, NAV_REDIRECTS } from 'helpers/config';
+import { formatCount } from 'helpers/utils';
+import { useAOProvider } from 'providers/AOProvider';
+import { useEthereumProvider } from 'providers/EthereumProvider';
+import { useLanguageProvider } from 'providers/LanguageProvider';
+
+import * as S from './styles';
+
+export default function Landing() {
+	const aoProvider = useAOProvider();
+	const ethProvider = useEthereumProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
+
+	return (
+		<>
+			<S.Wrapper>
+				<S.ContentWrapper className={'fade-in'}>
+					<h4>{language.landingHeader1}</h4>
+					<h4>{language.landingHeader2}</h4>
+					<h4>{language.landingHeader3}</h4>
+					<p>{parse(language.landingSubheader)}</p>
+				</S.ContentWrapper>
+				<S.MetricsWrapper>
+					<S.MetricsSection className={'fade-in'}>
+						<S.MetricsLine>
+							<span className={'primary-text'}>{language.phase}</span>
+							<S.MetricsValue>
+								<p>{aoProvider.phase}</p>
+							</S.MetricsValue>
+						</S.MetricsLine>
+						<S.MetricsLine>
+							<span className={'primary-text'}>{language.status}</span>
+							<S.MetricsValue>
+								<S.Indicator />
+								<p>{aoProvider.status}</p>
+							</S.MetricsValue>
+						</S.MetricsLine>
+						<S.MetricsLine>
+							<span className={'primary-text'}>{language.fairLaunchDeposits}</span>
+							<S.MetricsValue>
+								<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
+							</S.MetricsValue>
+						</S.MetricsLine>
+					</S.MetricsSection>
+					<S.LinksWrapper>
+						{NAV_REDIRECTS.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
+							return (
+								<Link key={index} to={element.path} target={'_blank'} className={'primary-text'}>
+									<HyperTextLoad word={element.label} textType={'span'} speed={1} triggerOnLoad />
+								</Link>
+							);
+						})}
+					</S.LinksWrapper>
+					<S.MetricsSection className={'fade-in'}>
+						<S.MetricsLine>
+							<span className={'primary-text'}>{language.users}</span>
+							<S.MetricsValue>
+								<p>{aoProvider.users ? formatCount(aoProvider.users.toString()) : <EllipsisLoader />}</p>
+							</S.MetricsValue>
+						</S.MetricsLine>
+						<S.MetricsLine>
+							<span className={'primary-text'}>{language.messages}</span>
+							<S.MetricsValue>
+								<p>{aoProvider.messages ? formatCount(aoProvider.messages.toString()) : <EllipsisLoader />}</p>
+							</S.MetricsValue>
+						</S.MetricsLine>
+						<S.MetricsLine>
+							<span className={'primary-text'}>{language.processes}</span>
+							<S.MetricsValue>
+								<p>{aoProvider.processes ? formatCount(aoProvider.processes.toString()) : <EllipsisLoader />}</p>
+							</S.MetricsValue>
+						</S.MetricsLine>
+					</S.MetricsSection>
+				</S.MetricsWrapper>
+			</S.Wrapper>
+			<S.GraphicWrapper>
+				<video autoPlay muted loop playsInline preload={'auto'}>
+					<source src={ASSETS.landingGraphic} type={'video/mp4'} />
+					Your browser does not support the video tag.
+				</video>
+			</S.GraphicWrapper>
+		</>
+	);
+}

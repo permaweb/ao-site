@@ -1,38 +1,15 @@
-import ao from 'assets/ao.svg';
-import aoPict from 'assets/ao-pictograph.svg';
-import arconnect from 'assets/arconnect.png';
-import arrow from 'assets/arrow.svg';
-import arrowBack from 'assets/arrowBack.svg';
-import arweave from 'assets/arweave.svg';
-import arweaveApp from 'assets/arweave-app.svg';
-import calculator from 'assets/calculator.svg';
-import checkmark from 'assets/checkmark.svg';
-import close from 'assets/close.svg';
-import codehawksAudit from 'assets/codehawks-audit.svg';
-import dai from 'assets/dai.svg';
-import stEth from 'assets/eth.svg';
-import ethereum from 'assets/ethereum.svg';
-import heroGraphic from 'assets/hero-graphic.svg';
-import info from 'assets/info.svg';
-import ipBlock from 'assets/ip-block.png';
-import metamask from 'assets/metamask.png';
-import morpheusAudit from 'assets/morpheus-audit.svg';
-import nccAudit from 'assets/ncc-audit.svg';
-import othent from 'assets/othent.svg';
-import plus from 'assets/plus.svg';
-import rabby from 'assets/rabby.png';
-import renascenseAudit from 'assets/renascense-audit.svg';
-import walletConnect from 'assets/wallet-connect.png';
-
-import { ArWalletEnum, EthWalletEnum } from './types';
+import { ArWalletEnum } from './types';
 
 export const AO = {
 	token: 'm3PaWzK4PTG9lAaqYQPaPdOcXdO8hYqi5Fe9NWqXd0w',
 	tokenMirror: 'ptCu-Un-3FF8sZ5zNMYg43zRgSYAGVkjz2Lb0HZmx2M',
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
+	aoMetrics: 'vdpaKV_BQNISuDgtZpLDfDlMJinKHqM3d2NWd3bzeSk',
 	stEthPriceOracle: 'rwxd1EuSzEVoy3qTlDRm7eMYPbOMrmQMajynVrA-ikk',
 	daiPriceOracle: 'SVu0Atwg7FRQfQA1PUvhpTYsdBmXeJK8s_58retkdBg',
+	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
+	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
 };
 
 export const ETH_CONTRACTS = {
@@ -40,48 +17,71 @@ export const ETH_CONTRACTS = {
 	stEthBridge: '0xfE08D40Eee53d64936D3128838867c867602665c',
 	dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
 	daiBridge: '0x6A1B588B0684dACE1f53C5820111F400B3dbfeBf',
+	ethUsdPriceFeed: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
+	daiUsdPriceFeed: '0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9',
 };
 
-export const TOKEN_DECIMALS = 12;
-export const TOKEN_DENOMINATION = Math.pow(10, TOKEN_DECIMALS);
+export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
+export const ETH_TOKEN_DENOMINATION = Math.pow(10, 18);
+
+export const ENDPOINTS = {
+	arBalance: (address: string) => `https://arweave.net/wallet/${address}/balance`,
+	arTotalSupply: `https://arweave.net/total_supply`,
+	arTxEndpoint: (txId: string) => `https://arweave.net/${txId}`,
+	goldsky: `https://arweave-search.goldsky.com/graphql`,
+	mainnetRpc: `https://rpc.ankr.com/eth`,
+};
+
+const getTxEndpoint = (txId: string) => ENDPOINTS.arTxEndpoint(txId);
 
 export const ASSETS = {
-	ao,
-	aoPict,
-	arconnect,
-	arrow,
-	arrowBack,
-	arweaveApp,
-	calculator,
-	checkmark,
-	close,
-	plus,
-	codehawksAudit,
-	stEth,
-	dai,
-	heroGraphic,
-	info,
-	ipBlock,
-	metamask,
-	morpheusAudit,
-	nccAudit,
-	othent,
-	arweave,
-	rabby,
-	renascenseAudit,
-	walletConnect,
-	ethereum,
+	arconnect: getTxEndpoint('1Q5zOfpHzHnNtD2BS6Rg50WWT2H8aq3GYThDV3x6Qo0'),
+	arweaveApp: getTxEndpoint('CNZKujmn8vo0QM7Ssq18-3d0k6Azv1xsj20yAWt1Vew'),
+	codehawksAudit: getTxEndpoint('rT-u8ijl3BLWDZlrQ3zpSNQ3gCz5GAq-LZRX4Gwo_yA'),
+	morpheusAudit: getTxEndpoint('QbdAzvz1zVMpWw-9x-8W_0uBJt2lMVEryPKAVf0A9fw'),
+	nccAudit: getTxEndpoint('BX5fd9Z4PijeWx7GFwgh-BjJRVNcnD1dPi4qo4vUDcA'),
+	othent: getTxEndpoint('CV4m-XD_SYNKoxm7nh-3pxl_RdG9SdrOB2ibFmwCDPA'),
+	renascenseAudit: getTxEndpoint('oVv6te32GQUC-qidsZZlUOp3nTdfPcGFN-UeW9brau4'),
+	walletConnect: getTxEndpoint('llCUeYuxYxnH6rp2PVrkOR2pkGy0rFPR8wlIBbl-Ols'),
+	add: getTxEndpoint('RLWnDhoB0Dd_X-sLnNy4w2S7ds3l9591HcHK8nc3YRw'),
+	ao: getTxEndpoint('AzM59q2tcYzkySUUZUN1HCwfKGVHi--71UdoIk5gPUE'),
+	arrow: getTxEndpoint('ghFL1fzQ2C1eEAnqSVvfAMP5Jikx7NKSPP5neoNPALw'),
+	arweave: getTxEndpoint('LeeiCXkCDZKdh9uEfau2a13LziNGnT82anXFDW51Hgw'),
+	checkmark: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
+	close: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
+	copy: getTxEndpoint('au_20PzacCJjUbwjoX85kkzmW0YwH4KrPfP98NOBK8M'),
+	dai: getTxEndpoint('0fH_eBybJYRxjpjhJLiDoj8-7u7wYEHXtNElWEPb5is'),
+	deposit: getTxEndpoint('KJtoIHxAHtVRMDgDGF00NYcnz81iUSo2o8odeDB623Q'),
+	disconnect: getTxEndpoint('eWncZs2hH5oNSsWTIImJhqdZ4-n0P4CfZbduK2ae4L4'),
+	discord: getTxEndpoint('3X1BfFleeCZZdVZIx8DKDIblcLw7jzzRBCzSItlBy9E'),
+	edit: getTxEndpoint('SUWTk8Qtcub9EsP5PDF6-vzgKsP5Irg1bB9b8NImDDk'),
+	ethereum: getTxEndpoint('LmRXPMcmymzB5S_WpRgmmQtGMWoTHW7BFcmotOkKcGM'),
+	exchange: getTxEndpoint('KfE6Dh0j2pTLo4Z8U6fmk6mCRsB6O6NgxJpI_Vm0_wY'),
+	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
+	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
+	landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),
+	link: getTxEndpoint('UMfjnj-8e7fb3lYRdcFygu8c4JoBZq3hB-mzycYT4DU'),
+	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
+	pi: getTxEndpoint('n1AM_4usUnh6zj8GzdQDu1KkvC5XFlBLk7sKXgNHtos'),
+	plus: getTxEndpoint('OUryhpUV-y709P_Tr575rN8gS-8c5rzlKXNymR9gsE4'),
+	remove: getTxEndpoint('aKjWuVXkSeYOKzGP0MnnhHwoYUXqTHFMJfVCbqzYEo0'),
+	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
+	success: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
+	token: getTxEndpoint('f18VARM42GRSDY8UzZtEJrCsakbxluldOAnnED_V_Zk'),
+	view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
+	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
+	wander: getTxEndpoint('0nDLgQik8oWPr0nSVEwI9B8D-XMEptQagNdsdr_y6Jk'),
+	warning: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
+	website: getTxEndpoint('YBilSmUhX--T9vffUIDsCCrWoakxaxPqPVw7NCZNNVs'),
+	withdraw: getTxEndpoint('QOJLKefBz2xCPUbO8dEKB22aWv_zdQ6FYA_UWUriyJw'),
+	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
+	yield: getTxEndpoint('RrusyNB6RzmXfYcocp7tG9GSDkrF_z-_NfZMSxVgzOE'),
 };
 
 export const AR_WALLETS = [
-	{ type: ArWalletEnum.arConnect, logo: ASSETS.arconnect },
+	{ type: ArWalletEnum.wander, logo: ASSETS.wander },
 	{ type: ArWalletEnum.othent, logo: ASSETS.othent },
 	{ type: ArWalletEnum.arweaveApp, logo: ASSETS.arweaveApp },
-];
-
-export const ETH_WALLETS = [
-	{ type: EthWalletEnum.metamask, logo: ASSETS.metamask },
-	{ type: EthWalletEnum.rabby, logo: ASSETS.rabby },
 ];
 
 export const DOM = {
@@ -94,7 +94,7 @@ export const STYLING = {
 	cutoffs: {
 		desktop: '1200px',
 		initial: '1024px',
-		max: '1440px',
+		max: '1460px',
 		tablet: '840px',
 		tabletSecondary: '768px',
 		secondary: '540px',
@@ -103,6 +103,9 @@ export const STYLING = {
 		button: {
 			height: '40px',
 			width: 'fit-content',
+		},
+		nav: {
+			height: '75px',
 		},
 		radius: {
 			primary: '10px',
@@ -119,9 +122,10 @@ function createURLs() {
 	return {
 		base: base,
 		mint: mint,
+		mintDeposits: `${mint}deposits/`,
+		mintYield: `${mint}yield/`,
+		policies: `${base}policies/`,
 		read: `${base}read/`,
-		deposit: `${mint}deposit/`,
-		withdraw: `${mint}withdraw/`,
 		notFound: `${base}404`,
 	};
 }
@@ -129,8 +133,6 @@ function createURLs() {
 export const URLS = createURLs();
 
 export const WALLET_PERMISSIONS = ['ACCESS_ADDRESS', 'ACCESS_PUBLIC_KEY', 'SIGN_TRANSACTION', 'DISPATCH', 'SIGNATURE'];
-
-export const IP_TOKEN = '04c286535ab4dc';
 
 export const StEthBridge_ABI = [
 	{ inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
@@ -1241,15 +1243,74 @@ export const Erc20_ABI = [
 	},
 ];
 
-export const ENDPOINTS = {
-	arTotalSupply: `https://arweave.net/total_supply`,
-	ipCheck: `https://ipinfo.io?token=${IP_TOKEN}`,
-	mainnetRpc: `https://rpc.ankr.com/eth`,
-};
+export const PRICE_FEED_ABI = [
+	{
+		inputs: [],
+		name: 'latestRoundData',
+		outputs: [
+			{ internalType: 'uint80', name: 'roundId', type: 'uint80' },
+			{ internalType: 'int256', name: 'answer', type: 'int256' },
+			{ internalType: 'uint256', name: 'startedAt', type: 'uint256' },
+			{ internalType: 'uint256', name: 'updatedAt', type: 'uint256' },
+			{ internalType: 'uint80', name: 'answeredInRound', type: 'uint80' },
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+];
 
 export const REDIRECTS = {
-	stethMinting: 'https://stake.lido.fi/',
-	stethConversion:
-		'https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
-	ipBlock: 'https://www.standwithcrypto.org/action/call?action=call-your-representative',
+	arconnect: `https://arconnect.io`,
+	cookbook: `https://cookbook_ao.arweave.net`,
+	x: `http://x.com/aoTheComputer`,
+	github: `https://github.com/permaweb/ao`,
+	discord: `https://discord.gg/dYXtHwc9dc`,
+	stethMinting: `https://stake.lido.fi/`,
+	wander: `https://www.wander.app/`,
+	stethConversion: `https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84`,
+	tokenomics: `https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ`,
+	ipBlock: `https://www.standwithcrypto.org/action/call?action=call-your-representative`,
+	viewblock: (address: string) => `https://viewblock.io/arweave/address/${address}`,
+	etherscan: (address: string) => `https://etherscan.io/address/${address}`,
 };
+
+export const ETH_EXCHANGE_CONFIG = {
+	arweave: {
+		description: `Owners of AR generate AO continuously, proportionate to their holdings. You do not need to perform any form of activation in order to receive these tokens.
+This page will help you keep track of your AO rewards and future projections. Simply connect your Arweave wallet to view your balance.
+AO tokens will become transferrable after 15% of the supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ" target="_blank">blog post</a>.`,
+	},
+	dai: {
+		description: `66.6% of AO tokens are minted to users that bridge their assets to the network. Simply connect your wallet, deposit Dai, and earn AO.
+You will begin to accrue AO 24 hours after your deposit has been confirmed.<br/><br/>DAI has an 18-hour minimum lockup period. This means that you will not be able to remove your DAI from the bridge for 18 hours after depositing it.
+AO tokens will become transferrable after 15% of the supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ" target="_blank">blog post</a>.`,
+	},
+	stEth: {
+		description: `66.6% of AO tokens are minted to users that bridge their assets to the network. Simply connect your wallet, deposit staked Ethereum, and earn AO.
+You can remove your deposited tokens at any time. You will begin to accrue AO 24 hours after your deposit has been confirmed.<br/><br/>AO tokens will become transferrable after 15% of the supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ" target="_blank">blog post</a>.`,
+	},
+	cred: {
+		description: `Users that took part in AO testnet quests are able to convert their CRED tokens for AO-CLAIMs, at a rate of 1:1000.
+AO tokens have a 100% fair launch, with zero pre-allocations of any kind. As a consequence, the AO provided to those that convert their CRED will be purchased or earned via holding AR by ecosystem parties that have volunteered to do so.
+AO-claims will become redeemable after 15% of the AO supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/ydfvlhml1NI9DdTps3nEX634AY5JaQD4WmFGtRBryzk" target="_blank">blog post</a>.
+`,
+	},
+};
+
+export const ETH_EXCHANGE_REDIRECTS = {
+	ncc1: 'https://arweave.net/jZHVGxxxVpjGxD_uwpp-NSsezf9_z0r0evhDnV2hFNs',
+	ncc2: 'https://arweave.net/qWdHQIGjeAjc5U5O9gk_o2k4jRYO6khL1vOAGQzkd9Y',
+	morpheus:
+		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Distribution%20V1%20Audit%20%7C%20Community.md',
+	codehawks:
+		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Distribution%20V1%20Public%20Bug%20Bounty%20%7C%20Code%20Hawks.md',
+	renascence:
+		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Distribution%20V2%20Audit%20%7C%20Renascence.pdf',
+};
+
+export const NAV_REDIRECTS: { path: string; label: string; target?: '_blank' }[] = [
+	{ path: REDIRECTS.discord, label: 'Discord' },
+	{ path: REDIRECTS.x, label: 'X' },
+	{ path: REDIRECTS.github, label: 'GitHub' },
+	{ path: URLS.policies, label: 'Policies' },
+];

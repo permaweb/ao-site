@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import HyperTextLoad from 'components/hyperTextLoad';
+import { HyperTextLoad } from 'components/atoms/HyperTextLoad';
 import { ASSETS, REDIRECTS, URLS } from 'helpers/config';
 
 import * as S from './styles';

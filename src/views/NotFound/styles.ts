@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
+import { STYLING } from 'helpers/config';
+
 export const Wrapper = styled.div`
-	min-height: 100vh;
+	min-height: calc(100vh - ${STYLING.dimensions.nav.height});
 	width: 100%;
 	position: relative;
 `;
@@ -30,5 +32,6 @@ export const Divider = styled.div`
 
 export const Message = styled.p`
 	font-size: 18px;
-	margin-right: 10px;
+	margin: 0 10px 0 0;
+	font-family: ${(props) => props.theme.typography.family.alt1};
 `;

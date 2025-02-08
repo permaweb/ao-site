@@ -33,6 +33,34 @@ export function formatDisplayAmount(amount: number | string | null) {
 	}
 }
 
+export function formatDate(dateArg: string | number | null, dateType: 'dateString' | 'timestamp', fullTime?: boolean) {
+	if (!dateArg) {
+		return null;
+	}
+
+	let date: Date | null = null;
+
+	switch (dateType) {
+		case 'dateString':
+			date = new Date(dateArg);
+			break;
+		case 'timestamp':
+			date = new Date(Number(dateArg));
+			break;
+		default:
+			date = new Date(dateArg);
+			break;
+	}
+
+	return fullTime
+		? `${date.toLocaleString('default', { month: 'long' })} ${date.getDate()}, ${date.getUTCFullYear()} ${
+				date.getHours() % 12 || 12
+		  }:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')} ${
+				date.getHours() >= 12 ? 'PM' : 'AM'
+		  }`
+		: `${date.toLocaleString('default', { month: 'long' })} ${date.getDate()}, ${date.getUTCFullYear()}`;
+}
+
 export function getTagValue(list: { [key: string]: any }[], name: string): string {
 	for (let i = 0; i < list.length; i++) {
 		if (list[i]) {
@@ -128,4 +156,67 @@ export function getDaiReward(
 
 	const userYield = daiBridgedByUser * daiPrice * daiYield;
 	return bridgeRewards * (userYield / totalYield);
+}
+
+export function formatPercentage(percentage: any) {
+	if (isNaN(percentage)) return '0%';
+
+	let multiplied = percentage * 100;
+	let decimalPart = multiplied.toString().split('.')[1];
+
+	if (!decimalPart) {
+		return `${multiplied.toFixed(0)}%`;
+	}
+
+	if (decimalPart.length > 6 && decimalPart.substring(0, 6) === '000000') {
+		return `${multiplied.toFixed(0)}%`;
+	}
+
+	let nonZeroIndex = decimalPart.length;
+	for (let i = 0; i < decimalPart.length; i++) {
+		if (decimalPart[i] !== '0') {
+			nonZeroIndex = i + 1;
+			break;
+		}
+	}
+
+	return `${multiplied.toFixed(nonZeroIndex)}%`;
+}
+
+export function formatCount(count: string): string {
+	if (count === '0' || !Number(count)) return '0';
+
+	if (count.includes('.')) {
+		let parts = count.split('.');
+		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+		// Find the position of the last non-zero digit within the first 6 decimal places
+		let index = 0;
+		for (let i = 0; i < Math.min(parts[1].length, 12); i++) {
+			if (parts[1][i] !== '0') {
+				index = i + 1;
+			}
+		}
+
+		if (index === 0) {
+			// If all decimals are zeros, keep two decimal places
+			parts[1] = '00';
+		} else {
+			// Otherwise, truncate to the last non-zero digit
+			parts[1] = parts[1].substring(0, index);
+
+			// If the decimal part is longer than 4 digits, truncate to 4 digits
+			if (parts[1].length > 4 && parts[1].substring(0, 4) !== '0000') {
+				parts[1] = parts[1].substring(0, 4);
+			}
+		}
+
+		return parts.join('.');
+	} else {
+		return count.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
+}
+
+export function formatUSDAmount(amount: string): string {
+	return `$ ${formatCount(amount)}`;
 }

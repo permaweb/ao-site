@@ -30,6 +30,7 @@ export async function messageResult(args: {
 			const response = {};
 
 			Messages.forEach((message: any) => {
+				console.log(message);
 				const action = getTagValue(message.Tags, 'Action') || args.action;
 
 				let responseData = null;

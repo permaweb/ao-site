@@ -24,6 +24,7 @@ module.exports = {
 								'^permaweb-orderbook',
 								'^permaweb-sdk',
 								'^@permaweb/aoconnect',
+								'^@permaweb/libs',
 								'^@permaweb/stampjs',
 								'^@?\\w',
 							],

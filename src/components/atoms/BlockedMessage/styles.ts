@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	margin: auto;
 
 	img {
 		width: 65%;

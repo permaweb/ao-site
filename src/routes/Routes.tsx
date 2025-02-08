@@ -1,22 +1,23 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+import { Loader } from 'components/atoms/Loader';
 import { URLS } from 'helpers/config';
 
-const Home = getLazyImport('Home');
-const Spec = getLazyImport('Spec');
+const Landing = getLazyImport('Landing');
 const Mint = getLazyImport('Mint');
-const Deposit = getLazyImport('Deposit');
+const NotFound = getLazyImport('NotFound');
+const Policies = getLazyImport('Policies');
 
 export default function _Routes() {
 	return (
-		<Suspense fallback={null}>
+		<Suspense fallback={<Loader />}>
 			<Routes>
-				<Route path={URLS.base} element={<Home />} />
-				<Route path={URLS.read} element={<Spec />} />
+				<Route path={URLS.base} element={<Landing />} />
 				<Route path={URLS.mint} element={<Mint />} />
-				<Route path={URLS.deposit} element={<Deposit />} />
-				<Route path={URLS.withdraw} element={<Deposit />} />
+				<Route path={URLS.policies} element={<Policies />} />
+				<Route path={`${URLS.mint}:active`} element={<Mint />} />
+				<Route path={'*'} element={<NotFound />} />
 			</Routes>
 		</Suspense>
 	);

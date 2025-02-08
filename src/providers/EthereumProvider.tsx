@@ -1,19 +1,40 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatEther } from '@ethersproject/units';
 import coinbaseWalletModule from '@web3-onboard/coinbase';
 import Onboard, { EIP1193Provider } from '@web3-onboard/core';
 import injectedModule from '@web3-onboard/injected-wallets';
-// import portisModule from '@web3-onboard/portis';
 import torusModule from '@web3-onboard/torus';
 import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
+import { hashMessage, recoverPublicKey, toBytes } from 'viem';
+import { Config, useConfig } from 'wagmi';
+import { getAccount, signMessage } from 'wagmi/actions';
+import Web3 from 'web3';
 
-import { ENDPOINTS } from 'helpers/config';
+import { createData, EthereumSigner, InjectedEthereumSigner } from '@dha-team/arbundles';
+import { connect } from '@permaweb/aoconnect';
 
-import gnosisModule from './ethereum/customGnosis';
-import { customBrave } from './ethereum/customInjected';
+import { readHandler } from 'api';
+
+import {
+	AO,
+	ASSETS,
+	DaiBridge_ABI,
+	ENDPOINTS,
+	Erc20_ABI,
+	ETH_CONTRACTS,
+	ETH_TOKEN_DENOMINATION,
+	PRICE_FEED_ABI,
+	StEthBridge_ABI,
+} from 'helpers/config';
+import gnosisModule from 'helpers/customGnosis';
+import { customBrave } from 'helpers/customInjected';
+import { EthTokensType, EthTokensYieldProjectionsType, EthTotalDepositedType } from 'helpers/types';
+import { formatDisplayAmount, formatUSDAmount, getDaiReward, getEthReward } from 'helpers/utils';
+
+import { useAOProvider } from './AOProvider';
 
 const injected = injectedModule();
 const trust = trustModule();
@@ -21,35 +42,21 @@ const torus = torusModule();
 const coinbaseWalletSdk = coinbaseWalletModule();
 const trezor = trezorModule({
 	email: 'team@arweave.org',
-	// appUrl: 'https://ao.arweave.dev', TODO
-	appUrl: 'https://ao-staging.arweave.dev',
+	appUrl: 'https://ao.arweave.net',
 });
 const gnosisSafe = gnosisModule();
 const walletConnect = walletConnectModule({
 	projectId: '1854ae39b9f92e1c56b858cb425e9a7e',
 });
 const brave = () => customBrave;
-// const portis = portisModule({
-// 	apiKey: '<API_KEY>', // TODO
-// });
 
-const wallets = [
-	injected,
-	trust,
-	coinbaseWalletSdk,
-	torus,
-	walletConnect,
-	trezor,
-	gnosisSafe,
-	brave,
-	// portis,
-];
+const wallets = [injected, trust, coinbaseWalletSdk, torus, walletConnect, trezor, gnosisSafe, brave];
 
 const onboard = Onboard({
 	wallets,
 	chains: [
 		{
-			id: '0x1', // Chain ID in hexadecimal for Ethereum Mainnet
+			id: '0x1',
 			token: 'ETH',
 			label: 'Ethereum Mainnet',
 			rpcUrl: ENDPOINTS.mainnetRpc,
@@ -57,8 +64,8 @@ const onboard = Onboard({
 	],
 	appMetadata: {
 		name: 'AO',
-		icon: '/images/ao_black.svg',
-		logo: '/images/ao_black.svg',
+		icon: ASSETS.ao,
+		logo: ASSETS.ao,
 		description: 'AO Staking',
 		recommendedInjectedWallets: [
 			{ name: 'Coinbase', url: 'https://wallet.coinbase.com/' },
@@ -81,7 +88,12 @@ const onboard = Onboard({
 
 interface EthereumContextState {
 	walletAddress: string | null;
+	connecting: boolean;
 	balance: string | null;
+	tokens: EthTokensType | null;
+	refreshTokens: () => void;
+	projections: EthTokensYieldProjectionsType | null;
+	totalDeposited: EthTotalDepositedType | null;
 	handleConnect: (walletType: string) => void;
 	handleDisconnect: () => void;
 	walletModalVisible: boolean;
@@ -97,7 +109,12 @@ interface EthereumProviderProps {
 
 const DEFAULT_CONTEXT: EthereumContextState = {
 	walletAddress: null,
+	connecting: false,
 	balance: null,
+	tokens: null,
+	refreshTokens: () => {},
+	projections: null,
+	totalDeposited: null,
 	handleConnect: () => {},
 	handleDisconnect: () => {},
 	walletModalVisible: false,
@@ -107,87 +124,40 @@ const DEFAULT_CONTEXT: EthereumContextState = {
 	ensureMainnet: () => Promise.resolve(),
 };
 
-const EthereumContext = createContext<EthereumContextState>(DEFAULT_CONTEXT);
+const EthereumContext = React.createContext<EthereumContextState>(DEFAULT_CONTEXT);
 
-export const useEthereumProvider = () => useContext(EthereumContext);
+export const useEthereumProvider = () => React.useContext(EthereumContext);
 
-export function EthereumProvider({ children }: EthereumProviderProps) {
-	const [walletAddress, setWalletAddress] = useState<string | null>(null);
-	const [balance, setBalance] = useState<string | null>(null);
-	const [walletModalVisible, setWalletModalVisible] = useState<boolean>(false);
-	const [errorMessage, setErrorMessage] = useState<string | null>(null);
-	const [web3Provider, setWeb3Provider] = useState<EIP1193Provider | null>(null);
+export function EthereumProvider(props: EthereumProviderProps) {
+	const aoProvider = useAOProvider();
 
-	const recoverConnection = useCallback(async () => {
-		const [primaryWallet] = onboard.state.get().wallets;
-		if (primaryWallet) {
-			const success = await onboard.setChain({ chainId: '0x1' });
-			if (!success) return;
+	const [walletAddress, setWalletAddress] = React.useState<string | null>(null);
+	const [balance, setBalance] = React.useState<string | null>(null);
+	const [projections, setProjections] = React.useState<EthTokensYieldProjectionsType | null>(null);
+	const [tokens, setTokens] = React.useState<EthTokensType | null>(null);
+	const [tokenRefreshTrigger, setTokenRefreshTrigger] = React.useState<boolean | null>(null);
+	const [totalDeposited, setTotalDeposited] = React.useState<EthTotalDepositedType | null>(null);
+	const [walletModalVisible, setWalletModalVisible] = React.useState<boolean>(false);
+	const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+	const [web3Provider, setWeb3Provider] = React.useState<EIP1193Provider | null>(null);
 
-			setWeb3Provider(primaryWallet.provider);
-			const provider = new Web3Provider(primaryWallet.provider);
-			const signer = provider.getSigner();
-			const address = await signer.getAddress();
-			setWalletAddress(address);
+	const [connecting, setConnecting] = React.useState<boolean>(true);
+	const [disconnected, setDisconnected] = React.useState(false);
 
-			const balance = await signer.getBalance();
-			setBalance(formatEther(balance));
-		}
-	}, []);
-
-	useEffect(() => {
+	React.useEffect(() => {
 		setTimeout(() => {
 			recoverConnection();
 		}, 500);
 	}, []);
 
-	const handleConnect = async () => {
-		try {
-			const [primaryWallet] = await onboard.connectWallet();
-			if (!primaryWallet) throw new Error('No wallet selected');
-
-			const success = await onboard.setChain({ chainId: '0x1' });
-			if (!success) throw new Error('Please switch to Ethereum Mainnet');
-
-			setWeb3Provider(primaryWallet.provider);
-			const provider = new Web3Provider(primaryWallet.provider);
-			const signer = provider.getSigner();
-			const address = await signer.getAddress();
-			setWalletAddress(address);
-
-			const balance = await signer.getBalance();
-			setBalance(formatEther(balance));
-
-			setWalletModalVisible(false);
-		} catch (error) {
-			setErrorMessage(error.message);
-			setWalletAddress(null);
-			setBalance(null);
-		}
-
-		setWalletModalVisible(false);
-	};
-
-	const handleDisconnect = async () => {
-		const [primaryWallet] = onboard.state.get().wallets;
-		if (primaryWallet) {
-			try {
-				await onboard.disconnectWallet({ label: primaryWallet.label });
-			} finally {
-				setWalletAddress(null);
-				setBalance(null);
-			}
-		}
-	};
-
-	useEffect(() => {
+	React.useEffect(() => {
 		if (walletModalVisible) {
 			handleConnect();
 		}
 	}, [walletModalVisible]);
 
-	// Subscribe to wallet address changes
-	useEffect(() => {
+	/* Subscribe to wallet address changes */
+	React.useEffect(() => {
 		if (walletAddress === null) return;
 
 		const wallets = onboard.state.select('wallets');
@@ -218,7 +188,331 @@ export function EthereumProvider({ children }: EthereumProviderProps) {
 		};
 	}, [walletAddress]);
 
-	const ensureMainnet = useCallback(async () => {
+	/* StETH - DAI Total Deposited */
+	React.useEffect(() => {
+		(async function () {
+			try {
+				const web3 = new Web3(ENDPOINTS.mainnetRpc);
+				const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
+				const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
+
+				let [totalStEthDeposited, totalDaiDeposited] = await Promise.all([
+					stEthBridgeContract.methods.totalDepositedInPublicPools().call() as any,
+					daiBridgeContract.methods.totalDepositedInPublicPools().call() as any,
+				]);
+
+				totalStEthDeposited = Number(totalStEthDeposited) / Math.pow(10, 18);
+				totalDaiDeposited = Number(totalDaiDeposited) / Math.pow(10, 18);
+
+				if (isNaN(totalStEthDeposited)) throw new Error('Invalid totalStEthDeposited');
+				if (isNaN(totalDaiDeposited)) throw new Error('Invalid totalDaiDeposited');
+
+				const ethUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.ethUsdPriceFeed);
+				const daiUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.daiUsdPriceFeed);
+
+				const ethUsdPriceData = await ethUsdFeed.methods.latestRoundData().call();
+				const daiUsdPriceData = await daiUsdFeed.methods.latestRoundData().call();
+
+				const ethUsdPrice = (ethUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
+				const daiUsdPrice = (daiUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
+
+				const usdStEthValue = BigInt(Math.floor(totalStEthDeposited)) * BigInt(ethUsdPrice);
+				const usdDaiValue = BigInt(Math.floor(totalDaiDeposited)) * BigInt(daiUsdPrice);
+				const usdTotal = usdStEthValue + usdDaiValue;
+
+				setTotalDeposited({
+					stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited.toFixed(2)) },
+					dai: { value: totalDaiDeposited, display: formatDisplayAmount(totalDaiDeposited.toFixed(2)) },
+					usdTotal: { value: usdTotal, display: formatUSDAmount(usdTotal.toString()) },
+				});
+			} catch (e: any) {
+				console.error(e);
+			}
+		})();
+	}, []);
+
+	// const AO_MINT = 'LPK-D_3gZkXtia6ywwU1wRwgFOZ-eLFRMP9pfAFRfuw';
+	// const config = useConfig();
+
+	// async function sendMessage(msg, key) {
+	// 	function createDataItemSigner(wallet) {
+	// 		const signer = async ({ data, tags, target, anchor }) => {
+	// 			const dataItem = createData(data, key, { tags, target, anchor });
+	// 			return dataItem.sign(key).then(async () => ({
+	// 				id: await dataItem.id,
+	// 				raw: await dataItem.getRaw(),
+	// 			}));
+	// 		};
+
+	// 		return signer;
+	// 	}
+
+	// 	const signer = createDataItemSigner(key);
+	// 	const message = await connect().message({
+	// 		process: AO_MINT,
+	// 		signer,
+	// 		data: msg.Data || Date.now().toString(),
+	// 		tags: msg.Tags,
+	// 	});
+	// 	return await connect().result({ process: AO_MINT, message });
+	// }
+
+	// const connector = config.connectors.find((c) => c.name === 'MetaMask');
+
+	// const provider = {
+	// 	getSigner: () => ({
+	// 		signMessage: async (message: any) => {
+	// 			const arg = message instanceof String ? message : { raw: message };
+
+	// 			const ethAccount = getAccount(config);
+
+	// 			return await signMessage(config, {
+	// 				message: arg as any,
+	// 				account: ethAccount.address,
+	// 				connector: connector,
+	// 			});
+	// 		},
+	// 	}),
+	// };
+
+	// const signer = new InjectedEthereumSigner(provider as any);
+	// signer.setPublicKey = async () => {
+	// 	const message = 'Sign this message to connect';
+	// 	const ethAccount = getAccount(config);
+
+	// 	const signature = await signMessage(config, {
+	// 		message: message,
+	// 		account: ethAccount.address,
+	// 		connector: connector,
+	// 	});
+	// 	const hash = await hashMessage(message);
+	// 	const recoveredKey = await recoverPublicKey({
+	// 		hash,
+	// 		signature,
+	// 	});
+	// 	signer.publicKey = Buffer.from(toBytes(recoveredKey));
+	// };
+
+	// React.useEffect(() => {
+	// 	(async function () {
+	// 		await signer.setPublicKey();
+	// 		const TResult = await sendMessage({
+	// 			Tags: [
+	// 				{ name: 'Action', value: 'User.Get-Tokens' },
+	// 				// { name: 'Token', value: 'DAI' },
+	// 			],
+	// 		}, signer);
+	// 		console.log('SendMessage Result:', TResult);
+	// 	})();
+	// }, []);
+
+	/* StETH - DAI Balance and Deposited */
+	React.useEffect(() => {
+		(async function () {
+			if (walletAddress && web3Provider) {
+				try {
+					const web3 = new Web3(web3Provider);
+
+					const stEthContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.stEth);
+					const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
+
+					const daiContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
+					const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
+
+					const stEthBalanceOf = (await stEthContract.methods.balanceOf(walletAddress).call()) as any as bigint;
+					const stEthUsersData = (await stEthBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
+
+					const daiBalanceOf = (await daiContract.methods.balanceOf(walletAddress).call()) as any as bigint;
+					const daiUsersData = (await daiBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
+
+					setTokens((prev) => ({
+						...prev,
+						stEth: {
+							balance: {
+								value: stEthBalanceOf,
+								display: getBalanceDisplay(stEthBalanceOf),
+							},
+							deposited: {
+								value: stEthUsersData.deposited,
+								display: getBalanceDisplay(stEthUsersData.deposited),
+								lastStake: stEthUsersData.lastStake,
+							},
+						},
+						dai: {
+							balance: {
+								value: daiBalanceOf,
+								display: getBalanceDisplay(daiBalanceOf),
+							},
+							deposited: {
+								value: daiUsersData.deposited,
+								display: getBalanceDisplay(daiUsersData.deposited),
+								lastStake: daiUsersData.lastStake,
+							},
+						},
+					}));
+				} catch (e: any) {
+					console.error(e);
+				}
+			}
+		})();
+	}, [walletAddress, tokenRefreshTrigger, web3Provider]);
+
+	React.useEffect(() => {
+		(async function () {
+			if (walletAddress && tokens && balance && totalDeposited && aoProvider.mintedSupply && web3Provider) {
+				try {
+					const [daiResp, stEthResp] = await Promise.all([
+						readHandler({
+							processId: AO.daiPriceOracle,
+							action: 'Info',
+						}),
+						readHandler({
+							processId: AO.stEthPriceOracle,
+							action: 'Info',
+						}),
+					]);
+
+					const daiPrice = Number(daiResp?.LastPrice) / 10000;
+					const daiYield = Number(daiResp?.LastYield) / 10000;
+					const stEthPrice = Number(stEthResp?.LastPrice) / 10000;
+					const stEthYield = Number(stEthResp?.LastYield) / 10000;
+
+					const totalDepositedSteth = Number(totalDeposited?.stEth?.value ?? BigInt(0));
+					const totalDepositedDai = Number(totalDeposited?.dai?.value ?? BigInt(0));
+
+					const ethReward = (days: number, amount: number) => {
+						return getEthReward(
+							days,
+							amount,
+							aoProvider.mintedSupply,
+							totalDepositedSteth,
+							totalDepositedDai,
+							stEthPrice,
+							stEthYield,
+							daiPrice,
+							daiYield
+						);
+					};
+
+					const daiReward = (days: number, amount: number) => {
+						return getDaiReward(
+							days,
+							amount,
+							aoProvider.mintedSupply,
+							totalDepositedSteth,
+							totalDepositedDai,
+							stEthPrice,
+							stEthYield,
+							daiPrice,
+							daiYield
+						);
+					};
+
+					setProjections({
+						stEth: {
+							monthly: {
+								amount: ethReward(30, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: ethReward(30, 1),
+							},
+							yearly: {
+								amount: ethReward(365, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: ethReward(365, 1),
+							},
+						},
+						dai: {
+							monthly: {
+								amount: daiReward(30, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: daiReward(30, 1),
+							},
+							yearly: {
+								amount: daiReward(365, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: daiReward(365, 1),
+							},
+						},
+					});
+				} catch (e: any) {
+					console.error(e);
+				}
+			} else {
+				setProjections(null);
+			}
+		})();
+	}, [walletAddress, tokens, balance, totalDeposited, aoProvider.mintedSupply, web3Provider]);
+
+	const handleConnect = async () => {
+		try {
+			const [primaryWallet] = await onboard.connectWallet();
+			if (!primaryWallet) throw new Error('No wallet selected');
+
+			const success = await onboard.setChain({ chainId: '0x1' });
+			if (!success) throw new Error('Please switch to Ethereum Mainnet');
+
+			setWeb3Provider(primaryWallet.provider);
+			const provider = new Web3Provider(primaryWallet.provider);
+			const signer = provider.getSigner();
+			const address = await signer.getAddress();
+			setWalletAddress(address);
+
+			const balance = await signer.getBalance();
+			setBalance(formatEther(balance));
+			setDisconnected(false);
+			setWalletModalVisible(false);
+		} catch (error) {
+			setErrorMessage(error.message);
+			setWalletAddress(null);
+			setBalance(null);
+		}
+
+		setWalletModalVisible(false);
+	};
+
+	const recoverConnection = React.useCallback(async () => {
+		if (disconnected) return;
+
+		const lastConnectedWallet = JSON.parse(localStorage.getItem('onboard.js:last_connected_wallet'));
+		if (lastConnectedWallet && lastConnectedWallet.length > 0) {
+			setConnecting(true);
+			const [primaryWallet] = await onboard.connectWallet({
+				autoSelect: { label: lastConnectedWallet[0], disableModals: true },
+			});
+
+			if (primaryWallet) {
+				const success = await onboard.setChain({ chainId: '0x1' });
+				if (!success) return;
+
+				setWeb3Provider(primaryWallet.provider);
+
+				const provider = new Web3Provider(primaryWallet.provider);
+				const signer = provider.getSigner();
+				const address = await signer.getAddress();
+				setWalletAddress(address);
+				setConnecting(false);
+
+				const ethBalance = await signer.getBalance();
+				const formattedEth = formatEther(ethBalance);
+
+				setBalance(formattedEth);
+			}
+		} else {
+			setConnecting(false);
+		}
+	}, [onboard, disconnected]);
+
+	const handleDisconnect = async () => {
+		const [primaryWallet] = onboard.state.get().wallets;
+		if (primaryWallet) {
+			try {
+				await onboard.disconnectWallet({ label: primaryWallet.label });
+			} finally {
+				setWalletAddress(null);
+				setBalance(null);
+				localStorage.removeItem('onboard.js:last_connected_wallet');
+				setDisconnected(true);
+			}
+		}
+	};
+
+	const ensureMainnet = React.useCallback(async () => {
 		const [primaryWallet] = onboard.state.get().wallets;
 		if (primaryWallet) {
 			const success = await onboard.setChain({ chainId: '0x1' });
@@ -226,12 +520,23 @@ export function EthereumProvider({ children }: EthereumProviderProps) {
 		}
 	}, []);
 
+	function getBalanceDisplay(amount: bigint) {
+		if (amount === BigInt(0)) return '0';
+		return formatDisplayAmount(Web3.utils.fromWei(amount, 'ether'));
+	}
+
 	return (
 		<>
 			<EthereumContext.Provider
 				value={{
 					walletAddress,
 					balance,
+					tokens,
+					refreshTokens: () => {
+						setTokenRefreshTrigger((prev) => !prev);
+					},
+					projections,
+					totalDeposited,
 					handleConnect,
 					handleDisconnect,
 					walletModalVisible,
@@ -239,9 +544,10 @@ export function EthereumProvider({ children }: EthereumProviderProps) {
 					errorMessage,
 					web3Provider,
 					ensureMainnet,
+					connecting,
 				}}
 			>
-				{children}
+				{props.children}
 			</EthereumContext.Provider>
 		</>
 	);

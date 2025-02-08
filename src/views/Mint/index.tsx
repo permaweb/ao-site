@@ -1,534 +1,187 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
-import Web3 from 'web3';
+import parse from 'html-react-parser';
 
-import { readHandler } from 'api';
-
-import AnimatedNumber from 'components/atoms/AnimatedNumber/AnimatedNumber';
-import { BlockedMessage } from 'components/atoms/BlockedMessage';
-import { Button } from 'components/atoms/Button';
-import { IconButton } from 'components/atoms/IconButton';
-import { Loader } from 'components/atoms/Loader';
-import WalletConnectionStatus from 'components/organisms/WalletConnectionStatus/WalletConnectionStatus';
-import {
-	AO,
-	ASSETS,
-	DaiBridge_ABI,
-	ENDPOINTS,
-	ETH_CONTRACTS,
-	StEthBridge_ABI,
-	TOKEN_DENOMINATION,
-} from 'helpers/config';
-import { formatDisplayAmount } from 'helpers/utils';
-import { useArweaveProvider } from 'providers/ArweaveProvider';
+import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
+import { Modal } from 'components/molecules/Modal';
+import { SupplyChart } from 'components/molecules/SupplyChart';
+import { URLTabs } from 'components/molecules/URLTabs';
+import { ASSETS, REDIRECTS, URLS } from 'helpers/config';
+import { formatCount } from 'helpers/utils';
+import { Footer } from 'navigation/footer';
+import { useAOProvider } from 'providers/AOProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
+import { useLanguageProvider } from 'providers/LanguageProvider';
 
-import { ArweaveSection } from './ArweaveSection';
-import { DaiSection } from './DaiSection';
-import { StETHSection } from './StETHSection';
+import { BalanceSection } from './MintBalances/BalanceSection';
+import { MintAllocation } from './MintAllocation';
+import { MintBalances } from './MintBalances';
 import * as S from './styles';
 
 export default function Mint() {
-	const [loading, setLoading] = React.useState<boolean>(false);
-	const [isBlocked, setIsBlocked] = React.useState<boolean>(false);
+	const { active } = useParams();
+	const navigate = useNavigate();
 
-	React.useEffect(() => {
-		const checkLocation = async () => {
-			setLoading(true);
-			try {
-				const response = await fetch(ENDPOINTS.ipCheck);
-				const data = await response.json();
-				if (data.country === 'US') {
-					setIsBlocked(true);
-				}
-			} catch (error) {
-				console.error('Error fetching location data', error.message);
-			}
-			setLoading(false);
-		};
-
-		checkLocation();
-	}, []);
-
-	const [aoSupply, setAoSupply] = React.useState<number | null>(null);
-	React.useEffect(() => {
-		(async function () {
-			try {
-				let aoSupplyFetch: number;
-				aoSupplyFetch = await readHandler({
-					processId: AO.tokenMirror,
-					action: 'Minted-Supply',
-				});
-
-				if (aoSupplyFetch) {
-					setAoSupply(aoSupplyFetch / TOKEN_DENOMINATION);
-				}
-			} catch (e: any) {
-				console.error(e);
-			}
-		})();
-	}, []);
-
-	const arProvider = useArweaveProvider();
+	const aoProvider = useAOProvider();
 	const ethProvider = useEthereumProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
-	const [aoBalanceForArWallet, setAoBalanceForArWallet] = React.useState<number | null>(null);
-	const [aoBalancesForEthWallet, setAoBalancesForEthWallet] = React.useState<Record<string, string>>(null);
+	const [info, setInfo] = React.useState<string | null>(null);
 
-	React.useEffect(() => {
-		(async function () {
-			if (arProvider && arProvider.walletAddress) {
-				try {
-					const tokenBalance = await readHandler({
-						processId: AO.tokenMirror,
-						action: 'Balance',
-						tags: [{ name: 'Recipient', value: arProvider.walletAddress }],
-					});
-					if (tokenBalance != null) setAoBalanceForArWallet(tokenBalance / TOKEN_DENOMINATION);
-					else setAoBalanceForArWallet(0);
-				} catch (e: any) {
-					console.error(e);
-				}
-			} else {
-				setAoBalanceForArWallet(null);
-			}
-		})();
-	}, [arProvider]);
+	const [aoSupply, setAOSupply] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
+	const [aoSupplyReset, setAOSupplyReset] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
+	const [currentMonth, setCurrentMonth] = React.useState<number | null>(null);
 
 	React.useEffect(() => {
-		(async function () {
-			if (ethProvider && ethProvider.walletAddress) {
-				console.log('Fetching ao balance for eth address', ethProvider.walletAddress);
-				try {
-					const tokenBalances = await readHandler({
-						processId: AO.tokenMirror,
-						action: 'Balances-By-User',
-						tags: [{ name: 'User', value: ethProvider.walletAddress }],
-					});
-					console.log('Fetched ao balance for eth address', tokenBalances);
-					if (!tokenBalances) {
-						setAoBalancesForEthWallet({});
-					} else {
-						setAoBalancesForEthWallet(tokenBalances);
-					}
-				} catch (e: any) {
-					console.error(e);
-				}
-			} else {
-				setAoBalancesForEthWallet(null);
-			}
-		})();
-	}, [ethProvider]);
+		if (!active) navigate(URLS.mintDeposits);
+	}, [navigate]);
 
-	const aoBalanceForEthWalletLoading = useMemo(
-		() => ethProvider && ethProvider.walletAddress && aoBalancesForEthWallet === null,
-		[ethProvider, aoBalancesForEthWallet]
+	React.useEffect(() => {
+		setAOSupply({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
+		setAOSupplyReset({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
+	}, [aoProvider.mintedSupply]);
+
+	const TABS = React.useMemo(
+		() => [
+			{
+				label: language.deposits,
+				icon: ASSETS.deposit,
+				disabled: false,
+				url: URLS.mintDeposits,
+				view: () => <MintBalances />,
+			},
+			{
+				label: language.yield,
+				icon: ASSETS.yield,
+				disabled: false,
+				url: URLS.mintYield,
+				view: () => <MintAllocation />,
+			},
+		],
+		[]
 	);
 
-	const aoBalanceForArWalletLoading = useMemo(
-		() => arProvider && arProvider.walletAddress && aoBalanceForArWallet === null,
-		[arProvider, aoBalanceForArWallet]
-	);
+	function getSupplyDate() {
+		const tokenReleaseDate = new Date();
+		tokenReleaseDate.setMonth(tokenReleaseDate.getMonth() - currentMonth);
+		const supplyDate = new Date(tokenReleaseDate);
+		supplyDate.setMonth(supplyDate.getMonth() + currentMonth + (aoSupply?.monthsFromNow ?? 0));
 
-	const aoBalance = React.useMemo<number | null>(() => {
-		let calcAmount = null;
-
-		if (typeof aoBalanceForArWallet === 'number') {
-			calcAmount += aoBalanceForArWallet;
-		}
-
-		/* Only check connected arweave wallet balance */
-		if (arProvider.walletAddress && aoBalancesForEthWallet !== null) {
-			for (const wallet of Object.keys(aoBalancesForEthWallet)) {
-				if (aoBalancesForEthWallet[wallet] === arProvider.walletAddress) {
-					calcAmount += parseInt(aoBalancesForEthWallet[wallet]) / TOKEN_DENOMINATION;
-				}
-			}
-		}
-
-		// if (arProvider.walletAddress && aoBalancesForEthWallet !== null) {
-		// 	for (const wallet of Object.keys(aoBalancesForEthWallet)) {
-		// 		if (arProvider.walletAddress === wallet) continue;
-
-		// 		calcAmount += parseInt(aoBalancesForEthWallet[wallet]) / TOKEN_DENOMINATION;
-		// 	}
-		// }
-
-		return calcAmount;
-	}, [aoBalanceForArWallet, aoBalancesForEthWallet, arProvider]);
-
-	const [arweaveMonthlyReward, setArweaveMonthlyReward] = React.useState<number | null>(null);
-	const [arweaveYearlyReward, setArweaveYearlyReward] = React.useState<number | null>(null);
-
-	const [ethMonthlyReward, setEthMonthlyReward] = React.useState<number | null>(null);
-	const [ethYearlyReward, setEthYearlyReward] = React.useState<number | null>(null);
-
-	const [daiMonthlyReward, setDaiMonthlyReward] = React.useState<number | null>(null);
-	const [daiYearlyReward, setDaiYearlyReward] = React.useState<number | null>(null);
-
-	const monthlyReward = React.useMemo(() => {
-		let calcAmount = null;
-
-		if (typeof arweaveMonthlyReward === 'number') {
-			calcAmount += arweaveMonthlyReward;
-		}
-
-		if (typeof ethMonthlyReward === 'number') {
-			calcAmount += ethMonthlyReward;
-		}
-
-		if (typeof daiMonthlyReward === 'number') {
-			calcAmount += daiMonthlyReward;
-		}
-
-		return calcAmount;
-	}, [arweaveMonthlyReward, ethMonthlyReward, daiMonthlyReward]);
-
-	const yearlyReward = React.useMemo(() => {
-		let calcAmount = null;
-
-		if (typeof arweaveYearlyReward === 'number') {
-			calcAmount += arweaveYearlyReward;
-		}
-
-		if (typeof ethYearlyReward === 'number') {
-			calcAmount += ethYearlyReward;
-		}
-
-		if (typeof daiYearlyReward === 'number') {
-			calcAmount += daiYearlyReward;
-		}
-
-		return calcAmount;
-	}, [arweaveYearlyReward, ethYearlyReward, daiYearlyReward]);
-
-	const realtimeReward = React.useMemo<number | null>(() => {
-		let calcAmount = null;
-
-		if (typeof arweaveMonthlyReward === 'number') {
-			calcAmount += arweaveMonthlyReward;
-		}
-
-		if (typeof ethMonthlyReward === 'number') {
-			calcAmount += ethMonthlyReward;
-		}
-
-		if (typeof daiMonthlyReward === 'number') {
-			calcAmount += daiMonthlyReward;
-		}
-
-		calcAmount = calcAmount / 30 / 24 / 60 / 60;
-
-		return calcAmount;
-	}, [arweaveMonthlyReward, ethMonthlyReward, daiMonthlyReward]);
-
-	const [totalStEthBridged, setTotalStEthBridged] = React.useState<number | null>(null);
-	const [totalDaiBridged, setTotalDaiBridged] = React.useState<number | null>(null);
-
-	const connected = useMemo(() => !!ethProvider.walletAddress || !!arProvider.walletAddress, [arProvider, ethProvider]);
-
-	useEffect(() => {
-		(async function () {
-			try {
-				const web3 = new Web3(ENDPOINTS.mainnetRpc);
-				const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
-				const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
-
-				let [totalStEthDeposited, totalDaiDeposited] = await Promise.all([
-					stEthBridgeContract.methods.totalDepositedInPublicPools().call() as any,
-					daiBridgeContract.methods.totalDepositedInPublicPools().call() as any,
-				]);
-				console.log('LOG: totalStEthDeposited, totalDaiDeposited:', totalStEthDeposited, totalDaiDeposited);
-
-				totalStEthDeposited = Number(totalStEthDeposited) / Math.pow(10, 18);
-				totalDaiDeposited = Number(totalDaiDeposited) / Math.pow(10, 18);
-
-				if (isNaN(totalStEthDeposited)) throw new Error('Invalid totalStEthDeposited');
-				if (isNaN(totalDaiDeposited)) throw new Error('Invalid totalDaiDeposited');
-
-				setTotalStEthBridged(totalStEthDeposited);
-				setTotalDaiBridged(totalDaiDeposited);
-			} catch (e: any) {
-				console.error(e);
-			}
-		})();
-	}, []);
-
-	const [stEthPrice, setStEthPrice] = React.useState<number | null>(null);
-	const [stEthYield, setStEthYield] = React.useState<number | null>(null);
-	const [daiPrice, setDaiPrice] = React.useState<number | null>(null);
-	const [daiYield, setDaiYield] = React.useState<number | null>(null);
-
-	useEffect(() => {
-		(async function () {
-			try {
-				const [daiResp, stEthResp] = await Promise.all([
-					readHandler({
-						processId: AO.daiPriceOracle,
-						action: 'Info',
-					}),
-					readHandler({
-						processId: AO.stEthPriceOracle,
-						action: 'Info',
-					}),
-				]);
-				console.log('LOG: daiResp, stEthResp:', daiResp, stEthResp);
-
-				const daiPrice = Number(daiResp.LastPrice) / 10_000;
-				const daiYield = Number(daiResp.LastYield) / 10_000;
-				const stEthPrice = Number(stEthResp.LastPrice) / 10_000;
-				const stEthYield = Number(stEthResp.LastYield) / 10_000;
-
-				console.log('LOG: daiPrice, daiYield, stEthPrice, stEthYield:', daiPrice, daiYield, stEthPrice, stEthYield);
-
-				setDaiPrice(daiPrice);
-				setDaiYield(daiYield);
-				setStEthPrice(stEthPrice);
-				setStEthYield(stEthYield);
-			} catch (e: any) {
-				console.error(e);
-			}
-		})();
-	}, []);
-
-	function getView() {
-		if (loading) return <Loader />;
-		if (isBlocked) {
-			return (
-				<S.BlockMessage>
-					<BlockedMessage />
-				</S.BlockMessage>
-			);
-		}
-
-		return (
-			<S.Wrapper>
-				<S.Heading>
-					<S.Subheading>[+] Your Dashboard</S.Subheading>
-					<WalletConnectionStatus />
-				</S.Heading>
-				<S.Hero columns={2}>
-					<S.Column>
-						<S.Section columns={1}>
-							<S.Column>
-								<S.Label>
-									<span>Your AO</span>
-								</S.Label>
-								{arProvider.walletAddress ? (
-									aoBalance === null ? (
-										!aoBalanceForEthWalletLoading && !aoBalanceForArWalletLoading ? (
-											'-'
-										) : (
-											<S.LoadingWrapper>
-												<S.Loader>
-													<Loader xSm relative />
-												</S.Loader>
-											</S.LoadingWrapper>
-										)
-									) : (
-										<S.AssetAmount>
-											<ReactSVG src={ASSETS.aoPict} />
-											<AnimatedNumber startValue={aoBalance} increment={realtimeReward} />
-											{(aoBalanceForEthWalletLoading || aoBalanceForArWalletLoading) && (
-												<S.LoadingWrapper>
-													<S.Loader>
-														<Loader xSm relative />
-													</S.Loader>
-												</S.LoadingWrapper>
-											)}
-										</S.AssetAmount>
-									)
-								) : (
-									<Button
-										style={{
-											width: 'fit-content',
-											margin: '10px 0 15px 0',
-											boxShadow: '0px 4px 0px 0px #797979',
-											border: '1px solid black',
-										}}
-										type={'alt1'}
-										label={'Connect Arweave Wallet'}
-										handlePress={() => {
-											arProvider.setWalletModalVisible(true);
-										}}
-										loading={loading}
-										height={40}
-									/>
-								)}
-								<S.Label>
-									<S.TooltipLine>
-										<span>/ {formatDisplayAmount(21_000_000)}</span>
-										<IconButton
-											type={'primary'}
-											src={ASSETS.info}
-											handlePress={() => {
-												const url =
-													'https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ';
-												window.open(url, '_blank');
-											}}
-											dimensions={{ icon: 15, wrapper: 25 }}
-										/>
-									</S.TooltipLine>
-								</S.Label>
-							</S.Column>
-						</S.Section>
-						<S.Divider />
-						<S.Section columns={2}>
-							<S.Column>
-								<S.Label>30 day projection</S.Label>
-								{connected ? (
-									monthlyReward === null ? (
-										<S.LoadingWrapper>
-											<S.Loader>
-												<Loader xSm relative />
-											</S.Loader>
-										</S.LoadingWrapper>
-									) : (
-										<S.AssetAmount variant="alt1">
-											<ReactSVG src={ASSETS.aoPict} />+{formatDisplayAmount(monthlyReward)}
-										</S.AssetAmount>
-									)
-								) : (
-									<span style={{ fontSize: '28px', fontFamily: 'DM Sans' }}>0 </span>
-								)}
-							</S.Column>
-							<S.Column>
-								<S.Label>1 year projection</S.Label>
-								{connected ? (
-									yearlyReward === null ? (
-										<S.LoadingWrapper>
-											<S.Loader>
-												<Loader xSm relative />
-											</S.Loader>
-										</S.LoadingWrapper>
-									) : (
-										<S.AssetAmount variant="alt1">
-											<ReactSVG src={ASSETS.aoPict} />+{formatDisplayAmount(yearlyReward)}
-										</S.AssetAmount>
-									)
-								) : (
-									<span style={{ fontSize: '28px', fontFamily: 'DM Sans' }}>0 </span>
-								)}
-							</S.Column>
-						</S.Section>
-					</S.Column>
-					<S.InfoWrapper className={'border-wrapper-primary'}>
-						<S.InfoWrapperSection>
-							<S.InfoHeader>
-								<img style={{ width: '40px' }} src={ASSETS.aoPict} />
-								<h4>: 100% Fair Launch.</h4>
-							</S.InfoHeader>
-							<p style={{ fontFamily: 'DM Sans', textTransform: 'none' }}>
-								21 million tokens. 4 year halving.
-								<br />
-								<br />
-								Just like Bitcoin.
-								<br />
-								<br />
-								Every single $AO minted by the community.
-								<br />
-								<br />
-								Hold ar or pre-bridge your assets to participate.
-								<br />
-								<br />
-								<a
-									href={
-										'https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ'
-									}
-									target="_blank"
-								>
-									Learn more.
-								</a>
-							</p>
-						</S.InfoWrapperSection>
-						<S.InfoWrapperSection>
-							<img className="pie-chart" src={ASSETS.heroGraphic} />
-						</S.InfoWrapperSection>
-					</S.InfoWrapper>
-				</S.Hero>
-				<ArweaveSection
-					loading={loading}
-					aoSupply={aoSupply}
-					onYearlyReward={setArweaveYearlyReward}
-					onMonthlyReward={setArweaveMonthlyReward}
-				/>
-				<StETHSection
-					loading={loading}
-					aoSupply={aoSupply}
-					onYearlyReward={setEthYearlyReward}
-					onMonthlyReward={setEthMonthlyReward}
-					totalStEthBridged={totalStEthBridged}
-					totalDaiBridged={totalDaiBridged}
-					stEthPrice={stEthPrice}
-					stEthYield={stEthYield}
-					daiPrice={daiPrice}
-					daiYield={daiYield}
-				/>
-				<DaiSection
-					loading={loading}
-					aoSupply={aoSupply}
-					onYearlyReward={setDaiYearlyReward}
-					onMonthlyReward={setDaiMonthlyReward}
-					totalStEthBridged={totalStEthBridged}
-					totalDaiBridged={totalDaiBridged}
-					stEthPrice={stEthPrice}
-					stEthYield={stEthYield}
-					daiPrice={daiPrice}
-					daiYield={daiYield}
-				/>
-				<S.Heading>
-					<S.Subheading>[+] Network</S.Subheading>
-				</S.Heading>
-				<S.Section columns={4}>
-					<S.Column>
-						<S.Label>Total AO Supply</S.Label>
-						{aoSupply === null ? (
-							<S.LoadingWrapper>
-								<S.Loader>
-									<Loader xSm relative />
-								</S.Loader>
-							</S.LoadingWrapper>
-						) : (
-							<S.AssetAmount variant="alt2">
-								<ReactSVG src={ASSETS.aoPict} />
-								{formatDisplayAmount(aoSupply.toFixed(2))}
-							</S.AssetAmount>
-						)}
-					</S.Column>
-					<S.Column>
-						<S.Label>Total stETH Bridged</S.Label>
-						{totalStEthBridged === null ? (
-							<S.LoadingWrapper>
-								<S.Loader>
-									<Loader xSm relative />
-								</S.Loader>
-							</S.LoadingWrapper>
-						) : (
-							<S.AssetAmount variant="alt2">
-								<ReactSVG src={ASSETS.stEth} />
-								{formatDisplayAmount(totalStEthBridged.toFixed(2))}
-							</S.AssetAmount>
-						)}
-					</S.Column>
-					<S.Column>
-						<S.Label>Total DAI Bridged</S.Label>
-						{totalDaiBridged === null ? (
-							<S.LoadingWrapper>
-								<S.Loader>
-									<Loader xSm relative />
-								</S.Loader>
-							</S.LoadingWrapper>
-						) : (
-							<S.AssetAmount variant="alt2">
-								<ReactSVG src={ASSETS.dai} />
-								{formatDisplayAmount(totalDaiBridged.toFixed(2))}
-							</S.AssetAmount>
-						)}
-					</S.Column>
-				</S.Section>
-			</S.Wrapper>
-		);
+		return supplyDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
 	}
 
-	return getView();
+	return (
+		<>
+			<S.Wrapper>
+				<S.GlobalWrapper>
+					<S.InfoWrapper className={'border-wrapper-alt1 fade-in'}>
+						<S.InfoHeader>
+							<ReactSVG src={ASSETS.plus} />
+							<p>{language.fairLaunch}</p>
+						</S.InfoHeader>
+						<S.InfoBody>
+							<p>{parse(language.mintSubheader)}</p>
+							<a href={REDIRECTS.tokenomics} target={'_blank'}>
+								{language.learnMore}
+							</a>
+						</S.InfoBody>
+					</S.InfoWrapper>
+					<S.MetricsWrapper className={'fade-in'}>
+						<S.Metrics>
+							<S.MetricsSection>
+								<S.MetricsValue>
+									<span className={'primary-text'}>{language.totalAOSupply}</span>
+								</S.MetricsValue>
+								<S.MetricsValueMain>
+									<ReactSVG id={'ao-logo'} src={ASSETS.ao} />
+									<p>
+										{aoSupply?.amount !== null ? (
+											aoSupply?.amount > 0 ? (
+												formatCount(aoSupply.amount.toFixed(4).toString())
+											) : (
+												'-'
+											)
+										) : (
+											<EllipsisLoader />
+										)}
+									</p>
+								</S.MetricsValueMain>
+								<S.MetricsValue>
+									<p>{getSupplyDate()}</p>
+								</S.MetricsValue>
+							</S.MetricsSection>
+						</S.Metrics>
+						<SupplyChart
+							currentValue={{ months: aoSupply?.monthsFromNow, supply: aoSupply?.amount }}
+							setCurrentValue={(updatedValue: { months: number; supply: number }) =>
+								setAOSupply({
+									monthsFromNow: updatedValue.months,
+									amount: updatedValue.supply,
+								})
+							}
+							setCurrentMonth={(value: number) => setCurrentMonth(value)}
+							handleReset={() => setAOSupply(aoSupplyReset)}
+						/>
+					</S.MetricsWrapper>
+				</S.GlobalWrapper>
+				<S.BalancesPrimaryWrapper>
+					<S.HeaderWrapper>
+						<S.HeaderInfoWrapper>
+							<S.HeaderInfo>
+								<h6>{language.network}</h6>
+							</S.HeaderInfo>
+						</S.HeaderInfoWrapper>
+						<S.HeaderTooltip>
+							<button onClick={() => setInfo(language.networkInfo)}>
+								<ReactSVG src={ASSETS.info} />
+								{language.infoTooltip}
+							</button>
+						</S.HeaderTooltip>
+					</S.HeaderWrapper>
+					<S.BalancesGlobalWrapper className={'border-wrapper-primary'}>
+						<S.BalanceQuantitySection>
+							<S.BalanceQuantityHeader>
+								<span className={'primary-text'}>{language.fairLaunchDeposits}</span>
+							</S.BalanceQuantityHeader>
+							<S.BalanceQuantityBody>
+								<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
+							</S.BalanceQuantityBody>
+						</S.BalanceQuantitySection>
+						<S.BalancesPrimaryFlexWrapper>
+							<S.BalanceQuantityEndSection>
+								<S.BalanceQuantityHeader>
+									<span className={'primary-text'}>{language.totalStEthBridged}</span>
+								</S.BalanceQuantityHeader>
+								<S.BalanceQuantityBody>
+									<ReactSVG src={ASSETS.stEth} />
+									<p>{ethProvider.totalDeposited?.stEth?.display ?? <EllipsisLoader />}</p>
+								</S.BalanceQuantityBody>
+							</S.BalanceQuantityEndSection>
+							<S.BalanceQuantityEndSection>
+								<S.BalanceQuantityHeader>
+									<span className={'primary-text'}>{language.totalDaiBridged}</span>
+								</S.BalanceQuantityHeader>
+								<S.BalanceQuantityBody>
+									<ReactSVG src={ASSETS.dai} />
+									<p>{ethProvider.totalDeposited?.dai?.display ?? <EllipsisLoader />}</p>
+								</S.BalanceQuantityBody>
+							</S.BalanceQuantityEndSection>
+						</S.BalancesPrimaryFlexWrapper>
+					</S.BalancesGlobalWrapper>
+					<BalanceSection type={'ao'} />
+				</S.BalancesPrimaryWrapper>
+				<URLTabs tabs={TABS} activeUrl={TABS[0].url} />
+				<Footer />
+			</S.Wrapper>
+			{info && (
+				<Modal header={'Earnings'} handleClose={() => setInfo(null)}>
+					<S.ModalWrapper className={'modal-wrapper'}>
+						<span>{info}</span>
+					</S.ModalWrapper>
+				</Modal>
+			)}
+		</>
+	);
 }

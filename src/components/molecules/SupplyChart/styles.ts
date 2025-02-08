@@ -1,26 +1,16 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-	height: 400px;
+	height: 398.5px;
 	width: 100%;
 	position: relative;
-`;
+	cursor: crosshair;
+	overflow: hidden;
 
-export const Label = styled.div`
-	span {
-		color: ${(props) => props.theme.colors.font.primary};
-		font-size: ${(props) => props.theme.typography.size.xxSmall};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		text-transform: uppercase;
+	canvas {
+		width: calc(100% + 15px) !important;
+		position: absolute;
+		top: 9.5px;
+		left: -9.5px;
 	}
-`;
-
-export const YLabel = styled(Label)`
-	margin: 0 0 20px 5px;
-`;
-
-export const XLabel = styled(Label)`
-	margin: 10px 0 0 0;
-	display: flex;
-	justify-content: center;
 `;
