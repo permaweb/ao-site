@@ -24,6 +24,7 @@ export const GraphicWrapper = styled.div`
 		left: 0;
 		z-index: 2;
 		opacity: 0.85;
+		pointer-events: none;
 	}
 `;
 
@@ -55,17 +56,31 @@ export const ContentWrapper = styled.div`
 	}
 
 	p {
-		max-width: 415px;
+		max-width: 445px;
 		line-height: 1.5;
 		font-size: ${(props) => props.theme.typography.size.lg};
 		font-size: clamp(16px, 1.65vw, 18px);
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
+		color: ${(props) => props.theme.colors.font.primary};
 		text-align: right;
 		padding: 30px 0 20px 20px;
 		margin: -10px 0 0 0;
 		position: relative;
 		transition: ${open} ${fadeIn2};
+
+		a {
+			font-size: ${(props) => props.theme.typography.size.lg};
+			font-size: clamp(16px, 1.65vw, 18px);
+			font-family: ${(props) => props.theme.typography.family.alt1};
+			font-weight: ${(props) => props.theme.typography.weight.regular};
+			color: ${(props) => props.theme.colors.font.primary};
+			text-decoration: underline;
+
+			&:hover {
+				color: ${(props) => props.theme.colors.font.alt1};
+			}
+		}
 
 		&:before {
 			content: '';

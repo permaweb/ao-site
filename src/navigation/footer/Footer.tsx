@@ -10,7 +10,7 @@ export default function Footer() {
 		<S.LinksWrapper>
 			{NAV_REDIRECTS.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
 				return (
-					<Link key={index} to={element.path} target={element.target || ''} className={'primary-text'}>
+					<Link key={index} to={element.path} target={'_blank'} className={'primary-text'}>
 						<HyperTextLoad word={element.label} textType={'span'} speed={1} triggerOnLoad />
 					</Link>
 				);

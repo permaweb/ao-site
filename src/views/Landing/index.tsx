@@ -1,5 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import parse from 'html-react-parser';
 
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { HyperTextLoad } from 'components/atoms/HyperTextLoad';
@@ -11,25 +11,11 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 
-// TODO: Legal policies
 export default function Landing() {
 	const aoProvider = useAOProvider();
 	const ethProvider = useEthereumProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
-
-	React.useEffect(() => {
-		const header = document.getElementById('site-header');
-		console.log(header);
-		if (header) {
-			header.classList.add('landing-view');
-		}
-		return () => {
-			if (header) {
-				header.classList.remove('landing-view');
-			}
-		};
-	}, []);
 
 	return (
 		<>
@@ -38,7 +24,7 @@ export default function Landing() {
 					<h4>{language.landingHeader1}</h4>
 					<h4>{language.landingHeader2}</h4>
 					<h4>{language.landingHeader3}</h4>
-					<p>{language.landingSubheader}</p>
+					<p>{parse(language.landingSubheader)}</p>
 				</S.ContentWrapper>
 				<S.MetricsWrapper>
 					<S.MetricsSection className={'fade-in'}>
@@ -65,7 +51,7 @@ export default function Landing() {
 					<S.LinksWrapper>
 						{NAV_REDIRECTS.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
 							return (
-								<Link key={index} to={element.path} target={element.target || ''} className={'primary-text'}>
+								<Link key={index} to={element.path} target={'_blank'} className={'primary-text'}>
 									<HyperTextLoad word={element.label} textType={'span'} speed={1} triggerOnLoad />
 								</Link>
 							);
@@ -94,7 +80,7 @@ export default function Landing() {
 				</S.MetricsWrapper>
 			</S.Wrapper>
 			<S.GraphicWrapper>
-				<video autoPlay muted loop>
+				<video autoPlay muted loop playsInline preload={'auto'}>
 					<source src={ASSETS.landingGraphic} type={'video/mp4'} />
 					Your browser does not support the video tag.
 				</video>

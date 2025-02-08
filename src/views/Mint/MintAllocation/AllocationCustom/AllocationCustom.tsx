@@ -19,41 +19,6 @@ export default function AllocationCustom() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
-	// const PROJECT_1 = {
-	// 	decay_factor: 0.5,
-	// 	flp_token: 'k3K6_wPHkyYLrZEfeIBvbzW3ne6X7jCgzikBkQcXOO8',
-	// 	status: 'AwaitingInitialDeposit',
-	// 	flp_id: '5sGEKUtMTmzd7Et5BAaBjRibTHwfc3_lqiXa8XXhxuk',
-	// 	flp_ticker: 'PIXL',
-	// 	token_supply_to_use: '10000000000000000000',
-	// 	withdrawn_qty: '0',
-	// 	flp_name: 'Bazar',
-	// 	id: '5sGEKUtMTmzd7Et5BAaBjRibTHwfc3_lqiXa8XXhxuk',
-	// 	ends_at_ts: 1739636493818,
-	// 	stats_updated_at: 1738772983923,
-	// 	initializer: 'P6i7xXWuZtuKJVJYNwEqduj0s8R_G4wZJ38TB5Knpy4',
-	// 	accumulated_qty: '0',
-	// 	starts_at_ts: 1738858893818,
-	// 	treasury: 'P6i7xXWuZtuKJVJYNwEqduj0s8R_G4wZJ38TB5Knpy4',
-	// 	created_at_ts: 1738772983923,
-	// 	last_updated_at_ts: 1738772983923,
-	// 	distributed_qty: '0',
-	// 	total_token_supply: '"1000000000000000000000000000"',
-	// 	deployer: 'P6i7xXWuZtuKJVJYNwEqduj0s8R_G4wZJ38TB5Knpy4',
-	// 	// ADDED_FIELDS
-	// 	token_denomination: 12,
-	// 	short_description: 'Atomic Asset Marketplace',
-	// 	long_description: `Explore a dynamic atomic asset marketplace where you can discover unique digital assets. Engage with a community of creators and collectors, and trade with confidence knowing each transaction is secure and transparent. Whether you're a seasoned trader or new to the world of digital assets, our platform offers the tools and resources you need to succeed.`,
-	// 	disclaimer: `PI/AO not available in Restricted Jurisdictions. It is your obligation to ensure your acquisition of PI/AO does not violate applicable laws in your jurisdiction.`,
-	// 	logo: 'k3Wh9FznFjK_Yb2qiIMoxvLFUQruo4oM24mM4ZY3diY',
-	// 	website: 'https://bazar.arweave.net',
-	// 	links: {
-	// 		x: 'https://x.com/OurBazAR',
-	// 		discord: 'https://discord.com/invite/weavers',
-	// 		github: 'https://github.com/permaweb/bazar',
-	// 	},
-	// };
-
 	const [projects, setProjects] = React.useState<any[] | null>(null);
 	const [selectedProjects, setSelectedProjects] = React.useState<any[]>([]);
 	const [activeProject, setActiveProject] = React.useState<any | null>(null);
@@ -70,8 +35,6 @@ export default function AllocationCustom() {
 				if (response?.Messages?.[0]?.Data) {
 					setProjects(JSON.parse(response.Messages[0].Data));
 				}
-
-				console.log(response);
 			} catch (e: any) {
 				setProjects([]);
 			}
@@ -89,34 +52,16 @@ export default function AllocationCustom() {
 		(record: AllocationRecordType) => record.id === activeProject?.id
 	);
 
-	// async function handleSave() {
-	// 	if (activeProject) {
-	// 		if (currentAllocationRecord) {
-	// 			allocationProvider.removeToken({
-	// 				id: activeProject.id,
-	// 				label: activeProject.flp_ticker,
-	// 			});
-	// 		} else {
-	// 			allocationProvider.addToken({
-	// 				id: activeProject.id,
-	// 				label: activeProject.flp_ticker,
-	// 			});
-	// 		}
-
-	// 		await allocationProvider.savePreferences();
-	// 	}
-	// }
-
 	const toggleSelection = (project: any) => {
 		const existingProjects = [...selectedProjects];
-		const exists = existingProjects.some((project) => project.id === project.id);
+		const exists = existingProjects.some((existingProject) => existingProject.id === project.id);
 
 		if (exists) {
 			setSelectedProjects((prev) => prev.filter((item) => item !== project.id));
-			allocationProvider.removeToken({ id: project.id, label: project.flp_ticker });
+			allocationProvider.removeToken({ id: project.id, label: project.flp_token_ticker });
 		} else {
 			setSelectedProjects((prev) => [...prev, project.id]);
-			allocationProvider.addToken({ id: project.id, label: project.flp_ticker });
+			allocationProvider.addToken({ id: project.id, label: project.flp_token_ticker });
 		}
 	};
 
@@ -131,7 +76,7 @@ export default function AllocationCustom() {
 				}}
 				disabled={
 					allocationProvider.loading ||
-					allocationProvider.isTokenDisabled({ id: activeProject?.id, label: activeProject?.flp_ticker })
+					allocationProvider.isTokenDisabled({ id: activeProject?.id, label: activeProject?.flp_token_ticker })
 				}
 				loading={allocationProvider.loading}
 				icon={currentAllocationRecord ? ASSETS.remove : ASSETS.add}
@@ -141,21 +86,31 @@ export default function AllocationCustom() {
 	}
 
 	function getProjectLinks(project: any) {
-		if (!project?.links) return null;
-
 		return (
 			<>
-				{Object.keys(project.links).map((key: string, index: number) => {
-					return (
-						<S.ProjectLink key={index}>
-							<Link to={project.links[key]} target={'_blank'} onClick={(e) => e.stopPropagation()}>
-								<ReactSVG src={ASSETS[key] ?? ASSETS.link} />
-							</Link>
-						</S.ProjectLink>
-					);
-				})}
+				{project?.twitter_handle?.length > 0 && (
+					<S.ProjectLink>
+						<Link to={`https://x.com/${project.twitter_handle}`} target={'_blank'} onClick={(e) => e.stopPropagation()}>
+							<ReactSVG src={ASSETS.x} />
+						</Link>
+					</S.ProjectLink>
+				)}
 			</>
 		);
+
+		// return (
+		// 	<>
+		// 		{Object.keys(project.links).map((key: string, index: number) => {
+		// 			return (
+		// 				<S.ProjectLink key={index}>
+		// 					<Link to={project.links[key]} target={'_blank'} onClick={(e) => e.stopPropagation()}>
+		// 						<ReactSVG src={ASSETS[key] ?? ASSETS.link} />
+		// 					</Link>
+		// 				</S.ProjectLink>
+		// 			);
+		// 		})}
+		// 	</>
+		// );
 	}
 
 	const copyTokenId = React.useCallback(async (address: string) => {
@@ -185,7 +140,7 @@ export default function AllocationCustom() {
 			return (
 				<S.GridWrapper>
 					{projects.map((project, index) => {
-						const isActive = selectedProjects.some((project) => project.id === project.id);
+						const isActive = selectedProjects.some((selectedProject) => selectedProject.id === project.id);
 
 						return (
 							<S.GridElement key={index} className={'fade-in'}>
@@ -195,24 +150,24 @@ export default function AllocationCustom() {
 											<S.ProjectLogo>
 												<img
 													src={
-														project.logo && checkValidAddress(project.logo)
-															? ENDPOINTS.arTxEndpoint(project.logo)
+														project.flp_token_logo && checkValidAddress(project.flp_token_logo)
+															? ENDPOINTS.arTxEndpoint(project.flp_token_logo)
 															: ASSETS.token
 													}
 												/>
 											</S.ProjectLogo>
 											<S.ProjectTitle>
-												<span>{project.flp_name}</span>
+												<span>{project.flp_name ?? '-'}</span>
 											</S.ProjectTitle>
 										</S.ProjectHeaderDetails>
 										<S.ProjectIndex active={isActive}>
-											<span className={'indicator'}>{`${project.flp_ticker} # ${index + 1}`}</span>
+											<span className={'indicator'}>{`${project.flp_token_ticker ?? '-'} # ${index + 1}`}</span>
 										</S.ProjectIndex>
 									</S.ProjectHeader>
 									<S.ProjectLinks>
-										{project.website && (
+										{project.website_url && (
 											<S.ProjectLink>
-												<Link to={project.website} target={'_blank'} onClick={(e) => e.stopPropagation()}>
+												<Link to={project.website_url} target={'_blank'} onClick={(e) => e.stopPropagation()}>
 													<ReactSVG src={ASSETS.website} />
 												</Link>
 											</S.ProjectLink>
@@ -275,8 +230,8 @@ export default function AllocationCustom() {
 								<S.ProjectLogo>
 									<img
 										src={
-											activeProject?.logo && checkValidAddress(activeProject?.logo)
-												? ENDPOINTS.arTxEndpoint(activeProject.logo)
+											activeProject?.flp_token_logo && checkValidAddress(activeProject?.flp_token_logo)
+												? ENDPOINTS.arTxEndpoint(activeProject.flp_token_logo)
 												: ASSETS.token
 										}
 									/>
@@ -286,13 +241,13 @@ export default function AllocationCustom() {
 								</S.ProjectTitle>
 							</S.ProjectHeaderDetails>
 							<S.ProjectIndex active={false}>
-								<span className={'indicator'}>{activeProject?.flp_ticker}</span>
+								<span className={'indicator'}>{activeProject?.flp_token_ticker}</span>
 							</S.ProjectIndex>
 						</S.ProjectHeader>
 						<S.ProjectLinks>
-							{activeProject?.website && (
+							{activeProject?.website_url && (
 								<S.ProjectLink>
-									<Link to={activeProject.website} target={'_blank'} onClick={(e) => e.stopPropagation()}>
+									<Link to={activeProject.website_url} target={'_blank'} onClick={(e) => e.stopPropagation()}>
 										<ReactSVG src={ASSETS.website} />
 									</Link>
 								</S.ProjectLink>
@@ -300,14 +255,16 @@ export default function AllocationCustom() {
 							{getProjectLinks(activeProject)}
 						</S.ProjectLinks>
 						<S.ProjectBody>
-							<S.ProjectId onClick={() => copyTokenId(activeProject?.flp_token ?? '-')}>
+							<S.ProjectId onClick={() => copyTokenId(activeProject?.flp_token_process ?? '-')}>
 								<span>{`${language.tokenId}:`}</span>
-								<p>{activeProject?.flp_token ? formatAddress(activeProject.flp_token, false) : '-'}</p>
+								<p>{activeProject?.flp_token_process ? formatAddress(activeProject.flp_token_process, false) : '-'}</p>
 								<ReactSVG src={copied ? ASSETS.checkmark : ASSETS.copy} />
 							</S.ProjectId>
-							<S.ProjectShortDescription>
-								<p className={'primary-text'}>{activeProject?.short_description ?? 'No description'}</p>
-							</S.ProjectShortDescription>
+							{activeProject?.long_description && (
+								<S.ProjectShortDescription>
+									<p className={'primary-text'}>{activeProject?.short_description ?? 'No description'}</p>
+								</S.ProjectShortDescription>
+							)}
 							{activeProject?.long_description && (
 								<S.ProjectLongDescription>
 									<p>{activeProject.long_description}</p>

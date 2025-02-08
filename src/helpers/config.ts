@@ -9,7 +9,7 @@ export const AO = {
 	stEthPriceOracle: 'rwxd1EuSzEVoy3qTlDRm7eMYPbOMrmQMajynVrA-ikk',
 	daiPriceOracle: 'SVu0Atwg7FRQfQA1PUvhpTYsdBmXeJK8s_58retkdBg',
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
-	flpFactory: 's7IwHRVvjiRksIr5znqfaGAQj9qB9sulh9qqh7lm80E',
+	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
 };
 
 export const ETH_CONTRACTS = {

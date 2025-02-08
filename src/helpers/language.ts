@@ -57,7 +57,7 @@ export const language = {
 		landingHeader1: `Hyper.`,
 		landingHeader2: `Parallel.`,
 		landingHeader3: `Computer.`,
-		landingSubheader: `A decentralized super computer built on top of Arweave's permanent data storage.`,
+		landingSubheader: `A decentralized supercomputer built on top of <a href="https://arweave.org" target="_blank">Arweave</a>'s permanent data storage.`,
 		learnMore: `Learn More`,
 		loading: `Loading`,
 		max: `Max`,
