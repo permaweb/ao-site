@@ -142,7 +142,7 @@ export default function AllocationCustom() {
 					{projects.map((project, index) => {
 						const isActive = selectedProjects.some((selectedProject) => selectedProject.id === project.id);
 
-						return (
+						return project.flp_name ? (
 							<S.GridElement key={index} className={'fade-in'}>
 								<S.Project active={isActive} onClick={() => toggleSelection(project)}>
 									<S.ProjectHeader>
@@ -176,7 +176,7 @@ export default function AllocationCustom() {
 									</S.ProjectLinks>
 									<S.ProjectBody>
 										<S.ProjectShortDescription>
-											<p className={'primary-text'}>{project.short_description ?? 'No description'}</p>
+											<p className={'primary-text'}>{project.flp_short_description ?? 'No description'}</p>
 										</S.ProjectShortDescription>
 									</S.ProjectBody>
 									<S.ProjectFooter>
@@ -199,12 +199,14 @@ export default function AllocationCustom() {
 									</S.ProjectFooter>
 								</S.Project>
 							</S.GridElement>
-						);
+						) : null;
 					})}
 				</S.GridWrapper>
 			);
 		}
 	}
+
+	console.log(activeProject);
 
 	return (
 		<>
@@ -260,25 +262,27 @@ export default function AllocationCustom() {
 								<p>{activeProject?.flp_token_process ? formatAddress(activeProject.flp_token_process, false) : '-'}</p>
 								<ReactSVG src={copied ? ASSETS.checkmark : ASSETS.copy} />
 							</S.ProjectId>
-							{activeProject?.long_description && (
+							{activeProject?.flp_short_description && (
 								<S.ProjectShortDescription>
-									<p className={'primary-text'}>{activeProject?.short_description ?? 'No description'}</p>
+									<p className={'primary-text'}>{activeProject?.flp_short_description ?? 'No description'}</p>
 								</S.ProjectShortDescription>
 							)}
-							{activeProject?.long_description && (
+							{activeProject?.flp_long_description && (
 								<S.ProjectLongDescription>
-									<p>{activeProject.long_description}</p>
+									<p>{activeProject.flp_long_description}</p>
 								</S.ProjectLongDescription>
 							)}
 							<S.ProjectLinesWrapper>
 								<S.ProjectLineWrapper>
 									<S.ProjectInfoLine>
 										<span className={'primary-text'}>{language.startDate}</span>
-										<p>{activeProject?.starts_at_ts ? formatDate(activeProject.starts_at_ts, 'timestamp') : '-'}</p>
+										<p>
+											{activeProject?.starts_at_ts ? formatDate(activeProject.starts_at_ts * 1000, 'dateString') : '-'}
+										</p>
 									</S.ProjectInfoLine>
 									<S.ProjectInfoLine>
 										<span className={'primary-text'}>{language.endDate}</span>
-										<p>{activeProject?.ends_at_ts ? formatDate(activeProject.ends_at_ts, 'timestamp') : '-'}</p>
+										<p>{activeProject?.ends_at_ts ? formatDate(activeProject.ends_at_ts * 1000, 'dateString') : '-'}</p>
 									</S.ProjectInfoLine>
 								</S.ProjectLineWrapper>
 							</S.ProjectLinesWrapper>

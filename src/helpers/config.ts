@@ -1312,5 +1312,5 @@ export const NAV_REDIRECTS: { path: string; label: string; target?: '_blank' }[]
 	{ path: REDIRECTS.discord, label: 'Discord' },
 	{ path: REDIRECTS.x, label: 'X' },
 	{ path: REDIRECTS.github, label: 'GitHub' },
-	// { path: URLS.policies, label: 'Policies' },
+	{ path: URLS.policies, label: 'Policies' },
 ];

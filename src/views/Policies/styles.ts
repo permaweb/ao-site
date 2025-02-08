@@ -45,6 +45,10 @@ export const Wrapper = styled.div`
 		font-size: calc(clamp(28px, 2.75vw, 36px) * 0.4);
 	}
 
+	ol {
+		list-style: normal;
+	}
+
 	a,
 	p,
 	li {
@@ -65,6 +69,7 @@ export const Wrapper = styled.div`
 		}
 	}
 
+	ol,
 	ul {
 		display: flex;
 		flex-direction: column;

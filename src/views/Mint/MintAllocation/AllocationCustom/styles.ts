@@ -180,7 +180,7 @@ export const ProjectIndex = styled.div<{ active: boolean }>`
 export const ProjectBody = styled.div``;
 
 export const ProjectShortDescription = styled.div`
-	height: 50px;
+	height: 60px;
 	p {
 		height: 100%;
 		white-space: normal;
@@ -200,7 +200,7 @@ export const ProjectLongDescription = styled.div`
 		overflow: hidden;
 		line-height: 1.5;
 		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-size: ${(props) => props.theme.typography.size.small};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 		text-align: left;
