@@ -25,14 +25,10 @@ export const WalletListItem = styled.button`
 	justify-content: center;
 	text-align: center;
 	padding: 15px;
+	gap: 8.5px;
 	background: ${(props) => props.theme.colors.container.primary.background};
 	border: 1px solid ${(props) => props.theme.colors.border.alt1} !important;
 	border-radius: ${STYLING.dimensions.radius.alt1};
-	img {
-		width: 30px;
-		border-radius: 50%;
-		margin: 0 0 10px 0;
-	}
 	span {
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.small};
@@ -48,6 +44,16 @@ export const WalletListItem = styled.button`
 		width: calc(100% - 40px);
 		margin: auto;
 		padding: 25px 15px;
+	}
+`;
+
+export const WalletItemImageWrapper = styled.div`
+	min-height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	img {
+		width: 30px;
 	}
 `;
 

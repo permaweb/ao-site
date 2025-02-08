@@ -29,7 +29,7 @@ export default function Header() {
 
 	return (
 		<>
-			<S.Wrapper>
+			<S.Wrapper id={'site-header'}>
 				<S.Content className={'max-view-wrapper fade-in'}>
 					<S.SectionStart>
 						<S.LogoWrapper>

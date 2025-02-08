@@ -243,6 +243,22 @@ export const GlobalStyle = createGlobalStyle`
 	.fade-in {
 		animation: ${open} ${transition2};
 	}
+
+	#site-header.landing-view {
+		background: transparent !important;
+	}
+
+	#site-header.landing-view::before {
+		content: '';
+		position: absolute;
+		top: -5px;
+		left: 0;
+		width: 100%;
+		height: calc(100% + 5px);
+		background: ${(props) => props.theme.colors.view.background};
+		z-index: -1;
+		filter: blur(15px);
+	}
 `;
 
 export const View = styled.main`

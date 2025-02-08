@@ -49,7 +49,6 @@ export function useAllocationProvider(): AllocationContextState {
 	return context;
 }
 
-// TODO: Select projects by default if allocated
 export function AllocationProvider(props: { children: React.ReactNode }) {
 	const arProvider = useArweaveProvider();
 	const languageProvider = useLanguageProvider();

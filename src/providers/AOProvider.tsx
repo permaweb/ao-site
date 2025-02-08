@@ -20,18 +20,18 @@ enum AONetworkStatus {
 }
 
 interface AOContextState {
+	users: number | null;
 	messages: number | null;
 	processes: number | null;
-	nodes: string | null;
 	phase: AOPhase | null;
 	status: AONetworkStatus | null;
 	mintedSupply: number | null;
 }
 
 const DEFAULT_CONTEXT = {
+	users: null,
 	messages: null,
 	processes: null,
-	nodes: null,
 	phase: null,
 	status: null,
 	mintedSupply: null,
@@ -43,9 +43,9 @@ export function useAOProvider(): AOContextState {
 	return React.useContext(AOContext);
 }
 
-// TODO: Nodes
 export function AOProvider(props: { children: React.ReactNode }) {
 	const [mintedSupply, setMintedSupply] = React.useState<number | null>(null);
+	const [users, setUsers] = React.useState<number | null>(null);
 	const [messages, setMessages] = React.useState<number | null>(null);
 	const [processes, setProcesses] = React.useState<number | null>(null);
 
@@ -65,6 +65,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 			try {
 				const networkStats = await getNetworkStats();
 
+				setUsers(networkStats?.[networkStats?.length - 1]?.active_users);
 				setMessages(networkStats?.[networkStats?.length - 1]?.tx_count_rolling);
 				setProcesses(networkStats?.[networkStats?.length - 1]?.processes_rolling);
 			} catch (e: any) {
@@ -137,9 +138,9 @@ export function AOProvider(props: { children: React.ReactNode }) {
 	return (
 		<AOContext.Provider
 			value={{
+				users: users,
 				messages: messages,
 				processes: processes,
-				nodes: '144',
 				phase: AOPhase.MainnetEarly,
 				status: AONetworkStatus.Live,
 				mintedSupply: mintedSupply,

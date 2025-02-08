@@ -23,6 +23,7 @@ export const GraphicWrapper = styled.div`
 		top: ${STYLING.dimensions.nav.height};
 		left: 0;
 		z-index: 2;
+		opacity: 0.85;
 	}
 `;
 
@@ -197,7 +198,7 @@ export const LinksWrapper = styled.div`
 	align-items: center;
 	gap: 28.5px;
 	position: relative;
-	padding: 20px 20px 0px 20px;
+	padding: 20px 20px 16.5px 20px;
 
 	&:before {
 		content: '';

@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 40px;
-	padding: 10px 0 40px 0;
+	padding: 10px 0 35px 0;
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		padding: 0 0 40px 0;
@@ -183,6 +183,10 @@ export const Metrics = styled.div`
 		background: ${(props) => props.theme.colors.view.background};
 		z-index: -1;
 		filter: blur(5px);
+	}
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		position: relative;
 	}
 `;
 

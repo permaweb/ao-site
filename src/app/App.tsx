@@ -12,9 +12,9 @@ import * as S from './styles';
 export default function App() {
 	const [loading, setLoading] = React.useState<boolean>(true);
 
-	// React.useEffect(() => {
-	// 	AsciiArt();
-	// }, []);
+	React.useEffect(() => {
+		AsciiArt();
+	}, []);
 
 	React.useEffect(() => {
 		preloadAssets().then(() => setLoading(false));

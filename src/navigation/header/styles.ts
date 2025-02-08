@@ -7,7 +7,7 @@ export const Wrapper = styled.header`
 	height: ${STYLING.dimensions.nav.height};
 	width: 100%;
 	position: sticky;
-	z-index: 2;
+	z-index: 4;
 	top: 0;
 	background: ${(props) => props.theme.colors.view.background};
 `;
@@ -29,13 +29,13 @@ export const SectionStart = styled.div`
 `;
 
 export const LogoWrapper = styled.div`
-	height: 27.5px;
-	width: 27.5px;
+	height: 28.5px;
+	width: 28.5px;
 	animation: ${open} ${transition2};
 
 	svg {
-		height: 27.5px;
-		width: 27.5px;
+		height: 28.5px;
+		width: 28.5px;
 		margin: 2.25px 0 0 0;
 		path {
 			fill: ${(props) => props.theme.colors.icon.primary.fill};

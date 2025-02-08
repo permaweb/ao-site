@@ -1,8 +1,9 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { HyperTextLoad } from 'components/atoms/HyperTextLoad';
-import { ASSETS, NAV_REDIRECTS, REDIRECTS, URLS } from 'helpers/config';
+import { ASSETS, NAV_REDIRECTS } from 'helpers/config';
 import { formatCount } from 'helpers/utils';
 import { useAOProvider } from 'providers/AOProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -16,6 +17,19 @@ export default function Landing() {
 	const ethProvider = useEthereumProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
+
+	React.useEffect(() => {
+		const header = document.getElementById('site-header');
+		console.log(header);
+		if (header) {
+			header.classList.add('landing-view');
+		}
+		return () => {
+			if (header) {
+				header.classList.remove('landing-view');
+			}
+		};
+	}, []);
 
 	return (
 		<>
@@ -59,9 +73,9 @@ export default function Landing() {
 					</S.LinksWrapper>
 					<S.MetricsSection className={'fade-in'}>
 						<S.MetricsLine>
-							<span className={'primary-text'}>{language.nodes}</span>
+							<span className={'primary-text'}>{language.users}</span>
 							<S.MetricsValue>
-								<p>{formatCount(aoProvider.nodes)}</p>
+								<p>{aoProvider.users ? formatCount(aoProvider.users.toString()) : <EllipsisLoader />}</p>
 							</S.MetricsValue>
 						</S.MetricsLine>
 						<S.MetricsLine>

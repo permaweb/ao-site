@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
+import { dryrun } from '@permaweb/aoconnect';
+
 import { Button } from 'components/atoms/Button';
 import { Panel } from 'components/atoms/Panel';
-// import { dryrun } from '@permaweb/aoconnect';
 import { AO, ASSETS, ENDPOINTS } from 'helpers/config';
 import { AllocationRecordType } from 'helpers/types';
-import { checkValidAddress, formatAddress, formatDate, getTagValue } from 'helpers/utils';
+import { checkValidAddress, formatAddress, formatDate } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
@@ -18,66 +19,64 @@ export default function AllocationCustom() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
-	const PROJECT_1 = {
-		decay_factor: 0.5,
-		flp_token: 'k3K6_wPHkyYLrZEfeIBvbzW3ne6X7jCgzikBkQcXOO8',
-		status: 'AwaitingInitialDeposit',
-		flp_id: '5sGEKUtMTmzd7Et5BAaBjRibTHwfc3_lqiXa8XXhxuk',
-		flp_ticker: 'PIXL',
-		token_supply_to_use: '10000000000000000000',
-		withdrawn_qty: '0',
-		flp_name: 'Bazar',
-		id: '5sGEKUtMTmzd7Et5BAaBjRibTHwfc3_lqiXa8XXhxuk',
-		ends_at_ts: 1739636493818,
-		stats_updated_at: 1738772983923,
-		initializer: 'P6i7xXWuZtuKJVJYNwEqduj0s8R_G4wZJ38TB5Knpy4',
-		accumulated_qty: '0',
-		starts_at_ts: 1738858893818,
-		treasury: 'P6i7xXWuZtuKJVJYNwEqduj0s8R_G4wZJ38TB5Knpy4',
-		created_at_ts: 1738772983923,
-		last_updated_at_ts: 1738772983923,
-		distributed_qty: '0',
-		total_token_supply: '"1000000000000000000000000000"',
-		deployer: 'P6i7xXWuZtuKJVJYNwEqduj0s8R_G4wZJ38TB5Knpy4',
-		// ADDED_FIELDS
-		token_denomination: 12,
-		short_description: 'Atomic Asset Marketplace',
-		long_description: `Explore a dynamic atomic asset marketplace where you can discover unique digital assets. Engage with a community of creators and collectors, and trade with confidence knowing each transaction is secure and transparent. Whether you're a seasoned trader or new to the world of digital assets, our platform offers the tools and resources you need to succeed.`,
-		disclaimer: `PI/AO not available in Restricted Jurisdictions. It is your obligation to ensure your acquisition of PI/AO does not violate applicable laws in your jurisdiction.`,
-		logo: 'k3Wh9FznFjK_Yb2qiIMoxvLFUQruo4oM24mM4ZY3diY',
-		website: 'https://bazar.arweave.net',
-		links: {
-			x: 'https://x.com/OurBazAR',
-			discord: 'https://discord.com/invite/weavers',
-			github: 'https://github.com/permaweb/bazar',
-		},
-	};
+	// const PROJECT_1 = {
+	// 	decay_factor: 0.5,
+	// 	flp_token: 'k3K6_wPHkyYLrZEfeIBvbzW3ne6X7jCgzikBkQcXOO8',
+	// 	status: 'AwaitingInitialDeposit',
+	// 	flp_id: '5sGEKUtMTmzd7Et5BAaBjRibTHwfc3_lqiXa8XXhxuk',
+	// 	flp_ticker: 'PIXL',
+	// 	token_supply_to_use: '10000000000000000000',
+	// 	withdrawn_qty: '0',
+	// 	flp_name: 'Bazar',
+	// 	id: '5sGEKUtMTmzd7Et5BAaBjRibTHwfc3_lqiXa8XXhxuk',
+	// 	ends_at_ts: 1739636493818,
+	// 	stats_updated_at: 1738772983923,
+	// 	initializer: 'P6i7xXWuZtuKJVJYNwEqduj0s8R_G4wZJ38TB5Knpy4',
+	// 	accumulated_qty: '0',
+	// 	starts_at_ts: 1738858893818,
+	// 	treasury: 'P6i7xXWuZtuKJVJYNwEqduj0s8R_G4wZJ38TB5Knpy4',
+	// 	created_at_ts: 1738772983923,
+	// 	last_updated_at_ts: 1738772983923,
+	// 	distributed_qty: '0',
+	// 	total_token_supply: '"1000000000000000000000000000"',
+	// 	deployer: 'P6i7xXWuZtuKJVJYNwEqduj0s8R_G4wZJ38TB5Knpy4',
+	// 	// ADDED_FIELDS
+	// 	token_denomination: 12,
+	// 	short_description: 'Atomic Asset Marketplace',
+	// 	long_description: `Explore a dynamic atomic asset marketplace where you can discover unique digital assets. Engage with a community of creators and collectors, and trade with confidence knowing each transaction is secure and transparent. Whether you're a seasoned trader or new to the world of digital assets, our platform offers the tools and resources you need to succeed.`,
+	// 	disclaimer: `PI/AO not available in Restricted Jurisdictions. It is your obligation to ensure your acquisition of PI/AO does not violate applicable laws in your jurisdiction.`,
+	// 	logo: 'k3Wh9FznFjK_Yb2qiIMoxvLFUQruo4oM24mM4ZY3diY',
+	// 	website: 'https://bazar.arweave.net',
+	// 	links: {
+	// 		x: 'https://x.com/OurBazAR',
+	// 		discord: 'https://discord.com/invite/weavers',
+	// 		github: 'https://github.com/permaweb/bazar',
+	// 	},
+	// };
 
-	const [projects, setProjects] = React.useState<any[] | null>([PROJECT_1]);
+	const [projects, setProjects] = React.useState<any[] | null>(null);
 	const [selectedProjects, setSelectedProjects] = React.useState<any[]>([]);
 	const [activeProject, setActiveProject] = React.useState<any | null>(null);
 	const [copied, setCopied] = React.useState<boolean>(false);
 
-	// TODO
-	// React.useEffect(() => {
-	// 	(async function () {
-	// 		try {
-	// 			const response = await dryrun({
-	// 				process: AO.flpFactory,
-	// 				tags: [{ name: 'Action', value: 'Get-FLPs' }]
-	// 			});
+	React.useEffect(() => {
+		(async function () {
+			try {
+				const response = await dryrun({
+					process: AO.flpFactory,
+					tags: [{ name: 'Action', value: 'Get-FLPs' }],
+				});
 
-	// 			if (response?.Messages?.[0]?.Data) {
-	// 				setProjects(JSON.parse(response.Messages[0].Data));
-	// 			}
+				if (response?.Messages?.[0]?.Data) {
+					setProjects(JSON.parse(response.Messages[0].Data));
+				}
 
-	// 			console.log(response);
-	// 		}
-	// 		catch (e: any) {
-	// 			setProjects([])
-	// 		}
-	// 	})();
-	// }, []);
+				console.log(response);
+			} catch (e: any) {
+				setProjects([]);
+			}
+		})();
+	}, []);
 
 	React.useEffect(() => {
 		if (!projects || !allocationProvider.records) return;

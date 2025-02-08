@@ -70,6 +70,7 @@ export const ASSETS = {
 	token: getTxEndpoint('f18VARM42GRSDY8UzZtEJrCsakbxluldOAnnED_V_Zk'),
 	view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
 	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
+	wander: getTxEndpoint('0nDLgQik8oWPr0nSVEwI9B8D-XMEptQagNdsdr_y6Jk'),
 	warning: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
 	website: getTxEndpoint('YBilSmUhX--T9vffUIDsCCrWoakxaxPqPVw7NCZNNVs'),
 	withdraw: getTxEndpoint('QOJLKefBz2xCPUbO8dEKB22aWv_zdQ6FYA_UWUriyJw'),
@@ -78,7 +79,7 @@ export const ASSETS = {
 };
 
 export const AR_WALLETS = [
-	{ type: ArWalletEnum.arConnect, logo: ASSETS.arconnect },
+	{ type: ArWalletEnum.wander, logo: ASSETS.wander },
 	{ type: ArWalletEnum.othent, logo: ASSETS.othent },
 	{ type: ArWalletEnum.arweaveApp, logo: ASSETS.arweaveApp },
 ];
@@ -1265,6 +1266,7 @@ export const REDIRECTS = {
 	github: `https://github.com/permaweb/ao`,
 	discord: `https://discord.gg/dYXtHwc9dc`,
 	stethMinting: `https://stake.lido.fi/`,
+	wander: `https://www.wander.app/`,
 	stethConversion: `https://matcha.xyz/tokens/ethereum/eth?buyChain=1&buyAddress=0xae7ab96520de3a18e5e111b5eaab095312d7fe84`,
 	tokenomics: `https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ`,
 	ipBlock: `https://www.standwithcrypto.org/action/call?action=call-your-representative`,
@@ -1307,8 +1309,8 @@ export const ETH_EXCHANGE_REDIRECTS = {
 };
 
 export const NAV_REDIRECTS: { path: string; label: string; target?: '_blank' }[] = [
+	{ path: REDIRECTS.discord, label: 'Discord' },
 	{ path: REDIRECTS.x, label: 'X' },
 	{ path: REDIRECTS.github, label: 'GitHub' },
-	{ path: REDIRECTS.discord, label: 'Discord' },
 	// { path: URLS.policies, label: 'Policies' },
 ];

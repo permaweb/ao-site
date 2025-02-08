@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { fadeIn1, open } from 'helpers/animations';
+import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div<{ top: number; noHeader: boolean }>`
 	min-height: 100vh;
@@ -21,6 +22,7 @@ export const Container = styled.div<{
 	max-width: ${(props) => (props.noHeader ? '100%' : '90vw')};
 	background: ${(props) => (props.noHeader ? 'transparent' : props.theme.colors.container.primary.background)};
 	margin: 20px auto;
+	border-radius: ${STYLING.dimensions.radius.alt1};
 `;
 
 export const Header = styled.div`
