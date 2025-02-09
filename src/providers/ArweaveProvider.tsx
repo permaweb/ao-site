@@ -132,7 +132,7 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 			if (walletAddress) {
 				try {
 					const tokenBalance = await readHandler({
-						processId: AO.tokenMirror,
+						processId: AO.token,
 						action: 'Balance',
 						tags: [{ name: 'Recipient', value: walletAddress }],
 					});
