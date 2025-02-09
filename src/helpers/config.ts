@@ -1,7 +1,7 @@
 import { ArWalletEnum } from './types';
 
 export const AO = {
-	token: 'm3PaWzK4PTG9lAaqYQPaPdOcXdO8hYqi5Fe9NWqXd0w',
+	token: '0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc',
 	tokenMirror: 'ptCu-Un-3FF8sZ5zNMYg43zRgSYAGVkjz2Lb0HZmx2M',
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
