@@ -62,7 +62,7 @@ export const ASSETS = {
 	landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),
 	link: getTxEndpoint('UMfjnj-8e7fb3lYRdcFygu8c4JoBZq3hB-mzycYT4DU'),
 	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
-	pi: getTxEndpoint('n1AM_4usUnh6zj8GzdQDu1KkvC5XFlBLk7sKXgNHtos'),
+	pi: getTxEndpoint('fGTu1CGT6TAz6Uj55CPkpJRy_whPKRZH6OFFpVHWOS0'),
 	plus: getTxEndpoint('OUryhpUV-y709P_Tr575rN8gS-8c5rzlKXNymR9gsE4'),
 	remove: getTxEndpoint('aKjWuVXkSeYOKzGP0MnnhHwoYUXqTHFMJfVCbqzYEo0'),
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
