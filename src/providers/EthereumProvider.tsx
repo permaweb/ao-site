@@ -207,13 +207,16 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				const ethUsdPriceData = await ethUsdFeed.methods.latestRoundData().call();
 				const daiUsdPriceData = await daiUsdFeed.methods.latestRoundData().call();
 
-				const ethUsdPrice = (ethUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
-				const daiUsdPrice = (daiUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
+				console.log(daiUsdPriceData);
 
-				console.log('ethUsdPrice');
-				console.log(ethUsdPrice);
-				console.log('daiUsdPrice');
-				console.log(daiUsdPrice);
+				const ethUsdPrice = (ethUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
+				// const daiUsdPrice = (daiUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
+				const daiUsdPrice = 1;
+
+				// console.log('ethUsdPrice');
+				// console.log(ethUsdPrice);
+				// console.log('daiUsdPrice');
+				// console.log(daiUsdPrice);
 
 				const usdStEthValue = BigInt(Math.floor(totalStEthDeposited)) * BigInt(ethUsdPrice);
 				const usdDaiValue = BigInt(Math.floor(totalDaiDeposited)) * BigInt(daiUsdPrice);
