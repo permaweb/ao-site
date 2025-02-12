@@ -8,13 +8,7 @@ import torusModule from '@web3-onboard/torus';
 import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
-import { hashMessage, recoverPublicKey, toBytes } from 'viem';
-import { Config, useConfig } from 'wagmi';
-import { getAccount, signMessage } from 'wagmi/actions';
 import Web3 from 'web3';
-
-import { createData, EthereumSigner, InjectedEthereumSigner } from '@dha-team/arbundles';
-import { connect } from '@permaweb/aoconnect';
 
 import { readHandler } from 'api';
 
@@ -216,9 +210,21 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				const ethUsdPrice = (ethUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
 				const daiUsdPrice = (daiUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
 
+				console.log('ethUsdPrice');
+				console.log(ethUsdPrice);
+				console.log('daiUsdPrice');
+				console.log(daiUsdPrice);
+
 				const usdStEthValue = BigInt(Math.floor(totalStEthDeposited)) * BigInt(ethUsdPrice);
 				const usdDaiValue = BigInt(Math.floor(totalDaiDeposited)) * BigInt(daiUsdPrice);
 				const usdTotal = usdStEthValue + usdDaiValue;
+
+				// console.log('usdStEthValue')
+				// console.log(usdStEthValue)
+				// console.log('usdDaiValue')
+				// console.log(usdDaiValue)
+				// console.log('usdTotal')
+				// console.log(usdTotal)
 
 				setTotalDeposited({
 					stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited.toFixed(2)) },
@@ -230,9 +236,6 @@ export function EthereumProvider(props: EthereumProviderProps) {
 			}
 		})();
 	}, []);
-
-	// const AO_MINT = 'LPK-D_3gZkXtia6ywwU1wRwgFOZ-eLFRMP9pfAFRfuw';
-	// const config = useConfig();
 
 	// async function sendMessage(msg, key) {
 	// 	function createDataItemSigner(wallet) {

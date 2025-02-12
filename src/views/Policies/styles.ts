@@ -74,6 +74,7 @@ export const Wrapper = styled.div`
 		display: flex;
 		flex-direction: column;
 		gap: 25px;
+		padding: 0 0 0 15px;
 	}
 
 	img {
