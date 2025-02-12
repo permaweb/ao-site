@@ -38,6 +38,8 @@ export const lightTheme = {
 	dark2: '#333333',
 	link1: '#23BE30',
 	link2: '#27D735',
+	chart1: '#C78135',
+	chart2: '#FBF5EE',
 	stats: {
 		primary: '#ddece7',
 		alt1: '#e8eae6',
@@ -116,6 +118,10 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 					color: currentTheme.neutral7,
 				},
 			},
+		},
+		chart: {
+			primary: currentTheme.chart1,
+			background: currentTheme.chart2,
 		},
 		checkbox: {
 			active: {

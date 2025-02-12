@@ -1,7 +1,7 @@
 import React from 'react';
 import { cacheExchange, Client, fetchExchange, gql } from 'urql';
 
-import { readHandler } from 'api';
+import { dryrun } from '@permaweb/aoconnect';
 
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 
@@ -50,18 +50,52 @@ export function AOProvider(props: { children: React.ReactNode }) {
 	const [processes, setProcesses] = React.useState<number | null>(null);
 
 	React.useEffect(() => {
+		const CACHE_KEY = 'mintedSupply';
+		const TIMESTAMP_KEY = 'mintedSupplyTimestamp';
+		const CACHE_DURATION = 24 * 60 * 60 * 1000;
+
+		const cachedValue = localStorage.getItem(CACHE_KEY);
+		const cachedTimestamp = localStorage.getItem(TIMESTAMP_KEY);
+		const now = Date.now();
+
+		if (cachedValue && cachedTimestamp && now - parseInt(cachedTimestamp, 10) < CACHE_DURATION) {
+			setMintedSupply(Number(cachedValue));
+			return;
+		}
+
 		(async function () {
 			try {
-				const aoSupplyFetch = await readHandler({
-					processId: AO.tokenMirror,
-					action: 'Minted-Supply',
+				const res = await dryrun({
+					process: AO.token,
+					Owner: 'geZphdOvGxzLyPbZgLgrADGHBVAZaidotlZkvIAQiYg',
+					tags: [{ name: 'Action', value: 'Eval' }],
+					data: `
+				local bint = require('.bint')(256)
+				local function add(a,b) return bint(a) + bint(b) end
+				print(tostring(
+				  Utils.reduce(add, 0, Utils.values(Balances))
+				))
+			  `,
 				});
 
-				if (aoSupplyFetch) setMintedSupply(aoSupplyFetch / AO_TOKEN_DENOMINATION);
-			} catch (e: any) {
-				console.error(e);
-			}
+				if (res.Error) {
+					console.log(res.Error);
+					return;
+				}
 
+				const value = res.Output.data / AO_TOKEN_DENOMINATION;
+				setMintedSupply(value);
+
+				localStorage.setItem(CACHE_KEY, value.toString());
+				localStorage.setItem(TIMESTAMP_KEY, now.toString());
+			} catch (error) {
+				console.error('Error during dryrun:', error);
+			}
+		})();
+	}, []);
+
+	React.useEffect(() => {
+		(async function () {
 			try {
 				const networkStats = await getNetworkStats();
 
