@@ -1,6 +1,6 @@
+import parse from 'html-react-parser';
 import React from 'react';
 import { ReactSVG } from 'react-svg';
-import parse from 'html-react-parser';
 
 import { Button } from 'components/atoms/Button';
 import { ASSETS } from 'helpers/config';

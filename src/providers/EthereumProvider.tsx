@@ -1,4 +1,3 @@
-import React from 'react';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatEther } from '@ethersproject/units';
 import coinbaseWalletModule from '@web3-onboard/coinbase';
@@ -8,9 +7,9 @@ import torusModule from '@web3-onboard/torus';
 import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
-import Web3 from 'web3';
-
 import { readHandler } from 'api';
+import React from 'react';
+import Web3 from 'web3';
 
 import {
 	AO,
@@ -202,12 +201,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				if (isNaN(totalDaiDeposited)) throw new Error('Invalid totalDaiDeposited');
 
 				const ethUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.ethUsdPriceFeed);
-				const daiUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.daiUsdPriceFeed);
+				// const daiUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.daiUsdPriceFeed);
 
 				const ethUsdPriceData = await ethUsdFeed.methods.latestRoundData().call();
-				const daiUsdPriceData = await daiUsdFeed.methods.latestRoundData().call();
-
-				console.log(daiUsdPriceData);
+				// const daiUsdPriceData = await daiUsdFeed.methods.latestRoundData().call();
 
 				const ethUsdPrice = (ethUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
 				// const daiUsdPrice = (daiUsdPriceData as any).answer / BigInt(Math.pow(10, 8));

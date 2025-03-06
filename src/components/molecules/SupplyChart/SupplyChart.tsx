@@ -1,5 +1,3 @@
-import React from 'react';
-import { Line } from 'react-chartjs-2';
 import {
 	CategoryScale,
 	Chart as ChartJS,
@@ -11,6 +9,8 @@ import {
 	Title,
 	Tooltip,
 } from 'chart.js';
+import React from 'react';
+import { Line } from 'react-chartjs-2';
 import { useTheme } from 'styled-components';
 
 import { useAOProvider } from 'providers/AOProvider';

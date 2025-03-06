@@ -1,6 +1,6 @@
+import parse from 'html-react-parser';
 import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
-import parse from 'html-react-parser';
 
 import { ASSETS, ETH_EXCHANGE_CONFIG, ETH_EXCHANGE_REDIRECTS } from 'helpers/config';
 import { TokenEarningsType } from 'helpers/types';

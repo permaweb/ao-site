@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
+import { Link } from 'react-router-dom';
 
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { HyperTextLoad } from 'components/atoms/HyperTextLoad';

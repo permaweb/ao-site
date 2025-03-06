@@ -1,7 +1,7 @@
+import parse from 'html-react-parser';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
-import parse from 'html-react-parser';
 
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Modal } from 'components/molecules/Modal';

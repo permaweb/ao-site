@@ -1,8 +1,6 @@
-import React from 'react';
-
 import { ArweaveWebWallet } from 'arweave-wallet-connector';
-
 import { readHandler } from 'api';
+import React from 'react';
 
 import { Modal } from 'components/molecules/Modal';
 import {
@@ -147,7 +145,7 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 
 	React.useEffect(() => {
 		(async function () {
-			if (walletAddress && balance && aoProvider.mintedSupply) {
+			if (walletAddress && balance !== null && aoProvider.mintedSupply) {
 				try {
 					let arBalance = Number(balance);
 					let arSupply = 66000000;
