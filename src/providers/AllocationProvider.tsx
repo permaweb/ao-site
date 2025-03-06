@@ -1,5 +1,5 @@
-import React from 'react';
 import _ from 'lodash';
+import React from 'react';
 
 import { createDataItemSigner, dryrun, message, result } from '@permaweb/aoconnect';
 

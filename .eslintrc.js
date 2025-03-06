@@ -1,6 +1,6 @@
 module.exports = {
 	parser: '@typescript-eslint/parser',
-	plugins: ['import', '@typescript-eslint', 'simple-import-sort', 'react-hooks'],
+	plugins: ['import', '@typescript-eslint', 'simple-import-sort'],
 	extends: [],
 	rules: {
 		'import/no-duplicates': 'error',
@@ -15,20 +15,8 @@ module.exports = {
 					'error',
 					{
 						groups: [
-							['^react', '^@?\\w'],
-							[
-								'^arweave',
-								'arbundles',
-								'@irys/sdk',
-								'^warp',
-								'^permaweb-orderbook',
-								'^permaweb-sdk',
-								'^@permaweb/aoconnect',
-								'^@permaweb/libs',
-								'^@permaweb/stampjs',
-								'^@?\\w',
-							],
-							['^(@|api)(/.*|$)', '^(@|gql)(/.*|$)'],
+							['^arweave', '^@permaweb/libs', '^@?\\w'],
+							['^@permaweb/arx', '^@permaweb/aoconnect', '^@permaweb/libs', '^@?\\w'],
 							[
 								'^(@|app)(/.*|$)',
 								'^(@|assets)(/.*|$)',
@@ -55,7 +43,6 @@ module.exports = {
 						],
 					},
 				],
-				'react-hooks/exhaustive-deps': 'off',
 			},
 		},
 	],

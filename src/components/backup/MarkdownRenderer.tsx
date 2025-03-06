@@ -1,6 +1,6 @@
+import Prism from 'prismjs';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import Prism from 'prismjs';
 import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import remarkCodeBlocks from 'remark-code-blocks';

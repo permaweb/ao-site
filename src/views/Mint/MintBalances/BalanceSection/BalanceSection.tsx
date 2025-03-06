@@ -179,10 +179,10 @@ export default function BalanceSection(props: IProps) {
 		if (!token.wallet?.provider?.walletAddress) return '-';
 		switch (props.type) {
 			case 'ao':
-				if (token.wallet?.provider?.aoBalance) return formatDisplayAmount(token.wallet.provider.aoBalance);
+				if (token.wallet?.provider?.aoBalance !== null) return formatDisplayAmount(token.wallet.provider.aoBalance);
 				return <EllipsisLoader />;
 			case 'arweave':
-				if (token.wallet?.provider?.balance) return formatDisplayAmount(token.wallet.provider.balance);
+				if (token.wallet?.provider?.balance !== null) return formatDisplayAmount(token.wallet.provider.balance);
 				return <EllipsisLoader />;
 			case EthTokenEnum.StEth:
 			case EthTokenEnum.DAI:
