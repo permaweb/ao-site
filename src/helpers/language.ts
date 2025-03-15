@@ -13,7 +13,7 @@ export const language = {
 		ar: `AR`,
 		arDescription: `The Harddrive`,
 		arLabel: `Arweave`,
-		arSummary: `Turn your AO yield into Arweave. Your AO yield will return you back AR tokens for permanant date storage use.`,
+		arSummary: `Turn your AO yield into Arweave. Your AO yield will return you back AR tokens for permanant data storage use.`,
 		arweaveAddress: `Arweave Address`,
 		backToMint: `Back to Mint`,
 		balance: `Balance`,
