@@ -3,21 +3,24 @@ import React from 'react';
 import { ReactSVG } from 'react-svg';
 
 import { Button } from 'components/atoms/Button';
-import { ASSETS } from 'helpers/config';
+import { AO, ASSETS } from 'helpers/config';
 import { AllocationRecordType, AllocationTokenType } from 'helpers/types';
 import { formatPercentage } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
+import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 import { IProps } from './types';
 
 export default function AllocationToken(props: IProps) {
+	const arProvider = useArweaveProvider();
 	const allocationProvider = useAllocationProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
 	const [token, setToken] = React.useState<{
+		id: string;
 		type: AllocationTokenType;
 		label: string;
 		description: string;
@@ -29,18 +32,21 @@ export default function AllocationToken(props: IProps) {
 
 	const TOKENS = {
 		arweave: {
+			id: null, // TODO
 			label: language.arLabel,
 			description: language.arDescription,
 			summary: language.arSummary,
 			icon: ASSETS.arweave,
 		},
 		pi: {
+			id: AO.piProcess,
 			label: language.piLabel,
 			description: language.piDescription,
 			summary: language.piSummary,
 			icon: ASSETS.pi,
 		},
 		ao: {
+			id: arProvider.walletAddress,
 			label: language.ao,
 			description: language.aoDescription,
 			summary: language.aoSummary,
@@ -62,29 +68,33 @@ export default function AllocationToken(props: IProps) {
 			default:
 				break;
 		}
-	}, [props.type]);
+	}, [props.type, arProvider.walletAddress]);
 
 	const currentAllocationRecord = allocationProvider.records?.find(
-		(record: AllocationRecordType) => record.id === token?.type
+		(record: AllocationRecordType) => record.id === token?.id
 	);
 
 	function getTokenAction() {
+		let label = token.label === 'Arweave' ? 'Coming soon!' : currentAllocationRecord ? language.remove : language.add;
+		let disabled =
+			token.label === 'Arweave' ? true : allocationProvider.isTokenDisabled({ id: token.id, label: token.label });
+
 		return (
 			<Button
 				type={currentAllocationRecord ? 'primary' : 'alt1'}
-				label={currentAllocationRecord ? language.remove : language.add}
+				label={label}
 				handlePress={() =>
 					currentAllocationRecord
 						? allocationProvider.removeToken({
-								id: token.type,
+								id: token.id,
 								label: token.label,
 						  })
 						: allocationProvider.addToken({
-								id: token.type,
+								id: token.id,
 								label: token.label,
 						  })
 				}
-				disabled={allocationProvider.isTokenDisabled({ id: token.type, label: token.label })}
+				disabled={disabled}
 				icon={currentAllocationRecord ? ASSETS.remove : ASSETS.add}
 				iconLeftAlign
 				height={65}

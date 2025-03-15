@@ -59,6 +59,7 @@ export default function MintAllocation() {
 						</S.TokenFlexWrapper>
 						<S.PrimaryTokensInfo className={'border-wrapper-alt1'}>
 							<span>{`· ${language.primaryTokensInfo}`}</span>
+							<span>{`· AR rewards are coming soon. Until they go live, any previous AR selection will be delegated to AO.`}</span>
 						</S.PrimaryTokensInfo>
 					</S.PrimaryTokens>
 					<AllocationCustom />
