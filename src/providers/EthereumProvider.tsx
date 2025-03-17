@@ -227,8 +227,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				// console.log(usdTotal)
 
 				setTotalDeposited({
-					stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited.toFixed(2)) },
-					dai: { value: totalDaiDeposited, display: formatDisplayAmount(totalDaiDeposited.toFixed(2)) },
+					stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited, 2) },
+					dai: { value: totalDaiDeposited, display: formatDisplayAmount(totalDaiDeposited, 2) },
 					usdTotal: { value: usdTotal, display: formatUSDAmount(usdTotal.toString()) },
 				});
 			} catch (e: any) {

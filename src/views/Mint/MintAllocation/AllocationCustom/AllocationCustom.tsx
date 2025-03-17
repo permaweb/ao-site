@@ -256,13 +256,11 @@ export default function AllocationCustom() {
 								<S.ProjectLineWrapper>
 									<S.ProjectInfoLine>
 										<span className={'primary-text'}>{language.startDate}</span>
-										<p>
-											{activeProject?.starts_at_ts ? formatDate(activeProject.starts_at_ts * 1000, 'dateString') : '-'}
-										</p>
+										<p>{activeProject?.starts_at_ts ? formatDate(activeProject.starts_at_ts, 'dateString') : 'None'}</p>
 									</S.ProjectInfoLine>
 									<S.ProjectInfoLine>
 										<span className={'primary-text'}>{language.endDate}</span>
-										<p>{activeProject?.ends_at_ts ? formatDate(activeProject.ends_at_ts * 1000, 'dateString') : '-'}</p>
+										<p>{activeProject?.ends_at_ts ? formatDate(activeProject.ends_at_ts, 'dateString') : 'None'}</p>
 									</S.ProjectInfoLine>
 								</S.ProjectLineWrapper>
 							</S.ProjectLinesWrapper>

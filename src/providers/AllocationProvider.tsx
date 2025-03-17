@@ -278,15 +278,14 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 
 	const isTokenDisabled = (token: AllocationRecordType) => {
 		const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
-
 		if (!existingRecord) return false;
-
 		if (records.length === 1) return true;
 	};
 
 	const savePreferences = async (initialSave?: boolean) => {
 		if (arProvider.walletAddress) {
 			setLoading(true);
+			setResponse(null);
 			try {
 				const messages = [];
 
@@ -319,6 +318,16 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 						return factorA - factorB;
 					});
 				} else messages.push(...records.map((record) => getMessage(record)));
+
+				/* Run pre-checks on factors */
+				for (const messageToSend of messages) {
+					const factor = JSON.parse(messageToSend.data).factor;
+					if (factor > 0 && factor < 500) {
+						setResponse({ status: 'warning', message: language.allocationTooLow });
+						setLoading(false);
+						return;
+					}
+				}
 
 				for (const messageToSend of messages) {
 					console.log(messageToSend);

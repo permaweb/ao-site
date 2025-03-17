@@ -13,24 +13,36 @@ export function formatRequiredField(field: string) {
 	return `${field} *`;
 }
 
-export function formatDisplayAmount(amount: number | string | null) {
+export function formatDisplayAmount(amount: number | string | null, fixed?: number) {
 	if (amount === null) return '-';
-	if (amount.toString().includes('.')) {
-		let parts = amount.toString().split('.');
-		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-		let firstTwoDecimals = parts[1].substring(0, 2);
+	let num = typeof amount === 'string' ? parseFloat(amount) : amount;
+	if (isNaN(num)) return '-';
 
-		if (firstTwoDecimals === '00') {
-			parts[1] = parts[1].substring(0, 6);
-		} else {
-			parts[1] = parts[1].substring(0, 4);
-		}
-
-		return parts.join('.');
+	let formatted: string;
+	if (typeof fixed === 'number') {
+		// Use toFixed with the given precision, then convert back to a number
+		// to remove any trailing zeros.
+		formatted = Number(num.toFixed(fixed)).toString();
 	} else {
-		return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		// Fallback: use the original logic when no fixed argument is provided.
+		formatted = num.toFixed(10).replace(/\.?0+$/, '');
+		let [integerPart, decimalPart] = formatted.split('.');
+		integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		if (decimalPart) {
+			if (decimalPart.startsWith('00')) {
+				decimalPart = decimalPart.substring(0, 6);
+			} else {
+				decimalPart = decimalPart.substring(0, 4);
+			}
+			return decimalPart ? `${integerPart}.${decimalPart}` : integerPart;
+		}
+		return integerPart;
 	}
+
+	let [integerPart, decimalPart] = formatted.split('.');
+	integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	return decimalPart ? `${integerPart}.${decimalPart}` : integerPart;
 }
 
 export function formatDate(dateArg: string | number | null, dateType: 'dateString' | 'timestamp', fullTime?: boolean) {

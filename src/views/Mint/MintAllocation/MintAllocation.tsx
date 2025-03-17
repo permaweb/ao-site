@@ -41,7 +41,7 @@ export default function MintAllocation() {
 
 	function getView() {
 		if (!arProvder.walletAddress) return <WalletBlock />;
-		if (allocationProvider.records.length <= 0 && allocationProvider.fetchingSetup)
+		if ((allocationProvider.records.length <= 0 && allocationProvider.fetchingSetup) || !allocationProvider.projects)
 			return <Loader message={`${language.gettingPreferences}...`} />;
 		if (allocationProvider.showSetup) return <AllocationSetup />;
 		return (

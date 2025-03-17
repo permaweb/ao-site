@@ -4,6 +4,7 @@ export const language = {
 		all: `All`,
 		allocation: `Allocation`,
 		allocationSummaryDescription: `Below represents how you are currently allocating your AO Yield.`,
+		allocationTooLow: `Allocations must be greater than 5%`,
 		amountDeposited: `Amount Deposited`,
 		ao: `AO`,
 		aoAudit: `AO Specific Audits`,
