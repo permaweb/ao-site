@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button } from 'components/atoms/Button';
+import { AO } from 'helpers/config';
 import { scrollTo } from 'helpers/window';
 import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
@@ -25,8 +26,20 @@ export default function AllocationSetup() {
 	}
 
 	function handleSelect(id: 'pi' | 'ao') {
-		allocationProvider.addFullToken({ id: id, label: language[id] });
-		setActiveAction(id);
+		if (arProvider.walletAddress) {
+			let recipient: string;
+			switch (id) {
+				case 'pi':
+					recipient = AO.piProcess;
+					break;
+				case 'ao':
+					recipient = arProvider.walletAddress;
+					break;
+			}
+
+			allocationProvider.addFullToken({ id: recipient, label: language[id] });
+			setActiveAction(id);
+		}
 	}
 
 	function getAction() {

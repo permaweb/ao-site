@@ -2,11 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
-import { dryrun } from '@permaweb/aoconnect';
-
 import { Button } from 'components/atoms/Button';
 import { Panel } from 'components/atoms/Panel';
-import { AO, ASSETS, ENDPOINTS } from 'helpers/config';
+import { ASSETS, ENDPOINTS } from 'helpers/config';
 import { AllocationRecordType } from 'helpers/types';
 import { checkValidAddress, formatAddress, formatDate } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
@@ -19,34 +17,18 @@ export default function AllocationCustom() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
-	const [projects, setProjects] = React.useState<any[] | null>(null);
 	const [selectedProjects, setSelectedProjects] = React.useState<any[]>([]);
 	const [activeProject, setActiveProject] = React.useState<any | null>(null);
 	const [copied, setCopied] = React.useState<boolean>(false);
 
 	React.useEffect(() => {
-		(async function () {
-			try {
-				const response = await dryrun({
-					process: AO.flpFactory,
-					tags: [{ name: 'Action', value: 'Get-FLPs' }],
-				});
-
-				if (response?.Messages?.[0]?.Data) {
-					setProjects(JSON.parse(response.Messages[0].Data));
-				}
-			} catch (e: any) {
-				setProjects([]);
-			}
-		})();
-	}, []);
-
-	React.useEffect(() => {
-		if (!projects || !allocationProvider.records) return;
+		if (!allocationProvider.projects || !allocationProvider.records) return;
 		setSelectedProjects(
-			projects.filter((project) => allocationProvider.records.some((record) => record.id === project.id))
+			allocationProvider.projects.filter((project) =>
+				allocationProvider.records.some((record) => record.id === project.id)
+			)
 		);
-	}, [projects, allocationProvider.records]);
+	}, [allocationProvider.projects, allocationProvider.records]);
 
 	const currentAllocationRecord = allocationProvider.records?.find(
 		(record: AllocationRecordType) => record.id === activeProject?.id
@@ -124,13 +106,13 @@ export default function AllocationCustom() {
 	}, []);
 
 	function getProjects() {
-		if (!projects) {
+		if (!allocationProvider.projects) {
 			return (
 				<S.LoadingWrapper>
 					<span>{`${language.gettingProjects}...`}</span>
 				</S.LoadingWrapper>
 			);
-		} else if (projects.length <= 0) {
+		} else if (allocationProvider.projects.length <= 0) {
 			return (
 				<S.EmptyWrapper>
 					<span>{language.noProjectsFound}</span>
@@ -139,7 +121,7 @@ export default function AllocationCustom() {
 		} else {
 			return (
 				<S.GridWrapper>
-					{projects.map((project, index) => {
+					{allocationProvider.projects.map((project, index) => {
 						const isActive = selectedProjects.some((selectedProject) => selectedProject.id === project.id);
 
 						return project.flp_name ? (
@@ -205,8 +187,6 @@ export default function AllocationCustom() {
 			);
 		}
 	}
-
-	console.log(activeProject);
 
 	return (
 		<>
@@ -276,13 +256,11 @@ export default function AllocationCustom() {
 								<S.ProjectLineWrapper>
 									<S.ProjectInfoLine>
 										<span className={'primary-text'}>{language.startDate}</span>
-										<p>
-											{activeProject?.starts_at_ts ? formatDate(activeProject.starts_at_ts * 1000, 'dateString') : '-'}
-										</p>
+										<p>{activeProject?.starts_at_ts ? formatDate(activeProject.starts_at_ts, 'dateString') : 'None'}</p>
 									</S.ProjectInfoLine>
 									<S.ProjectInfoLine>
 										<span className={'primary-text'}>{language.endDate}</span>
-										<p>{activeProject?.ends_at_ts ? formatDate(activeProject.ends_at_ts * 1000, 'dateString') : '-'}</p>
+										<p>{activeProject?.ends_at_ts ? formatDate(activeProject.ends_at_ts, 'dateString') : 'None'}</p>
 									</S.ProjectInfoLine>
 								</S.ProjectLineWrapper>
 							</S.ProjectLinesWrapper>

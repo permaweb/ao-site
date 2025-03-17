@@ -6,7 +6,6 @@ import { createDataItemSigner, dryrun, message, result } from '@permaweb/aoconne
 import { Notification } from 'components/atoms/Notification';
 import { AO } from 'helpers/config';
 import { AllocationRecordType, AllocationTokenRecordType, NotificationType } from 'helpers/types';
-import { getTagValue } from 'helpers/utils';
 
 import { useArweaveProvider } from './ArweaveProvider';
 import { useLanguageProvider } from './LanguageProvider';
@@ -23,6 +22,7 @@ interface AllocationContextState {
 	loading: boolean;
 	isTokenDisabled: (token: AllocationTokenRecordType) => boolean;
 	unsavedChanges: boolean;
+	projects: any[];
 }
 
 const DEFAULT_CONTEXT: AllocationContextState = {
@@ -37,6 +37,7 @@ const DEFAULT_CONTEXT: AllocationContextState = {
 	loading: false,
 	isTokenDisabled: () => false,
 	unsavedChanges: false,
+	projects: [],
 };
 
 const AllocationContext = React.createContext<AllocationContextState>(DEFAULT_CONTEXT);
@@ -61,9 +62,27 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [response, setResponse] = React.useState<NotificationType | null>(null);
 	const [unsavedChanges, setUnsavedChanges] = React.useState<boolean>(false);
+	const [projects, setProjects] = React.useState<any>(null);
 
 	React.useEffect(() => {
-		if (arProvider.walletAddress) {
+		(async function () {
+			try {
+				const response = await dryrun({
+					process: AO.flpFactory,
+					tags: [{ name: 'Action', value: 'Get-FLPs' }],
+				});
+
+				if (response?.Messages?.[0]?.Data) {
+					setProjects(JSON.parse(response.Messages[0].Data));
+				}
+			} catch (e: any) {
+				setProjects([]);
+			}
+		})();
+	}, []);
+
+	React.useEffect(() => {
+		if (arProvider.walletAddress && projects) {
 			const cached = getCachedRecords();
 			if (cached && cached.length > 0) {
 				setRecords(cached);
@@ -74,7 +93,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		} else {
 			setShowSetup(true);
 		}
-	}, [arProvider.walletAddress]);
+	}, [arProvider.walletAddress, projects]);
 
 	React.useEffect(() => {
 		const normalizeRecords = (arr: AllocationRecordType[]) =>
@@ -94,20 +113,42 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		setFetchingSetup(true);
 		try {
 			const response = await dryrun({
-				process: AO.yieldPreferences,
+				process: AO.delegationOracle,
 				tags: [
-					{ name: 'Action', value: 'Get-Preferences' },
-					{ name: 'Address', value: arProvider.walletAddress },
+					{ name: 'Action', value: 'Get-Delegations' },
+					{ name: 'Wallet', value: arProvider.walletAddress },
 				],
 			});
 
-			if (response?.Messages?.[0].Data) {
-				const remoteRecords = JSON.parse(response.Messages[0].Data);
-				setRecords(remoteRecords);
-				setOriginalRecords(remoteRecords);
-				setCachedRecords(remoteRecords);
-				setShowSetup(false);
-				setUnsavedChanges(false);
+			if (response?.Messages?.[0]?.Data) {
+				const remoteRecords = JSON.parse(response.Messages[0].Data).delegationPrefs;
+
+				if (remoteRecords?.length > 0) {
+					const parsedRecords = remoteRecords.map((record) => {
+						let label: string;
+						if (record.walletTo === AO.piProcess) {
+							label = 'PI';
+						} else if (record.walletTo === arProvider.walletAddress) {
+							label = 'AO';
+						} else {
+							label = projects.find((project) => project.id === record.walletTo).flp_token_ticker;
+						}
+						return {
+							id: record.walletTo ?? '-',
+							label: label,
+							value: parseInt(record.factor ?? '0', 10) / 10000,
+						};
+					});
+
+					setRecords(parsedRecords);
+					setOriginalRecords(parsedRecords);
+					setCachedRecords(parsedRecords);
+
+					setShowSetup(false);
+					setUnsavedChanges(false);
+				} else {
+					setShowSetup(true);
+				}
 			} else {
 				setShowSetup(true);
 			}
@@ -237,51 +278,78 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 
 	const isTokenDisabled = (token: AllocationRecordType) => {
 		const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
-
 		if (!existingRecord) return false;
-
 		if (records.length === 1) return true;
 	};
 
 	const savePreferences = async (initialSave?: boolean) => {
-		setLoading(true);
-		try {
-			const prevRecords = [...records];
+		if (arProvider.walletAddress) {
+			setLoading(true);
+			setResponse(null);
+			try {
+				const messages = [];
 
-			const response = await message({
-				process: AO.yieldPreferences,
-				signer: createDataItemSigner(arProvider.wallet),
-				tags: [{ name: 'Action', value: 'Update-Preferences' }],
-				data: JSON.stringify(records),
-			});
+				const getMessage = (record: AllocationRecordType, originalRecord?: AllocationRecordType) => {
+					return {
+						process: AO.delegationOracle,
+						signer: createDataItemSigner(arProvider.wallet),
+						tags: [{ name: 'Action', value: 'Set-Delegation' }],
+						data: JSON.stringify({
+							walletFrom: arProvider.walletAddress,
+							walletTo: record?.id ?? originalRecord?.id,
+							factor: Math.floor((record?.value ?? 0) * 10000),
+						}),
+					};
+				};
 
-			const updateResult = await result({
-				process: AO.yieldPreferences,
-				message: response,
-			});
+				if (originalRecords.length > records.length) {
+					for (const record of originalRecords) {
+						const existingRecord = records.find((existingRecord) => existingRecord.id === record.id);
+						messages.push(getMessage(existingRecord, record));
+					}
 
-			const updateMessage = updateResult?.Messages?.[0];
-			const status = getTagValue(updateMessage.Tags, 'Status') === 'Success' ? 'success' : 'warning';
-			setResponse({ status: status, message: getTagValue(updateMessage.Tags, 'Response') });
+					messages.sort((a, b) => {
+						const factorA = JSON.parse(a.data).factor;
+						const factorB = JSON.parse(b.data).factor;
 
-			if (status !== 'success') {
-				updateRecords(prevRecords);
-			} else {
-				setOriginalRecords(records);
+						if (factorA === 0 && factorB !== 0) return -1;
+						if (factorA !== 0 && factorB === 0) return 1;
+
+						return factorA - factorB;
+					});
+				} else messages.push(...records.map((record) => getMessage(record)));
+
+				/* Run pre-checks on factors */
+				for (const messageToSend of messages) {
+					const factor = JSON.parse(messageToSend.data).factor;
+					if (factor > 0 && factor < 500) {
+						setResponse({ status: 'warning', message: language.allocationTooLow });
+						setLoading(false);
+						return;
+					}
+				}
+
+				for (const messageToSend of messages) {
+					console.log(messageToSend);
+					const response = await message(messageToSend);
+					const updateResult = await result({
+						process: AO.delegationOracle,
+						message: response,
+					});
+					console.log(updateResult);
+				}
+
+				setResponse({ status: 'success', message: `${language.preferencesUpdated}!` });
+
 				if (initialSave) await fetchSetup();
+			} catch (e: any) {
+				setResponse({
+					status: 'warning',
+					message: e.message ?? language.errorSavingPreferences,
+				});
 			}
-
-			if (!updateMessage) {
-				setResponse({ status: 'warning', message: language.errorSavingPreferences });
-				return;
-			}
-		} catch (e: any) {
-			setResponse({
-				status: 'warning',
-				message: e.message ?? language.errorSavingPreferences,
-			});
+			setLoading(false);
 		}
-		setLoading(false);
 	};
 
 	return (
@@ -299,6 +367,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 					loading,
 					isTokenDisabled,
 					unsavedChanges,
+					projects,
 				}}
 			>
 				{props.children}
