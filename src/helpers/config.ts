@@ -31,7 +31,7 @@ export const ENDPOINTS = {
 	arTotalSupply: `https://arweave.net/total_supply`,
 	arTxEndpoint: (txId: string) => `https://arweave.net/${txId}`,
 	goldsky: `https://arweave-search.goldsky.com/graphql`,
-	mainnetRpc: `https://rpc.ankr.com/eth`,
+	mainnetRpc: `https://ethereum.publicnode.com`,
 };
 
 const getTxEndpoint = (txId: string) => ENDPOINTS.arTxEndpoint(txId);
