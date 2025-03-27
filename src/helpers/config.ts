@@ -11,7 +11,7 @@ export const AO = {
 	daiPriceOracle: '5q8vpzC5QAKOAJFM26MAKfZw1gwtw7WA_J2861ZiKhI',
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
-	piProcess: '_Klu3s_wsfbbDGNhxdAttSendODbTnkkP9PZYJ8a6v8',
+	piProcess: 'rxxU4g-7tUHGvF28W2l53hxarpbaFR4NaSnOaxx6MIE',
 };
 
 export const ETH_CONTRACTS = {
