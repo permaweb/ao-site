@@ -289,37 +289,39 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 			try {
 				const messages = [];
 
-				const getMessage = (record: AllocationRecordType, originalRecord?: AllocationRecordType) => {
-					return {
-						process: AO.delegationOracle,
-						signer: createDataItemSigner(arProvider.wallet),
-						tags: [{ name: 'Action', value: 'Set-Delegation' }],
-						data: JSON.stringify({
-							walletFrom: arProvider.walletAddress,
-							walletTo: record?.id ?? originalRecord?.id,
-							factor: Math.floor((record?.value ?? 0) * 10000),
-						}),
-					};
-				};
+				const createMessage = (id, factor) => ({
+					process: AO.delegationOracle,
+					signer: createDataItemSigner(arProvider.wallet),
+					tags: [{ name: 'Action', value: 'Set-Delegation' }],
+					data: JSON.stringify({
+						walletFrom: arProvider.walletAddress,
+						walletTo: id,
+						factor: factor,
+					}),
+				});
 
-				if (originalRecords.length > records.length) {
-					for (const record of originalRecords) {
-						const existingRecord = records.find((existingRecord) => existingRecord.id === record.id);
-						messages.push(getMessage(existingRecord, record));
+				const newIds = records.map((record) => record.id);
+
+				originalRecords.forEach((originalRecord) => {
+					if (!newIds.includes(originalRecord.id)) {
+						messages.push(createMessage(originalRecord.id, 0));
 					}
+				});
 
-					messages.sort((a, b) => {
-						const factorA = JSON.parse(a.data).factor;
-						const factorB = JSON.parse(b.data).factor;
+				records.forEach((newRecord) => {
+					const factor = Math.floor((newRecord.value ?? 0) * 10000);
+					messages.push(createMessage(newRecord.id, factor));
+				});
 
-						if (factorA === 0 && factorB !== 0) return -1;
-						if (factorA !== 0 && factorB === 0) return 1;
+				messages.sort((a, b) => {
+					const factorA = JSON.parse(a.data).factor;
+					const factorB = JSON.parse(b.data).factor;
 
-						return factorA - factorB;
-					});
-				} else messages.push(...records.map((record) => getMessage(record)));
+					if (factorA === 0 && factorB !== 0) return -1;
+					if (factorA !== 0 && factorB === 0) return 1;
+					return factorA - factorB;
+				});
 
-				/* Run pre-checks on factors */
 				for (const messageToSend of messages) {
 					const factor = JSON.parse(messageToSend.data).factor;
 					if (factor > 0 && factor < 500) {
