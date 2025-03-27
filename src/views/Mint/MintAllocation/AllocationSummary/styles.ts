@@ -143,10 +143,6 @@ export const SummaryLineActionsWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 20px;
-
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		display: none;
-	}
 `;
 
 export const SummaryLineActions = styled.div`
@@ -185,6 +181,10 @@ export const SummaryLineActions = styled.div`
 				}
 			}
 		}
+	}
+
+	@media (max-width: ${STYLING.cutoffs.secondary}) {
+		display: none;
 	}
 `;
 
