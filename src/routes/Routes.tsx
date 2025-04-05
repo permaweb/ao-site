@@ -8,6 +8,7 @@ const Landing = getLazyImport('Landing');
 const Mint = getLazyImport('Mint');
 const NotFound = getLazyImport('NotFound');
 const Policies = getLazyImport('Policies');
+const Fund = getLazyImport('Fund');
 
 export default function _Routes() {
 	return (
@@ -16,6 +17,7 @@ export default function _Routes() {
 				<Route path={URLS.base} element={<Landing />} />
 				<Route path={URLS.mint} element={<Mint />} />
 				<Route path={URLS.policies} element={<Policies />} />
+				<Route path={URLS.fund} element={<Fund />} />
 				<Route path={`${URLS.mint}:active`} element={<Mint />} />
 				<Route path={'*'} element={<NotFound />} />
 			</Routes>

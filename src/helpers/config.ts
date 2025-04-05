@@ -128,6 +128,7 @@ function createURLs() {
 		mintYield: `${mint}yield/`,
 		policies: `${base}policies/`,
 		read: `${base}read/`,
+		fund: `${base}fund/`,
 		notFound: `${base}404`,
 	};
 }
