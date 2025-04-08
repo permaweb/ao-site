@@ -1,36 +1,34 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
-import { Button } from 'components/atoms/Button';
 import { ASSETS } from 'helpers/config';
 import { retryable } from 'helpers/network';
 import { formatAddress, formatDate } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
-import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { getDelegationRecords, getFlps, getLastDelegationRecord } from '../../api/fair-launch-api';
-import { formatNumber, formatNumberAuto, formatTicker, parseBigIntAsNumber } from '../../helpers/format';
+import { formatNumber, formatTicker, parseBigIntAsNumber } from '../../helpers/format';
 import { FLF_PROCESS } from '../../settings';
 
 import { AllocationItem } from './components/AllocationItem';
 import { AllocationPieChart } from './components/AllocationPieChart';
+import { ArrowSquareDownIcon } from './components/ArrowSquareDownIcon';
 import { InMemoryTable } from './components/InMemoryTable';
-import { LoadingSkeletons } from './components/LoadingSkeletons';
+import { LoadingSkeletons, Skeleton } from './components/LoadingSkeletons';
 import { PiFavicon } from './components/PiFavicon';
 import { TokenAvatar } from './components/TokenAvatar';
 import { TrendChart } from './components/TrendChart';
 import * as S from './styles';
 
-// Core Permaweb tokens
-const CORE_TOKENS = [
+const CORE_PROJECTS = [
 	{
 		id: 'pi',
 		name: 'Permaweb Index',
 		ticker: 'PI',
 		logo: ASSETS.pi,
-		process: 'permaweb-index',
+		process: 'TODO',
 		description:
 			'Diversify your AO rewards with PI, a token representing the permaweb. PI is composed of 1/3 AO, 1/3 Arweave (AR), and 1/3 ecosystem project tokens.',
 	},
@@ -39,16 +37,16 @@ const CORE_TOKENS = [
 		name: 'Arweave',
 		ticker: 'AR',
 		logo: ASSETS.arweave,
-		process: 'arweave',
+		process: 'TODO',
 		description:
 			'Turn your AO yield into Arweave. Your AO yield will return you back AR tokens for permanent data storage use.',
 	},
 	{
-		id: '0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc',
+		id: 'ao',
 		name: 'AO',
 		ticker: 'AO',
-		logo: ASSETS.ao,
-		process: 'ao',
+		logo: ASSETS.aoCircled,
+		process: '0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc',
 		description:
 			'Keep earning AO. Your AR holding yield and deposits will continue to accrue AO without any reallocation.',
 	},
@@ -58,18 +56,12 @@ export default function Fund() {
 	const [tabIndex, setTabIndex] = useState(0);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [allocations, setAllocations] = useState<Record<string, number>>({});
-	const [pageSize, setPageSize] = useState(30);
-	const [expandedRow, setExpandedRow] = useState<string | null>(null);
+	const [pageSize, setPageSize] = useState(10);
+	const [expandedRows, setExpandedRows] = useState<string[]>([]);
 
 	const { data: allFlps } = useQuery({
 		queryKey: ['allFlps'],
-		queryFn: () =>
-			retryable(getFlps)(FLF_PROCESS).then((flps) => {
-				return flps.map((flp) => ({
-					...flp,
-					amount_delegated: Math.floor(Math.random() * 10000000),
-				}));
-			}),
+		queryFn: () => retryable(getFlps)(FLF_PROCESS),
 	});
 
 	const { data: lastDelegationRecord } = useQuery({
@@ -82,29 +74,6 @@ export default function Fund() {
 		queryFn: () => retryable(getDelegationRecords)(),
 	});
 
-	const sortedAndFilteredFlps = useMemo(() => {
-		if (!allFlps) return [];
-
-		const filtered = allFlps.filter((flp) => {
-			if (!searchQuery) return true;
-			const query = searchQuery.toLowerCase();
-			return (
-				flp.flp_name?.toLowerCase().includes(query) ||
-				flp.flp_token_name?.toLowerCase().includes(query) ||
-				flp.flp_token_ticker?.toLowerCase().includes(query) ||
-				flp.flp_token_process?.toLowerCase().includes(query)
-			);
-		});
-
-		return [...filtered].sort((a, b) => {
-			if (tabIndex === 0) {
-				return b.amount_delegated - a.amount_delegated;
-			}
-			return b.starts_at_ts - a.starts_at_ts;
-		});
-	}, [allFlps, searchQuery, tabIndex]);
-
-	// Get project yield from lastDelegationRecord
 	const getProjectYield = (projectProcess) => {
 		if (
 			!lastDelegationRecord ||
@@ -115,8 +84,42 @@ export default function Fund() {
 		}
 
 		const lastDirectDelegation = lastDelegationRecord.directDelegations[0];
-		return parseBigIntAsNumber(lastDirectDelegation.projectYields?.[projectProcess] || '0', 12);
+		return Number(parseBigIntAsNumber(lastDirectDelegation.projectYields?.[projectProcess] || '0', 12));
 	};
+
+	const sortedAndFilteredFlps = useMemo(() => {
+		if (!allFlps) return [];
+
+		const filtered = allFlps.filter((flp) => {
+			if (searchQuery) {
+				const query = searchQuery.toLowerCase();
+				if (
+					!(
+						flp.flp_name?.toLowerCase().includes(query) ||
+						flp.flp_token_name?.toLowerCase().includes(query) ||
+						flp.flp_token_ticker?.toLowerCase().includes(query) ||
+						flp.flp_token_process?.toLowerCase().includes(query)
+					)
+				) {
+					return false;
+				}
+			}
+
+			if (tabIndex === 0) {
+				const projectYield = getProjectYield(flp.id);
+				return typeof projectYield === 'number' && projectYield > 10;
+			} else {
+				return true;
+			}
+		});
+
+		return [...filtered].sort((a, b) => {
+			if (tabIndex === 0) {
+				return getProjectYield(b.id) - getProjectYield(a.id);
+			}
+			return b.starts_at_ts - a.starts_at_ts;
+		});
+	}, [allFlps, searchQuery, tabIndex, lastDelegationRecord]);
 
 	const totalAllocation = Object.values(allocations).reduce((sum, val) => sum + val, 0);
 	const isMaxAllocation = totalAllocation >= 100;
@@ -129,26 +132,35 @@ export default function Fund() {
 		}));
 	};
 
-	// Generate colors for core tokens
 	const coreTokenColors = {
-		'permaweb-index': '#8884d8',
+		pi: '#8884d8',
 		arweave: '#82ca9d',
 		ao: '#ffc658',
 	};
 
-	// Combine core tokens and FLPs for the pie chart
-	const pieChartData = [
-		...CORE_TOKENS.map((token) => ({
-			token: token.ticker,
-			percentage: allocations[token.process] || 0,
-			color: coreTokenColors[token.process],
-		})),
-		...(allFlps?.map((flp, idx) => ({
-			token: flp.flp_token_ticker,
-			percentage: allocations[flp.flp_token_process] || 0,
-			color: ['#0088fe', '#00C49F', '#FFBB28', '#FF8042', '#ff8042'][idx % 5],
-		})) || []),
-	];
+	const flpColorMap = useMemo(() => {
+		const colorPalette = ['#0088fe', '#00C49F', '#FFBB28', '#FF8042', '#ff8042'];
+		return (allFlps || []).reduce((acc, flp, idx) => {
+			acc[flp.id] = colorPalette[idx % colorPalette.length];
+			return acc;
+		}, {});
+	}, [allFlps]);
+
+	const pieChartData = useMemo(
+		() => [
+			...CORE_PROJECTS.map((project) => ({
+				token: project.ticker,
+				percentage: allocations[project.id] || 0,
+				color: coreTokenColors[project.id],
+			})),
+			...(allFlps?.map((flp) => ({
+				token: flp.flp_token_ticker,
+				percentage: allocations[flp.id] || 0,
+				color: flpColorMap[flp.id],
+			})) || []),
+		],
+		[allocations, allFlps, flpColorMap]
+	);
 
 	const arProvider = useArweaveProvider();
 
@@ -193,18 +205,23 @@ export default function Fund() {
 										notation: 'compact',
 									})
 								) : (
-									<S.SkeletonLoader width={60} height={24} />
+									<Skeleton width={60} height={24} />
 								)}
 							</S.StatValue>
 						</div>
-						<TrendChart height={50} />
+						<TrendChart
+							height={50}
+							delegationRecords={delegationRecords}
+							dataKey="totalDelegatedAO"
+							isLoading={!delegationRecords}
+						/>
 					</S.StatCard>
 					<S.StatCard>
 						<div>
 							<S.StatLabel>FAIR LAUNCH PROJECTS</S.StatLabel>
-							<S.StatValue>{allFlps ? allFlps.length : <S.SkeletonLoader width={60} height={24} />}</S.StatValue>
+							<S.StatValue>{allFlps ? allFlps.length : <Skeleton width={60} height={24} />}</S.StatValue>
 						</div>
-						<TrendChart height={50} />
+						<TrendChart height={50} delegationRecords={createCumulativeFlpData(allFlps)} isLoading={!allFlps} />
 					</S.StatCard>
 					<S.StatCard>
 						<div>
@@ -213,11 +230,16 @@ export default function Fund() {
 								{lastDelegationRecord ? (
 									lastDelegationRecord?.summary?.Data.totalDelegators
 								) : (
-									<S.SkeletonLoader width={60} height={24} />
+									<Skeleton width={60} height={24} />
 								)}
 							</S.StatValue>
 						</div>
-						<TrendChart height={50} />
+						<TrendChart
+							height={50}
+							delegationRecords={delegationRecords}
+							dataKey="totalDelegators"
+							isLoading={!delegationRecords}
+						/>
 					</S.StatCard>
 				</S.StatsGrid>
 
@@ -228,7 +250,7 @@ export default function Fund() {
 					</S.SectionTitle>
 
 					<S.CoreTokensContainer>
-						{CORE_TOKENS.map((token) => (
+						{CORE_PROJECTS.map((token) => (
 							<S.CoreTokenCard key={token.id}>
 								<div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
 									<S.CoreTokenHeader>
@@ -238,7 +260,7 @@ export default function Fund() {
 									</S.CoreTokenHeader>
 									<S.Subtitle>{token.description}</S.Subtitle>
 								</div>
-								<S.CardAddButton onClick={() => handleAllocationChange(token.process, 5)} disabled={isMaxAllocation}>
+								<S.CardAddButton onClick={() => handleAllocationChange(token.id, 5)} disabled={isMaxAllocation}>
 									<ReactSVG src={ASSETS.plus} />
 									Add
 								</S.CardAddButton>
@@ -270,13 +292,15 @@ export default function Fund() {
 							</S.Tab>
 						</S.TabsContainer>
 
-						<S.SearchBar>
-							<S.SearchInput
-								placeholder="Search for Project..."
-								value={searchQuery}
-								onChange={(e) => setSearchQuery(e.target.value)}
-							/>
-						</S.SearchBar>
+						<div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+							<S.SearchBar>
+								<S.SearchInput
+									placeholder="Search for Project..."
+									value={searchQuery}
+									onChange={(e) => setSearchQuery(e.target.value)}
+								/>
+							</S.SearchBar>
+						</div>
 					</div>
 
 					<InMemoryTable
@@ -299,8 +323,12 @@ export default function Fund() {
 						renderRow={(row: any, index: number) => (
 							<React.Fragment key={row.id}>
 								<S.TableRow
-									onClick={() => setExpandedRow(expandedRow === row.id ? null : row.id)}
-									className={expandedRow === row.id ? 'expanded' : ''}
+									onClick={() => {
+										setExpandedRows((prev) =>
+											prev.includes(row.id) ? prev.filter((id) => id !== row.id) : [...prev, row.id]
+										);
+									}}
+									className={expandedRows.includes(row.id) ? 'expanded' : ''}
 								>
 									<S.TableCell align="center">{index + 1}</S.TableCell>
 									<S.TableCell>
@@ -310,24 +338,41 @@ export default function Fund() {
 											<span style={{ color: '#757575' }}>{formatTicker(row.flp_token_ticker)}</span>
 										</S.TokenInfo>
 									</S.TableCell>
-									<S.TableCell>{formatNumber(row.amount_delegated)} $AO</S.TableCell>
-									<S.TableCell>{formatNumber(getProjectYield(row.id))} $AO</S.TableCell>
+									<S.TableCell>
+										<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+											<span>{formatNumber(getProjectYield(row.id))}</span>
+											<TokenAvatar logo={ASSETS.aoCircled} size="medium" />
+										</div>
+									</S.TableCell>
+									<S.TableCell>
+										<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+											<span>{formatNumber(getProjectYield(row.id))}</span>
+											<TokenAvatar logo={ASSETS.aoCircled} size="medium" />
+										</div>
+									</S.TableCell>
 									<S.TableCell>{formatDate(row.starts_at_ts, 'dateString') || 'Unknown'}</S.TableCell>
 									<S.TableCell align="right">
 										<S.RowActionContainer>
 											<S.SeeDetailsButton
-												className="details-button"
 												onClick={(e) => {
 													e.stopPropagation();
-													setExpandedRow(expandedRow === row.id ? null : row.id);
+													setExpandedRows((prev) =>
+														prev.includes(row.id) ? prev.filter((id) => id !== row.id) : [...prev, row.id]
+													);
 												}}
 											>
-												{expandedRow === row.id ? 'Close Details' : 'See Details'}
+												<div style={{ width: 200, height: 1, borderBottom: '1px solid #C8C8C8' }} />
+												<span>{expandedRows.includes(row.id) ? 'Close Details' : 'See Details'}</span>
+												<ArrowSquareDownIcon
+													style={{ transform: expandedRows.includes(row.id) ? 'rotate(180deg)' : 'rotate(0deg)' }}
+												/>
+												<div style={{ width: 200, height: 1, borderBottom: '1px solid #C8C8C8' }} />
 											</S.SeeDetailsButton>
 											<S.AddButton
 												onClick={(e) => {
 													e.stopPropagation();
-													handleAllocationChange(row.flp_token_process, 5);
+													e.preventDefault();
+													handleAllocationChange(row.id, 5);
 												}}
 												disabled={isMaxAllocation || row.status !== 'Active' || row.starts_at_ts > Date.now()}
 											>
@@ -336,74 +381,88 @@ export default function Fund() {
 										</S.RowActionContainer>
 									</S.TableCell>
 								</S.TableRow>
-								{expandedRow === row.id && (
+								{expandedRows.includes(row.id) && (
 									<S.DetailsRow>
 										<S.DetailsCell colSpan={6}>
 											<S.DetailsContent>
-												<S.DetailsHeader>
-													<TokenAvatar logo={row.flp_token_logo} size="large" />
-													<div>
-														<S.DetailsTitle>{row.flp_token_name}</S.DetailsTitle>
-														<S.DetailsTicker>{formatTicker(row.flp_token_ticker)}</S.DetailsTicker>
-													</div>
-													<S.CloseButton onClick={() => setExpandedRow(null)}>
-														<ReactSVG src={ASSETS.close} />
-													</S.CloseButton>
-												</S.DetailsHeader>
-
-												<S.DetailsSection>
-													<S.DetailsSectionTitle>Token Unlocks</S.DetailsSectionTitle>
-													<S.DetailsStat>Feb 21st, 2034</S.DetailsStat>
-												</S.DetailsSection>
-
-												<S.DetailsSection>
-													<S.DetailsSectionTitle>Run Time</S.DetailsSectionTitle>
-													<S.DetailsStat>2 years, 1 day left</S.DetailsStat>
-												</S.DetailsSection>
-
-												<S.DetailsSection>
-													<S.DetailsSectionTitle>Amount</S.DetailsSectionTitle>
-													<S.DetailsStat>
-														<div>Delegators</div>
-														<div>6,000,000,000</div>
-													</S.DetailsStat>
-												</S.DetailsSection>
-
-												<S.DetailsSection>
-													<S.DetailsSectionTitle>Supply</S.DetailsSectionTitle>
-													<S.DetailsStat>
-														<div>Total Fair Launch vs Total Supply</div>
-														<div>2,000,000,000 / 3,000,000,000</div>
-													</S.DetailsStat>
-													<S.DetailsStat>
-														<div>Percentage of Supply</div>
-														<div>90%</div>
-													</S.DetailsStat>
-													<S.DetailsStat>
-														<div>Decay Rate</div>
-														<div>0.5</div>
-													</S.DetailsStat>
-												</S.DetailsSection>
-
-												<S.SocialLinks>
-													<Link to="#">
-														<ReactSVG src={ASSETS.x} />
-													</Link>
-													<Link to="#">
+												<div>
+													<S.SocialLinks>
+														{row.twitter_handle && (
+															<Link to={`https://x.com/${row.twitter_handle}`}>
+																<ReactSVG src={ASSETS.x} />
+															</Link>
+														)}
+														{/* <Link to={`https://github.com/${row.flp_github}`}>
 														<ReactSVG src={ASSETS.github} />
-													</Link>
-													<Link to="#">
+													</Link> */}
+														{/* <Link to={`https://${row.flp_token_discord}`}>
 														<ReactSVG src={ASSETS.discord} />
-													</Link>
-													<Link to="#">
-														<ReactSVG src={ASSETS.website} />
-													</Link>
-												</S.SocialLinks>
+													</Link> */}
+														{/* {
+														row.telegram_handle && (
+															<Link to={`https://telegram.me/${row.telegram_handle}`}>
+																<ReactSVG src={ASSETS.telegram} />
+															</Link>
+														)
+													} */}
+														{row.website_url && (
+															<Link to={row.website_url}>
+																<ReactSVG src={ASSETS.website} />
+															</Link>
+														)}
+													</S.SocialLinks>
 
-												<S.DetailsDescription>
-													{row.description ||
-														'Elevate your decentralized GPU experience with AI Nexus, a groundbreaking token that represents the future of artificial intelligence. AI Nexus is developed from a fusion of 1/3 Quantum Compute, 1/3 Neural Network (NN), and 1/3 tokens from diverse tech ecosystem projects.'}
-												</S.DetailsDescription>
+													<S.DetailsDescription>
+														{row.description ||
+															'Elevate your decentralized GPU experience with AI Nexus, a groundbreaking token that represents the future of artificial intelligence. AI Nexus is developed from a fusion of 1/3 Quantum Compute, 1/3 Neural Network (NN), and 1/3 tokens from diverse tech ecosystem projects.'}
+													</S.DetailsDescription>
+												</div>
+
+												<S.DetailsSectionsGrid>
+													<div>
+														<S.DetailsSectionHeading>Unlock Date</S.DetailsSectionHeading>
+														<S.DetailSectionContent>
+															<div>
+																<S.DetailsSectionLabel>TOKEN UNLOCKS</S.DetailsSectionLabel>
+																<S.DetailsSectionValue>Feb 21st, 2034</S.DetailsSectionValue>
+															</div>
+															<div>
+																<S.DetailsSectionLabel>RUN TIME</S.DetailsSectionLabel>
+																<S.DetailsSectionValue style={{ color: '#51C85B' }}>
+																	2 years, 1 day left
+																</S.DetailsSectionValue>
+															</div>
+														</S.DetailSectionContent>
+													</div>
+
+													<div>
+														<S.DetailsSectionHeading>Amount</S.DetailsSectionHeading>
+														<S.DetailSectionContent>
+															<div>
+																<S.DetailsSectionLabel>DELEGATORS</S.DetailsSectionLabel>
+																<S.DetailsSectionValue>6,000,000,000</S.DetailsSectionValue>
+															</div>
+														</S.DetailSectionContent>
+													</div>
+
+													<div>
+														<S.DetailsSectionHeading>Supply</S.DetailsSectionHeading>
+														<S.DetailSectionContent>
+															<div>
+																<S.DetailsSectionLabel>TOTAL FAIR LAUNCH VS TOTAL SUPPLY</S.DetailsSectionLabel>
+																<S.DetailsSectionValue>2,000,000,000 / 3,000,000,000</S.DetailsSectionValue>
+															</div>
+															<div>
+																<S.DetailsSectionLabel>PERCENTAGE OF SUPPLY</S.DetailsSectionLabel>
+																<S.DetailsSectionValue>90%</S.DetailsSectionValue>
+															</div>
+															<div>
+																<S.DetailsSectionLabel>DECAY RATE</S.DetailsSectionLabel>
+																<S.DetailsSectionValue>0.5</S.DetailsSectionValue>
+															</div>
+														</S.DetailSectionContent>
+													</div>
+												</S.DetailsSectionsGrid>
 											</S.DetailsContent>
 										</S.DetailsCell>
 									</S.DetailsRow>
@@ -421,52 +480,50 @@ export default function Fund() {
 
 				<div style={{ marginTop: '1rem' }}>
 					<div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-						<span style={{ fontWeight: 500 }}>Summary</span>
-						<span style={{ fontWeight: 500 }}>%</span>
+						<S.SectionTitle style={{ fontWeight: 500, margin: 0 }}>Summary</S.SectionTitle>
+						<S.SectionTitle style={{ fontWeight: 500, margin: 0 }}>%</S.SectionTitle>
 					</div>
 
 					<div style={{ borderTop: '1px solid #eee', margin: '0.5rem 0' }} />
 
-					<div>
-						<span style={{ fontWeight: 500 }}>Core Permaweb Tokens</span>
-					</div>
+					{isMaxAllocation && (
+						<div style={{ padding: '0.5rem 1rem', fontSize: '12px', color: '#666' }}>
+							You are at 100%, you must remove some percentage of allocation to begin adding more.
+						</div>
+					)}
 
 					<div style={{ maxHeight: 350, overflowY: 'auto' }}>
-						{/* Core Tokens */}
-						{CORE_TOKENS.map((token) => (
-							<AllocationItem
-								key={token.id}
-								token={token.process}
-								ticker={token.ticker}
-								percentage={allocations[token.process] || 0}
-								color={coreTokenColors[token.process]}
-								isMaxAllocation={isMaxAllocation}
-								isCore={true}
-								onAllocationChange={(change) => handleAllocationChange(token.process, change)}
-							/>
-						))}
+						<S.AllocationContainer>
+							<S.SectionTitle style={{ fontWeight: 500, margin: 0, fontSize: 12, marginBottom: 6 }}>
+								Core Permaweb Tokens
+							</S.SectionTitle>
+							{CORE_PROJECTS.map((project) => (
+								<AllocationItem
+									key={project.id}
+									logo={project.logo}
+									ticker={project.ticker}
+									percentage={allocations[project.id] || 0}
+									color={coreTokenColors[project.id]}
+									isMaxAllocation={isMaxAllocation}
+									onAllocationChange={(change) => handleAllocationChange(project.id, change)}
+								/>
+							))}
+						</S.AllocationContainer>
 
-						{/* Message if allocation is at 100% */}
-						{isMaxAllocation && (
-							<div style={{ padding: '0.5rem 1rem', fontSize: '12px', color: '#666' }}>
-								You are at 100%, you must remove some percentage of allocation to begin adding more.
-							</div>
-						)}
-
-						{/* Project Tokens */}
-						{allFlps?.map((flp, idx) => (
-							<AllocationItem
-								key={flp.id}
-								token={flp.flp_token_process}
-								ticker={flp.flp_token_ticker}
-								logo={flp.flp_token_logo}
-								percentage={allocations[flp.flp_token_process] || 0}
-								color={pieChartData[CORE_TOKENS.length + idx]?.color || '#F2F2F2'}
-								isMaxAllocation={isMaxAllocation}
-								disabled={flp.status !== 'Active' || flp.starts_at_ts > Date.now()}
-								onAllocationChange={(change) => handleAllocationChange(flp.flp_token_process, change)}
-							/>
-						))}
+						{allFlps
+							?.filter((flp) => allocations[flp.id] && allocations[flp.id] > 0)
+							.map((flp) => (
+								<AllocationItem
+									key={flp.id}
+									ticker={flp.flp_token_ticker}
+									logo={flp.flp_token_logo}
+									percentage={allocations[flp.id] || 0}
+									color={flpColorMap[flp.id] || '#F2F2F2'}
+									isMaxAllocation={isMaxAllocation}
+									disabled={flp.status !== 'Active' || flp.starts_at_ts > Date.now()}
+									onAllocationChange={(change) => handleAllocationChange(flp.id, change)}
+								/>
+							))}
 					</div>
 				</div>
 
@@ -475,3 +532,45 @@ export default function Fund() {
 		</S.Container>
 	);
 }
+
+const createCumulativeFlpData = (flps) => {
+	if (!flps || flps.length === 0) return [];
+
+	const sortedFlps = [...flps]
+		.filter((flp) => flp && typeof flp.created_at_ts === 'number')
+		.sort((a, b) => a.created_at_ts - b.created_at_ts);
+
+	const dailyData = [];
+	let cumulativeCount = 0;
+
+	const dateCountMap = {};
+
+	sortedFlps.forEach((flp) => {
+		const date = new Date(flp.created_at_ts);
+		const dayTimestamp = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+
+		dateCountMap[dayTimestamp] = (dateCountMap[dayTimestamp] || 0) + 1;
+	});
+
+	const sortedDays = Object.keys(dateCountMap)
+		.map(Number)
+		.sort((a, b) => a - b);
+
+	sortedDays.forEach((dayTimestamp) => {
+		cumulativeCount += dateCountMap[dayTimestamp];
+		dailyData.push({
+			timestamp: dayTimestamp,
+			count: dateCountMap[dayTimestamp],
+			cumulativeCount,
+		});
+	});
+
+	return dailyData.map((item) => ({
+		summary: {
+			Timestamp: item.timestamp,
+			Data: {
+				totalDelegators: item.cumulativeCount.toString(),
+			},
+		},
+	}));
+};

@@ -6,14 +6,12 @@ import { formatTicker } from '../../../helpers/format';
 import { TokenAvatar } from './TokenAvatar';
 
 interface AllocationItemProps {
-	token: string;
 	ticker: string;
 	logo?: string;
 	percentage: number;
 	color: string;
 	isMaxAllocation: boolean;
 	disabled?: boolean;
-	isCore?: boolean;
 	onAllocationChange: (change: number) => void;
 }
 
@@ -70,61 +68,28 @@ const Percentage = styled.span`
 	font-weight: 600;
 `;
 
-const CoreTokenSymbol = styled.div<{ symbol: string }>`
-	width: 24px;
-	height: 24px;
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background: ${(props) =>
-		props.symbol === 'π'
-			? '#8884d8'
-			: props.symbol === 'a'
-			? '#82ca9d'
-			: props.symbol === 'AO'
-			? '#ffc658'
-			: '#f0f0f0'};
-	color: white;
-	font-weight: bold;
-	font-size: 14px;
-`;
-
 export function AllocationItem({
-	token,
 	ticker,
 	logo,
 	percentage,
 	color,
 	isMaxAllocation,
 	disabled,
-	isCore,
 	onAllocationChange,
 }: AllocationItemProps) {
-	const getSymbolForCore = () => {
-		if (ticker === 'SPI') return 'π';
-		if (ticker === 'SAR') return 'a';
-		if (ticker === 'AO') return 'AO';
-		return '';
-	};
-
 	return (
-		<Container disabled={disabled}>
+		<Container disabled={disabled} className="allocation-item">
 			<TokenInfo>
 				<ColorDot color={color} />
-				{isCore ? (
-					<CoreTokenSymbol symbol={getSymbolForCore()}>{getSymbolForCore()}</CoreTokenSymbol>
-				) : logo ? (
-					<TokenAvatar logo={logo} size="medium" />
-				) : null}
-				<span>{isCore ? `$${ticker}` : formatTicker(ticker)}</span>
+				<TokenAvatar logo={logo} size="medium" />
+				<span>{formatTicker(ticker)}</span>
 			</TokenInfo>
 			<Controls>
-				<Button variant="add" onClick={() => onAllocationChange(5)} disabled={isMaxAllocation || disabled}>
-					+5%
-				</Button>
 				<Button onClick={() => onAllocationChange(-5)} disabled={disabled}>
 					-5%
+				</Button>
+				<Button variant="add" onClick={() => onAllocationChange(5)} disabled={isMaxAllocation || disabled}>
+					+5%
 				</Button>
 				<Percentage>{percentage}%</Percentage>
 			</Controls>

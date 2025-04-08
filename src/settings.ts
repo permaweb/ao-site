@@ -1,2 +1,2 @@
 export const FORMAT_DECIMALS = 4;
-export const FLF_PROCESS = 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE';
+export const FLF_PROCESS = 'JC0_BVWWf7xbmXUeKskDBRQ5fJo8fWgPtaEYMOf-Vbk'; //'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE';

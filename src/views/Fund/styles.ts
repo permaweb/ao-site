@@ -104,8 +104,10 @@ export const SearchInput = styled.input`
 
 export const TableCell = styled.td<{ align?: 'left' | 'center' | 'right' }>`
 	text-align: ${(props) => props.align || 'left'};
-	padding: 10px;
-	border-bottom: 1px solid #eee;
+	padding: 30px 10px;
+	table tr:not(.expanded) & {
+		border-bottom: 1px solid #eee;
+	}
 	font-size: 13px;
 	font-family: ${(props) => props.theme.typography.family.alt1};
 	font-weight: 400;
@@ -119,13 +121,14 @@ export const TokenInfo = styled.div`
 `;
 
 export const AddButton = styled.button`
-	padding: 6px 12px;
+	padding: 10px 12px;
 	background-color: #51c85b;
 	color: #fff;
 	border: none;
-	border-radius: 5px;
+	border-radius: 2px;
 	cursor: pointer;
-
+	font-weight: 700;
+	font-size: 14px;
 	&:disabled {
 		background-color: #aaa;
 		cursor: not-allowed;
@@ -140,15 +143,16 @@ export const AllocationPanel = styled.div`
 `;
 
 export const SubmitButton = styled.button`
-	padding: 10px 20px;
+	margin-top: 20px;
+	padding: 25px 12px;
 	background-color: #51c85b;
 	color: #fff;
 	border: none;
+	width: 100%;
 	border-radius: 4px;
-	cursor: pointer;
-	&:hover {
-		background-color: #0056b3;
-	}
+	font-size: 19px;
+	font-weight: 700;
+	line-height: 0;
 `;
 
 export const ConnectButton = styled.button`
@@ -246,26 +250,6 @@ export const CardAddButton = styled.button`
 	gap: 4px;
 `;
 
-export const SkeletonLoader = styled.div<{ width: number; height: number }>`
-	width: ${(props) => props.width}px;
-	height: ${(props) => props.height}px;
-	background-color: #f0f0f0;
-	border-radius: 4px;
-	animation: pulse 1.5s infinite;
-
-	@keyframes pulse {
-		0% {
-			opacity: 0.6;
-		}
-		50% {
-			opacity: 1;
-		}
-		100% {
-			opacity: 0.6;
-		}
-	}
-`;
-
 export const TableRow = styled.tr`
 	cursor: pointer;
 	transition: background-color 0.2s;
@@ -277,10 +261,7 @@ export const TableRow = styled.tr`
 	&.expanded {
 		background-color: #f5f5f5;
 	}
-
-	&:hover .details-button {
-		opacity: 1;
-	}
+	position: relative;
 `;
 
 export const RowActionContainer = styled.div`
@@ -294,14 +275,39 @@ export const SeeDetailsButton = styled.button`
 	padding: 6px 12px;
 	background-color: transparent;
 	color: #333;
-	border: 1px solid #ccc;
-	border-radius: 5px;
+	border: none;
 	cursor: pointer;
 	opacity: 0;
-	transition: opacity 0.2s, background-color 0.2s;
+	table tr:hover & {
+		opacity: 1;
+	}
+
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-size: 10px;
+	position: absolute;
+	top: 68px;
+	left: 0;
+	right: 0;
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+`;
+
+export const CloseAllButton = styled.button`
+	padding: 6px 12px;
+	background-color: #f5f5f5;
+	color: #555;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 13px;
+	transition: background-color 0.2s;
 
 	&:hover {
-		background-color: #f0f0f0;
+		background-color: #e8e8e8;
 	}
 `;
 
@@ -314,8 +320,11 @@ export const DetailsCell = styled.td`
 `;
 
 export const DetailsContent = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 	padding: 20px;
 	border-bottom: 1px solid #eee;
+	gap: 40px;
 `;
 
 export const DetailsHeader = styled.div`
@@ -377,10 +386,51 @@ export const DetailsStat = styled.div`
 	font-family: ${(props) => props.theme.typography.family.alt1};
 `;
 
+export const DetailsSectionsGrid = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+`;
+
+export const DetailsSectionHeading = styled.h3`
+	font-size: 14px;
+	font-weight: 500;
+	margin: 0 0 10px 0;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	text-decoration: underline;
+`;
+
+export const DetailSectionContent = styled.div`
+	display: flex;
+	flex-direction: row;
+	gap: 15px;
+
+	& > div {
+		padding: 10px;
+		background-color: #fff;
+		border-radius: 5px;
+	}
+`;
+
+export const DetailsSectionLabel = styled.div`
+	font-size: 10px;
+	color: #ababab;
+	text-transform: uppercase;
+	margin-bottom: 5px;
+	font-weight: normal;
+`;
+
+export const DetailsSectionValue = styled.div`
+	font-size: 14px;
+	font-weight: 600;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	color: #000;
+`;
+
 export const SocialLinks = styled.div`
 	display: flex;
 	gap: 15px;
-	margin: 20px 0;
+	margin: 15px 0;
 
 	& a {
 		color: #333;
@@ -393,8 +443,19 @@ export const SocialLinks = styled.div`
 `;
 
 export const DetailsDescription = styled.p`
-	font-size: 14px;
-	line-height: 1.6;
-	color: #555;
-	margin: 0;
+	font-size: 12px;
+	line-height: 2;
+	color: #6b6b6b;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+`;
+
+export const AllocationContainer = styled.div`
+	background: #fff;
+	padding: 10px;
+	border-radius: 10px;
+
+	.allocation-item {
+		padding-left: 6px;
+		padding-right: 6px;
+	}
 `;

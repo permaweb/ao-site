@@ -36,9 +36,8 @@ const TableBody = styled.tbody`
 `;
 
 const LoadMoreButton = styled.button`
-	width: 100%;
-	padding: 1rem;
-	margin-top: 1rem;
+	margin: 0 auto;
+	padding: 10px 20px;
 	background: transparent;
 	border: 1px solid #ddd;
 	border-radius: 0.5rem;
@@ -55,7 +54,7 @@ export function InMemoryTable({ sortedBy, data, pageSize, onLoadMore, headerCell
 	const hasMore = data.length > pageSize;
 
 	return (
-		<div>
+		<div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
 			<Table>
 				<thead>
 					<tr>
