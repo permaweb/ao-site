@@ -14,7 +14,7 @@ export const LeftPanel = styled.div`
 	flex: 3;
 	display: flex;
 	flex-direction: column;
-	gap: 32px;
+	gap: 48px;
 `;
 
 export const Header = styled.header`
@@ -125,6 +125,7 @@ export const AddButton = styled.button`
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+
 	&:disabled {
 		background-color: #aaa;
 		cursor: not-allowed;
@@ -163,18 +164,14 @@ export const ConnectButton = styled.button`
 	font-family: ${(props) => props.theme.typography.family.alt1};
 `;
 
-// Core Permaweb Tokens Styles
-export const SectionTitle = styled.h3`
+export const SectionTitle = styled.h4`
 	display: flex;
 	align-items: center;
-	font-size: 18px;
+	gap: 10px;
+	font-size: 14px;
 	font-weight: 400;
-	margin-bottom: 20px;
-`;
-
-export const Icon = styled.span`
-	margin-right: 10px;
-	font-weight: bold;
+	letter-spacing: normal;
+	margin: 20px 0;
 `;
 
 export const CoreTokensContainer = styled.div`
@@ -186,50 +183,218 @@ export const CoreTokensContainer = styled.div`
 export const CoreTokenCard = styled.div`
 	background-color: #fff;
 	border-radius: 10px;
-	padding: 20px;
+	padding: 12px 8px;
 	box-shadow: 0 2px 1.2px rgba(0, 0, 0, 0.02);
 	display: flex;
 	flex-direction: column;
 	border: 1px solid #f6f6f6;
+	justify-content: space-between;
+	gap: 12px;
 `;
 
 export const CoreTokenHeader = styled.div`
 	display: flex;
 	align-items: center;
 	margin-bottom: 10px;
-`;
-
-export const CoreTokenIcon = styled.div<{ type: string }>`
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-right: 10px;
-	color: white;
-	font-weight: bold;
-	background: ${(props) =>
-		props.type === 'pi'
-			? '#8884d8'
-			: props.type === 'arweave'
-			? '#82ca9d'
-			: props.type === 'ao'
-			? '#ffc658'
-			: '#f0f0f0'};
+	gap: 10px;
+	flex-direction: row;
 `;
 
 export const CoreTokenName = styled.div`
-	font-size: 16px;
+	font-size: 18px;
 	font-weight: 500;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	line-height: 1;
 `;
 
 export const CoreTokenTicker = styled.span`
-	color: #757575;
-	margin-left: 5px;
+	color: #ccc;
+	font-size: 12px;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	line-height: 1;
 `;
 
-export const AddButtonContainer = styled.div`
+export const CardAddButton = styled.button`
+	padding: 6px 12px;
+	background-color: #51c85b;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	width: 100%;
+	font-size: 19px;
+	font-weight: 700;
+	line-height: 0;
+
+	&:disabled {
+		background-color: #aaa;
+		cursor: not-allowed;
+	}
+
+	& svg {
+		width: 19px;
+		height: 19px;
+	}
+
+	& svg line {
+		stroke: #fff;
+		stroke-width: 30;
+	}
+
 	display: flex;
+	align-items: center;
 	justify-content: center;
+	gap: 4px;
+`;
+
+export const SkeletonLoader = styled.div<{ width: number; height: number }>`
+	width: ${(props) => props.width}px;
+	height: ${(props) => props.height}px;
+	background-color: #f0f0f0;
+	border-radius: 4px;
+	animation: pulse 1.5s infinite;
+
+	@keyframes pulse {
+		0% {
+			opacity: 0.6;
+		}
+		50% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0.6;
+		}
+	}
+`;
+
+export const TableRow = styled.tr`
+	cursor: pointer;
+	transition: background-color 0.2s;
+
+	&:hover {
+		background-color: #f9f9f9;
+	}
+
+	&.expanded {
+		background-color: #f5f5f5;
+	}
+
+	&:hover .details-button {
+		opacity: 1;
+	}
+`;
+
+export const RowActionContainer = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	justify-content: flex-end;
+`;
+
+export const SeeDetailsButton = styled.button`
+	padding: 6px 12px;
+	background-color: transparent;
+	color: #333;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.2s, background-color 0.2s;
+
+	&:hover {
+		background-color: #f0f0f0;
+	}
+`;
+
+export const DetailsRow = styled.tr`
+	background-color: #f5f5f5;
+`;
+
+export const DetailsCell = styled.td`
+	padding: 0;
+`;
+
+export const DetailsContent = styled.div`
+	padding: 20px;
+	border-bottom: 1px solid #eee;
+`;
+
+export const DetailsHeader = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	margin-bottom: 20px;
+	position: relative;
+`;
+
+export const DetailsTitle = styled.h3`
+	font-size: 20px;
+	font-weight: 500;
+	margin: 0;
+	line-height: 1.2;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+`;
+
+export const DetailsTicker = styled.div`
+	color: #757575;
+	font-size: 14px;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+`;
+
+export const CloseButton = styled.button`
+	position: absolute;
+	right: 0;
+	top: 0;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 5px;
+
+	& svg {
+		width: 16px;
+		height: 16px;
+	}
+`;
+
+export const DetailsSection = styled.div`
+	margin-bottom: 15px;
+`;
+
+export const DetailsSectionTitle = styled.h4`
+	font-size: 14px;
+	color: #757575;
+	margin: 0 0 5px 0;
+	font-weight: normal;
+	text-transform: uppercase;
+`;
+
+export const DetailsStat = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px 0;
+	font-size: 16px;
+	font-weight: 500;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+`;
+
+export const SocialLinks = styled.div`
+	display: flex;
+	gap: 15px;
+	margin: 20px 0;
+
+	& a {
+		color: #333;
+
+		& svg {
+			width: 20px;
+			height: 20px;
+		}
+	}
+`;
+
+export const DetailsDescription = styled.p`
+	font-size: 14px;
+	line-height: 1.6;
+	color: #555;
+	margin: 0;
 `;

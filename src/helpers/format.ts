@@ -98,33 +98,34 @@ export function parseBigIntAsNumber(value?: bigint | string, denomination = 0, m
 		// handle negative values by capturing the sign
 		const isNegative = value.toString().startsWith('-');
 		const absValue = isNegative
-			? (typeof value === 'string' ? BigInt(value) : value) * -1n
+			? (typeof value === 'string' ? BigInt(value) : value) * BigInt(-1)
 			: typeof value === 'string'
 			? BigInt(value)
 			: value;
 
-		// multiplier according to the denomination
-		const dMul = 10n ** BigInt(denomination);
+		// multiplier according to the denomination using a loop instead of exponentiation
+		let dMul = BigInt(1);
+		for (let i = 0; i < denomination; i++) {
+			dMul *= BigInt(10);
+		}
 
 		// fractional and integer parts
 		const integerPart = absValue / dMul;
-
-		// return value
 		let result = integerPart.toString();
 
 		// add fractions
 		if (maximumFractionDigits !== 0) {
 			// starting index of the fractional part
-			const fractionalPartStart = integerPart !== 0n ? integerPart.toString().length : 0;
+			const fractionalPartStart = integerPart !== BigInt(0) ? integerPart.toString().length : 0;
 
 			// calculate fractional part
 			let fractions = absValue
 				.toString()
 				.slice(fractionalPartStart)
-				.padStart(Number(denomination), '0')
+				.padStart(denomination, '0')
 				.slice(0, maximumFractionDigits);
 
-			if (fractions !== '' && BigInt(fractions) > 0n) {
+			if (fractions !== '' && BigInt(fractions) > BigInt(0)) {
 				result += '.' + fractions.replace(/0*$/, '');
 			}
 		}
@@ -143,30 +144,37 @@ export function parseBigIntAsNumber(value?: bigint | string, denomination = 0, m
  * Parse a string containing a decimal number (float) to a bigint, based on a token denomination
  */
 export function parseNumberAsBigInt(number?: string, denomination = 0) {
-	// this is to support numbers with this notation 4.3311482723360494e-7
+	// Support numbers with scientific notation, e.g. "4.3311482723360494e-7"
 	let value = number?.includes('e') ? Number(number).toFixed(denomination) : number;
-	if (!value) return 0n;
-	// multiplier according to the denomination
-	const dMul = 10n ** BigInt(denomination);
+	if (!value) return BigInt(0);
 
-	// replace formatters
+	// Remove formatters like commas
 	value = value.replace(/,/g, '');
+	if (value === '') return BigInt(0);
 
-	// empty value
-	if (value === '') return 0n;
+	// Build multiplier (dMul = 10^denomination) without using exponentiation
+	let dMul = BigInt(1);
+	for (let i = 0; i < denomination; i++) {
+		dMul *= BigInt(10);
+	}
 
-	let result = BigInt(value.split('.')[0]) * dMul;
-	const plainFractions = value.split('.')[1];
+	const parts = value.split('.');
+	let result = BigInt(parts[0]) * dMul;
+	const plainFractions = parts[1];
 
 	if (plainFractions && plainFractions !== '') {
-		// select part that is max. as long as the denomination
-		// the other part is discarded
-		const relevantPart = plainFractions.slice(0, Number(denomination));
+		// Only keep digits up to the given denomination
+		const relevantPart = plainFractions.slice(0, denomination);
 		let fractionalPart = BigInt(relevantPart);
 
-		// fill to match denomination
-		if (BigInt(relevantPart.length) < denomination) {
-			fractionalPart = fractionalPart * 10n ** (BigInt(denomination) - BigInt(relevantPart.length));
+		// If the fraction has fewer digits than the denomination, adjust by a multiplier
+		const diff = denomination - relevantPart.length;
+		if (diff > 0) {
+			let multiplier = BigInt(1);
+			for (let i = 0; i < diff; i++) {
+				multiplier *= BigInt(10);
+			}
+			fractionalPart *= multiplier;
 		}
 
 		result += fractionalPart;

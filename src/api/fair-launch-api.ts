@@ -262,3 +262,48 @@ export async function getAggregatedStats(processId: string): Promise<any> {
 	console.log('onStats', data);
 	return data;
 }
+
+interface DelegationRecord {
+	directDelegations: Array<{
+		Timestamp: number;
+		projectYields: Record<string, string>;
+		Nonce: string;
+	}>;
+	summary?: {
+		Timestamp: number;
+		Nonce: string;
+		Data: {
+			totalDelegatedAO: string;
+			totalPiDelegatedAO: string;
+			totalDelegators: string;
+			totalDirectDelegators: string;
+			totalDirectDelegatedAO: string;
+			totalPiDelegators: string;
+		};
+	};
+}
+
+export async function getLastDelegationRecord(): Promise<DelegationRecord | null> {
+	const res = await dryrun({
+		process: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY',
+		tags: [{ name: 'Action', value: 'Get-Last-Record' }],
+	});
+	if (!res.Messages.length) return null;
+	const data = JSON.parse(res.Messages[0].Data);
+	console.log('onLastDelegationRecord', data);
+	return data;
+}
+
+export async function getDelegationRecords(): Promise<DelegationRecord[]> {
+	const res = await dryrun({
+		process: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY',
+		tags: [
+			{ name: 'Action', value: 'Get-Last-N-Records' },
+			{ name: 'N', value: '30' },
+		],
+	});
+	if (!res.Messages.length) return null;
+	const data = JSON.parse(res.Messages[0].Data);
+	console.log('onDelegationRecords', data);
+	return data;
+}
