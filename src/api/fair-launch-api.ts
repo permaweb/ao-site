@@ -323,21 +323,17 @@ export interface UserDelegationResponse {
 }
 
 export async function getUserDelegations(walletAddress: string): Promise<UserDelegationResponse | null> {
-	try {
-		const res = await dryrun({
-			process: AO.delegationProcess,
-			tags: [
-				{ name: 'Action', value: 'Get-Delegations' },
-				{ name: 'Wallet', value: walletAddress },
-			],
-		});
-		if (!res.Messages.length) return null;
-		const data = JSON.parse(res.Messages[0].Data);
-		return data;
-	} catch (error) {
-		console.error('Error fetching user delegations:', error);
-		return null;
-	}
+	const res = await dryrun({
+		process: AO.delegationProcess,
+		tags: [
+			{ name: 'Action', value: 'Get-Delegations' },
+			{ name: 'Wallet', value: walletAddress },
+		],
+	});
+	if (!res.Messages.length) return null;
+	const data = JSON.parse(res.Messages[0].Data);
+	console.log('onUserDelegations', data);
+	return data;
 }
 
 export interface SetDelegationParams {
@@ -347,17 +343,20 @@ export interface SetDelegationParams {
 }
 
 export async function setDelegation(params: SetDelegationParams): Promise<string> {
+	console.log('Update delegation', params);
+	const data = JSON.stringify({
+		walletFrom: params.walletFrom,
+		walletTo: params.walletTo,
+		factor: params.factor,
+	});
+
 	const msgId = await message({
 		process: AO.delegationProcess,
 		signer: createDataItemSigner(window.arweaveWallet),
-		tags: [
-			{ name: 'Action', value: 'Set-Delegation' },
-			{ name: 'Wallet-From', value: params.walletFrom },
-			{ name: 'Wallet-To', value: params.walletTo },
-			{ name: 'Factor', value: params.factor.toString() },
-		],
+		data,
+		tags: [{ name: 'Action', value: 'Set-Delegation' }],
 	});
-
+	console.log('Update delegation msgId', msgId);
 	const computedResult = await result({ message: msgId, process: AO.delegationProcess });
 
 	console.log('Update delegation result', computedResult);
