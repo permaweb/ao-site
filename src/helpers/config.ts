@@ -6,16 +6,17 @@ export const AO = {
 	cred: 'Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc',
 	aoClaim: 'U2Bv-LEoFzwAFfBx9MiXNnAfaYRjT4MG9T7sFcVHn20',
 	aoMetrics: 'vdpaKV_BQNISuDgtZpLDfDlMJinKHqM3d2NWd3bzeSk',
-	// delegationOracle: 'cuxSKjGJ-WDB9PzSkVkVVrIBSh3DrYHYz44usQOj5yE',
+	delegationOracle: 'cuxSKjGJ-WDB9PzSkVkVVrIBSh3DrYHYz44usQOj5yE',
 	stEthPriceOracle: 'wJV8FMkpoeLsTjJ6O7YZEuQgMqj-sDjPHhTeA73RsCc',
 	daiPriceOracle: '5q8vpzC5QAKOAJFM26MAKfZw1gwtw7WA_J2861ZiKhI',
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
-	// flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
-	// piProcess: 'rxxU4g-7tUHGvF28W2l53hxarpbaFR4NaSnOaxx6MIE',
-	delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
-	yieldHistorian: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY', // staging
-	flpFactory: 'JC0_BVWWf7xbmXUeKskDBRQ5fJo8fWgPtaEYMOf-Vbk', // staging
-	piProcess: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots', // staging
+	yieldHistorian: '', //TODO
+	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
+	piProcess: 'rxxU4g-7tUHGvF28W2l53hxarpbaFR4NaSnOaxx6MIE',
+	// delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
+	// yieldHistorian: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY', // staging
+	// flpFactory: 'JC0_BVWWf7xbmXUeKskDBRQ5fJo8fWgPtaEYMOf-Vbk', // staging
+	// piProcess: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots', // staging
 };
 
 export const ETH_CONTRACTS = {

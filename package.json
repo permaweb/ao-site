@@ -14,8 +14,8 @@
 		"test:coverage": "CI=true npm test -- --env=jsdom --coverage",
 		"prepare": "husky install",
 		"build": "NODE_ENV=production webpack",
-		"deploy:staging": "npm run build && permaweb-deploy --ant-process Gu5XiFhZZO_Pc6vRb6eoR3DxQi2P_1SzAVkHDbsPtbc",
-		"deploy:main": "npm run build && permaweb-deploy --ant-process HY021r2MQL9Zi0qSNFAQ9QRshIc2mNPYf65pZBP04cE"
+		"deploy:staging": "npm run build && permaweb-deploy --ant-process q8T2WkYufgEqtfF6Tn02mGqNqOvZ48suh6lfqzFR0-8",
+		"deploy:main": "npm run build && permaweb-deploy --ant-process q8T2WkYufgEqtfF6Tn02mGqNqOvZ48suh6lfqzFR0-8"
 	},
 	"dependencies": {
 		"@dha-team/arbundles": "^1.0.1",
