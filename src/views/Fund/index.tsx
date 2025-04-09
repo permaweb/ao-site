@@ -592,7 +592,7 @@ export default function Fund() {
 				)}
 
 				<S.SubmitButton disabled={!arProvider.walletAddress || isSubmitting} onClick={handleSubmitChanges}>
-					{isSubmitting ? 'Submitting...' : 'Submit Changes'}
+					{isSubmitting ? 'Saving...' : 'Confirm Delegation Preferences'}
 				</S.SubmitButton>
 			</S.AllocationPanel>
 		</S.Container>
