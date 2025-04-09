@@ -4,7 +4,7 @@ import { ReactSVG } from 'react-svg';
 
 import { ASSETS } from 'helpers/config';
 import { retryable } from 'helpers/network';
-import { formatAddress } from 'helpers/utils';
+import { formatAddress, formatDate } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 
 import { getDelegationRecords, getFlps, getLastDelegationRecord } from '../../api/fair-launch-api';
@@ -231,8 +231,7 @@ export default function Fund() {
 						</div>
 						<TrendChart
 							height={50}
-							delegationRecords={delegationRecords}
-							dataKey="totalDelegatedAO"
+							data={convertToChartData(delegationRecords, 'totalDelegatedAO')}
 							isLoading={!delegationRecords}
 						/>
 					</S.StatCard>
@@ -241,7 +240,11 @@ export default function Fund() {
 							<S.StatLabel>FAIR LAUNCH PROJECTS</S.StatLabel>
 							<S.StatValue>{allFlps ? allFlps.length : <Skeleton width={60} height={24} />}</S.StatValue>
 						</div>
-						<TrendChart height={50} delegationRecords={createCumulativeFlpData(allFlps)} isLoading={!allFlps} />
+						<TrendChart
+							height={50}
+							data={convertToChartData(createCumulativeFlpData(allFlps), 'totalDelegators')}
+							isLoading={!allFlps}
+						/>
 					</S.StatCard>
 					<S.StatCard>
 						<div>
@@ -256,8 +259,7 @@ export default function Fund() {
 						</div>
 						<TrendChart
 							height={50}
-							delegationRecords={delegationRecords}
-							dataKey="totalDelegators"
+							data={convertToChartData(delegationRecords, 'totalDelegators')}
 							isLoading={!delegationRecords}
 						/>
 					</S.StatCard>
@@ -460,3 +462,55 @@ const createCumulativeFlpData = (flps) => {
 		},
 	}));
 };
+
+export function convertToChartData(rawData: any[], dataKey: string, chartColor: string = '#0DBD27') {
+	if (!rawData || rawData.length === 0) {
+		return {
+			labels: [],
+			datasets: [
+				{
+					data: [],
+					borderColor: chartColor,
+					backgroundColor: `${chartColor}33`,
+					fill: true,
+					tension: 0.4,
+					pointRadius: 0,
+					borderWidth: 1,
+				},
+			],
+		};
+	}
+
+	const sortedRecords = rawData
+		.filter((record) => record?.summary?.Data?.[dataKey] !== undefined)
+		.sort((a, b) => {
+			const timestampA = a?.summary?.Timestamp || 0;
+			const timestampB = b?.summary?.Timestamp || 0;
+			return timestampA - timestampB;
+		});
+
+	const labels = sortedRecords.map((record) =>
+		record?.summary?.Timestamp ? formatDate(record.summary.Timestamp, 'dateString') : 'Unknown'
+	);
+
+	const values = sortedRecords.map((record) => {
+		const value = record?.summary?.Data?.[dataKey];
+		if (!value) return 0;
+		return dataKey === 'totalDelegatedAO' ? parseFloat(value) / 10 ** 12 : parseInt(value, 10);
+	});
+
+	return {
+		labels,
+		datasets: [
+			{
+				data: values,
+				borderColor: chartColor,
+				backgroundColor: `${chartColor}33`,
+				fill: true,
+				tension: 0.4,
+				pointRadius: 0,
+				borderWidth: 1,
+			},
+		],
+	};
+}

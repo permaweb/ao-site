@@ -130,6 +130,7 @@ function createURLs() {
 		policies: `${base}policies/`,
 		read: `${base}read/`,
 		fund: `${base}fund/`,
+		fundDashboard: `${base}fund/dashboard/`,
 		notFound: `${base}404`,
 	};
 }

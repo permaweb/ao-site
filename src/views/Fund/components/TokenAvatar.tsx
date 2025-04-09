@@ -11,7 +11,7 @@ interface TokenAvatarProps {
 const sizes = {
 	medium: '20px',
 	large: '30px',
-	xl: '84px',
+	xl: '46px',
 };
 
 const Avatar = styled.img<{ size: string }>`
