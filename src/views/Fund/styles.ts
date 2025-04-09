@@ -151,6 +151,11 @@ export const AllocationPanel = styled.div`
 	padding: 20px;
 	background-color: #f7f7f7;
 	border-radius: 8px;
+	position: sticky;
+	top: 76px;
+	align-self: flex-start;
+	max-height: calc(100vh - 40px);
+	overflow-y: auto;
 `;
 
 export const SubmitButton = styled.button`
