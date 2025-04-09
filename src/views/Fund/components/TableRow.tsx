@@ -22,6 +22,7 @@ interface TableRowProps {
 	isMaxAllocation: boolean;
 	handleAllocationChange: (token: string, change: number) => void;
 	getProjectYield: (projectProcess: string) => number;
+	getTotalProjectYield: (projectProcess: string) => number;
 	coreTokenColors: Record<string, string>;
 	flpColorMap: Record<string, string>;
 	isSubmitting: boolean;
@@ -36,6 +37,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 	isMaxAllocation,
 	handleAllocationChange,
 	getProjectYield,
+	getTotalProjectYield,
 	coreTokenColors,
 	flpColorMap,
 	isSubmitting,
@@ -61,7 +63,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 				</S.TableCell>
 				<S.TableCell>
 					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-						<span>{formatNumber(getProjectYield(row.id))}</span>
+						<span>{formatNumber(getTotalProjectYield(row.id))}</span>
 						<TokenAvatar logo={ASSETS.aoCircled} size="medium" />
 					</div>
 				</S.TableCell>

@@ -265,7 +265,7 @@ export async function getAggregatedStats(processId: string): Promise<any> {
 	return data;
 }
 
-interface DelegationRecord {
+interface LastDelegationRecord {
 	directDelegations: Array<{
 		Timestamp: number;
 		projectYields: Record<string, string>;
@@ -285,7 +285,32 @@ interface DelegationRecord {
 	};
 }
 
-export async function getLastDelegationRecord(): Promise<DelegationRecord | null> {
+interface DelegationRecord {
+	directDelegations: {
+		Data: {
+			Nonce: string;
+			projectYields: Record<string, string>;
+			projectBps: Record<string, string>;
+			delegationTable: Record<string, string>;
+		};
+		Timestamp: number;
+		Nonce: string;
+	};
+	summary?: {
+		Timestamp: number;
+		Nonce: string;
+		Data: {
+			totalDelegatedAO: string;
+			totalPiDelegatedAO: string;
+			totalDelegators: string;
+			totalDirectDelegators: string;
+			totalDirectDelegatedAO: string;
+			totalPiDelegators: string;
+		};
+	};
+}
+
+export async function getLastDelegationRecord(): Promise<LastDelegationRecord | null> {
 	const res = await dryrun({
 		process: AO.yieldHistorian,
 		tags: [{ name: 'Action', value: 'Get-Last-Record' }],
@@ -301,7 +326,7 @@ export async function getDelegationRecords(): Promise<DelegationRecord[]> {
 		process: AO.yieldHistorian,
 		tags: [
 			{ name: 'Action', value: 'Get-Last-N-Records' },
-			{ name: 'N', value: '30' },
+			{ name: 'N', value: '100' },
 		],
 	});
 	if (!res.Messages.length) return null;

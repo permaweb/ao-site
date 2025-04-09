@@ -116,7 +116,7 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 									</S.DetailSectionContent>
 								</div>
 
-								<div>
+								{/* <div>
 									<S.DetailsSectionHeading>Amount</S.DetailsSectionHeading>
 									<S.DetailSectionContent>
 										<div>
@@ -126,7 +126,7 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 											</S.DetailsSectionValue>
 										</div>
 									</S.DetailSectionContent>
-								</div>
+								</div> */}
 
 								<div>
 									<S.DetailsSectionHeading>Supply</S.DetailsSectionHeading>
@@ -187,7 +187,7 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 									</S.DetailSectionContent>
 								</div>
 
-								<div>
+								{/* <div>
 									<S.DetailsSectionHeading>Amount</S.DetailsSectionHeading>
 									<S.DetailSectionContent>
 										<div>
@@ -195,7 +195,7 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 											<S.DetailsSectionValue>TODO</S.DetailsSectionValue>
 										</div>
 									</S.DetailSectionContent>
-								</div>
+								</div> */}
 
 								<div>
 									<S.DetailsSectionHeading>Supply</S.DetailsSectionHeading>

@@ -122,7 +122,7 @@ export default function Fund() {
 		}
 	}, [userDelegations, allFlps, submitError]);
 
-	const getProjectYield = (projectProcess) => {
+	const getProjectYield = (flpId) => {
 		if (
 			!lastDelegationRecord ||
 			!lastDelegationRecord.directDelegations ||
@@ -132,7 +132,27 @@ export default function Fund() {
 		}
 
 		const lastDirectDelegation = lastDelegationRecord.directDelegations[0];
-		return Number(parseBigIntAsNumber(lastDirectDelegation.projectYields?.[projectProcess] || '0', 12));
+		return Number(parseBigIntAsNumber(lastDirectDelegation.projectYields?.[flpId] || '0', 12));
+	};
+
+	const totalProjectYields = useMemo(() => {
+		if (!delegationRecords || delegationRecords.length === 0) return {};
+		return delegationRecords.reduce((acc, record) => {
+			if (!record.directDelegations) return acc;
+
+			const directDelegation = record.directDelegations.Data;
+			if (!directDelegation.projectYields) return acc;
+
+			for (const [key, value] of Object.entries(directDelegation.projectYields)) {
+				acc[key] = (acc[key] || 0) + Number(parseBigIntAsNumber(value || '0', 12));
+			}
+
+			return acc;
+		}, {});
+	}, [delegationRecords]);
+
+	const getTotalProjectYield = (flpId) => {
+		return totalProjectYields[flpId] || 0;
 	};
 
 	const sortedAndFilteredFlps = useMemo(() => {
@@ -155,7 +175,7 @@ export default function Fund() {
 			}
 
 			if (tabIndex === 0) {
-				const projectYield = getProjectYield(flp.id);
+				const projectYield = getTotalProjectYield(flp.id);
 				return typeof projectYield === 'number' && projectYield > 10;
 			} else {
 				return true;
@@ -164,11 +184,11 @@ export default function Fund() {
 
 		return [...filtered].sort((a, b) => {
 			if (tabIndex === 0) {
-				return getProjectYield(b.id) - getProjectYield(a.id);
+				return getTotalProjectYield(b.id) - getTotalProjectYield(a.id);
 			}
 			return b.starts_at_ts - a.starts_at_ts;
 		});
-	}, [allFlps, searchQuery, tabIndex, lastDelegationRecord]);
+	}, [allFlps, searchQuery, tabIndex, lastDelegationRecord, delegationRecords]);
 
 	const totalAllocation = Object.values(allocations).reduce((sum, val) => sum + val, 0);
 	const isMaxAllocation = totalAllocation >= 100;
@@ -319,7 +339,7 @@ export default function Fund() {
 		}
 	};
 
-	if (!allFlps || !lastDelegationRecord) return <LoadingSkeletons />;
+	if (!allFlps || !lastDelegationRecord || !delegationRecords) return <LoadingSkeletons />;
 
 	return (
 		<S.Container style={{ display: 'flex', flexDirection: 'row', gap: 20, alignItems: 'flex-start', marginBottom: 60 }}>
@@ -491,6 +511,7 @@ export default function Fund() {
 								isMaxAllocation={isMaxAllocation}
 								handleAllocationChange={handleAllocationChange}
 								getProjectYield={getProjectYield}
+								getTotalProjectYield={getTotalProjectYield}
 								coreTokenColors={coreTokenColors}
 								flpColorMap={flpColorMap}
 								isSubmitting={isSubmitting}
