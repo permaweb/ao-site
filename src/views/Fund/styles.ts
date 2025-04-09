@@ -121,7 +121,7 @@ export const TokenInfo = styled.div`
 `;
 
 export const AddButton = styled.button`
-	padding: 10px 12px;
+	padding: 8px 14px;
 	background-color: #51c85b;
 	color: #fff;
 	border: none;
@@ -132,6 +132,17 @@ export const AddButton = styled.button`
 	&:disabled {
 		background-color: #aaa;
 		cursor: not-allowed;
+	}
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	flex-direction: row;
+
+	& svg polyline {
+		stroke: #fff;
+		stroke-width: 30;
 	}
 `;
 
@@ -267,8 +278,12 @@ export const TableRow = styled.tr`
 export const RowActionContainer = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	gap: 8px;
 	justify-content: flex-end;
+
+	& svg line {
+		stroke-width: 30;
+	}
 `;
 
 export const SeeDetailsButton = styled.button`
@@ -442,7 +457,7 @@ export const SocialLinks = styled.div`
 	}
 `;
 
-export const DetailsDescription = styled.p`
+export const DetailsDescription = styled.div`
 	font-size: 12px;
 	line-height: 2;
 	color: #6b6b6b;

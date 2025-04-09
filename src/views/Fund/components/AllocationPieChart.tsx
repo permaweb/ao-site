@@ -25,10 +25,13 @@ const ChartContainer = styled.div`
 export function AllocationPieChart({ data }: AllocationPieChartProps) {
 	const hasAllocations = data.some((item) => item.percentage > 0);
 
+	const totalAllocated = data.reduce((sum, item) => sum + item.percentage, 0);
+	const unallocatedPercentage = Math.max(0, 100 - totalAllocated);
+
 	const chartData = useMemo(() => {
 		if (!hasAllocations) {
 			return {
-				labels: ['No allocations'],
+				labels: ['Unallocated'],
 				datasets: [
 					{
 						data: [100],
@@ -39,17 +42,26 @@ export function AllocationPieChart({ data }: AllocationPieChartProps) {
 			};
 		}
 
+		const chartData = [...data];
+		if (unallocatedPercentage > 0) {
+			chartData.push({
+				token: 'Unallocated',
+				percentage: unallocatedPercentage,
+				color: 'rgba(40, 40, 40, 0.2)',
+			});
+		}
+
 		return {
-			labels: data.map((item) => item.token),
+			labels: chartData.map((item) => item.token),
 			datasets: [
 				{
-					data: data.map((item) => item.percentage),
-					backgroundColor: data.map((item) => item.color || '#F2F2F2'),
+					data: chartData.map((item) => item.percentage),
+					backgroundColor: chartData.map((item) => item.color || '#F2F2F2'),
 					borderWidth: 0,
 				},
 			],
 		};
-	}, [data, hasAllocations]);
+	}, [data, hasAllocations, unallocatedPercentage]);
 
 	const options = {
 		responsive: true,

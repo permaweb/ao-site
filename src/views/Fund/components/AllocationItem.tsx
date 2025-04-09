@@ -34,11 +34,12 @@ const TokenInfo = styled.div`
 	align-items: center;
 `;
 
-const ColorDot = styled.div<{ color: string }>`
+export const ColorDot = styled.div<{ color: string }>`
 	width: 16px;
 	height: 16px;
-	border-radius: 0.25rem;
+	border-radius: 2px;
 	background: ${(props) => props.color};
+	border: 1px solid #707070;
 `;
 
 const Controls = styled.div`

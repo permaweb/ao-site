@@ -1,23 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
 import { ASSETS } from 'helpers/config';
 import { retryable } from 'helpers/network';
-import { formatAddress, formatDate } from 'helpers/utils';
+import { formatAddress } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 
 import { getDelegationRecords, getFlps, getLastDelegationRecord } from '../../api/fair-launch-api';
-import { formatNumber, formatTicker, parseBigIntAsNumber } from '../../helpers/format';
+import { formatNumber, parseBigIntAsNumber } from '../../helpers/format';
 import { FLF_PROCESS } from '../../settings';
 
 import { AllocationItem } from './components/AllocationItem';
 import { AllocationPieChart } from './components/AllocationPieChart';
-import { ArrowSquareDownIcon } from './components/ArrowSquareDownIcon';
 import { InMemoryTable } from './components/InMemoryTable';
 import { LoadingSkeletons, Skeleton } from './components/LoadingSkeletons';
 import { PiFavicon } from './components/PiFavicon';
+import { TableRow } from './components/TableRow';
 import { TokenAvatar } from './components/TokenAvatar';
 import { TrendChart } from './components/TrendChart';
 import * as S from './styles';
@@ -51,6 +50,12 @@ const CORE_PROJECTS = [
 			'Keep earning AO. Your AR holding yield and deposits will continue to accrue AO without any reallocation.',
 	},
 ];
+
+const coreTokenColors = {
+	pi: '#BBBAD9',
+	arweave: '#BEEFD1',
+	ao: '#E5E3D7',
+};
 
 export default function Fund() {
 	const [tabIndex, setTabIndex] = useState(0);
@@ -132,16 +137,31 @@ export default function Fund() {
 		}));
 	};
 
-	const coreTokenColors = {
-		pi: '#8884d8',
-		arweave: '#82ca9d',
-		ao: '#ffc658',
-	};
-
 	const flpColorMap = useMemo(() => {
-		const colorPalette = ['#0088fe', '#00C49F', '#FFBB28', '#FF8042', '#ff8042'];
-		return (allFlps || []).reduce((acc, flp, idx) => {
-			acc[flp.id] = colorPalette[idx % colorPalette.length];
+		const colorPalette = [
+			'#F9E1C9',
+			'#C5DEC2',
+			'#F8F1E1',
+			'#E5E3D7',
+			'#E2E4E8',
+			'#B6D8D8',
+			'#CFCEE0',
+			'#EDDFD2',
+			'#C3D8C1',
+			'#EDD7E7',
+			'#E9D6D4',
+			'#E2E4E8',
+			'#D8D7E8',
+			'#EAEEDC',
+			'#C7E1C3',
+			'#EDF8F5',
+			'#BEEFD1',
+			'#C2D1E1',
+			'#D8EDED',
+		];
+		return (allFlps || []).reduce((acc, flp) => {
+			const idAsNumber = flp.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+			acc[flp.id] = colorPalette[idAsNumber % colorPalette.length];
 			return acc;
 		}, {});
 	}, [allFlps]);
@@ -321,153 +341,19 @@ export default function Fund() {
 							{ style: { width: 180, minWidth: 180, maxWidth: 180 }, label: 'ADD TO ALLOCATION', align: 'right' },
 						]}
 						renderRow={(row: any, index: number) => (
-							<React.Fragment key={row.id}>
-								<S.TableRow
-									onClick={() => {
-										setExpandedRows((prev) =>
-											prev.includes(row.id) ? prev.filter((id) => id !== row.id) : [...prev, row.id]
-										);
-									}}
-									className={expandedRows.includes(row.id) ? 'expanded' : ''}
-								>
-									<S.TableCell align="center">{index + 1}</S.TableCell>
-									<S.TableCell>
-										<S.TokenInfo>
-											<TokenAvatar logo={row.flp_token_logo} size="large" />
-											{row.flp_token_name && <span>{row.flp_token_name}</span>}
-											<span style={{ color: '#757575' }}>{formatTicker(row.flp_token_ticker)}</span>
-										</S.TokenInfo>
-									</S.TableCell>
-									<S.TableCell>
-										<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-											<span>{formatNumber(getProjectYield(row.id))}</span>
-											<TokenAvatar logo={ASSETS.aoCircled} size="medium" />
-										</div>
-									</S.TableCell>
-									<S.TableCell>
-										<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-											<span>{formatNumber(getProjectYield(row.id))}</span>
-											<TokenAvatar logo={ASSETS.aoCircled} size="medium" />
-										</div>
-									</S.TableCell>
-									<S.TableCell>{formatDate(row.starts_at_ts, 'dateString') || 'Unknown'}</S.TableCell>
-									<S.TableCell align="right">
-										<S.RowActionContainer>
-											<S.SeeDetailsButton
-												onClick={(e) => {
-													e.stopPropagation();
-													setExpandedRows((prev) =>
-														prev.includes(row.id) ? prev.filter((id) => id !== row.id) : [...prev, row.id]
-													);
-												}}
-											>
-												<div style={{ width: 200, height: 1, borderBottom: '1px solid #C8C8C8' }} />
-												<span>{expandedRows.includes(row.id) ? 'Close Details' : 'See Details'}</span>
-												<ArrowSquareDownIcon
-													style={{ transform: expandedRows.includes(row.id) ? 'rotate(180deg)' : 'rotate(0deg)' }}
-												/>
-												<div style={{ width: 200, height: 1, borderBottom: '1px solid #C8C8C8' }} />
-											</S.SeeDetailsButton>
-											<S.AddButton
-												onClick={(e) => {
-													e.stopPropagation();
-													e.preventDefault();
-													handleAllocationChange(row.id, 5);
-												}}
-												disabled={isMaxAllocation || row.status !== 'Active' || row.starts_at_ts > Date.now()}
-											>
-												Add
-											</S.AddButton>
-										</S.RowActionContainer>
-									</S.TableCell>
-								</S.TableRow>
-								{expandedRows.includes(row.id) && (
-									<S.DetailsRow>
-										<S.DetailsCell colSpan={6}>
-											<S.DetailsContent>
-												<div>
-													<S.SocialLinks>
-														{row.twitter_handle && (
-															<Link to={`https://x.com/${row.twitter_handle}`}>
-																<ReactSVG src={ASSETS.x} />
-															</Link>
-														)}
-														{/* <Link to={`https://github.com/${row.flp_github}`}>
-														<ReactSVG src={ASSETS.github} />
-													</Link> */}
-														{/* <Link to={`https://${row.flp_token_discord}`}>
-														<ReactSVG src={ASSETS.discord} />
-													</Link> */}
-														{/* {
-														row.telegram_handle && (
-															<Link to={`https://telegram.me/${row.telegram_handle}`}>
-																<ReactSVG src={ASSETS.telegram} />
-															</Link>
-														)
-													} */}
-														{row.website_url && (
-															<Link to={row.website_url}>
-																<ReactSVG src={ASSETS.website} />
-															</Link>
-														)}
-													</S.SocialLinks>
-
-													<S.DetailsDescription>
-														{row.description ||
-															'Elevate your decentralized GPU experience with AI Nexus, a groundbreaking token that represents the future of artificial intelligence. AI Nexus is developed from a fusion of 1/3 Quantum Compute, 1/3 Neural Network (NN), and 1/3 tokens from diverse tech ecosystem projects.'}
-													</S.DetailsDescription>
-												</div>
-
-												<S.DetailsSectionsGrid>
-													<div>
-														<S.DetailsSectionHeading>Unlock Date</S.DetailsSectionHeading>
-														<S.DetailSectionContent>
-															<div>
-																<S.DetailsSectionLabel>TOKEN UNLOCKS</S.DetailsSectionLabel>
-																<S.DetailsSectionValue>Feb 21st, 2034</S.DetailsSectionValue>
-															</div>
-															<div>
-																<S.DetailsSectionLabel>RUN TIME</S.DetailsSectionLabel>
-																<S.DetailsSectionValue style={{ color: '#51C85B' }}>
-																	2 years, 1 day left
-																</S.DetailsSectionValue>
-															</div>
-														</S.DetailSectionContent>
-													</div>
-
-													<div>
-														<S.DetailsSectionHeading>Amount</S.DetailsSectionHeading>
-														<S.DetailSectionContent>
-															<div>
-																<S.DetailsSectionLabel>DELEGATORS</S.DetailsSectionLabel>
-																<S.DetailsSectionValue>6,000,000,000</S.DetailsSectionValue>
-															</div>
-														</S.DetailSectionContent>
-													</div>
-
-													<div>
-														<S.DetailsSectionHeading>Supply</S.DetailsSectionHeading>
-														<S.DetailSectionContent>
-															<div>
-																<S.DetailsSectionLabel>TOTAL FAIR LAUNCH VS TOTAL SUPPLY</S.DetailsSectionLabel>
-																<S.DetailsSectionValue>2,000,000,000 / 3,000,000,000</S.DetailsSectionValue>
-															</div>
-															<div>
-																<S.DetailsSectionLabel>PERCENTAGE OF SUPPLY</S.DetailsSectionLabel>
-																<S.DetailsSectionValue>90%</S.DetailsSectionValue>
-															</div>
-															<div>
-																<S.DetailsSectionLabel>DECAY RATE</S.DetailsSectionLabel>
-																<S.DetailsSectionValue>0.5</S.DetailsSectionValue>
-															</div>
-														</S.DetailSectionContent>
-													</div>
-												</S.DetailsSectionsGrid>
-											</S.DetailsContent>
-										</S.DetailsCell>
-									</S.DetailsRow>
-								)}
-							</React.Fragment>
+							<TableRow
+								key={row.id}
+								row={row}
+								index={index}
+								expandedRows={expandedRows}
+								setExpandedRows={setExpandedRows}
+								allocations={allocations}
+								isMaxAllocation={isMaxAllocation}
+								handleAllocationChange={handleAllocationChange}
+								getProjectYield={getProjectYield}
+								coreTokenColors={coreTokenColors}
+								flpColorMap={flpColorMap}
+							/>
 						)}
 					/>
 				</div>
@@ -485,12 +371,6 @@ export default function Fund() {
 					</div>
 
 					<div style={{ borderTop: '1px solid #eee', margin: '0.5rem 0' }} />
-
-					{isMaxAllocation && (
-						<div style={{ padding: '0.5rem 1rem', fontSize: '12px', color: '#666' }}>
-							You are at 100%, you must remove some percentage of allocation to begin adding more.
-						</div>
-					)}
 
 					<div style={{ maxHeight: 350, overflowY: 'auto' }}>
 						<S.AllocationContainer>
@@ -526,6 +406,12 @@ export default function Fund() {
 							))}
 					</div>
 				</div>
+
+				{isMaxAllocation && (
+					<S.Subtitle style={{ padding: '20px 10px 0px', fontSize: '12px' }}>
+						You are at 100%, you must remove some percentage of allocation to begin adding more.
+					</S.Subtitle>
+				)}
 
 				<S.SubmitButton>Submit Changes</S.SubmitButton>
 			</S.AllocationPanel>
