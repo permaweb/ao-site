@@ -284,34 +284,30 @@ interface DelegationRecord {
 		};
 	};
 }
+
 export async function getLastDelegationRecord(): Promise<DelegationRecord | null> {
-	try {
-		const res = await dryrun({
-			process: AO.historianProcess,
-			tags: [{ name: 'Action', value: 'Get-Last-Delegation-Record' }],
-		});
-		if (!res.Messages.length) return null;
-		const data = JSON.parse(res.Messages[0].Data);
-		return data;
-	} catch (error) {
-		console.error('Error fetching last delegation record:', error);
-		return null;
-	}
+	const res = await dryrun({
+		process: AO.historianProcess,
+		tags: [{ name: 'Action', value: 'Get-Last-Record' }],
+	});
+	if (!res.Messages.length) return null;
+	const data = JSON.parse(res.Messages[0].Data);
+	console.log('onLastDelegationRecord', data);
+	return data;
 }
 
 export async function getDelegationRecords(): Promise<DelegationRecord[]> {
-	try {
-		const res = await dryrun({
-			process: AO.historianProcess,
-			tags: [{ name: 'Action', value: 'Get-Delegation-Records' }],
-		});
-		if (!res.Messages.length) return [];
-		const data = JSON.parse(res.Messages[0].Data);
-		return data;
-	} catch (error) {
-		console.error('Error fetching delegation records:', error);
-		return [];
-	}
+	const res = await dryrun({
+		process: AO.historianProcess,
+		tags: [
+			{ name: 'Action', value: 'Get-Last-N-Records' },
+			{ name: 'N', value: '30' },
+		],
+	});
+	if (!res.Messages.length) return null;
+	const data = JSON.parse(res.Messages[0].Data);
+	console.log('onDelegationRecords', data);
+	return data;
 }
 
 export interface DelegationPreference {
@@ -331,7 +327,7 @@ export async function getUserDelegations(walletAddress: string): Promise<UserDel
 		const res = await dryrun({
 			process: AO.delegationProcess,
 			tags: [
-				{ name: 'Action', value: 'Get-User-Delegations' },
+				{ name: 'Action', value: 'Get-Delegations' },
 				{ name: 'Wallet', value: walletAddress },
 			],
 		});

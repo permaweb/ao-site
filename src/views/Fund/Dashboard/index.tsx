@@ -142,7 +142,7 @@ export default function DashboardPage() {
 								<S.TableRow key={i}>
 									<S.TableCell>
 										<S.TokenInfo>
-											<Skeleton width={40} height={40} style={{ borderRadius: '50%' }} />
+											<Skeleton width={20} height={20} style={{ borderRadius: '50%' }} />
 											<Skeleton width={120} height={20} />
 										</S.TokenInfo>
 									</S.TableCell>
@@ -166,6 +166,7 @@ export default function DashboardPage() {
 
 						return (
 							<DelegationTableRow
+								key={row.id}
 								row={row}
 								index={index}
 								expandedRows={expandedRows}
