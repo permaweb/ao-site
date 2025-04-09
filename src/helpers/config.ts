@@ -12,6 +12,10 @@ export const AO = {
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
 	piProcess: 'rxxU4g-7tUHGvF28W2l53hxarpbaFR4NaSnOaxx6MIE',
+	piToken: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots',
+	delegationProcess: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc',
+	historianProcess: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY',
+	flfProcess: 'JC0_BVWWf7xbmXUeKskDBRQ5fJo8fWgPtaEYMOf-Vbk',
 };
 
 export const ETH_CONTRACTS = {
@@ -903,11 +907,7 @@ export const DaiBridge_ABI = [
 		inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
 		name: 'pools',
 		outputs: [
-			{
-				internalType: 'uint128',
-				name: 'withdrawLockPeriodAfterStake',
-				type: 'uint128',
-			},
+			{ internalType: 'uint128', name: 'withdrawLockPeriodAfterStake', type: 'uint128' },
 			{ internalType: 'uint256', name: 'minimalStake', type: 'uint256' },
 			{ internalType: 'bool', name: 'isPublic', type: 'bool' },
 		],

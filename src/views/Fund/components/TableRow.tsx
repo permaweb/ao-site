@@ -1,19 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
-import { getFlpInfo } from 'api/fair-launch-api';
-import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { ReactSVG } from 'react-svg';
 
 import { ASSETS } from 'helpers/config';
-import { retryable } from 'helpers/network';
 import { formatDate } from 'helpers/utils';
+import { useArweaveProvider } from 'providers/ArweaveProvider';
 
-import { formatNumber, formatTicker, parseBigIntAsNumber } from '../../../helpers/format';
+import { formatNumber, formatTicker } from '../../../helpers/format';
 import * as S from '../styles';
 
 import { ColorDot } from './AllocationItem';
 import { ArrowSquareDownIcon } from './ArrowSquareDownIcon';
-import { Skeleton } from './LoadingSkeletons';
+import { FlpDetailsRow } from './FlpDetailsRow';
 import { TokenAvatar } from './TokenAvatar';
 
 interface TableRowProps {
@@ -27,6 +24,7 @@ interface TableRowProps {
 	getProjectYield: (projectProcess: string) => number;
 	coreTokenColors: Record<string, string>;
 	flpColorMap: Record<string, string>;
+	isSubmitting: boolean;
 }
 
 export const TableRow: React.FC<TableRowProps> = ({
@@ -40,66 +38,10 @@ export const TableRow: React.FC<TableRowProps> = ({
 	getProjectYield,
 	coreTokenColors,
 	flpColorMap,
+	isSubmitting,
 }) => {
 	const isExpanded = expandedRows.includes(row.id);
-
-	const { data: flpInfo, isLoading: flpInfoLoading } = useQuery({
-		queryKey: ['flp-info', row.id],
-		queryFn: async () => {
-			const flpInfo = await retryable(getFlpInfo)(row.id!);
-			console.log('onFlpInfo', flpInfo);
-			return flpInfo;
-		},
-		enabled: !!row.id && isExpanded,
-	});
-
-	const totalToDistribute = useMemo(() => {
-		try {
-			return parseBigIntAsNumber(flpInfo?.['Token-Supply-To-Use'], Number(flpInfo?.['Token-Denomination']));
-		} catch {
-			return 0;
-		}
-	}, [flpInfo]);
-
-	const totalSupply = useMemo(() => {
-		try {
-			let supply: string = flpInfo?.['Total-Token-Supply-At-Creation'];
-
-			try {
-				supply = JSON.parse(supply);
-			} catch {}
-
-			return parseBigIntAsNumber(supply, Number(flpInfo?.['Token-Denomination']));
-		} catch {
-			return 0;
-		}
-	}, [flpInfo]);
-
-	const percentageOfSupply = useMemo(() => {
-		if (totalSupply === 0) return 0;
-		return (Number(totalToDistribute) / Number(totalSupply)) * 100;
-	}, [totalToDistribute, totalSupply]);
-
-	const runTime = useMemo(() => {
-		if (!row.starts_at_ts || !row.ends_at_ts) return 'Indefinitely';
-
-		const startDate = new Date(row.starts_at_ts);
-		const endDate = new Date(row.ends_at_ts);
-
-		const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
-		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-		const years = Math.floor(diffDays / 365);
-		const remainingDays = diffDays % 365;
-
-		if (years > 0) {
-			return `${years} year${years > 1 ? 's' : ''}${
-				remainingDays > 0 ? `, ${remainingDays} day${remainingDays > 1 ? 's' : ''}` : ''
-			}`;
-		} else {
-			return `${diffDays} day${diffDays > 1 ? 's' : ''}`;
-		}
-	}, [row.starts_at_ts, row.ends_at_ts]);
+	const arProvider = useArweaveProvider();
 
 	return (
 		<React.Fragment key={row.id}>
@@ -161,7 +103,13 @@ export const TableRow: React.FC<TableRowProps> = ({
 										width: '16px',
 										height: '16px',
 										color:
-											isMaxAllocation || row.status !== 'Active' || row.starts_at_ts > Date.now() ? '#aaa' : '#51c85b',
+											isSubmitting ||
+											isMaxAllocation ||
+											row.status !== 'Active' ||
+											row.starts_at_ts > Date.now() ||
+											!arProvider.walletAddress
+												? '#aaa'
+												: '#51c85b',
 									}}
 								/>
 								<S.AddButton
@@ -170,7 +118,13 @@ export const TableRow: React.FC<TableRowProps> = ({
 										e.preventDefault();
 										handleAllocationChange(row.id, 5);
 									}}
-									disabled={isMaxAllocation || row.status !== 'Active' || row.starts_at_ts > Date.now()}
+									disabled={
+										isSubmitting ||
+										isMaxAllocation ||
+										row.status !== 'Active' ||
+										row.starts_at_ts > Date.now() ||
+										!arProvider.walletAddress
+									}
 								>
 									Add
 								</S.AddButton>
@@ -179,149 +133,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 					</S.RowActionContainer>
 				</S.TableCell>
 			</S.TableRow>
-			{isExpanded && (
-				<S.DetailsRow>
-					<S.DetailsCell colSpan={6}>
-						<S.DetailsContent>
-							{flpInfoLoading ? (
-								<>
-									<div>
-										<S.SocialLinks>
-											<Skeleton width={24} height={24} style={{ marginRight: '10px' }} />
-											<Skeleton width={24} height={24} />
-										</S.SocialLinks>
-
-										<S.DetailsDescription>
-											<Skeleton width="100%" height={60} />
-										</S.DetailsDescription>
-									</div>
-
-									<S.DetailsSectionsGrid>
-										<div>
-											<S.DetailsSectionHeading>Unlock Date</S.DetailsSectionHeading>
-											<S.DetailSectionContent>
-												<div>
-													<S.DetailsSectionLabel>TOKEN UNLOCKS</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>
-														<Skeleton width={120} height={20} />
-													</S.DetailsSectionValue>
-												</div>
-												<div>
-													<S.DetailsSectionLabel>RUN TIME</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>
-														<Skeleton width={150} height={20} />
-													</S.DetailsSectionValue>
-												</div>
-											</S.DetailSectionContent>
-										</div>
-
-										<div>
-											<S.DetailsSectionHeading>Amount</S.DetailsSectionHeading>
-											<S.DetailSectionContent>
-												<div>
-													<S.DetailsSectionLabel>DELEGATORS</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>
-														<Skeleton width={120} height={20} />
-													</S.DetailsSectionValue>
-												</div>
-											</S.DetailSectionContent>
-										</div>
-
-										<div>
-											<S.DetailsSectionHeading>Supply</S.DetailsSectionHeading>
-											<S.DetailSectionContent>
-												<div>
-													<S.DetailsSectionLabel>TOTAL FAIR LAUNCH VS TOTAL SUPPLY</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>
-														<Skeleton width={180} height={20} />
-													</S.DetailsSectionValue>
-												</div>
-												<div>
-													<S.DetailsSectionLabel>PERCENTAGE OF SUPPLY</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>
-														<Skeleton width={60} height={20} />
-													</S.DetailsSectionValue>
-												</div>
-												<div>
-													<S.DetailsSectionLabel>DECAY RATE</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>
-														<Skeleton width={60} height={20} />
-													</S.DetailsSectionValue>
-												</div>
-											</S.DetailSectionContent>
-										</div>
-									</S.DetailsSectionsGrid>
-								</>
-							) : (
-								<>
-									<div>
-										<S.SocialLinks>
-											{row.twitter_handle && (
-												<Link to={`https://x.com/${row.twitter_handle}`} target="_blank">
-													<ReactSVG src={ASSETS.x} />
-												</Link>
-											)}
-											{row.website_url && (
-												<Link to={row.website_url} target="_blank">
-													<ReactSVG src={ASSETS.website} />
-												</Link>
-											)}
-										</S.SocialLinks>
-
-										<S.DetailsDescription>{flpInfo?.['Flp-Long-Description']}</S.DetailsDescription>
-									</div>
-
-									<S.DetailsSectionsGrid>
-										<div>
-											<S.DetailsSectionHeading>Unlock Date</S.DetailsSectionHeading>
-											<S.DetailSectionContent>
-												<div>
-													<S.DetailsSectionLabel>TOKEN UNLOCKS</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>{formatDate(row.starts_at_ts, 'dateString')}</S.DetailsSectionValue>
-												</div>
-												<div>
-													<S.DetailsSectionLabel>RUN TIME</S.DetailsSectionLabel>
-													<S.DetailsSectionValue style={{ color: '#51C85B' }}>{runTime}</S.DetailsSectionValue>
-												</div>
-											</S.DetailSectionContent>
-										</div>
-
-										<div>
-											<S.DetailsSectionHeading>Amount</S.DetailsSectionHeading>
-											<S.DetailSectionContent>
-												<div>
-													<S.DetailsSectionLabel>DELEGATORS</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>TODO</S.DetailsSectionValue>
-												</div>
-											</S.DetailSectionContent>
-										</div>
-
-										<div>
-											<S.DetailsSectionHeading>Supply</S.DetailsSectionHeading>
-											<S.DetailSectionContent>
-												<div>
-													<S.DetailsSectionLabel>TOTAL FAIR LAUNCH VS TOTAL SUPPLY</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>
-														{formatNumber(totalToDistribute)} / {formatNumber(totalSupply)}
-													</S.DetailsSectionValue>
-												</div>
-												<div>
-													<S.DetailsSectionLabel>PERCENTAGE OF SUPPLY</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>{percentageOfSupply.toFixed(2)}%</S.DetailsSectionValue>
-												</div>
-												<div>
-													<S.DetailsSectionLabel>DECAY RATE</S.DetailsSectionLabel>
-													<S.DetailsSectionValue>{flpInfo?.['Decay-Factor']}</S.DetailsSectionValue>
-												</div>
-											</S.DetailSectionContent>
-										</div>
-									</S.DetailsSectionsGrid>
-								</>
-							)}
-						</S.DetailsContent>
-					</S.DetailsCell>
-				</S.DetailsRow>
-			)}
+			<FlpDetailsRow row={row} isExpanded={isExpanded} colSpan={6} />
 		</React.Fragment>
 	);
 };

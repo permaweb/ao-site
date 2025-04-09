@@ -1,15 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ReactSVG } from 'react-svg';
 
-import { ASSETS } from 'helpers/config';
+import { AO, ASSETS } from 'helpers/config';
 import { retryable } from 'helpers/network';
 import { formatAddress, formatDate } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 
-import { getDelegationRecords, getFlps, getLastDelegationRecord } from '../../api/fair-launch-api';
+import {
+	getDelegationRecords,
+	getFlps,
+	getLastDelegationRecord,
+	getUserDelegations,
+	setDelegation,
+	UserDelegationResponse,
+} from '../../api/fair-launch-api';
 import { formatNumber, parseBigIntAsNumber } from '../../helpers/format';
-import { FLF_PROCESS } from '../../settings';
 
 import { AllocationItem } from './components/AllocationItem';
 import { AllocationPieChart } from './components/AllocationPieChart';
@@ -63,10 +69,12 @@ export default function Fund() {
 	const [allocations, setAllocations] = useState<Record<string, number>>({});
 	const [pageSize, setPageSize] = useState(10);
 	const [expandedRows, setExpandedRows] = useState<string[]>([]);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState<string | null>(null);
 
 	const { data: allFlps } = useQuery({
 		queryKey: ['allFlps'],
-		queryFn: () => retryable(getFlps)(FLF_PROCESS),
+		queryFn: () => retryable(getFlps)(AO.flfProcess),
 	});
 
 	const { data: lastDelegationRecord } = useQuery({
@@ -78,6 +86,40 @@ export default function Fund() {
 		queryKey: ['delegationRecords'],
 		queryFn: () => retryable(getDelegationRecords)(),
 	});
+
+	const arProvider = useArweaveProvider();
+
+	const { data: userDelegations, refetch: refetchUserDelegations } = useQuery<UserDelegationResponse | null>({
+		queryKey: ['userDelegations'],
+		queryFn: () => retryable(getUserDelegations)(arProvider.walletAddress),
+		enabled: !!arProvider.walletAddress,
+	});
+
+	useEffect(() => {
+		if (userDelegations && userDelegations.delegationPrefs) {
+			const initialAllocations: Record<string, number> = {};
+
+			CORE_PROJECTS.forEach((project) => {
+				const delegation = userDelegations.delegationPrefs.find((pref) => pref.walletTo === project.process);
+
+				if (delegation) {
+					initialAllocations[project.id] = delegation.factor / 100;
+				}
+			});
+
+			if (allFlps) {
+				allFlps.forEach((flp) => {
+					const delegation = userDelegations.delegationPrefs.find((pref) => pref.walletTo === flp.id);
+
+					if (delegation) {
+						initialAllocations[flp.id] = delegation.factor / 100;
+					}
+				});
+			}
+
+			setAllocations(initialAllocations);
+		}
+	}, [userDelegations, allFlps, submitError]);
 
 	const getProjectYield = (projectProcess) => {
 		if (
@@ -100,6 +142,7 @@ export default function Fund() {
 				const query = searchQuery.toLowerCase();
 				if (
 					!(
+						flp.id?.toLowerCase().includes(query) ||
 						flp.flp_name?.toLowerCase().includes(query) ||
 						flp.flp_token_name?.toLowerCase().includes(query) ||
 						flp.flp_token_ticker?.toLowerCase().includes(query) ||
@@ -130,6 +173,8 @@ export default function Fund() {
 	const isMaxAllocation = totalAllocation >= 100;
 
 	const handleAllocationChange = (token: string, change: number) => {
+		if (!arProvider.walletAddress || isSubmitting) return;
+
 		if (isMaxAllocation && change > 0) return;
 		setAllocations((prev) => ({
 			...prev,
@@ -182,9 +227,98 @@ export default function Fund() {
 		[allocations, allFlps, flpColorMap]
 	);
 
-	const arProvider = useArweaveProvider();
+	const handleSubmitChanges = async () => {
+		if (!arProvider.walletAddress) return;
 
-	if (!allFlps) return <LoadingSkeletons />;
+		setIsSubmitting(true);
+		setSubmitError(null);
+
+		try {
+			const currentDelegations = userDelegations?.delegationPrefs || [];
+
+			const changes = [];
+
+			for (const project of CORE_PROJECTS) {
+				const currentDelegation = currentDelegations.find((pref) => pref.walletTo === project.process);
+
+				const newFactor = Math.round((allocations[project.id] || 0) * 100);
+
+				if (currentDelegation && currentDelegation.factor > newFactor) {
+					changes.push({
+						type: 'reduce',
+						walletTo: project.process,
+						factor: newFactor,
+					});
+				} else if (!currentDelegation && newFactor > 0) {
+					changes.push({
+						type: 'increase',
+						walletTo: project.process,
+						factor: newFactor,
+					});
+				} else if (currentDelegation && currentDelegation.factor < newFactor) {
+					changes.push({
+						type: 'increase',
+						walletTo: project.process,
+						factor: newFactor,
+					});
+				}
+			}
+
+			if (allFlps) {
+				for (const flp of allFlps) {
+					const currentDelegation = currentDelegations.find((pref) => pref.walletTo === flp.id);
+
+					const newFactor = Math.round((allocations[flp.id] || 0) * 100);
+
+					if (currentDelegation && currentDelegation.factor > newFactor) {
+						changes.push({
+							type: 'reduce',
+							walletTo: flp.id,
+							factor: newFactor,
+						});
+					} else if (!currentDelegation && newFactor > 0) {
+						changes.push({
+							type: 'increase',
+							walletTo: flp.id,
+							factor: newFactor,
+						});
+					} else if (currentDelegation && currentDelegation.factor < newFactor) {
+						changes.push({
+							type: 'increase',
+							walletTo: flp.id,
+							factor: newFactor,
+						});
+					}
+				}
+			}
+
+			const sortedChanges = changes.sort((a, b) => {
+				if (a.type === 'reduce' && b.type === 'increase') return -1;
+				if (a.type === 'increase' && b.type === 'reduce') return 1;
+				return 0;
+			});
+
+			for (const change of sortedChanges) {
+				await setDelegation({
+					walletFrom: arProvider.walletAddress,
+					walletTo: change.walletTo,
+					factor: change.factor,
+				});
+			}
+		} catch (error) {
+			console.error('Error submitting delegation changes:', error);
+			if (String(error).includes('total delegation factors exceed 10000 basis points')) {
+				setSubmitError('Total delegation factors exceed 10000 basis points. Please reduce your allocation.');
+			} else {
+				setSubmitError(error.message || 'Failed to submit changes. Please try again.');
+			}
+		} finally {
+			await refetchUserDelegations();
+			setIsSubmitting(false);
+		}
+	};
+
+	if (!allFlps || !lastDelegationRecord) return <LoadingSkeletons />;
 
 	return (
 		<S.Container style={{ display: 'flex', flexDirection: 'row', gap: 20, alignItems: 'flex-start', marginBottom: 60 }}>
@@ -282,7 +416,10 @@ export default function Fund() {
 									</S.CoreTokenHeader>
 									<S.Subtitle>{token.description}</S.Subtitle>
 								</div>
-								<S.CardAddButton onClick={() => handleAllocationChange(token.id, 5)} disabled={isMaxAllocation}>
+								<S.CardAddButton
+									onClick={() => handleAllocationChange(token.id, 5)}
+									disabled={isMaxAllocation || !arProvider.walletAddress || isSubmitting}
+								>
 									<ReactSVG src={ASSETS.plus} />
 									Add
 								</S.CardAddButton>
@@ -355,6 +492,7 @@ export default function Fund() {
 								getProjectYield={getProjectYield}
 								coreTokenColors={coreTokenColors}
 								flpColorMap={flpColorMap}
+								isSubmitting={isSubmitting}
 							/>
 						)}
 					/>
@@ -387,6 +525,7 @@ export default function Fund() {
 									percentage={allocations[project.id] || 0}
 									color={coreTokenColors[project.id]}
 									isMaxAllocation={isMaxAllocation}
+									disabled={isSubmitting}
 									onAllocationChange={(change) => handleAllocationChange(project.id, change)}
 								/>
 							))}
@@ -402,7 +541,12 @@ export default function Fund() {
 									percentage={allocations[flp.id] || 0}
 									color={flpColorMap[flp.id] || '#F2F2F2'}
 									isMaxAllocation={isMaxAllocation}
-									disabled={flp.status !== 'Active' || flp.starts_at_ts > Date.now()}
+									disabled={
+										isSubmitting ||
+										flp.status !== 'Active' ||
+										flp.starts_at_ts > Date.now() ||
+										!arProvider.walletAddress
+									}
 									onAllocationChange={(change) => handleAllocationChange(flp.id, change)}
 								/>
 							))}
@@ -415,7 +559,19 @@ export default function Fund() {
 					</S.Subtitle>
 				)}
 
-				<S.SubmitButton>Submit Changes</S.SubmitButton>
+				{!arProvider.walletAddress && (
+					<S.Subtitle style={{ padding: '20px 10px 0px', fontSize: '12px' }}>
+						Please connect your wallet to manage allocations.
+					</S.Subtitle>
+				)}
+
+				{submitError && (
+					<S.Subtitle style={{ padding: '20px 10px 0px', fontSize: '12px', color: 'red' }}>{submitError}</S.Subtitle>
+				)}
+
+				<S.SubmitButton disabled={!arProvider.walletAddress || isSubmitting} onClick={handleSubmitChanges}>
+					{isSubmitting ? 'Submitting...' : 'Submit Changes'}
+				</S.SubmitButton>
 			</S.AllocationPanel>
 		</S.Container>
 	);

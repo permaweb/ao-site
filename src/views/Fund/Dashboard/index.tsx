@@ -1,17 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import { readHandler } from 'api';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { ASSETS } from 'helpers/config';
+import { AO, ASSETS } from 'helpers/config';
+import { formatNumber, parseBigIntAsNumber } from 'helpers/format';
 import { retryable } from 'helpers/network';
 import { formatAddress, formatDate } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 
-import { getFlps } from '../../../api/fair-launch-api';
-import { FLF_PROCESS } from '../../../settings';
+import { getFlps, getUserDelegations } from '../../../api/fair-launch-api';
+import { DelegationTableRow } from '../components/DelegationTableRow';
 import { InMemoryTable } from '../components/InMemoryTable';
+import { Skeleton } from '../components/LoadingSkeletons';
 import { PiFavicon } from '../components/PiFavicon';
-import { TableRow } from '../components/TableRow';
 import { TokenAvatar } from '../components/TokenAvatar';
 import { TrendChart } from '../components/TrendChart';
 import * as S from '../styles';
@@ -48,10 +50,48 @@ const chartData = {
 export default function DashboardPage() {
 	const { data: allFlps } = useQuery({
 		queryKey: ['allFlps'],
-		queryFn: () => retryable(getFlps)(FLF_PROCESS),
+		queryFn: () => retryable(getFlps)(AO.flfProcess),
 	});
 
 	const arProvider = useArweaveProvider();
+	const [expandedRows, setExpandedRows] = useState<number[]>([]);
+
+	const { data: userDelegations } = useQuery({
+		queryKey: ['userDelegations'],
+		queryFn: () => retryable(getUserDelegations)(arProvider.walletAddress),
+		enabled: !!arProvider.walletAddress,
+	});
+
+	const { data: piBalance } = useQuery({
+		queryKey: ['piBalance'],
+		queryFn: async () => {
+			if (arProvider.walletAddress) {
+				const tokenBalance = await readHandler({
+					processId: AO.piToken,
+					action: 'Balance',
+					tags: [{ name: 'Recipient', value: arProvider.walletAddress }],
+				});
+				return String(tokenBalance);
+			}
+		},
+		enabled: !!arProvider.walletAddress,
+	});
+
+	const delegatedFlps = useMemo(() => {
+		if (!allFlps || !userDelegations) return [];
+
+		const delegationMap = new Map();
+		userDelegations.delegationPrefs.forEach((pref) => {
+			delegationMap.set(pref.walletTo, pref.factor);
+		});
+
+		return allFlps.filter((flp) => {
+			const factor = delegationMap.get(flp.id);
+			return factor && factor > 0;
+		});
+	}, [allFlps, userDelegations]);
+
+	const isLoading = !allFlps || !userDelegations;
 
 	return (
 		<DashboardContainer>
@@ -59,7 +99,7 @@ export default function DashboardPage() {
 				<S.HeaderContent>
 					<div>
 						<S.Title>Your Dashboard</S.Title>
-						<S.Subtitle>View all your allocated AO yield.</S.Subtitle>
+						<S.Subtitle>View all your delegations.</S.Subtitle>
 					</div>
 					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 20 }}>
 						<S.DashboardLink to="/fund">Go Back to Discover {'>'}</S.DashboardLink>
@@ -80,49 +120,64 @@ export default function DashboardPage() {
 
 			<S.StatCard>
 				<div>
-					<S.StatLabel style={{ fontSize: 12 }}>YOUR TOTAL REWARDS</S.StatLabel>
+					<S.StatLabel style={{ fontSize: 12 }}>YOUR PI BALANCE</S.StatLabel>
 					<S.StatValue style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10, fontSize: 48 }}>
-						3.5
-						<TokenAvatar logo={ASSETS.aoCircled} size="xl" />
+						{piBalance ? formatNumber(parseBigIntAsNumber(piBalance, 12)) : <Skeleton width={100} height={48} />}
+						<TokenAvatar logo={ASSETS.pi} size="xl" />
 					</S.StatValue>
 				</div>
-				<TrendChart height={150} width={500} data={chartData} isLoading={!allFlps} />
+				{/* <TrendChart height={150} width={500} data={chartData} isLoading={!allFlps} /> */}
 			</S.StatCard>
 
 			<S.SectionTitle>
 				<PiFavicon />
-				View and edit all your current delegations.
+				View your current delegations.
 			</S.SectionTitle>
 
-			<InMemoryTable
-				data={allFlps || []}
-				pageSize={10}
-				onLoadMore={() => {}}
-				sortedBy="amount_delegated"
-				headerCells={[
-					{ style: { width: 50, minWidth: 50, maxWidth: 50 }, label: '#', align: 'center' },
-					{ style: { width: 220, minWidth: 220, maxWidth: 220 }, label: 'NAME' },
-					{ style: { width: 200, minWidth: 200, maxWidth: 200 }, label: 'TOTAL AO DELEGATED', key: 'amount_delegated' },
-					{ style: { width: 200, minWidth: 200, maxWidth: 200 }, label: 'DELEGATED LAST CYCLE' },
-					{ style: { width: 180, minWidth: 180, maxWidth: 180 }, label: 'DATE STARTED', key: 'starts_at_ts' },
-					{ style: { width: 180, minWidth: 180, maxWidth: 180 }, label: 'ADD TO ALLOCATION', align: 'right' },
-				]}
-				renderRow={(row: any, index: number) => (
-					<TableRow
-						key={row.id}
-						row={row}
-						index={index}
-						expandedRows={[]}
-						setExpandedRows={() => {}}
-						allocations={{}}
-						isMaxAllocation={false}
-						handleAllocationChange={() => {}}
-						getProjectYield={() => 0}
-						coreTokenColors={{}}
-						flpColorMap={{}}
-					/>
-				)}
-			/>
+			{isLoading ? (
+				<div>
+					<table style={{ width: '100%', borderCollapse: 'collapse' }}>
+						<tbody>
+							{[1, 2, 3, 4, 5].map((i) => (
+								<S.TableRow key={i}>
+									<S.TableCell>
+										<S.TokenInfo>
+											<Skeleton width={40} height={40} style={{ borderRadius: '50%' }} />
+											<Skeleton width={120} height={20} />
+										</S.TokenInfo>
+									</S.TableCell>
+									<S.TableCell align="right">
+										<Skeleton width={60} height={20} />
+									</S.TableCell>
+								</S.TableRow>
+							))}
+						</tbody>
+					</table>
+				</div>
+			) : delegatedFlps.length > 0 ? (
+				<InMemoryTable
+					data={delegatedFlps}
+					pageSize={10}
+					onLoadMore={() => {}}
+					headerCells={[]}
+					renderRow={(row: any, index: number) => {
+						const delegation = userDelegations?.delegationPrefs.find((pref) => pref.walletTo === row.id);
+						const delegationPercentage = delegation ? delegation.factor / 100 : 0;
+
+						return (
+							<DelegationTableRow
+								row={row}
+								index={index}
+								expandedRows={expandedRows}
+								setExpandedRows={setExpandedRows}
+								delegationPercentage={delegationPercentage}
+							/>
+						);
+					}}
+				/>
+			) : (
+				<S.SectionTitle style={{ margin: 'auto' }}>You have no delegations.</S.SectionTitle>
+			)}
 		</DashboardContainer>
 	);
 }

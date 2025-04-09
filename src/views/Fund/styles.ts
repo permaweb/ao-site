@@ -164,6 +164,11 @@ export const SubmitButton = styled.button`
 	font-size: 19px;
 	font-weight: 700;
 	line-height: 0;
+
+	&:disabled {
+		background-color: #aaa;
+		cursor: not-allowed;
+	}
 `;
 
 export const ConnectButton = styled.button`

@@ -2,6 +2,8 @@ import { Tag } from 'arweave/web/lib/transaction';
 
 import { createDataItemSigner, dryrun, message, result } from '@permaweb/aoconnect';
 
+import { AO } from '../helpers/config';
+
 /**
  * Flatten tags to a key value object
  */
@@ -282,28 +284,95 @@ interface DelegationRecord {
 		};
 	};
 }
-
 export async function getLastDelegationRecord(): Promise<DelegationRecord | null> {
-	const res = await dryrun({
-		process: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY',
-		tags: [{ name: 'Action', value: 'Get-Last-Record' }],
-	});
-	if (!res.Messages.length) return null;
-	const data = JSON.parse(res.Messages[0].Data);
-	console.log('onLastDelegationRecord', data);
-	return data;
+	try {
+		const res = await dryrun({
+			process: AO.historianProcess,
+			tags: [{ name: 'Action', value: 'Get-Last-Delegation-Record' }],
+		});
+		if (!res.Messages.length) return null;
+		const data = JSON.parse(res.Messages[0].Data);
+		return data;
+	} catch (error) {
+		console.error('Error fetching last delegation record:', error);
+		return null;
+	}
 }
 
 export async function getDelegationRecords(): Promise<DelegationRecord[]> {
-	const res = await dryrun({
-		process: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY',
+	try {
+		const res = await dryrun({
+			process: AO.historianProcess,
+			tags: [{ name: 'Action', value: 'Get-Delegation-Records' }],
+		});
+		if (!res.Messages.length) return [];
+		const data = JSON.parse(res.Messages[0].Data);
+		return data;
+	} catch (error) {
+		console.error('Error fetching delegation records:', error);
+		return [];
+	}
+}
+
+export interface DelegationPreference {
+	walletTo: string;
+	factor: number;
+}
+
+export interface UserDelegationResponse {
+	delegationPrefs: DelegationPreference[];
+	lastUpdate: number;
+	wallet: string;
+	totalFactor: string;
+}
+
+export async function getUserDelegations(walletAddress: string): Promise<UserDelegationResponse | null> {
+	try {
+		const res = await dryrun({
+			process: AO.delegationProcess,
+			tags: [
+				{ name: 'Action', value: 'Get-User-Delegations' },
+				{ name: 'Wallet', value: walletAddress },
+			],
+		});
+		if (!res.Messages.length) return null;
+		const data = JSON.parse(res.Messages[0].Data);
+		return data;
+	} catch (error) {
+		console.error('Error fetching user delegations:', error);
+		return null;
+	}
+}
+
+export interface SetDelegationParams {
+	walletFrom: string;
+	walletTo: string;
+	factor: number;
+}
+
+export async function setDelegation(params: SetDelegationParams): Promise<string> {
+	const msgId = await message({
+		process: AO.delegationProcess,
+		signer: createDataItemSigner(window.arweaveWallet),
 		tags: [
-			{ name: 'Action', value: 'Get-Last-N-Records' },
-			{ name: 'N', value: '30' },
+			{ name: 'Action', value: 'Set-Delegation' },
+			{ name: 'Wallet-From', value: params.walletFrom },
+			{ name: 'Wallet-To', value: params.walletTo },
+			{ name: 'Factor', value: params.factor.toString() },
 		],
 	});
-	if (!res.Messages.length) return null;
-	const data = JSON.parse(res.Messages[0].Data);
-	console.log('onDelegationRecords', data);
-	return data;
+
+	const computedResult = await result({ message: msgId, process: AO.delegationProcess });
+
+	console.log('Update delegation result', computedResult);
+
+	if (computedResult.Messages.length === 0 && computedResult.Spawns.length === 0 && computedResult.Output.data) {
+		throw new Error(computedResult.Output.data);
+	}
+
+	if (computedResult.Messages.length === 0 && computedResult.Spawns.length === 0 && computedResult.Error) {
+		throw new Error(computedResult.Error);
+	}
+
+	return msgId;
 }

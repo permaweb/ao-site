@@ -1,31 +1,4 @@
-import { FORMAT_DECIMALS } from '../settings';
-
-/**
- * Format addresses
- *
- * @param address Address to format
- */
-export function formatAddress(address: string, count = 13) {
-	return address.substring(0, count) + '...' + address.substring(address.length - count, address.length);
-}
-
-/**
- * Returns if this is a valid arweave address
- */
-export const isAddress = (addr: string) => /[a-z0-9_-]{43}/i.test(addr);
-
-/**
- * Parse gateway from URL
- */
-export function parseGateway(url: string) {
-	const urlObj = new URL(url);
-
-	return {
-		host: urlObj.host,
-		port: urlObj.port ? parseFloat(urlObj.port) : 443,
-		protocol: urlObj.protocol.replace(':', '') as 'http' | 'https',
-	};
-}
+const FORMAT_DECIMALS = 4;
 
 export function formatNumber(number: number | string, options: Intl.NumberFormatOptions = {}, locale?: string) {
 	return new Intl.NumberFormat(locale, options).format(Number(number));
@@ -189,8 +162,6 @@ export function parseNumberAsBigInt(number?: string, denomination = 0) {
 export function formatTicker(ticker?: string) {
 	if (!ticker) return 'Unknown';
 
-	ticker = ticker.replace('Botega LP ', '');
-
 	if (ticker.includes('/')) {
 		const index = ticker.indexOf('/');
 		const first = ticker.slice(0, index);
@@ -200,25 +171,3 @@ export function formatTicker(ticker?: string) {
 
 	return `$${ticker}`;
 }
-
-const decimalRegexp = /^\d*(?:[.])?\d*$/;
-export const decimalEnforcer = (nextUserInput: string) => {
-	if (nextUserInput === '') {
-		return '';
-	} else if (nextUserInput === '.') {
-		return '0.';
-	} else if (decimalRegexp.test(nextUserInput)) {
-		return nextUserInput;
-	}
-	return '';
-};
-
-const integerRegexp = /^\d*$/;
-export const integerEnforcer = (nextUserInput: string) => {
-	if (nextUserInput === '') {
-		return '';
-	} else if (integerRegexp.test(nextUserInput)) {
-		return nextUserInput;
-	}
-	return '';
-};
