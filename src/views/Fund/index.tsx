@@ -33,7 +33,7 @@ const CORE_PROJECTS = [
 		name: 'Permaweb Index',
 		ticker: 'PI',
 		logo: ASSETS.pi,
-		process: 'TODO',
+		process: AO.piProcess,
 		description:
 			'Diversify your AO rewards with PI, a token representing the permaweb. PI is composed of 1/3 AO, 1/3 Arweave (AR), and 1/3 ecosystem project tokens.',
 	},
@@ -42,6 +42,7 @@ const CORE_PROJECTS = [
 		name: 'Arweave',
 		ticker: 'AR',
 		logo: ASSETS.arweave,
+		disabled: true,
 		process: 'TODO',
 		description:
 			'Turn your AO yield into Arweave. Your AO yield will return you back AR tokens for permanent data storage use.',
@@ -51,7 +52,7 @@ const CORE_PROJECTS = [
 		name: 'AO',
 		ticker: 'AO',
 		logo: ASSETS.aoCircled,
-		process: '0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc',
+		process: AO.token,
 		description:
 			'Keep earning AO. Your AR holding yield and deposits will continue to accrue AO without any reallocation.',
 	},
@@ -74,7 +75,7 @@ export default function Fund() {
 
 	const { data: allFlps } = useQuery({
 		queryKey: ['allFlps'],
-		queryFn: () => retryable(getFlps)(AO.flfProcess),
+		queryFn: () => retryable(getFlps)(AO.flpFactory),
 	});
 
 	const { data: lastDelegationRecord } = useQuery({
@@ -406,19 +407,19 @@ export default function Fund() {
 					</S.SectionTitle>
 
 					<S.CoreTokensContainer>
-						{CORE_PROJECTS.map((token) => (
-							<S.CoreTokenCard key={token.id}>
+						{CORE_PROJECTS.map((project) => (
+							<S.CoreTokenCard key={project.id}>
 								<div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
 									<S.CoreTokenHeader>
-										<TokenAvatar logo={token.logo} size="large" />
-										<S.CoreTokenName>{token.name}</S.CoreTokenName>
-										<S.CoreTokenTicker>${token.ticker}</S.CoreTokenTicker>
+										<TokenAvatar logo={project.logo} size="large" />
+										<S.CoreTokenName>{project.name}</S.CoreTokenName>
+										<S.CoreTokenTicker>${project.ticker}</S.CoreTokenTicker>
 									</S.CoreTokenHeader>
-									<S.Subtitle>{token.description}</S.Subtitle>
+									<S.Subtitle>{project.description}</S.Subtitle>
 								</div>
 								<S.CardAddButton
-									onClick={() => handleAllocationChange(token.id, 5)}
-									disabled={isMaxAllocation || !arProvider.walletAddress || isSubmitting}
+									onClick={() => handleAllocationChange(project.id, 5)}
+									disabled={isMaxAllocation || !arProvider.walletAddress || isSubmitting || project.disabled}
 								>
 									<ReactSVG src={ASSETS.plus} />
 									Add
@@ -525,7 +526,7 @@ export default function Fund() {
 									percentage={allocations[project.id] || 0}
 									color={coreTokenColors[project.id]}
 									isMaxAllocation={isMaxAllocation}
-									disabled={isSubmitting}
+									disabled={isSubmitting || project.disabled}
 									onAllocationChange={(change) => handleAllocationChange(project.id, change)}
 								/>
 							))}

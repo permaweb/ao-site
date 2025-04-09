@@ -287,7 +287,7 @@ interface DelegationRecord {
 
 export async function getLastDelegationRecord(): Promise<DelegationRecord | null> {
 	const res = await dryrun({
-		process: AO.historianProcess,
+		process: AO.yieldHistorian,
 		tags: [{ name: 'Action', value: 'Get-Last-Record' }],
 	});
 	if (!res.Messages.length) return null;
@@ -298,7 +298,7 @@ export async function getLastDelegationRecord(): Promise<DelegationRecord | null
 
 export async function getDelegationRecords(): Promise<DelegationRecord[]> {
 	const res = await dryrun({
-		process: AO.historianProcess,
+		process: AO.yieldHistorian,
 		tags: [
 			{ name: 'Action', value: 'Get-Last-N-Records' },
 			{ name: 'N', value: '30' },
@@ -324,7 +324,7 @@ export interface UserDelegationResponse {
 
 export async function getUserDelegations(walletAddress: string): Promise<UserDelegationResponse | null> {
 	const res = await dryrun({
-		process: AO.delegationProcess,
+		process: AO.delegationOracle,
 		tags: [
 			{ name: 'Action', value: 'Get-Delegations' },
 			{ name: 'Wallet', value: walletAddress },
@@ -351,13 +351,13 @@ export async function setDelegation(params: SetDelegationParams): Promise<string
 	});
 
 	const msgId = await message({
-		process: AO.delegationProcess,
+		process: AO.delegationOracle,
 		signer: createDataItemSigner(window.arweaveWallet),
 		data,
 		tags: [{ name: 'Action', value: 'Set-Delegation' }],
 	});
 	console.log('Update delegation msgId', msgId);
-	const computedResult = await result({ message: msgId, process: AO.delegationProcess });
+	const computedResult = await result({ message: msgId, process: AO.delegationOracle });
 
 	console.log('Update delegation result', computedResult);
 

@@ -50,7 +50,7 @@ const chartData = {
 export default function DashboardPage() {
 	const { data: allFlps } = useQuery({
 		queryKey: ['allFlps'],
-		queryFn: () => retryable(getFlps)(AO.flfProcess),
+		queryFn: () => retryable(getFlps)(AO.flpFactory),
 	});
 
 	const arProvider = useArweaveProvider();
@@ -67,7 +67,7 @@ export default function DashboardPage() {
 		queryFn: async () => {
 			if (arProvider.walletAddress) {
 				const tokenBalance = await readHandler({
-					processId: AO.piToken,
+					processId: AO.piProcess,
 					action: 'Balance',
 					tags: [{ name: 'Recipient', value: arProvider.walletAddress }],
 				});
