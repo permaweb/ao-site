@@ -10,7 +10,7 @@ export const AO = {
 	stEthPriceOracle: 'wJV8FMkpoeLsTjJ6O7YZEuQgMqj-sDjPHhTeA73RsCc',
 	daiPriceOracle: '5q8vpzC5QAKOAJFM26MAKfZw1gwtw7WA_J2861ZiKhI',
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
-	yieldHistorian: '', //TODO
+	yieldHistorian: 'NRP0xtzeV9MHgwLmgD254erUB7mUjMBhBkYkNYkbNEo',
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
 	piProcess: 'rxxU4g-7tUHGvF28W2l53hxarpbaFR4NaSnOaxx6MIE',
 	// delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
