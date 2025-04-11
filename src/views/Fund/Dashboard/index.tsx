@@ -71,7 +71,8 @@ export default function DashboardPage() {
 					action: 'Balance',
 					tags: [{ name: 'Recipient', value: arProvider.walletAddress }],
 				});
-				return String(tokenBalance);
+				console.log('onPiBalance', tokenBalance);
+				return String(tokenBalance || 0);
 			}
 		},
 		enabled: !!arProvider.walletAddress,

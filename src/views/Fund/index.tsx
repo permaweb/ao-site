@@ -339,7 +339,7 @@ export default function Fund() {
 		}
 	};
 
-	if (!allFlps || !lastDelegationRecord || !delegationRecords) return <LoadingSkeletons />;
+	if (!allFlps) return <LoadingSkeletons />;
 
 	return (
 		<S.Container style={{ display: 'flex', flexDirection: 'row', gap: 20, alignItems: 'flex-start', marginBottom: 60 }}>
