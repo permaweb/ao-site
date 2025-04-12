@@ -11,6 +11,7 @@ import { formatDate } from 'helpers/utils';
 import { formatNumber, parseBigIntAsNumber } from '../../../helpers/format';
 import * as S from '../styles';
 
+import { IdBlock } from './IdBlock';
 import { Skeleton } from './LoadingSkeletons';
 
 interface FlpDetailsRowProps {
@@ -83,6 +84,15 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 	return (
 		<S.DetailsRow>
 			<S.DetailsCell colSpan={colSpan}>
+				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+					<S.IdBlockContainer>
+						<IdBlock label={row.id} value={row.id} />
+					</S.IdBlockContainer>
+					<S.ViewOnAoLink to={`https://ao.link/${row.id}`} target="_blank">
+						View on ao.link {'>'}
+					</S.ViewOnAoLink>
+				</div>
+
 				<S.DetailsContent>
 					{flpInfoLoading ? (
 						<>

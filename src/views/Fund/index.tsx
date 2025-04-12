@@ -159,6 +159,8 @@ export default function Fund() {
 		if (!allFlps) return [];
 
 		const filtered = allFlps.filter((flp) => {
+			if (!flp.flp_token_name) return false;
+
 			if (searchQuery) {
 				const query = searchQuery.toLowerCase();
 				if (
@@ -186,6 +188,10 @@ export default function Fund() {
 			if (tabIndex === 0) {
 				return getTotalProjectYield(b.id) - getTotalProjectYield(a.id);
 			}
+
+			if (b.starts_at_ts - a.starts_at_ts === 0) {
+				return a.flp_token_name.localeCompare(b.flp_token_name);
+			}
 			return b.starts_at_ts - a.starts_at_ts;
 		});
 	}, [allFlps, searchQuery, tabIndex, lastDelegationRecord, delegationRecords]);
@@ -194,7 +200,11 @@ export default function Fund() {
 	const isMaxAllocation = totalAllocation >= 100;
 
 	const handleAllocationChange = (token: string, change: number) => {
-		if (!arProvider.walletAddress || isSubmitting) return;
+		if (!arProvider.walletAddress) {
+			arProvider.setWalletModalVisible(true);
+			return;
+		}
+		if (isSubmitting) return;
 
 		if (isMaxAllocation && change > 0) return;
 		setAllocations((prev) => ({
@@ -249,7 +259,10 @@ export default function Fund() {
 	);
 
 	const handleSubmitChanges = async () => {
-		if (!arProvider.walletAddress) return;
+		if (!arProvider.walletAddress) {
+			arProvider.setWalletModalVisible(true);
+			return;
+		}
 
 		setIsSubmitting(true);
 		setSubmitError(null);
@@ -437,13 +450,25 @@ export default function Fund() {
 									</S.CoreTokenHeader>
 									<S.Subtitle>{project.description}</S.Subtitle>
 								</div>
-								<S.CardAddButton
-									onClick={() => handleAllocationChange(project.id, 5)}
-									disabled={isMaxAllocation || !arProvider.walletAddress || isSubmitting || project.disabled}
-								>
-									<ReactSVG src={ASSETS.plus} />
-									Add
-								</S.CardAddButton>
+								{allocations[project.id] && allocations[project.id] > 0 ? (
+									<>
+										<S.CardAddButton
+											disabled
+											style={{ backgroundColor: coreTokenColors[project.id] || flpColorMap[project.id] }}
+										>
+											Added
+											<ReactSVG src={ASSETS.checkmark} />
+										</S.CardAddButton>
+									</>
+								) : (
+									<S.CardAddButton
+										onClick={() => handleAllocationChange(project.id, 5)}
+										disabled={isMaxAllocation || isSubmitting || project.disabled}
+									>
+										<ReactSVG src={ASSETS.plus} />
+										Add
+									</S.CardAddButton>
+								)}
 							</S.CoreTokenCard>
 						))}
 					</S.CoreTokensContainer>
@@ -492,13 +517,14 @@ export default function Fund() {
 							{ style: { width: 50, minWidth: 50, maxWidth: 50 }, label: '#', align: 'center' },
 							{ style: { width: 220, minWidth: 220, maxWidth: 220 }, label: 'NAME' },
 							{
-								style: { width: 200, minWidth: 200, maxWidth: 200 },
+								style: { width: 160, minWidth: 160, maxWidth: 160 },
 								label: 'TOTAL AO DELEGATED',
 								key: 'amount_delegated',
 							},
-							{ style: { width: 200, minWidth: 200, maxWidth: 200 }, label: 'DELEGATED LAST CYCLE' },
-							{ style: { width: 180, minWidth: 180, maxWidth: 180 }, label: 'DATE STARTED', key: 'starts_at_ts' },
-							{ style: { width: 180, minWidth: 180, maxWidth: 180 }, label: 'ADD TO ALLOCATION', align: 'right' },
+							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'DIRECT DELEGATION LAST CYCLE' },
+							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'PI DELEGATION LAST CYCLE' },
+							{ style: { width: 140, minWidth: 140, maxWidth: 140 }, label: 'DATE STARTED', key: 'starts_at_ts' },
+							{ style: { width: 140, minWidth: 140, maxWidth: 140 }, label: 'ADD TO ALLOCATION', align: 'right' },
 						]}
 						renderRow={(row: any, index: number) => (
 							<TableRow
@@ -591,7 +617,7 @@ export default function Fund() {
 					<S.Subtitle style={{ padding: '20px 10px 0px', fontSize: '12px', color: 'red' }}>{submitError}</S.Subtitle>
 				)}
 
-				<S.SubmitButton disabled={!arProvider.walletAddress || isSubmitting} onClick={handleSubmitChanges}>
+				<S.SubmitButton disabled={isSubmitting} onClick={handleSubmitChanges}>
 					{isSubmitting ? 'Saving...' : 'Confirm Delegation Preferences'}
 				</S.SubmitButton>
 			</S.AllocationPanel>

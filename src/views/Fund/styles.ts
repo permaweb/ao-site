@@ -265,6 +265,11 @@ export const CardAddButton = styled.button`
 		stroke-width: 30;
 	}
 
+	& svg polyline {
+		stroke: #fff;
+		stroke-width: 30;
+	}
+
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -341,14 +346,13 @@ export const DetailsRow = styled.tr`
 `;
 
 export const DetailsCell = styled.td`
-	padding: 0;
+	padding: 20px;
+	border-bottom: 1px solid #eee;
 `;
 
 export const DetailsContent = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	padding: 20px;
-	border-bottom: 1px solid #eee;
 	gap: 40px;
 `;
 
@@ -482,5 +486,23 @@ export const AllocationContainer = styled.div`
 	.allocation-item {
 		padding-left: 6px;
 		padding-right: 6px;
+	}
+`;
+
+export const IdBlockContainer = styled.div`
+	width: fit-content;
+	padding: 5px;
+	background-color: #fff;
+	border-radius: 4px;
+	font-size: 12px;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+`;
+
+export const ViewOnAoLink = styled(Link)`
+	font-size: 12px;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+
+	&:hover {
+		text-decoration: underline;
 	}
 `;

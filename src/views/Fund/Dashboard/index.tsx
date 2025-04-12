@@ -57,13 +57,13 @@ export default function DashboardPage() {
 	const [expandedRows, setExpandedRows] = useState<number[]>([]);
 
 	const { data: userDelegations } = useQuery({
-		queryKey: ['userDelegations'],
+		queryKey: ['userDelegations', arProvider.walletAddress],
 		queryFn: () => retryable(getUserDelegations)(arProvider.walletAddress),
 		enabled: !!arProvider.walletAddress,
 	});
 
 	const { data: piBalance } = useQuery({
-		queryKey: ['piBalance'],
+		queryKey: ['piBalance', arProvider.walletAddress],
 		queryFn: async () => {
 			if (arProvider.walletAddress) {
 				const tokenBalance = await readHandler({
@@ -119,23 +119,27 @@ export default function DashboardPage() {
 				</S.HeaderContent>
 			</S.Header>
 
-			<S.StatCard>
-				<div>
-					<S.StatLabel style={{ fontSize: 12 }}>YOUR PI BALANCE</S.StatLabel>
-					<S.StatValue style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10, fontSize: 48 }}>
-						{piBalance ? formatNumber(parseBigIntAsNumber(piBalance, 12)) : <Skeleton width={100} height={48} />}
-						<TokenAvatar logo={ASSETS.pi} size="xl" />
-					</S.StatValue>
-				</div>
-				{/* <TrendChart height={150} width={500} data={chartData} isLoading={!allFlps} /> */}
-			</S.StatCard>
+			{arProvider.walletAddress && (
+				<S.StatCard>
+					<div>
+						<S.StatLabel style={{ fontSize: 12 }}>YOUR PI BALANCE</S.StatLabel>
+						<S.StatValue style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10, fontSize: 48 }}>
+							{piBalance ? formatNumber(parseBigIntAsNumber(piBalance, 12)) : <Skeleton width={100} height={48} />}
+							<TokenAvatar logo={ASSETS.pi} size="xl" />
+						</S.StatValue>
+					</div>
+					{/* <TrendChart height={150} width={500} data={chartData} isLoading={!allFlps} /> */}
+				</S.StatCard>
+			)}
 
 			<S.SectionTitle>
 				<PiFavicon />
 				View your current delegations.
 			</S.SectionTitle>
 
-			{isLoading ? (
+			{!arProvider.walletAddress ? (
+				<S.SectionTitle style={{ margin: 'auto' }}>Connect wallet to view your delegations.</S.SectionTitle>
+			) : isLoading ? (
 				<div>
 					<table style={{ width: '100%', borderCollapse: 'collapse' }}>
 						<tbody>

@@ -2,8 +2,7 @@ import React from 'react';
 import { ReactSVG } from 'react-svg';
 
 import { ASSETS } from 'helpers/config';
-import { formatDate } from 'helpers/utils';
-import { useArweaveProvider } from 'providers/ArweaveProvider';
+import { formatAddress, formatDate } from 'helpers/utils';
 
 import { formatNumber, formatTicker } from '../../../helpers/format';
 import * as S from '../styles';
@@ -11,6 +10,7 @@ import * as S from '../styles';
 import { ColorDot } from './AllocationItem';
 import { ArrowSquareDownIcon } from './ArrowSquareDownIcon';
 import { FlpDetailsRow } from './FlpDetailsRow';
+import { IdBlock } from './IdBlock';
 import { TokenAvatar } from './TokenAvatar';
 
 interface TableRowProps {
@@ -43,7 +43,6 @@ export const TableRow: React.FC<TableRowProps> = ({
 	isSubmitting,
 }) => {
 	const isExpanded = expandedRows.includes(row.id);
-	const arProvider = useArweaveProvider();
 
 	return (
 		<React.Fragment key={row.id}>
@@ -54,12 +53,15 @@ export const TableRow: React.FC<TableRowProps> = ({
 				className={isExpanded ? 'expanded' : ''}
 			>
 				<S.TableCell align="center">{index + 1}</S.TableCell>
-				<S.TableCell>
+				<S.TableCell style={{ position: 'relative' }}>
 					<S.TokenInfo>
 						<TokenAvatar logo={row.flp_token_logo} size="large" />
 						{row.flp_token_name && <span>{row.flp_token_name}</span>}
 						<span style={{ color: '#757575' }}>{formatTicker(row.flp_token_ticker)}</span>
 					</S.TokenInfo>
+					<div style={{ position: 'absolute', left: 45, bottom: 14, zIndex: 9999999 }}>
+						<IdBlock label={formatAddress(row.id, false)} value={row.id} />
+					</div>
 				</S.TableCell>
 				<S.TableCell>
 					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -69,6 +71,13 @@ export const TableRow: React.FC<TableRowProps> = ({
 				</S.TableCell>
 				<S.TableCell>
 					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+						<span>{formatNumber(getProjectYield(row.id))}</span>
+						<TokenAvatar logo={ASSETS.aoCircled} size="medium" />
+					</div>
+				</S.TableCell>
+				<S.TableCell>
+					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+						{/* TODO */}
 						<span>{formatNumber(getProjectYield(row.id))}</span>
 						<TokenAvatar logo={ASSETS.aoCircled} size="medium" />
 					</div>
@@ -105,11 +114,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 										width: '16px',
 										height: '16px',
 										color:
-											isSubmitting ||
-											isMaxAllocation ||
-											row.status !== 'Active' ||
-											row.starts_at_ts > Date.now() ||
-											!arProvider.walletAddress
+											isSubmitting || isMaxAllocation || row.status !== 'Active' || row.starts_at_ts > Date.now()
 												? '#aaa'
 												: '#51c85b',
 									}}
@@ -120,13 +125,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 										e.preventDefault();
 										handleAllocationChange(row.id, 5);
 									}}
-									disabled={
-										isSubmitting ||
-										isMaxAllocation ||
-										row.status !== 'Active' ||
-										row.starts_at_ts > Date.now() ||
-										!arProvider.walletAddress
-									}
+									disabled={isSubmitting || isMaxAllocation || row.status !== 'Active' || row.starts_at_ts > Date.now()}
 								>
 									Add
 								</S.AddButton>
@@ -135,7 +134,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 					</S.RowActionContainer>
 				</S.TableCell>
 			</S.TableRow>
-			<FlpDetailsRow row={row} isExpanded={isExpanded} colSpan={6} />
+			<FlpDetailsRow row={row} isExpanded={isExpanded} colSpan={7} />
 		</React.Fragment>
 	);
 };
