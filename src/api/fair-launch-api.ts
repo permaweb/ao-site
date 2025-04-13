@@ -396,3 +396,46 @@ export async function setDelegation(params: SetDelegationParams): Promise<string
 
 	return msgId;
 }
+
+export async function getClaimableBalance(walletAddress: string, flpId: string): Promise<string | null> {
+	const res = await dryrun({
+		process: flpId,
+		tags: [
+			{ name: 'Action', value: 'Get-Claimable-Balance' },
+			{ name: 'Wallet', value: walletAddress },
+		],
+	});
+	if (!res.Messages.length) return null;
+	const data = res.Messages[0].Data;
+	console.log('onGetClaimableBalance', data);
+	return data;
+}
+
+export async function withdrawFLPToken(flpId: string): Promise<string> {
+	console.log('Claim rewards', flpId);
+	const msgId = await message({
+		process: flpId,
+		signer: createDataItemSigner(window.arweaveWallet),
+		tags: [{ name: 'Action', value: 'Withdraw-FLP-Token' }],
+	});
+	console.log('Claim rewards msgId', msgId);
+	const computedResult = await result({ message: msgId, process: flpId });
+
+	console.log('Claim rewards result', computedResult);
+
+	if (computedResult.Messages.length === 0 && computedResult.Spawns.length === 0 && computedResult.Output.data) {
+		throw new Error(computedResult.Output.data);
+	}
+
+	if (computedResult.Messages.length === 0 && computedResult.Spawns.length === 0 && computedResult.Error) {
+		throw new Error(computedResult.Error);
+	}
+
+	const reponseMsg = computedResult.Messages[0];
+	const responseStatus = reponseMsg.Tags.find((tag: any) => tag.name === 'Status');
+
+	if (responseStatus.value === 'Error')
+		throw new Error(reponseMsg.Tags.find((tag: any) => tag.name === 'Reason').value || reponseMsg.Data);
+
+	return msgId;
+}

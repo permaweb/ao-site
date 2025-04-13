@@ -176,6 +176,187 @@ export const SubmitButton = styled.button`
 	}
 `;
 
+export const FlpSelectorButton = styled.button`
+	padding: 8px 12px;
+	background-color: #fafafa;
+	color: #333;
+	border: 1px solid #afafaf;
+	border-radius: 5px;
+	cursor: pointer;
+	&:hover {
+		background-color: #f0f0f0;
+	}
+	display: flex;
+	gap: 4px;
+	align-items: center;
+
+	font-size: 14px;
+	font-weight: 600;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+`;
+
+export const FlpSelectorDropdown = styled.div`
+	width: 300px;
+	max-width: 90vw;
+	max-height: 500px;
+	overflow-y: auto;
+	position: absolute;
+	z-index: 1;
+	top: 47.5px;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 12.5px 20px 13.5px 20px;
+	border-radius: 10px;
+	background: #ffffff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+`;
+
+export const FlpSelectorItem = styled.button<{ selected?: boolean }>`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-weight: ${(props) => props.theme.typography.weight.medium};
+	color: ${(props) => props.theme.colors.font?.primary || '#222326'};
+	padding: 8px 5px;
+	border-radius: 5px;
+	text-align: left;
+	background: ${(props) => (props.selected ? '#f0f7f1' : 'transparent')};
+
+	&:hover {
+		background: ${(props) => (props.selected ? '#e5f2e6' : '#f5f5f5')};
+	}
+
+	.selected-indicator {
+		margin-left: auto;
+		color: #51c85b;
+		font-size: 20px;
+		line-height: 1;
+
+		svg {
+			width: 18px;
+			height: 18px;
+			display: block;
+
+			path {
+				fill: #51c85b;
+			}
+		}
+	}
+`;
+
+export const FlpSelectorDoneButton = styled.button`
+	margin-top: 10px;
+	padding: 8px 0;
+	background-color: #51c85b;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 14px;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	text-align: center;
+
+	&:hover {
+		background-color: #48b652;
+	}
+`;
+
+export const FlpModalContent = styled.div`
+	padding: 20px;
+
+	.search-container {
+		margin-bottom: 30px;
+	}
+
+	${SearchBar} {
+		width: 100%;
+	}
+
+	${SearchInput} {
+		min-width: auto;
+		width: 100%;
+		padding: 15px 20px;
+	}
+
+	.flp-list {
+		max-height: 400px;
+		overflow-y: auto;
+		margin-bottom: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+	}
+`;
+
+export const FlpModalItem = styled.button<{ selected?: boolean }>`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 15px;
+	border-radius: 5px;
+	text-align: left;
+	background: ${(props) => (props.selected ? '#f0f7f1' : 'transparent')};
+	transition: background 0.2s;
+	border: none;
+
+	&:hover {
+		background: ${(props) => (props.selected ? '#e5f2e6' : '#f5f5f5')};
+	}
+
+	.flp-info {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.flp-name {
+		font-size: 14px;
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		color: ${(props) => props.theme.colors.font?.primary || '#222326'};
+	}
+
+	.flp-ticker {
+		font-size: 12px;
+		color: #757575;
+	}
+
+	.selected-indicator {
+		margin-left: auto;
+		color: #51c85b;
+		font-size: 20px;
+		line-height: 1;
+
+		svg {
+			width: 18px;
+			height: 18px;
+			display: block;
+
+			path {
+				fill: #51c85b;
+			}
+		}
+	}
+`;
+
+export const FlpModalFooter = styled.div`
+	display: flex;
+	justify-content: center;
+	padding-top: 10px;
+	border-top: 1px solid #eee;
+
+	${FlpSelectorDoneButton} {
+		min-width: 120px;
+	}
+`;
+
 export const ConnectButton = styled.button`
 	padding: 10px 20px;
 	background-color: #fafafa;
