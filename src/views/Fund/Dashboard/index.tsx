@@ -60,15 +60,6 @@ export default function DashboardPage() {
 
 	const myFlpIds = useStore($myFlps);
 
-	const myFlps = useMemo(() => {
-		if (!allFlps) return [];
-		return myFlpIds
-			.map((id) => {
-				return allFlps.find((flp: any) => flp.id === id);
-			})
-			.filter(Boolean);
-	}, [myFlpIds, allFlps]);
-
 	const arProvider = useArweaveProvider();
 	const [expandedRows, setExpandedRows] = useState<number[]>([]);
 	const [showFlpModal, setShowFlpModal] = useState(false);
@@ -109,6 +100,13 @@ export default function DashboardPage() {
 			return factor && factor > 0;
 		});
 	}, [allFlps, userDelegations]);
+
+	const myFlps = useMemo(() => {
+		if (!allFlps) return [];
+		return allFlps.filter((flp: any) => {
+			return myFlpIds.includes(flp.id) || delegatedFlps.some((delegatedFlp: any) => delegatedFlp.id === flp.id);
+		});
+	}, [myFlpIds, allFlps, delegatedFlps]);
 
 	const isLoading = !allFlps || !userDelegations;
 
