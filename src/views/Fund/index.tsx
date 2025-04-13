@@ -406,7 +406,9 @@ export default function Fund() {
 					<S.StatCard>
 						<div>
 							<S.StatLabel>FAIR LAUNCH PROJECTS</S.StatLabel>
-							<S.StatValue>{allFlps ? allFlps.length : <Skeleton width={60} height={24} />}</S.StatValue>
+							<S.StatValue>
+								{allFlps ? allFlps.filter((flp) => !!flp.flp_token_name).length : <Skeleton width={60} height={24} />}
+							</S.StatValue>
 						</div>
 						<TrendChart
 							height={50}
@@ -465,8 +467,13 @@ export default function Fund() {
 										onClick={() => handleAllocationChange(project.id, 5)}
 										disabled={isMaxAllocation || isSubmitting || project.disabled}
 									>
-										<ReactSVG src={ASSETS.plus} />
-										Add
+										<ReactSVG
+											src={ASSETS.plus}
+											style={{
+												opacity: project.disabled ? 0 : 1,
+											}}
+										/>
+										{project.disabled ? 'Coming Soon' : 'Add'}
 									</S.CardAddButton>
 								)}
 							</S.CoreTokenCard>
@@ -561,24 +568,25 @@ export default function Fund() {
 					<div style={{ borderTop: '1px solid #eee', margin: '0.5rem 0' }} />
 
 					<div style={{ maxHeight: 350, overflowY: 'auto' }}>
-						<S.AllocationContainer>
-							<S.SectionTitle style={{ fontWeight: 500, margin: 0, fontSize: 12, marginBottom: 6 }}>
-								Core Permaweb Tokens
-							</S.SectionTitle>
-							{CORE_PROJECTS.map((project) => (
-								<AllocationItem
-									key={project.id}
-									logo={project.logo}
-									ticker={project.ticker}
-									percentage={allocations[project.id] || 0}
-									color={coreTokenColors[project.id]}
-									isMaxAllocation={isMaxAllocation}
-									disabled={isSubmitting || project.disabled}
-									onAllocationChange={(change) => handleAllocationChange(project.id, change)}
-								/>
-							))}
-						</S.AllocationContainer>
-
+						{CORE_PROJECTS.filter((x) => allocations[x.id] && allocations[x.id] > 0).length > 0 && (
+							<S.AllocationContainer>
+								<S.SectionTitle style={{ fontWeight: 500, margin: 0, fontSize: 12, marginBottom: 6 }}>
+									Core Permaweb Tokens
+								</S.SectionTitle>
+								{CORE_PROJECTS.filter((x) => allocations[x.id] && allocations[x.id] > 0).map((project) => (
+									<AllocationItem
+										key={project.id}
+										logo={project.logo}
+										ticker={project.ticker}
+										percentage={allocations[project.id] || 0}
+										color={coreTokenColors[project.id]}
+										isMaxAllocation={isMaxAllocation}
+										disabled={isSubmitting || project.disabled}
+										onAllocationChange={(change) => handleAllocationChange(project.id, change)}
+									/>
+								))}
+							</S.AllocationContainer>
+						)}
 						{allFlps
 							?.filter((flp) => allocations[flp.id] && allocations[flp.id] > 0)
 							.map((flp) => (
