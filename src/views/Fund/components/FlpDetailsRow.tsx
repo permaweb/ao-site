@@ -40,14 +40,17 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 	}, [flpInfo]);
 
 	const totalSupply = useMemo(() => {
+		if (!flpInfo) return 0;
 		try {
 			let supply: string = flpInfo?.['Total-Token-Supply-At-Creation'];
 
 			try {
-				supply = JSON.parse(supply);
+				if (supply.includes('"')) {
+					supply = JSON.parse(supply);
+				}
 			} catch {}
 
-			return parseBigIntAsNumber(supply, Number(flpInfo?.['Token-Denomination']));
+			return parseBigIntAsNumber(String(supply), Number(flpInfo?.['Token-Denomination']));
 		} catch {
 			return 0;
 		}
@@ -218,11 +221,14 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 										</div>
 										<div>
 											<S.DetailsSectionLabel>PERCENTAGE OF SUPPLY</S.DetailsSectionLabel>
-											<S.DetailsSectionValue>{percentageOfSupply.toFixed(2)}%</S.DetailsSectionValue>
+											<S.DetailsSectionValue>
+												{percentageOfSupply.toFixed(2)}
+												{percentageOfSupply !== Infinity ? '%' : ''}
+											</S.DetailsSectionValue>
 										</div>
 										<div>
 											<S.DetailsSectionLabel>DECAY RATE</S.DetailsSectionLabel>
-											<S.DetailsSectionValue>{flpInfo?.['Decay-Factor']}</S.DetailsSectionValue>
+											<S.DetailsSectionValue>{Number(flpInfo?.['Decay-Factor']).toFixed(4)}%</S.DetailsSectionValue>
 										</div>
 									</S.DetailSectionContent>
 								</div>
