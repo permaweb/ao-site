@@ -643,7 +643,7 @@ const createCumulativeFlpData = (flps) => {
 	if (!flps || flps.length === 0) return [];
 
 	const sortedFlps = [...flps]
-		.filter((flp) => flp && typeof flp.created_at_ts === 'number')
+		.filter((flp) => flp && typeof flp.created_at_ts === 'number' && !!flp.flp_token_name)
 		.sort((a, b) => a.created_at_ts - b.created_at_ts);
 
 	const dailyData = [];
