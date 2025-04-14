@@ -266,8 +266,9 @@ export async function getAggregatedStats(processId: string): Promise<any> {
 }
 
 interface LastDelegationRecord {
-	directDelegations: Array<{
+	delegations: Array<{
 		Timestamp: number;
+		approximateProjectPiYields: Record<string, string>;
 		projectYields: Record<string, string>;
 		Nonce: string;
 	}>;
@@ -286,7 +287,7 @@ interface LastDelegationRecord {
 }
 
 interface DelegationRecord {
-	directDelegations: {
+	delegations: {
 		Data: {
 			Nonce: string;
 			projectYields: Record<string, string>;

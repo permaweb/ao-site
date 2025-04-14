@@ -123,24 +123,29 @@ export default function Fund() {
 	}, [userDelegations, allFlps, submitError]);
 
 	const getProjectYield = (flpId) => {
-		if (
-			!lastDelegationRecord ||
-			!lastDelegationRecord.directDelegations ||
-			lastDelegationRecord.directDelegations.length === 0
-		) {
+		if (!lastDelegationRecord || !lastDelegationRecord.delegations || lastDelegationRecord.delegations.length === 0) {
 			return 0;
 		}
 
-		const lastDirectDelegation = lastDelegationRecord.directDelegations[0];
+		const lastDirectDelegation = lastDelegationRecord.delegations[0];
 		return Number(parseBigIntAsNumber(lastDirectDelegation.projectYields?.[flpId] || '0', 12));
+	};
+
+	const getProjectPiYield = (flpId) => {
+		if (!lastDelegationRecord || !lastDelegationRecord.delegations || lastDelegationRecord.delegations.length === 0) {
+			return 0;
+		}
+
+		const lastDirectDelegation = lastDelegationRecord.delegations[0];
+		return Number(parseBigIntAsNumber(lastDirectDelegation.approximateProjectPiYields?.[flpId] || '0', 12));
 	};
 
 	const totalProjectYields = useMemo(() => {
 		if (!delegationRecords || delegationRecords.length === 0) return {};
 		return delegationRecords.reduce((acc, record) => {
-			if (!record.directDelegations) return acc;
+			if (!record.delegations) return acc;
 
-			const directDelegation = record.directDelegations.Data;
+			const directDelegation = record.delegations.Data;
 			if (!directDelegation.projectYields) return acc;
 
 			for (const [key, value] of Object.entries(directDelegation.projectYields)) {
@@ -544,6 +549,7 @@ export default function Fund() {
 								isMaxAllocation={isMaxAllocation}
 								handleAllocationChange={handleAllocationChange}
 								getProjectYield={getProjectYield}
+								getProjectPiYield={getProjectPiYield}
 								getTotalProjectYield={getTotalProjectYield}
 								coreTokenColors={coreTokenColors}
 								flpColorMap={flpColorMap}
