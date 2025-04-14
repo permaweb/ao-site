@@ -119,7 +119,7 @@ export default function DashboardPage() {
 						<S.Subtitle>View all your delegations.</S.Subtitle>
 					</div>
 					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 20 }}>
-						<S.DashboardLink to="/fund">Go Back to Discover {'>'}</S.DashboardLink>
+						<S.DashboardLink to="/delegate">Go Back to Discover {'>'}</S.DashboardLink>
 						<S.ConnectButton onClick={() => arProvider.setWalletModalVisible(true)}>
 							{arProvider.walletAddress ? (
 								<>

@@ -367,12 +367,12 @@ export default function Fund() {
 						<div>
 							<S.Title>Discover Permaweb Fair Launch Projects</S.Title>
 							<S.Subtitle>
-								The Permaweb Index is a permissionless ecosystem fund that allows delegation
+								The Permaweb Index is a fully autonomous permissionless, ecosystem liquidity pool that allows delegation
 								<br /> of your yield to a variety of Permaweb ecosystem projects.
 							</S.Subtitle>
 						</div>
 						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 20 }}>
-							<S.DashboardLink to="/fund/dashboard">View Dashboard {'>'}</S.DashboardLink>
+							<S.DashboardLink to="/delegate/dashboard">View Dashboard {'>'}</S.DashboardLink>
 							<S.ConnectButton onClick={() => arProvider.setWalletModalVisible(true)}>
 								{arProvider.walletAddress ? (
 									<>

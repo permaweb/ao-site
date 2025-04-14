@@ -77,15 +77,15 @@ function TermsAndConditions() {
 			<S.TermsSection>
 				<S.TermsTitle>AR: </S.TermsTitle>
 				<S.TermsText>
-					'AR is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of Pi/AO/AR
-					does not violate applicable laws in your jurisdiction.'
+					'AR is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AR does
+					not violate applicable laws in your jurisdiction.'
 				</S.TermsText>
 			</S.TermsSection>
 			<S.TermsSection>
 				<S.TermsTitle>AO: </S.TermsTitle>
 				<S.TermsText>
-					'AO is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of Pi/AO/AR
-					does not violate applicable laws in your jurisdiction.'
+					'AO is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AO does
+					not violate applicable laws in your jurisdiction.'
 				</S.TermsText>
 			</S.TermsSection>
 			<S.TermsSection>

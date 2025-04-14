@@ -134,8 +134,8 @@ function createURLs() {
 		mintYield: `${mint}yield/`,
 		policies: `${base}policies/`,
 		read: `${base}read/`,
-		fund: `${base}fund/`,
-		fundDashboard: `${base}fund/dashboard/`,
+		delegate: `${base}delegate/`,
+		delegateDashboard: `${base}delegate/dashboard/`,
 		notFound: `${base}404`,
 	};
 }
