@@ -112,8 +112,14 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 
 							<S.DetailsSectionsGrid>
 								<div>
-									<S.DetailsSectionHeading>Unlock Date</S.DetailsSectionHeading>
+									<S.DetailsSectionHeading>Timeline</S.DetailsSectionHeading>
 									<S.DetailSectionContent>
+										<div>
+											<S.DetailsSectionLabel>START DATE</S.DetailsSectionLabel>
+											<S.DetailsSectionValue>
+												<Skeleton width={120} height={20} />
+											</S.DetailsSectionValue>
+										</div>
 										<div>
 											<S.DetailsSectionLabel>TOKEN UNLOCKS</S.DetailsSectionLabel>
 											<S.DetailsSectionValue>
@@ -187,12 +193,20 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 
 							<S.DetailsSectionsGrid>
 								<div>
-									<S.DetailsSectionHeading>Unlock Date</S.DetailsSectionHeading>
+									<S.DetailsSectionHeading>Timeline</S.DetailsSectionHeading>
 									<S.DetailSectionContent>
 										<div>
-											<S.DetailsSectionLabel>TOKEN UNLOCKS</S.DetailsSectionLabel>
-											<S.DetailsSectionValue>{formatDate(row.starts_at_ts, 'dateString')}</S.DetailsSectionValue>
+											<S.DetailsSectionLabel>START DATE</S.DetailsSectionLabel>
+											<S.DetailsSectionValue>{formatDate(row.starts_at_ts, 'dateString', true)}</S.DetailsSectionValue>
 										</div>
+										{!isNaN(Number(flpInfo['Token-Unlock-Timestamp'])) && (
+											<div>
+												<S.DetailsSectionLabel>TOKEN UNLOCKS</S.DetailsSectionLabel>
+												<S.DetailsSectionValue>
+													{formatDate(flpInfo?.['Token-Unlock-Timestamp'], 'timestamp', true)}
+												</S.DetailsSectionValue>
+											</div>
+										)}
 										<div>
 											<S.DetailsSectionLabel>RUN TIME</S.DetailsSectionLabel>
 											<S.DetailsSectionValue style={{ color: '#51C85B' }}>{runTime}</S.DetailsSectionValue>
