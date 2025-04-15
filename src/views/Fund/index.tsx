@@ -27,37 +27,6 @@ import { TokenAvatar } from './components/TokenAvatar';
 import { TrendChart } from './components/TrendChart';
 import * as S from './styles';
 
-const CORE_PROJECTS = [
-	{
-		id: 'pi',
-		name: 'Permaweb Index',
-		ticker: 'PI',
-		logo: ASSETS.pi,
-		process: AO.piProcess,
-		description:
-			'Diversify your AO rewards with PI, a token representing the permaweb. PI is composed of 1/3 AO, 1/3 Arweave (AR), and 1/3 ecosystem project tokens.',
-	},
-	{
-		id: 'arweave',
-		name: 'Arweave',
-		ticker: 'AR',
-		logo: ASSETS.arweave,
-		disabled: true,
-		process: 'TODO',
-		description:
-			'Turn your AO yield into Arweave. Your AO yield will return you back AR tokens for permanent data storage use.',
-	},
-	{
-		id: 'ao',
-		name: 'AO',
-		ticker: 'AO',
-		logo: ASSETS.aoCircled,
-		process: AO.token,
-		description:
-			'Keep earning AO. Your AR holding yield and deposits will continue to accrue AO without any reallocation.',
-	},
-];
-
 const coreTokenColors = {
 	pi: '#BBBAD9',
 	arweave: '#BEEFD1',
@@ -95,6 +64,37 @@ export default function Fund() {
 		queryFn: () => retryable(getUserDelegations)(arProvider.walletAddress),
 		enabled: !!arProvider.walletAddress,
 	});
+
+	const CORE_PROJECTS = [
+		{
+			id: 'pi',
+			name: 'Permaweb Index',
+			ticker: 'PI',
+			logo: ASSETS.pi,
+			process: AO.piProcess,
+			description:
+				'Diversify your AO rewards with PI, a token representing the permaweb. PI is composed of 1/3 AO, 1/3 Arweave (AR), and 1/3 ecosystem project tokens.',
+		},
+		{
+			id: 'arweave',
+			name: 'Arweave',
+			ticker: 'AR',
+			logo: ASSETS.arweave,
+			disabled: true,
+			process: 'TODO',
+			description:
+				'Turn your AO yield into Arweave. Your AO yield will return you back AR tokens for permanent data storage use.',
+		},
+		{
+			id: 'ao',
+			name: 'AO',
+			ticker: 'AO',
+			logo: ASSETS.aoCircled,
+			process: arProvider.walletAddress,
+			description:
+				'Keep earning AO. Your AR holding yield and deposits will continue to accrue AO without any reallocation.',
+		},
+	];
 
 	useEffect(() => {
 		if (userDelegations && userDelegations.delegationPrefs) {
