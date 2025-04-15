@@ -91,7 +91,7 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 					<S.IdBlockContainer>
 						<IdBlock label={row.id} value={row.id} />
 					</S.IdBlockContainer>
-					<S.ViewOnAoLink to={`https://ao.link/entity/${row.id}`} target="_blank">
+					<S.ViewOnAoLink to={`https://ao.link/#/entity/${row.id}`} target="_blank">
 						View on ao.link {'>'}
 					</S.ViewOnAoLink>
 				</div>
