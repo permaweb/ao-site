@@ -403,7 +403,7 @@ export async function getClaimableBalance(walletAddress: string, flpId: string):
 		process: flpId,
 		tags: [
 			{ name: 'Action', value: 'Get-Claimable-Balance' },
-			{ name: 'Wallet', value: walletAddress },
+			{ name: 'Recipient', value: walletAddress },
 		],
 	});
 	if (!res.Messages.length) return null;
