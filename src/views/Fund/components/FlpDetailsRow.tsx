@@ -112,7 +112,7 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 
 							<S.DetailsSectionsGrid>
 								<div>
-									<S.DetailsSectionHeading>Timeline</S.DetailsSectionHeading>
+									<S.DetailsSectionHeading>Unlock Date</S.DetailsSectionHeading>
 									<S.DetailSectionContent>
 										<div>
 											<S.DetailsSectionLabel>START DATE</S.DetailsSectionLabel>
@@ -193,7 +193,7 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 
 							<S.DetailsSectionsGrid>
 								<div>
-									<S.DetailsSectionHeading>Timeline</S.DetailsSectionHeading>
+									<S.DetailsSectionHeading>Unlock Date</S.DetailsSectionHeading>
 									<S.DetailSectionContent>
 										<div>
 											<S.DetailsSectionLabel>START DATE</S.DetailsSectionLabel>
