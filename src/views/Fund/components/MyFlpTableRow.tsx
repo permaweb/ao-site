@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getClaimableBalance, withdrawFLPToken } from 'api/fair-launch-api';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -39,6 +39,8 @@ export function MyFlpTableRow({ row, index }: MyFlpTableRowProps) {
 		enabled: !!arProvider.walletAddress,
 	});
 
+	const queryClient = useQueryClient();
+
 	return (
 		<StaticTableRow>
 			<S.TableCell>
@@ -69,6 +71,8 @@ export function MyFlpTableRow({ row, index }: MyFlpTableRowProps) {
 								setError(null);
 								setIsClaiming(true);
 								await withdrawFLPToken(row.id);
+								// invalidate the query
+								queryClient.invalidateQueries({ queryKey: ['claimableBalance', row.id, arProvider.walletAddress] });
 							} catch (error) {
 								console.error('Error claiming FLP tokens:', error);
 								setError(error instanceof Error ? error.message : 'Failed to claim tokens');
