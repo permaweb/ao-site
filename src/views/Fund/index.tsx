@@ -11,6 +11,7 @@ import {
 	getDelegationRecords,
 	getFlps,
 	getLastDelegationRecord,
+	getTotalDelegated,
 	getUserDelegations,
 	setDelegation,
 	UserDelegationResponse,
@@ -50,6 +51,11 @@ export default function Fund() {
 	const { data: lastDelegationRecord } = useQuery({
 		queryKey: ['lastDelegationRecord'],
 		queryFn: () => retryable(getLastDelegationRecord)(),
+	});
+
+	const { data: totalDelegated } = useQuery({
+		queryKey: ['totalDelegated'],
+		queryFn: () => retryable(getTotalDelegated)(),
 	});
 
 	const { data: delegationRecords } = useQuery({
@@ -141,20 +147,13 @@ export default function Fund() {
 	};
 
 	const totalProjectYields = useMemo(() => {
-		if (!delegationRecords || delegationRecords.length === 0) return {};
-		return delegationRecords.reduce((acc, record) => {
-			if (!record.delegations) return acc;
+		if (!totalDelegated || !totalDelegated.combined) return {};
 
-			const directDelegation = record.delegations.Data;
-			if (!directDelegation.projectYields) return acc;
-
-			for (const [key, value] of Object.entries(directDelegation.projectYields)) {
-				acc[key] = (acc[key] || 0) + Number(parseBigIntAsNumber(value || '0', 12));
-			}
-
+		return Object.entries(totalDelegated.combined).reduce((acc, [key, value]) => {
+			acc[key] = Number(parseBigIntAsNumber(value || '0', 12));
 			return acc;
 		}, {});
-	}, [delegationRecords]);
+	}, [totalDelegated]);
 
 	const getTotalProjectYield = (flpId) => {
 		return totalProjectYields[flpId] || 0;
@@ -199,7 +198,7 @@ export default function Fund() {
 			}
 			return b.starts_at_ts - a.starts_at_ts;
 		});
-	}, [allFlps, searchQuery, tabIndex, lastDelegationRecord, delegationRecords]);
+	}, [allFlps, searchQuery, tabIndex, lastDelegationRecord, totalDelegated]);
 
 	const totalAllocation = Object.values(allocations).reduce((sum, val) => sum + val, 0);
 	const isMaxAllocation = totalAllocation >= 100;

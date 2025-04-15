@@ -324,6 +324,23 @@ export async function getLastDelegationRecord(): Promise<LastDelegationRecord | 
 	return data;
 }
 
+interface TotalDelegated {
+	direct: Record<string, string>;
+	pi: Record<string, string>;
+	combined: Record<string, string>;
+}
+
+export async function getTotalDelegated(): Promise<TotalDelegated | null> {
+	const res = await dryrun({
+		process: AO.yieldHistorian,
+		tags: [{ name: 'Action', value: 'Get-Total-Delegated-AO-By-Project' }],
+	});
+	if (!res.Messages.length) return null;
+	const data = JSON.parse(res.Messages[0].Data);
+	console.log('onTotalDelegated', data);
+	return data;
+}
+
 export async function getDelegationRecords(): Promise<DelegationRecord[]> {
 	const res = await dryrun({
 		process: AO.yieldHistorian,
