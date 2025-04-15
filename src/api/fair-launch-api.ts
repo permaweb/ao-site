@@ -227,8 +227,10 @@ export async function getFlps(processId: string, statusFilter?: string): Promise
 		const tags = [{ name: 'Action', value: 'Get-FLPs' }];
 		if (statusFilter) tags.push({ name: 'Status-Filter', value: statusFilter });
 		const res = await dryrun({ process: processId, tags });
-		const list = res.Messages.length ? JSON.parse(res.Messages[0].Data) : [];
+		let list = res.Messages.length ? JSON.parse(res.Messages[0].Data) : [];
 		console.log('onFlps', list);
+		list = list.filter((flp: any) => flp.status === 'Active');
+		console.log('onFilteredFlps', list);
 		return list;
 	} catch (error) {
 		console.error('Error fetching FLPs:', error);

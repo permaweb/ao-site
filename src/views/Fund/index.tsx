@@ -535,8 +535,8 @@ export default function Fund() {
 							},
 							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'DIRECT DELEGATION LAST CYCLE' },
 							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'PI DELEGATION LAST CYCLE' },
-							{ style: { width: 140, minWidth: 140, maxWidth: 140 }, label: 'DATE STARTED', key: 'starts_at_ts' },
-							{ style: { width: 140, minWidth: 140, maxWidth: 140 }, label: 'ADD TO ALLOCATION', align: 'right' },
+							{ style: { width: 120, minWidth: 120, maxWidth: 120 }, label: 'START DATE', key: 'starts_at_ts' },
+							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'ADD TO ALLOCATION', align: 'right' },
 						]}
 						renderRow={(row: any, index: number) => (
 							<TableRow

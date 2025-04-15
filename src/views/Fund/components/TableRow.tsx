@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ReactSVG } from 'react-svg';
 
 import { ASSETS } from 'helpers/config';
@@ -12,6 +12,7 @@ import { ArrowSquareDownIcon } from './ArrowSquareDownIcon';
 import { FlpDetailsRow } from './FlpDetailsRow';
 import { IdBlock } from './IdBlock';
 import { TokenAvatar } from './TokenAvatar';
+import Tooltip from './Tooltip';
 
 interface TableRowProps {
 	row: any;
@@ -45,6 +46,33 @@ export const TableRow: React.FC<TableRowProps> = ({
 	isSubmitting,
 }) => {
 	const isExpanded = expandedRows.includes(row.id);
+	const isNotStartedYet = useMemo(() => row.starts_at_ts > Date.now(), [row.starts_at_ts]);
+
+	const timeRemainingText = useMemo(() => {
+		if (!isNotStartedYet) return '';
+
+		const startDate = new Date(row.starts_at_ts);
+		const currentDate = new Date();
+		const diffTime = Math.abs(startDate.getTime() - currentDate.getTime());
+
+		const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+		const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+
+		const formattedDate = formatDate(row.starts_at_ts, 'dateString', true);
+
+		return (
+			<div style={{ whiteSpace: 'normal', textAlign: 'left' }}>
+				<div>The Fairlaunch will start on:</div>
+				<div style={{ fontWeight: 'bold', margin: '4px 0' }}>{formattedDate}</div>
+				<div>
+					in approx ~ {days > 0 ? `${days} days, ` : ''}
+					{hours > 0 ? `${hours} hours, ` : ''}
+					{minutes} minutes from now.
+				</div>
+			</div>
+		);
+	}, [row.starts_at_ts, isNotStartedYet]);
 
 	return (
 		<React.Fragment key={row.id}>
@@ -107,6 +135,10 @@ export const TableRow: React.FC<TableRowProps> = ({
 									<ReactSVG src={ASSETS.checkmark} style={{ width: '16px', height: '16px' }} />
 								</S.AddButton>
 							</>
+						) : isNotStartedYet ? (
+							<Tooltip content={timeRemainingText}>
+								<S.AddButton disabled>Not started yet</S.AddButton>
+							</Tooltip>
 						) : (
 							<>
 								<ReactSVG
@@ -115,7 +147,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 										width: '16px',
 										height: '16px',
 										color:
-											isSubmitting || isMaxAllocation || row.status !== 'Active' || row.starts_at_ts > Date.now()
+											isSubmitting || isMaxAllocation || row.status !== 'Active' || isNotStartedYet
 												? '#aaa'
 												: '#51c85b',
 									}}
@@ -126,7 +158,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 										e.preventDefault();
 										handleAllocationChange(row.id, 5);
 									}}
-									disabled={isSubmitting || isMaxAllocation || row.status !== 'Active' || row.starts_at_ts > Date.now()}
+									disabled={isSubmitting || isMaxAllocation || row.status !== 'Active'}
 								>
 									Add
 								</S.AddButton>
