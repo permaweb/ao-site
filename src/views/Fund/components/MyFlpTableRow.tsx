@@ -63,7 +63,7 @@ export function MyFlpTableRow({ row, index }: MyFlpTableRowProps) {
 			<S.TableCell align="right">
 				<S.RowActionContainer style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
 					<S.AddButton
-						disabled={!claimableBalance || isClaiming}
+						disabled={!claimableBalance || claimableBalance === '0' || isClaiming}
 						onClick={async () => {
 							try {
 								setError(null);

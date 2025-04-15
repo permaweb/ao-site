@@ -435,8 +435,8 @@ export async function withdrawFLPToken(flpId: string): Promise<string> {
 	const reponseMsg = computedResult.Messages[0];
 	const responseStatus = reponseMsg.Tags.find((tag: any) => tag.name === 'Status');
 
-	if (responseStatus.value === 'Error')
-		throw new Error(reponseMsg.Tags.find((tag: any) => tag.name === 'Reason').value || reponseMsg.Data);
+	if (responseStatus?.value === 'Error')
+		throw new Error(reponseMsg.Tags.find((tag: any) => tag.name === 'Reason')?.value || reponseMsg.Data);
 
 	return msgId;
 }
