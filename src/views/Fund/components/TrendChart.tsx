@@ -26,6 +26,7 @@ interface TrendChartProps {
 	data?: StandardChartData;
 	chartColor?: string;
 	isLoading?: boolean;
+	showDetailedTooltip?: boolean;
 }
 
 const ChartContainer = styled.div<{ height: number; width: number }>`
@@ -39,10 +40,11 @@ const ChartContainer = styled.div<{ height: number; width: number }>`
 
 export function TrendChart({
 	height = 150,
-	width = 130,
+	width = 110,
 	data,
 	chartColor = '#0DBD27',
 	isLoading = false,
+	showDetailedTooltip = false,
 }: TrendChartProps) {
 	const chartRef = useRef<ChartJS<'line'>>(null);
 
@@ -85,14 +87,41 @@ export function TrendChart({
 				enabled: true,
 				mode: 'nearest' as const,
 				intersect: false,
-				backgroundColor: 'rgba(0, 0, 0, 0.7)',
-				titleFont: { size: 12 },
-				bodyFont: { size: 11 },
-				padding: 8,
+				backgroundColor: 'rgba(51, 51, 51, 0.66)',
+				titleFont: {
+					size: 10,
+					weight: 'normal' as const,
+				},
+				bodyFont: { size: 9 },
+				padding: { top: 4, bottom: 4, left: 6, right: 6 },
+				cornerRadius: 4,
 				displayColors: false,
 				callbacks: {
-					title: (items: any) => items[0].label || 'Unknown',
-					label: (context: any) => context.raw.toLocaleString(),
+					title: (items: any) => {
+						if (!items || !items[0] || !items[0].label) return 'Unknown';
+						try {
+							return new Date(items[0].label).toLocaleDateString('en-US', {
+								month: 'long',
+								day: 'numeric',
+								year: 'numeric',
+							});
+						} catch (e) {
+							return items[0].label || 'Unknown';
+						}
+					},
+					label: (context: any) => {
+						if (showDetailedTooltip && context.dataset.label === 'total') {
+							const index = context.dataIndex;
+							const userValue = context.dataset.meta?.userValues?.[index]?.toLocaleString() || '0';
+							const piValue = context.dataset.meta?.piValues?.[index]?.toLocaleString() || '0';
+							const totalValue = context.raw.toLocaleString();
+
+							return [`By Users: ${userValue}`, `By PI: ${piValue}`, `Total: ${totalValue}`];
+						}
+
+						return `${context.raw.toLocaleString()}`;
+					},
+					labelTextColor: () => '#fff',
 				},
 			},
 		},

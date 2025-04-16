@@ -42,26 +42,64 @@ export const Subtitle = styled.h2`
 
 export const StatsGrid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(4, 1fr);
 	gap: 20px;
+
+	.total-delegations {
+		grid-column: span 2;
+	}
 `;
 
 export const StatCard = styled.div`
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
 `;
 
+export const StatLabelRow = styled.div`
+	display: flex;
+	flex-direction: row;
+	gap: 40px;
+	width: 100%;
+`;
+
 export const StatLabel = styled.div`
-	font-size: 14px;
+	font-size: 10.3px;
 	color: #222326;
+	font-weight: normal;
+`;
+
+export const Ticker = styled.span`
+	font-size: 11px;
+	color: #7d7d7d;
 	font-weight: normal;
 `;
 
 export const StatValue = styled.div`
 	font-size: 32px;
-	font-weight: medium;
+	font-weight: 500;
+	color: #222326;
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	display: flex;
+	align-items: center;
+	gap: 10px;
+
+	svg {
+		width: 24px;
+		height: 24px;
+	}
+`;
+
+export const StatSubLabel = styled.div`
+	font-size: 10px;
+	color: #6b6b6b;
+	font-weight: normal;
+`;
+
+export const StatSubValue = styled.div`
+	font-size: 12px;
+	font-weight: 500;
 	color: #222326;
 	font-family: ${(props) => props.theme.typography.family.alt1};
 `;

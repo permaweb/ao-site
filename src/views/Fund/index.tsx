@@ -452,23 +452,67 @@ export default function Fund() {
 				</S.Header>
 
 				<S.StatsGrid>
-					<S.StatCard>
+					<S.StatCard className="total-delegations">
 						<div>
-							<S.StatLabel>TOTAL DELEGATED</S.StatLabel>
-							<S.StatValue>
-								{lastDelegationRecord ? (
-									formatNumber(parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalDelegatedAO, 12), {
-										notation: 'compact',
-									})
-								) : (
-									<Skeleton width={60} height={24} />
-								)}
-							</S.StatValue>
+							<S.StatLabelRow>
+								<div>
+									<S.StatLabel>TOTAL DELEGATIONS</S.StatLabel>
+									<S.StatValue>
+										{lastDelegationRecord ? (
+											<>
+												{formatNumber(parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalDelegatedAO, 12), {
+													notation: 'compact',
+												})}
+												<TokenAvatar logo={ASSETS.aoCircled} size="large" />
+											</>
+										) : (
+											<Skeleton width={60} height={26} style={{ marginTop: 6 }} />
+										)}
+									</S.StatValue>
+								</div>
+								<div>
+									<S.StatLabel>BY USERS</S.StatLabel>
+									<S.StatValue style={{ fontSize: 15, marginTop: 15 }}>
+										{lastDelegationRecord ? (
+											<>
+												{formatNumber(
+													parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalDirectDelegatedAO || '0', 12),
+													{
+														notation: 'compact',
+													}
+												)}{' '}
+												<S.Ticker>$AO</S.Ticker>
+											</>
+										) : (
+											<Skeleton width={60} height={15} />
+										)}
+									</S.StatValue>
+								</div>
+								<div>
+									<S.StatLabel>BY PERMAWEB INDEX</S.StatLabel>
+									<S.StatValue style={{ fontSize: 15, marginTop: 15 }}>
+										{lastDelegationRecord ? (
+											<>
+												{formatNumber(
+													parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalPiDelegatedAO || '0', 12),
+													{
+														notation: 'compact',
+													}
+												)}{' '}
+												<S.Ticker>$AO</S.Ticker>
+											</>
+										) : (
+											<Skeleton width={60} height={15} />
+										)}
+									</S.StatValue>
+								</div>
+							</S.StatLabelRow>
 						</div>
 						<TrendChart
-							height={50}
+							height={65}
 							data={convertToChartData(delegationRecords, 'totalDelegatedAO')}
 							isLoading={!delegationRecords}
+							showDetailedTooltip
 						/>
 					</S.StatCard>
 					<S.StatCard>
@@ -479,7 +523,7 @@ export default function Fund() {
 							</S.StatValue>
 						</div>
 						<TrendChart
-							height={50}
+							height={65}
 							data={convertToChartData(createCumulativeFlpData(allFlps), 'totalDelegators')}
 							isLoading={!allFlps}
 						/>
@@ -496,7 +540,7 @@ export default function Fund() {
 							</S.StatValue>
 						</div>
 						<TrendChart
-							height={50}
+							height={65}
 							data={convertToChartData(delegationRecords, 'totalDelegators')}
 							isLoading={!delegationRecords}
 						/>
@@ -781,6 +825,23 @@ export function convertToChartData(rawData: any[], dataKey: string, chartColor: 
 		return dataKey === 'totalDelegatedAO' ? parseFloat(value) / 10 ** 12 : parseInt(value, 10);
 	});
 
+	const userValues = sortedRecords.map((record) => {
+		const value = record?.summary?.Data?.totalDirectDelegatedAO;
+		if (!value) return 0;
+		return dataKey === 'totalDelegatedAO' ? parseFloat(value) / 10 ** 12 : parseInt(value, 10);
+	});
+
+	const piValues = sortedRecords.map((record) => {
+		const value = record?.summary?.Data?.totalPiDelegatedAO;
+		if (!value) return 0;
+		return dataKey === 'totalDelegatedAO' ? parseFloat(value) / 10 ** 12 : parseInt(value, 10);
+	});
+
+	const meta = {
+		userValues,
+		piValues,
+	};
+
 	return {
 		labels,
 		datasets: [
@@ -792,6 +853,9 @@ export function convertToChartData(rawData: any[], dataKey: string, chartColor: 
 				tension: 0.4,
 				pointRadius: 0,
 				borderWidth: 1,
+				label: 'total',
+				// Include meta information
+				meta,
 			},
 		],
 	};

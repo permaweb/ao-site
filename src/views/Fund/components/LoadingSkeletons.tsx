@@ -65,9 +65,13 @@ const HeaderActions = styled.div`
 
 const StatsGrid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(4, 1fr);
 	gap: 20px;
 	margin-bottom: 30px;
+
+	& > div:first-child {
+		grid-column: span 2;
+	}
 `;
 
 const StatCard = styled.div`
@@ -76,7 +80,8 @@ const StatCard = styled.div`
 	align-items: center;
 	padding: 1rem;
 	background: white;
-	border-radius: 4px;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 `;
 
 const CoreTokensGrid = styled.div`
@@ -155,13 +160,25 @@ export function LoadingSkeletons() {
 					</HeaderContainer>
 
 					<StatsGrid>
-						{[1, 2, 3].map((i) => (
+						{[1, 2, 3].map((i, index) => (
 							<StatCard key={i}>
 								<div>
 									<Skeleton style={{ width: '80px', height: '14px', marginBottom: '8px' }} />
 									<Skeleton style={{ width: '60px', height: '32px' }} />
+									{index === 0 && (
+										<div style={{ display: 'flex', gap: '20px', marginTop: '8px' }}>
+											<div>
+												<Skeleton style={{ width: '60px', height: '12px', marginBottom: '5px' }} />
+												<Skeleton style={{ width: '40px', height: '15px' }} />
+											</div>
+											<div>
+												<Skeleton style={{ width: '100px', height: '12px', marginBottom: '5px' }} />
+												<Skeleton style={{ width: '40px', height: '15px' }} />
+											</div>
+										</div>
+									)}
 								</div>
-								<Skeleton style={{ width: '80px', height: '50px' }} />
+								<Skeleton style={{ width: '80px', height: '65px' }} />
 							</StatCard>
 						))}
 					</StatsGrid>
