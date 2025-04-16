@@ -122,12 +122,12 @@ export const TokenInfo = styled.div`
 
 export const AddButton = styled.button`
 	padding: 8px 14px;
-	background-color: #51c85b;
+	background-color: ${(props) => props.theme.colors.button.alt1.background};
 	color: #fff;
 	border: none;
 	border-radius: 2px;
 	cursor: pointer;
-	font-weight: 700;
+	font-weight: 500;
 	font-size: 14px;
 	&:disabled {
 		background-color: #aaa;
@@ -161,13 +161,13 @@ export const AllocationPanel = styled.div`
 export const SubmitButton = styled.button`
 	margin-top: 20px;
 	padding: 25px 12px;
-	background-color: #51c85b;
+	background: ${(props) => props.theme.colors.button.alt1.background};
 	color: #fff;
 	border: none;
 	width: 100%;
 	border-radius: 4px;
-	font-size: 19px;
-	font-weight: 700;
+	font-size: 16px;
+	font-weight: 500;
 	line-height: 0;
 
 	&:disabled {
@@ -191,7 +191,7 @@ export const FlpSelectorButton = styled.button`
 	align-items: center;
 
 	font-size: 14px;
-	font-weight: 600;
+	font-weight: 500;
 	font-family: ${(props) => props.theme.typography.family.alt1};
 `;
 
@@ -233,7 +233,7 @@ export const FlpSelectorItem = styled.button<{ selected?: boolean }>`
 
 	.selected-indicator {
 		margin-left: auto;
-		color: #51c85b;
+		color: ${(props) => props.theme.colors.button.alt1.background};
 		font-size: 20px;
 		line-height: 1;
 
@@ -243,7 +243,7 @@ export const FlpSelectorItem = styled.button<{ selected?: boolean }>`
 			display: block;
 
 			path {
-				fill: #51c85b;
+				fill: ${(props) => props.theme.colors.button.alt1.background};
 			}
 		}
 	}
@@ -252,12 +252,12 @@ export const FlpSelectorItem = styled.button<{ selected?: boolean }>`
 export const FlpSelectorDoneButton = styled.button`
 	margin-top: 10px;
 	padding: 8px 0;
-	background-color: #51c85b;
+	background-color: ${(props) => props.theme.colors.button.alt1.background};
 	color: #fff;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
-	font-weight: 600;
+	font-weight: 500;
 	font-size: 14px;
 	font-family: ${(props) => props.theme.typography.family.alt1};
 	text-align: center;
@@ -330,7 +330,7 @@ export const FlpModalItem = styled.button<{ selected?: boolean }>`
 
 	.selected-indicator {
 		margin-left: auto;
-		color: #51c85b;
+		color: ${(props) => props.theme.colors.button.alt1.background};
 		font-size: 20px;
 		line-height: 1;
 
@@ -340,7 +340,7 @@ export const FlpModalItem = styled.button<{ selected?: boolean }>`
 			display: block;
 
 			path {
-				fill: #51c85b;
+				fill: ${(props) => props.theme.colors.button.alt1.background};
 			}
 		}
 	}
@@ -421,15 +421,16 @@ export const CoreTokenTicker = styled.span`
 `;
 
 export const CardAddButton = styled.button`
-	padding: 6px 12px;
-	background-color: #51c85b;
+	padding: 10px 12px;
+	background-color: ${(props) => props.theme.colors.button.alt1.background};
 	color: #fff;
 	border: none;
 	cursor: pointer;
 	width: 100%;
 	font-size: 19px;
-	font-weight: 700;
+	font-weight: 500;
 	line-height: 0;
+	border-radius: 4px;
 
 	&:disabled {
 		background-color: #aaa;

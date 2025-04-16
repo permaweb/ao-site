@@ -209,7 +209,7 @@ export const FlpDetailsRow: React.FC<FlpDetailsRowProps> = ({ row, isExpanded, c
 										)}
 										<div>
 											<S.DetailsSectionLabel>RUN TIME</S.DetailsSectionLabel>
-											<S.DetailsSectionValue style={{ color: '#51C85B' }}>{runTime}</S.DetailsSectionValue>
+											<S.DetailsSectionValue style={{ color: '#23BE30' }}>{runTime}</S.DetailsSectionValue>
 										</div>
 									</S.DetailSectionContent>
 								</div>

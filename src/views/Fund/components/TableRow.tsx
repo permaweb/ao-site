@@ -149,7 +149,7 @@ export const TableRow: React.FC<TableRowProps> = ({
 										color:
 											isSubmitting || isMaxAllocation || row.status !== 'Active' || isNotStartedYet
 												? '#aaa'
-												: '#51c85b',
+												: '#23BE30',
 									}}
 								/>
 								<S.AddButton

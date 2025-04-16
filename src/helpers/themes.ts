@@ -2,7 +2,7 @@ import { DefaultTheme } from 'styled-components';
 
 export const lightTheme = {
 	scheme: 'light',
-	positive1: '#27D735',
+	positive1: '#23BE30',
 	positive2: '#23BE30',
 	caution1: '#EEB700',
 	negative1: '#ED254E',
@@ -29,7 +29,7 @@ export const lightTheme = {
 	shadow2: 'rgb(75, 75, 75, .5)',
 	primary1: '#3344FF',
 	primary2: '#091DFF',
-	accent1: '#27D735',
+	accent1: '#23BE30',
 	accent2: '#23BE30',
 	light1: '#FFFFFF',
 	light2: '#DADADA',
@@ -37,7 +37,7 @@ export const lightTheme = {
 	dark1: '#151515',
 	dark2: '#333333',
 	link1: '#23BE30',
-	link2: '#27D735',
+	link2: '#23BE30',
 	chart1: '#C78135',
 	chart2: '#FBF5EE',
 	stats: {

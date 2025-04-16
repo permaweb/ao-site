@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { IconButton } from 'components/atoms/IconButton';
+import { ASSETS } from 'helpers/config';
+
 import { formatTicker } from '../../../helpers/format';
 
 import { TokenAvatar } from './TokenAvatar';
@@ -13,6 +16,7 @@ interface AllocationItemProps {
 	isMaxAllocation: boolean;
 	disabled?: boolean;
 	onAllocationChange: (change: number) => void;
+	hideControls?: boolean;
 }
 
 const Container = styled.div<{ disabled?: boolean }>`
@@ -77,6 +81,7 @@ export function AllocationItem({
 	isMaxAllocation,
 	disabled,
 	onAllocationChange,
+	hideControls = false,
 }: AllocationItemProps) {
 	return (
 		<Container disabled={disabled} className="allocation-item">
@@ -85,15 +90,29 @@ export function AllocationItem({
 				<TokenAvatar logo={logo} size="medium" />
 				<span>{formatTicker(ticker)}</span>
 			</TokenInfo>
-			<Controls>
-				<Button onClick={() => onAllocationChange(-5)} disabled={disabled}>
-					-5%
-				</Button>
-				<Button variant="add" onClick={() => onAllocationChange(5)} disabled={isMaxAllocation || disabled}>
-					+5%
-				</Button>
-				<Percentage>{percentage}%</Percentage>
-			</Controls>
+			{!hideControls ? (
+				<Controls>
+					<Button onClick={() => onAllocationChange(-5)} disabled={disabled}>
+						-5%
+					</Button>
+					<Button variant="add" onClick={() => onAllocationChange(5)} disabled={isMaxAllocation || disabled}>
+						+5%
+					</Button>
+					<Percentage>{percentage}%</Percentage>
+				</Controls>
+			) : (
+				<Controls>
+					<IconButton
+						type={'alt1'}
+						src={ASSETS.info}
+						handlePress={() => {}}
+						dimensions={{ wrapper: 35, icon: 19.5 }}
+						tooltip={'Your AO yield.'}
+						tooltipPosition="left"
+					/>
+					<Percentage>{percentage}%</Percentage>
+				</Controls>
+			)}
 		</Container>
 	);
 }

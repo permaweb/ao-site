@@ -52,7 +52,9 @@ export const HeaderInfoWrapper = styled.div`
 
 export const HeaderInfo = styled.div`
 	h6 {
-		font-weight: ${(props) => props.theme.typography.weight.bold};
+		font-size: 29px;
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;
@@ -97,20 +99,17 @@ export const InfoHeader = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 7.5px;
-	padding: 22.5px 25px;
-	background: ${(props) => props.theme.colors.container.alt2.background};
 
 	p {
-		font-size: clamp(24px, 2.75vw, 28px);
-		font-family: ${(props) => props.theme.typography.family.primary};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-size: 29px;
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
-		text-transform: uppercase;
 	}
 
 	svg {
-		height: 20px;
-		width: 20px;
+		height: 12px;
+		width: 12px;
 		color: ${(props) => props.theme.colors.indicator.primary};
 		fill: ${(props) => props.theme.colors.indicator.primary};
 		margin: 7.5px 0 0 0;
@@ -124,12 +123,11 @@ export const InfoHeader = styled.div`
 `;
 
 export const InfoBody = styled.div`
-	padding: 25px;
 	p {
-		font-size: ${(props) => props.theme.typography.size.base};
+		font-size: 12px;
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		color: ${(props) => props.theme.colors.font.primary};
+		color: #6b6b6b;
 
 		b {
 			font-weight: ${(props) => props.theme.typography.weight.xBold};
@@ -141,7 +139,7 @@ export const InfoBody = styled.div`
 		display: block;
 		margin: 20px 0 0 0;
 		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-size: ${(props) => props.theme.typography.size.base};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.link.color};
 		text-decoration: underline;
@@ -267,7 +265,7 @@ export const BalanceQuantityBody = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.lg};
 		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.xBold};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 	}
 
 	p {

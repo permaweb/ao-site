@@ -105,12 +105,17 @@ export default function Fund() {
 	useEffect(() => {
 		if (userDelegations && userDelegations.delegationPrefs) {
 			const initialAllocations: Record<string, number> = {};
+			let totalAllocated = 0;
 
 			CORE_PROJECTS.forEach((project) => {
+				// Skip AO for now, we'll calculate it last
+				if (project.id === 'ao') return;
+
 				const delegation = userDelegations.delegationPrefs.find((pref) => pref.walletTo === project.process);
 
 				if (delegation) {
 					initialAllocations[project.id] = delegation.factor / 100;
+					totalAllocated += delegation.factor / 100;
 				}
 			});
 
@@ -120,8 +125,25 @@ export default function Fund() {
 
 					if (delegation) {
 						initialAllocations[flp.id] = delegation.factor / 100;
+						totalAllocated += delegation.factor / 100;
 					}
 				});
+			}
+
+			// Assign remaining allocation to AO
+			const aoAllocation = 100 - totalAllocated;
+			if (aoAllocation > 0) {
+				initialAllocations['ao'] = aoAllocation;
+			} else {
+				// If there's an explicit AO allocation, use it
+				const aoProject = CORE_PROJECTS.find((p) => p.id === 'ao');
+				const aoExplicitDelegation = userDelegations.delegationPrefs.find(
+					(pref) => aoProject && pref.walletTo === aoProject.process
+				);
+
+				if (aoExplicitDelegation) {
+					initialAllocations['ao'] = aoExplicitDelegation.factor / 100;
+				}
 			}
 
 			setAllocations(initialAllocations);
@@ -182,7 +204,7 @@ export default function Fund() {
 
 			if (tabIndex === 0) {
 				const projectYield = getTotalProjectYield(flp.id);
-				return typeof projectYield === 'number' && projectYield > 10;
+				return typeof projectYield === 'number' && projectYield > 1;
 			} else {
 				return true;
 			}
@@ -202,6 +224,10 @@ export default function Fund() {
 
 	const totalAllocation = Object.values(allocations).reduce((sum, val) => sum + val, 0);
 	const isMaxAllocation = totalAllocation >= 100;
+	const nonAoTotalAllocation = Object.entries(allocations)
+		.filter(([key]) => key !== 'ao')
+		.reduce((sum, [_, value]) => sum + value, 0);
+	const cannotAllocateMore = nonAoTotalAllocation >= 100;
 
 	const handleAllocationChange = (token: string, change: number) => {
 		if (!arProvider.walletAddress) {
@@ -210,11 +236,49 @@ export default function Fund() {
 		}
 		if (isSubmitting) return;
 
-		if (isMaxAllocation && change > 0) return;
-		setAllocations((prev) => ({
-			...prev,
-			[token]: Math.max(0, Math.min(100, (prev[token] || 0) + change)),
-		}));
+		// Don't allow direct modification of AO through this function
+		if (token === 'ao' && change !== 0) return;
+
+		// For adding to other tokens, subtract from AO if possible
+		if (change > 0 && token !== 'ao') {
+			// Calculate total without AO
+			const totalWithoutAO = Object.entries(allocations)
+				.filter(([key]) => key !== 'ao')
+				.reduce((sum, [_, value]) => sum + value, 0);
+
+			// If we're already at max allocation, don't allow further addition
+			if (totalWithoutAO >= 100) return;
+
+			// If adding would exceed 100%, adjust the change amount
+			if (totalWithoutAO + change > 100) {
+				change = 100 - totalWithoutAO;
+			}
+
+			// Update allocations by adding to the token and removing from AO
+			setAllocations((prev) => {
+				const aoAllocation = prev['ao'] || 100 - totalWithoutAO;
+				if (aoAllocation < change) return prev; // Don't change if not enough AO allocation
+
+				return {
+					...prev,
+					[token]: Math.max(0, Math.min(100, (prev[token] || 0) + change)),
+					ao: Math.max(0, aoAllocation - change),
+				};
+			});
+		}
+		// For reducing other tokens, add back to AO
+		else if (change < 0 && token !== 'ao') {
+			setAllocations((prev) => {
+				const newTokenValue = Math.max(0, Math.min(100, (prev[token] || 0) + change));
+				const aoAllocation = prev['ao'] || 0;
+
+				return {
+					...prev,
+					[token]: newTokenValue,
+					ao: Math.min(100, aoAllocation - change), // add the removed amount to AO
+				};
+			});
+		}
 	};
 
 	const flpColorMap = useMemo(() => {
@@ -469,7 +533,7 @@ export default function Fund() {
 								) : (
 									<S.CardAddButton
 										onClick={() => handleAllocationChange(project.id, 5)}
-										disabled={isMaxAllocation || isSubmitting || project.disabled}
+										disabled={cannotAllocateMore || isSubmitting || project.disabled}
 									>
 										<ReactSVG
 											src={ASSETS.plus}
@@ -545,7 +609,7 @@ export default function Fund() {
 								expandedRows={expandedRows}
 								setExpandedRows={setExpandedRows}
 								allocations={allocations}
-								isMaxAllocation={isMaxAllocation}
+								isMaxAllocation={cannotAllocateMore}
 								handleAllocationChange={handleAllocationChange}
 								getProjectYield={getProjectYield}
 								getProjectPiYield={getProjectPiYield}
@@ -585,9 +649,10 @@ export default function Fund() {
 										ticker={project.ticker}
 										percentage={allocations[project.id] || 0}
 										color={coreTokenColors[project.id]}
-										isMaxAllocation={isMaxAllocation}
-										disabled={isSubmitting || project.disabled}
+										isMaxAllocation={cannotAllocateMore}
+										disabled={cannotAllocateMore || isSubmitting || project.disabled}
 										onAllocationChange={(change) => handleAllocationChange(project.id, change)}
+										hideControls={project.id === 'ao'}
 									/>
 								))}
 							</S.AllocationContainer>
@@ -601,7 +666,7 @@ export default function Fund() {
 									logo={flp.flp_token_logo}
 									percentage={allocations[flp.id] || 0}
 									color={flpColorMap[flp.id] || '#F2F2F2'}
-									isMaxAllocation={isMaxAllocation}
+									isMaxAllocation={cannotAllocateMore}
 									disabled={
 										isSubmitting ||
 										flp.status !== 'Active' ||

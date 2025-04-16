@@ -51,6 +51,7 @@ export const Primary = styled.button<{
 	warning: boolean | undefined;
 	noTextTransform: boolean | undefined;
 }>`
+	border-radius: 4px;
 	position: relative;
 	background: ${(props) =>
 		props.warning
@@ -125,9 +126,8 @@ export const Primary = styled.button<{
 		text-overflow: ellipsis;
 		overflow: hidden;
 		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
-		font-family: ${(props) => props.theme.typography.family.primary} !important;
-		text-transform: ${(props) => (props.noTextTransform ? 'none' : 'uppercase')};
+		font-weight: ${(props) => props.theme.typography.weight.medium} !important;
+		font-family: ${(props) => props.theme.typography.family.alt1} !important;
 		letter-spacing: 0.35px;
 		color: ${(props) =>
 			props.warning
