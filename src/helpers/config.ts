@@ -10,8 +10,13 @@ export const AO = {
 	stEthPriceOracle: 'wJV8FMkpoeLsTjJ6O7YZEuQgMqj-sDjPHhTeA73RsCc',
 	daiPriceOracle: '5q8vpzC5QAKOAJFM26MAKfZw1gwtw7WA_J2861ZiKhI',
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
+	yieldHistorian: 'NRP0xtzeV9MHgwLmgD254erUB7mUjMBhBkYkNYkbNEo',
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
 	piProcess: 'rxxU4g-7tUHGvF28W2l53hxarpbaFR4NaSnOaxx6MIE',
+	// delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
+	// yieldHistorian: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY', // staging
+	// flpFactory: 'JC0_BVWWf7xbmXUeKskDBRQ5fJo8fWgPtaEYMOf-Vbk', // staging
+	// piProcess: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots', // staging
 };
 
 export const ETH_CONTRACTS = {
@@ -47,6 +52,7 @@ export const ASSETS = {
 	walletConnect: getTxEndpoint('llCUeYuxYxnH6rp2PVrkOR2pkGy0rFPR8wlIBbl-Ols'),
 	add: getTxEndpoint('RLWnDhoB0Dd_X-sLnNy4w2S7ds3l9591HcHK8nc3YRw'),
 	ao: getTxEndpoint('AzM59q2tcYzkySUUZUN1HCwfKGVHi--71UdoIk5gPUE'),
+	aoCircled: getTxEndpoint('UkS-mdoiG8hcAClhKK8ch4ZhEzla0mCPDOix9hpdSFE'),
 	arrow: getTxEndpoint('ghFL1fzQ2C1eEAnqSVvfAMP5Jikx7NKSPP5neoNPALw'),
 	arweave: getTxEndpoint('LeeiCXkCDZKdh9uEfau2a13LziNGnT82anXFDW51Hgw'),
 	checkmark: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
@@ -128,6 +134,8 @@ function createURLs() {
 		mintYield: `${mint}yield/`,
 		policies: `${base}policies/`,
 		read: `${base}read/`,
+		delegate: `${base}delegate/`,
+		delegateDashboard: `${base}delegate/dashboard/`,
 		notFound: `${base}404`,
 	};
 }
@@ -900,11 +908,7 @@ export const DaiBridge_ABI = [
 		inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
 		name: 'pools',
 		outputs: [
-			{
-				internalType: 'uint128',
-				name: 'withdrawLockPeriodAfterStake',
-				type: 'uint128',
-			},
+			{ internalType: 'uint128', name: 'withdrawLockPeriodAfterStake', type: 'uint128' },
 			{ internalType: 'uint256', name: 'minimalStake', type: 'uint256' },
 			{ internalType: 'bool', name: 'isPublic', type: 'bool' },
 		],

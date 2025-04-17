@@ -13,6 +13,7 @@ import { Footer } from 'navigation/footer';
 import { useAOProvider } from 'providers/AOProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
+import { Subtitle } from 'views/Fund/styles';
 
 import { BalanceSection } from './MintBalances/BalanceSection';
 import { MintAllocation } from './MintAllocation';
@@ -43,26 +44,6 @@ export default function Mint() {
 		setAOSupplyReset({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
 	}, [aoProvider.mintedSupply]);
 
-	const TABS = React.useMemo(
-		() => [
-			{
-				label: language.deposits,
-				icon: ASSETS.deposit,
-				disabled: false,
-				url: URLS.mintDeposits,
-				view: () => <MintBalances />,
-			},
-			{
-				label: language.yield,
-				icon: ASSETS.yield,
-				disabled: false,
-				url: URLS.mintYield,
-				view: () => <MintAllocation />,
-			},
-		],
-		[]
-	);
-
 	function getSupplyDate() {
 		const tokenReleaseDate = new Date();
 		tokenReleaseDate.setMonth(tokenReleaseDate.getMonth() - currentMonth);
@@ -76,7 +57,7 @@ export default function Mint() {
 		<>
 			<S.Wrapper>
 				<S.GlobalWrapper>
-					<S.InfoWrapper className={'border-wrapper-alt1 fade-in'}>
+					<S.InfoWrapper className={'fade-in'}>
 						<S.InfoHeader>
 							<ReactSVG src={ASSETS.plus} />
 							<p>{language.fairLaunch}</p>
@@ -127,19 +108,24 @@ export default function Mint() {
 					</S.MetricsWrapper>
 				</S.GlobalWrapper>
 				<S.BalancesPrimaryWrapper>
-					<S.HeaderWrapper>
-						<S.HeaderInfoWrapper>
-							<S.HeaderInfo>
-								<h6>{language.network}</h6>
-							</S.HeaderInfo>
-						</S.HeaderInfoWrapper>
-						<S.HeaderTooltip>
-							<button onClick={() => setInfo(language.networkInfo)}>
-								<ReactSVG src={ASSETS.info} />
-								{language.infoTooltip}
-							</button>
-						</S.HeaderTooltip>
-					</S.HeaderWrapper>
+					<div>
+						<S.HeaderWrapper>
+							<S.HeaderInfoWrapper>
+								<S.HeaderInfo>
+									<h6>{language.network}</h6>
+								</S.HeaderInfo>
+							</S.HeaderInfoWrapper>
+							<S.HeaderTooltip>
+								<button onClick={() => setInfo(language.networkInfo)}>
+									<ReactSVG src={ASSETS.info} />
+									{language.infoTooltip}
+								</button>
+							</S.HeaderTooltip>
+						</S.HeaderWrapper>
+						<Subtitle>
+							Track overall network token emissions, total deposited assets, and your current and projected AO holdings.
+						</Subtitle>
+					</div>
 					<S.BalancesGlobalWrapper className={'border-wrapper-primary'}>
 						<S.BalanceQuantitySection>
 							<S.BalanceQuantityHeader>
@@ -172,7 +158,7 @@ export default function Mint() {
 					</S.BalancesGlobalWrapper>
 					<BalanceSection type={'ao'} />
 				</S.BalancesPrimaryWrapper>
-				<URLTabs tabs={TABS} activeUrl={TABS[0].url} />
+				<MintBalances />
 				<Footer />
 			</S.Wrapper>
 			{info && (

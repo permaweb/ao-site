@@ -74,6 +74,17 @@ export const HeaderTooltip = styled.div`
 	}
 `;
 
+export const HeaderLink = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+
+	a {
+		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-size: ${(props) => props.theme.typography.size.base};
+	}
+`;
+
 export const BalancesBodyWrapper = styled(BodyWrapper)`
 	flex-direction: column;
 `;

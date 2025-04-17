@@ -47,7 +47,7 @@ export const BalanceHeader = styled.div`
 		line-height: 1;
 		font-size: ${(props) => props.theme.typography.size.xLg};
 		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.bold};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;
@@ -61,6 +61,10 @@ export const BalanceWalletWrapper = styled.div`
 `;
 
 export const BalanceWalletAction = styled.div`
+	button span {
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+	}
+
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		button {
 			height: 55px !important;
@@ -89,7 +93,7 @@ export const BalanceWalletDropdown = styled.div`
 		gap: 7.5px;
 		font-size: ${(props) => props.theme.typography.size.small};
 		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.bold};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 
 		svg {
@@ -140,7 +144,7 @@ export const BalanceWalletDropdownLine = styled.div`
 		font-family: ${(props) => props.theme.typography.family.alt1};
 
 		b {
-			font-weight: ${(props) => props.theme.typography.weight.xBold};
+			font-weight: ${(props) => props.theme.typography.weight.regular};
 		}
 	}
 
@@ -205,7 +209,7 @@ export const BalanceQuantityBody = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.lg};
 		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.xBold};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 	}
 
 	p {

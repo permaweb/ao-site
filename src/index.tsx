@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import { createConfig, http, WagmiProvider } from 'wagmi';
@@ -24,29 +25,33 @@ const config = createConfig({
 	},
 });
 
+const queryClient = new QueryClient();
+
 function Root() {
 	return (
-		<WagmiProvider config={config}>
-			<CustomThemeProvider>
-				<LanguageProvider>
-					<HashRouter>
-						<GlobalStyle />
-						<AOProvider>
-							<EthereumProvider>
-								<ArweaveProvider>
-									<AllocationProvider>
-										<div id={'loader'} />
-										<div id={'notification'} />
-										<div id={'overlay'} />
-										<App />
-									</AllocationProvider>
-								</ArweaveProvider>
-							</EthereumProvider>
-						</AOProvider>
-					</HashRouter>
-				</LanguageProvider>
-			</CustomThemeProvider>
-		</WagmiProvider>
+		<QueryClientProvider client={queryClient}>
+			<WagmiProvider config={config}>
+				<CustomThemeProvider>
+					<LanguageProvider>
+						<HashRouter>
+							<GlobalStyle />
+							<AOProvider>
+								<EthereumProvider>
+									<ArweaveProvider>
+										<AllocationProvider>
+											<div id={'loader'} />
+											<div id={'notification'} />
+											<div id={'overlay'} />
+											<App />
+										</AllocationProvider>
+									</ArweaveProvider>
+								</EthereumProvider>
+							</AOProvider>
+						</HashRouter>
+					</LanguageProvider>
+				</CustomThemeProvider>
+			</WagmiProvider>
+		</QueryClientProvider>
 	);
 }
 
