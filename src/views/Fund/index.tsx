@@ -66,7 +66,7 @@ export default function Fund() {
 	const arProvider = useArweaveProvider();
 
 	const { data: userDelegations, refetch: refetchUserDelegations } = useQuery<UserDelegationResponse | null>({
-		queryKey: ['userDelegations'],
+		queryKey: ['userDelegations', arProvider.walletAddress],
 		queryFn: () => retryable(getUserDelegations)(arProvider.walletAddress),
 		enabled: !!arProvider.walletAddress,
 	});

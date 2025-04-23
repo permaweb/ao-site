@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { IconButton } from 'components/atoms/IconButton';
 import { ASSETS } from 'helpers/config';
 
-import { formatTicker } from '../../../helpers/format';
+import { formatNumberAuto, formatTicker } from '../../../helpers/format';
 
 import { TokenAvatar } from './TokenAvatar';
 
@@ -98,7 +98,7 @@ export function AllocationItem({
 					<Button variant="add" onClick={() => onAllocationChange(5)} disabled={isMaxAllocation || disabled}>
 						+5%
 					</Button>
-					<Percentage>{percentage}%</Percentage>
+					<Percentage>{formatNumberAuto(percentage)}%</Percentage>
 				</Controls>
 			) : (
 				<Controls>
@@ -110,7 +110,7 @@ export function AllocationItem({
 						tooltip={'Your AO yield.'}
 						tooltipPosition="left"
 					/>
-					<Percentage>{percentage}%</Percentage>
+					<Percentage>{formatNumberAuto(percentage)}%</Percentage>
 				</Controls>
 			)}
 		</Container>
