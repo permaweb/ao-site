@@ -269,13 +269,20 @@ export default function Fund() {
 		// For reducing other tokens, add back to AO
 		else if (change < 0 && token !== 'ao') {
 			setAllocations((prev) => {
-				const newTokenValue = Math.max(0, Math.min(100, (prev[token] || 0) + change));
+				const currentValue = prev[token] || 0;
+				const newTokenValue = currentValue + change;
+
+				// If reducing would bring the value below 5%, set it to 0 instead
+				const finalTokenValue = newTokenValue < 5 && newTokenValue > 0 ? 0 : Math.max(0, Math.min(100, newTokenValue));
 				const aoAllocation = prev['ao'] || 0;
+
+				// Calculate how much to add back to AO (the difference between current and final value)
+				const amountToAddToAO = currentValue - finalTokenValue;
 
 				return {
 					...prev,
-					[token]: newTokenValue,
-					ao: Math.min(100, aoAllocation - change), // add the removed amount to AO
+					[token]: finalTokenValue,
+					ao: Math.min(100, aoAllocation + amountToAddToAO), // add the removed amount to AO
 				};
 			});
 		}
