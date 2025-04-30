@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import Modal from 'components/molecules/Modal/Modal';
 import { AO, ASSETS } from 'helpers/config';
-import { formatNumber, formatTicker, parseBigIntAsNumber } from 'helpers/format';
+import { formatNumberAuto, formatTicker, parseBigIntAsNumber } from 'helpers/format';
 import { retryable } from 'helpers/network';
 import { formatAddress, formatDate } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
@@ -76,7 +76,7 @@ export default function DashboardPage() {
 		queryFn: async () => {
 			if (arProvider.walletAddress) {
 				const tokenBalance = await readHandler({
-					processId: AO.piProcess,
+					processId: AO.piBalanceProcess,
 					action: 'Balance',
 					tags: [{ name: 'Recipient', value: arProvider.walletAddress }],
 				});
@@ -140,7 +140,7 @@ export default function DashboardPage() {
 					<div>
 						<S.StatLabel style={{ fontSize: 12 }}>YOUR PI BALANCE</S.StatLabel>
 						<S.StatValue style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10, fontSize: 48 }}>
-							{piBalance ? formatNumber(parseBigIntAsNumber(piBalance, 12)) : <Skeleton width={100} height={48} />}
+							{piBalance ? formatNumberAuto(parseBigIntAsNumber(piBalance, 12)) : <Skeleton width={100} height={48} />}
 							<TokenAvatar logo={ASSETS.pi} size="xl" />
 						</S.StatValue>
 					</div>
