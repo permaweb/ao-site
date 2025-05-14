@@ -4,6 +4,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
 	entry: './src/index.tsx',
@@ -64,6 +67,7 @@ module.exports = {
 							['@babel/preset-react', { runtime: 'automatic' }],
 							'@babel/preset-typescript',
 						],
+						plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean),
 					},
 				},
 			},
@@ -145,7 +149,8 @@ module.exports = {
 			'global.setImmediate': [require.resolve('timers'), 'setImmediate'],
 		}),
 		new webpack.NoEmitOnErrorsPlugin(),
-	],
+		isDevelopment && new ReactRefreshWebpackPlugin(),
+	].filter(Boolean),
 	resolve: {
 		extensions: ['.tsx', '.ts', '.jsx', '.js'],
 		preferRelative: true,

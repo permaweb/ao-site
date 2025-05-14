@@ -88,6 +88,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.20.12",
 		"@babel/preset-typescript": "^7.21.0",
+		"@pmmmwh/react-refresh-webpack-plugin": "^0.6.0",
 		"@svgr/webpack": "^6.5.1",
 		"@types/draft-js": "^0.11.12",
 		"@types/file-saver": "^2.0.7",
@@ -125,6 +126,7 @@
 		"prettier": "^2.8.3",
 		"process": "^0.11.10",
 		"raw-loader": "^4.0.2",
+		"react-refresh": "^0.17.0",
 		"stream-browserify": "^3.0.0",
 		"stream-http": "^3.2.0",
 		"style-loader": "^3.3.2",
