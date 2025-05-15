@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ReactSVG } from 'react-svg';
 
-import { AO, ASSETS } from 'helpers/config';
+import { AO, ASSETS, STYLING } from 'helpers/config';
 import { retryable } from 'helpers/network';
 import { formatAddress, formatDate } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
@@ -25,6 +25,7 @@ import { LoadingSkeletons, Skeleton } from './components/LoadingSkeletons';
 import { PiFavicon } from './components/PiFavicon';
 import { TableRow } from './components/TableRow';
 import { TokenAvatar } from './components/TokenAvatar';
+import Tooltip from './components/Tooltip';
 import { TrendChart } from './components/TrendChart';
 import * as S from './styles';
 
@@ -42,6 +43,9 @@ export default function Fund() {
 	const [expandedRows, setExpandedRows] = useState<string[]>([]);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
+
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+	const [showAllocationModal, setShowAllocationModal] = useState(false);
 
 	const { data: allFlps } = useQuery({
 		queryKey: ['allFlps'],
@@ -149,6 +153,12 @@ export default function Fund() {
 			setAllocations(initialAllocations);
 		}
 	}, [userDelegations, allFlps, submitError]);
+
+	useEffect(() => {
+		const handleResize = () => setWindowWidth(window.innerWidth);
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	}, []);
 
 	const getProjectYield = (flpId) => {
 		if (!lastDelegationRecord || !lastDelegationRecord.delegations || lastDelegationRecord.delegations.length === 0) {
@@ -427,252 +437,14 @@ export default function Fund() {
 		}
 	};
 
-	if (!allFlps) return <LoadingSkeletons />;
+	const isLaptop = windowWidth < parseInt(STYLING.cutoffs.max);
+	const isTablet = windowWidth < parseInt(STYLING.cutoffs.initial);
+	const isMobile = windowWidth < parseInt(STYLING.cutoffs.secondary);
 
-	return (
-		<S.Container style={{ display: 'flex', flexDirection: 'row', gap: 20, alignItems: 'flex-start', marginBottom: 60 }}>
-			<S.LeftPanel>
-				<S.Header>
-					<S.HeaderContent>
-						<div>
-							<S.Title>Discover Permaweb Fair Launch Projects</S.Title>
-							<S.Subtitle>
-								The Permaweb Index is a fully autonomous permissionless, ecosystem liquidity pool that allows delegation
-								<br /> of your yield to a variety of Permaweb ecosystem projects.
-							</S.Subtitle>
-						</div>
-						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 20 }}>
-							<S.DashboardLink to="/delegate/dashboard">View Dashboard {'>'}</S.DashboardLink>
-							<S.ConnectButton onClick={() => arProvider.setWalletModalVisible(true)}>
-								{arProvider.walletAddress ? (
-									<>
-										<span>
-											Connected <b>{formatAddress(arProvider.walletAddress, false)}</b>
-										</span>
-									</>
-								) : (
-									'Connect Wallet'
-								)}
-							</S.ConnectButton>
-						</div>
-					</S.HeaderContent>
-				</S.Header>
+	if (!allFlps) return <LoadingSkeletons isTablet={isTablet} isMobile={isMobile} />;
 
-				<S.StatsGrid>
-					<S.StatCard className="total-delegations">
-						<div>
-							<S.StatLabelRow>
-								<div>
-									<S.StatLabel>TOTAL DELEGATIONS</S.StatLabel>
-									<S.StatValue>
-										{lastDelegationRecord ? (
-											<>
-												{formatNumber(parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalDelegatedAO, 12), {
-													notation: 'compact',
-												})}
-												<TokenAvatar logo={ASSETS.aoCircled} size="large" />
-											</>
-										) : (
-											<Skeleton width={60} height={26} style={{ marginTop: 6 }} />
-										)}
-									</S.StatValue>
-								</div>
-								<div>
-									<S.StatLabel>BY USERS</S.StatLabel>
-									<S.StatValue style={{ fontSize: 15, marginTop: 15 }}>
-										{lastDelegationRecord ? (
-											<>
-												{formatNumber(
-													parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalDirectDelegatedAO || '0', 12),
-													{
-														notation: 'compact',
-													}
-												)}{' '}
-												<S.Ticker>$AO</S.Ticker>
-											</>
-										) : (
-											<Skeleton width={60} height={15} />
-										)}
-									</S.StatValue>
-								</div>
-								<div>
-									<S.StatLabel>BY PERMAWEB INDEX</S.StatLabel>
-									<S.StatValue style={{ fontSize: 15, marginTop: 15 }}>
-										{lastDelegationRecord ? (
-											<>
-												{formatNumber(
-													parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalPiDelegatedAO || '0', 12),
-													{
-														notation: 'compact',
-													}
-												)}{' '}
-												<S.Ticker>$AO</S.Ticker>
-											</>
-										) : (
-											<Skeleton width={60} height={15} />
-										)}
-									</S.StatValue>
-								</div>
-							</S.StatLabelRow>
-						</div>
-						<TrendChart
-							height={65}
-							data={convertToChartData(delegationRecords, 'totalDelegatedAO')}
-							isLoading={!delegationRecords}
-							showDetailedTooltip
-						/>
-					</S.StatCard>
-					<S.StatCard>
-						<div>
-							<S.StatLabel>FAIR LAUNCH PROJECTS</S.StatLabel>
-							<S.StatValue>
-								{allFlps ? allFlps.filter((flp) => !!flp.flp_token_name).length : <Skeleton width={60} height={24} />}
-							</S.StatValue>
-						</div>
-						<TrendChart
-							height={65}
-							data={convertToChartData(createCumulativeFlpData(allFlps), 'totalDelegators')}
-							isLoading={!allFlps}
-						/>
-					</S.StatCard>
-					<S.StatCard>
-						<div>
-							<S.StatLabel>USERS</S.StatLabel>
-							<S.StatValue>
-								{lastDelegationRecord ? (
-									lastDelegationRecord?.summary?.Data.totalDelegators
-								) : (
-									<Skeleton width={60} height={24} />
-								)}
-							</S.StatValue>
-						</div>
-						<TrendChart
-							height={65}
-							data={convertToChartData(delegationRecords, 'totalDelegators')}
-							isLoading={!delegationRecords}
-						/>
-					</S.StatCard>
-				</S.StatsGrid>
-
-				<div>
-					<S.SectionTitle>
-						<PiFavicon />
-						Add the core of the Permaweb to your allocation.
-					</S.SectionTitle>
-
-					<S.CoreTokensContainer>
-						{CORE_PROJECTS.map((project) => (
-							<S.CoreTokenCard key={project.id}>
-								<div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-									<S.CoreTokenHeader>
-										<TokenAvatar logo={project.logo} size="large" />
-										<S.CoreTokenName>{project.name}</S.CoreTokenName>
-										<S.CoreTokenTicker>${project.ticker}</S.CoreTokenTicker>
-									</S.CoreTokenHeader>
-									<S.Subtitle>{project.description}</S.Subtitle>
-								</div>
-								{allocations[project.id] && allocations[project.id] > 0 ? (
-									<>
-										<S.CardAddButton
-											disabled
-											style={{ backgroundColor: coreTokenColors[project.id] || flpColorMap[project.id] }}
-										>
-											Added
-											<ReactSVG src={ASSETS.checkmark} />
-										</S.CardAddButton>
-									</>
-								) : (
-									<S.CardAddButton
-										onClick={() => handleAllocationChange(project.id, 5)}
-										disabled={cannotAllocateMore || isSubmitting || project.disabled}
-									>
-										<ReactSVG
-											src={ASSETS.plus}
-											style={{
-												opacity: project.disabled ? 0 : 1,
-											}}
-										/>
-										{project.disabled ? 'Coming Soon' : 'Add'}
-									</S.CardAddButton>
-								)}
-							</S.CoreTokenCard>
-						))}
-					</S.CoreTokensContainer>
-				</div>
-
-				<div>
-					<S.SectionTitle>
-						<PiFavicon />
-						Add Permaweb projects to your current allocation.
-					</S.SectionTitle>
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							alignItems: 'center',
-							marginBottom: 20,
-						}}
-					>
-						<S.TabsContainer>
-							<S.Tab active={tabIndex === 0} onClick={() => setTabIndex(0)}>
-								Popular Delegations
-							</S.Tab>
-							<S.Tab active={tabIndex === 1} onClick={() => setTabIndex(1)}>
-								Explore Delegations
-							</S.Tab>
-						</S.TabsContainer>
-
-						<div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-							<S.SearchBar>
-								<S.SearchInput
-									placeholder="Search for Project..."
-									value={searchQuery}
-									onChange={(e) => setSearchQuery(e.target.value)}
-								/>
-							</S.SearchBar>
-						</div>
-					</div>
-
-					<InMemoryTable
-						data={sortedAndFilteredFlps}
-						pageSize={pageSize}
-						onLoadMore={() => setPageSize((prev) => prev + 30)}
-						sortedBy={tabIndex === 0 ? 'amount_delegated' : 'starts_at_ts'}
-						headerCells={[
-							{ style: { width: 50, minWidth: 50, maxWidth: 50 }, label: '#', align: 'center' },
-							{ style: { width: 220, minWidth: 220, maxWidth: 220 }, label: 'NAME' },
-							{
-								style: { width: 160, minWidth: 160, maxWidth: 160 },
-								label: 'TOTAL AO DELEGATED',
-								key: 'amount_delegated',
-							},
-							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'DIRECT DELEGATION LAST CYCLE' },
-							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'PI DELEGATION LAST CYCLE' },
-							{ style: { width: 120, minWidth: 120, maxWidth: 120 }, label: 'START DATE', key: 'starts_at_ts' },
-							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'ADD TO ALLOCATION', align: 'right' },
-						]}
-						renderRow={(row: any, index: number) => (
-							<TableRow
-								key={row.id}
-								row={row}
-								index={index}
-								expandedRows={expandedRows}
-								setExpandedRows={setExpandedRows}
-								allocations={allocations}
-								isMaxAllocation={cannotAllocateMore}
-								handleAllocationChange={handleAllocationChange}
-								getProjectYield={getProjectYield}
-								getProjectPiYield={getProjectPiYield}
-								getTotalProjectYield={getTotalProjectYield}
-								coreTokenColors={coreTokenColors}
-								flpColorMap={flpColorMap}
-								isSubmitting={isSubmitting}
-							/>
-						)}
-					/>
-				</div>
-			</S.LeftPanel>
+	const allocationForm = (
+		<>
 			<S.AllocationPanel>
 				<S.Title>Allocation</S.Title>
 				<S.Subtitle>The below Pie Chart represents how you are currently allocating your AO Yield</S.Subtitle>
@@ -750,6 +522,279 @@ export default function Fund() {
 					{isSubmitting ? 'Saving...' : 'Confirm Delegation Preferences'}
 				</S.SubmitButton>
 			</S.AllocationPanel>
+		</>
+	);
+
+	return (
+		<S.Container style={{ display: 'flex', flexDirection: 'row', gap: 20, alignItems: 'flex-start', marginBottom: 60 }}>
+			<S.LeftPanel>
+				<S.Header>
+					<S.HeaderContent isTablet={isTablet}>
+						<div>
+							<S.Title>Discover Permaweb Fair Launch Projects</S.Title>
+							<S.Subtitle>
+								The Permaweb Index is a fully autonomous permissionless, ecosystem liquidity pool that allows delegation
+								<br /> of your yield to a variety of Permaweb ecosystem projects.
+							</S.Subtitle>
+						</div>
+						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+							<S.DashboardLink to="/delegate/dashboard">View Dashboard {'>'}</S.DashboardLink>
+							<S.ConnectButton onClick={() => arProvider.setWalletModalVisible(true)}>
+								{arProvider.walletAddress ? (
+									<>
+										<span>
+											Connected <b>{formatAddress(arProvider.walletAddress, false)}</b>
+										</span>
+									</>
+								) : (
+									'Connect Wallet'
+								)}
+							</S.ConnectButton>
+						</div>
+					</S.HeaderContent>
+				</S.Header>
+
+				<S.StatsGrid isTablet={isTablet}>
+					<S.StatCard className="total-delegations">
+						<div>
+							<S.StatLabelRow>
+								<div>
+									<S.StatLabel>TOTAL DELEGATIONS</S.StatLabel>
+									<S.StatValue>
+										{lastDelegationRecord ? (
+											<>
+												{formatNumber(parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalDelegatedAO, 12), {
+													notation: 'compact',
+												})}
+												<TokenAvatar logo={ASSETS.aoCircled} size="large" />
+											</>
+										) : (
+											<Skeleton width={60} height={26} style={{ marginTop: 6 }} />
+										)}
+									</S.StatValue>
+								</div>
+								<div style={{ display: isMobile ? 'none' : 'block' }}>
+									<S.StatLabel>BY USERS</S.StatLabel>
+									<S.StatValue style={{ fontSize: 15, marginTop: 15 }}>
+										{lastDelegationRecord ? (
+											<>
+												{formatNumber(
+													parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalDirectDelegatedAO || '0', 12),
+													{
+														notation: 'compact',
+													}
+												)}{' '}
+												<S.Ticker>$AO</S.Ticker>
+											</>
+										) : (
+											<Skeleton width={60} height={15} />
+										)}
+									</S.StatValue>
+								</div>
+								<div style={{ display: isMobile ? 'none' : 'block' }}>
+									<S.StatLabel>BY PERMAWEB INDEX</S.StatLabel>
+									<S.StatValue style={{ fontSize: 15, marginTop: 15 }}>
+										{lastDelegationRecord ? (
+											<>
+												{formatNumber(
+													parseBigIntAsNumber(lastDelegationRecord?.summary?.Data.totalPiDelegatedAO || '0', 12),
+													{
+														notation: 'compact',
+													}
+												)}{' '}
+												<S.Ticker>$AO</S.Ticker>
+											</>
+										) : (
+											<Skeleton width={60} height={15} />
+										)}
+									</S.StatValue>
+								</div>
+							</S.StatLabelRow>
+						</div>
+						<TrendChart
+							height={65}
+							width={isTablet ? 200 : undefined}
+							data={convertToChartData(delegationRecords, 'totalDelegatedAO')}
+							isLoading={!delegationRecords}
+							showDetailedTooltip
+						/>
+					</S.StatCard>
+					<S.StatCard>
+						<div>
+							<S.StatLabel>FAIR LAUNCH PROJECTS</S.StatLabel>
+							<S.StatValue>
+								{allFlps ? allFlps.filter((flp) => !!flp.flp_token_name).length : <Skeleton width={60} height={24} />}
+							</S.StatValue>
+						</div>
+						<TrendChart
+							height={65}
+							width={isTablet ? 200 : undefined}
+							data={convertToChartData(createCumulativeFlpData(allFlps), 'totalDelegators')}
+							isLoading={!allFlps}
+						/>
+					</S.StatCard>
+					<S.StatCard>
+						<div>
+							<S.StatLabel>USERS</S.StatLabel>
+							<S.StatValue>
+								{lastDelegationRecord ? (
+									lastDelegationRecord?.summary?.Data.totalDelegators
+								) : (
+									<Skeleton width={60} height={24} />
+								)}
+							</S.StatValue>
+						</div>
+						<TrendChart
+							height={65}
+							width={isTablet ? 200 : undefined}
+							data={convertToChartData(delegationRecords, 'totalDelegators')}
+							isLoading={!delegationRecords}
+						/>
+					</S.StatCard>
+				</S.StatsGrid>
+
+				<div>
+					<S.SectionTitle>
+						<PiFavicon />
+						Add the core of the Permaweb to your allocation.
+					</S.SectionTitle>
+
+					<S.CoreTokensContainer isTablet={isTablet}>
+						{CORE_PROJECTS.map((project) => (
+							<S.CoreTokenCard key={project.id}>
+								<div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+									<S.CoreTokenHeader>
+										<TokenAvatar logo={project.logo} size="large" />
+										<S.CoreTokenName>{project.name}</S.CoreTokenName>
+										<S.CoreTokenTicker>${project.ticker}</S.CoreTokenTicker>
+									</S.CoreTokenHeader>
+									<S.Subtitle>{project.description}</S.Subtitle>
+								</div>
+								<Tooltip
+									content={
+										project.id === 'ao'
+											? 'Your allocation is full, reduce allocation from other projects to increase your AO allocation.'
+											: null
+									}
+								>
+									{allocations[project.id] && allocations[project.id] > 0 ? (
+										<>
+											<S.CardAddButton
+												disabled
+												style={{ backgroundColor: coreTokenColors[project.id] || flpColorMap[project.id] }}
+											>
+												Added
+												<ReactSVG src={ASSETS.checkmark} />
+											</S.CardAddButton>
+										</>
+									) : (
+										<S.CardAddButton
+											onClick={() => handleAllocationChange(project.id, 5)}
+											disabled={cannotAllocateMore || isSubmitting || project.disabled}
+										>
+											<ReactSVG
+												src={ASSETS.plus}
+												style={{
+													opacity: project.disabled ? 0 : 1,
+												}}
+											/>
+											{project.disabled ? 'Coming Soon' : 'Add'}
+										</S.CardAddButton>
+									)}
+								</Tooltip>
+							</S.CoreTokenCard>
+						))}
+					</S.CoreTokensContainer>
+				</div>
+
+				<div>
+					<S.SectionTitle>
+						<PiFavicon />
+						Add Permaweb projects to your current allocation.
+					</S.SectionTitle>
+					<S.TabsAndSearchContainer isMobile={isMobile}>
+						<S.TabsContainer>
+							<S.Tab active={tabIndex === 0} onClick={() => setTabIndex(0)}>
+								Popular Delegations
+							</S.Tab>
+							<S.Tab active={tabIndex === 1} onClick={() => setTabIndex(1)}>
+								Explore Delegations
+							</S.Tab>
+						</S.TabsContainer>
+
+						<div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+							<S.SearchBar isTablet={isTablet} isMobile={isMobile}>
+								<S.SearchInput
+									isTablet={isTablet}
+									isMobile={isMobile}
+									placeholder="Search for Project..."
+									value={searchQuery}
+									onChange={(e) => setSearchQuery(e.target.value)}
+								/>
+							</S.SearchBar>
+						</div>
+					</S.TabsAndSearchContainer>
+
+					<InMemoryTable
+						data={sortedAndFilteredFlps}
+						pageSize={pageSize}
+						onLoadMore={() => setPageSize((prev) => prev + 30)}
+						sortedBy={tabIndex === 0 ? 'amount_delegated' : 'starts_at_ts'}
+						isTablet={isTablet}
+						headerCells={[
+							{ style: { width: 50, minWidth: 50, maxWidth: 50 }, label: '#', align: 'center' },
+							{ style: { width: 220, minWidth: 220, maxWidth: 220 }, label: 'NAME' },
+							{
+								style: { width: 160, minWidth: 160, maxWidth: 160 },
+								label: 'TOTAL AO DELEGATED',
+								key: 'amount_delegated',
+							},
+							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'DIRECT DELEGATION LAST CYCLE' },
+							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'PI DELEGATION LAST CYCLE' },
+							{ style: { width: 120, minWidth: 120, maxWidth: 120 }, label: 'START DATE', key: 'starts_at_ts' },
+							{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'ADD TO ALLOCATION', align: 'right' },
+						]}
+						renderRow={(row: any, index: number) => (
+							<TableRow
+								key={row.id}
+								row={row}
+								index={index}
+								expandedRows={expandedRows}
+								setExpandedRows={setExpandedRows}
+								allocations={allocations}
+								isMaxAllocation={cannotAllocateMore}
+								handleAllocationChange={handleAllocationChange}
+								getProjectYield={getProjectYield}
+								getProjectPiYield={getProjectPiYield}
+								getTotalProjectYield={getTotalProjectYield}
+								coreTokenColors={coreTokenColors}
+								flpColorMap={flpColorMap}
+								isSubmitting={isSubmitting}
+								isTablet={isTablet}
+							/>
+						)}
+					/>
+				</div>
+			</S.LeftPanel>
+			{isLaptop ? (
+				<>
+					<S.MobileAllocationButton onClick={() => setShowAllocationModal(true)}>
+						View Allocations
+					</S.MobileAllocationButton>
+					{showAllocationModal && (
+						<S.ModalOverlay onClick={() => setShowAllocationModal(false)} isMobile={isMobile}>
+							<S.ModalContent onClick={(e) => e.stopPropagation()} isMobile={isMobile}>
+								<S.CloseButton onClick={() => setShowAllocationModal(false)}>
+									<ReactSVG src={ASSETS.close} />
+								</S.CloseButton>
+								{allocationForm}
+							</S.ModalContent>
+						</S.ModalOverlay>
+					)}
+				</>
+			) : (
+				allocationForm
+			)}
 		</S.Container>
 	);
 }

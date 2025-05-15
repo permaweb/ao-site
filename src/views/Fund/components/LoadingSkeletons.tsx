@@ -44,10 +44,12 @@ const AllocationPanel = styled.div`
 	height: fit-content;
 `;
 
-const HeaderContainer = styled.div`
+const HeaderContainer = styled.div<{ isTablet?: boolean }>`
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items: ${(props) => (props.isTablet ? 'flex-start' : 'center')};
+	flex-direction: ${(props) => (props.isTablet ? 'column' : 'row')};
+	gap: ${(props) => (props.isTablet ? '20px' : '0')};
 	margin-bottom: 20px;
 `;
 
@@ -63,14 +65,14 @@ const HeaderActions = styled.div`
 	align-items: center;
 `;
 
-const StatsGrid = styled.div`
+const StatsGrid = styled.div<{ isTablet?: boolean }>`
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: ${(props) => (props.isTablet ? '1fr' : 'repeat(4, 1fr)')};
 	gap: 20px;
 	margin-bottom: 30px;
 
 	& > div:first-child {
-		grid-column: span 2;
+		grid-column: ${(props) => (props.isTablet ? 'span 1' : 'span 2')};
 	}
 `;
 
@@ -84,9 +86,9 @@ const StatCard = styled.div`
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 `;
 
-const CoreTokensGrid = styled.div`
+const CoreTokensGrid = styled.div<{ isTablet?: boolean }>`
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: ${(props) => (props.isTablet ? 'repeat(1, 1fr)' : 'repeat(3, 1fr)')};
 	gap: 20px;
 	margin-top: 1rem;
 	margin-bottom: 2rem;
@@ -125,33 +127,43 @@ const TabsContainer = styled.div`
 	margin-bottom: 1rem;
 `;
 
-const TableRow = styled.div`
+const TableRow = styled.div<{ isTablet?: boolean }>`
 	display: grid;
-	grid-template-columns: 5% 20% 20% 20% 15% 15%;
+	grid-template-columns: ${(props) => (props.isTablet ? '1fr' : '5% 20% 20% 20% 15% 15%')};
 	gap: 10px;
 	padding: 1rem;
-	border-bottom: 1px solid #eee;
+	border-bottom: ${(props) => (props.isTablet ? 'none' : '1px solid #eee')};
 	width: 100%;
 	box-sizing: border-box;
+	${(props) =>
+		props.isTablet &&
+		`
+		background: white; /* Similar to actual cards */
+		border-radius: 8px;
+		margin-bottom: 15px;
+		box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Similar to actual cards */
+		height: auto; /* Or a fixed height like 120px */
+		padding: 15px; /* Match card padding */
+	`}
 `;
 
-const SearchInput = styled(Skeleton)`
-	width: 100%;
-	max-width: 300px;
-	height: 50px;
-	border-radius: 50px;
-	margin-bottom: 20px;
+const TabsAndSearchContainerSkeleton = styled.div<{ isMobile?: boolean }>`
+	display: flex;
+	flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
+	justify-content: space-between;
+	align-items: ${(props) => (props.isMobile ? 'stretch' : 'center')};
+	gap: ${(props) => (props.isMobile ? '20px' : '0')};
 `;
 
-export function LoadingSkeletons() {
+export function LoadingSkeletons({ isTablet, isMobile }: { isTablet?: boolean; isMobile?: boolean }) {
 	return (
 		<Container>
-			<LeftPanel>
+			<LeftPanel style={{ width: isTablet || isMobile ? '100%' : 'auto' }}>
 				<div>
-					<HeaderContainer>
+					<HeaderContainer isTablet={isTablet}>
 						<HeaderContent>
-							<Skeleton style={{ width: '400px', height: '29px' }} />
-							<Skeleton style={{ width: '300px', height: '12px' }} />
+							<Skeleton style={{ width: isTablet ? '80%' : '400px', height: '29px' }} />
+							<Skeleton style={{ width: isTablet ? '60%' : '300px', height: '12px' }} />
 						</HeaderContent>
 						<HeaderActions>
 							<Skeleton style={{ width: '120px', height: '20px' }} />
@@ -159,13 +171,13 @@ export function LoadingSkeletons() {
 						</HeaderActions>
 					</HeaderContainer>
 
-					<StatsGrid>
+					<StatsGrid isTablet={isTablet}>
 						{[1, 2, 3].map((i, index) => (
 							<StatCard key={i}>
 								<div>
 									<Skeleton style={{ width: '80px', height: '14px', marginBottom: '8px' }} />
 									<Skeleton style={{ width: '60px', height: '32px' }} />
-									{index === 0 && (
+									{index === 0 && !isMobile && (
 										<div style={{ display: 'flex', gap: '20px', marginTop: '8px' }}>
 											<div>
 												<Skeleton style={{ width: '60px', height: '12px', marginBottom: '5px' }} />
@@ -186,7 +198,7 @@ export function LoadingSkeletons() {
 
 				<div>
 					<Skeleton style={{ width: '300px', height: '20px', marginBottom: '20px' }} />
-					<CoreTokensGrid>
+					<CoreTokensGrid isTablet={isTablet}>
 						{[1, 2, 3].map((i) => (
 							<CoreTokenCard key={i}>
 								<TokenHeader>
@@ -205,22 +217,40 @@ export function LoadingSkeletons() {
 
 				<div>
 					<Skeleton style={{ width: '300px', height: '20px', marginBottom: '20px' }} />
-					<TabsContainer>
-						<Skeleton style={{ width: '180px', height: '40px', borderRadius: '50px' }} />
-						<Skeleton style={{ width: '180px', height: '40px', borderRadius: '50px' }} />
-					</TabsContainer>
+					<TabsAndSearchContainerSkeleton isMobile={isMobile}>
+						<TabsContainer>
+							<Skeleton style={{ width: '180px', height: '40px', borderRadius: '50px' }} />
+							<Skeleton style={{ width: '180px', height: '40px', borderRadius: '50px' }} />
+						</TabsContainer>
+						<Skeleton
+							style={{
+								width: '100%',
+								maxWidth: isMobile ? '100%' : '300px',
+								height: '50px',
+								borderRadius: '50px',
+							}}
+						/>
+					</TabsAndSearchContainerSkeleton>
 					<TableContainer>
 						<TableSkeleton>
-							<TableRow>
-								{[1, 2, 3, 4, 5, 6].map((i) => (
-									<Skeleton key={i} style={{ height: '20px' }} />
-								))}
-							</TableRow>
-							{[1, 2, 3, 4, 5].map((i) => (
-								<TableRow key={i}>
-									{[1, 2, 3, 4, 5, 6].map((j) => (
-										<Skeleton key={j} style={{ height: '20px' }} />
+							{!isTablet && (
+								<TableRow>
+									{[1, 2, 3, 4, 5, 6].map((i) => (
+										<Skeleton key={i} style={{ height: '20px' }} />
 									))}
+								</TableRow>
+							)}
+							{[1, 2, 3, 4, 5].map((i) => (
+								<TableRow key={i} isTablet={isTablet}>
+									{isTablet ? (
+										<>
+											<Skeleton style={{ width: '70%', height: '20px', marginBottom: '10px' }} />
+											<Skeleton style={{ width: '90%', height: '15px', marginBottom: '10px' }} />
+											<Skeleton style={{ width: '50%', height: '15px' }} />
+										</>
+									) : (
+										[1, 2, 3, 4, 5, 6].map((j) => <Skeleton key={j} style={{ height: '20px' }} />)
+									)}
 								</TableRow>
 							))}
 						</TableSkeleton>
@@ -228,28 +258,30 @@ export function LoadingSkeletons() {
 				</div>
 			</LeftPanel>
 
-			<AllocationPanel>
-				<Skeleton style={{ width: '150px', height: '29px', marginBottom: '10px' }} />
-				<Skeleton style={{ width: '300px', height: '12px', marginBottom: '20px' }} />
+			{!(isTablet || isMobile) && (
+				<AllocationPanel>
+					<Skeleton style={{ width: '150px', height: '29px', marginBottom: '10px' }} />
+					<Skeleton style={{ width: '300px', height: '12px', marginBottom: '20px' }} />
 
-				<Skeleton style={{ width: '100%', height: '300px', borderRadius: '50%', marginBottom: '20px' }} />
+					<Skeleton style={{ width: '100%', height: '300px', borderRadius: '50%', marginBottom: '20px' }} />
 
-				<Skeleton style={{ width: '100%', height: '20px', marginBottom: '10px' }} />
-				<Skeleton style={{ width: '100%', height: '1px', marginBottom: '10px' }} />
+					<Skeleton style={{ width: '100%', height: '20px', marginBottom: '10px' }} />
+					<Skeleton style={{ width: '100%', height: '1px', marginBottom: '10px' }} />
 
-				<Skeleton style={{ width: '80%', height: '20px', marginBottom: '15px' }} />
+					<Skeleton style={{ width: '80%', height: '20px', marginBottom: '15px' }} />
 
-				<div style={{ marginBottom: '20px' }}>
-					{[1, 2, 3, 4, 5].map((i) => (
-						<div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0' }}>
-							<Skeleton style={{ width: '70%', height: '20px' }} />
-							<Skeleton style={{ width: '20%', height: '20px' }} />
-						</div>
-					))}
-				</div>
+					<div style={{ marginBottom: '20px' }}>
+						{[1, 2, 3, 4, 5].map((i) => (
+							<div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0' }}>
+								<Skeleton style={{ width: '70%', height: '20px' }} />
+								<Skeleton style={{ width: '20%', height: '20px' }} />
+							</div>
+						))}
+					</div>
 
-				<Skeleton style={{ width: '100%', height: '40px', borderRadius: '4px' }} />
-			</AllocationPanel>
+					<Skeleton style={{ width: '100%', height: '50px', borderRadius: '4px' }} />
+				</AllocationPanel>
+			)}
 		</Container>
 	);
 }

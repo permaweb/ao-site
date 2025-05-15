@@ -116,6 +116,8 @@ const TooltipContent = styled.div<{ position: string }>`
 `;
 
 const Tooltip: React.FC<TooltipProps> = ({ content, children, position = 'bottom' }) => {
+	if (!content) return children;
+
 	return (
 		<TooltipWrapper>
 			{children}

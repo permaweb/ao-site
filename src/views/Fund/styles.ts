@@ -21,10 +21,12 @@ export const Header = styled.header`
 	margin-bottom: 20px;
 `;
 
-export const HeaderContent = styled.div`
+export const HeaderContent = styled.div<{ isTablet?: boolean }>`
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items: ${(props) => (props.isTablet ? 'flex-start' : 'center')};
+	flex-direction: ${(props) => (props.isTablet ? 'column' : 'row')};
+	gap: ${(props) => (props.isTablet ? '20px' : '0')};
 `;
 
 export const Title = styled.h1`
@@ -40,21 +42,22 @@ export const Subtitle = styled.h2`
 	letter-spacing: normal;
 `;
 
-export const StatsGrid = styled.div`
+export const StatsGrid = styled.div<{ isTablet?: boolean }>`
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: ${(props) => (props.isTablet ? '1fr' : 'repeat(4, 1fr)')};
 	gap: 20px;
 
 	.total-delegations {
-		grid-column: span 2;
+		grid-column: ${(props) => (props.isTablet ? 'span 1' : 'span 2')};
 	}
 `;
 
-export const StatCard = styled.div`
+export const StatCard = styled.div<{ isMobile?: boolean }>`
 	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
+	flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
+	align-items: ${(props) => (props.isMobile ? 'flex-start' : 'flex-start')};
 	justify-content: space-between;
+	${(props) => props.isMobile && `gap: 15px;`}
 `;
 
 export const StatLabelRow = styled.div`
@@ -76,8 +79,8 @@ export const Ticker = styled.span`
 	font-weight: normal;
 `;
 
-export const StatValue = styled.div`
-	font-size: 32px;
+export const StatValue = styled.div<{ isMobile?: boolean }>`
+	font-size: ${(props) => (props.isMobile ? '24px' : '32px')};
 	font-weight: 500;
 	color: #222326;
 	font-family: ${(props) => props.theme.typography.family.alt1};
@@ -110,6 +113,7 @@ export const TabsContainer = styled.div`
 	border-radius: 50px;
 	padding: 6px;
 	gap: 6px;
+	justify-content: center;
 `;
 
 export const Tab = styled.button<{ active: boolean }>`
@@ -125,19 +129,31 @@ export const Tab = styled.button<{ active: boolean }>`
 	}
 `;
 
-export const SearchBar = styled.div`
-	border: 1px solid #dedede;
-	border-radius: 50px;
+export const TabsAndSearchContainer = styled.div<{ isMobile?: boolean }>`
+	display: flex;
+	flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
+	justify-content: space-between;
+	align-items: ${(props) => (props.isMobile ? 'stretch' : 'center')};
+	margin-bottom: 20px;
+	gap: ${(props) => (props.isMobile ? '10px' : '0')};
 `;
 
-export const SearchInput = styled.input`
-	min-width: 500px;
-	padding: 20px 20px;
+export const SearchBar = styled.div<{ isTablet?: boolean; isMobile?: boolean }>`
+	border: 1px solid #dedede;
+	border-radius: 50px;
+	width: ${(props) => (props.isMobile ? '100%' : 'auto')};
+`;
+
+export const SearchInput = styled.input<{ isTablet?: boolean; isMobile?: boolean }>`
+	min-width: ${(props) => (props.isTablet || props.isMobile ? 'auto' : '500px')};
+	width: ${(props) => (props.isMobile ? '100%' : 'auto')};
+	padding: ${(props) => (props.isTablet || props.isMobile ? '15px 20px' : '20px 20px')};
 	border: none;
 	font-family: ${(props) => props.theme.typography.family.alt1};
 	color: #6a6a6a;
 	font-weight: 500;
 	font-size: 13px;
+	box-sizing: border-box;
 `;
 
 export const TableCell = styled.td<{ align?: 'left' | 'center' | 'right' }>`
@@ -418,9 +434,9 @@ export const SectionTitle = styled.h4`
 	margin: 20px 0;
 `;
 
-export const CoreTokensContainer = styled.div`
+export const CoreTokensContainer = styled.div<{ isTablet?: boolean }>`
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: ${(props) => (props.isTablet ? '1fr' : 'repeat(3, 1fr)')};
 	gap: 20px;
 `;
 
@@ -521,29 +537,32 @@ export const RowActionContainer = styled.div`
 	}
 `;
 
-export const SeeDetailsButton = styled.button`
+export const SeeDetailsButton = styled.button<{ isCard?: boolean }>`
 	padding: 6px 12px;
 	background-color: transparent;
 	color: #333;
 	border: none;
 	cursor: pointer;
-	opacity: 0;
-	table tr:hover & {
-		opacity: 1;
-	}
-
 	font-family: ${(props) => props.theme.typography.family.alt1};
 	font-size: 10px;
-	position: absolute;
-	top: 68px;
-	left: 0;
-	right: 0;
-
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
+
+	${(props) =>
+		!props.isCard &&
+		`
+		opacity: 0;
+		table tr:hover & {
+			opacity: 1;
+		}
+		position: absolute;
+		top: 68px;
+		left: 0;
+		right: 0;
+	`}
 `;
 
 export const CloseAllButton = styled.button`
@@ -565,15 +584,16 @@ export const DetailsRow = styled.tr`
 	background-color: #f5f5f5;
 `;
 
-export const DetailsCell = styled.td`
+export const DetailsCell = styled.td<{ isTablet?: boolean }>`
 	padding: 20px;
 	border-bottom: 1px solid #eee;
+	${(props) => props.isTablet && `padding: 0px;`}
 `;
 
-export const DetailsContent = styled.div`
+export const DetailsContent = styled.div<{ isTablet?: boolean }>`
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 40px;
+	grid-template-columns: ${(props) => (props.isTablet ? '1fr' : '1fr 1fr')};
+	gap: ${(props) => (props.isTablet ? '20px' : '40px')};
 `;
 
 export const DetailsHeader = styled.div`
@@ -600,8 +620,8 @@ export const DetailsTicker = styled.div`
 
 export const CloseButton = styled.button`
 	position: absolute;
-	right: 0;
-	top: 0;
+	right: 25px;
+	top: 25px;
 	background: transparent;
 	border: none;
 	cursor: pointer;
@@ -649,15 +669,16 @@ export const DetailsSectionHeading = styled.h3`
 	text-decoration: underline;
 `;
 
-export const DetailSectionContent = styled.div`
+export const DetailSectionContent = styled.div<{ isTablet?: boolean }>`
 	display: flex;
-	flex-direction: row;
+	flex-direction: ${(props) => (props.isTablet ? 'column' : 'row')};
 	gap: 15px;
 
 	& > div {
 		padding: 10px;
 		background-color: #fff;
 		border-radius: 5px;
+		${(props) => props.isTablet && `flex-basis: auto;`}/* Allow items to take full width in column layout */
 	}
 `;
 
@@ -724,5 +745,85 @@ export const ViewOnAoLink = styled(Link)`
 
 	&:hover {
 		text-decoration: underline;
+	}
+`;
+
+export const MobileAllocationButton = styled.button`
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 25px 20px;
+	background-color: ${(props) => props.theme.colors.button.alt1.background};
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 0;
+	cursor: pointer;
+	z-index: 1000;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.33);
+
+	&:disabled {
+		background-color: #aaa;
+		cursor: not-allowed;
+	}
+
+	&:hover {
+		background-color: ${(props) => props.theme.colors.button.alt1.hover};
+	}
+`;
+
+export const ModalOverlay = styled.div<{ isMobile?: boolean }>`
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1001;
+
+	${(props) =>
+		props.isMobile &&
+		`
+		padding: 0;
+		align-items: stretch;
+		justify-content: stretch;
+	`}
+`;
+
+export const ModalContent = styled.div<{ isMobile?: boolean }>`
+	background-color: white;
+	padding: 0;
+	border-radius: ${(props) => (props.isMobile ? '0' : '8px')};
+	position: relative;
+	width: ${(props) => (props.isMobile ? '100vw' : 'clamp(300px, 90vw, 500px)')};
+	height: ${(props) => (props.isMobile ? '100vh' : 'auto')};
+	max-height: ${(props) => (props.isMobile ? '100vh' : '90vh')};
+	display: flex;
+	flex-direction: column;
+
+	${(props) =>
+		props.isMobile &&
+		`
+		box-shadow: none;
+		overflow-y: auto;
+	`}
+
+	${AllocationPanel} {
+		position: ${(props) => (props.isMobile ? 'static' : 'sticky')};
+		max-height: ${(props) => (props.isMobile ? 'none' : 'calc(90vh - 60px)')};
+		width: 100%;
+		box-sizing: border-box;
+		${(props) =>
+			props.isMobile &&
+			`
+			border-radius: 0;
+			flex-grow: 1;
+			`}
 	}
 `;
