@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AOSyncProvider } from '@vela-ventures/aosync-sdk-react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import { createConfig, http, WagmiProvider } from 'wagmi';
@@ -10,6 +11,7 @@ import { GlobalStyle } from 'app/styles';
 import { AllocationProvider } from 'providers/AllocationProvider';
 import { AOProvider } from 'providers/AOProvider';
 import { ArweaveProvider } from 'providers/ArweaveProvider';
+import { BeaconWalletProvider } from 'providers/BeaconWalletProvider';
 import { CustomThemeProvider } from 'providers/CustomThemeProvider';
 import { EthereumProvider } from 'providers/EthereumProvider';
 import { LanguageProvider } from 'providers/LanguageProvider';
@@ -36,16 +38,18 @@ function Root() {
 						<HashRouter>
 							<GlobalStyle />
 							<AOProvider>
-								<EthereumProvider>
-									<ArweaveProvider>
-										<AllocationProvider>
-											<div id={'loader'} />
-											<div id={'notification'} />
-											<div id={'overlay'} />
-											<App />
-										</AllocationProvider>
-									</ArweaveProvider>
-								</EthereumProvider>
+								<BeaconWalletProvider>
+									<EthereumProvider>
+										<ArweaveProvider>
+											<AllocationProvider>
+												<div id={'loader'} />
+												<div id={'notification'} />
+												<div id={'overlay'} />
+												<App />
+											</AllocationProvider>
+										</ArweaveProvider>
+									</EthereumProvider>
+								</BeaconWalletProvider>
 							</AOProvider>
 						</HashRouter>
 					</LanguageProvider>

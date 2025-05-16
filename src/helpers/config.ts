@@ -85,12 +85,14 @@ export const ASSETS = {
 	withdraw: getTxEndpoint('QOJLKefBz2xCPUbO8dEKB22aWv_zdQ6FYA_UWUriyJw'),
 	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
 	yield: getTxEndpoint('RrusyNB6RzmXfYcocp7tG9GSDkrF_z-_NfZMSxVgzOE'),
+	beacon: getTxEndpoint('iXL24MHFs5MRS0uwAHLQgxEluwolVc9VKYVou7ngM6o'),
 };
 
 export const AR_WALLETS = [
 	{ type: ArWalletEnum.wander, logo: ASSETS.wander },
 	{ type: ArWalletEnum.othent, logo: ASSETS.othent },
 	{ type: ArWalletEnum.arweaveApp, logo: ASSETS.arweaveApp },
+	{ type: ArWalletEnum.beaconWallet, logo: ASSETS.beacon },
 ];
 
 export const DOM = {

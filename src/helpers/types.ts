@@ -59,6 +59,7 @@ export enum ArWalletEnum {
 	othent = 'othent',
 	arweaveApp = 'arweave.app',
 	wander = 'wander',
+	beaconWallet = 'beacon',
 }
 
 export type SelectOptionType = { id: string; label: string; icon?: React.ReactNode };

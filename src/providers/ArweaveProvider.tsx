@@ -1,4 +1,5 @@
 import { ArweaveWebWallet } from 'arweave-wallet-connector';
+import { useWallet } from '@vela-ventures/aosync-sdk-react';
 import { readHandler } from 'api';
 import React from 'react';
 
@@ -128,6 +129,13 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
+	const {
+		isConnected: isBeaconConnected,
+		connect: connectBeacon,
+		disconnect: disconnectBeacon,
+		getAddress: getBeaconAddress,
+	} = useWallet();
+
 	const wallets = AR_WALLETS;
 
 	const [wallet, setWallet] = React.useState<any>(null);
@@ -214,14 +222,21 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 	async function handleWallet() {
 		if (localStorage.getItem('walletType')) {
 			try {
-				await handleConnect(localStorage.getItem('walletType') as any);
+				const walletType = localStorage.getItem('walletType') as ArWalletEnum;
+				if (walletType === ArWalletEnum.beaconWallet && isBeaconConnected) {
+					const address = await getBeaconAddress();
+					setWalletAddress(address);
+					setWalletType(ArWalletEnum.beaconWallet);
+				} else if (walletType !== ArWalletEnum.beaconWallet) {
+					await handleConnect(walletType);
+				}
 			} catch (e: any) {
 				console.error(e);
 			}
 		}
 	}
 
-	async function handleConnect(walletType: ArWalletEnum.arConnect | ArWalletEnum.othent | ArWalletEnum.arweaveApp) {
+	async function handleConnect(walletType: ArWalletEnum) {
 		let walletObj: any = null;
 		switch (walletType) {
 			case ArWalletEnum.arConnect:
@@ -233,8 +248,11 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 			case ArWalletEnum.arweaveApp:
 				handleArweaveApp();
 				break;
+			case ArWalletEnum.beaconWallet:
+				handleBeaconWallet();
+				break;
 			default:
-				if (window.arweaveWallet || walletType === ArWalletEnum.arConnect) {
+				if (window.arweaveWallet) {
 					handleArConnect();
 					break;
 				}
@@ -291,12 +309,42 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 		}
 	}
 
+	async function handleBeaconWallet() {
+		try {
+			if (!isBeaconConnected) {
+				await connectBeacon();
+				const address = await getBeaconAddress();
+				setWalletAddress(address);
+				setWalletType(ArWalletEnum.beaconWallet);
+				localStorage.setItem('walletType', ArWalletEnum.beaconWallet);
+				setWallet({ name: 'Beacon Wallet' });
+			} else {
+				const address = await getBeaconAddress();
+				setWalletAddress(address);
+				setWalletType(ArWalletEnum.beaconWallet);
+				localStorage.setItem('walletType', ArWalletEnum.beaconWallet);
+				setWallet({ name: 'Beacon Wallet' });
+			}
+			setWalletModalVisible(false);
+		} catch (e: any) {
+			console.error('Beacon Wallet connection failure', e);
+		}
+	}
+
 	async function handleDisconnect() {
 		try {
+			const walletType = localStorage.getItem('walletType') as ArWalletEnum | null;
+
+			if (walletType === ArWalletEnum.beaconWallet) {
+				await disconnectBeacon();
+			} else if (global.window?.arweaveWallet?.disconnect) {
+				await global.window.arweaveWallet.disconnect();
+			}
+
 			setWallet(null);
 			setWalletAddress(null);
+			setWalletType(null);
 			if (localStorage.getItem('walletType')) localStorage.removeItem('walletType');
-			await global.window?.arweaveWallet?.disconnect();
 		} catch (e: any) {
 			console.error('ArweaveProvider disconnect error', e);
 		}

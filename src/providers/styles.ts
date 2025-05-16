@@ -18,7 +18,7 @@ export const WalletListContainer = styled.div`
 `;
 
 export const WalletListItem = styled.button`
-	width: 187.5px;
+	width: 150px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

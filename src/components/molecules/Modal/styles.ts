@@ -18,7 +18,7 @@ export const Wrapper = styled.div<{ top: number; noHeader: boolean }>`
 export const Container = styled.div<{
 	noHeader: boolean;
 }>`
-	width: 750px;
+	width: 800px;
 	max-width: ${(props) => (props.noHeader ? '100%' : '90vw')};
 	background: ${(props) => (props.noHeader ? 'transparent' : props.theme.colors.container.primary.background)};
 	margin: 20px auto;
