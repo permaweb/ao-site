@@ -6,7 +6,7 @@ import { ENDPOINTS } from 'helpers/config';
 
 import * as S from './styles';
 
-const POLICY = 'YaCWs9oWm2g1GwwRSQYNJ0sa70zSdSmExx3vRkrpc_o';
+const POLICY = 'buSkVXmV6q49tfKgOQUS5VJBJsoxZsDZ9eE51pmG0wE';
 
 export default function Policies() {
 	const [policy, setPolicy] = React.useState<any>(null);
