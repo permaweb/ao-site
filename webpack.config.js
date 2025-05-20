@@ -153,7 +153,7 @@ module.exports = {
 			process: 'process/browser',
 			crypto: 'crypto-browserify',
 			stream: 'stream-browserify',
-			qrcode: path.resolve(__dirname, 'qrcode-alias.js'), // Add this line
+			qrcode$: path.resolve(__dirname, 'src/helpers/qrcode-alias.js'),
 		},
 		fallback: {
 			fs: false,

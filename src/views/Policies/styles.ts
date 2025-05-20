@@ -13,36 +13,13 @@ export const Wrapper = styled.div`
 	h4,
 	h5,
 	h6 {
+		font-size: ${(props) => props.theme.typography.size.lg};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
 		overflow-wrap: anywhere;
 		line-height: 1.5;
 		letter-spacing: 1.05px;
-	}
-
-	h1 {
-		font-size: clamp(28px, 2.75vw, 36px);
-	}
-
-	h2 {
-		font-size: calc(clamp(28px, 2.75vw, 36px) * 0.8);
-	}
-
-	h3 {
-		font-size: calc(clamp(28px, 2.75vw, 36px) * 0.7);
-	}
-
-	h4 {
-		font-size: calc(clamp(28px, 2.75vw, 36px) * 0.6);
-	}
-
-	h5 {
-		font-size: calc(clamp(28px, 2.75vw, 36px) * 0.5);
-	}
-
-	h6 {
-		font-size: calc(clamp(28px, 2.75vw, 36px) * 0.4);
 	}
 
 	ol {

@@ -137,5 +137,8 @@
 		"webpack": "^5.75.0",
 		"webpack-cli": "^5.0.1",
 		"webpack-dev-server": "^4.13.2"
+	},
+	"overrides": {
+		"qrcode": "1.5.1"
 	}
 }
