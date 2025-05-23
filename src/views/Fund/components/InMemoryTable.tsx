@@ -14,6 +14,7 @@ interface InMemoryTableProps {
 		key?: string;
 	}[];
 	renderRow: (row: any, index: number) => React.ReactNode;
+	isTablet?: boolean;
 }
 
 const Table = styled.table`
@@ -49,23 +50,33 @@ const LoadMoreButton = styled.button`
 	}
 `;
 
-export function InMemoryTable({ sortedBy, data, pageSize, onLoadMore, headerCells, renderRow }: InMemoryTableProps) {
+export function InMemoryTable({
+	sortedBy,
+	data,
+	pageSize,
+	onLoadMore,
+	headerCells,
+	renderRow,
+	isTablet,
+}: InMemoryTableProps) {
 	const displayedData = data.slice(0, pageSize);
 	const hasMore = data.length > pageSize;
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
 			<Table>
-				<thead>
-					<tr>
-						{headerCells.map((cell, index) => (
-							<TableHeader key={index} align={cell.align} style={cell.style}>
-								{cell.key && sortedBy === cell.key && <SortByIcon style={{ marginRight: 10, marginLeft: 10 }} />}
-								{cell.label}
-							</TableHeader>
-						))}
-					</tr>
-				</thead>
+				{!isTablet && (
+					<thead>
+						<tr>
+							{headerCells.map((cell, index) => (
+								<TableHeader key={index} align={cell.align} style={cell.style}>
+									{cell.key && sortedBy === cell.key && <SortByIcon style={{ marginRight: 10, marginLeft: 10 }} />}
+									{cell.label}
+								</TableHeader>
+							))}
+						</tr>
+					</thead>
+				)}
 				<TableBody>{displayedData.map((row, index) => renderRow(row, index))}</TableBody>
 			</Table>
 			{hasMore && onLoadMore && <LoadMoreButton onClick={onLoadMore}>Load More</LoadMoreButton>}

@@ -7,6 +7,7 @@ import { ASSETS } from 'helpers/config';
 import { formatNumberAuto, formatTicker } from '../../../helpers/format';
 
 import { TokenAvatar } from './TokenAvatar';
+import Tooltip from './Tooltip';
 
 interface AllocationItemProps {
 	ticker: string;

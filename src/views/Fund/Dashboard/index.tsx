@@ -1,12 +1,12 @@
 import { useStore } from '@nanostores/react';
 import { useQuery } from '@tanstack/react-query';
 import { readHandler } from 'api';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
 
 import Modal from 'components/molecules/Modal/Modal';
-import { AO, ASSETS } from 'helpers/config';
+import { AO, ASSETS, STYLING } from 'helpers/config';
 import { formatNumberAuto, formatTicker, parseBigIntAsNumber } from 'helpers/format';
 import { retryable } from 'helpers/network';
 import { formatAddress, formatDate } from 'helpers/utils';
@@ -65,6 +65,17 @@ export default function DashboardPage() {
 	const [showFlpModal, setShowFlpModal] = useState(false);
 	const [searchTerm, setSearchTerm] = useState('');
 
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+	useEffect(() => {
+		const handleResize = () => setWindowWidth(window.innerWidth);
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	}, []);
+
+	const isTablet = windowWidth < parseInt(STYLING.cutoffs.initial);
+	const isMobile = windowWidth < parseInt(STYLING.cutoffs.secondary);
+
 	const { data: userDelegations } = useQuery({
 		queryKey: ['userDelegations', arProvider.walletAddress],
 		queryFn: () => retryable(getUserDelegations)(arProvider.walletAddress),
@@ -113,7 +124,7 @@ export default function DashboardPage() {
 	return (
 		<DashboardContainer>
 			<S.Header>
-				<S.HeaderContent>
+				<S.HeaderContent isTablet={isTablet}>
 					<div>
 						<S.Title>Your Dashboard</S.Title>
 						<S.Subtitle>View all your delegations.</S.Subtitle>
@@ -136,10 +147,19 @@ export default function DashboardPage() {
 			</S.Header>
 
 			{arProvider.walletAddress && (
-				<S.StatCard>
+				<S.StatCard isMobile={isMobile}>
 					<div>
 						<S.StatLabel style={{ fontSize: 12 }}>YOUR PI BALANCE</S.StatLabel>
-						<S.StatValue style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10, fontSize: 48 }}>
+						<S.StatValue
+							isMobile={isMobile}
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								gap: 10,
+								fontSize: isMobile ? 32 : 48,
+							}}
+						>
 							{piBalance ? formatNumberAuto(parseBigIntAsNumber(piBalance, 12)) : <Skeleton width={100} height={48} />}
 							<TokenAvatar logo={ASSETS.pi} size="xl" />
 						</S.StatValue>
@@ -160,16 +180,21 @@ export default function DashboardPage() {
 							<InMemoryTable
 								data={myFlps}
 								pageSize={myFlps.length}
-								headerCells={[
-									{ style: { width: 220, minWidth: 220, maxWidth: 220 }, label: 'NAME' },
-									{
-										style: { width: 160, minWidth: 160, maxWidth: 160 },
-										label: 'AVAILABLE TO CLAIM',
-									},
-									{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'ACTIONS', align: 'right' },
-								]}
+								headerCells={
+									isTablet
+										? []
+										: [
+												{ style: { width: 220, minWidth: 220, maxWidth: 220 }, label: 'NAME' },
+												{
+													style: { width: 160, minWidth: 160, maxWidth: 160 },
+													label: 'AVAILABLE TO CLAIM',
+												},
+												{ style: { width: 160, minWidth: 160, maxWidth: 160 }, label: 'ACTIONS', align: 'right' },
+										  ]
+								}
+								isTablet={isTablet}
 								renderRow={(row: any, index: number) => {
-									return <MyFlpTableRow key={row.id} row={row} index={index} />;
+									return <MyFlpTableRow key={row.id} row={row} index={index} isTablet={isTablet} />;
 								}}
 							/>
 						</div>
@@ -267,23 +292,45 @@ export default function DashboardPage() {
 					<S.SectionTitle style={{ margin: 'auto' }}>Connect wallet to view your delegations.</S.SectionTitle>
 				) : isLoading ? (
 					<div>
-						<table style={{ width: '100%', borderCollapse: 'collapse' }}>
-							<tbody>
-								{[1, 2, 3, 4, 5].map((i) => (
-									<S.TableRow key={i}>
-										<S.TableCell>
-											<S.TokenInfo>
-												<Skeleton width={20} height={20} style={{ borderRadius: '50%' }} />
-												<Skeleton width={120} height={20} />
-											</S.TokenInfo>
-										</S.TableCell>
-										<S.TableCell align="right">
-											<Skeleton width={60} height={20} />
-										</S.TableCell>
-									</S.TableRow>
-								))}
-							</tbody>
-						</table>
+						{isTablet ? (
+							[1, 2, 3].map((i) => (
+								<div
+									key={i}
+									style={{
+										background: 'white',
+										borderRadius: '8px',
+										padding: '15px',
+										marginBottom: '15px',
+										boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+										display: 'flex',
+										flexDirection: 'column',
+										gap: '10px',
+									}}
+								>
+									<Skeleton style={{ width: '70%', height: '20px' }} />
+									<Skeleton style={{ width: '90%', height: '15px' }} />
+									<Skeleton style={{ width: '50%', height: '15px' }} />
+								</div>
+							))
+						) : (
+							<table style={{ width: '100%', borderCollapse: 'collapse' }}>
+								<tbody>
+									{[1, 2, 3, 4, 5].map((i) => (
+										<S.TableRow key={i}>
+											<S.TableCell>
+												<S.TokenInfo>
+													<Skeleton width={20} height={20} style={{ borderRadius: '50%' }} />
+													<Skeleton width={120} height={20} />
+												</S.TokenInfo>
+											</S.TableCell>
+											<S.TableCell align="right">
+												<Skeleton width={60} height={20} />
+											</S.TableCell>
+										</S.TableRow>
+									))}
+								</tbody>
+							</table>
+						)}
 					</div>
 				) : delegatedFlps.length > 0 ? (
 					<InMemoryTable
@@ -291,6 +338,7 @@ export default function DashboardPage() {
 						pageSize={10}
 						onLoadMore={() => {}}
 						headerCells={[]}
+						isTablet={isTablet}
 						renderRow={(row: any, index: number) => {
 							const delegation = userDelegations?.delegationPrefs.find((pref) => pref.walletTo === row.id);
 							const delegationPercentage = delegation ? delegation.factor / 100 : 0;
@@ -303,6 +351,7 @@ export default function DashboardPage() {
 									expandedRows={expandedRows}
 									setExpandedRows={setExpandedRows}
 									delegationPercentage={delegationPercentage}
+									isTablet={isTablet}
 								/>
 							);
 						}}
