@@ -4,7 +4,7 @@ import Web3 from 'web3';
 
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
-import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, StEthBridge_ABI } from 'helpers/config';
+import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, StEthBridge_ABI, UsdsBridge_ABI } from 'helpers/config';
 import { EthExchangeType, EthTokenEnum } from 'helpers/types';
 import { arweaveToEVMBytes, checkValidAddress, formatAddress } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -57,9 +57,9 @@ export default function EthExchange(props: IProps) {
 		}
 	}, [amountInWei, ethProvider.tokens]);
 
-	/* Check DAI Stake Lockup Period */
+	/* Check DAI and USDS Stake Lockup Period */
 	React.useEffect(() => {
-		if (props.token === EthTokenEnum.DAI && exchangeType === 'withdraw') {
+		if ((props.token === EthTokenEnum.DAI || props.token === EthTokenEnum.USDS) && exchangeType === 'withdraw') {
 			const lastStake = BigInt(ethProvider?.tokens?.[props.token]?.deposited?.lastStake);
 			const lockupWindow = BigInt(64800);
 			const currentTime = BigInt(Math.floor(Date.now() / 1000));
@@ -70,7 +70,9 @@ export default function EthExchange(props: IProps) {
 				const hours = Number(timeRemaining / BigInt(3600));
 				const minutes = Number((timeRemaining % BigInt(3600)) / BigInt(60));
 				const seconds = Number(timeRemaining % BigInt(60));
-				setLockupTimeRemaining(`DAI is locked, you can withdraw in (${hours}h:${minutes}m:${seconds}s)`);
+				setLockupTimeRemaining(
+					`${props.token.toUpperCase()} is locked, you can withdraw in (${hours}h:${minutes}m:${seconds}s)`
+				);
 				setDisabled(true);
 				return;
 			}
@@ -136,6 +138,10 @@ export default function EthExchange(props: IProps) {
 					bridgeAddress = ETH_CONTRACTS.daiBridge;
 					bridgeContract = new web3.eth.Contract(DaiBridge_ABI, bridgeAddress);
 					tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
+				} else if (props.token === EthTokenEnum.USDS) {
+					bridgeAddress = ETH_CONTRACTS.usdsBridge;
+					bridgeContract = new web3.eth.Contract(UsdsBridge_ABI, bridgeAddress);
+					tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.usds);
 				}
 
 				const poolId = 0;

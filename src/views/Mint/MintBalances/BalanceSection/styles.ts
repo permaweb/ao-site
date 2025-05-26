@@ -12,6 +12,7 @@ function getBalanceWrapper(type: TokenEarningsType, theme: DefaultTheme) {
 			`;
 		case EthTokenEnum.StEth:
 		case EthTokenEnum.DAI:
+		case EthTokenEnum.USDS:
 			return `
 				background: ${theme.colors.container.primary.background};
 				border: 1px solid ${theme.colors.border.primary};

@@ -99,7 +99,7 @@ export const BalancesFlexWrapper = styled.div`
 `;
 
 export const BalanceFlexSection = styled.div`
-	width: calc(50% - 20px);
+	width: calc(33.33% - 20px);
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		width: 100%;

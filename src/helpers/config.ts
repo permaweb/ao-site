@@ -9,6 +9,7 @@ export const AO = {
 	delegationOracle: 'cuxSKjGJ-WDB9PzSkVkVVrIBSh3DrYHYz44usQOj5yE',
 	stEthPriceOracle: 'wJV8FMkpoeLsTjJ6O7YZEuQgMqj-sDjPHhTeA73RsCc',
 	daiPriceOracle: '5q8vpzC5QAKOAJFM26MAKfZw1gwtw7WA_J2861ZiKhI',
+	usdsPriceOracle: '0x0000000000000000000000000000000000000000', // TODO
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
 	yieldHistorian: 'NRP0xtzeV9MHgwLmgD254erUB7mUjMBhBkYkNYkbNEo',
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
@@ -25,8 +26,11 @@ export const ETH_CONTRACTS = {
 	stEthBridge: '0xfE08D40Eee53d64936D3128838867c867602665c',
 	dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
 	daiBridge: '0x6A1B588B0684dACE1f53C5820111F400B3dbfeBf',
+	usds: '0xdc035d45d973e3ec169d2276ddab16f1e407384f',
+	usdsBridge: '0x1fa69debf88f3ccc3a4604ac35d86b34c7b01cf1',
 	ethUsdPriceFeed: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
 	daiUsdPriceFeed: '0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9',
+	usdsUsdPriceFeed: '0x0000000000000000000000000000000000000000', // TODO
 };
 
 export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
@@ -76,6 +80,7 @@ export const ASSETS = {
 	remove: getTxEndpoint('aKjWuVXkSeYOKzGP0MnnhHwoYUXqTHFMJfVCbqzYEo0'),
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
 	success: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
+	usds: getTxEndpoint('_BWFo1KkjR5t0Mg7mhS9Kme1q4JbxKZJYwg9sglm_UA'),
 	token: getTxEndpoint('f18VARM42GRSDY8UzZtEJrCsakbxluldOAnnED_V_Zk'),
 	view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
 	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
@@ -1033,6 +1038,8 @@ export const DaiBridge_ABI = [
 	},
 ];
 
+export const UsdsBridge_ABI = DaiBridge_ABI;
+
 export const Erc20_ABI = [
 	{ inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
 	{
@@ -1295,6 +1302,10 @@ AO tokens will become transferrable after 15% of the supply has been minted, on 
 	stEth: {
 		description: `66.6% of AO tokens are minted to users that bridge their assets to the network. Simply connect your wallet, deposit staked Ethereum, and earn AO.
 You can remove your deposited tokens at any time. You will begin to accrue AO 24 hours after your deposit has been confirmed.<br/><br/>AO tokens will become transferrable after 15% of the supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ" target="_blank">blog post</a>.`,
+	},
+	usds: {
+		description: `66.6% of AO tokens are minted to users that bridge their assets to the network. Simply connect your wallet, deposit USDS, and earn AO.
+You will begin to accrue AO 24 hours after your deposit has been confirmed.<br/><br/>USDS has an 18-hour minimum lockup period. This means that you will not be able to remove your USDS from the bridge for 18 hours after depositing it.`,
 	},
 	cred: {
 		description: `Users that took part in AO testnet quests are able to convert their CRED tokens for AO-CLAIMs, at a rate of 1:1000.

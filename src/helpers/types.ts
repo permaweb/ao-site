@@ -2,11 +2,12 @@ import React from 'react';
 
 export type AllocationTokenType = 'pi' | 'ao' | 'arweave';
 
-export type TokenEarningsType = 'ao' | 'arweave' | EthTokenEnum.StEth | EthTokenEnum.DAI;
+export type TokenEarningsType = 'ao' | 'arweave' | EthTokenEnum.StEth | EthTokenEnum.DAI | EthTokenEnum.USDS;
 
 export enum EthTokenEnum {
 	StEth = 'stEth',
 	DAI = 'dai',
+	USDS = 'usds',
 }
 
 export type EthExchangeType = 'deposit' | 'withdraw';
@@ -21,12 +22,14 @@ export type TokenDepositType = {
 export type EthTotalDepositedType = {
 	[EthTokenEnum.StEth]: TokenBigIntType;
 	[EthTokenEnum.DAI]: TokenBigIntType;
+	[EthTokenEnum.USDS]: TokenBigIntType;
 	usdTotal: TokenBigIntType;
 };
 
 export type EthTokensType = {
 	[EthTokenEnum.StEth]: TokenDepositType;
 	[EthTokenEnum.DAI]: TokenDepositType;
+	[EthTokenEnum.USDS]: TokenDepositType;
 };
 
 export type EthTokensYieldProjectionsType = {
@@ -35,6 +38,10 @@ export type EthTokensYieldProjectionsType = {
 		yearly: TokenProjectionType;
 	};
 	[EthTokenEnum.DAI]: {
+		monthly: TokenProjectionType;
+		yearly: TokenProjectionType;
+	};
+	[EthTokenEnum.USDS]: {
 		monthly: TokenProjectionType;
 		yearly: TokenProjectionType;
 	};

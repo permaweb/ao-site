@@ -170,6 +170,31 @@ export function getDaiReward(
 	return bridgeRewards * (userYield / totalYield);
 }
 
+export function getUsdsReward(
+	days: number,
+	usdsBridgedByUser: number,
+	currentAoSupply: number,
+	totalStEthBridged: number,
+	totalDaiBridged: number,
+	totalUsdsBridged: number,
+	stEthPrice: number,
+	stEthYield: number,
+	daiPrice: number,
+	daiYield: number,
+	usdsPrice: number,
+	usdsYield: number
+) {
+	const bridgeRewards = getRewardInDays(days, currentAoSupply) * (2 / 3);
+
+	const totalStEthYield = totalStEthBridged * stEthPrice * stEthYield;
+	const totalDaiYield = totalDaiBridged * daiPrice * daiYield;
+	const totalUsdsYield = totalUsdsBridged * usdsPrice * usdsYield;
+	const totalYield = totalStEthYield + totalDaiYield + totalUsdsYield;
+
+	const userYield = usdsBridgedByUser * usdsPrice * usdsYield;
+	return bridgeRewards * (userYield / totalYield);
+}
+
 export function formatPercentage(percentage: any) {
 	if (isNaN(percentage)) return '0%';
 

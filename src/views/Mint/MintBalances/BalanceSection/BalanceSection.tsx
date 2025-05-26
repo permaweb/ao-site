@@ -99,6 +99,23 @@ export default function BalanceSection(props: IProps) {
 					component: getEthExchange(EthTokenEnum.DAI),
 				},
 			},
+			usds: {
+				header: language.depositedUsds,
+				ticker: language.usds,
+				wallet: {
+					label: language.connectEthWallet,
+					icon: ASSETS.ethereum,
+					provider: ethProvider,
+					redirect: (address: string) => REDIRECTS.etherscan(address),
+				},
+				balance: { header: language.amountDeposited, icon: ASSETS.usds },
+				action: {
+					label: language.depositUsds,
+					icon: ASSETS.exchange,
+					fn: () => setShowAction(true),
+					component: getEthExchange(EthTokenEnum.USDS),
+				},
+			},
 		};
 	}, [arProvider, ethProvider, language]);
 
@@ -115,6 +132,9 @@ export default function BalanceSection(props: IProps) {
 				break;
 			case EthTokenEnum.DAI:
 				setToken({ ...tokens.dai });
+				break;
+			case EthTokenEnum.USDS:
+				setToken({ ...tokens.usds });
 				break;
 			default:
 				break;
@@ -187,6 +207,8 @@ export default function BalanceSection(props: IProps) {
 			case EthTokenEnum.StEth:
 			case EthTokenEnum.DAI:
 				return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ?? <EllipsisLoader />;
+			case EthTokenEnum.USDS:
+				return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ?? <EllipsisLoader />;
 			default:
 				return '-';
 		}
@@ -201,6 +223,8 @@ export default function BalanceSection(props: IProps) {
 			case EthTokenEnum.StEth:
 			case EthTokenEnum.DAI:
 				return token?.wallet?.provider?.projections?.[props.type];
+			case EthTokenEnum.USDS:
+				return token?.wallet?.provider?.projections?.[props.type];
 			default:
 				return null;
 		}
@@ -214,14 +238,16 @@ export default function BalanceSection(props: IProps) {
 				amount:
 					(arProvider.projections?.monthly?.amount ?? 0) +
 					(ethProvider.projections?.stEth?.monthly?.amount ?? 0) +
-					(ethProvider.projections?.dai?.monthly?.amount ?? 0),
+					(ethProvider.projections?.dai?.monthly?.amount ?? 0) +
+					(ethProvider.projections?.usds?.monthly?.amount ?? 0),
 				ratio: null,
 			},
 			yearly: {
 				amount:
 					(arProvider.projections?.yearly?.amount ?? 0) +
 					(ethProvider.projections?.stEth?.yearly?.amount ?? 0) +
-					(ethProvider.projections?.dai?.yearly?.amount ?? 0),
+					(ethProvider.projections?.dai?.yearly?.amount ?? 0) +
+					(ethProvider.projections?.usds?.yearly?.amount ?? 0),
 				ratio: null,
 			},
 		};

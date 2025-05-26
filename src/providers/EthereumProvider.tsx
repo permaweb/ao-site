@@ -21,11 +21,12 @@ import {
 	ETH_TOKEN_DENOMINATION,
 	PRICE_FEED_ABI,
 	StEthBridge_ABI,
+	UsdsBridge_ABI,
 } from 'helpers/config';
 import gnosisModule from 'helpers/customGnosis';
 import { customBrave } from 'helpers/customInjected';
 import { EthTokensType, EthTokensYieldProjectionsType, EthTotalDepositedType } from 'helpers/types';
-import { formatDisplayAmount, formatUSDAmount, getDaiReward, getEthReward } from 'helpers/utils';
+import { formatDisplayAmount, formatUSDAmount, getDaiReward, getEthReward, getUsdsReward } from 'helpers/utils';
 
 import { useAOProvider } from './AOProvider';
 
@@ -181,27 +182,32 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		};
 	}, [walletAddress]);
 
-	/* StETH - DAI Total Deposited */
+	/* StETH - DAI - USDS Total Deposited */
 	React.useEffect(() => {
 		(async function () {
 			try {
 				const web3 = new Web3(ENDPOINTS.mainnetRpc);
 				const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
 				const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
+				const usdsBridgeContract = new web3.eth.Contract(UsdsBridge_ABI, ETH_CONTRACTS.usdsBridge);
 
-				let [totalStEthDeposited, totalDaiDeposited] = await Promise.all([
+				let [totalStEthDeposited, totalDaiDeposited, totalUsdsDeposited] = await Promise.all([
 					stEthBridgeContract.methods.totalDepositedInPublicPools().call() as any,
 					daiBridgeContract.methods.totalDepositedInPublicPools().call() as any,
+					usdsBridgeContract.methods.totalDepositedInPublicPools().call() as any,
 				]);
 
 				totalStEthDeposited = Number(totalStEthDeposited) / Math.pow(10, 18);
 				totalDaiDeposited = Number(totalDaiDeposited) / Math.pow(10, 18);
+				totalUsdsDeposited = Number(totalUsdsDeposited) / Math.pow(10, 18);
 
 				if (isNaN(totalStEthDeposited)) throw new Error('Invalid totalStEthDeposited');
 				if (isNaN(totalDaiDeposited)) throw new Error('Invalid totalDaiDeposited');
+				if (isNaN(totalUsdsDeposited)) throw new Error('Invalid totalUsdsDeposited');
 
 				const ethUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.ethUsdPriceFeed);
 				// const daiUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.daiUsdPriceFeed);
+				// const usdUsdSFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.usdsUsdPriceFeed);
 
 				const ethUsdPriceData = await ethUsdFeed.methods.latestRoundData().call();
 				// const daiUsdPriceData = await daiUsdFeed.methods.latestRoundData().call();
@@ -209,26 +215,33 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				const ethUsdPrice = (ethUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
 				// const daiUsdPrice = (daiUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
 				const daiUsdPrice = 1;
+				const usdsUsdPrice = 1;
 
 				// console.log('ethUsdPrice');
 				// console.log(ethUsdPrice);
 				// console.log('daiUsdPrice');
 				// console.log(daiUsdPrice);
+				// console.log('usdsUsdPrice')
+				// console.log(usdsUsdPrice)
 
 				const usdStEthValue = BigInt(Math.floor(totalStEthDeposited)) * BigInt(ethUsdPrice);
 				const usdDaiValue = BigInt(Math.floor(totalDaiDeposited)) * BigInt(daiUsdPrice);
-				const usdTotal = usdStEthValue + usdDaiValue;
+				const usdUsdsValue = BigInt(Math.floor(totalUsdsDeposited)) * BigInt(usdsUsdPrice);
+				const usdTotal = usdStEthValue + usdDaiValue + usdUsdsValue;
 
 				// console.log('usdStEthValue')
 				// console.log(usdStEthValue)
 				// console.log('usdDaiValue')
 				// console.log(usdDaiValue)
+				// console.log('usdUsdsValue')
+				// console.log(usdUsdsValue)
 				// console.log('usdTotal')
 				// console.log(usdTotal)
 
 				setTotalDeposited({
 					stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited, 2) },
 					dai: { value: totalDaiDeposited, display: formatDisplayAmount(totalDaiDeposited, 2) },
+					usds: { value: totalUsdsDeposited, display: formatDisplayAmount(totalUsdsDeposited, 2) },
 					usdTotal: { value: usdTotal, display: formatUSDAmount(usdTotal.toString()) },
 				});
 			} catch (e: any) {
@@ -322,11 +335,17 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					const daiContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
 					const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
 
+					const usdsContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.usds);
+					const usdsBridgeContract = new web3.eth.Contract(UsdsBridge_ABI, ETH_CONTRACTS.usdsBridge);
+
 					const stEthBalanceOf = (await stEthContract.methods.balanceOf(walletAddress).call()) as any as bigint;
 					const stEthUsersData = (await stEthBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
 
 					const daiBalanceOf = (await daiContract.methods.balanceOf(walletAddress).call()) as any as bigint;
 					const daiUsersData = (await daiBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
+
+					const usdsBalanceOf = (await usdsContract.methods.balanceOf(walletAddress).call()) as any as bigint;
+					const usdsUsersData = (await usdsBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
 
 					setTokens((prev) => ({
 						...prev,
@@ -352,6 +371,17 @@ export function EthereumProvider(props: EthereumProviderProps) {
 								lastStake: daiUsersData.lastStake,
 							},
 						},
+						usds: {
+							balance: {
+								value: usdsBalanceOf,
+								display: getBalanceDisplay(usdsBalanceOf),
+							},
+							deposited: {
+								value: usdsUsersData.deposited,
+								display: getBalanceDisplay(usdsUsersData.deposited),
+								lastStake: usdsUsersData.lastStake,
+							},
+						},
 					}));
 				} catch (e: any) {
 					console.error(e);
@@ -364,7 +394,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		(async function () {
 			if (walletAddress && tokens && balance && totalDeposited && aoProvider.mintedSupply && web3Provider) {
 				try {
-					const [daiResp, stEthResp] = await Promise.all([
+					const [daiResp, stEthResp, usdsResp] = await Promise.all([
 						readHandler({
 							processId: AO.daiPriceOracle,
 							action: 'Info',
@@ -373,15 +403,24 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							processId: AO.stEthPriceOracle,
 							action: 'Info',
 						}),
+						readHandler({
+							processId: AO.usdsPriceOracle,
+							action: 'Info',
+						}),
 					]);
 
 					const daiPrice = Number(daiResp?.LastPrice) / 10000;
 					const daiYield = Number(daiResp?.LastYield) / 10000;
+
 					const stEthPrice = Number(stEthResp?.LastPrice) / 10000;
 					const stEthYield = Number(stEthResp?.LastYield) / 10000;
 
+					const usdsPrice = Number(usdsResp?.LastPrice) / 10000;
+					const usdsYield = Number(usdsResp?.LastYield) / 10000;
+
 					const totalDepositedSteth = Number(totalDeposited?.stEth?.value ?? BigInt(0));
 					const totalDepositedDai = Number(totalDeposited?.dai?.value ?? BigInt(0));
+					const totalDepositedUsds = Number(totalDeposited?.usds?.value ?? BigInt(0));
 
 					const ethReward = (days: number, amount: number) => {
 						return getEthReward(
@@ -411,6 +450,23 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						);
 					};
 
+					const usdsReward = (days: number, amount: number) => {
+						return getUsdsReward(
+							days,
+							amount,
+							aoProvider.mintedSupply,
+							totalDepositedSteth,
+							totalDepositedDai,
+							totalDepositedUsds,
+							stEthPrice,
+							stEthYield,
+							daiPrice,
+							daiYield,
+							usdsPrice,
+							usdsYield
+						);
+					};
+
 					setProjections({
 						stEth: {
 							monthly: {
@@ -430,6 +486,16 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							yearly: {
 								amount: daiReward(365, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
 								ratio: daiReward(365, 1),
+							},
+						},
+						usds: {
+							monthly: {
+								amount: usdsReward(30, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: usdsReward(30, 1),
+							},
+							yearly: {
+								amount: usdsReward(365, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: usdsReward(365, 1),
 							},
 						},
 					});

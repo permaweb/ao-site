@@ -154,6 +154,15 @@ export default function Mint() {
 									<p>{ethProvider.totalDeposited?.dai?.display ?? <EllipsisLoader />}</p>
 								</S.BalanceQuantityBody>
 							</S.BalanceQuantityEndSection>
+							<S.BalanceQuantityEndSection>
+								<S.BalanceQuantityHeader>
+									<span className={'primary-text'}>{language.totalUsdsBridged}</span>
+								</S.BalanceQuantityHeader>
+								<S.BalanceQuantityBody>
+									<ReactSVG src={ASSETS.usds} />
+									<p>{ethProvider.totalDeposited?.usds?.display ?? <EllipsisLoader />}</p>
+								</S.BalanceQuantityBody>
+							</S.BalanceQuantityEndSection>
 						</S.BalancesPrimaryFlexWrapper>
 					</S.BalancesGlobalWrapper>
 					<BalanceSection type={'ao'} />
