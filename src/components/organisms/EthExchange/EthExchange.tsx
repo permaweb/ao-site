@@ -61,7 +61,7 @@ export default function EthExchange(props: IProps) {
 	React.useEffect(() => {
 		if ((props.token === EthTokenEnum.DAI || props.token === EthTokenEnum.USDS) && exchangeType === 'withdraw') {
 			const lastStake = BigInt(ethProvider?.tokens?.[props.token]?.deposited?.lastStake || 0);
-			const lockupWindow = BigInt(64800);
+			const lockupWindow = BigInt(60); // TODO: Change to 64800
 			const currentTime = BigInt(Math.floor(Date.now() / 1000));
 			const timeSinceLastStake = currentTime - lastStake;
 
