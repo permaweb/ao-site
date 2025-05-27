@@ -167,8 +167,13 @@ export default function EthExchange(props: IProps) {
 						}
 
 						if (props.token === EthTokenEnum.USDS) {
+							const gasEstimate = await bridgeContract.methods.stake(amountInWei, arweaveRecipient).estimateGas({
+								from: ethProvider.walletAddress,
+							});
+							const gas = ((BigInt(gasEstimate) * BigInt(11)) / BigInt(10)).toString();
 							const stake = await bridgeContract.methods.stake(amountInWei, arweaveRecipient).send({
 								from: ethProvider.walletAddress,
+								gas,
 							});
 							console.log('Stake transaction:', stake);
 							await checkTransactionReceipt(stake.transactionHash);
