@@ -166,20 +166,38 @@ export default function EthExchange(props: IProps) {
 							console.log('Approval transaction confirmed:', approval);
 						}
 
-						const stake = await bridgeContract.methods.stake(poolId, amountInWei, arweaveRecipient).send({
-							from: ethProvider.walletAddress,
-						});
-						console.log('Stake transaction:', stake);
-						await checkTransactionReceipt(stake.transactionHash);
-						console.log('Stake transaction confirmed:', stake);
+						if (props.token === EthTokenEnum.USDS) {
+							const stake = await bridgeContract.methods.stake(amountInWei, arweaveRecipient).send({
+								from: ethProvider.walletAddress,
+							});
+							console.log('Stake transaction:', stake);
+							await checkTransactionReceipt(stake.transactionHash);
+							console.log('Stake transaction confirmed:', stake);
+						} else {
+							const stake = await bridgeContract.methods.stake(poolId, amountInWei, arweaveRecipient).send({
+								from: ethProvider.walletAddress,
+							});
+							console.log('Stake transaction:', stake);
+							await checkTransactionReceipt(stake.transactionHash);
+							console.log('Stake transaction confirmed:', stake);
+						}
 						break;
 					case 'withdraw':
-						const withdraw = await bridgeContract.methods.withdraw(poolId, amountInWei, arweaveRecipient).send({
-							from: ethProvider.walletAddress,
-						});
-						console.log('Withdraw transaction:', withdraw);
-						await checkTransactionReceipt(withdraw.transactionHash);
-						console.log('Withdraw transaction confirmed:', withdraw);
+						if (props.token === EthTokenEnum.USDS) {
+							const withdraw = await bridgeContract.methods.withdraw(amountInWei, arweaveRecipient).send({
+								from: ethProvider.walletAddress,
+							});
+							console.log('Withdraw transaction:', withdraw);
+							await checkTransactionReceipt(withdraw.transactionHash);
+							console.log('Withdraw transaction confirmed:', withdraw);
+						} else {
+							const withdraw = await bridgeContract.methods.withdraw(poolId, amountInWei, arweaveRecipient).send({
+								from: ethProvider.walletAddress,
+							});
+							console.log('Withdraw transaction:', withdraw);
+							await checkTransactionReceipt(withdraw.transactionHash);
+							console.log('Withdraw transaction confirmed:', withdraw);
+						}
 						break;
 				}
 
