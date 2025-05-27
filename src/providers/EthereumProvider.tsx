@@ -345,7 +345,17 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					const daiUsersData = (await daiBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
 
 					const usdsBalanceOf = (await usdsContract.methods.balanceOf(walletAddress).call()) as any as bigint;
-					const usdsUsersData = (await usdsBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
+
+					let usdsUsersData: any;
+					try {
+						usdsUsersData = (await usdsBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
+					} catch (e: any) {
+						console.error(e);
+						usdsUsersData = {
+							deposited: 0,
+							lastStake: 0,
+						};
+					}
 
 					setTokens((prev) => ({
 						...prev,

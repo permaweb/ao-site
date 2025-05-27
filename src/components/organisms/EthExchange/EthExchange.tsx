@@ -60,7 +60,7 @@ export default function EthExchange(props: IProps) {
 	/* Check DAI and USDS Stake Lockup Period */
 	React.useEffect(() => {
 		if ((props.token === EthTokenEnum.DAI || props.token === EthTokenEnum.USDS) && exchangeType === 'withdraw') {
-			const lastStake = BigInt(ethProvider?.tokens?.[props.token]?.deposited?.lastStake);
+			const lastStake = BigInt(ethProvider?.tokens?.[props.token]?.deposited?.lastStake || 0);
 			const lockupWindow = BigInt(64800);
 			const currentTime = BigInt(Math.floor(Date.now() / 1000));
 			const timeSinceLastStake = currentTime - lastStake;
