@@ -194,7 +194,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				let [totalStEthDeposited, totalDaiDeposited, totalUsdsDeposited] = await Promise.all([
 					stEthBridgeContract.methods.totalDepositedInPublicPools().call() as any,
 					daiBridgeContract.methods.totalDepositedInPublicPools().call() as any,
-					usdsBridgeContract.methods.totalDepositedInPublicPools().call() as any,
+					usdsBridgeContract.methods.totalDepositedInVault().call() as any,
 				]);
 
 				totalStEthDeposited = Number(totalStEthDeposited) / Math.pow(10, 18);
@@ -345,17 +345,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					const daiUsersData = (await daiBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
 
 					const usdsBalanceOf = (await usdsContract.methods.balanceOf(walletAddress).call()) as any as bigint;
-
-					let usdsUsersData: any;
-					try {
-						usdsUsersData = (await usdsBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
-					} catch (e: any) {
-						console.error(e);
-						usdsUsersData = {
-							deposited: 0,
-							lastStake: 0,
-						};
-					}
+					const usdsUsersData = (await usdsBridgeContract.methods.usersData(walletAddress).call()) as any;
 
 					setTokens((prev) => ({
 						...prev,
