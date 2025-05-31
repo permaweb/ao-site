@@ -31,6 +31,7 @@ export const ETH_CONTRACTS = {
 	ethUsdPriceFeed: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
 	daiUsdPriceFeed: '0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9',
 	usdsUsdPriceFeed: '0x0000000000000000000000000000000000000000', // TODO
+	daiToUsdsUpgrade: '0x3225737a9bbb6473cb4a45b7244aca2befdb276a',
 };
 
 export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
@@ -1286,6 +1287,85 @@ export const UsdsBridge_ABI = [
 		name: 'withdrawLockPeriodAfterStake',
 		outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
 		stateMutability: 'view',
+		type: 'function',
+	},
+];
+
+export const DaiToUsdsUpgrade_ABI = [
+	{
+		inputs: [
+			{ internalType: 'address', name: 'daiJoin_', type: 'address' },
+			{ internalType: 'address', name: 'usdsJoin_', type: 'address' },
+		],
+		stateMutability: 'nonpayable',
+		type: 'constructor',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: true, internalType: 'address', name: 'caller', type: 'address' },
+			{ indexed: true, internalType: 'address', name: 'usr', type: 'address' },
+			{ indexed: false, internalType: 'uint256', name: 'wad', type: 'uint256' },
+		],
+		name: 'DaiToUsds',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: true, internalType: 'address', name: 'caller', type: 'address' },
+			{ indexed: true, internalType: 'address', name: 'usr', type: 'address' },
+			{ indexed: false, internalType: 'uint256', name: 'wad', type: 'uint256' },
+		],
+		name: 'UsdsToDai',
+		type: 'event',
+	},
+	{
+		inputs: [],
+		name: 'dai',
+		outputs: [{ internalType: 'contract GemLike', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'daiJoin',
+		outputs: [{ internalType: 'contract DaiJoinLike', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'address', name: 'usr', type: 'address' },
+			{ internalType: 'uint256', name: 'wad', type: 'uint256' },
+		],
+		name: 'daiToUsds',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'usds',
+		outputs: [{ internalType: 'contract GemLike', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'usdsJoin',
+		outputs: [{ internalType: 'contract UsdsJoinLike', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'address', name: 'usr', type: 'address' },
+			{ internalType: 'uint256', name: 'wad', type: 'uint256' },
+		],
+		name: 'usdsToDai',
+		outputs: [],
+		stateMutability: 'nonpayable',
 		type: 'function',
 	},
 ];

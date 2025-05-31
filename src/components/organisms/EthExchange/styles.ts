@@ -157,3 +157,47 @@ export const EndActionsWrapper = styled.div`
 	justify-content: flex-end;
 	gap: 15px;
 `;
+
+export const UpgradeCheckboxWrapper = styled.label`
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 15px;
+
+	input[type='checkbox'] {
+		margin-right: 10px;
+		height: 18px;
+		width: 18px;
+		&:disabled {
+			cursor: not-allowed;
+		}
+	}
+
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	color: ${(props) => props.theme.colors.font.primary.alt1};
+	font-weight: ${(props) => props.theme.typography.weight.medium};
+	cursor: pointer;
+`;
+
+export const ModalContentWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	padding: 20px;
+	p {
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.primary.alt1};
+		line-height: 1.6;
+	}
+`;
+
+export const ModalActions = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	gap: 15px;
+	margin-top: 10px;
+
+	button {
+		min-width: 120px; // Give buttons some minimum width
+	}
+`;

@@ -3,8 +3,18 @@ import { ReactSVG } from 'react-svg';
 import Web3 from 'web3';
 
 import { Button } from 'components/atoms/Button';
+import { Checkbox } from 'components/atoms/Checkbox';
 import { FormField } from 'components/atoms/FormField';
-import { ASSETS, DaiBridge_ABI, Erc20_ABI, ETH_CONTRACTS, StEthBridge_ABI, UsdsBridge_ABI } from 'helpers/config';
+import { Modal } from 'components/molecules/Modal';
+import {
+	ASSETS,
+	DaiBridge_ABI,
+	DaiToUsdsUpgrade_ABI,
+	Erc20_ABI,
+	ETH_CONTRACTS,
+	StEthBridge_ABI,
+	UsdsBridge_ABI,
+} from 'helpers/config';
 import { EthExchangeType, EthTokenEnum } from 'helpers/types';
 import { arweaveToEVMBytes, checkValidAddress, formatAddress } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -32,6 +42,9 @@ export default function EthExchange(props: IProps) {
 	const [processed, setProcessed] = React.useState<boolean>(false);
 	const [lockupTimeRemaining, setLockupTimeRemaining] = React.useState<string | null>(null);
 	const [layoutRefresh, setLayoutRefresh] = React.useState<number>(0);
+	const [upgradeToUsds, setUpgradeToUsds] = React.useState<boolean>(false);
+	const [userAskedToUpgrade, setUserAskedToUpgrade] = React.useState<boolean>(false);
+	const [showUpgradeModal, setShowUpgradeModal] = React.useState<boolean>(false);
 
 	const amountInWei = React.useMemo(() => {
 		try {
@@ -121,7 +134,38 @@ export default function EthExchange(props: IProps) {
 
 	React.useEffect(() => {
 		handleClear();
-	}, [exchangeType]);
+	}, [exchangeType, props.open]);
+
+	React.useEffect(() => {
+		if (props.token === EthTokenEnum.DAI && exchangeType === 'deposit') {
+			setUserAskedToUpgrade(false);
+		} else {
+			setUpgradeToUsds(false);
+			setUserAskedToUpgrade(false);
+		}
+	}, [props.token, exchangeType]);
+
+	function handleAmountBlur() {
+		if (
+			props.token === EthTokenEnum.DAI &&
+			exchangeType === 'deposit' &&
+			amountInWei > BigInt(0) &&
+			!userAskedToUpgrade
+		) {
+			setShowUpgradeModal(true);
+			setUserAskedToUpgrade(true);
+		}
+	}
+
+	function handleUpgradeModalConfirm() {
+		setUpgradeToUsds(true);
+		setShowUpgradeModal(false);
+	}
+
+	function handleUpgradeModalCancel() {
+		setUpgradeToUsds(false);
+		setShowUpgradeModal(false);
+	}
 
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amountInWei > 0) {
@@ -133,6 +177,7 @@ export default function EthExchange(props: IProps) {
 				let bridgeAddress = ETH_CONTRACTS.stEthBridge;
 				let bridgeContract = new web3.eth.Contract(StEthBridge_ABI, bridgeAddress);
 				let tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.stEth);
+				let currentToken = props.token;
 
 				if (props.token === EthTokenEnum.DAI) {
 					bridgeAddress = ETH_CONTRACTS.daiBridge;
@@ -142,6 +187,44 @@ export default function EthExchange(props: IProps) {
 					bridgeAddress = ETH_CONTRACTS.usdsBridge;
 					bridgeContract = new web3.eth.Contract(UsdsBridge_ABI, bridgeAddress);
 					tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.usds);
+				}
+
+				if (exchangeType === 'deposit' && props.token === EthTokenEnum.DAI && upgradeToUsds) {
+					console.log('User opted to upgrade DAI to USDS');
+					const upgradeContractAddress = ETH_CONTRACTS.daiToUsdsUpgrade;
+					const upgradeContract = new web3.eth.Contract(DaiToUsdsUpgrade_ABI, upgradeContractAddress);
+
+					// Check allowance for DAI on the upgrade contract
+					const daiTokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
+					const upgradeAllowance = await daiTokenContract.methods
+						.allowance(ethProvider.walletAddress, upgradeContractAddress)
+						.call();
+					if (Number(upgradeAllowance) < Number(amountInWei)) {
+						const upgradeApproval = await daiTokenContract.methods.approve(upgradeContractAddress, amountInWei).send({
+							from: ethProvider.walletAddress,
+						});
+						console.log('DAI Upgrade Approval transaction:', upgradeApproval);
+						const upgradeApprovalReceipt = await checkTransactionReceipt(upgradeApproval.transactionHash);
+						if (!upgradeApprovalReceipt || !upgradeApprovalReceipt.status) {
+							throw new Error('DAI to USDS upgrade approval failed');
+						}
+						console.log('DAI Upgrade Approval transaction confirmed:', upgradeApprovalReceipt);
+					}
+
+					// Perform the DAI to USDS upgrade
+					const upgradeTx = await upgradeContract.methods.daiToUsds(ethProvider.walletAddress, amountInWei).send({
+						from: ethProvider.walletAddress,
+					});
+					console.log('DAI to USDS Upgrade transaction:', upgradeTx);
+
+					await checkTransactionReceipt(upgradeTx.transactionHash);
+					console.log('DAI to USDS Upgrade transaction confirmed:', upgradeTx);
+
+					// Update contract and token details to USDS for staking
+					bridgeAddress = ETH_CONTRACTS.usdsBridge;
+					bridgeContract = new web3.eth.Contract(UsdsBridge_ABI, bridgeAddress);
+					tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.usds);
+					currentToken = EthTokenEnum.USDS;
 				}
 
 				const poolId = 0;
@@ -166,7 +249,7 @@ export default function EthExchange(props: IProps) {
 							console.log('Approval transaction confirmed:', approval);
 						}
 
-						if (props.token === EthTokenEnum.USDS) {
+						if (currentToken === EthTokenEnum.USDS) {
 							const gasEstimate = await bridgeContract.methods.stake(amountInWei, arweaveRecipient).estimateGas({
 								from: ethProvider.walletAddress,
 							});
@@ -189,8 +272,13 @@ export default function EthExchange(props: IProps) {
 						break;
 					case 'withdraw':
 						if (props.token === EthTokenEnum.USDS) {
+							const gasEstimate = await bridgeContract.methods.withdraw(amountInWei, arweaveRecipient).estimateGas({
+								from: ethProvider.walletAddress,
+							});
+							const gas = ((BigInt(gasEstimate) * BigInt(11)) / BigInt(10)).toString();
 							const withdraw = await bridgeContract.methods.withdraw(amountInWei, arweaveRecipient).send({
 								from: ethProvider.walletAddress,
+								gas,
 							});
 							console.log('Withdraw transaction:', withdraw);
 							await checkTransactionReceipt(withdraw.transactionHash);
@@ -252,6 +340,8 @@ export default function EthExchange(props: IProps) {
 		setAmount('0');
 		setLoading(false);
 		setProcessed(false);
+		setUpgradeToUsds(false);
+		setUserAskedToUpgrade(false);
 	}
 
 	function getMaxDisabled() {
@@ -322,21 +412,33 @@ export default function EthExchange(props: IProps) {
 					{getTabAction('withdraw')}
 				</S.TabsWrapper>
 				<S.FormWrapper>
-					{getFormHeader()}
-					<S.Form invalid={invalid}>
-						<FormField
-							type={'number'}
-							value={amount}
-							onChange={(e: any) => setAmount(e.target.value)}
-							invalid={{ status: invalid, message: null }}
-							disabled={loading || !ethProvider.walletAddress || lockupTimeRemaining !== null}
-							hideErrorMessage
-						/>
-						<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
-							<ReactSVG src={ASSETS[props.token]} />
-							<p>{props.token}</p>
-						</S.FormFieldLabel>
-					</S.Form>
+					<div onBlur={handleAmountBlur}>
+						{getFormHeader()}
+						<S.Form invalid={invalid}>
+							<FormField
+								type={'number'}
+								value={amount}
+								onChange={(e: any) => setAmount(e.target.value)}
+								invalid={{ status: invalid, message: null }}
+								disabled={loading || !ethProvider.walletAddress || lockupTimeRemaining !== null}
+								hideErrorMessage
+							/>
+							<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
+								<ReactSVG src={ASSETS[props.token]} />
+								<p>{props.token}</p>
+							</S.FormFieldLabel>
+						</S.Form>
+					</div>
+					{props.token === EthTokenEnum.DAI && exchangeType === 'deposit' && (
+						<S.UpgradeCheckboxWrapper>
+							<Checkbox
+								checked={upgradeToUsds}
+								handleSelect={() => setUpgradeToUsds(!upgradeToUsds)}
+								disabled={loading}
+							/>
+							Upgrade to USDS (higher yield)
+						</S.UpgradeCheckboxWrapper>
+					)}
 					{exchangeType === 'deposit' && (
 						<FormField
 							value={recipient}
@@ -380,6 +482,21 @@ export default function EthExchange(props: IProps) {
 					/>
 				</S.EndActionsWrapper>
 			</S.Wrapper>
+
+			{showUpgradeModal && (
+				<Modal header="Upgrade to USDS?" handleClose={handleUpgradeModalCancel}>
+					<S.ModalContentWrapper>
+						<p>
+							USDS offers a higher yield, resulting in greater rewards. Would you like to upgrade your DAI to USDS for
+							this deposit?
+						</p>
+						<S.ModalActions>
+							<Button type="primary" label="Yes, Upgrade" handlePress={handleUpgradeModalConfirm} />
+							<Button type="alt1" label="No, Thanks" handlePress={handleUpgradeModalCancel} />
+						</S.ModalActions>
+					</S.ModalContentWrapper>
+				</Modal>
+			)}
 		</>
 	);
 }

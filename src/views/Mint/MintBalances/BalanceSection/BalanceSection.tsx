@@ -117,7 +117,7 @@ export default function BalanceSection(props: IProps) {
 				},
 			},
 		};
-	}, [arProvider, ethProvider, language]);
+	}, [arProvider, ethProvider, language, showAction]);
 
 	React.useEffect(() => {
 		switch (props.type) {
@@ -151,6 +151,7 @@ export default function BalanceSection(props: IProps) {
 	function getEthExchange(token: EthTokenEnum) {
 		return (
 			<EthExchange
+				open={showAction}
 				token={token}
 				setResponse={(response: NotificationType) => setActionResponse(response)}
 				handleClose={() => setShowAction(false)}
