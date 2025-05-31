@@ -47,6 +47,8 @@ export default function Fund() {
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const [showAllocationModal, setShowAllocationModal] = useState(false);
 
+	const YIELD_THRESHOLD = 1;
+
 	const { data: allFlps } = useQuery({
 		queryKey: ['allFlps'],
 		queryFn: () => retryable(getFlps)(AO.flpFactory),
@@ -224,6 +226,12 @@ export default function Fund() {
 			if (tabIndex === 0) {
 				return getTotalProjectYield(b.id) - getTotalProjectYield(a.id);
 			}
+
+			const yieldA = getTotalProjectYield(a.id);
+			const yieldB = getTotalProjectYield(b.id);
+
+			if (yieldA < YIELD_THRESHOLD && yieldB >= YIELD_THRESHOLD) return 1;
+			if (yieldB < YIELD_THRESHOLD && yieldA >= YIELD_THRESHOLD) return -1;
 
 			if (b.starts_at_ts - a.starts_at_ts === 0) {
 				return a.flp_token_name.localeCompare(b.flp_token_name);
