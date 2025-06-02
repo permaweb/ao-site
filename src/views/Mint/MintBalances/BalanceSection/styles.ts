@@ -48,7 +48,7 @@ export const BalanceHeader = styled.div`
 		line-height: 1;
 		font-size: ${(props) => props.theme.typography.size.xLg};
 		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;
@@ -244,7 +244,15 @@ export const BalanceQuantityFooter = styled.div`
 
 export const BalanceAction = styled.div`
 	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+
 	button {
+		width: 100%;
+		min-width: unset;
+
 		span {
 			font-size: ${(props) => props.theme.typography.size.small} !important;
 		}
@@ -260,4 +268,8 @@ export const BalanceAction = styled.div`
 export const ActionWrapper = styled.div`
 	width: 100%;
 	padding: 0 20px 20px 20px;
+`;
+
+export const AprText = styled.span`
+	color: ${(props) => props.theme.colors.button.alt1.background} !important;
 `;

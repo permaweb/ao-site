@@ -1,3 +1,5 @@
+import { ethers } from 'ethers';
+
 import { ArWalletEnum } from './types';
 
 export const AO = {
@@ -1617,6 +1619,53 @@ export const REDIRECTS = {
 	viewblock: (address: string) => `https://viewblock.io/arweave/address/${address}`,
 	etherscan: (address: string) => `https://etherscan.io/address/${address}`,
 };
+
+export async function fetchTokenYield(tokenType: 'dai' | 'usds' | 'stEth'): Promise<number | null> {
+	try {
+		const provider = new ethers.JsonRpcProvider(ENDPOINTS.mainnetRpc);
+		const SECS = 365 * 24 * 3600;
+		const apy = (r: number) => (Math.pow(r, SECS) - 1) * 100;
+
+		switch (tokenType) {
+			case 'dai':
+				// DAI DSR (Maker Pot)
+				const dsrContract = new ethers.Contract(
+					'0x197e90f9fad81970ba7976f33cbd77088e5d7cf7',
+					['function dsr() view returns(uint256)'],
+					provider
+				);
+				const dsrValue = await dsrContract.dsr();
+				return apy(parseFloat(ethers.formatUnits(dsrValue, 27)));
+
+			case 'usds':
+				// USDS SSR (Sky Savings Rate)
+				const ssrContract = new ethers.Contract(
+					'0xa3931d71877c0e7a3148cb7eb4463524fec27fbd',
+					['function ssr() view returns(uint256)'],
+					provider
+				);
+				const ssrValue = await ssrContract.ssr();
+				return apy(parseFloat(ethers.formatUnits(ssrValue, 27)));
+
+			case 'stEth':
+				// stETH 7-day SMA APR (already in %)
+				const stEthResponse = await fetch('https://eth-api.lido.fi/v1/protocol/steth/apr/sma');
+				const stEthData = await stEthResponse.json();
+				return +(
+					stEthData?.data?.smaApr ?? // new schema
+					stEthData?.data?.apr ?? // old schema
+					stEthData?.smaApr ?? // fallback
+					stEthData?.apr
+				);
+
+			default:
+				return null;
+		}
+	} catch (error) {
+		console.error(`Error fetching ${tokenType} yield:`, error);
+		return null;
+	}
+}
 
 export const ETH_EXCHANGE_CONFIG = {
 	arweave: {

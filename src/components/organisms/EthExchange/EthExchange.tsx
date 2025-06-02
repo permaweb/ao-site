@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ReactSVG } from 'react-svg';
 import Web3 from 'web3';
 
 import { Button } from 'components/atoms/Button';
-import { Checkbox } from 'components/atoms/Checkbox';
 import { FormField } from 'components/atoms/FormField';
-import { Modal } from 'components/molecules/Modal';
 import {
 	ASSETS,
 	DaiBridge_ABI,
 	DaiToUsdsUpgrade_ABI,
 	Erc20_ABI,
 	ETH_CONTRACTS,
+	fetchTokenYield,
 	StEthBridge_ABI,
 	UsdsBridge_ABI,
 } from 'helpers/config';
@@ -32,7 +31,11 @@ export default function EthExchange(props: IProps) {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
-	const [exchangeType, setExchangeType] = React.useState<EthExchangeType>('deposit');
+	const [exchangeType, setExchangeType] = React.useState<EthExchangeType>(props.defaultTab || 'deposit');
+
+	useEffect(() => {
+		setExchangeType(props.defaultTab || 'deposit');
+	}, [props.defaultTab]);
 
 	const [amount, setAmount] = React.useState<string>('0');
 	const [recipient, setRecipient] = React.useState<string | null>('');
@@ -42,9 +45,8 @@ export default function EthExchange(props: IProps) {
 	const [processed, setProcessed] = React.useState<boolean>(false);
 	const [lockupTimeRemaining, setLockupTimeRemaining] = React.useState<string | null>(null);
 	const [layoutRefresh, setLayoutRefresh] = React.useState<number>(0);
-	const [upgradeToUsds, setUpgradeToUsds] = React.useState<boolean>(false);
-	const [userAskedToUpgrade, setUserAskedToUpgrade] = React.useState<boolean>(false);
-	const [showUpgradeModal, setShowUpgradeModal] = React.useState<boolean>(false);
+	const [daiYield, setDaiYield] = React.useState<number | null>(null);
+	const [usdsYield, setUsdsYield] = React.useState<number | null>(null);
 
 	const amountInWei = React.useMemo(() => {
 		try {
@@ -61,6 +63,9 @@ export default function EthExchange(props: IProps) {
 		}
 
 		switch (exchangeType) {
+			case 'convert':
+				setInvalid(amountInWei > ethProvider?.tokens?.[props.token]?.balance?.value);
+				break;
 			case 'deposit':
 				setInvalid(amountInWei > ethProvider?.tokens?.[props.token]?.balance?.value);
 				break;
@@ -111,6 +116,9 @@ export default function EthExchange(props: IProps) {
 		}
 
 		switch (exchangeType) {
+			case 'convert':
+				setDisabled(amountInWei > ethProvider?.tokens?.[props.token]?.balance?.value);
+				break;
 			case 'deposit':
 				setDisabled(
 					amountInWei > ethProvider?.tokens?.[props.token]?.balance?.value || !recipient || getInvalidRecipient()
@@ -137,35 +145,21 @@ export default function EthExchange(props: IProps) {
 	}, [exchangeType, props.open]);
 
 	React.useEffect(() => {
-		if (props.token === EthTokenEnum.DAI && exchangeType === 'deposit') {
-			setUserAskedToUpgrade(false);
-		} else {
-			setUpgradeToUsds(false);
-			setUserAskedToUpgrade(false);
+		if (props.token === EthTokenEnum.DAI) {
+			const fetchYields = async () => {
+				try {
+					const [daiYieldValue, usdsYieldValue] = await Promise.all([fetchTokenYield('dai'), fetchTokenYield('usds')]);
+
+					setDaiYield(daiYieldValue);
+					setUsdsYield(usdsYieldValue);
+				} catch (error) {
+					console.error('Error fetching yields:', error);
+				}
+			};
+
+			fetchYields();
 		}
-	}, [props.token, exchangeType]);
-
-	function handleAmountBlur() {
-		if (
-			props.token === EthTokenEnum.DAI &&
-			exchangeType === 'deposit' &&
-			amountInWei > BigInt(0) &&
-			!userAskedToUpgrade
-		) {
-			setShowUpgradeModal(true);
-			setUserAskedToUpgrade(true);
-		}
-	}
-
-	function handleUpgradeModalConfirm() {
-		setUpgradeToUsds(true);
-		setShowUpgradeModal(false);
-	}
-
-	function handleUpgradeModalCancel() {
-		setUpgradeToUsds(false);
-		setShowUpgradeModal(false);
-	}
+	}, [props.token]);
 
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amountInWei > 0) {
@@ -189,44 +183,6 @@ export default function EthExchange(props: IProps) {
 					tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.usds);
 				}
 
-				if (exchangeType === 'deposit' && props.token === EthTokenEnum.DAI && upgradeToUsds) {
-					console.log('User opted to upgrade DAI to USDS');
-					const upgradeContractAddress = ETH_CONTRACTS.daiToUsdsUpgrade;
-					const upgradeContract = new web3.eth.Contract(DaiToUsdsUpgrade_ABI, upgradeContractAddress);
-
-					// Check allowance for DAI on the upgrade contract
-					const daiTokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
-					const upgradeAllowance = await daiTokenContract.methods
-						.allowance(ethProvider.walletAddress, upgradeContractAddress)
-						.call();
-					if (Number(upgradeAllowance) < Number(amountInWei)) {
-						const upgradeApproval = await daiTokenContract.methods.approve(upgradeContractAddress, amountInWei).send({
-							from: ethProvider.walletAddress,
-						});
-						console.log('DAI Upgrade Approval transaction:', upgradeApproval);
-						const upgradeApprovalReceipt = await checkTransactionReceipt(upgradeApproval.transactionHash);
-						if (!upgradeApprovalReceipt || !upgradeApprovalReceipt.status) {
-							throw new Error('DAI to USDS upgrade approval failed');
-						}
-						console.log('DAI Upgrade Approval transaction confirmed:', upgradeApprovalReceipt);
-					}
-
-					// Perform the DAI to USDS upgrade
-					const upgradeTx = await upgradeContract.methods.daiToUsds(ethProvider.walletAddress, amountInWei).send({
-						from: ethProvider.walletAddress,
-					});
-					console.log('DAI to USDS Upgrade transaction:', upgradeTx);
-
-					await checkTransactionReceipt(upgradeTx.transactionHash);
-					console.log('DAI to USDS Upgrade transaction confirmed:', upgradeTx);
-
-					// Update contract and token details to USDS for staking
-					bridgeAddress = ETH_CONTRACTS.usdsBridge;
-					bridgeContract = new web3.eth.Contract(UsdsBridge_ABI, bridgeAddress);
-					tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.usds);
-					currentToken = EthTokenEnum.USDS;
-				}
-
 				const poolId = 0;
 
 				let arweaveRecipient = '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -235,6 +191,33 @@ export default function EthExchange(props: IProps) {
 				}
 
 				switch (exchangeType) {
+					case 'convert':
+						const upgradeContractAddress = ETH_CONTRACTS.daiToUsdsUpgrade;
+						const upgradeContract = new web3.eth.Contract(DaiToUsdsUpgrade_ABI, upgradeContractAddress);
+
+						const daiTokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
+						const upgradeAllowance = await daiTokenContract.methods
+							.allowance(ethProvider.walletAddress, upgradeContractAddress)
+							.call();
+						if (Number(upgradeAllowance) < Number(amountInWei)) {
+							const upgradeApproval = await daiTokenContract.methods.approve(upgradeContractAddress, amountInWei).send({
+								from: ethProvider.walletAddress,
+							});
+							console.log('DAI Upgrade Approval transaction:', upgradeApproval);
+							const upgradeApprovalReceipt = await checkTransactionReceipt(upgradeApproval.transactionHash);
+							if (!upgradeApprovalReceipt || !upgradeApprovalReceipt.status) {
+								throw new Error('DAI to USDS upgrade approval failed');
+							}
+							console.log('DAI Upgrade Approval transaction confirmed:', upgradeApprovalReceipt);
+						}
+
+						const upgradeTx = await upgradeContract.methods.daiToUsds(ethProvider.walletAddress, amountInWei).send({
+							from: ethProvider.walletAddress,
+						});
+						console.log('DAI to USDS Upgrade transaction:', upgradeTx);
+						await checkTransactionReceipt(upgradeTx.transactionHash);
+						console.log('DAI to USDS Upgrade transaction confirmed:', upgradeTx);
+						break;
 					case 'deposit':
 						const allowance = await tokenContract.methods.allowance(ethProvider.walletAddress, bridgeAddress).call();
 						if (Number(allowance) < Number(amountInWei)) {
@@ -340,14 +323,14 @@ export default function EthExchange(props: IProps) {
 		setAmount('0');
 		setLoading(false);
 		setProcessed(false);
-		setUpgradeToUsds(false);
-		setUserAskedToUpgrade(false);
 	}
 
 	function getMaxDisabled() {
 		if (loading || !ethProvider.walletAddress || lockupTimeRemaining) return true;
 
 		switch (exchangeType) {
+			case 'convert':
+				return ethProvider.tokens?.[props.token]?.balance?.value <= BigInt(0);
 			case 'deposit':
 				return ethProvider.tokens?.[props.token]?.balance?.value <= BigInt(0);
 			case 'withdraw':
@@ -360,6 +343,7 @@ export default function EthExchange(props: IProps) {
 	}
 
 	function getTabAction(type: EthExchangeType) {
+		const iconToUse = type === 'convert' ? ASSETS.exchange : ASSETS[type];
 		return (
 			<Button
 				type={'primary'}
@@ -367,7 +351,7 @@ export default function EthExchange(props: IProps) {
 				handlePress={() => setExchangeType(type)}
 				disabled={loading}
 				active={exchangeType === type}
-				icon={ASSETS[type]}
+				icon={iconToUse}
 				iconLeftAlign
 			/>
 		);
@@ -376,6 +360,9 @@ export default function EthExchange(props: IProps) {
 	function getFormHeader() {
 		let amountToUse = null;
 		switch (exchangeType) {
+			case 'convert':
+				amountToUse = ethProvider?.tokens?.[props.token]?.balance;
+				break;
 			case 'deposit':
 				amountToUse = ethProvider?.tokens?.[props.token]?.balance;
 				break;
@@ -386,7 +373,11 @@ export default function EthExchange(props: IProps) {
 
 		return (
 			<S.FormHeader>
-				<span>{`Deposited: ${ethProvider?.tokens?.[props.token]?.deposited?.display ?? '-'}`}</span>
+				{exchangeType === 'convert' ? (
+					<span></span>
+				) : (
+					<span>{`Deposited: ${ethProvider?.tokens?.[props.token]?.deposited?.display ?? '-'}`}</span>
+				)}
 				<S.FormFieldAction>
 					<span>{`Available: ${amountToUse?.display ?? '-'}`}</span>
 					<Button
@@ -408,11 +399,38 @@ export default function EthExchange(props: IProps) {
 					<p>{formatAddress(ethProvider.walletAddress ?? '-', true)}</p>
 				</S.HeaderWrapper>
 				<S.TabsWrapper>
+					{props.token === EthTokenEnum.DAI && getTabAction('convert')}
 					{getTabAction('deposit')}
 					{getTabAction('withdraw')}
 				</S.TabsWrapper>
 				<S.FormWrapper>
-					<div onBlur={handleAmountBlur}>
+					<div>
+						{exchangeType === 'convert' && props.token === EthTokenEnum.DAI && (
+							<S.YieldHeader>
+								<span>Yield:</span>
+								<S.YieldComparison>
+									<S.YieldToken>
+										<ReactSVG src={ASSETS.dai} />
+										<span>DAI</span>
+										<span className="yield">{daiYield !== null ? `${daiYield.toFixed(1)}% APR` : '-'}</span>
+									</S.YieldToken>
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path
+											d="M5 12h14m-7-7l7 7-7 7"
+											stroke="currentColor"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+										/>
+									</svg>
+									<S.YieldToken>
+										<ReactSVG src={ASSETS.usds} />
+										<span>USDS</span>
+										<span className="yield">{usdsYield !== null ? `${usdsYield.toFixed(1)}% APR` : '-'}</span>
+									</S.YieldToken>
+								</S.YieldComparison>
+							</S.YieldHeader>
+						)}
 						{getFormHeader()}
 						<S.Form invalid={invalid}>
 							<FormField
@@ -429,16 +447,6 @@ export default function EthExchange(props: IProps) {
 							</S.FormFieldLabel>
 						</S.Form>
 					</div>
-					{props.token === EthTokenEnum.DAI && exchangeType === 'deposit' && (
-						<S.UpgradeCheckboxWrapper>
-							<Checkbox
-								checked={upgradeToUsds}
-								handleSelect={() => setUpgradeToUsds(!upgradeToUsds)}
-								disabled={loading}
-							/>
-							Upgrade to USDS (higher yield)
-						</S.UpgradeCheckboxWrapper>
-					)}
 					{exchangeType === 'deposit' && (
 						<FormField
 							value={recipient}
@@ -459,9 +467,9 @@ export default function EthExchange(props: IProps) {
 				<S.ActionWrapper>
 					<Button
 						type={'alt1'}
-						label={processed ? 'Done' : exchangeType}
+						label={processed ? 'Done' : language[exchangeType]}
 						handlePress={() => (processed ? handleClear() : handleSubmit())}
-						icon={ASSETS[exchangeType]}
+						icon={exchangeType === 'convert' ? ASSETS.exchange : ASSETS[exchangeType]}
 						iconLeftAlign
 						disabled={processed ? false : disabled}
 						loading={loading}
@@ -482,21 +490,6 @@ export default function EthExchange(props: IProps) {
 					/>
 				</S.EndActionsWrapper>
 			</S.Wrapper>
-
-			{showUpgradeModal && (
-				<Modal header="Upgrade to USDS?" handleClose={handleUpgradeModalCancel}>
-					<S.ModalContentWrapper>
-						<p>
-							USDS offers a higher yield, resulting in greater rewards. Would you like to upgrade your DAI to USDS for
-							this deposit?
-						</p>
-						<S.ModalActions>
-							<Button type="primary" label="Yes, Upgrade" handlePress={handleUpgradeModalConfirm} />
-							<Button type="alt1" label="No, Thanks" handlePress={handleUpgradeModalCancel} />
-						</S.ModalActions>
-					</S.ModalContentWrapper>
-				</Modal>
-			)}
 		</>
 	);
 }

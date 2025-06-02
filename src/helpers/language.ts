@@ -28,6 +28,7 @@ export const language = {
 		connectArWallet: `Connect Arweave Wallet`,
 		connectEthWallet: `Connect ETH Wallet`,
 		connectToContinue: `Connect your wallet to continue`,
+		convert: `Convert`,
 		copied: `Copied`,
 		copyWalletAddress: `Copy Wallet Address`,
 		credBalance: `Wallet CRED Balance`,

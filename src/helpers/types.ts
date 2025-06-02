@@ -10,7 +10,7 @@ export enum EthTokenEnum {
 	USDS = 'usds',
 }
 
-export type EthExchangeType = 'deposit' | 'withdraw';
+export type EthExchangeType = 'convert' | 'deposit' | 'withdraw';
 
 export type TokenBigIntType = { value: bigint | null; display: string | null };
 

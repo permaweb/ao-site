@@ -95,6 +95,71 @@ export const FormFieldAction = styled.div`
 	gap: 12.5px;
 `;
 
+export const YieldHeader = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 20px;
+
+	> span {
+		color: ${(props) => props.theme.colors.font.primary};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+	}
+`;
+
+export const YieldComparison = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	flex: 1;
+
+	> svg {
+		height: 20px;
+		width: 20px;
+		margin: 0;
+		color: ${(props) => props.theme.colors.font.primary.alt1};
+		flex-shrink: 0;
+	}
+`;
+
+export const YieldToken = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 16px;
+	background: ${(props) => props.theme.colors.container.alt1.background};
+	border-radius: ${STYLING.dimensions.radius.alt2};
+	border: 1px solid ${(props) => props.theme.colors.border.alt1};
+	flex-grow: 1;
+	height: fit-content;
+
+	div {
+		height: 24px;
+	}
+
+	svg {
+		height: 24px;
+		width: 24px;
+		margin: 0;
+		flex-shrink: 0;
+	}
+
+	span {
+		color: ${(props) => props.theme.colors.font.primary};
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+
+		&.yield {
+			color: ${(props) => props.theme.colors.button.alt1.background};
+			font-weight: ${(props) => props.theme.typography.weight.bold};
+			margin-left: auto;
+		}
+	}
+`;
+
 export const FormFieldLabel = styled.div<{ disabled: boolean }>`
 	height: 67.5px;
 	display: flex;

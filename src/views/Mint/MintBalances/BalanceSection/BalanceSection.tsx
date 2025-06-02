@@ -6,8 +6,8 @@ import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Notification } from 'components/atoms/Notification';
 import { Panel } from 'components/atoms/Panel';
 import { EthExchange } from 'components/organisms/EthExchange';
-import { ASSETS, REDIRECTS } from 'helpers/config';
-import { EthTokenEnum, NotificationType } from 'helpers/types';
+import { ASSETS, fetchTokenYield, REDIRECTS } from 'helpers/config';
+import { EthExchangeType, EthTokenEnum, NotificationType } from 'helpers/types';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -23,8 +23,10 @@ export default function BalanceSection(props: IProps) {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
+	const [currentYield, setCurrentYield] = React.useState<number | null>(null);
+
 	const [token, setToken] = React.useState<{
-		header: string;
+		header: string | React.ReactNode;
 		ticker: string;
 		wallet: { label: string; icon: string; provider: any; redirect: (address: string) => string };
 		balance: { header: string; icon: string };
@@ -40,6 +42,36 @@ export default function BalanceSection(props: IProps) {
 	const [showAction, setShowAction] = React.useState<boolean>(false);
 	const [actionResponse, setActionResponse] = React.useState<NotificationType | null>(null);
 	const [copied, setCopied] = React.useState<boolean>(false);
+	const [showDaiConvertModal, setShowDaiConvertModal] = React.useState<boolean>(false);
+
+	React.useEffect(() => {
+		const fetchYields = async () => {
+			try {
+				let yieldValue = null;
+
+				switch (props.type) {
+					case EthTokenEnum.StEth:
+						yieldValue = await fetchTokenYield('stEth');
+						break;
+					case EthTokenEnum.DAI:
+						yieldValue = await fetchTokenYield('dai');
+						break;
+					case EthTokenEnum.USDS:
+						yieldValue = await fetchTokenYield('usds');
+						break;
+					default:
+						break;
+				}
+
+				setCurrentYield(yieldValue);
+				console.log(`Yield for ${props.type}:`, yieldValue);
+			} catch (error) {
+				console.error('Error fetching yields:', error);
+			}
+		};
+
+		fetchYields();
+	}, [props.type]);
 
 	const tokens = React.useMemo(() => {
 		return {
@@ -66,7 +98,12 @@ export default function BalanceSection(props: IProps) {
 				balance: { header: language.currentBalance, icon: ASSETS.arweave },
 			},
 			stEth: {
-				header: language.depositedSteth,
+				header: (
+					<>
+						{language.stEth}{' '}
+						<S.AprText>{currentYield !== null ? `${currentYield.toFixed(2)}% APR` : <EllipsisLoader />}</S.AprText>
+					</>
+				),
 				ticker: language.stEth,
 				wallet: {
 					label: language.connectEthWallet,
@@ -83,7 +120,12 @@ export default function BalanceSection(props: IProps) {
 				},
 			},
 			dai: {
-				header: language.depositedDai,
+				header: (
+					<>
+						{language.dai}{' '}
+						<S.AprText>{currentYield !== null ? `${currentYield.toFixed(2)}% APR` : <EllipsisLoader />}</S.AprText>
+					</>
+				),
 				ticker: language.dai,
 				wallet: {
 					label: language.connectEthWallet,
@@ -96,11 +138,18 @@ export default function BalanceSection(props: IProps) {
 					label: language.depositDai,
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
-					component: getEthExchange(EthTokenEnum.DAI),
+					component: showDaiConvertModal
+						? getEthExchange(EthTokenEnum.DAI, 'convert')
+						: getEthExchange(EthTokenEnum.DAI),
 				},
 			},
 			usds: {
-				header: language.depositedUsds,
+				header: (
+					<>
+						{language.usds}{' '}
+						<S.AprText>{currentYield !== null ? `${currentYield.toFixed(2)}% APR` : <EllipsisLoader />}</S.AprText>
+					</>
+				),
 				ticker: language.usds,
 				wallet: {
 					label: language.connectEthWallet,
@@ -117,7 +166,7 @@ export default function BalanceSection(props: IProps) {
 				},
 			},
 		};
-	}, [arProvider, ethProvider, language, showAction]);
+	}, [arProvider, ethProvider, language, showAction, currentYield, showDaiConvertModal]);
 
 	React.useEffect(() => {
 		switch (props.type) {
@@ -148,13 +197,20 @@ export default function BalanceSection(props: IProps) {
 		}));
 	}, [token?.wallet?.provider]);
 
-	function getEthExchange(token: EthTokenEnum) {
+	React.useEffect(() => {
+		if (!showAction) {
+			setShowDaiConvertModal(false);
+		}
+	}, [showAction]);
+
+	function getEthExchange(token: EthTokenEnum, defaultTab?: EthExchangeType) {
 		return (
 			<EthExchange
 				open={showAction}
 				token={token}
 				setResponse={(response: NotificationType) => setActionResponse(response)}
 				handleClose={() => setShowAction(false)}
+				defaultTab={defaultTab}
 			/>
 		);
 	}
@@ -175,6 +231,16 @@ export default function BalanceSection(props: IProps) {
 		}
 
 		if (token.action) token.action.fn();
+	}
+
+	function handleConvertPress() {
+		if (!token.wallet.provider.walletAddress) {
+			token.wallet.provider.setWalletModalVisible(true);
+			return;
+		}
+
+		setShowDaiConvertModal(true);
+		setShowAction(true);
 	}
 
 	function getActionLabel() {
@@ -386,8 +452,20 @@ export default function BalanceSection(props: IProps) {
 					</S.BalancesQuantityFlexSection>
 					{token.action && (
 						<S.BalanceAction>
+							{props.type === EthTokenEnum.DAI && (
+								<Button
+									type={'alt1'}
+									label="I want higher yield"
+									handlePress={handleConvertPress}
+									icon={ASSETS.exchange}
+									iconLeftAlign
+									disabled={showAction || token.wallet.provider.connecting}
+									height={55}
+									fullWidth
+								/>
+							)}
 							<Button
-								type={'alt1'}
+								type={props.type === EthTokenEnum.DAI ? 'indicator' : 'alt1'}
 								label={getActionLabel()}
 								handlePress={handleActionPress}
 								icon={token.wallet.provider.walletAddress ? token.action.icon : ASSETS.wallet}
