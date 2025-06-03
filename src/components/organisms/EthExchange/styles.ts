@@ -376,3 +376,58 @@ export const ModalActions = styled.div`
 		min-width: 120px; // Give buttons some minimum width
 	}
 `;
+
+export const CompleteScreen = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 20px;
+`;
+
+export const CompleteIcon = styled.div`
+	font-size: 60px;
+	color: ${(props) => props.theme.colors.button.alt1.background};
+	margin-bottom: 10px;
+`;
+
+export const CompleteTitle = styled.h2`
+	color: ${(props) => props.theme.colors.font.primary};
+	font-size: ${(props) => props.theme.typography.size.lg};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	margin: 0;
+`;
+
+export const CompleteMessage = styled.p`
+	color: ${(props) => props.theme.colors.font.primary.alt1};
+	font-size: ${(props) => props.theme.typography.size.base};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	margin: 0;
+`;
+
+export const TxHashWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
+	max-width: 400px;
+`;
+
+export const TxHashLabel = styled.span`
+	color: ${(props) => props.theme.colors.font.primary};
+	font-size: ${(props) => props.theme.typography.size.small};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+`;
+
+export const TxHash = styled.div`
+	background: ${(props) => props.theme.colors.container.alt1.background};
+	padding: 12px;
+	border-radius: ${STYLING.dimensions.radius.primary};
+	word-break: break-all;
+	color: ${(props) => props.theme.colors.font.primary};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	font-family: monospace;
+	margin-bottom: 8px;
+`;

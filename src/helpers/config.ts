@@ -11,7 +11,7 @@ export const AO = {
 	delegationOracle: 'cuxSKjGJ-WDB9PzSkVkVVrIBSh3DrYHYz44usQOj5yE',
 	stEthPriceOracle: 'wJV8FMkpoeLsTjJ6O7YZEuQgMqj-sDjPHhTeA73RsCc',
 	daiPriceOracle: '5q8vpzC5QAKOAJFM26MAKfZw1gwtw7WA_J2861ZiKhI',
-	usdsPriceOracle: '0x0000000000000000000000000000000000000000', // TODO
+	usdsPriceOracle: 'VKpCgQD6s3f-Dagwz-s8MwJG9I0fzvqn3PQkT-LkCPs',
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
 	yieldHistorian: 'NRP0xtzeV9MHgwLmgD254erUB7mUjMBhBkYkNYkbNEo',
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
@@ -32,7 +32,7 @@ export const ETH_CONTRACTS = {
 	usdsBridge: '0xB7410dA12a1256D61C4a954B1d20026F92b12e81',
 	ethUsdPriceFeed: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
 	daiUsdPriceFeed: '0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9',
-	usdsUsdPriceFeed: '0x0000000000000000000000000000000000000000', // TODO
+	usdsUsdPriceFeed: '0x0000000000000000000000000000000000000000',
 	daiToUsdsUpgrade: '0x3225737a9bbb6473cb4a45b7244aca2befdb276a',
 };
 

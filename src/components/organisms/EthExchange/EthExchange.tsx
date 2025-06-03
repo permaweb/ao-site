@@ -47,6 +47,7 @@ export default function EthExchange(props: IProps) {
 	const [layoutRefresh, setLayoutRefresh] = React.useState<number>(0);
 	const [daiYield, setDaiYield] = React.useState<number | null>(null);
 	const [usdsYield, setUsdsYield] = React.useState<number | null>(null);
+	const [isConversionProgressing, setIsConversionProgressing] = React.useState<boolean>(false);
 
 	const effectiveToken = React.useMemo(() => {
 		if (props.conversionFlow && exchangeType === 'convert') {
@@ -148,8 +149,10 @@ export default function EthExchange(props: IProps) {
 	]);
 
 	React.useEffect(() => {
-		handleClear();
-	}, [exchangeType, props.open]);
+		if (!isConversionProgressing) {
+			handleClear();
+		}
+	}, [exchangeType, props.open, isConversionProgressing]);
 
 	React.useEffect(() => {
 		if (effectiveToken === EthTokenEnum.DAI) {
@@ -287,19 +290,23 @@ export default function EthExchange(props: IProps) {
 				ethProvider.refreshTokens();
 
 				if (props.conversionFlow && exchangeType === 'convert') {
+					setIsConversionProgressing(true);
 					setExchangeType('deposit');
 					setProcessed(false);
-					handleClear();
+					setAmount('0');
+					setLoading(false);
 					props.setResponse({
 						message: 'DAI successfully converted to USDS. Now deposit USDS.',
 						status: 'success',
 					});
 				} else {
+					if (!(props.conversionFlow && exchangeType === 'deposit')) {
+						setIsConversionProgressing(false);
+					}
 					props.setResponse({
 						message: `Successful ${exchangeType}`,
 						status: 'success',
 					});
-					props.handleClose();
 				}
 			} catch (e) {
 				console.error(e);
@@ -309,7 +316,9 @@ export default function EthExchange(props: IProps) {
 				});
 			}
 			setLoading(false);
-			setProcessed(true);
+			if (!(props.conversionFlow && exchangeType === 'convert')) {
+				setProcessed(true);
+			}
 		}
 	}
 
@@ -341,6 +350,7 @@ export default function EthExchange(props: IProps) {
 		setAmount('0');
 		setLoading(false);
 		setProcessed(false);
+		setIsConversionProgressing(false);
 		if (props.conversionFlow) {
 			setExchangeType('convert');
 		}
@@ -453,64 +463,74 @@ export default function EthExchange(props: IProps) {
 					</S.TabsWrapper>
 				)}
 				<S.FormWrapper>
-					<div>
-						{exchangeType === 'convert' && (
-							<S.YieldHeader>
-								<span>Yield:</span>
-								<S.YieldComparison>
-									<S.YieldToken>
-										<ReactSVG src={ASSETS.dai} />
-										<span>DAI</span>
-										<span className="yield">{daiYield !== null ? `${daiYield.toFixed(1)}% APR` : '-'}</span>
-									</S.YieldToken>
-									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path
-											d="M5 12h14m-7-7l7 7-7 7"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-									</svg>
-									<S.YieldToken>
-										<ReactSVG src={ASSETS.usds} />
-										<span>USDS</span>
-										<span className="yield">{usdsYield !== null ? `${usdsYield.toFixed(1)}% APR` : '-'}</span>
-									</S.YieldToken>
-								</S.YieldComparison>
-							</S.YieldHeader>
-						)}
-						{getFormHeader()}
-						<S.Form invalid={invalid}>
-							<FormField
-								type={'number'}
-								value={amount}
-								onChange={(e: any) => setAmount(e.target.value)}
-								invalid={{ status: invalid, message: null }}
-								disabled={loading || !ethProvider.walletAddress || lockupTimeRemaining !== null}
-								hideErrorMessage
-							/>
-							<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
-								<ReactSVG src={ASSETS[effectiveToken]} />
-								<p>{effectiveToken}</p>
-							</S.FormFieldLabel>
-						</S.Form>
-					</div>
-					{exchangeType === 'deposit' && (
-						<FormField
-							value={recipient}
-							label={language.arweaveAddress}
-							onChange={(e: any) => setRecipient(e.target.value)}
-							invalid={{ status: getInvalidRecipient(), message: null }}
-							disabled={loading || !ethProvider.walletAddress}
-							required
-							hideErrorMessage
-						/>
-					)}
-					{lockupTimeRemaining && (
-						<S.FormMessage>
-							<p>{lockupTimeRemaining}</p>
-						</S.FormMessage>
+					{props.conversionFlow && processed ? (
+						<S.CompleteScreen>
+							<S.CompleteIcon>✓</S.CompleteIcon>
+							<S.CompleteTitle>Transaction Complete!</S.CompleteTitle>
+							<S.CompleteMessage>Your USDS has been successfully deposited.</S.CompleteMessage>
+						</S.CompleteScreen>
+					) : (
+						<>
+							<div>
+								{exchangeType === 'convert' && (
+									<S.YieldHeader>
+										<span>Yield:</span>
+										<S.YieldComparison>
+											<S.YieldToken>
+												<ReactSVG src={ASSETS.dai} />
+												<span>DAI</span>
+												<span className="yield">{daiYield !== null ? `${daiYield.toFixed(1)}% APR` : '-'}</span>
+											</S.YieldToken>
+											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<path
+													d="M5 12h14m-7-7l7 7-7 7"
+													stroke="currentColor"
+													strokeWidth="2"
+													strokeLinecap="round"
+													strokeLinejoin="round"
+												/>
+											</svg>
+											<S.YieldToken>
+												<ReactSVG src={ASSETS.usds} />
+												<span>USDS</span>
+												<span className="yield">{usdsYield !== null ? `${usdsYield.toFixed(1)}% APR` : '-'}</span>
+											</S.YieldToken>
+										</S.YieldComparison>
+									</S.YieldHeader>
+								)}
+								{getFormHeader()}
+								<S.Form invalid={invalid}>
+									<FormField
+										type={'number'}
+										value={amount}
+										onChange={(e: any) => setAmount(e.target.value)}
+										invalid={{ status: invalid, message: null }}
+										disabled={loading || !ethProvider.walletAddress || lockupTimeRemaining !== null}
+										hideErrorMessage
+									/>
+									<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
+										<ReactSVG src={ASSETS[effectiveToken]} />
+										<p>{effectiveToken}</p>
+									</S.FormFieldLabel>
+								</S.Form>
+							</div>
+							{exchangeType === 'deposit' && (
+								<FormField
+									value={recipient}
+									label={language.arweaveAddress}
+									onChange={(e: any) => setRecipient(e.target.value)}
+									invalid={{ status: getInvalidRecipient(), message: null }}
+									disabled={loading || !ethProvider.walletAddress}
+									required
+									hideErrorMessage
+								/>
+							)}
+							{lockupTimeRemaining && (
+								<S.FormMessage>
+									<p>{lockupTimeRemaining}</p>
+								</S.FormMessage>
+							)}
+						</>
 					)}
 				</S.FormWrapper>
 				<S.ActionWrapper>

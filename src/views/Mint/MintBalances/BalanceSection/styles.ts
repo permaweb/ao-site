@@ -273,3 +273,17 @@ export const ActionWrapper = styled.div`
 export const AprText = styled.span`
 	color: ${(props) => props.theme.colors.button.alt1.background} !important;
 `;
+
+export const ConvertButtonLabel = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+
+	button & span {
+		font-size: ${(props) => props.theme.typography.size.xxSmall} !important;
+	}
+
+	small {
+		font-size: ${(props) => props.theme.typography.size.xxxSmall};
+	}
+`;

@@ -457,12 +457,10 @@ export default function BalanceSection(props: IProps) {
 								<Button
 									type={'alt1'}
 									label={
-										<>
-											I want{' '}
-											<u>
-												<b>higher yield</b>
-											</u>
-										</>
+										<S.ConvertButtonLabel>
+											<span>Convert DAI to USDS</span>
+											<small>for higher yield</small>
+										</S.ConvertButtonLabel>
 									}
 									handlePress={handleConvertPress}
 									icon={ASSETS.arrowRight}
