@@ -270,7 +270,7 @@ export const ActionWrapper = styled.div`
 	padding: 0 20px 20px 20px;
 `;
 
-export const AprText = styled.span`
+export const ApyText = styled.span`
 	color: ${(props) => props.theme.colors.button.alt1.background} !important;
 `;
 

@@ -101,7 +101,7 @@ export default function BalanceSection(props: IProps) {
 				header: (
 					<>
 						{language.stEth}{' '}
-						<S.AprText>{currentYield !== null ? `${currentYield.toFixed(2)}% APR` : <EllipsisLoader />}</S.AprText>
+						<S.ApyText>{currentYield !== null ? `${currentYield.toFixed(2)}% APY` : <EllipsisLoader />}</S.ApyText>
 					</>
 				),
 				ticker: language.stEth,
@@ -123,7 +123,7 @@ export default function BalanceSection(props: IProps) {
 				header: (
 					<>
 						{language.dai}{' '}
-						<S.AprText>{currentYield !== null ? `${currentYield.toFixed(2)}% APR` : <EllipsisLoader />}</S.AprText>
+						<S.ApyText>{currentYield !== null ? `${currentYield.toFixed(2)}% APY` : <EllipsisLoader />}</S.ApyText>
 					</>
 				),
 				ticker: language.dai,
@@ -145,7 +145,7 @@ export default function BalanceSection(props: IProps) {
 				header: (
 					<>
 						{language.usds}{' '}
-						<S.AprText>{currentYield !== null ? `${currentYield.toFixed(2)}% APR` : <EllipsisLoader />}</S.AprText>
+						<S.ApyText>{currentYield !== null ? `${currentYield.toFixed(2)}% APY` : <EllipsisLoader />}</S.ApyText>
 					</>
 				),
 				ticker: language.usds,

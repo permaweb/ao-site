@@ -479,7 +479,7 @@ export default function EthExchange(props: IProps) {
 											<S.YieldToken>
 												<ReactSVG src={ASSETS.dai} />
 												<span>DAI</span>
-												<span className="yield">{daiYield !== null ? `${daiYield.toFixed(1)}% APR` : '-'}</span>
+												<span className="yield">{daiYield !== null ? `${daiYield.toFixed(1)}% APY` : '-'}</span>
 											</S.YieldToken>
 											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 												<path
@@ -493,7 +493,7 @@ export default function EthExchange(props: IProps) {
 											<S.YieldToken>
 												<ReactSVG src={ASSETS.usds} />
 												<span>USDS</span>
-												<span className="yield">{usdsYield !== null ? `${usdsYield.toFixed(1)}% APR` : '-'}</span>
+												<span className="yield">{usdsYield !== null ? `${usdsYield.toFixed(1)}% APY` : '-'}</span>
 											</S.YieldToken>
 										</S.YieldComparison>
 									</S.YieldHeader>
