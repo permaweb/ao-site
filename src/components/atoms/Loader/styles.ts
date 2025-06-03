@@ -12,14 +12,14 @@ export const Wrapper = styled.div`
 	background: ${(props) => props.theme.colors.view.background};
 `;
 
-export const Container = styled.div<{ relative: boolean; noPosition?: boolean }>`
+export const Container = styled.div<{ relative: boolean; noPosition?: boolean; noMargins?: boolean }>`
 	height: ${(props) => (props.noPosition ? 'auto' : '50px')};
 	width: ${(props) => (props.noPosition ? 'auto' : '50px')};
 	position: ${(props) => (props.noPosition ? 'static' : props.relative ? 'relative' : 'fixed')};
 	top: ${(props) => (props.noPosition ? 'auto' : props.relative ? 'auto' : '50%')};
 	left: ${(props) => (props.noPosition ? 'auto' : props.relative ? 'auto' : '50%')};
 	transform: ${(props) => (props.noPosition ? 'none' : props.relative ? 'translate(0, 0)' : 'translate(-50%, -50%)')};
-	margin: ${(props) => (props.noPosition ? '7.5px 0 0 0' : props.relative ? 'auto' : '0')};
+	margin: ${(props) => (props.noPosition ? '7.5px 0 0 0' : props.relative && !props.noMargins ? 'auto' : '0')};
 	z-index: 3;
 `;
 

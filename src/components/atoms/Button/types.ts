@@ -10,6 +10,7 @@ export interface IProps {
 	disabled?: boolean;
 	active?: boolean;
 	loading?: boolean;
+	loadingText?: string;
 	icon?: string;
 	iconLeftAlign?: boolean;
 	formSubmit?: boolean;

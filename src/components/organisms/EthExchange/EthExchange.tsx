@@ -49,6 +49,12 @@ export default function EthExchange(props: IProps) {
 	const [usdsYield, setUsdsYield] = React.useState<number | null>(null);
 	const [isConversionProgressing, setIsConversionProgressing] = React.useState<boolean>(false);
 
+	const errorButtonLabel = React.useMemo(() => {
+		if (!amount || amount === '0') return language.depositAmountPrompt;
+		if (exchangeType === 'deposit' && !recipient) return language.depositAddressPrompt;
+		return null;
+	}, [amount, language.depositAmountPrompt, exchangeType, recipient]);
+
 	const effectiveToken = React.useMemo(() => {
 		if (props.conversionFlow && exchangeType === 'convert') {
 			return EthTokenEnum.DAI;
@@ -293,7 +299,6 @@ export default function EthExchange(props: IProps) {
 					setIsConversionProgressing(true);
 					setExchangeType('deposit');
 					setProcessed(false);
-					setAmount('0');
 					setLoading(false);
 					props.setResponse({
 						message: 'DAI successfully converted to USDS. Now deposit USDS.',
@@ -536,12 +541,13 @@ export default function EthExchange(props: IProps) {
 				<S.ActionWrapper>
 					<Button
 						type={'alt1'}
-						label={processed ? 'Done' : language[exchangeType]}
+						label={processed ? 'Done' : errorButtonLabel || language[exchangeType]}
 						handlePress={() => (processed ? handleClear() : handleSubmit())}
-						icon={exchangeType === 'convert' ? ASSETS.exchange : ASSETS[exchangeType]}
+						icon={errorButtonLabel ? undefined : exchangeType === 'convert' ? ASSETS.exchange : ASSETS[exchangeType]}
 						iconLeftAlign
 						disabled={processed ? false : disabled}
 						loading={loading}
+						loadingText={language[`${exchangeType}-loading`]}
 						height={55}
 						fullWidth
 					/>
