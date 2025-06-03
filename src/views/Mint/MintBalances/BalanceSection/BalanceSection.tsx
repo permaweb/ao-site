@@ -1,13 +1,14 @@
 import React from 'react';
 import { ReactSVG } from 'react-svg';
 
+import { ApyTooltip } from 'components/atoms/ApyTooltip';
 import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Notification } from 'components/atoms/Notification';
 import { Panel } from 'components/atoms/Panel';
 import { EthExchange } from 'components/organisms/EthExchange';
 import { ASSETS, fetchTokenYield, REDIRECTS } from 'helpers/config';
-import { EthTokenEnum, NotificationType } from 'helpers/types';
+import { EthTokenEnum, EthTokensYieldProjectionsType, NotificationType } from 'helpers/types';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -24,6 +25,7 @@ export default function BalanceSection(props: IProps) {
 	const language = languageProvider.object[languageProvider.current];
 
 	const [currentYield, setCurrentYield] = React.useState<number | null>(null);
+	const [currentNativeYield, setCurrentNativeYield] = React.useState<number | null>(null);
 
 	const [token, setToken] = React.useState<{
 		header: string | React.ReactNode;
@@ -47,24 +49,24 @@ export default function BalanceSection(props: IProps) {
 	React.useEffect(() => {
 		const fetchYields = async () => {
 			try {
-				let yieldValue = null;
+				let nativeYieldValue = null;
 
 				switch (props.type) {
 					case EthTokenEnum.StEth:
-						yieldValue = await fetchTokenYield('stEth');
+						nativeYieldValue = await fetchTokenYield('stEth');
 						break;
 					case EthTokenEnum.DAI:
-						yieldValue = await fetchTokenYield('dai');
+						nativeYieldValue = await fetchTokenYield('dai');
 						break;
 					case EthTokenEnum.USDS:
-						yieldValue = await fetchTokenYield('usds');
+						nativeYieldValue = await fetchTokenYield('usds');
 						break;
 					default:
 						break;
 				}
 
-				setCurrentYield(yieldValue);
-				console.log(`Yield for ${props.type}:`, yieldValue);
+				setCurrentNativeYield(nativeYieldValue);
+				console.log(`Native yield for ${props.type}:`, nativeYieldValue);
 			} catch (error) {
 				console.error('Error fetching yields:', error);
 			}
@@ -72,6 +74,31 @@ export default function BalanceSection(props: IProps) {
 
 		fetchYields();
 	}, [props.type]);
+
+	React.useEffect(() => {
+		const allProjections = token?.wallet?.provider?.projections as EthTokensYieldProjectionsType;
+		const projections = getTokenProjections();
+		const aoPrice = token?.wallet?.provider?.aoPrice;
+		if (projections?.yearly?.ratio && aoPrice) {
+			let assetPrice;
+
+			switch (props.type) {
+				case EthTokenEnum.StEth:
+					assetPrice = allProjections[EthTokenEnum.StEth].price;
+					break;
+				case EthTokenEnum.DAI:
+					assetPrice = allProjections[EthTokenEnum.DAI].price;
+					break;
+				case EthTokenEnum.USDS:
+					assetPrice = allProjections[EthTokenEnum.USDS].price;
+					break;
+			}
+
+			const apy = ((projections.yearly.ratio * aoPrice) / assetPrice) * 100;
+			console.log('Projected APY', apy, aoPrice, assetPrice);
+			setCurrentYield(apy);
+		}
+	}, [token?.wallet?.provider?.projections, props.type]);
 
 	const tokens = React.useMemo(() => {
 		return {
@@ -100,8 +127,22 @@ export default function BalanceSection(props: IProps) {
 			stEth: {
 				header: (
 					<>
-						{language.stEth}{' '}
-						<S.ApyText>{currentYield !== null ? `${currentYield.toFixed(2)}% APY` : <EllipsisLoader />}</S.ApyText>
+						<S.HeaderRow>
+							{language.stEth}
+							<S.ApyRow>
+								{currentYield !== null ? (
+									<>
+										<S.ApyText>{`≈${currentYield.toFixed(1)}% APY`}</S.ApyText>
+										<ApyTooltip position="top" />
+									</>
+								) : (
+									<EllipsisLoader />
+								)}
+							</S.ApyRow>
+						</S.HeaderRow>
+						<S.NativeYieldText>
+							Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
+						</S.NativeYieldText>
 					</>
 				),
 				ticker: language.stEth,
@@ -122,8 +163,22 @@ export default function BalanceSection(props: IProps) {
 			dai: {
 				header: (
 					<>
-						{language.dai}{' '}
-						<S.ApyText>{currentYield !== null ? `${currentYield.toFixed(2)}% APY` : <EllipsisLoader />}</S.ApyText>
+						<S.HeaderRow>
+							{language.dai}
+							<S.ApyRow>
+								{currentYield !== null ? (
+									<>
+										<S.ApyText>{`≈${currentYield.toFixed(1)}% APY`}</S.ApyText>
+										<ApyTooltip position="top" />
+									</>
+								) : (
+									<EllipsisLoader />
+								)}
+							</S.ApyRow>
+						</S.HeaderRow>
+						<S.NativeYieldText>
+							Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
+						</S.NativeYieldText>
 					</>
 				),
 				ticker: language.dai,
@@ -144,8 +199,22 @@ export default function BalanceSection(props: IProps) {
 			usds: {
 				header: (
 					<>
-						{language.usds}{' '}
-						<S.ApyText>{currentYield !== null ? `${currentYield.toFixed(2)}% APY` : <EllipsisLoader />}</S.ApyText>
+						<S.HeaderRow>
+							{language.usds}
+							<S.ApyRow>
+								{currentYield !== null ? (
+									<>
+										<S.ApyText>{`≈${currentYield.toFixed(1)}% APY`}</S.ApyText>
+										<ApyTooltip position="top" />
+									</>
+								) : (
+									<EllipsisLoader />
+								)}
+							</S.ApyRow>
+						</S.HeaderRow>
+						<S.NativeYieldText>
+							Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
+						</S.NativeYieldText>
 					</>
 				),
 				ticker: language.usds,
@@ -458,8 +527,7 @@ export default function BalanceSection(props: IProps) {
 									type={'alt1'}
 									label={
 										<S.ConvertButtonLabel>
-											<span>Convert DAI to USDS</span>
-											<small>for higher yield</small>
+											<span>Swap DAI → USDS</span>
 										</S.ConvertButtonLabel>
 									}
 									handlePress={handleConvertPress}

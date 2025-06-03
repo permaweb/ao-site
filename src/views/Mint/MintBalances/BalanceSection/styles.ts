@@ -46,7 +46,7 @@ export const BalanceHeaderWrapper = styled.div`
 export const BalanceHeader = styled.div`
 	span {
 		line-height: 1;
-		font-size: ${(props) => props.theme.typography.size.xLg};
+		font-size: ${(props) => props.theme.typography.size.lg};
 		font-family: ${(props) => props.theme.typography.family.alt1};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
@@ -274,6 +274,30 @@ export const ApyText = styled.span`
 	color: ${(props) => props.theme.colors.button.alt1.background} !important;
 `;
 
+export const YieldContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+`;
+
+export const HeaderRow = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 5px;
+`;
+
+export const ApyRow = styled.div`
+	display: flex;
+	align-items: flex-start;
+	gap: 6px;
+`;
+
+export const NativeYieldText = styled.span`
+	color: ${(props) => props.theme.colors.font.primary.alt1} !important;
+	font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+	font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+`;
+
 export const ConvertButtonLabel = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -285,5 +309,14 @@ export const ConvertButtonLabel = styled.div`
 
 	small {
 		font-size: ${(props) => props.theme.typography.size.xxxSmall};
+	}
+`;
+
+export const ModalWrapper = styled.div`
+	p {
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.primary.alt1};
+		line-height: 1.6;
+		margin: 0;
 	}
 `;

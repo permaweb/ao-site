@@ -14,7 +14,7 @@ import {
 	StEthBridge_ABI,
 	UsdsBridge_ABI,
 } from 'helpers/config';
-import { EthExchangeType, EthTokenEnum } from 'helpers/types';
+import { EthExchangeType, EthTokenEnum, EthTokensYieldProjectionsType } from 'helpers/types';
 import { arweaveToEVMBytes, checkValidAddress, formatAddress } from 'helpers/utils';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -47,6 +47,8 @@ export default function EthExchange(props: IProps) {
 	const [layoutRefresh, setLayoutRefresh] = React.useState<number>(0);
 	const [daiYield, setDaiYield] = React.useState<number | null>(null);
 	const [usdsYield, setUsdsYield] = React.useState<number | null>(null);
+	const [daiNativeYield, setDaiNativeYield] = React.useState<number | null>(null);
+	const [usdsNativeYield, setUsdsNativeYield] = React.useState<number | null>(null);
 	const [isConversionProgressing, setIsConversionProgressing] = React.useState<boolean>(false);
 
 	const errorButtonLabel = React.useMemo(() => {
@@ -161,13 +163,32 @@ export default function EthExchange(props: IProps) {
 	}, [exchangeType, props.open, isConversionProgressing]);
 
 	React.useEffect(() => {
-		if (effectiveToken === EthTokenEnum.DAI) {
+		const allProjections = ethProvider?.projections as EthTokensYieldProjectionsType;
+		const aoPrice = ethProvider?.aoPrice;
+
+		if (effectiveToken === EthTokenEnum.DAI && aoPrice) {
 			const fetchYields = async () => {
 				try {
-					const [daiYieldValue, usdsYieldValue] = await Promise.all([fetchTokenYield('dai'), fetchTokenYield('usds')]);
+					const [daiNativeYield, usdsNativeYield] = await Promise.all([
+						fetchTokenYield('dai'),
+						fetchTokenYield('usds'),
+					]);
 
-					setDaiYield(daiYieldValue);
-					setUsdsYield(usdsYieldValue);
+					setDaiNativeYield(daiNativeYield);
+					setUsdsNativeYield(usdsNativeYield);
+
+					const daiPrice = allProjections[EthTokenEnum.DAI].price;
+					const usdsPrice = allProjections[EthTokenEnum.USDS].price;
+
+					const daiApy = ethProvider?.projections?.dai?.yearly?.ratio
+						? ((ethProvider.projections.dai.yearly.ratio * aoPrice) / daiPrice) * 100
+						: null;
+					const usdsApy = ethProvider?.projections?.usds?.yearly?.ratio
+						? ((ethProvider.projections.usds.yearly.ratio * aoPrice) / usdsPrice) * 100
+						: null;
+
+					setDaiYield(daiApy);
+					setUsdsYield(usdsApy);
 				} catch (error) {
 					console.error('Error fetching yields:', error);
 				}
@@ -175,7 +196,7 @@ export default function EthExchange(props: IProps) {
 
 			fetchYields();
 		}
-	}, [effectiveToken]);
+	}, [effectiveToken, ethProvider?.projections, ethProvider?.aoPrice]);
 
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amountInWei > 0) {
@@ -484,7 +505,12 @@ export default function EthExchange(props: IProps) {
 											<S.YieldToken>
 												<ReactSVG src={ASSETS.dai} />
 												<span>DAI</span>
-												<span className="yield">{daiYield !== null ? `${daiYield.toFixed(2)}% APY` : '-'}</span>
+												<S.YieldDisplay>
+													<span className="yield">{daiYield !== null ? `≈${daiYield.toFixed(1)}% APY` : '-'}</span>
+													<span className="native">
+														Native: {daiNativeYield !== null ? `${daiNativeYield.toFixed(1)} AO` : '-'}
+													</span>
+												</S.YieldDisplay>
 											</S.YieldToken>
 											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 												<path
@@ -498,7 +524,12 @@ export default function EthExchange(props: IProps) {
 											<S.YieldToken>
 												<ReactSVG src={ASSETS.usds} />
 												<span>USDS</span>
-												<span className="yield">{usdsYield !== null ? `${usdsYield.toFixed(2)}% APY` : '-'}</span>
+												<S.YieldDisplay>
+													<span className="yield">{usdsYield !== null ? `≈${usdsYield.toFixed(1)}% APY` : '-'}</span>
+													<span className="native">
+														Native: {usdsNativeYield !== null ? `${usdsNativeYield.toFixed(1)}%` : '-'}
+													</span>
+												</S.YieldDisplay>
 											</S.YieldToken>
 										</S.YieldComparison>
 									</S.YieldHeader>

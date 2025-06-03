@@ -34,14 +34,17 @@ export type EthTokensType = {
 
 export type EthTokensYieldProjectionsType = {
 	[EthTokenEnum.StEth]: {
+		price: number;
 		monthly: TokenProjectionType;
 		yearly: TokenProjectionType;
 	};
 	[EthTokenEnum.DAI]: {
+		price: number;
 		monthly: TokenProjectionType;
 		yearly: TokenProjectionType;
 	};
 	[EthTokenEnum.USDS]: {
+		price: number;
 		monthly: TokenProjectionType;
 		yearly: TokenProjectionType;
 	};

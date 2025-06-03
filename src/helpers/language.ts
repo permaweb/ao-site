@@ -141,6 +141,8 @@ export const language = {
 		yieldAllocation: `Yield Allocation`,
 		yieldCustomizeInfo: `Tailor your rewards to your preferences. Adjust the mix of PI, AO, and/or AR you earn, and you can also select specific tokens from participating permaweb projects.`,
 		yieldSetupInfo: `Select PI or AO to start. You'll be able to fine-tune your choices on the next page.`,
+		apyExplanation: `APY is a live projection, extrapolated from current AO yield and price using public data. It moves with the market and isn't guaranteed, but it targets a rate above the asset's native yield.`,
+		nativeYieldExplanation: `Native yield is what the asset earns in its own vault; when it rises, AO's APY usually follows suit.`,
 		yourAO: `Your AO`,
 	},
 };

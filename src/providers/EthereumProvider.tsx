@@ -95,6 +95,7 @@ interface EthereumContextState {
 	errorMessage: string | null;
 	web3Provider: EIP1193Provider | null;
 	ensureMainnet: () => Promise<void>;
+	aoPrice: number | null;
 }
 
 interface EthereumProviderProps {
@@ -116,6 +117,7 @@ const DEFAULT_CONTEXT: EthereumContextState = {
 	errorMessage: null,
 	web3Provider: null,
 	ensureMainnet: () => Promise.resolve(),
+	aoPrice: null,
 };
 
 const EthereumContext = React.createContext<EthereumContextState>(DEFAULT_CONTEXT);
@@ -134,6 +136,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	const [walletModalVisible, setWalletModalVisible] = React.useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 	const [web3Provider, setWeb3Provider] = React.useState<EIP1193Provider | null>(null);
+	const [aoPrice, setAoPrice] = React.useState<number | null>(null);
 
 	const [connecting, setConnecting] = React.useState<boolean>(true);
 	const [disconnected, setDisconnected] = React.useState(false);
@@ -469,6 +472,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 
 					setProjections({
 						stEth: {
+							price: stEthPrice,
 							monthly: {
 								amount: ethReward(30, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
 								ratio: ethReward(30, 1),
@@ -479,6 +483,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							},
 						},
 						dai: {
+							price: daiPrice,
 							monthly: {
 								amount: daiReward(30, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
 								ratio: daiReward(30, 1),
@@ -489,6 +494,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							},
 						},
 						usds: {
+							price: usdsPrice,
 							monthly: {
 								amount: usdsReward(30, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
 								ratio: usdsReward(30, 1),
@@ -507,6 +513,28 @@ export function EthereumProvider(props: EthereumProviderProps) {
 			}
 		})();
 	}, [walletAddress, tokens, balance, totalDeposited, aoProvider.mintedSupply, web3Provider]);
+
+	React.useEffect(() => {
+		(async function () {
+			try {
+				const priceResp = await readHandler({
+					processId: 'Meb6GwY5I9QN77F0c5Ku2GpCFxtYyG1mfJus2GWYtII',
+					action: 'Get-Price-For-Token',
+					data: '',
+					tags: [
+						{ name: 'Base-Token-Process', value: '0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc' },
+						{ name: 'Quote-Token-Process', value: 'USD' },
+					],
+				});
+
+				if (priceResp?.Price) {
+					setAoPrice(Number(priceResp.Price));
+				}
+			} catch (e: any) {
+				console.error('Error fetching AO price:', e);
+			}
+		})();
+	}, []);
 
 	const handleConnect = async () => {
 		try {
@@ -614,6 +642,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					web3Provider,
 					ensureMainnet,
 					connecting,
+					aoPrice,
 				}}
 			>
 				{props.children}

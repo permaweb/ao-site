@@ -245,10 +245,6 @@ export const YieldToken = styled.div`
 	flex-grow: 1;
 	height: fit-content;
 
-	div {
-		height: 24px;
-	}
-
 	svg {
 		height: 24px;
 		width: 24px;
@@ -266,6 +262,28 @@ export const YieldToken = styled.div`
 			color: ${(props) => props.theme.colors.button.alt1.background};
 			font-weight: ${(props) => props.theme.typography.weight.bold};
 			margin-left: auto;
+		}
+	}
+`;
+
+export const YieldDisplay = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 2px;
+	margin-left: auto;
+
+	span {
+		&.yield {
+			color: ${(props) => props.theme.colors.button.alt1.background};
+			font-weight: ${(props) => props.theme.typography.weight.bold};
+			font-size: ${(props) => props.theme.typography.size.small};
+		}
+
+		&.native {
+			color: ${(props) => props.theme.colors.font.primary.alt1};
+			font-size: ${(props) => props.theme.typography.size.xSmall};
+			font-weight: ${(props) => props.theme.typography.weight.regular};
 		}
 	}
 `;
