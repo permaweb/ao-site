@@ -7,7 +7,7 @@ import { Notification } from 'components/atoms/Notification';
 import { Panel } from 'components/atoms/Panel';
 import { EthExchange } from 'components/organisms/EthExchange';
 import { ASSETS, fetchTokenYield, REDIRECTS } from 'helpers/config';
-import { EthExchangeType, EthTokenEnum, NotificationType } from 'helpers/types';
+import { EthTokenEnum, NotificationType } from 'helpers/types';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
@@ -138,9 +138,7 @@ export default function BalanceSection(props: IProps) {
 					label: language.depositDai,
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
-					component: showDaiConvertModal
-						? getEthExchange(EthTokenEnum.DAI, 'convert')
-						: getEthExchange(EthTokenEnum.DAI),
+					component: showDaiConvertModal ? getEthExchange(EthTokenEnum.USDS, true) : getEthExchange(EthTokenEnum.DAI),
 				},
 			},
 			usds: {
@@ -162,7 +160,7 @@ export default function BalanceSection(props: IProps) {
 					label: language.depositUsds,
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
-					component: getEthExchange(EthTokenEnum.USDS),
+					component: showDaiConvertModal ? getEthExchange(EthTokenEnum.USDS, true) : getEthExchange(EthTokenEnum.USDS),
 				},
 			},
 		};
@@ -203,14 +201,14 @@ export default function BalanceSection(props: IProps) {
 		}
 	}, [showAction]);
 
-	function getEthExchange(token: EthTokenEnum, defaultTab?: EthExchangeType) {
+	function getEthExchange(token: EthTokenEnum, conversionFlow?: boolean) {
 		return (
 			<EthExchange
 				open={showAction}
 				token={token}
 				setResponse={(response: NotificationType) => setActionResponse(response)}
 				handleClose={() => setShowAction(false)}
-				defaultTab={defaultTab}
+				conversionFlow={conversionFlow}
 			/>
 		);
 	}
@@ -452,12 +450,22 @@ export default function BalanceSection(props: IProps) {
 					</S.BalancesQuantityFlexSection>
 					{token.action && (
 						<S.BalanceAction>
-							{props.type === EthTokenEnum.DAI && (
+							{(props.type === EthTokenEnum.DAI ||
+								(props.type === EthTokenEnum.USDS &&
+									ethProvider?.tokens?.[EthTokenEnum.DAI]?.balance?.value > 0 &&
+									ethProvider?.tokens?.[EthTokenEnum.USDS]?.balance?.value <= 0)) && (
 								<Button
 									type={'alt1'}
-									label="I want higher yield"
+									label={
+										<>
+											I want{' '}
+											<u>
+												<b>higher yield</b>
+											</u>
+										</>
+									}
 									handlePress={handleConvertPress}
-									icon={ASSETS.exchange}
+									icon={ASSETS.arrowRight}
 									iconLeftAlign
 									disabled={showAction || token.wallet.provider.connecting}
 									height={55}
@@ -482,7 +490,7 @@ export default function BalanceSection(props: IProps) {
 				<Panel
 					open={showAction}
 					width={550}
-					header={token.action.label}
+					header={showDaiConvertModal ? language.convertDai : token.action.label}
 					handleClose={() => setShowAction(false)}
 					closeHandlerDisabled
 				>

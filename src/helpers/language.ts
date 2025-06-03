@@ -37,6 +37,7 @@ export const language = {
 		date: `Date`,
 		deposit: `Deposit`,
 		depositDai: `Deposit DAI`,
+		convertDai: `Convert DAI to USDS`,
 		depositStEth: `Deposit StETH`,
 		depositUsds: `Deposit USDS`,
 		depositedDai: `Deposited DAI`,

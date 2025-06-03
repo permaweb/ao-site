@@ -5,5 +5,5 @@ export interface IProps {
 	setResponse: (response: NotificationType) => void;
 	open: boolean;
 	handleClose: () => void;
-	defaultTab?: EthExchangeType;
+	conversionFlow?: boolean;
 }

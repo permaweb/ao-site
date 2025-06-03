@@ -29,7 +29,7 @@ export const ETH_CONTRACTS = {
 	dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
 	daiBridge: '0x6A1B588B0684dACE1f53C5820111F400B3dbfeBf',
 	usds: '0xdc035d45d973e3ec169d2276ddab16f1e407384f',
-	usdsBridge: '0xa65f94d5D371BE45Ba1d8B472e30CD3651eE72b0',
+	usdsBridge: '0xB7410dA12a1256D61C4a954B1d20026F92b12e81',
 	ethUsdPriceFeed: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
 	daiUsdPriceFeed: '0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9',
 	usdsUsdPriceFeed: '0x0000000000000000000000000000000000000000', // TODO
@@ -73,6 +73,7 @@ export const ASSETS = {
 	edit: getTxEndpoint('SUWTk8Qtcub9EsP5PDF6-vzgKsP5Irg1bB9b8NImDDk'),
 	ethereum: getTxEndpoint('LmRXPMcmymzB5S_WpRgmmQtGMWoTHW7BFcmotOkKcGM'),
 	exchange: getTxEndpoint('KfE6Dh0j2pTLo4Z8U6fmk6mCRsB6O6NgxJpI_Vm0_wY'),
+	arrowRight: getTxEndpoint('Xkqtxc5_R8KSczygjl9iOk0LHv-GSbD8xhIw5IPIIuc'),
 	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
 	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
 	landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),

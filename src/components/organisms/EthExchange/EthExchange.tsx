@@ -31,11 +31,11 @@ export default function EthExchange(props: IProps) {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
-	const [exchangeType, setExchangeType] = React.useState<EthExchangeType>(props.defaultTab || 'deposit');
+	const [exchangeType, setExchangeType] = React.useState<EthExchangeType>(props.conversionFlow ? 'convert' : 'deposit');
 
 	useEffect(() => {
-		setExchangeType(props.defaultTab || 'deposit');
-	}, [props.defaultTab]);
+		setExchangeType(props.conversionFlow ? 'convert' : 'deposit');
+	}, [props.conversionFlow]);
 
 	const [amount, setAmount] = React.useState<string>('0');
 	const [recipient, setRecipient] = React.useState<string | null>('');
@@ -47,6 +47,13 @@ export default function EthExchange(props: IProps) {
 	const [layoutRefresh, setLayoutRefresh] = React.useState<number>(0);
 	const [daiYield, setDaiYield] = React.useState<number | null>(null);
 	const [usdsYield, setUsdsYield] = React.useState<number | null>(null);
+
+	const effectiveToken = React.useMemo(() => {
+		if (props.conversionFlow && exchangeType === 'convert') {
+			return EthTokenEnum.DAI;
+		}
+		return props.token;
+	}, [props.conversionFlow, exchangeType, props.token]);
 
 	const amountInWei = React.useMemo(() => {
 		try {
@@ -64,21 +71,21 @@ export default function EthExchange(props: IProps) {
 
 		switch (exchangeType) {
 			case 'convert':
-				setInvalid(amountInWei > ethProvider?.tokens?.[props.token]?.balance?.value);
+				setInvalid(amountInWei > ethProvider?.tokens?.[effectiveToken]?.balance?.value);
 				break;
 			case 'deposit':
-				setInvalid(amountInWei > ethProvider?.tokens?.[props.token]?.balance?.value);
+				setInvalid(amountInWei > ethProvider?.tokens?.[effectiveToken]?.balance?.value);
 				break;
 			case 'withdraw':
-				setInvalid(amountInWei > ethProvider?.tokens?.[props.token]?.deposited?.value);
+				setInvalid(amountInWei > ethProvider?.tokens?.[effectiveToken]?.deposited?.value);
 				break;
 		}
 	}, [amountInWei, ethProvider.tokens]);
 
 	/* Check DAI and USDS Stake Lockup Period */
 	React.useEffect(() => {
-		if ((props.token === EthTokenEnum.DAI || props.token === EthTokenEnum.USDS) && exchangeType === 'withdraw') {
-			const lastStake = BigInt(ethProvider?.tokens?.[props.token]?.deposited?.lastStake || 0);
+		if ((effectiveToken === EthTokenEnum.DAI || effectiveToken === EthTokenEnum.USDS) && exchangeType === 'withdraw') {
+			const lastStake = BigInt(ethProvider?.tokens?.[effectiveToken]?.deposited?.lastStake || 0);
 			const lockupWindow = BigInt(60); // TODO: Change to 64800
 			const currentTime = BigInt(Math.floor(Date.now() / 1000));
 			const timeSinceLastStake = currentTime - lastStake;
@@ -89,7 +96,7 @@ export default function EthExchange(props: IProps) {
 				const minutes = Number((timeRemaining % BigInt(3600)) / BigInt(60));
 				const seconds = Number(timeRemaining % BigInt(60));
 				setLockupTimeRemaining(
-					`${props.token.toUpperCase()} is locked, you can withdraw in (${hours}h:${minutes}m:${seconds}s)`
+					`${effectiveToken.toUpperCase()} is locked, you can withdraw in (${hours}h:${minutes}m:${seconds}s)`
 				);
 				setDisabled(true);
 				return;
@@ -97,7 +104,7 @@ export default function EthExchange(props: IProps) {
 		} else {
 			setLockupTimeRemaining(null);
 		}
-	}, [ethProvider.tokens, exchangeType, props.token, layoutRefresh]);
+	}, [ethProvider.tokens, exchangeType, effectiveToken, layoutRefresh]);
 
 	React.useEffect(() => {
 		if (!lockupTimeRemaining) return;
@@ -117,15 +124,15 @@ export default function EthExchange(props: IProps) {
 
 		switch (exchangeType) {
 			case 'convert':
-				setDisabled(amountInWei > ethProvider?.tokens?.[props.token]?.balance?.value);
+				setDisabled(amountInWei > ethProvider?.tokens?.[effectiveToken]?.balance?.value);
 				break;
 			case 'deposit':
 				setDisabled(
-					amountInWei > ethProvider?.tokens?.[props.token]?.balance?.value || !recipient || getInvalidRecipient()
+					amountInWei > ethProvider?.tokens?.[effectiveToken]?.balance?.value || !recipient || getInvalidRecipient()
 				);
 				break;
 			case 'withdraw':
-				setDisabled(amountInWei > ethProvider?.tokens?.[props.token]?.deposited?.value);
+				setDisabled(amountInWei > ethProvider?.tokens?.[effectiveToken]?.deposited?.value);
 				break;
 		}
 	}, [
@@ -136,7 +143,7 @@ export default function EthExchange(props: IProps) {
 		amount,
 		exchangeType,
 		recipient,
-		props.token,
+		effectiveToken,
 		lockupTimeRemaining,
 	]);
 
@@ -145,7 +152,7 @@ export default function EthExchange(props: IProps) {
 	}, [exchangeType, props.open]);
 
 	React.useEffect(() => {
-		if (props.token === EthTokenEnum.DAI) {
+		if (effectiveToken === EthTokenEnum.DAI) {
 			const fetchYields = async () => {
 				try {
 					const [daiYieldValue, usdsYieldValue] = await Promise.all([fetchTokenYield('dai'), fetchTokenYield('usds')]);
@@ -159,7 +166,7 @@ export default function EthExchange(props: IProps) {
 
 			fetchYields();
 		}
-	}, [props.token]);
+	}, [effectiveToken]);
 
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amountInWei > 0) {
@@ -171,13 +178,13 @@ export default function EthExchange(props: IProps) {
 				let bridgeAddress = ETH_CONTRACTS.stEthBridge;
 				let bridgeContract = new web3.eth.Contract(StEthBridge_ABI, bridgeAddress);
 				let tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.stEth);
-				let currentToken = props.token;
+				let currentToken = effectiveToken;
 
-				if (props.token === EthTokenEnum.DAI) {
+				if (effectiveToken === EthTokenEnum.DAI) {
 					bridgeAddress = ETH_CONTRACTS.daiBridge;
 					bridgeContract = new web3.eth.Contract(DaiBridge_ABI, bridgeAddress);
 					tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
-				} else if (props.token === EthTokenEnum.USDS) {
+				} else if (effectiveToken === EthTokenEnum.USDS) {
 					bridgeAddress = ETH_CONTRACTS.usdsBridge;
 					bridgeContract = new web3.eth.Contract(UsdsBridge_ABI, bridgeAddress);
 					tokenContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.usds);
@@ -254,7 +261,7 @@ export default function EthExchange(props: IProps) {
 						}
 						break;
 					case 'withdraw':
-						if (props.token === EthTokenEnum.USDS) {
+						if (effectiveToken === EthTokenEnum.USDS) {
 							const gasEstimate = await bridgeContract.methods.withdraw(amountInWei, arweaveRecipient).estimateGas({
 								from: ethProvider.walletAddress,
 							});
@@ -278,11 +285,22 @@ export default function EthExchange(props: IProps) {
 				}
 
 				ethProvider.refreshTokens();
-				props.setResponse({
-					message: `Successful ${exchangeType}`,
-					status: 'success',
-				});
-				props.handleClose();
+
+				if (props.conversionFlow && exchangeType === 'convert') {
+					setExchangeType('deposit');
+					setProcessed(false);
+					handleClear();
+					props.setResponse({
+						message: 'DAI successfully converted to USDS. Now deposit USDS.',
+						status: 'success',
+					});
+				} else {
+					props.setResponse({
+						message: `Successful ${exchangeType}`,
+						status: 'success',
+					});
+					props.handleClose();
+				}
 			} catch (e) {
 				console.error(e);
 				props.setResponse({
@@ -323,6 +341,9 @@ export default function EthExchange(props: IProps) {
 		setAmount('0');
 		setLoading(false);
 		setProcessed(false);
+		if (props.conversionFlow) {
+			setExchangeType('convert');
+		}
 	}
 
 	function getMaxDisabled() {
@@ -330,11 +351,11 @@ export default function EthExchange(props: IProps) {
 
 		switch (exchangeType) {
 			case 'convert':
-				return ethProvider.tokens?.[props.token]?.balance?.value <= BigInt(0);
+				return ethProvider.tokens?.[effectiveToken]?.balance?.value <= BigInt(0);
 			case 'deposit':
-				return ethProvider.tokens?.[props.token]?.balance?.value <= BigInt(0);
+				return ethProvider.tokens?.[effectiveToken]?.balance?.value <= BigInt(0);
 			case 'withdraw':
-				return ethProvider.tokens?.[props.token]?.deposited?.value <= BigInt(0);
+				return ethProvider.tokens?.[effectiveToken]?.deposited?.value <= BigInt(0);
 		}
 	}
 
@@ -343,17 +364,42 @@ export default function EthExchange(props: IProps) {
 	}
 
 	function getTabAction(type: EthExchangeType) {
-		const iconToUse = type === 'convert' ? ASSETS.exchange : ASSETS[type];
 		return (
-			<Button
-				type={'primary'}
-				label={language[type]}
-				handlePress={() => setExchangeType(type)}
-				disabled={loading}
-				active={exchangeType === type}
-				icon={iconToUse}
-				iconLeftAlign
-			/>
+			<S.TabButton active={exchangeType === type} disabled={loading} onClick={() => setExchangeType(type)}>
+				{language[type]}
+			</S.TabButton>
+		);
+	}
+
+	function getStepperComponent() {
+		const steps = [
+			{ key: 'convert', label: 'Convert DAI to USDS' },
+			{ key: 'deposit', label: 'Deposit USDS' },
+			{ key: 'complete', label: 'Complete' },
+		];
+
+		const currentStepIndex = steps.findIndex((step) => step.key === exchangeType);
+		const completedStepIndex = processed ? 2 : currentStepIndex;
+
+		return (
+			<S.StepperWrapper>
+				{steps.map((step, index) => {
+					const isActive = index === currentStepIndex && !processed;
+					const isCompleted = index < completedStepIndex || (processed && index <= completedStepIndex);
+
+					return (
+						<S.StepperItem key={step.key}>
+							<S.StepperStep active={isActive} completed={isCompleted}>
+								{isCompleted ? '✓' : index + 1}
+							</S.StepperStep>
+							<S.StepperLabel active={isActive} completed={isCompleted}>
+								{step.label}
+							</S.StepperLabel>
+							{index < steps.length - 1 && <S.StepperConnector completed={isCompleted} />}
+						</S.StepperItem>
+					);
+				})}
+			</S.StepperWrapper>
 		);
 	}
 
@@ -361,13 +407,13 @@ export default function EthExchange(props: IProps) {
 		let amountToUse = null;
 		switch (exchangeType) {
 			case 'convert':
-				amountToUse = ethProvider?.tokens?.[props.token]?.balance;
+				amountToUse = ethProvider?.tokens?.[effectiveToken]?.balance;
 				break;
 			case 'deposit':
-				amountToUse = ethProvider?.tokens?.[props.token]?.balance;
+				amountToUse = ethProvider?.tokens?.[effectiveToken]?.balance;
 				break;
 			case 'withdraw':
-				amountToUse = ethProvider?.tokens?.[props.token]?.deposited;
+				amountToUse = ethProvider?.tokens?.[effectiveToken]?.deposited;
 				break;
 		}
 
@@ -376,7 +422,7 @@ export default function EthExchange(props: IProps) {
 				{exchangeType === 'convert' ? (
 					<span></span>
 				) : (
-					<span>{`Deposited: ${ethProvider?.tokens?.[props.token]?.deposited?.display ?? '-'}`}</span>
+					<span>{`Deposited: ${ethProvider?.tokens?.[effectiveToken]?.deposited?.display ?? '-'}`}</span>
 				)}
 				<S.FormFieldAction>
 					<span>{`Available: ${amountToUse?.display ?? '-'}`}</span>
@@ -398,14 +444,17 @@ export default function EthExchange(props: IProps) {
 					<ReactSVG src={ASSETS.ethereum} />
 					<p>{formatAddress(ethProvider.walletAddress ?? '-', true)}</p>
 				</S.HeaderWrapper>
-				<S.TabsWrapper>
-					{props.token === EthTokenEnum.DAI && getTabAction('convert')}
-					{getTabAction('deposit')}
-					{getTabAction('withdraw')}
-				</S.TabsWrapper>
+				{props.conversionFlow ? (
+					getStepperComponent()
+				) : (
+					<S.TabsWrapper>
+						{getTabAction('deposit')}
+						{getTabAction('withdraw')}
+					</S.TabsWrapper>
+				)}
 				<S.FormWrapper>
 					<div>
-						{exchangeType === 'convert' && props.token === EthTokenEnum.DAI && (
+						{exchangeType === 'convert' && (
 							<S.YieldHeader>
 								<span>Yield:</span>
 								<S.YieldComparison>
@@ -442,8 +491,8 @@ export default function EthExchange(props: IProps) {
 								hideErrorMessage
 							/>
 							<S.FormFieldLabel disabled={loading || !ethProvider.walletAddress}>
-								<ReactSVG src={ASSETS[props.token]} />
-								<p>{props.token}</p>
+								<ReactSVG src={ASSETS[effectiveToken]} />
+								<p>{effectiveToken}</p>
 							</S.FormFieldLabel>
 						</S.Form>
 					</div>
@@ -478,7 +527,7 @@ export default function EthExchange(props: IProps) {
 					/>
 				</S.ActionWrapper>
 				<S.EndWrapper>
-					<ExchangeInfo token={props.token} />
+					<ExchangeInfo token={effectiveToken} />
 				</S.EndWrapper>
 				<S.EndActionsWrapper>
 					<Button

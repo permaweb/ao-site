@@ -35,11 +35,122 @@ export const FormWrapper = styled.div`
 export const TabsWrapper = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 20px;
+	gap: 0;
+	border-bottom: 2px solid ${(props) => props.theme.colors.border.alt1};
+	margin-bottom: 10px;
+`;
 
-	button {
-		flex: 1;
+export const TabButton = styled.button<{ active: boolean; disabled: boolean }>`
+	background: none;
+	border: none;
+	padding: 12px 0;
+	font-size: ${(props) => props.theme.typography.size.base};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	color: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.primary.alt1)};
+	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+	position: relative;
+	opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+	transition: color 0.2s ease;
+	flex: 1;
+	text-align: center;
+
+	&:hover {
+		color: ${(props) => !props.disabled && props.theme.colors.font.primary};
 	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: -2px;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: ${(props) => props.theme.colors.button.alt1.background};
+		transform: scaleX(${(props) => (props.active ? 1 : 0)});
+		transition: transform 0.2s ease;
+	}
+`;
+
+export const StepperWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 30px;
+	padding: 20px 0;
+`;
+
+export const StepperItem = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+	flex: 1;
+`;
+
+export const StepperStep = styled.div<{ active: boolean; completed: boolean }>`
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: ${(props) => props.theme.typography.size.small};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	border: 2px solid;
+	margin-bottom: 8px;
+	transition: all 0.3s ease;
+
+	${(props) => {
+		if (props.completed) {
+			return `
+				background: ${props.theme.colors.button.alt1.background};
+				border-color: ${props.theme.colors.button.alt1.background};
+				color: ${props.theme.colors.button.alt1.color};
+			`;
+		} else if (props.active) {
+			return `
+				background: transparent;
+				border-color: ${props.theme.colors.button.alt1.background};
+				color: ${props.theme.colors.button.alt1.background};
+			`;
+		} else {
+			return `
+				background: transparent;
+				border-color: ${props.theme.colors.border.alt1};
+				color: ${props.theme.colors.font.primary.alt1};
+			`;
+		}
+	}}
+`;
+
+export const StepperLabel = styled.span<{ active: boolean; completed: boolean }>`
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	text-align: center;
+	transition: color 0.3s ease;
+
+	color: ${(props) => {
+		if (props.completed || props.active) {
+			return props.theme.colors.font.primary;
+		} else {
+			return props.theme.colors.font.primary.alt1;
+		}
+	}};
+`;
+
+export const StepperConnector = styled.div<{ completed: boolean }>`
+	position: absolute;
+	top: 20px;
+	left: calc(50% + 20px);
+	right: calc(-50% + 20px);
+	height: 2px;
+	background: ${(props) =>
+		props.completed ? props.theme.colors.button.alt1.background : props.theme.colors.border.alt1};
+	transition: background 0.3s ease;
+	z-index: 1;
 `;
 
 export const Form = styled.div<{ invalid: boolean }>`
@@ -131,7 +242,6 @@ export const YieldToken = styled.div`
 	padding: 12px 16px;
 	background: ${(props) => props.theme.colors.container.alt1.background};
 	border-radius: ${STYLING.dimensions.radius.alt2};
-	border: 1px solid ${(props) => props.theme.colors.border.alt1};
 	flex-grow: 1;
 	height: fit-content;
 
