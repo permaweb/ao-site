@@ -389,13 +389,28 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				} catch (e: any) {
 					console.error(e);
 				}
+			} else {
+				setTokens({
+					stEth: {
+						balance: { value: null, display: getBalanceDisplay(null) },
+						deposited: { value: null, display: getBalanceDisplay(null), lastStake: null },
+					},
+					dai: {
+						balance: { value: null, display: getBalanceDisplay(null) },
+						deposited: { value: null, display: getBalanceDisplay(null), lastStake: null },
+					},
+					usds: {
+						balance: { value: null, display: getBalanceDisplay(null) },
+						deposited: { value: null, display: getBalanceDisplay(null), lastStake: null },
+					},
+				});
 			}
 		})();
 	}, [walletAddress, tokenRefreshTrigger, web3Provider]);
 
 	React.useEffect(() => {
 		(async function () {
-			if (walletAddress && tokens && balance && totalDeposited && aoProvider.mintedSupply && web3Provider) {
+			if (tokens && totalDeposited && aoProvider.mintedSupply) {
 				try {
 					const [daiResp, stEthResp, usdsResp] = await Promise.all([
 						readHandler({
@@ -512,7 +527,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				setProjections(null);
 			}
 		})();
-	}, [walletAddress, tokens, balance, totalDeposited, aoProvider.mintedSupply, web3Provider]);
+	}, [tokens, totalDeposited, aoProvider.mintedSupply]);
 
 	React.useEffect(() => {
 		(async function () {
@@ -617,7 +632,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		}
 	}, []);
 
-	function getBalanceDisplay(amount: bigint) {
+	function getBalanceDisplay(amount: bigint | null): string {
+		if (amount === null) return '-';
 		if (amount === BigInt(0)) return '0';
 		return formatDisplayAmount(Web3.utils.fromWei(amount, 'ether'));
 	}

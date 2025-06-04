@@ -166,7 +166,7 @@ export default function EthExchange(props: IProps) {
 		const allProjections = ethProvider?.projections as EthTokensYieldProjectionsType;
 		const aoPrice = ethProvider?.aoPrice;
 
-		if (effectiveToken === EthTokenEnum.DAI && aoPrice) {
+		if (effectiveToken === EthTokenEnum.DAI && aoPrice && allProjections) {
 			const fetchYields = async () => {
 				try {
 					const [daiNativeYield, usdsNativeYield] = await Promise.all([
@@ -508,7 +508,7 @@ export default function EthExchange(props: IProps) {
 												<S.YieldDisplay>
 													<span className="yield">{daiYield !== null ? `≈${daiYield.toFixed(1)}% APY` : '-'}</span>
 													<span className="native">
-														Native: {daiNativeYield !== null ? `${daiNativeYield.toFixed(1)} AO` : '-'}
+														Native: {daiNativeYield !== null ? `${daiNativeYield.toFixed(1)}%` : '-'}
 													</span>
 												</S.YieldDisplay>
 											</S.YieldToken>

@@ -466,14 +466,23 @@ export default function BalanceSection(props: IProps) {
 							</S.BalanceQuantityHeader>
 							<S.BalanceQuantityBody>
 								<p>
-									{getTokenProjections() ? (
-										<>
-											<span className={'indicator'}>+</span>
-											{formatDisplayAmount(getTokenProjections().monthly.amount)}
-										</>
-									) : (
-										<>{token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-'}</>
-									)}
+									{(() => {
+										const projectionData = getTokenProjections();
+										if (projectionData) {
+											const amount = projectionData.monthly.amount;
+											if (amount === null || amount === 0) {
+												return '-';
+											}
+											return (
+												<>
+													<span className={'indicator'}>+</span>
+													{formatDisplayAmount(amount)}
+												</>
+											);
+										} else {
+											return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
+										}
+									})()}
 								</p>
 							</S.BalanceQuantityBody>
 							{props.type !== 'ao' && (
@@ -494,14 +503,23 @@ export default function BalanceSection(props: IProps) {
 							</S.BalanceQuantityHeader>
 							<S.BalanceQuantityBody>
 								<p>
-									{getTokenProjections() ? (
-										<>
-											<span className={'indicator'}>+</span>
-											{formatDisplayAmount(getTokenProjections().yearly.amount)}
-										</>
-									) : (
-										<>{token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-'}</>
-									)}
+									{(() => {
+										const projectionData = getTokenProjections();
+										if (projectionData) {
+											const amount = projectionData.yearly.amount;
+											if (amount === null || amount === 0) {
+												return '-';
+											}
+											return (
+												<>
+													<span className={'indicator'}>+</span>
+													{formatDisplayAmount(amount)}
+												</>
+											);
+										} else {
+											return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
+										}
+									})()}
 								</p>
 							</S.BalanceQuantityBody>
 							{props.type !== 'ao' && (
