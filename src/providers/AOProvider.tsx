@@ -6,8 +6,8 @@ import { connect } from '@permaweb/aoconnect';
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 
 export const afCu = connect({
-  CU_URL: "https://cu-af.dataos.so",
-})
+	CU_URL: 'https://cu-af.dataos.so',
+});
 
 export const goldsky = new Client({
 	url: ENDPOINTS.goldsky,

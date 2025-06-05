@@ -155,6 +155,7 @@ export async function readHandler(args: {
 	tags?: TagType[];
 	data?: any;
 	replyTag?: TagType;
+	ignoreDataResponse?: boolean;
 }): Promise<any> {
 	const tags = [{ name: 'Action', value: args.action }];
 	if (args.tags) tags.push(...args.tags);
@@ -173,7 +174,7 @@ export async function readHandler(args: {
 			});
 		}
 
-		if (message.Data) {
+		if (message.Data && !args.ignoreDataResponse) {
 			return JSON.parse(message.Data);
 		} else {
 			if (message.Tags) {

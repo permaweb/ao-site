@@ -424,6 +424,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						readHandler({
 							processId: AO.usdsPriceOracle,
 							action: 'Info',
+							ignoreDataResponse: true,
 						}),
 					]);
 
@@ -433,8 +434,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					const stEthPrice = Number(stEthResp?.LastPrice) / 10000;
 					const stEthYield = Number(stEthResp?.LastYield) / 10000;
 
-					const usdsPrice = Number(usdsResp?.LastPrice) / 10000;
-					const usdsYield = Number(usdsResp?.LastYield) / 10000;
+					const usdsPrice = Number(usdsResp?.Price) / 10000;
+					const usdsYield = Number(usdsResp?.Yield) / 10000;
 
 					const totalDepositedSteth = Number(totalDeposited?.stEth?.value ?? BigInt(0));
 					const totalDepositedDai = Number(totalDeposited?.dai?.value ?? BigInt(0));
