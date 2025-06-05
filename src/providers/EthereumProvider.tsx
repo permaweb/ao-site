@@ -476,6 +476,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						deposited: { value: null, display: getBalanceDisplay(null), lastStake: null },
 					},
 				});
+				setLastArweaveAddress(null);
 			}
 		})();
 	}, [walletAddress, tokenRefreshTrigger, web3Provider]);

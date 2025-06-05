@@ -201,8 +201,10 @@ export default function EthExchange(props: IProps) {
 	React.useEffect(() => {
 		if (ethProvider.lastArweaveAddress) {
 			setRecipient(ethProvider.lastArweaveAddress);
+		} else {
+			setRecipient('');
 		}
-	}, [ethProvider.lastArweaveAddress]);
+	}, [ethProvider]);
 
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amountInWei > 0) {
