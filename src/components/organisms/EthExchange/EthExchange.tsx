@@ -198,6 +198,12 @@ export default function EthExchange(props: IProps) {
 		}
 	}, [effectiveToken, ethProvider?.projections, ethProvider?.aoPrice]);
 
+	React.useEffect(() => {
+		if (ethProvider.lastArweaveAddress) {
+			setRecipient(ethProvider.lastArweaveAddress);
+		}
+	}, [ethProvider.lastArweaveAddress]);
+
 	async function handleSubmit() {
 		if (ethProvider.walletAddress && amount && amountInWei > 0) {
 			setLoading(true);
@@ -556,7 +562,7 @@ export default function EthExchange(props: IProps) {
 									label={language.arweaveAddress}
 									onChange={(e: any) => setRecipient(e.target.value)}
 									invalid={{ status: getInvalidRecipient(), message: null }}
-									disabled={loading || !ethProvider.walletAddress}
+									disabled={!!ethProvider.lastArweaveAddress}
 									required
 									hideErrorMessage
 								/>

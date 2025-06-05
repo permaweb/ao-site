@@ -9,7 +9,7 @@ import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
 import { readHandler } from 'api';
 import React from 'react';
-import Web3 from 'web3';
+import Web3, { EventLog } from 'web3';
 
 import {
 	AO,
@@ -26,7 +26,15 @@ import {
 import gnosisModule from 'helpers/customGnosis';
 import { customBrave } from 'helpers/customInjected';
 import { EthTokensType, EthTokensYieldProjectionsType, EthTotalDepositedType } from 'helpers/types';
-import { formatDisplayAmount, formatUSDAmount, getDaiReward, getEthReward, getUsdsReward } from 'helpers/utils';
+import {
+	checkValidAddress,
+	evmBytesToArweaveAddress,
+	formatDisplayAmount,
+	formatUSDAmount,
+	getDaiReward,
+	getEthReward,
+	getUsdsReward,
+} from 'helpers/utils';
 
 import { useAOProvider } from './AOProvider';
 
@@ -96,6 +104,7 @@ interface EthereumContextState {
 	web3Provider: EIP1193Provider | null;
 	ensureMainnet: () => Promise<void>;
 	aoPrice: number | null;
+	lastArweaveAddress: string | null;
 }
 
 interface EthereumProviderProps {
@@ -118,6 +127,7 @@ const DEFAULT_CONTEXT: EthereumContextState = {
 	web3Provider: null,
 	ensureMainnet: () => Promise.resolve(),
 	aoPrice: null,
+	lastArweaveAddress: null,
 };
 
 const EthereumContext = React.createContext<EthereumContextState>(DEFAULT_CONTEXT);
@@ -137,6 +147,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 	const [web3Provider, setWeb3Provider] = React.useState<EIP1193Provider | null>(null);
 	const [aoPrice, setAoPrice] = React.useState<number | null>(null);
+	const [lastArweaveAddress, setLastArweaveAddress] = React.useState<string | null>(null);
 
 	const [connecting, setConnecting] = React.useState<boolean>(true);
 	const [disconnected, setDisconnected] = React.useState(false);
@@ -386,6 +397,67 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							},
 						},
 					}));
+
+					// Find the arweave address from the last staked event
+					const [stEthEvents, daiEvents, usdsEvents] = await Promise.all([
+						stEthBridgeContract.getPastEvents('UserStaked' as any, {
+							fromBlock: 0,
+							toBlock: 'latest',
+							filter: { user: walletAddress },
+						}),
+						daiBridgeContract.getPastEvents('UserStaked' as any, {
+							fromBlock: 0,
+							toBlock: 'latest',
+							filter: { user: walletAddress },
+						}),
+						usdsBridgeContract.getPastEvents('UserStaked' as any, {
+							fromBlock: 0,
+							toBlock: 'latest',
+							filter: { user: walletAddress },
+						}),
+					]);
+
+					const allEvents = [...stEthEvents, ...daiEvents, ...usdsEvents] as EventLog[];
+
+					allEvents.sort((a, b) => {
+						const blockB = BigInt(b.blockNumber || 0);
+						const blockA = BigInt(a.blockNumber || 0);
+
+						if (blockA < blockB) return 1;
+						if (blockA > blockB) return -1;
+
+						const indexB = BigInt(b.transactionIndex || 0);
+						const indexA = BigInt(a.transactionIndex || 0);
+
+						if (indexA < indexB) return 1;
+						if (indexA > indexB) return -1;
+
+						return 0;
+					});
+
+					if (allEvents.length > 0) {
+						const latestEvent = allEvents[0];
+						if (latestEvent.returnValues && latestEvent.returnValues.arweaveAddress) {
+							const arweaveAddressBytes32 = latestEvent.returnValues.arweaveAddress as string;
+							try {
+								const convertedArweaveAddress = evmBytesToArweaveAddress(arweaveAddressBytes32);
+								if (convertedArweaveAddress && checkValidAddress(convertedArweaveAddress)) {
+									setLastArweaveAddress(convertedArweaveAddress);
+								} else {
+									console.warn(
+										'Failed to convert or validate arweaveAddress from event:',
+										arweaveAddressBytes32,
+										'Converted:',
+										convertedArweaveAddress
+									);
+									setLastArweaveAddress(null);
+								}
+							} catch (e) {
+								console.error('Error during evmBytesToArweaveAddress conversion:', e);
+								setLastArweaveAddress(null);
+							}
+						}
+					}
 				} catch (e: any) {
 					console.error(e);
 				}
@@ -660,6 +732,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					ensureMainnet,
 					connecting,
 					aoPrice,
+					lastArweaveAddress,
 				}}
 			>
 				{props.children}

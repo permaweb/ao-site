@@ -111,6 +111,41 @@ export function arweaveToEVMBytes(arweaveAddress) {
 	return `0x${hexString}`;
 }
 
+export function evmBytesToArweaveAddress(evmBytes: string): string | null {
+	if (!evmBytes || !evmBytes.startsWith('0x') || evmBytes.length !== 66) {
+		// Basic validation for a bytes32 hex string
+		console.error('Invalid EVM bytes string for Arweave address conversion:', evmBytes);
+		return null;
+	}
+
+	const hexString = evmBytes.substring(2);
+
+	// Convert hex string to byte array
+	const bytes = new Uint8Array(hexString.length / 2);
+	for (let i = 0; i < hexString.length; i += 2) {
+		bytes[i / 2] = parseInt(hexString.substring(i, i + 2), 16);
+	}
+
+	// Convert byte array to binary string
+	let binaryString = '';
+	for (let i = 0; i < bytes.length; i++) {
+		binaryString += String.fromCharCode(bytes[i]);
+	}
+
+	// Convert binary string to base64
+	const base64Address = btoa(binaryString);
+
+	// Convert base64 to base64url
+	const base64UrlAddress = base64Address.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+	// Arweave addresses are typically 43 characters long
+	if (base64UrlAddress.length !== 43) {
+		console.warn('Converted Arweave address has an unexpected length:', base64UrlAddress, 'Original hex:', evmBytes);
+	}
+
+	return base64UrlAddress;
+}
+
 export function getRewardInDays(days: number, currentSupply: number) {
 	const TOTAL_AO_SUPPLY = 21000000;
 	//  AO_MINTED is the % of AO tokens already minted
