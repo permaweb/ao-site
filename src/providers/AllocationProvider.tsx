@@ -1,12 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
 
-import { createDataItemSigner, dryrun, message, result } from '@permaweb/aoconnect';
+import { createDataItemSigner, message, result } from '@permaweb/aoconnect';
 
 import { Notification } from 'components/atoms/Notification';
 import { AO } from 'helpers/config';
 import { AllocationRecordType, AllocationTokenRecordType, NotificationType } from 'helpers/types';
 
+import { afCu } from './AOProvider';
 import { useArweaveProvider } from './ArweaveProvider';
 import { useLanguageProvider } from './LanguageProvider';
 
@@ -67,7 +68,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	React.useEffect(() => {
 		(async function () {
 			try {
-				const response = await dryrun({
+				const response = await afCu.dryrun({
 					process: AO.flpFactory,
 					tags: [{ name: 'Action', value: 'Get-FLPs' }],
 				});
@@ -112,7 +113,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	const fetchSetup = async () => {
 		setFetchingSetup(true);
 		try {
-			const response = await dryrun({
+			const response = await afCu.dryrun({
 				process: AO.delegationOracle,
 				tags: [
 					{ name: 'Action', value: 'Get-Delegations' },

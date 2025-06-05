@@ -1,9 +1,13 @@
 import React from 'react';
 import { cacheExchange, Client, fetchExchange, gql } from 'urql';
 
-import { dryrun } from '@permaweb/aoconnect';
+import { connect } from '@permaweb/aoconnect';
 
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
+
+export const afCu = connect({
+  CU_URL: "https://cu-af.dataos.so",
+})
 
 export const goldsky = new Client({
 	url: ENDPOINTS.goldsky,
@@ -65,7 +69,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 
 		(async function () {
 			try {
-				const res = await dryrun({
+				const res = await afCu.dryrun({
 					process: AO.token,
 					Owner: 'geZphdOvGxzLyPbZgLgrADGHBVAZaidotlZkvIAQiYg',
 					tags: [{ name: 'Action', value: 'Eval' }],
@@ -89,7 +93,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				localStorage.setItem(CACHE_KEY, value.toString());
 				localStorage.setItem(TIMESTAMP_KEY, now.toString());
 			} catch (error) {
-				console.error('Error during dryrun:', error);
+				console.error('Error during afCu.dryrun:', error);
 			}
 		})();
 	}, []);

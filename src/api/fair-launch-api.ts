@@ -1,6 +1,8 @@
 import { Tag } from 'arweave/web/lib/transaction';
 
-import { createDataItemSigner, dryrun, message, result } from '@permaweb/aoconnect';
+import { createDataItemSigner, message, result } from '@permaweb/aoconnect';
+
+import { afCu } from 'providers/AOProvider';
 
 import { AO } from '../helpers/config';
 
@@ -27,7 +29,7 @@ export async function initialize(processId: string): Promise<string> {
 
 // Info
 export async function getInfo(processId: string): Promise<any> {
-	const res = await dryrun({
+	const res = await afCu.dryrun({
 		process: processId,
 		tags: [{ name: 'Action', value: 'Info' }],
 	});
@@ -145,7 +147,7 @@ export async function updateSocials(processId: string, params: UpdateSocialsPara
 // -------- Read Queries --------
 
 export async function getFlpId(processId: string, requestId: string): Promise<string> {
-	const res = await dryrun({
+	const res = await afCu.dryrun({
 		process: processId,
 		tags: [
 			{ name: 'Action', value: 'Get-FLP-Id' },
@@ -160,7 +162,7 @@ export async function getFlpId(processId: string, requestId: string): Promise<st
 
 export async function getFlp(processId: string, id: string): Promise<any> {
 	try {
-		const res = await dryrun({
+		const res = await afCu.dryrun({
 			process: processId,
 			tags: [
 				{ name: 'Action', value: 'Get-FLP' },
@@ -179,7 +181,7 @@ export async function getFlp(processId: string, id: string): Promise<any> {
 
 export async function getFlpInfo(processId: string): Promise<any> {
 	try {
-		const res = await dryrun({
+		const res = await afCu.dryrun({
 			process: processId,
 			tags: [{ name: 'Action', value: 'Info' }],
 		});
@@ -206,7 +208,7 @@ export interface DistributionTick {
 
 export async function getFlpTickHistory(processId: string): Promise<DistributionTick[]> {
 	try {
-		const res = await dryrun({
+		const res = await afCu.dryrun({
 			process: processId,
 			tags: [{ name: 'Action', value: 'Get-Yield-Tick-History' }],
 		});
@@ -226,7 +228,7 @@ export async function getFlps(processId: string, statusFilter?: string): Promise
 	try {
 		const tags = [{ name: 'Action', value: 'Get-FLPs' }];
 		if (statusFilter) tags.push({ name: 'Status-Filter', value: statusFilter });
-		const res = await dryrun({ process: processId, tags });
+		const res = await afCu.dryrun({ process: processId, tags });
 		let list = res.Messages.length ? JSON.parse(res.Messages[0].Data) : [];
 		console.log('onFlps', list);
 		list = list.filter((flp: any) => flp.status === 'Active');
@@ -250,14 +252,14 @@ export async function getRankedFlps(
 		{ name: 'Limit', value: limit.toString() },
 	];
 	if (statusFilter) tags.push({ name: 'Status-Filter', value: statusFilter });
-	const res = await dryrun({ process: processId, tags });
+	const res = await afCu.dryrun({ process: processId, tags });
 	const list = res.Messages.length ? JSON.parse(res.Messages[0].Data) : [];
 	console.log('onRankedFlps', list);
 	return list;
 }
 
 export async function getAggregatedStats(processId: string): Promise<any> {
-	const res = await dryrun({
+	const res = await afCu.dryrun({
 		process: processId,
 		tags: [{ name: 'Action', value: 'Get-Aggregated-Stats' }],
 	});
@@ -314,7 +316,7 @@ interface DelegationRecord {
 }
 
 export async function getLastDelegationRecord(): Promise<LastDelegationRecord | null> {
-	const res = await dryrun({
+	const res = await afCu.dryrun({
 		process: AO.yieldHistorian,
 		tags: [{ name: 'Action', value: 'Get-Last-Record' }],
 	});
@@ -331,7 +333,7 @@ interface TotalDelegated {
 }
 
 export async function getTotalDelegated(): Promise<TotalDelegated | null> {
-	const res = await dryrun({
+	const res = await afCu.dryrun({
 		process: AO.yieldHistorian,
 		tags: [{ name: 'Action', value: 'Get-Total-Delegated-AO-By-Project' }],
 	});
@@ -342,7 +344,7 @@ export async function getTotalDelegated(): Promise<TotalDelegated | null> {
 }
 
 export async function getDelegationRecords(): Promise<DelegationRecord[]> {
-	const res = await dryrun({
+	const res = await afCu.dryrun({
 		process: AO.yieldHistorian,
 		tags: [
 			{ name: 'Action', value: 'Get-Last-N-Records' },
@@ -368,7 +370,7 @@ export interface UserDelegationResponse {
 }
 
 export async function getUserDelegations(walletAddress: string): Promise<UserDelegationResponse | null> {
-	const res = await dryrun({
+	const res = await afCu.dryrun({
 		process: AO.delegationOracle,
 		tags: [
 			{ name: 'Action', value: 'Get-Delegations' },
@@ -418,7 +420,7 @@ export async function setDelegation(params: SetDelegationParams): Promise<string
 }
 
 export async function getClaimableBalance(walletAddress: string, flpId: string): Promise<string | null> {
-	const res = await dryrun({
+	const res = await afCu.dryrun({
 		process: flpId,
 		tags: [
 			{ name: 'Action', value: 'Get-Claimable-Balance' },
