@@ -1,7 +1,7 @@
 import React from 'react';
 import { cacheExchange, Client, fetchExchange, gql } from 'urql';
 
-import { connect } from '@permaweb/aoconnect';
+import { connect, dryrun } from '@permaweb/aoconnect';
 
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 
@@ -62,14 +62,14 @@ export function AOProvider(props: { children: React.ReactNode }) {
 		const cachedTimestamp = localStorage.getItem(TIMESTAMP_KEY);
 		const now = Date.now();
 
-		if (cachedValue && cachedTimestamp && now - parseInt(cachedTimestamp, 10) < CACHE_DURATION) {
+		if (!isNaN(Number(cachedValue)) && cachedTimestamp && now - parseInt(cachedTimestamp, 10) < CACHE_DURATION) {
 			setMintedSupply(Number(cachedValue));
 			return;
 		}
 
 		(async function () {
 			try {
-				const res = await afCu.dryrun({
+				const res = await dryrun({
 					process: AO.token,
 					Owner: 'geZphdOvGxzLyPbZgLgrADGHBVAZaidotlZkvIAQiYg',
 					tags: [{ name: 'Action', value: 'Eval' }],
@@ -88,6 +88,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				}
 
 				const value = res.Output.data / AO_TOKEN_DENOMINATION;
+				if (isNaN(value)) throw new Error('Invalid minted supply value');
 				setMintedSupply(value);
 
 				localStorage.setItem(CACHE_KEY, value.toString());
