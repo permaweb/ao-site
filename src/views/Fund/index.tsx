@@ -473,7 +473,7 @@ export default function Fund() {
 										percentage={allocations[project.id] || 0}
 										color={coreTokenColors[project.id]}
 										isMaxAllocation={cannotAllocateMore}
-										disabled={cannotAllocateMore || isSubmitting || project.disabled}
+										disabled={isSubmitting || project.disabled}
 										onAllocationChange={(change) => handleAllocationChange(project.id, change)}
 										hideControls={project.id === 'ao'}
 									/>
