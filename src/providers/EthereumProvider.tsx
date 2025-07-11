@@ -645,7 +645,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				const priceResp = await getPriceForToken('0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc');
 
 				if (priceResp) {
-					setAoPrice(priceResp.usd_price / priceResp.denominator);
+					setAoPrice(priceResp.usd_price);
 				}
 			} catch (e: any) {
 				console.error('Error fetching AO price:', e);
