@@ -38,6 +38,42 @@ import {
 
 import { useAOProvider } from './AOProvider';
 
+// Helper function to get price from Supabase
+async function getPriceForToken(processId: string): Promise<{ usd_price: number; denominator: number } | null> {
+	try {
+		const SUPABASE_URL = 'https://kzmzniagsfcfnhgsjkpv.supabase.co';
+		const SUPABASE_ANON_KEY =
+			'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6bXpuaWFnc2ZjZm5oZ3Nqa3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0MjI5NDEsImV4cCI6MjA2Mzk5ODk0MX0.IjB7j34CjhqUXQcO_dKM_9k3okmSomSpu9dtyPV2agU';
+
+		if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+			console.error('Supabase configuration missing');
+			return null;
+		}
+
+		const response = await fetch(`${SUPABASE_URL}/functions/v1/usd-price`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+			},
+			body: JSON.stringify({
+				processId: processId,
+			}),
+		});
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+
+		const data = await response.json();
+		console.log(data); // Should contain usd_price and denominator fields
+		return data;
+	} catch (error) {
+		console.error('Error fetching price from Supabase:', error);
+		return null;
+	}
+}
+
 const injected = injectedModule();
 const trust = trustModule();
 const torus = torusModule();
@@ -606,18 +642,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	React.useEffect(() => {
 		(async function () {
 			try {
-				const priceResp = await readHandler({
-					processId: 'Meb6GwY5I9QN77F0c5Ku2GpCFxtYyG1mfJus2GWYtII',
-					action: 'Get-Price-For-Token',
-					data: '',
-					tags: [
-						{ name: 'Base-Token-Process', value: '0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc' },
-						{ name: 'Quote-Token-Process', value: 'USD' },
-					],
-				});
+				const priceResp = await getPriceForToken('0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc');
 
-				if (priceResp?.Price) {
-					setAoPrice(Number(priceResp.Price));
+				if (priceResp) {
+					setAoPrice(priceResp.usd_price / priceResp.denominator);
 				}
 			} catch (e: any) {
 				console.error('Error fetching AO price:', e);

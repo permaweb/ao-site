@@ -19,8 +19,13 @@ export const AO = {
 	piBalanceProcess: '4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs',
 	// delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
 	// yieldHistorian: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY', // staging
-	// flpFactory: 'JC0_BVWWf7xbmXUeKskDBRQ5fJo8fWgPtaEYMOf-Vbk', // staging
+	// flpFactory: 'JC0_BVWWf7xbmXUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
 	// piProcess: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots', // staging
+};
+
+export const SUPABASE = {
+	url: process.env.REACT_APP_SUPABASE_URL || '',
+	anonKey: process.env.REACT_APP_SUPABASE_ANON_KEY || '',
 };
 
 export const ETH_CONTRACTS = {
