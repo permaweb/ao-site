@@ -564,7 +564,7 @@ export default function EthExchange(props: IProps) {
 									label={language.arweaveAddress}
 									onChange={(e: any) => setRecipient(e.target.value)}
 									invalid={{ status: getInvalidRecipient(), message: null }}
-									disabled={!!ethProvider.lastArweaveAddress}
+									disabled={false} //!!ethProvider.lastArweaveAddress
 									required
 									hideErrorMessage
 								/>
