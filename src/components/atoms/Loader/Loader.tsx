@@ -21,7 +21,11 @@ export default function Loader(props: IProps) {
 
 	function getLoader(size: number, height: number, width: number, useRelative?: boolean, noPosition?: boolean) {
 		return (
-			<S.Container relative={props.relative ? props.relative : useRelative ?? false} noPosition={noPosition}>
+			<S.Container
+				relative={props.relative ? props.relative : useRelative ?? false}
+				noPosition={noPosition}
+				noMargins={props.noMargins}
+			>
 				<S.Spinner size={size} height={height} width={width} noPosition={noPosition}>
 					<S.Blade noPosition={noPosition} />
 					<S.Blade noPosition={noPosition} />

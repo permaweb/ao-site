@@ -9,7 +9,7 @@ import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
 import { readHandler } from 'api';
 import React from 'react';
-import Web3 from 'web3';
+import Web3, { EventLog } from 'web3';
 
 import {
 	AO,
@@ -21,13 +21,58 @@ import {
 	ETH_TOKEN_DENOMINATION,
 	PRICE_FEED_ABI,
 	StEthBridge_ABI,
+	UsdsBridge_ABI,
 } from 'helpers/config';
 import gnosisModule from 'helpers/customGnosis';
 import { customBrave } from 'helpers/customInjected';
 import { EthTokensType, EthTokensYieldProjectionsType, EthTotalDepositedType } from 'helpers/types';
-import { formatDisplayAmount, formatUSDAmount, getDaiReward, getEthReward } from 'helpers/utils';
+import {
+	checkValidAddress,
+	evmBytesToArweaveAddress,
+	formatDisplayAmount,
+	formatUSDAmount,
+	getDaiReward,
+	getEthReward,
+	getUsdsReward,
+} from 'helpers/utils';
 
 import { useAOProvider } from './AOProvider';
+
+// Helper function to get price from Supabase
+async function getPriceForToken(processId: string): Promise<{ usd_price: number; denominator: number } | null> {
+	try {
+		const SUPABASE_URL = 'https://kzmzniagsfcfnhgsjkpv.supabase.co';
+		const SUPABASE_ANON_KEY =
+			'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6bXpuaWFnc2ZjZm5oZ3Nqa3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0MjI5NDEsImV4cCI6MjA2Mzk5ODk0MX0.IjB7j34CjhqUXQcO_dKM_9k3okmSomSpu9dtyPV2agU';
+
+		if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+			console.error('Supabase configuration missing');
+			return null;
+		}
+
+		const response = await fetch(`${SUPABASE_URL}/functions/v1/usd-price`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+			},
+			body: JSON.stringify({
+				processId: processId,
+			}),
+		});
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+
+		const data = await response.json();
+		console.log(data); // Should contain usd_price and denominator fields
+		return data;
+	} catch (error) {
+		console.error('Error fetching price from Supabase:', error);
+		return null;
+	}
+}
 
 const injected = injectedModule();
 const trust = trustModule();
@@ -94,6 +139,8 @@ interface EthereumContextState {
 	errorMessage: string | null;
 	web3Provider: EIP1193Provider | null;
 	ensureMainnet: () => Promise<void>;
+	aoPrice: number | null;
+	lastArweaveAddress: string | null;
 }
 
 interface EthereumProviderProps {
@@ -115,6 +162,8 @@ const DEFAULT_CONTEXT: EthereumContextState = {
 	errorMessage: null,
 	web3Provider: null,
 	ensureMainnet: () => Promise.resolve(),
+	aoPrice: null,
+	lastArweaveAddress: null,
 };
 
 const EthereumContext = React.createContext<EthereumContextState>(DEFAULT_CONTEXT);
@@ -133,6 +182,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	const [walletModalVisible, setWalletModalVisible] = React.useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 	const [web3Provider, setWeb3Provider] = React.useState<EIP1193Provider | null>(null);
+	const [aoPrice, setAoPrice] = React.useState<number | null>(null);
+	const [lastArweaveAddress, setLastArweaveAddress] = React.useState<string | null>(null);
 
 	const [connecting, setConnecting] = React.useState<boolean>(true);
 	const [disconnected, setDisconnected] = React.useState(false);
@@ -181,27 +232,32 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		};
 	}, [walletAddress]);
 
-	/* StETH - DAI Total Deposited */
+	/* StETH - DAI - USDS Total Deposited */
 	React.useEffect(() => {
 		(async function () {
 			try {
 				const web3 = new Web3(ENDPOINTS.mainnetRpc);
 				const stEthBridgeContract = new web3.eth.Contract(StEthBridge_ABI, ETH_CONTRACTS.stEthBridge);
 				const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
+				const usdsBridgeContract = new web3.eth.Contract(UsdsBridge_ABI, ETH_CONTRACTS.usdsBridge);
 
-				let [totalStEthDeposited, totalDaiDeposited] = await Promise.all([
+				let [totalStEthDeposited, totalDaiDeposited, totalUsdsDeposited] = await Promise.all([
 					stEthBridgeContract.methods.totalDepositedInPublicPools().call() as any,
 					daiBridgeContract.methods.totalDepositedInPublicPools().call() as any,
+					usdsBridgeContract.methods.totalDepositedInVault().call() as any,
 				]);
 
 				totalStEthDeposited = Number(totalStEthDeposited) / Math.pow(10, 18);
 				totalDaiDeposited = Number(totalDaiDeposited) / Math.pow(10, 18);
+				totalUsdsDeposited = Number(totalUsdsDeposited) / Math.pow(10, 18);
 
 				if (isNaN(totalStEthDeposited)) throw new Error('Invalid totalStEthDeposited');
 				if (isNaN(totalDaiDeposited)) throw new Error('Invalid totalDaiDeposited');
+				if (isNaN(totalUsdsDeposited)) throw new Error('Invalid totalUsdsDeposited');
 
 				const ethUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.ethUsdPriceFeed);
 				// const daiUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.daiUsdPriceFeed);
+				// const usdUsdSFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.usdsUsdPriceFeed);
 
 				const ethUsdPriceData = await ethUsdFeed.methods.latestRoundData().call();
 				// const daiUsdPriceData = await daiUsdFeed.methods.latestRoundData().call();
@@ -209,26 +265,33 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				const ethUsdPrice = (ethUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
 				// const daiUsdPrice = (daiUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
 				const daiUsdPrice = 1;
+				const usdsUsdPrice = 1;
 
 				// console.log('ethUsdPrice');
 				// console.log(ethUsdPrice);
 				// console.log('daiUsdPrice');
 				// console.log(daiUsdPrice);
+				// console.log('usdsUsdPrice')
+				// console.log(usdsUsdPrice)
 
 				const usdStEthValue = BigInt(Math.floor(totalStEthDeposited)) * BigInt(ethUsdPrice);
 				const usdDaiValue = BigInt(Math.floor(totalDaiDeposited)) * BigInt(daiUsdPrice);
-				const usdTotal = usdStEthValue + usdDaiValue;
+				const usdUsdsValue = BigInt(Math.floor(totalUsdsDeposited)) * BigInt(usdsUsdPrice);
+				const usdTotal = usdStEthValue + usdDaiValue + usdUsdsValue;
 
 				// console.log('usdStEthValue')
 				// console.log(usdStEthValue)
 				// console.log('usdDaiValue')
 				// console.log(usdDaiValue)
+				// console.log('usdUsdsValue')
+				// console.log(usdUsdsValue)
 				// console.log('usdTotal')
 				// console.log(usdTotal)
 
 				setTotalDeposited({
 					stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited, 2) },
 					dai: { value: totalDaiDeposited, display: formatDisplayAmount(totalDaiDeposited, 2) },
+					usds: { value: totalUsdsDeposited, display: formatDisplayAmount(totalUsdsDeposited, 2) },
 					usdTotal: { value: usdTotal, display: formatUSDAmount(usdTotal.toString()) },
 				});
 			} catch (e: any) {
@@ -322,11 +385,17 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					const daiContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.dai);
 					const daiBridgeContract = new web3.eth.Contract(DaiBridge_ABI, ETH_CONTRACTS.daiBridge);
 
+					const usdsContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.usds);
+					const usdsBridgeContract = new web3.eth.Contract(UsdsBridge_ABI, ETH_CONTRACTS.usdsBridge);
+
 					const stEthBalanceOf = (await stEthContract.methods.balanceOf(walletAddress).call()) as any as bigint;
 					const stEthUsersData = (await stEthBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
 
 					const daiBalanceOf = (await daiContract.methods.balanceOf(walletAddress).call()) as any as bigint;
 					const daiUsersData = (await daiBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
+
+					const usdsBalanceOf = (await usdsContract.methods.balanceOf(walletAddress).call()) as any as bigint;
+					const usdsUsersData = (await usdsBridgeContract.methods.usersData(walletAddress).call()) as any;
 
 					setTokens((prev) => ({
 						...prev,
@@ -352,19 +421,107 @@ export function EthereumProvider(props: EthereumProviderProps) {
 								lastStake: daiUsersData.lastStake,
 							},
 						},
+						usds: {
+							balance: {
+								value: usdsBalanceOf,
+								display: getBalanceDisplay(usdsBalanceOf),
+							},
+							deposited: {
+								value: usdsUsersData.deposited,
+								display: getBalanceDisplay(usdsUsersData.deposited),
+								lastStake: usdsUsersData.lastStake,
+							},
+						},
 					}));
+
+					// Find the arweave address from the last staked event
+					const [stEthEvents, daiEvents, usdsEvents] = await Promise.all([
+						stEthBridgeContract.getPastEvents('UserStaked' as any, {
+							fromBlock: 0,
+							toBlock: 'latest',
+							filter: { user: walletAddress },
+						}),
+						daiBridgeContract.getPastEvents('UserStaked' as any, {
+							fromBlock: 0,
+							toBlock: 'latest',
+							filter: { user: walletAddress },
+						}),
+						usdsBridgeContract.getPastEvents('UserStaked' as any, {
+							fromBlock: 0,
+							toBlock: 'latest',
+							filter: { user: walletAddress },
+						}),
+					]);
+
+					const allEvents = [...stEthEvents, ...daiEvents, ...usdsEvents] as EventLog[];
+
+					allEvents.sort((a, b) => {
+						const blockB = BigInt(b.blockNumber || 0);
+						const blockA = BigInt(a.blockNumber || 0);
+
+						if (blockA < blockB) return 1;
+						if (blockA > blockB) return -1;
+
+						const indexB = BigInt(b.transactionIndex || 0);
+						const indexA = BigInt(a.transactionIndex || 0);
+
+						if (indexA < indexB) return 1;
+						if (indexA > indexB) return -1;
+
+						return 0;
+					});
+
+					if (allEvents.length > 0) {
+						const latestEvent = allEvents[0];
+						if (latestEvent.returnValues && latestEvent.returnValues.arweaveAddress) {
+							const arweaveAddressBytes32 = latestEvent.returnValues.arweaveAddress as string;
+							try {
+								const convertedArweaveAddress = evmBytesToArweaveAddress(arweaveAddressBytes32);
+								if (convertedArweaveAddress && checkValidAddress(convertedArweaveAddress)) {
+									setLastArweaveAddress(convertedArweaveAddress);
+								} else {
+									console.warn(
+										'Failed to convert or validate arweaveAddress from event:',
+										arweaveAddressBytes32,
+										'Converted:',
+										convertedArweaveAddress
+									);
+									setLastArweaveAddress(null);
+								}
+							} catch (e) {
+								console.error('Error during evmBytesToArweaveAddress conversion:', e);
+								setLastArweaveAddress(null);
+							}
+						}
+					}
 				} catch (e: any) {
 					console.error(e);
 				}
+			} else {
+				setTokens({
+					stEth: {
+						balance: { value: null, display: getBalanceDisplay(null) },
+						deposited: { value: null, display: getBalanceDisplay(null), lastStake: null },
+					},
+					dai: {
+						balance: { value: null, display: getBalanceDisplay(null) },
+						deposited: { value: null, display: getBalanceDisplay(null), lastStake: null },
+					},
+					usds: {
+						balance: { value: null, display: getBalanceDisplay(null) },
+						deposited: { value: null, display: getBalanceDisplay(null), lastStake: null },
+					},
+				});
+				setLastArweaveAddress(null);
 			}
 		})();
 	}, [walletAddress, tokenRefreshTrigger, web3Provider]);
 
 	React.useEffect(() => {
 		(async function () {
-			if (walletAddress && tokens && balance && totalDeposited && aoProvider.mintedSupply && web3Provider) {
+			if (tokens && totalDeposited && aoProvider.mintedSupply) {
 				try {
-					const [daiResp, stEthResp] = await Promise.all([
+					const [daiResp, stEthResp, usdsResp] = await Promise.all([
 						readHandler({
 							processId: AO.daiPriceOracle,
 							action: 'Info',
@@ -373,15 +530,25 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							processId: AO.stEthPriceOracle,
 							action: 'Info',
 						}),
+						readHandler({
+							processId: AO.usdsPriceOracle,
+							action: 'Info',
+							ignoreDataResponse: true,
+						}),
 					]);
 
 					const daiPrice = Number(daiResp?.LastPrice) / 10000;
 					const daiYield = Number(daiResp?.LastYield) / 10000;
+
 					const stEthPrice = Number(stEthResp?.LastPrice) / 10000;
 					const stEthYield = Number(stEthResp?.LastYield) / 10000;
 
+					const usdsPrice = Number(usdsResp?.LastPrice) / 10000;
+					const usdsYield = Number(usdsResp?.LastYield) / 10000;
+
 					const totalDepositedSteth = Number(totalDeposited?.stEth?.value ?? BigInt(0));
 					const totalDepositedDai = Number(totalDeposited?.dai?.value ?? BigInt(0));
+					const totalDepositedUsds = Number(totalDeposited?.usds?.value ?? BigInt(0));
 
 					const ethReward = (days: number, amount: number) => {
 						return getEthReward(
@@ -411,8 +578,26 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						);
 					};
 
+					const usdsReward = (days: number, amount: number) => {
+						return getUsdsReward(
+							days,
+							amount,
+							aoProvider.mintedSupply,
+							totalDepositedSteth,
+							totalDepositedDai,
+							totalDepositedUsds,
+							stEthPrice,
+							stEthYield,
+							daiPrice,
+							daiYield,
+							usdsPrice,
+							usdsYield
+						);
+					};
+
 					setProjections({
 						stEth: {
+							price: stEthPrice,
 							monthly: {
 								amount: ethReward(30, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
 								ratio: ethReward(30, 1),
@@ -423,6 +608,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							},
 						},
 						dai: {
+							price: daiPrice,
 							monthly: {
 								amount: daiReward(30, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
 								ratio: daiReward(30, 1),
@@ -430,6 +616,17 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							yearly: {
 								amount: daiReward(365, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
 								ratio: daiReward(365, 1),
+							},
+						},
+						usds: {
+							price: usdsPrice,
+							monthly: {
+								amount: usdsReward(30, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: usdsReward(30, 1),
+							},
+							yearly: {
+								amount: usdsReward(365, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: usdsReward(365, 1),
 							},
 						},
 					});
@@ -440,7 +637,21 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				setProjections(null);
 			}
 		})();
-	}, [walletAddress, tokens, balance, totalDeposited, aoProvider.mintedSupply, web3Provider]);
+	}, [tokens, totalDeposited, aoProvider.mintedSupply]);
+
+	React.useEffect(() => {
+		(async function () {
+			try {
+				const priceResp = await getPriceForToken('0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc');
+
+				if (priceResp) {
+					setAoPrice(priceResp.usd_price);
+				}
+			} catch (e: any) {
+				console.error('Error fetching AO price:', e);
+			}
+		})();
+	}, []);
 
 	const handleConnect = async () => {
 		try {
@@ -523,7 +734,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		}
 	}, []);
 
-	function getBalanceDisplay(amount: bigint) {
+	function getBalanceDisplay(amount: bigint | null): string {
+		if (amount === null) return '-';
 		if (amount === BigInt(0)) return '0';
 		return formatDisplayAmount(Web3.utils.fromWei(amount, 'ether'));
 	}
@@ -548,6 +760,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					web3Provider,
 					ensureMainnet,
 					connecting,
+					aoPrice,
+					lastArweaveAddress,
 				}}
 			>
 				{props.children}

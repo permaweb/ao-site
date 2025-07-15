@@ -1,3 +1,5 @@
+import { ethers } from 'ethers';
+
 import { ArWalletEnum } from './types';
 
 export const AO = {
@@ -9,6 +11,7 @@ export const AO = {
 	delegationOracle: 'cuxSKjGJ-WDB9PzSkVkVVrIBSh3DrYHYz44usQOj5yE',
 	stEthPriceOracle: 'wJV8FMkpoeLsTjJ6O7YZEuQgMqj-sDjPHhTeA73RsCc',
 	daiPriceOracle: '5q8vpzC5QAKOAJFM26MAKfZw1gwtw7WA_J2861ZiKhI',
+	usdsPriceOracle: 'qjOMZnan8Vo2gaLaOF1FXbFXOQOn_5sKbYspNSVRyNY',
 	yieldPreferences: 'pGpdfjH4XkjS_GPuFSPlkEJ3buIWWlI8q4-BqG7GiAo',
 	yieldHistorian: 'NRP0xtzeV9MHgwLmgD254erUB7mUjMBhBkYkNYkbNEo',
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
@@ -16,8 +19,13 @@ export const AO = {
 	piBalanceProcess: '4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs',
 	// delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
 	// yieldHistorian: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY', // staging
-	// flpFactory: 'JC0_BVWWf7xbmXUeKskDBRQ5fJo8fWgPtaEYMOf-Vbk', // staging
+	// flpFactory: 'JC0_BVWWf7xbmXUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
 	// piProcess: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots', // staging
+};
+
+export const SUPABASE = {
+	url: process.env.REACT_APP_SUPABASE_URL || '',
+	anonKey: process.env.REACT_APP_SUPABASE_ANON_KEY || '',
 };
 
 export const ETH_CONTRACTS = {
@@ -25,8 +33,12 @@ export const ETH_CONTRACTS = {
 	stEthBridge: '0xfE08D40Eee53d64936D3128838867c867602665c',
 	dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
 	daiBridge: '0x6A1B588B0684dACE1f53C5820111F400B3dbfeBf',
+	usds: '0xdc035d45d973e3ec169d2276ddab16f1e407384f',
+	usdsBridge: '0x7Cd01D5CaD4BA0CaEbA02583a5C61d35B23E08eB',
 	ethUsdPriceFeed: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
 	daiUsdPriceFeed: '0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9',
+	usdsUsdPriceFeed: '0x0000000000000000000000000000000000000000',
+	daiToUsdsUpgrade: '0x3225737a9bbb6473cb4a45b7244aca2befdb276a',
 };
 
 export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
@@ -66,6 +78,7 @@ export const ASSETS = {
 	edit: getTxEndpoint('SUWTk8Qtcub9EsP5PDF6-vzgKsP5Irg1bB9b8NImDDk'),
 	ethereum: getTxEndpoint('LmRXPMcmymzB5S_WpRgmmQtGMWoTHW7BFcmotOkKcGM'),
 	exchange: getTxEndpoint('KfE6Dh0j2pTLo4Z8U6fmk6mCRsB6O6NgxJpI_Vm0_wY'),
+	arrowRight: getTxEndpoint('Xkqtxc5_R8KSczygjl9iOk0LHv-GSbD8xhIw5IPIIuc'),
 	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
 	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
 	landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),
@@ -76,6 +89,7 @@ export const ASSETS = {
 	remove: getTxEndpoint('aKjWuVXkSeYOKzGP0MnnhHwoYUXqTHFMJfVCbqzYEo0'),
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
 	success: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
+	usds: getTxEndpoint('_BWFo1KkjR5t0Mg7mhS9Kme1q4JbxKZJYwg9sglm_UA'),
 	token: getTxEndpoint('f18VARM42GRSDY8UzZtEJrCsakbxluldOAnnED_V_Zk'),
 	view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
 	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
@@ -1033,6 +1047,337 @@ export const DaiBridge_ABI = [
 	},
 ];
 
+export const UsdsBridge_ABI = [
+	{ inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: false, internalType: 'address', name: 'previousAdmin', type: 'address' },
+			{ indexed: false, internalType: 'address', name: 'newAdmin', type: 'address' },
+		],
+		name: 'AdminChanged',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [{ indexed: true, internalType: 'address', name: 'beacon', type: 'address' }],
+		name: 'BeaconUpgraded',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: false, internalType: 'uint256', name: 'totalAssets', type: 'uint256' },
+			{ indexed: false, internalType: 'uint256', name: 'overplus', type: 'uint256' },
+		],
+		name: 'CalculateOverplusResult',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [{ indexed: false, internalType: 'uint8', name: 'version', type: 'uint8' }],
+		name: 'Initialized',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [{ indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' }],
+		name: 'OverplusBridged',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: true, internalType: 'address', name: 'previousOwner', type: 'address' },
+			{ indexed: true, internalType: 'address', name: 'newOwner', type: 'address' },
+		],
+		name: 'OwnershipTransferred',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [{ indexed: true, internalType: 'address', name: 'implementation', type: 'address' }],
+		name: 'Upgraded',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: true, internalType: 'address', name: 'user', type: 'address' },
+			{ indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+			{ indexed: false, internalType: 'bytes32', name: 'arweaveAddress', type: 'bytes32' },
+		],
+		name: 'UserStaked',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: true, internalType: 'address', name: 'user', type: 'address' },
+			{ indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+			{ indexed: false, internalType: 'bytes32', name: 'arweaveAddress', type: 'bytes32' },
+		],
+		name: 'UserWithdrawn',
+		type: 'event',
+	},
+	{
+		inputs: [
+			{ internalType: 'address', name: 'aoDistributionWallet_', type: 'address' },
+			{ internalType: 'uint128', name: 'withdrawLockPeriodAfterStake_', type: 'uint128' },
+			{ internalType: 'uint256', name: 'minimalStake_', type: 'uint256' },
+			{ internalType: 'uint128', name: 'lastUpdate_', type: 'uint128' },
+			{ internalType: 'address', name: 'refunderAddress_', type: 'address' },
+			{ internalType: 'address', name: 'fallbackAddress_', type: 'address' },
+			{ internalType: 'uint16', name: 'depositReferralCode_', type: 'uint16' },
+		],
+		name: 'Distribution_init',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'aoDistributionWallet',
+		outputs: [{ internalType: 'address', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{ inputs: [], name: 'bridgeOverplus', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+	{
+		inputs: [],
+		name: 'calculateOverplus',
+		outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'depositReferralCode',
+		outputs: [{ internalType: 'uint16', name: '', type: 'uint16' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'depositToken',
+		outputs: [{ internalType: 'address', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [{ internalType: 'address', name: 'user', type: 'address' }],
+		name: 'ejectStakedFunds',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'isNotUpgradeable',
+		outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'lastUpdate',
+		outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'minimalStake',
+		outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'owner',
+		outputs: [{ internalType: 'address', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'proxiableUUID',
+		outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{ inputs: [], name: 'removeUpgradeability', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+	{ inputs: [], name: 'renounceOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+	{
+		inputs: [
+			{ internalType: 'uint256', name: 'amount_', type: 'uint256' },
+			{ internalType: 'bytes32', name: 'arweaveAddress_', type: 'bytes32' },
+		],
+		name: 'stake',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'totalDepositedInVault',
+		outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
+		name: 'transferOwnership',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [{ internalType: 'address', name: 'newImplementation', type: 'address' }],
+		name: 'upgradeTo',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'address', name: 'newImplementation', type: 'address' },
+			{ internalType: 'bytes', name: 'data', type: 'bytes' },
+		],
+		name: 'upgradeToAndCall',
+		outputs: [],
+		stateMutability: 'payable',
+		type: 'function',
+	},
+	{
+		inputs: [{ internalType: 'address', name: 'user', type: 'address' }],
+		name: 'usersData',
+		outputs: [
+			{
+				components: [
+					{ internalType: 'uint128', name: 'lastStake', type: 'uint128' },
+					{ internalType: 'uint256', name: 'deposited', type: 'uint256' },
+				],
+				internalType: 'struct IDistribution.UserData',
+				name: '',
+				type: 'tuple',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'vault',
+		outputs: [{ internalType: 'contract IERC4626', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'vaultAddress',
+		outputs: [{ internalType: 'address', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'uint256', name: 'amount_', type: 'uint256' },
+			{ internalType: 'bytes32', name: 'arweaveAddress_', type: 'bytes32' },
+		],
+		name: 'withdraw',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'withdrawLockPeriodAfterStake',
+		outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+];
+
+export const DaiToUsdsUpgrade_ABI = [
+	{
+		inputs: [
+			{ internalType: 'address', name: 'daiJoin_', type: 'address' },
+			{ internalType: 'address', name: 'usdsJoin_', type: 'address' },
+		],
+		stateMutability: 'nonpayable',
+		type: 'constructor',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: true, internalType: 'address', name: 'caller', type: 'address' },
+			{ indexed: true, internalType: 'address', name: 'usr', type: 'address' },
+			{ indexed: false, internalType: 'uint256', name: 'wad', type: 'uint256' },
+		],
+		name: 'DaiToUsds',
+		type: 'event',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: true, internalType: 'address', name: 'caller', type: 'address' },
+			{ indexed: true, internalType: 'address', name: 'usr', type: 'address' },
+			{ indexed: false, internalType: 'uint256', name: 'wad', type: 'uint256' },
+		],
+		name: 'UsdsToDai',
+		type: 'event',
+	},
+	{
+		inputs: [],
+		name: 'dai',
+		outputs: [{ internalType: 'contract GemLike', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'daiJoin',
+		outputs: [{ internalType: 'contract DaiJoinLike', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'address', name: 'usr', type: 'address' },
+			{ internalType: 'uint256', name: 'wad', type: 'uint256' },
+		],
+		name: 'daiToUsds',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'usds',
+		outputs: [{ internalType: 'contract GemLike', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'usdsJoin',
+		outputs: [{ internalType: 'contract UsdsJoinLike', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{ internalType: 'address', name: 'usr', type: 'address' },
+			{ internalType: 'uint256', name: 'wad', type: 'uint256' },
+		],
+		name: 'usdsToDai',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+];
+
 export const Erc20_ABI = [
 	{ inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
 	{
@@ -1268,7 +1613,7 @@ export const PRICE_FEED_ABI = [
 
 export const REDIRECTS = {
 	arconnect: `https://arconnect.io`,
-	cookbook: `https://cookbook_ao.arweave.net`,
+	cookbook: `https://cookbook_ao.defi.ao`,
 	x: `http://x.com/aoTheComputer`,
 	github: `https://github.com/permaweb/ao`,
 	discord: `https://discord.gg/dYXtHwc9dc`,
@@ -1280,6 +1625,53 @@ export const REDIRECTS = {
 	viewblock: (address: string) => `https://viewblock.io/arweave/address/${address}`,
 	etherscan: (address: string) => `https://etherscan.io/address/${address}`,
 };
+
+export async function fetchTokenYield(tokenType: 'dai' | 'usds' | 'stEth'): Promise<number | null> {
+	try {
+		const provider = new ethers.JsonRpcProvider(ENDPOINTS.mainnetRpc);
+		const SECS = 365 * 24 * 3600;
+		const apy = (r: number) => (Math.pow(r, SECS) - 1) * 100;
+
+		switch (tokenType) {
+			case 'dai':
+				// DAI DSR (Maker Pot)
+				const dsrContract = new ethers.Contract(
+					'0x197e90f9fad81970ba7976f33cbd77088e5d7cf7',
+					['function dsr() view returns(uint256)'],
+					provider
+				);
+				const dsrValue = await dsrContract.dsr();
+				return apy(parseFloat(ethers.formatUnits(dsrValue, 27)));
+
+			case 'usds':
+				// USDS SSR (Sky Savings Rate)
+				const ssrContract = new ethers.Contract(
+					'0xa3931d71877c0e7a3148cb7eb4463524fec27fbd',
+					['function ssr() view returns(uint256)'],
+					provider
+				);
+				const ssrValue = await ssrContract.ssr();
+				return apy(parseFloat(ethers.formatUnits(ssrValue, 27)));
+
+			case 'stEth':
+				// stETH 7-day SMA APR (already in %)
+				const stEthResponse = await fetch('https://eth-api.lido.fi/v1/protocol/steth/apr/sma');
+				const stEthData = await stEthResponse.json();
+				return +(
+					stEthData?.data?.smaApr ?? // new schema
+					stEthData?.data?.apr ?? // old schema
+					stEthData?.smaApr ?? // fallback
+					stEthData?.apr
+				);
+
+			default:
+				return null;
+		}
+	} catch (error) {
+		console.error(`Error fetching ${tokenType} yield:`, error);
+		return null;
+	}
+}
 
 export const ETH_EXCHANGE_CONFIG = {
 	arweave: {
@@ -1296,6 +1688,10 @@ AO tokens will become transferrable after 15% of the supply has been minted, on 
 		description: `66.6% of AO tokens are minted to users that bridge their assets to the network. Simply connect your wallet, deposit staked Ethereum, and earn AO.
 You can remove your deposited tokens at any time. You will begin to accrue AO 24 hours after your deposit has been confirmed.<br/><br/>AO tokens will become transferrable after 15% of the supply has been minted, on approximately February 8th, 2025. Learn more in the <a href="https://mirror.xyz/0x1EE4bE8670E8Bd7E9E2E366F530467030BE4C840/-UWra0q0KWecSpgg2-c37dbZ0lnOMEScEEkabVm9qaQ" target="_blank">blog post</a>.`,
 	},
+	usds: {
+		description: `66.6% of AO tokens are minted to users that bridge their assets to the network. Simply connect your wallet, deposit USDS, and earn AO.
+You will begin to accrue AO 24 hours after your deposit has been confirmed.<br/><br/>USDS has an 18-hour minimum lockup period. This means that you will not be able to remove your USDS from the bridge for 18 hours after depositing it.`,
+	},
 	cred: {
 		description: `Users that took part in AO testnet quests are able to convert their CRED tokens for AO-CLAIMs, at a rate of 1:1000.
 AO tokens have a 100% fair launch, with zero pre-allocations of any kind. As a consequence, the AO provided to those that convert their CRED will be purchased or earned via holding AR by ecosystem parties that have volunteered to do so.
@@ -1307,6 +1703,7 @@ AO-claims will become redeemable after 15% of the AO supply has been minted, on 
 export const ETH_EXCHANGE_REDIRECTS = {
 	ncc1: 'https://arweave.net/jZHVGxxxVpjGxD_uwpp-NSsezf9_z0r0evhDnV2hFNs',
 	ncc2: 'https://arweave.net/qWdHQIGjeAjc5U5O9gk_o2k4jRYO6khL1vOAGQzkd9Y',
+	ncc3: 'https://arweave.net/uJbexla4PpyQloxMHYuNqXOLTilYRxdweBKbUFjiMpQ',
 	morpheus:
 		'https://github.com/MorpheusAIs/Docs/blob/main/Security%20Audit%20Reports/Distribution%20Contract/Distribution%20V1%20Audit%20%7C%20Community.md',
 	codehawks:

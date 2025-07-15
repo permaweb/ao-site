@@ -2,6 +2,8 @@ import { ReactSVG } from 'react-svg';
 
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
+import { Loader } from '../Loader';
+
 import * as S from './styles';
 import { IProps } from './types';
 
@@ -63,7 +65,7 @@ export default function Button(props: IProps) {
 	function getLabel() {
 		return (
 			<>
-				{props.icon && props.iconLeftAlign && (
+				{props.icon && props.iconLeftAlign && !props.loading && (
 					<StyledIcon
 						warning={props.warning || false}
 						disabled={props.disabled}
@@ -73,8 +75,9 @@ export default function Button(props: IProps) {
 						<ReactSVG src={props.icon} />
 					</StyledIcon>
 				)}
-				<span>{props.loading ? `${language.loading}...` : props.label}</span>
-				{props.icon && !props.iconLeftAlign && (
+				{props.loading && props.iconLeftAlign && <Loader xSm relative noMargins />}
+				<span>{props.loading ? props.loadingText || `${language.loading}...` : props.label}</span>
+				{props.icon && !props.iconLeftAlign && !props.loading && (
 					<StyledIcon
 						warning={props.warning || false}
 						disabled={props.disabled}
@@ -84,6 +87,7 @@ export default function Button(props: IProps) {
 						<ReactSVG src={props.icon} />
 					</StyledIcon>
 				)}
+				{props.loading && !props.iconLeftAlign && <Loader xSm relative noMargins />}
 			</>
 		);
 	}

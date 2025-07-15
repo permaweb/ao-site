@@ -57,6 +57,14 @@ export default function ExchangeInfo(props: { token: TokenEarningsType }) {
 								<span>2</span>
 							</div>
 						</Link>
+						<Link to={ETH_EXCHANGE_REDIRECTS.ncc3} target={'_blank'}>
+							<div className={'ncc-audit-wrapper'}>
+								<div className={'ncc-audit'}>
+									<ReactSVG src={ASSETS.nccAudit} />
+								</div>
+								<span>3</span>
+							</div>
+						</Link>
 					</S.IconsLine>
 				</S.IconGroup>
 			</S.IconsWrapper>

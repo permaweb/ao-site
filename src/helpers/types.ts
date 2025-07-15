@@ -2,14 +2,15 @@ import React from 'react';
 
 export type AllocationTokenType = 'pi' | 'ao' | 'arweave';
 
-export type TokenEarningsType = 'ao' | 'arweave' | EthTokenEnum.StEth | EthTokenEnum.DAI;
+export type TokenEarningsType = 'ao' | 'arweave' | EthTokenEnum.StEth | EthTokenEnum.DAI | EthTokenEnum.USDS;
 
 export enum EthTokenEnum {
 	StEth = 'stEth',
 	DAI = 'dai',
+	USDS = 'usds',
 }
 
-export type EthExchangeType = 'deposit' | 'withdraw';
+export type EthExchangeType = 'convert' | 'deposit' | 'withdraw';
 
 export type TokenBigIntType = { value: bigint | null; display: string | null };
 
@@ -21,20 +22,29 @@ export type TokenDepositType = {
 export type EthTotalDepositedType = {
 	[EthTokenEnum.StEth]: TokenBigIntType;
 	[EthTokenEnum.DAI]: TokenBigIntType;
+	[EthTokenEnum.USDS]: TokenBigIntType;
 	usdTotal: TokenBigIntType;
 };
 
 export type EthTokensType = {
 	[EthTokenEnum.StEth]: TokenDepositType;
 	[EthTokenEnum.DAI]: TokenDepositType;
+	[EthTokenEnum.USDS]: TokenDepositType;
 };
 
 export type EthTokensYieldProjectionsType = {
 	[EthTokenEnum.StEth]: {
+		price: number;
 		monthly: TokenProjectionType;
 		yearly: TokenProjectionType;
 	};
 	[EthTokenEnum.DAI]: {
+		price: number;
+		monthly: TokenProjectionType;
+		yearly: TokenProjectionType;
+	};
+	[EthTokenEnum.USDS]: {
+		price: number;
 		monthly: TokenProjectionType;
 		yearly: TokenProjectionType;
 	};

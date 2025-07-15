@@ -1,9 +1,13 @@
 import React from 'react';
 import { cacheExchange, Client, fetchExchange, gql } from 'urql';
 
-import { dryrun } from '@permaweb/aoconnect';
+import { connect, dryrun } from '@permaweb/aoconnect';
 
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
+
+export const afCu = connect({
+	CU_URL: 'https://cu-af.dataos.so',
+});
 
 export const goldsky = new Client({
 	url: ENDPOINTS.goldsky,
@@ -58,7 +62,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 		const cachedTimestamp = localStorage.getItem(TIMESTAMP_KEY);
 		const now = Date.now();
 
-		if (cachedValue && cachedTimestamp && now - parseInt(cachedTimestamp, 10) < CACHE_DURATION) {
+		if (!isNaN(Number(cachedValue)) && cachedTimestamp && now - parseInt(cachedTimestamp, 10) < CACHE_DURATION) {
 			setMintedSupply(Number(cachedValue));
 			return;
 		}
@@ -84,12 +88,13 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				}
 
 				const value = res.Output.data / AO_TOKEN_DENOMINATION;
+				if (isNaN(value)) throw new Error('Invalid minted supply value');
 				setMintedSupply(value);
 
 				localStorage.setItem(CACHE_KEY, value.toString());
 				localStorage.setItem(TIMESTAMP_KEY, now.toString());
 			} catch (error) {
-				console.error('Error during dryrun:', error);
+				console.error('Error during afCu.dryrun:', error);
 			}
 		})();
 	}, []);

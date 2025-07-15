@@ -35,11 +35,122 @@ export const FormWrapper = styled.div`
 export const TabsWrapper = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 20px;
+	gap: 0;
+	border-bottom: 2px solid ${(props) => props.theme.colors.border.alt1};
+	margin-bottom: 10px;
+`;
 
-	button {
-		flex: 1;
+export const TabButton = styled.button<{ active: boolean; disabled: boolean }>`
+	background: none;
+	border: none;
+	padding: 12px 0;
+	font-size: ${(props) => props.theme.typography.size.base};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	color: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.primary.alt1)};
+	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+	position: relative;
+	opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+	transition: color 0.2s ease;
+	flex: 1;
+	text-align: center;
+
+	&:hover {
+		color: ${(props) => !props.disabled && props.theme.colors.font.primary};
 	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: -2px;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: ${(props) => props.theme.colors.button.alt1.background};
+		transform: scaleX(${(props) => (props.active ? 1 : 0)});
+		transition: transform 0.2s ease;
+	}
+`;
+
+export const StepperWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 30px;
+	padding: 20px 0;
+`;
+
+export const StepperItem = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+	flex: 1;
+`;
+
+export const StepperStep = styled.div<{ active: boolean; completed: boolean }>`
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: ${(props) => props.theme.typography.size.small};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	border: 2px solid;
+	margin-bottom: 8px;
+	transition: all 0.3s ease;
+
+	${(props) => {
+		if (props.completed) {
+			return `
+				background: ${props.theme.colors.button.alt1.background};
+				border-color: ${props.theme.colors.button.alt1.background};
+				color: ${props.theme.colors.button.alt1.color};
+			`;
+		} else if (props.active) {
+			return `
+				background: transparent;
+				border-color: ${props.theme.colors.button.alt1.background};
+				color: ${props.theme.colors.button.alt1.background};
+			`;
+		} else {
+			return `
+				background: transparent;
+				border-color: ${props.theme.colors.border.alt1};
+				color: ${props.theme.colors.font.primary.alt1};
+			`;
+		}
+	}}
+`;
+
+export const StepperLabel = styled.span<{ active: boolean; completed: boolean }>`
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	text-align: center;
+	transition: color 0.3s ease;
+
+	color: ${(props) => {
+		if (props.completed || props.active) {
+			return props.theme.colors.font.primary;
+		} else {
+			return props.theme.colors.font.primary.alt1;
+		}
+	}};
+`;
+
+export const StepperConnector = styled.div<{ completed: boolean }>`
+	position: absolute;
+	top: 20px;
+	left: calc(50% + 20px);
+	right: calc(-50% + 20px);
+	height: 2px;
+	background: ${(props) =>
+		props.completed ? props.theme.colors.button.alt1.background : props.theme.colors.border.alt1};
+	transition: background 0.3s ease;
+	z-index: 1;
 `;
 
 export const Form = styled.div<{ invalid: boolean }>`
@@ -93,6 +204,88 @@ export const FormFieldAction = styled.div`
 	display: flex;
 	align-items: flex-end;
 	gap: 12.5px;
+`;
+
+export const YieldHeader = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 20px;
+
+	> span {
+		color: ${(props) => props.theme.colors.font.primary};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+	}
+`;
+
+export const YieldComparison = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	flex: 1;
+
+	> svg {
+		height: 20px;
+		width: 20px;
+		margin: 0;
+		color: ${(props) => props.theme.colors.font.primary.alt1};
+		flex-shrink: 0;
+	}
+`;
+
+export const YieldToken = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 16px;
+	background: ${(props) => props.theme.colors.container.alt1.background};
+	border-radius: ${STYLING.dimensions.radius.alt2};
+	flex-grow: 1;
+	height: fit-content;
+
+	svg {
+		height: 24px;
+		width: 24px;
+		margin: 0;
+		flex-shrink: 0;
+	}
+
+	span {
+		color: ${(props) => props.theme.colors.font.primary};
+		font-size: ${(props) => props.theme.typography.size.small};
+		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-weight: ${(props) => props.theme.typography.weight.bold};
+
+		&.yield {
+			color: ${(props) => props.theme.colors.button.alt1.background};
+			font-weight: ${(props) => props.theme.typography.weight.bold};
+			margin-left: auto;
+		}
+	}
+`;
+
+export const YieldDisplay = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 2px;
+	margin-left: auto;
+
+	span {
+		&.yield {
+			color: ${(props) => props.theme.colors.button.alt1.background};
+			font-weight: ${(props) => props.theme.typography.weight.bold};
+			font-size: ${(props) => props.theme.typography.size.small};
+		}
+
+		&.native {
+			color: ${(props) => props.theme.colors.font.primary.alt1};
+			font-size: ${(props) => props.theme.typography.size.xSmall};
+			font-weight: ${(props) => props.theme.typography.weight.regular};
+		}
+	}
 `;
 
 export const FormFieldLabel = styled.div<{ disabled: boolean }>`
@@ -156,4 +349,103 @@ export const EndActionsWrapper = styled.div`
 	align-items: center;
 	justify-content: flex-end;
 	gap: 15px;
+`;
+
+export const UpgradeCheckboxWrapper = styled.label`
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 15px;
+
+	input[type='checkbox'] {
+		margin-right: 10px;
+		height: 18px;
+		width: 18px;
+		&:disabled {
+			cursor: not-allowed;
+		}
+	}
+
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	color: ${(props) => props.theme.colors.font.primary.alt1};
+	font-weight: ${(props) => props.theme.typography.weight.medium};
+	cursor: pointer;
+`;
+
+export const ModalContentWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	padding: 20px;
+	p {
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.primary.alt1};
+		line-height: 1.6;
+	}
+`;
+
+export const ModalActions = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	gap: 15px;
+	margin-top: 10px;
+
+	button {
+		min-width: 120px; // Give buttons some minimum width
+	}
+`;
+
+export const CompleteScreen = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 20px;
+`;
+
+export const CompleteIcon = styled.div`
+	font-size: 60px;
+	color: ${(props) => props.theme.colors.button.alt1.background};
+	margin-bottom: 10px;
+`;
+
+export const CompleteTitle = styled.h2`
+	color: ${(props) => props.theme.colors.font.primary};
+	font-size: ${(props) => props.theme.typography.size.lg};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	margin: 0;
+`;
+
+export const CompleteMessage = styled.p`
+	color: ${(props) => props.theme.colors.font.primary.alt1};
+	font-size: ${(props) => props.theme.typography.size.base};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+	margin: 0;
+`;
+
+export const TxHashWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
+	max-width: 400px;
+`;
+
+export const TxHashLabel = styled.span`
+	color: ${(props) => props.theme.colors.font.primary};
+	font-size: ${(props) => props.theme.typography.size.small};
+	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-family: ${(props) => props.theme.typography.family.alt1};
+`;
+
+export const TxHash = styled.div`
+	background: ${(props) => props.theme.colors.container.alt1.background};
+	padding: 12px;
+	border-radius: ${STYLING.dimensions.radius.primary};
+	word-break: break-all;
+	color: ${(props) => props.theme.colors.font.primary};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	font-family: monospace;
+	margin-bottom: 8px;
 `;
