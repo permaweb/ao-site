@@ -278,10 +278,15 @@ export default function EthExchange(props: IProps) {
 						}
 
 						if (currentToken === EthTokenEnum.USDS) {
-							const gasEstimate = await bridgeContract.methods.stake(amountInWei, arweaveRecipient).estimateGas({
-								from: ethProvider.walletAddress,
-							});
-							const gas = ((BigInt(gasEstimate) * BigInt(11)) / BigInt(10)).toString();
+							let gas = undefined;
+							try {
+								const gasEstimate = await bridgeContract.methods.stake(amountInWei, arweaveRecipient).estimateGas({
+									from: ethProvider.walletAddress,
+								});
+								gas = ((BigInt(gasEstimate) * BigInt(11)) / BigInt(10)).toString();
+							} catch (error) {
+								console.error('Error estimating gas:', error);
+							}
 							const stake = await bridgeContract.methods.stake(amountInWei, arweaveRecipient).send({
 								from: ethProvider.walletAddress,
 								gas,
@@ -300,10 +305,15 @@ export default function EthExchange(props: IProps) {
 						break;
 					case 'withdraw':
 						if (effectiveToken === EthTokenEnum.USDS) {
-							const gasEstimate = await bridgeContract.methods.withdraw(amountInWei, arweaveRecipient).estimateGas({
-								from: ethProvider.walletAddress,
-							});
-							const gas = ((BigInt(gasEstimate) * BigInt(11)) / BigInt(10)).toString();
+							let gas = undefined;
+							try {
+								const gasEstimate = await bridgeContract.methods.withdraw(amountInWei, arweaveRecipient).estimateGas({
+									from: ethProvider.walletAddress,
+								});
+								gas = ((BigInt(gasEstimate) * BigInt(11)) / BigInt(10)).toString();
+							} catch (error) {
+								console.error('Error estimating gas:', error);
+							}
 							const withdraw = await bridgeContract.methods.withdraw(amountInWei, arweaveRecipient).send({
 								from: ethProvider.walletAddress,
 								gas,
