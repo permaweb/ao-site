@@ -1613,7 +1613,7 @@ export const PRICE_FEED_ABI = [
 
 export const REDIRECTS = {
 	arconnect: `https://arconnect.io`,
-	cookbook: `https://cookbook_ao.defi.ao`,
+	cookbook: `https://cookbook_ao.arweave.net`,
 	x: `http://x.com/aoTheComputer`,
 	github: `https://github.com/permaweb/ao`,
 	discord: `https://discord.gg/dYXtHwc9dc`,
