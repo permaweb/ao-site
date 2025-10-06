@@ -1,7 +1,7 @@
 import React from 'react';
 import { cacheExchange, Client, fetchExchange, gql } from 'urql';
 
-import { connect, dryrun } from '@permaweb/aoconnect';
+import { connect } from '@permaweb/aoconnect';
 
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 
@@ -69,25 +69,10 @@ export function AOProvider(props: { children: React.ReactNode }) {
 
 		(async function () {
 			try {
-				const res = await dryrun({
-					process: AO.token,
-					Owner: 'geZphdOvGxzLyPbZgLgrADGHBVAZaidotlZkvIAQiYg',
-					tags: [{ name: 'Action', value: 'Eval' }],
-					data: `
-				local bint = require('.bint')(256)
-				local function add(a,b) return bint(a) + bint(b) end
-				print(tostring(
-				  Utils.reduce(add, 0, Utils.values(Balances))
-				))
-			  `,
-				});
+				const res = await fetch(`${ENDPOINTS.aoStateNode(AO.token)}compute/token-info/supply`);
+				const supply = await res.text();
 
-				if (res.Error) {
-					console.log(res.Error);
-					return;
-				}
-
-				const value = res.Output.data / AO_TOKEN_DENOMINATION;
+				const value = Number(supply) / AO_TOKEN_DENOMINATION;
 				if (isNaN(value)) throw new Error('Invalid minted supply value');
 				setMintedSupply(value);
 

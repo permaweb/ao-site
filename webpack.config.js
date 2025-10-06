@@ -149,6 +149,22 @@ module.exports = {
 			'global.setImmediate': [require.resolve('timers'), 'setImmediate'],
 		}),
 		new webpack.NoEmitOnErrorsPlugin(),
+		new webpack.NormalModuleReplacementPlugin(
+			/qrcode\/lib\/browser\.js$/,
+			path.resolve(__dirname, 'src/helpers/qrcode-alias.js')
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/@reown\/appkit-ui.*\/utils\/qrcode\.js$/,
+			path.resolve(__dirname, 'src/helpers/qrcode-alias.js')
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/@reown\/appkit-ui.*\/utils\/QrCode\.js$/,
+			path.resolve(__dirname, 'src/helpers/qrcode-alias.js')
+		),
+		new webpack.IgnorePlugin({
+			resourceRegExp: /^porto$/,
+			contextRegExp: /@wagmi\/connectors/,
+		}),
 		isDevelopment && new ReactRefreshWebpackPlugin(),
 	].filter(Boolean),
 	resolve: {
@@ -164,6 +180,7 @@ module.exports = {
 			fs: false,
 			tls: false,
 			net: false,
+			'@react-native-async-storage/async-storage': false,
 			zlib: require.resolve('browserify-zlib'),
 			http: require.resolve('stream-http'),
 			https: require.resolve('https-browserify'),
