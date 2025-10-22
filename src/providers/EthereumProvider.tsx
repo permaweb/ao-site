@@ -537,14 +537,14 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						}),
 					]);
 
-					const daiPrice = Number(daiResp?.LastPrice) / 10000;
-					const daiYield = Number(daiResp?.LastYield) / 10000;
+					const daiPrice = Number(daiResp?.['Last-Price']) / 10000;
+					const daiYield = Number(daiResp?.['Last-Yield']) / 10000;
 
-					const stEthPrice = Number(stEthResp?.LastPrice) / 10000;
-					const stEthYield = Number(stEthResp?.LastYield) / 10000;
+					const stEthPrice = Number(stEthResp?.['Last-Price']) / 10000;
+					const stEthYield = Number(stEthResp?.['Last-Yield']) / 10000;
 
-					const usdsPrice = Number(usdsResp?.LastPrice) / 10000;
-					const usdsYield = Number(usdsResp?.LastYield) / 10000;
+					const usdsPrice = Number(usdsResp?.['Last-Price']) / 10000;
+					const usdsYield = Number(usdsResp?.['Last-Yield']) / 10000;
 
 					const totalDepositedSteth = Number(totalDeposited?.stEth?.value ?? BigInt(0));
 					const totalDepositedDai = Number(totalDeposited?.dai?.value ?? BigInt(0));
