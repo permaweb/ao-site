@@ -256,37 +256,17 @@ export function EthereumProvider(props: EthereumProviderProps) {
 				if (isNaN(totalUsdsDeposited)) throw new Error('Invalid totalUsdsDeposited');
 
 				const ethUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.ethUsdPriceFeed);
-				// const daiUsdFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.daiUsdPriceFeed);
-				// const usdUsdSFeed = new web3.eth.Contract(PRICE_FEED_ABI, ETH_CONTRACTS.usdsUsdPriceFeed);
 
 				const ethUsdPriceData = await ethUsdFeed.methods.latestRoundData().call();
-				// const daiUsdPriceData = await daiUsdFeed.methods.latestRoundData().call();
 
 				const ethUsdPrice = (ethUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
-				// const daiUsdPrice = (daiUsdPriceData as any).answer / BigInt(Math.pow(10, 8));
 				const daiUsdPrice = 1;
 				const usdsUsdPrice = 1;
-
-				// console.log('ethUsdPrice');
-				// console.log(ethUsdPrice);
-				// console.log('daiUsdPrice');
-				// console.log(daiUsdPrice);
-				// console.log('usdsUsdPrice')
-				// console.log(usdsUsdPrice)
 
 				const usdStEthValue = BigInt(Math.floor(totalStEthDeposited)) * BigInt(ethUsdPrice);
 				const usdDaiValue = BigInt(Math.floor(totalDaiDeposited)) * BigInt(daiUsdPrice);
 				const usdUsdsValue = BigInt(Math.floor(totalUsdsDeposited)) * BigInt(usdsUsdPrice);
 				const usdTotal = usdStEthValue + usdDaiValue + usdUsdsValue;
-
-				// console.log('usdStEthValue')
-				// console.log(usdStEthValue)
-				// console.log('usdDaiValue')
-				// console.log(usdDaiValue)
-				// console.log('usdUsdsValue')
-				// console.log(usdUsdsValue)
-				// console.log('usdTotal')
-				// console.log(usdTotal)
 
 				setTotalDeposited({
 					stEth: { value: totalStEthDeposited, display: formatDisplayAmount(totalStEthDeposited, 2) },
@@ -299,78 +279,6 @@ export function EthereumProvider(props: EthereumProviderProps) {
 			}
 		})();
 	}, []);
-
-	// async function sendMessage(msg, key) {
-	// 	function createDataItemSigner(wallet) {
-	// 		const signer = async ({ data, tags, target, anchor }) => {
-	// 			const dataItem = createData(data, key, { tags, target, anchor });
-	// 			return dataItem.sign(key).then(async () => ({
-	// 				id: await dataItem.id,
-	// 				raw: await dataItem.getRaw(),
-	// 			}));
-	// 		};
-
-	// 		return signer;
-	// 	}
-
-	// 	const signer = createDataItemSigner(key);
-	// 	const message = await connect().message({
-	// 		process: AO_MINT,
-	// 		signer,
-	// 		data: msg.Data || Date.now().toString(),
-	// 		tags: msg.Tags,
-	// 	});
-	// 	return await connect().result({ process: AO_MINT, message });
-	// }
-
-	// const connector = config.connectors.find((c) => c.name === 'MetaMask');
-
-	// const provider = {
-	// 	getSigner: () => ({
-	// 		signMessage: async (message: any) => {
-	// 			const arg = message instanceof String ? message : { raw: message };
-
-	// 			const ethAccount = getAccount(config);
-
-	// 			return await signMessage(config, {
-	// 				message: arg as any,
-	// 				account: ethAccount.address,
-	// 				connector: connector,
-	// 			});
-	// 		},
-	// 	}),
-	// };
-
-	// const signer = new InjectedEthereumSigner(provider as any);
-	// signer.setPublicKey = async () => {
-	// 	const message = 'Sign this message to connect';
-	// 	const ethAccount = getAccount(config);
-
-	// 	const signature = await signMessage(config, {
-	// 		message: message,
-	// 		account: ethAccount.address,
-	// 		connector: connector,
-	// 	});
-	// 	const hash = await hashMessage(message);
-	// 	const recoveredKey = await recoverPublicKey({
-	// 		hash,
-	// 		signature,
-	// 	});
-	// 	signer.publicKey = Buffer.from(toBytes(recoveredKey));
-	// };
-
-	// React.useEffect(() => {
-	// 	(async function () {
-	// 		await signer.setPublicKey();
-	// 		const TResult = await sendMessage({
-	// 			Tags: [
-	// 				{ name: 'Action', value: 'User.Get-Tokens' },
-	// 				// { name: 'Token', value: 'DAI' },
-	// 			],
-	// 		}, signer);
-	// 		console.log('SendMessage Result:', TResult);
-	// 	})();
-	// }, []);
 
 	/* StETH - DAI Balance and Deposited */
 	React.useEffect(() => {

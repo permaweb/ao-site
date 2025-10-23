@@ -2,7 +2,7 @@ import { createDataItemSigner, message, result, results } from '@permaweb/aoconn
 
 import { TagType } from 'helpers/types';
 import { getTagValue } from 'helpers/utils';
-import { afCu } from 'providers/AOProvider';
+import { cu } from 'providers/AOProvider';
 
 export async function messageResult(args: {
 	processId: string;
@@ -160,7 +160,7 @@ export async function readHandler(args: {
 	const tags = [{ name: 'Action', value: args.action }];
 	if (args.tags) tags.push(...args.tags);
 
-	const response = await afCu.dryrun({
+	const response = await cu.dryrun({
 		process: args.processId,
 		tags: tags,
 		data: JSON.stringify(args.data || {}),
