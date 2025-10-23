@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ReactSVG } from 'react-svg';
 
 import { AO, ASSETS, STYLING } from 'helpers/config';

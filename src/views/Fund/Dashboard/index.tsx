@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/react';
 import { useQuery } from '@tanstack/react-query';
 import { readHandler } from 'api';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
 
@@ -9,7 +9,7 @@ import Modal from 'components/molecules/Modal/Modal';
 import { AO, ASSETS, STYLING } from 'helpers/config';
 import { formatNumberAuto, formatTicker, parseBigIntAsNumber } from 'helpers/format';
 import { retryable } from 'helpers/network';
-import { formatAddress, formatDate } from 'helpers/utils';
+import { formatAddress } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 
 import { getFlps, getUserDelegations } from '../../../api/fair-launch-api';
@@ -20,7 +20,6 @@ import { Skeleton } from '../components/LoadingSkeletons';
 import { MyFlpTableRow } from '../components/MyFlpTableRow';
 import { PiFavicon } from '../components/PiFavicon';
 import { TokenAvatar } from '../components/TokenAvatar';
-import { TrendChart } from '../components/TrendChart';
 import * as S from '../styles';
 
 const DashboardContainer = styled.div`
@@ -28,29 +27,6 @@ const DashboardContainer = styled.div`
 	flex-direction: column;
 	gap: 40px;
 `;
-
-const mockDelegationRecords = [
-	{ timestamp: 1622505600000, value: 10 },
-	{ timestamp: 1625097600000, value: 200 },
-	{ timestamp: 1627776000000, value: 300 },
-	{ timestamp: 1630454400000, value: 400 },
-	{ timestamp: 1633046400000, value: 500 },
-];
-
-const chartData = {
-	labels: mockDelegationRecords.map((record) => formatDate(record.timestamp, 'dateString')),
-	datasets: [
-		{
-			data: mockDelegationRecords.map((record) => record.value),
-			borderColor: '#0DBD27',
-			backgroundColor: '#0DBD2733',
-			fill: true,
-			tension: 0.4,
-			pointRadius: 0,
-			borderWidth: 1,
-		},
-	],
-};
 
 export default function DashboardPage() {
 	const { data: allFlps } = useQuery({
@@ -164,7 +140,6 @@ export default function DashboardPage() {
 							<TokenAvatar logo={ASSETS.pi} size="xl" />
 						</S.StatValue>
 					</div>
-					{/* <TrendChart height={150} width={500} data={chartData} isLoading={!allFlps} /> */}
 				</S.StatCard>
 			)}
 
@@ -291,7 +266,7 @@ export default function DashboardPage() {
 				{!arProvider.walletAddress ? (
 					<S.SectionTitle style={{ margin: 'auto' }}>Connect wallet to view your delegations.</S.SectionTitle>
 				) : isLoading ? (
-					<div>
+					<div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
 						{isTablet ? (
 							[1, 2, 3].map((i) => (
 								<div
