@@ -66,7 +66,6 @@ async function getPriceForToken(processId: string): Promise<{ usd_price: number;
 		}
 
 		const data = await response.json();
-		console.log(data); // Should contain usd_price and denominator fields
 		return data;
 	} catch (error) {
 		console.error('Error fetching price from Supabase:', error);

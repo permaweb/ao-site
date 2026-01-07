@@ -17,7 +17,7 @@ export const HeaderWrapper = styled.div`
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.lg};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 	}
 
 	svg {
@@ -45,7 +45,7 @@ export const TabButton = styled.button<{ active: boolean; disabled: boolean }>`
 	border: none;
 	padding: 12px 0;
 	font-size: ${(props) => props.theme.typography.size.base};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
 	color: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.primary.alt1)};
 	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
@@ -97,7 +97,7 @@ export const StepperStep = styled.div<{ active: boolean; completed: boolean }>`
 	justify-content: center;
 	font-size: ${(props) => props.theme.typography.size.small};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	border: 2px solid;
 	margin-bottom: 8px;
 	transition: all 0.3s ease;
@@ -128,7 +128,7 @@ export const StepperStep = styled.div<{ active: boolean; completed: boolean }>`
 export const StepperLabel = styled.span<{ active: boolean; completed: boolean }>`
 	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	text-align: center;
 	transition: color 0.3s ease;
 
@@ -161,7 +161,7 @@ export const Form = styled.div<{ invalid: boolean }>`
 	input {
 		height: 75px;
 		font-size: ${(props) => props.theme.typography.size.xLg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.xBold};
 		color: ${(props) =>
 			!props.invalid ? props.theme.colors.font.primary : props.theme.colors.warning.primary} !important;
@@ -195,7 +195,7 @@ export const FormHeader = styled.div`
 	span {
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
 `;
@@ -215,7 +215,7 @@ export const YieldHeader = styled.div`
 	> span {
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
 `;
@@ -255,7 +255,7 @@ export const YieldToken = styled.div`
 	span {
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.small};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 
 		&.yield {
@@ -312,7 +312,7 @@ export const FormFieldLabel = styled.div<{ disabled: boolean }>`
 			props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xLg};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		text-transform: uppercase;
 	}
 `;
@@ -322,7 +322,7 @@ export const FormMessage = styled.div`
 		color: ${(props) => props.theme.colors.warning.primary};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 	}
 `;
 
@@ -413,14 +413,14 @@ export const CompleteTitle = styled.h2`
 	color: ${(props) => props.theme.colors.font.primary};
 	font-size: ${(props) => props.theme.typography.size.lg};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	margin: 0;
 `;
 
 export const CompleteMessage = styled.p`
 	color: ${(props) => props.theme.colors.font.primary.alt1};
 	font-size: ${(props) => props.theme.typography.size.base};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	margin: 0;
 `;
 
@@ -436,7 +436,7 @@ export const TxHashLabel = styled.span`
 	color: ${(props) => props.theme.colors.font.primary};
 	font-size: ${(props) => props.theme.typography.size.small};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const TxHash = styled.div`

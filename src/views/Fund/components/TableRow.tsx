@@ -34,7 +34,7 @@ const CardHeader = styled.div`
 	gap: 10px;
 
 	font-size: 13px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 const CardBody = styled.div`
@@ -55,7 +55,7 @@ const CardStat = styled.div`
 	}
 	.value {
 		font-size: 13px;
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		display: flex;
 		align-items: center;
 		gap: 6px;

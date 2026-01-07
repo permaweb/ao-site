@@ -33,7 +33,7 @@ export const WalletListItem = styled.button`
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.small};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 	}
 	&:hover {
 		background: ${(props) => props.theme.colors.container.primary.active};
@@ -65,7 +65,7 @@ export const WalletLink = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.small};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 	}
 	a {
 		text-decoration: underline;
@@ -84,7 +84,7 @@ export const TermsContainer = styled.div`
 export const TermsHeader = styled.h3`
 	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	color: ${(props) => props.theme.colors.font.primary};
 	margin-bottom: 15px;
 `;
@@ -97,7 +97,7 @@ export const TermsSection = styled.p`
 export const TermsTitle = styled.b`
 	font-size: ${(props) => props.theme.typography.size.xxxSmall};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	color: ${(props) => props.theme.colors.font.primary};
 	margin-bottom: 5px;
 `;
@@ -105,6 +105,6 @@ export const TermsTitle = styled.b`
 export const TermsText = styled.span`
 	font-size: ${(props) => props.theme.typography.size.xxxSmall};
 	font-weight: ${(props) => props.theme.typography.weight.medium};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	color: ${(props) => props.theme.colors.font.alt1};
 `;

@@ -32,7 +32,7 @@ export const Tab = styled.div`
 export const TabAction = styled.button<{ active: boolean; icon: boolean }>`
 	font-size: ${(props) => props.theme.typography.size.xLg};
 	font-weight: ${(props) => props.theme.typography.weight.medium};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	color: ${(props) => props.theme.colors.font.primary};
 	cursor: pointer;
 	&:hover {

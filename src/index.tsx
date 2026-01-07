@@ -27,6 +27,7 @@ const config = createConfig({
 
 const queryClient = new QueryClient();
 
+// TODO: Remove tanstack
 function Root() {
 	return (
 		<QueryClientProvider client={queryClient}>

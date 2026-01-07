@@ -45,7 +45,7 @@ export const Title = styled.p`
 	font-size: ${(props) => props.theme.typography.size.lg};
 	font-weight: ${(props) => props.theme.typography.weight.medium};
 	line-height: calc(${(props) => props.theme.typography.size.lg} + 5px);
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;

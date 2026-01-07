@@ -1,15 +1,10 @@
 import styled, { DefaultTheme } from 'styled-components';
 
 import { STYLING } from 'helpers/config';
-import { EthTokenEnum, TokenEarningsType } from 'helpers/types';
+import { BridgeTokenEarningsType, EthTokenEnum } from 'helpers/types';
 
-function getBalanceWrapper(type: TokenEarningsType, theme: DefaultTheme) {
+function getBalanceWrapper(type: BridgeTokenEarningsType, theme: DefaultTheme) {
 	switch (type) {
-		case 'ao':
-		case 'arweave':
-			return `
-				background: ${theme.colors.container.alt1.background};
-			`;
 		case EthTokenEnum.StEth:
 		case EthTokenEnum.DAI:
 		case EthTokenEnum.USDS:
@@ -20,9 +15,8 @@ function getBalanceWrapper(type: TokenEarningsType, theme: DefaultTheme) {
 	}
 }
 
-export const BalanceSection = styled.div<{ type: TokenEarningsType }>`
+export const BalanceSection = styled.div<{ type: BridgeTokenEarningsType }>`
 	width: 100%;
-	padding: 20px;
 	${(props) => getBalanceWrapper(props.type, props.theme)};
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		padding: 40px 25px;
@@ -36,6 +30,8 @@ export const BalanceHeaderWrapper = styled.div`
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: 20px;
+	padding: 20px;
+	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		flex-direction: column;
@@ -44,11 +40,12 @@ export const BalanceHeaderWrapper = styled.div`
 `;
 
 export const BalanceHeader = styled.div`
+	width: 100%;
 	span {
 		line-height: 1;
 		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;
@@ -93,7 +90,7 @@ export const BalanceWalletDropdown = styled.div`
 		align-items: center;
 		gap: 7.5px;
 		font-size: ${(props) => props.theme.typography.size.small};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 
@@ -142,7 +139,7 @@ export const BalanceWalletDropdownLine = styled.div`
 	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 	p {
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 
 		b {
 			font-weight: ${(props) => props.theme.typography.weight.regular};
@@ -161,9 +158,38 @@ export const BalanceBodyWrapper = styled.div`
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-	margin: 40px 0 0 0;
 	flex-wrap: wrap;
+	gap: 25px;
+	padding: 20px;
+`;
+
+export const BalanceQuantityLines = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
 	gap: 20px;
+`;
+
+export const BalanceQuantityLine = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 2.5px;
+
+	span,
+	p {
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+	}
+
+	span {
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+
+	p {
+		color: ${(props) => props.theme.colors.font.primary};
+	}
 `;
 
 export const BalanceQuantitySection = styled.div`
@@ -209,7 +235,7 @@ export const BalanceQuantityBody = styled.div`
 	p,
 	span {
 		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 	}
 
@@ -224,14 +250,6 @@ export const BalanceQuantityBody = styled.div`
 		height: 20px;
 		width: 20px;
 		margin: 6.5px 0 0 0;
-	}
-
-	#ao-logo {
-		svg {
-			height: 25px;
-			width: 25px;
-			margin: 6.5px 3.5px 0 0;
-		}
 	}
 `;
 
@@ -270,8 +288,18 @@ export const ActionWrapper = styled.div`
 	padding: 0 20px 20px 20px;
 `;
 
+export const ApyRow = styled.div`
+	display: flex;
+	align-items: flex-start;
+	gap: 15px;
+`;
+
 export const ApyText = styled.span`
-	color: ${(props) => props.theme.colors.button.alt1.background} !important;
+	font-size: ${(props) => props.theme.typography.size.small} !important;
+	font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+	color: ${(props) => props.theme.colors.indicator.active} !important;
+	display: flex;
+	margin: 0 0 1.5px 0;
 `;
 
 export const YieldContainer = styled.div`
@@ -281,19 +309,21 @@ export const YieldContainer = styled.div`
 `;
 
 export const HeaderRow = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 5px;
+`;
+
+export const HeaderRowStart = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 5px;
 `;
 
-export const ApyRow = styled.div`
-	display: flex;
-	align-items: flex-start;
-	gap: 6px;
-`;
-
 export const NativeYieldText = styled.span`
-	color: ${(props) => props.theme.colors.font.primary.alt1} !important;
+	color: ${(props) => props.theme.colors.font.alt1} !important;
 	font-size: ${(props) => props.theme.typography.size.xSmall} !important;
 	font-weight: ${(props) => props.theme.typography.weight.regular} !important;
 `;
@@ -318,5 +348,30 @@ export const ModalWrapper = styled.div`
 		color: ${(props) => props.theme.colors.font.primary.alt1};
 		line-height: 1.6;
 		margin: 0;
+	}
+`;
+
+export const NetworkDisconnected = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 25px;
+	padding: 20px 0 0 0;
+
+	p {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		color: ${(props) => props.theme.colors.font.primary};
+		margin: -10px 0 0 0;
+	}
+
+	svg {
+		height: 25px;
+		width: 25px;
+		color: ${(props) => props.theme.colors.font.primary};
+		fill: ${(props) => props.theme.colors.font.primary};
 	}
 `;

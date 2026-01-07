@@ -37,7 +37,7 @@ export const HeaderTooltip = styled.div`
 	button {
 		display: flex;
 		align-items: center;
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-size: ${(props) => props.theme.typography.size.base};
 		color: ${(props) => props.theme.colors.link.color};
@@ -108,7 +108,7 @@ export const PrimaryTokensInfo = styled.div`
 
 	span {
 		font-size: ${(props) => props.theme.typography.size.small};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		color: ${(props) => props.theme.colors.font.primary};
 		line-height: 1.65;
 	}
@@ -142,7 +142,7 @@ export const FooterWrapper = styled.div`
 
 	span {
 		font-size: ${(props) => props.theme.typography.size.small};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		color: ${(props) => props.theme.colors.font.primary};
 		line-height: 1.65;
 	}
@@ -151,7 +151,7 @@ export const FooterWrapper = styled.div`
 export const ModalWrapper = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;
@@ -159,7 +159,7 @@ export const ModalWrapper = styled.div`
 export const LoadingWrapper = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;

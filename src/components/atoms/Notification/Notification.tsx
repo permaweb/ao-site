@@ -36,7 +36,7 @@ export default function Notification(props: IProps) {
 			<S.Wrapper warning={props.type === 'warning'} className={'info'}>
 				<S.MessageWrapper>
 					<S.Icon warning={props.type === 'warning'}>
-						<ReactSVG src={props.type === 'warning' ? ASSETS.warning : ASSETS.success} />
+						<ReactSVG src={props.type === 'warning' ? ASSETS.close : ASSETS.success} />
 					</S.Icon>
 					<S.Message>{props.message}</S.Message>
 				</S.MessageWrapper>

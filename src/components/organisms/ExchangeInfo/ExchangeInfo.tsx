@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
 import { ASSETS, ETH_EXCHANGE_CONFIG, ETH_EXCHANGE_REDIRECTS } from 'helpers/config';
-import { TokenEarningsType } from 'helpers/types';
+import { BridgeTokenEarningsType } from 'helpers/types';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 
-export default function ExchangeInfo(props: { token: TokenEarningsType }) {
+export default function ExchangeInfo(props: { token: BridgeTokenEarningsType }) {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 

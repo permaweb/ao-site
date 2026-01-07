@@ -17,10 +17,10 @@ export const AO = {
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
 	piProcess: 'H1I09hGlSlqrvlQid4zBp-lleynE8bNo2Ep1u8xq0fQ',
 	piBalanceProcess: '4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs',
-	// delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
-	// yieldHistorian: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY', // staging
-	// flpFactory: 'JC0_BVWWf7xbmXUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
-	// piProcess: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots', // staging
+	// delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // Staging
+	// yieldHistorian: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY', // Staging
+	// flpFactory: 'JC0_BVWWf7xbmXUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // Staging
+	// piProcess: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots', // Staging
 };
 
 export const SUPABASE = {
@@ -50,7 +50,7 @@ export const ENDPOINTS = {
 	arTxEndpoint: (txId: string) => `https://arweave.net/${txId}`,
 	goldsky: `https://arweave-search.goldsky.com/graphql`,
 	mainnetRpc: `https://ethereum.publicnode.com`,
-	aoStateNode: (token: string) => `https://state.forward.computer/${token}~process@1.0/`,
+	aoStateNode: (token: string) => `https://state-a.forward.computer/${token}~process@1.0/`,
 };
 
 const getTxEndpoint = (txId: string) => ENDPOINTS.arTxEndpoint(txId);
@@ -95,7 +95,7 @@ export const ASSETS = {
 	view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
 	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
 	wander: getTxEndpoint('0nDLgQik8oWPr0nSVEwI9B8D-XMEptQagNdsdr_y6Jk'),
-	warning: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
+	warning: getTxEndpoint('667ltlFnNixyTj_CbCcOP_CWMz7MzLrfv5bAjZtKux4'),
 	website: getTxEndpoint('YBilSmUhX--T9vffUIDsCCrWoakxaxPqPVw7NCZNNVs'),
 	withdraw: getTxEndpoint('QOJLKefBz2xCPUbO8dEKB22aWv_zdQ6FYA_UWUriyJw'),
 	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
@@ -132,7 +132,7 @@ export const STYLING = {
 			height: '75px',
 		},
 		radius: {
-			primary: '10px',
+			primary: '0px',
 			alt1: '15px',
 			alt2: '5px',
 			alt3: '2.5px',

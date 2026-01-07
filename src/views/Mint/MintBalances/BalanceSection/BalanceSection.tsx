@@ -18,6 +18,7 @@ import { CloseHandler } from 'wrappers/CloseHandler';
 import * as S from './styles';
 import { IProps } from './types';
 
+// TODO: Tooltip with ao conversions included
 export default function BalanceSection(props: IProps) {
 	const arProvider = useArweaveProvider();
 	const ethProvider = useEthereumProvider();
@@ -28,7 +29,6 @@ export default function BalanceSection(props: IProps) {
 	const [currentNativeYield, setCurrentNativeYield] = React.useState<number | null>(null);
 
 	const [token, setToken] = React.useState<{
-		header: string | React.ReactNode;
 		ticker: string;
 		wallet: { label: string; icon: string; provider: any; redirect: (address: string) => string };
 		balance: { header: string; icon: string };
@@ -66,7 +66,6 @@ export default function BalanceSection(props: IProps) {
 				}
 
 				setCurrentNativeYield(nativeYieldValue);
-				console.log(`Native yield for ${props.type}:`, nativeYieldValue);
 			} catch (error) {
 				console.error('Error fetching yields:', error);
 			}
@@ -79,6 +78,10 @@ export default function BalanceSection(props: IProps) {
 		const allProjections = token?.wallet?.provider?.projections as EthTokensYieldProjectionsType;
 		const projections = getTokenProjections();
 		const aoPrice = token?.wallet?.provider?.aoPrice;
+
+		// TODO
+		setCurrentYield(6.6);
+
 		if (projections?.yearly?.ratio && aoPrice) {
 			let assetPrice;
 
@@ -95,56 +98,13 @@ export default function BalanceSection(props: IProps) {
 			}
 
 			const apy = ((projections.yearly.ratio * aoPrice) / assetPrice) * 100;
-			console.log('Projected APY', apy, aoPrice, assetPrice);
 			setCurrentYield(apy);
 		}
 	}, [token?.wallet?.provider?.projections, props.type]);
 
 	const tokens = React.useMemo(() => {
 		return {
-			ao: {
-				header: language.yourAO,
-				ticker: language.ao,
-				wallet: {
-					label: language.connectArWallet,
-					icon: ASSETS.arweave,
-					provider: arProvider,
-					redirect: (address: string) => REDIRECTS.viewblock(address),
-				},
-				balance: { header: language.currentBalance, icon: ASSETS.ao },
-			},
-			arweave: {
-				header: language.arLabel,
-				ticker: language.ar,
-				wallet: {
-					label: language.connectArWallet,
-					icon: ASSETS.arweave,
-					provider: arProvider,
-					redirect: (address: string) => REDIRECTS.viewblock(address),
-				},
-				balance: { header: language.currentBalance, icon: ASSETS.arweave },
-			},
 			stEth: {
-				header: (
-					<>
-						<S.HeaderRow>
-							{language.stEth}
-							<S.ApyRow>
-								{currentYield !== null ? (
-									<>
-										<S.ApyText>{`≈${currentYield.toFixed(1)}% APY`}</S.ApyText>
-										<ApyTooltip position="top" />
-									</>
-								) : (
-									<EllipsisLoader />
-								)}
-							</S.ApyRow>
-						</S.HeaderRow>
-						<S.NativeYieldText>
-							Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
-						</S.NativeYieldText>
-					</>
-				),
 				ticker: language.stEth,
 				wallet: {
 					label: language.connectEthWallet,
@@ -161,26 +121,6 @@ export default function BalanceSection(props: IProps) {
 				},
 			},
 			dai: {
-				header: (
-					<>
-						<S.HeaderRow>
-							{language.dai}
-							<S.ApyRow>
-								{currentYield !== null ? (
-									<>
-										<S.ApyText>{`≈${currentYield.toFixed(1)}% APY`}</S.ApyText>
-										<ApyTooltip position="top" />
-									</>
-								) : (
-									<EllipsisLoader />
-								)}
-							</S.ApyRow>
-						</S.HeaderRow>
-						<S.NativeYieldText>
-							Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
-						</S.NativeYieldText>
-					</>
-				),
 				ticker: language.dai,
 				wallet: {
 					label: language.connectEthWallet,
@@ -197,26 +137,6 @@ export default function BalanceSection(props: IProps) {
 				},
 			},
 			usds: {
-				header: (
-					<>
-						<S.HeaderRow>
-							{language.usds}
-							<S.ApyRow>
-								{currentYield !== null ? (
-									<>
-										<S.ApyText>{`≈${currentYield.toFixed(1)}% APY`}</S.ApyText>
-										<ApyTooltip position="top" />
-									</>
-								) : (
-									<EllipsisLoader />
-								)}
-							</S.ApyRow>
-						</S.HeaderRow>
-						<S.NativeYieldText>
-							Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
-						</S.NativeYieldText>
-					</>
-				),
 				ticker: language.usds,
 				wallet: {
 					label: language.connectEthWallet,
@@ -237,12 +157,6 @@ export default function BalanceSection(props: IProps) {
 
 	React.useEffect(() => {
 		switch (props.type) {
-			case 'ao':
-				setToken({ ...tokens.ao });
-				break;
-			case 'arweave':
-				setToken({ ...tokens.arweave });
-				break;
 			case EthTokenEnum.StEth:
 				setToken({ ...tokens.stEth });
 				break;
@@ -332,12 +246,6 @@ export default function BalanceSection(props: IProps) {
 	function getPrimaryBalance() {
 		if (!token.wallet?.provider?.walletAddress) return '-';
 		switch (props.type) {
-			case 'ao':
-				if (token.wallet?.provider?.aoBalance !== null) return formatDisplayAmount(token.wallet.provider.aoBalance);
-				return <EllipsisLoader />;
-			case 'arweave':
-				if (token.wallet?.provider?.balance !== null) return formatDisplayAmount(token.wallet.provider.balance);
-				return <EllipsisLoader />;
 			case EthTokenEnum.StEth:
 			case EthTokenEnum.DAI:
 				return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ?? <EllipsisLoader />;
@@ -350,10 +258,6 @@ export default function BalanceSection(props: IProps) {
 
 	function getTokenProjections() {
 		switch (props.type) {
-			case 'ao':
-				return mergeTokenProjections();
-			case 'arweave':
-				return token?.wallet?.provider?.projections;
 			case EthTokenEnum.StEth:
 			case EthTokenEnum.DAI:
 				return token?.wallet?.provider?.projections?.[props.type];
@@ -362,29 +266,6 @@ export default function BalanceSection(props: IProps) {
 			default:
 				return null;
 		}
-	}
-
-	function mergeTokenProjections() {
-		if (!arProvider.projections && !ethProvider.projections) return null;
-
-		return {
-			monthly: {
-				amount:
-					(arProvider.projections?.monthly?.amount ?? 0) +
-					(ethProvider.projections?.stEth?.monthly?.amount ?? 0) +
-					(ethProvider.projections?.dai?.monthly?.amount ?? 0) +
-					(ethProvider.projections?.usds?.monthly?.amount ?? 0),
-				ratio: null,
-			},
-			yearly: {
-				amount:
-					(arProvider.projections?.yearly?.amount ?? 0) +
-					(ethProvider.projections?.stEth?.yearly?.amount ?? 0) +
-					(ethProvider.projections?.dai?.yearly?.amount ?? 0) +
-					(ethProvider.projections?.usds?.yearly?.amount ?? 0),
-				ratio: null,
-			},
-		};
 	}
 
 	const copyAddress = React.useCallback(async (address: string) => {
@@ -402,9 +283,26 @@ export default function BalanceSection(props: IProps) {
 			<S.BalanceSection type={props.type} className={'fade-in'}>
 				<S.BalanceHeaderWrapper>
 					<S.BalanceHeader>
-						<span>{token.header}</span>
+						<S.HeaderRow>
+							<S.HeaderRowStart>
+								{token.ticker}
+								<S.ApyRow>
+									{currentYield !== null ? (
+										<>
+											<S.ApyText>{`≈${currentYield.toFixed(1)}% APY`}</S.ApyText>
+										</>
+									) : (
+										<EllipsisLoader />
+									)}
+								</S.ApyRow>
+							</S.HeaderRowStart>
+							{/* <ApyTooltip /> */}
+						</S.HeaderRow>
+						<S.NativeYieldText>
+							Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
+						</S.NativeYieldText>
 					</S.BalanceHeader>
-					<S.BalanceWalletWrapper>
+					{/* <S.BalanceWalletWrapper>
 						<CloseHandler
 							callback={() => {
 								setShowWalletDropdown(false);
@@ -447,126 +345,178 @@ export default function BalanceSection(props: IProps) {
 								</S.BalanceWalletDropdown>
 							)}
 						</CloseHandler>
-					</S.BalanceWalletWrapper>
+					</S.BalanceWalletWrapper> */}
 				</S.BalanceHeaderWrapper>
 				<S.BalanceBodyWrapper>
-					<S.BalanceQuantitySection>
-						<S.BalanceQuantityHeader>
-							<span className={'primary-text'}>{token.balance.header}</span>
-						</S.BalanceQuantityHeader>
-						<S.BalanceQuantityBody>
-							<ReactSVG id={props.type === 'ao' ? 'ao-logo' : ''} src={token.balance.icon} />
-							<p>{getPrimaryBalance()}</p>
-						</S.BalanceQuantityBody>
-					</S.BalanceQuantitySection>
-					<S.BalancesQuantityFlexSection>
-						<S.BalanceQuantityEndSection>
-							<S.BalanceQuantityHeader>
-								<span className={'primary-text'}>{language.thirtyDayProjection}</span>
-							</S.BalanceQuantityHeader>
-							<S.BalanceQuantityBody>
-								<p>
-									{(() => {
-										const projectionData = getTokenProjections();
-										if (projectionData) {
-											const amount = projectionData.monthly.amount;
-											if (amount === null || amount === 0) {
-												return '-';
+					{ethProvider.walletAddress ? (
+						<>
+							<S.BalanceQuantityLines>
+								<S.BalanceQuantityLine>
+									<span>{token.balance.header}</span>
+									<p>
+										{getPrimaryBalance()} {token.ticker}
+									</p>
+								</S.BalanceQuantityLine>
+								<S.BalanceQuantityLine>
+									<span>{language.thirtyDayProjection}</span>
+									<p>
+										{(() => {
+											const projectionData = getTokenProjections();
+											if (projectionData) {
+												const amount = projectionData.monthly.amount;
+												if (amount === null || amount === 0) {
+													return '-';
+												}
+												return <>{formatDisplayAmount(amount)}</>;
+											} else {
+												return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
 											}
-											return (
-												<>
-													<span className={'indicator'}>+</span>
-													{formatDisplayAmount(amount)}
-												</>
-											);
-										} else {
-											return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
-										}
-									})()}
-								</p>
-							</S.BalanceQuantityBody>
-							{props.type !== 'ao' && (
-								<S.BalanceQuantityFooter>
-									{getTokenProjections() ? (
-										<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
-											getTokenProjections().monthly.ratio
-										)} AO`}</span>
-									) : (
-										<span className={'primary-text'}>-</span>
-									)}
-								</S.BalanceQuantityFooter>
-							)}
-						</S.BalanceQuantityEndSection>
-						<S.BalanceQuantityEndSection>
-							<S.BalanceQuantityHeader>
-								<span className={'primary-text'}>{language.oneYearProjection}</span>
-							</S.BalanceQuantityHeader>
-							<S.BalanceQuantityBody>
-								<p>
-									{(() => {
-										const projectionData = getTokenProjections();
-										if (projectionData) {
-											const amount = projectionData.yearly.amount;
-											if (amount === null || amount === 0) {
-												return '-';
+										})()}{' '}
+										{token.ticker}
+									</p>
+								</S.BalanceQuantityLine>
+								<S.BalanceQuantityLine>
+									<span>{language.oneYearProjection}</span>
+									<p>
+										{(() => {
+											const projectionData = getTokenProjections();
+											if (projectionData) {
+												const amount = projectionData.yearly.amount;
+												if (amount === null || amount === 0) {
+													return '-';
+												}
+												return <>{formatDisplayAmount(amount)}</>;
+											} else {
+												return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
 											}
-											return (
-												<>
-													<span className={'indicator'}>+</span>
-													{formatDisplayAmount(amount)}
-												</>
-											);
-										} else {
-											return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
-										}
-									})()}
-								</p>
-							</S.BalanceQuantityBody>
-							{props.type !== 'ao' && (
-								<S.BalanceQuantityFooter>
-									{getTokenProjections() ? (
-										<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
-											getTokenProjections().yearly.ratio
-										)} AO`}</span>
-									) : (
-										<span className={'primary-text'}>-</span>
+										})()}{' '}
+										{token.ticker}
+									</p>
+								</S.BalanceQuantityLine>
+							</S.BalanceQuantityLines>
+							{/* <S.BalanceQuantitySection>
+								<S.BalanceQuantityHeader>
+									<span className={'primary-text'}>{token.balance.header}</span>
+								</S.BalanceQuantityHeader>
+								<S.BalanceQuantityBody>
+									<ReactSVG src={token.balance.icon} />
+									<p>{getPrimaryBalance()}</p>
+								</S.BalanceQuantityBody>
+							</S.BalanceQuantitySection> */}
+							{/* <S.BalancesQuantityFlexSection>
+								<S.BalanceQuantityEndSection>
+									<S.BalanceQuantityHeader>
+										<span className={'primary-text'}>{language.thirtyDayProjection}</span>
+									</S.BalanceQuantityHeader>
+									<S.BalanceQuantityBody>
+										<p>
+											{(() => {
+												const projectionData = getTokenProjections();
+												if (projectionData) {
+													const amount = projectionData.monthly.amount;
+													if (amount === null || amount === 0) {
+														return '-';
+													}
+													return (
+														<>
+															<span className={'indicator'}>+</span>
+															{formatDisplayAmount(amount)}
+														</>
+													);
+												} else {
+													return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
+												}
+											})()}
+										</p>
+									</S.BalanceQuantityBody>
+									<S.BalanceQuantityFooter>
+										{getTokenProjections() ? (
+											<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
+												getTokenProjections().monthly.ratio
+											)} AO`}</span>
+										) : (
+											<span className={'primary-text'}>-</span>
+										)}
+									</S.BalanceQuantityFooter>
+								</S.BalanceQuantityEndSection>
+								<S.BalanceQuantityEndSection>
+									<S.BalanceQuantityHeader>
+										<span className={'primary-text'}>{language.oneYearProjection}</span>
+									</S.BalanceQuantityHeader>
+									<S.BalanceQuantityBody>
+										<p>
+											{(() => {
+												const projectionData = getTokenProjections();
+												if (projectionData) {
+													const amount = projectionData.yearly.amount;
+													if (amount === null || amount === 0) {
+														return '-';
+													}
+													return (
+														<>
+															<span className={'indicator'}>+</span>
+															{formatDisplayAmount(amount)}
+														</>
+													);
+												} else {
+													return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
+												}
+											})()}
+										</p>
+									</S.BalanceQuantityBody>
+									<S.BalanceQuantityFooter>
+										{getTokenProjections() ? (
+											<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
+												getTokenProjections().yearly.ratio
+											)} AO`}</span>
+										) : (
+											<span className={'primary-text'}>-</span>
+										)}
+									</S.BalanceQuantityFooter>
+								</S.BalanceQuantityEndSection>
+							</S.BalancesQuantityFlexSection> */}
+							{token.action && (
+								<S.BalanceAction>
+									{(props.type === EthTokenEnum.DAI ||
+										(props.type === EthTokenEnum.USDS &&
+											ethProvider?.tokens?.[EthTokenEnum.DAI]?.balance?.value > 0 &&
+											ethProvider?.tokens?.[EthTokenEnum.USDS]?.balance?.value <= 0)) && (
+										<Button
+											type={'primary'}
+											label={
+												<S.ConvertButtonLabel>
+													<span>Swap DAI → USDS</span>
+												</S.ConvertButtonLabel>
+											}
+											handlePress={handleConvertPress}
+											disabled={showAction || token.wallet.provider.connecting}
+											height={55}
+											fullWidth
+										/>
 									)}
-								</S.BalanceQuantityFooter>
+									<Button
+										type={'primary'}
+										label={getActionLabel()}
+										handlePress={handleActionPress}
+										disabled={showAction || token.wallet.provider.connecting}
+										height={55}
+										fullWidth
+									/>
+								</S.BalanceAction>
 							)}
-						</S.BalanceQuantityEndSection>
-					</S.BalancesQuantityFlexSection>
-					{token.action && (
-						<S.BalanceAction>
-							{(props.type === EthTokenEnum.DAI ||
-								(props.type === EthTokenEnum.USDS &&
-									ethProvider?.tokens?.[EthTokenEnum.DAI]?.balance?.value > 0 &&
-									ethProvider?.tokens?.[EthTokenEnum.USDS]?.balance?.value <= 0)) && (
-								<Button
-									type={'alt1'}
-									label={
-										<S.ConvertButtonLabel>
-											<span>Swap DAI → USDS</span>
-										</S.ConvertButtonLabel>
-									}
-									handlePress={handleConvertPress}
-									icon={ASSETS.arrowRight}
-									iconLeftAlign
-									disabled={showAction || token.wallet.provider.connecting}
-									height={55}
-									fullWidth
-								/>
-							)}
+						</>
+					) : (
+						<S.NetworkDisconnected>
+							<ReactSVG src={ASSETS.wallet} />
+							<p>{language.connectEthWalletToViewRewards}</p>
 							<Button
-								type={props.type === EthTokenEnum.DAI ? 'indicator' : 'alt1'}
-								label={getActionLabel()}
-								handlePress={handleActionPress}
-								icon={token.wallet.provider.walletAddress ? token.action.icon : ASSETS.wallet}
-								iconLeftAlign
-								disabled={showAction || token.wallet.provider.connecting}
-								height={55}
+								type={'primary'}
+								label={language.connectWallet}
+								handlePress={handleWalletPress}
+								height={45}
 								fullWidth
 							/>
-						</S.BalanceAction>
+						</S.NetworkDisconnected>
 					)}
 				</S.BalanceBodyWrapper>
 			</S.BalanceSection>

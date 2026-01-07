@@ -83,7 +83,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				localStorage.setItem(CACHE_KEY, value.toString());
 				localStorage.setItem(TIMESTAMP_KEY, now.toString());
 			} catch (error) {
-				console.error('Error during afCu.dryrun:', error);
+				console.error('Error:', error);
 			}
 		})();
 	}, []);
@@ -145,6 +145,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 		${messageFields}
 	`;
 
+	// TODO: Atlas stats
 	async function getNetworkStats(): Promise<any[]> {
 		try {
 			const result = await goldsky.query<any>(networkStatsQuery, {}).toPromise();

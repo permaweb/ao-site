@@ -12,7 +12,7 @@ export const Header = styled.div`
 	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
 	span {
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-size: ${(props) => props.theme.typography.size.lg};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
@@ -32,7 +32,7 @@ export const ChartHeader = styled.div`
 	margin: 0 0 20px 0;
 	span {
 		font-size: ${(props) => props.theme.typography.size.small};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		color: ${(props) => props.theme.colors.font.alt1};
 	}
 `;
@@ -79,7 +79,7 @@ export const ChartKeyText = styled.p`
 export const Percentage = styled.p`
 	line-height: calc(${(props) => props.theme.typography.size.xSmall} + 5px);
 	font-size: ${(props) => props.theme.typography.size.xSmall};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
 	color: ${(props) => props.theme.colors.font.alt1};
 	padding: 0 !important;
@@ -95,7 +95,7 @@ export const SummaryHeader = styled.div`
 	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
 	span {
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-size: ${(props) => props.theme.typography.size.base};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
@@ -133,7 +133,7 @@ export const SummaryLineLabel = styled.div`
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
@@ -152,7 +152,7 @@ export const SummaryLineActions = styled.div`
 
 	button {
 		span {
-			font-family: ${(props) => props.theme.typography.family.alt1} !important;
+			font-family: ${(props) => props.theme.typography.family.primary} !important;
 			font-weight: ${(props) => props.theme.typography.weight.bold} !important;
 			text-decoration: underline;
 			text-decoration-thickness: 1.25px;
@@ -193,7 +193,7 @@ export const SummaryLinePercentage = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	P {
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
 		text-align: right;

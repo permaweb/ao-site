@@ -60,7 +60,7 @@ export const ContentWrapper = styled.div`
 		line-height: 1.5;
 		font-size: ${(props) => props.theme.typography.size.lg};
 		font-size: clamp(16px, 1.65vw, 18px);
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 		text-align: right;
@@ -72,7 +72,7 @@ export const ContentWrapper = styled.div`
 		a {
 			font-size: ${(props) => props.theme.typography.size.lg};
 			font-size: clamp(16px, 1.65vw, 18px);
-			font-family: ${(props) => props.theme.typography.family.alt1};
+			font-family: ${(props) => props.theme.typography.family.primary};
 			font-weight: ${(props) => props.theme.typography.weight.regular};
 			color: ${(props) => props.theme.colors.font.primary};
 			text-decoration: underline;
@@ -178,7 +178,7 @@ export const MetricsValue = styled.div`
 		height: 22.5px;
 		display: block;
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
@@ -228,7 +228,8 @@ export const LinksWrapper = styled.div`
 	}
 
 	a {
-		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-family: ${(props) => props.theme.typography.family.alt1};
 		line-height: 1;
 	}
 

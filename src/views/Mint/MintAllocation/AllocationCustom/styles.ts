@@ -22,7 +22,7 @@ export const Header = styled.div`
 export const HeaderTitle = styled.div`
 	p {
 		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
@@ -90,7 +90,7 @@ export const ProjectLogo = styled.div`
 export const ProjectTitle = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.xLg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
@@ -105,7 +105,7 @@ export const ProjectId = styled.button`
 	p,
 	span {
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
 
@@ -141,7 +141,7 @@ export const ProjectTicker = styled.div`
 	margin: 2.5px 0 0 0;
 	span {
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.alt2};
 		text-transform: uppercase;
@@ -171,7 +171,7 @@ export const ProjectLink = styled.div`
 export const ProjectIndex = styled.div<{ active: boolean }>`
 	span {
 		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => (props.active ? props.theme.colors.indicator.active : props.theme.colors.font.alt1)};
 	}
@@ -199,7 +199,7 @@ export const ProjectLongDescription = styled.div`
 		white-space: normal;
 		overflow: hidden;
 		line-height: 1.5;
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-size: ${(props) => props.theme.typography.size.small};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
@@ -254,7 +254,7 @@ export const ProjectInfoLine = styled.div`
 	}
 
 	p {
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-size: ${(props) => props.theme.typography.size.base};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
@@ -286,7 +286,7 @@ export const ProjectMarketCapValue = styled.div`
 		align-items: center;
 		gap: 2.5px;
 		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
 
@@ -317,7 +317,7 @@ export const IndicatorWrapper = styled.div`
 export const LoadingWrapper = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.small};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
 	}

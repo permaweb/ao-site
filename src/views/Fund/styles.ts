@@ -5,7 +5,7 @@ export const Container = styled.div``;
 
 export const DashboardLink = styled(Link)`
 	font-weight: bold;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	font-size: 14px;
 	text-decoration: underline;
 `;
@@ -83,7 +83,7 @@ export const StatValue = styled.div<{ isMobile?: boolean }>`
 	font-size: ${(props) => (props.isMobile ? '24px' : '32px')};
 	font-weight: 500;
 	color: #222326;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -104,7 +104,7 @@ export const StatSubValue = styled.div`
 	font-size: 12px;
 	font-weight: 500;
 	color: #222326;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const TabsContainer = styled.div`
@@ -118,7 +118,7 @@ export const TabsContainer = styled.div`
 
 export const Tab = styled.button<{ active: boolean }>`
 	min-width: 160px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	padding: 12px;
 	background-color: ${({ active }) => (active ? '#fff' : '#F2F2F2')};
 	border-radius: 50px;
@@ -149,7 +149,7 @@ export const SearchInput = styled.input<{ isTablet?: boolean; isMobile?: boolean
 	width: ${(props) => (props.isMobile ? '100%' : 'auto')};
 	padding: ${(props) => (props.isTablet || props.isMobile ? '15px 20px' : '20px 20px')};
 	border: none;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	color: #6a6a6a;
 	font-weight: 500;
 	font-size: 13px;
@@ -163,7 +163,7 @@ export const TableCell = styled.td<{ align?: 'left' | 'center' | 'right' }>`
 		border-bottom: 1px solid #eee;
 	}
 	font-size: 13px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	font-weight: 400;
 	vertical-align: middle;
 `;
@@ -246,7 +246,7 @@ export const FlpSelectorButton = styled.button`
 
 	font-size: 14px;
 	font-weight: 500;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const FlpSelectorDropdown = styled.div`
@@ -273,7 +273,7 @@ export const FlpSelectorItem = styled.button<{ selected?: boolean }>`
 	align-items: center;
 	gap: 10px;
 	font-size: 14px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	font-weight: ${(props) => props.theme.typography.weight.medium};
 	color: ${(props) => props.theme.colors.font?.primary || '#222326'};
 	padding: 8px 5px;
@@ -313,7 +313,7 @@ export const FlpSelectorDoneButton = styled.button`
 	cursor: pointer;
 	font-weight: 500;
 	font-size: 14px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	text-align: center;
 
 	&:hover {
@@ -372,7 +372,7 @@ export const FlpModalItem = styled.button<{ selected?: boolean }>`
 
 	.flp-name {
 		font-size: 14px;
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font?.primary || '#222326'};
 	}
@@ -421,7 +421,7 @@ export const ConnectButton = styled.button`
 	&:hover {
 		background-color: #f0f0f0;
 	}
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const SectionTitle = styled.h4`
@@ -463,14 +463,14 @@ export const CoreTokenHeader = styled.div`
 export const CoreTokenName = styled.div`
 	font-size: 18px;
 	font-weight: 500;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	line-height: 1;
 `;
 
 export const CoreTokenTicker = styled.span`
 	color: #ccc;
 	font-size: 12px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	line-height: 1;
 `;
 
@@ -543,7 +543,7 @@ export const SeeDetailsButton = styled.button<{ isCard?: boolean }>`
 	color: #333;
 	border: none;
 	cursor: pointer;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	font-size: 10px;
 	display: flex;
 	flex-direction: row;
@@ -609,13 +609,13 @@ export const DetailsTitle = styled.h3`
 	font-weight: 500;
 	margin: 0;
 	line-height: 1.2;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const DetailsTicker = styled.div`
 	color: #757575;
 	font-size: 14px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const CloseButton = styled.button`
@@ -652,7 +652,7 @@ export const DetailsStat = styled.div`
 	padding: 8px 0;
 	font-size: 16px;
 	font-weight: 500;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const DetailsSectionsGrid = styled.div`
@@ -665,7 +665,7 @@ export const DetailsSectionHeading = styled.h3`
 	font-size: 14px;
 	font-weight: 500;
 	margin: 0 0 10px 0;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	text-decoration: underline;
 `;
 
@@ -693,7 +693,7 @@ export const DetailsSectionLabel = styled.div`
 export const DetailsSectionValue = styled.div`
 	font-size: 14px;
 	font-weight: 600;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	color: #000;
 `;
 
@@ -716,7 +716,7 @@ export const DetailsDescription = styled.div`
 	font-size: 12px;
 	line-height: 2;
 	color: #6b6b6b;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const AllocationContainer = styled.div`
@@ -736,12 +736,12 @@ export const IdBlockContainer = styled.div`
 	background-color: #fff;
 	border-radius: 4px;
 	font-size: 12px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const ViewOnAoLink = styled(Link)`
 	font-size: 12px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 
 	&:hover {
 		text-decoration: underline;

@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
 	h4,
 	h5,
 	h6 {
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		color: ${(props) => props.theme.colors.font.primary};
 		overflow-wrap: anywhere;
@@ -48,7 +48,7 @@ export const Wrapper = styled.div`
 	a,
 	p,
 	li {
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 		overflow-wrap: anywhere;

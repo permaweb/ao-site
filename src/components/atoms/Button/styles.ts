@@ -51,7 +51,6 @@ export const Primary = styled.button<{
 	warning: boolean | undefined;
 	noTextTransform: boolean | undefined;
 }>`
-	border-radius: 4px;
 	position: relative;
 	background: ${(props) =>
 		props.warning
@@ -66,7 +65,7 @@ export const Primary = styled.button<{
 	max-width: ${(props) => (props.useMaxWidth ? STYLING.dimensions.button.width : '100%')};
 	overflow: hidden;
 	text-overflow: ellipsis;
-	padding: 0 15px;
+	padding: 0 17.5px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -126,8 +125,8 @@ export const Primary = styled.button<{
 		text-overflow: ellipsis;
 		overflow: hidden;
 		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.medium} !important;
-		font-family: ${(props) => props.theme.typography.family.alt1} !important;
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+		font-family: ${(props) => props.theme.typography.family.primary} !important;
 		letter-spacing: 0.35px;
 		color: ${(props) =>
 			props.warning
@@ -273,8 +272,9 @@ export const Alt2 = styled(Alt1)`
 		width: fit-content;
 		text-overflow: ellipsis;
 		overflow: hidden;
-		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+		font-size: ${(props) => props.theme.typography.size.small} !important;
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+		font-family: ${(props) => props.theme.typography.family.primary} !important;
 		text-transform: none;
 		color: ${(props) =>
 			props.active ? props.theme.colors.button.alt2.active.color : props.theme.colors.button.alt2.color} !important;
@@ -315,7 +315,7 @@ export const Alt3 = styled(Primary)`
 
 	span {
 		font-size: ${(props) => props.theme.typography.size.xxxSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
 		color: ${(props) =>
 			props.warning
 				? props.theme.colors.font.light1
@@ -415,7 +415,7 @@ export const Alt4 = styled(Primary)`
 
 	span {
 		font-size: ${(props) => props.theme.typography.size.xxxSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
 		color: ${(props) =>
 			props.warning
 				? props.theme.colors.font.light1

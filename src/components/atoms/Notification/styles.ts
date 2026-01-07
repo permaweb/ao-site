@@ -62,7 +62,7 @@ export const Message = styled.span`
 	color: ${(props) => props.theme.colors.font.light1};
 	font-weight: ${(props) => props.theme.typography.weight.bold} !important;
 	font-size: ${(props) => props.theme.typography.size.small} !important;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 export const Close = styled.div`
@@ -71,7 +71,7 @@ export const Close = styled.div`
 		span {
 			color: ${(props) => props.theme.colors.font.light1} !important;
 			font-size: ${(props) => props.theme.typography.size.small} !important;
-			font-family: ${(props) => props.theme.typography.family.alt1} !important;
+			font-family: ${(props) => props.theme.typography.family.primary} !important;
 		}
 		&:hover {
 			span {

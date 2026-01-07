@@ -2,7 +2,9 @@ import React from 'react';
 
 export type AllocationTokenType = 'pi' | 'ao' | 'arweave';
 
-export type TokenEarningsType = 'ao' | 'arweave' | EthTokenEnum.StEth | EthTokenEnum.DAI | EthTokenEnum.USDS;
+export type DefaultTokenEarningsType = 'ao' | 'arweave';
+
+export type BridgeTokenEarningsType = EthTokenEnum.StEth | EthTokenEnum.DAI | EthTokenEnum.USDS;
 
 export enum EthTokenEnum {
 	StEth = 'stEth',

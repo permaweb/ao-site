@@ -26,7 +26,7 @@ const CardHeader = styled.div`
 	align-items: center;
 	gap: 10px;
 	font-size: 13px;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;
 
 const CardFooter = styled.div`

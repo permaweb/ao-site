@@ -33,5 +33,5 @@ export const Divider = styled.div`
 export const Message = styled.p`
 	font-size: 18px;
 	margin: 0 10px 0 0;
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 `;

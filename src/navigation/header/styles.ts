@@ -67,7 +67,8 @@ export const DesktopNavWrapper = styled.div`
 	animation: ${open} ${transition2};
 
 	a {
-		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-family: ${(props) => props.theme.typography.family.alt1};
 		line-height: 1;
 	}
 

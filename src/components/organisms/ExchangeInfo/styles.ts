@@ -17,7 +17,7 @@ export const Description = styled.div`
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.small};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 
 		a {
 			color: ${(props) => props.theme.colors.font.primary};

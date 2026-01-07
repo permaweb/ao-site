@@ -3,14 +3,18 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
+import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
+import { ViewHeader } from 'components/atoms/ViewHeader';
 import { Modal } from 'components/molecules/Modal';
 import { SupplyChart } from 'components/molecules/SupplyChart';
 import { URLTabs } from 'components/molecules/URLTabs';
 import { ASSETS, REDIRECTS, URLS } from 'helpers/config';
-import { formatCount } from 'helpers/utils';
+import { DefaultTokenEarningsType, EthTokenEnum } from 'helpers/types';
+import { formatAddress, formatCount, formatDisplayAmount } from 'helpers/utils';
 import { Footer } from 'navigation/footer';
 import { useAOProvider } from 'providers/AOProvider';
+import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 import { Subtitle } from 'views/Fund/styles';
@@ -24,6 +28,7 @@ export default function Mint() {
 	const { active } = useParams();
 	const navigate = useNavigate();
 
+	const arProvider = useArweaveProvider();
 	const aoProvider = useAOProvider();
 	const ethProvider = useEthereumProvider();
 	const languageProvider = useLanguageProvider();
@@ -34,10 +39,6 @@ export default function Mint() {
 	const [aoSupply, setAOSupply] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
 	const [aoSupplyReset, setAOSupplyReset] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
 	const [currentMonth, setCurrentMonth] = React.useState<number | null>(null);
-
-	React.useEffect(() => {
-		if (!active) navigate(URLS.mintDeposits);
-	}, [navigate]);
 
 	React.useEffect(() => {
 		setAOSupply({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
@@ -53,125 +54,189 @@ export default function Mint() {
 		return supplyDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
 	}
 
+	function getTokenBalance(token: DefaultTokenEarningsType) {
+		if (!arProvider?.walletAddress) return '-';
+
+		let balance;
+
+		switch (token) {
+			case 'ao':
+				balance = 'aoBalance';
+				break;
+			case 'arweave':
+				balance = 'balance';
+				break;
+			default:
+				return null;
+		}
+
+		if (arProvider[balance] !== null) return <p>{formatDisplayAmount(arProvider[balance])}</p>;
+
+		return <EllipsisLoader />;
+	}
+
+	function getTokenProjections(token: DefaultTokenEarningsType) {
+		switch (token) {
+			case 'ao':
+				return mergeTokenProjections();
+			case 'arweave':
+				return arProvider?.projections;
+			default:
+				return null;
+		}
+	}
+
+	function mergeTokenProjections() {
+		if (!arProvider.projections && !ethProvider.projections) return null;
+
+		return {
+			monthly: {
+				amount:
+					(arProvider.projections?.monthly?.amount ?? 0) +
+					(ethProvider.projections?.stEth?.monthly?.amount ?? 0) +
+					(ethProvider.projections?.dai?.monthly?.amount ?? 0) +
+					(ethProvider.projections?.usds?.monthly?.amount ?? 0),
+				ratio: null,
+			},
+			yearly: {
+				amount:
+					(arProvider.projections?.yearly?.amount ?? 0) +
+					(ethProvider.projections?.stEth?.yearly?.amount ?? 0) +
+					(ethProvider.projections?.dai?.yearly?.amount ?? 0) +
+					(ethProvider.projections?.usds?.yearly?.amount ?? 0),
+				ratio: null,
+			},
+		};
+	}
+
+	function getTokenProjectionsDisplay(token: DefaultTokenEarningsType, period: 'monthly' | 'yearly') {
+		const projection = getTokenProjections(token)?.[period]?.amount;
+
+		if (projection) return <p>{formatDisplayAmount(projection)}</p>;
+
+		return <EllipsisLoader />;
+	}
+
 	return (
 		<>
-			<S.Wrapper>
-				<S.GlobalWrapper>
-					<S.InfoWrapper className={'fade-in'}>
-						<S.InfoHeader>
-							<ReactSVG src={ASSETS.plus} />
-							<p>{language.fairLaunch}</p>
-						</S.InfoHeader>
-						<S.InfoBody>
-							<p>{parse(language.mintSubheader)}</p>
-							<a href={REDIRECTS.tokenomics} target={'_blank'}>
-								{language.learnMore}
-							</a>
-						</S.InfoBody>
-					</S.InfoWrapper>
-					<S.MetricsWrapper className={'fade-in'}>
-						<S.Metrics>
-							<S.MetricsSection>
-								<S.MetricsValue>
-									<span className={'primary-text'}>{language.totalAOSupply}</span>
-								</S.MetricsValue>
-								<S.MetricsValueMain>
-									<ReactSVG id={'ao-logo'} src={ASSETS.ao} />
-									<p>
-										{aoSupply?.amount !== null ? (
-											aoSupply?.amount > 0 ? (
-												formatCount(aoSupply.amount.toFixed(4).toString())
-											) : (
-												'-'
-											)
-										) : (
-											<EllipsisLoader />
-										)}
-									</p>
-								</S.MetricsValueMain>
-								<S.MetricsValue>
-									<p>{getSupplyDate()}</p>
-								</S.MetricsValue>
-							</S.MetricsSection>
-						</S.Metrics>
-						<SupplyChart
-							currentValue={{ months: aoSupply?.monthsFromNow, supply: aoSupply?.amount }}
-							setCurrentValue={(updatedValue: { months: number; supply: number }) =>
-								setAOSupply({
-									monthsFromNow: updatedValue.months,
-									amount: updatedValue.supply,
-								})
-							}
-							setCurrentMonth={(value: number) => setCurrentMonth(value)}
-							handleReset={() => setAOSupply(aoSupplyReset)}
-						/>
-					</S.MetricsWrapper>
-				</S.GlobalWrapper>
-				<S.BalancesPrimaryWrapper>
-					<div>
-						<S.HeaderWrapper>
-							<S.HeaderInfoWrapper>
-								<S.HeaderInfo>
-									<h6>{language.network}</h6>
-								</S.HeaderInfo>
-							</S.HeaderInfoWrapper>
-							<S.HeaderTooltip>
-								<button onClick={() => setInfo(language.networkInfo)}>
-									<ReactSVG src={ASSETS.info} />
-									{language.infoTooltip}
-								</button>
-							</S.HeaderTooltip>
-						</S.HeaderWrapper>
-						<Subtitle>
-							Track overall network token emissions, total deposited assets, and your current and projected AO holdings.
-						</Subtitle>
-					</div>
-					<S.BalancesGlobalWrapper className={'border-wrapper-primary'}>
-						<S.BalanceQuantitySection>
-							<S.BalanceQuantityHeader>
-								<span className={'primary-text'}>{language.fairLaunchDeposits}</span>
-							</S.BalanceQuantityHeader>
-							<S.BalanceQuantityBody>
-								<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
-							</S.BalanceQuantityBody>
-						</S.BalanceQuantitySection>
-						<S.BalancesPrimaryFlexWrapper>
-							<S.BalanceQuantityEndSection>
-								<S.BalanceQuantityHeader>
-									<span className={'primary-text'}>{language.totalStEthBridged}</span>
-								</S.BalanceQuantityHeader>
-								<S.BalanceQuantityBody>
-									<ReactSVG src={ASSETS.stEth} />
-									<p>{ethProvider.totalDeposited?.stEth?.display ?? <EllipsisLoader />}</p>
-								</S.BalanceQuantityBody>
-							</S.BalanceQuantityEndSection>
-							<S.BalanceQuantityEndSection>
-								<S.BalanceQuantityHeader>
-									<span className={'primary-text'}>{language.totalDaiBridged}</span>
-								</S.BalanceQuantityHeader>
-								<S.BalanceQuantityBody>
-									<ReactSVG src={ASSETS.dai} />
-									<p>{ethProvider.totalDeposited?.dai?.display ?? <EllipsisLoader />}</p>
-								</S.BalanceQuantityBody>
-							</S.BalanceQuantityEndSection>
-							<S.BalanceQuantityEndSection>
-								<S.BalanceQuantityHeader>
-									<span className={'primary-text'}>{language.totalUsdsBridged}</span>
-								</S.BalanceQuantityHeader>
-								<S.BalanceQuantityBody>
-									<ReactSVG src={ASSETS.usds} />
-									<p>{ethProvider.totalDeposited?.usds?.display ?? <EllipsisLoader />}</p>
-								</S.BalanceQuantityBody>
-							</S.BalanceQuantityEndSection>
-						</S.BalancesPrimaryFlexWrapper>
-					</S.BalancesGlobalWrapper>
-					<BalanceSection type={'ao'} />
-				</S.BalancesPrimaryWrapper>
-				<MintBalances />
+			<S.Wrapper className={'fade-in'}>
+				<ViewHeader header={language.mint} />
+				<S.BodyWrapper>
+					<S.GlobalWrapper className={'fade-in border-wrapper-primary'}>
+						<S.GlobalSection>
+							<span>{language.globalFairLaunchDeposits}</span>
+							<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
+						</S.GlobalSection>
+						<S.GlobalSectionsFlex>
+							<S.GlobalSubSection>
+								<span>{language.totalStEthBridged}</span>
+								<p>{ethProvider.totalDeposited?.stEth?.display ?? <EllipsisLoader />}</p>
+							</S.GlobalSubSection>
+							<S.GlobalSubSection>
+								<span>{language.totalDaiBridged}</span>
+								<p>{ethProvider.totalDeposited?.dai?.display ?? <EllipsisLoader />}</p>
+							</S.GlobalSubSection>
+							<S.GlobalSubSection>
+								<span>{language.totalUsdsBridged}</span>
+								<p>{ethProvider.totalDeposited?.usds?.display ?? <EllipsisLoader />}</p>
+							</S.GlobalSubSection>
+						</S.GlobalSectionsFlex>
+					</S.GlobalWrapper>
+					<S.NetworkWrapper className={'fade-in border-wrapper-primary'}>
+						<S.NetworkHeaderWrapper>
+							<S.NetworkHeader>
+								<p>{language.yourNetworkRewards}</p>
+							</S.NetworkHeader>
+							<S.NetworkHeaderDivider />
+							<S.NetworkHeaderWallet>
+								{arProvider.walletAddress ? (
+									<>
+										<p>{formatAddress(arProvider.walletAddress, false)}</p>
+										<Button
+											type={'alt2'}
+											label={language.disconnect}
+											handlePress={() => arProvider.handleDisconnect()}
+										/>
+									</>
+								) : (
+									<>
+										<span>
+											{language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
+										</span>
+									</>
+								)}
+							</S.NetworkHeaderWallet>
+						</S.NetworkHeaderWrapper>
+						<S.NetworkBodyWrapper>
+							{arProvider.walletAddress ? (
+								<S.NetworkSectionsWrapper>
+									<S.NetworkSection>
+										<S.NetworkSectionHeader>
+											<span>{language.asset}</span>
+										</S.NetworkSectionHeader>
+										<S.NetworkSectionBody>
+											<S.NetworkSectionBodyValue>
+												<ReactSVG src={ASSETS.ao} />
+												{getTokenBalance('ao')}
+											</S.NetworkSectionBodyValue>
+											<S.NetworkSectionBodyValue>
+												<ReactSVG src={ASSETS.arweave} />
+												{getTokenBalance('arweave')}
+											</S.NetworkSectionBodyValue>
+										</S.NetworkSectionBody>
+									</S.NetworkSection>
+
+									<S.NetworkSection>
+										<S.NetworkSectionHeader>
+											<span>{language.thirtyDayProjectionAO}</span>
+										</S.NetworkSectionHeader>
+										<S.NetworkSectionBody>
+											<S.NetworkSectionBodyValue>
+												{getTokenProjectionsDisplay('ao', 'monthly')}
+											</S.NetworkSectionBodyValue>
+											<S.NetworkSectionBodyValue>
+												{getTokenProjectionsDisplay('arweave', 'monthly')}
+											</S.NetworkSectionBodyValue>
+										</S.NetworkSectionBody>
+									</S.NetworkSection>
+
+									<S.NetworkSection>
+										<S.NetworkSectionHeader>
+											<span>{language.oneYearProjectionAO}</span>
+										</S.NetworkSectionHeader>
+										<S.NetworkSectionBody>
+											<S.NetworkSectionBodyValue>
+												{getTokenProjectionsDisplay('ao', 'yearly')}
+											</S.NetworkSectionBodyValue>
+											<S.NetworkSectionBodyValue>
+												{getTokenProjectionsDisplay('arweave', 'yearly')}
+											</S.NetworkSectionBodyValue>
+										</S.NetworkSectionBody>
+									</S.NetworkSection>
+								</S.NetworkSectionsWrapper>
+							) : (
+								<S.NetworkDisconnected>
+									<ReactSVG src={ASSETS.wallet} />
+									<p>{language.connectArweaveWalletToViewRewards}</p>
+									<Button
+										type={'primary'}
+										label={language.connectWallet}
+										handlePress={() => arProvider.setWalletModalVisible(true)}
+										height={45}
+										width={175}
+									/>
+								</S.NetworkDisconnected>
+							)}
+						</S.NetworkBodyWrapper>
+					</S.NetworkWrapper>
+					<S.BalancesWrapper className={'border-wrapper-alt1'}>
+						<MintBalances />
+					</S.BalancesWrapper>
+				</S.BodyWrapper>
 				<Footer />
 			</S.Wrapper>
 			{info && (
-				<Modal header={'Earnings'} handleClose={() => setInfo(null)}>
+				<Modal header={language.earnings} handleClose={() => setInfo(null)}>
 					<S.ModalWrapper className={'modal-wrapper'}>
 						<span>{info}</span>
 					</S.ModalWrapper>

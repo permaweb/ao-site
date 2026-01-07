@@ -56,7 +56,7 @@ export const TokenSectionInfoWrapper = styled.div`
 export const TokenSectionTitle = styled.div`
 	p {
 		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
@@ -98,7 +98,7 @@ export const TokenBodyDescriptionWrapper = styled.div`
 	p {
 		line-height: 1.75;
 		font-size: ${(props) => props.theme.typography.size.small};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
@@ -140,7 +140,7 @@ export const TokenBodyQuantityValue = styled.div`
 	p,
 	span {
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
 

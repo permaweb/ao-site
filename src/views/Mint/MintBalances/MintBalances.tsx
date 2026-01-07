@@ -21,7 +21,7 @@ export default function MintBalances() {
 			<S.BalancesWrapper>
 				<S.BalancesBodyWrapper>
 					<S.BalancesBreakdownWrapper>
-						<div>
+						{/* <div>
 							<S.HeaderWrapper>
 								<S.HeaderInfoWrapper>
 									<S.HeaderInfo>
@@ -70,7 +70,7 @@ export default function MintBalances() {
 								holdings.
 							</Subtitle>
 						</div>
-						<BalanceSection type={'arweave'} />
+						<BalanceSection type={'arweave'} /> */}
 						<S.BalancesFlexWrapper>
 							<S.BalanceFlexSection>
 								<BalanceSection type={EthTokenEnum.StEth} />

@@ -41,7 +41,7 @@ export const Action = styled.button<{ active: boolean }>`
 
 export const ActionTitle = styled.div`
 	span {
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		font-size: ${(props) => props.theme.typography.size.xLg};
 		color: ${(props) => props.theme.colors.font.primary};
@@ -51,7 +51,7 @@ export const ActionTitle = styled.div`
 export const ActionDescription = styled.div`
 	p {
 		text-align: left;
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		font-size: ${(props) => props.theme.typography.size.base};
 		color: ${(props) => props.theme.colors.font.alt1};

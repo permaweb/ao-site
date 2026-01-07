@@ -45,7 +45,7 @@ export const HeaderTooltip = styled.div`
 	button {
 		display: flex;
 		align-items: center;
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-size: ${(props) => props.theme.typography.size.base};
 		color: ${(props) => props.theme.colors.link.color};
@@ -95,11 +95,11 @@ export const BalancesFlexWrapper = styled.div`
 	align-items: flex-start;
 	justify-content: space-between;
 	flex-wrap: wrap;
-	gap: 20px;
+	gap: 15px;
 `;
 
 export const BalanceFlexSection = styled.div`
-	width: calc(33.33% - 20px);
+	flex: 1;
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		width: 100%;
@@ -114,7 +114,7 @@ export const BalanceQuantityBody = styled.div`
 	p,
 	span {
 		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.xBold};
 	}
 
@@ -207,7 +207,7 @@ export const BalanceQuantityHeader = styled.div`
 export const ModalWrapper = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;
