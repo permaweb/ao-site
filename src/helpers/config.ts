@@ -50,7 +50,7 @@ export const ENDPOINTS = {
 	arTxEndpoint: (txId: string) => `https://arweave.net/${txId}`,
 	goldsky: `https://arweave-search.goldsky.com/graphql`,
 	mainnetRpc: `https://ethereum.publicnode.com`,
-	aoStateNode: (token: string) => `https://state.forward.computer/${token}~process@1.0/`,
+	aoStateNode: (token: string) => `https://state-a.forward.computer/${token}~process@1.0/`,
 };
 
 const getTxEndpoint = (txId: string) => ENDPOINTS.arTxEndpoint(txId);
