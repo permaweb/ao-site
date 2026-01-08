@@ -6,6 +6,7 @@ import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Notification } from 'components/atoms/Notification';
 import { Panel } from 'components/atoms/Panel';
+import { Tooltip } from 'components/atoms/Tooltip';
 import { EthExchange } from 'components/organisms/EthExchange';
 import { ASSETS, fetchTokenYield, REDIRECTS } from 'helpers/config';
 import { EthTokenEnum, EthTokensYieldProjectionsType, NotificationType } from 'helpers/types';
@@ -78,9 +79,6 @@ export default function BalanceSection(props: IProps) {
 		const allProjections = token?.wallet?.provider?.projections as EthTokensYieldProjectionsType;
 		const projections = getTokenProjections();
 		const aoPrice = token?.wallet?.provider?.aoPrice;
-
-		// TODO
-		setCurrentYield(6.6);
 
 		if (projections?.yearly?.ratio && aoPrice) {
 			let assetPrice;
@@ -278,6 +276,23 @@ export default function BalanceSection(props: IProps) {
 		}
 	}, []);
 
+	function renderProjectionAmount(period: 'monthly' | 'yearly') {
+		const projectionData = getTokenProjections();
+		if (projectionData) {
+			const amount = projectionData[period].amount;
+			if (amount === null || amount === 0) {
+				return '-';
+			}
+			return (
+				<>
+					{formatDisplayAmount(amount)} {token.ticker}
+				</>
+			);
+		} else {
+			return token.wallet?.provider?.walletAddress ? 'Loading...' : '-';
+		}
+	}
+
 	return token ? (
 		<>
 			<S.BalanceSection type={props.type} className={'fade-in'}>
@@ -296,6 +311,32 @@ export default function BalanceSection(props: IProps) {
 									)}
 								</S.ApyRow>
 							</S.HeaderRowStart>
+							<Tooltip
+								content={
+									<S.TooltipWrapper>
+										<p>{language.apyExplanation}</p>
+										<span>{language.nativeYieldExplanation}</span>
+										<S.BalanceQuantityFooter>
+											{getTokenProjections() ? (
+												<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
+													getTokenProjections().monthly.ratio
+												)} AO`}</span>
+											) : (
+												<span className={'primary-text'}>-</span>
+											)}
+										</S.BalanceQuantityFooter>
+										<S.BalanceQuantityFooter>
+											{getTokenProjections() ? (
+												<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
+													getTokenProjections().yearly.ratio
+												)} AO`}</span>
+											) : (
+												<span className={'primary-text'}>-</span>
+											)}
+										</S.BalanceQuantityFooter>
+									</S.TooltipWrapper>
+								}
+							/>
 							{/* <ApyTooltip /> */}
 						</S.HeaderRow>
 						<S.NativeYieldText>
@@ -359,39 +400,11 @@ export default function BalanceSection(props: IProps) {
 								</S.BalanceQuantityLine>
 								<S.BalanceQuantityLine>
 									<span>{language.thirtyDayProjection}</span>
-									<p>
-										{(() => {
-											const projectionData = getTokenProjections();
-											if (projectionData) {
-												const amount = projectionData.monthly.amount;
-												if (amount === null || amount === 0) {
-													return '-';
-												}
-												return <>{formatDisplayAmount(amount)}</>;
-											} else {
-												return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
-											}
-										})()}{' '}
-										{token.ticker}
-									</p>
+									<p>{renderProjectionAmount('monthly')}</p>
 								</S.BalanceQuantityLine>
 								<S.BalanceQuantityLine>
 									<span>{language.oneYearProjection}</span>
-									<p>
-										{(() => {
-											const projectionData = getTokenProjections();
-											if (projectionData) {
-												const amount = projectionData.yearly.amount;
-												if (amount === null || amount === 0) {
-													return '-';
-												}
-												return <>{formatDisplayAmount(amount)}</>;
-											} else {
-												return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
-											}
-										})()}{' '}
-										{token.ticker}
-									</p>
+									<p>{renderProjectionAmount('yearly')}</p>
 								</S.BalanceQuantityLine>
 							</S.BalanceQuantityLines>
 							{/* <S.BalanceQuantitySection>
@@ -477,23 +490,22 @@ export default function BalanceSection(props: IProps) {
 							</S.BalancesQuantityFlexSection> */}
 							{token.action && (
 								<S.BalanceAction>
-									{(props.type === EthTokenEnum.DAI ||
-										(props.type === EthTokenEnum.USDS &&
-											ethProvider?.tokens?.[EthTokenEnum.DAI]?.balance?.value > 0 &&
-											ethProvider?.tokens?.[EthTokenEnum.USDS]?.balance?.value <= 0)) && (
-										<Button
-											type={'primary'}
-											label={
-												<S.ConvertButtonLabel>
-													<span>Swap DAI → USDS</span>
-												</S.ConvertButtonLabel>
-											}
-											handlePress={handleConvertPress}
-											disabled={showAction || token.wallet.provider.connecting}
-											height={55}
-											fullWidth
-										/>
-									)}
+									{props.type === EthTokenEnum.USDS &&
+										ethProvider?.tokens?.[EthTokenEnum.DAI]?.balance?.value > 0 &&
+										ethProvider?.tokens?.[EthTokenEnum.USDS]?.balance?.value <= 0 && (
+											<Button
+												type={'primary'}
+												label={
+													<S.ConvertButtonLabel>
+														<span>Swap DAI → USDS</span>
+													</S.ConvertButtonLabel>
+												}
+												handlePress={handleConvertPress}
+												disabled={showAction || token.wallet.provider.connecting}
+												height={55}
+												fullWidth
+											/>
+										)}
 									<Button
 										type={'primary'}
 										label={getActionLabel()}
@@ -509,13 +521,7 @@ export default function BalanceSection(props: IProps) {
 						<S.NetworkDisconnected>
 							<ReactSVG src={ASSETS.wallet} />
 							<p>{language.connectEthWalletToViewRewards}</p>
-							<Button
-								type={'primary'}
-								label={language.connectWallet}
-								handlePress={handleWalletPress}
-								height={45}
-								fullWidth
-							/>
+							<Button type={'primary'} label={getWalletLabel()} handlePress={handleWalletPress} height={45} fullWidth />
 						</S.NetworkDisconnected>
 					)}
 				</S.BalanceBodyWrapper>

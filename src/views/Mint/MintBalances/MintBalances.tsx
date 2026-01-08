@@ -76,10 +76,10 @@ export default function MintBalances() {
 								<BalanceSection type={EthTokenEnum.StEth} />
 							</S.BalanceFlexSection>
 							<S.BalanceFlexSection>
-								<BalanceSection type={EthTokenEnum.DAI} />
+								<BalanceSection type={EthTokenEnum.USDS} />
 							</S.BalanceFlexSection>
 							<S.BalanceFlexSection>
-								<BalanceSection type={EthTokenEnum.USDS} />
+								<BalanceSection type={EthTokenEnum.DAI} />
 							</S.BalanceFlexSection>
 						</S.BalancesFlexWrapper>
 					</S.BalancesBreakdownWrapper>

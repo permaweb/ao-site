@@ -18,9 +18,6 @@ function getBalanceWrapper(type: BridgeTokenEarningsType, theme: DefaultTheme) {
 export const BalanceSection = styled.div<{ type: BridgeTokenEarningsType }>`
 	width: 100%;
 	${(props) => getBalanceWrapper(props.type, props.theme)};
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		padding: 40px 25px;
-	}
 `;
 
 export const BalanceHeaderWrapper = styled.div`
@@ -179,6 +176,9 @@ export const BalanceQuantityLine = styled.div`
 
 	span,
 	p {
+		display: flex;
+		align-items: center;
+		gap: 2.5px;
 		font-size: ${(props) => props.theme.typography.size.xSmall};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 	}
@@ -373,5 +373,25 @@ export const NetworkDisconnected = styled.div`
 		width: 25px;
 		color: ${(props) => props.theme.colors.font.primary};
 		fill: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const TooltipWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+
+	p {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+
+	span {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		color: ${(props) => props.theme.colors.font.alt1};
 	}
 `;

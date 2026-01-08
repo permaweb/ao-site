@@ -198,15 +198,15 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	.info {
-    padding: 0 5px 0.5px 5px;
-    background: ${(props) => props.theme.colors.tooltip.background};
-    border-radius: ${STYLING.dimensions.radius.alt2};
-    animation: ${open} ${transition2};
+    padding: 2.25px 5px;
+    background: ${(props) => props.theme.colors.tooltip.background} !important;
+    border-radius: ${STYLING.dimensions.radius.alt3};
+    animation: ${open} ${transition1};
     span {
-      color: ${(props) => props.theme.colors.tooltip.color};
-      font-size: ${(props) => props.theme.typography.size.xxxSmall};
-			font-family: ${(props) => props.theme.typography.family.primary};
-      font-weight: ${(props) => props.theme.typography.weight.bold};
+      color: ${(props) => props.theme.colors.tooltip.color} !important;
+      font-size: ${(props) => props.theme.typography.size.xxxSmall} !important;
+			font-family: ${(props) => props.theme.typography.family.primary} !important;
+      font-weight: ${(props) => props.theme.typography.weight.bold} !important;
       white-space: nowrap;
 	  }
   }

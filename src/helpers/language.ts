@@ -63,6 +63,7 @@ export const language = {
 		gettingPreferences: `Getting your preferences`,
 		gettingProjects: `Getting fair launch projects`,
 		gigaArmstrongInfo: `AO tokens are ultra scarce. At launch, there are only 1.03m of them. For comparison, there are 120 million Ether, 461 million Solana, and 55 billion Ripple tokens. You may prefer to refer to AO quantities in giga-Armstrongs -- 1,000,000,000 of its smallest units. Armstrongs are similar to Satoshis in Bitcoin.`,
+		help: 'Help',
 		infoTooltip: `How does this work?`,
 		landingHeader1: `Hyper.`,
 		landingHeader2: `Parallel.`,

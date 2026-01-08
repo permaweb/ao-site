@@ -96,12 +96,16 @@ export const BalancesFlexWrapper = styled.div`
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: 15px;
+
+	@media (max-width: ${STYLING.cutoffs.desktop}) {
+		flex-direction: column;
+	}
 `;
 
 export const BalanceFlexSection = styled.div`
 	flex: 1;
 
-	@media (max-width: ${STYLING.cutoffs.initial}) {
+	@media (max-width: ${STYLING.cutoffs.desktop}) {
 		width: 100%;
 	}
 `;

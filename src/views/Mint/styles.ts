@@ -22,6 +22,7 @@ export const GlobalWrapper = styled.div`
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		flex-direction: column;
 		gap: 0;
+		padding: 15px 0;
 	}
 `;
 
@@ -92,6 +93,11 @@ export const NetworkHeaderWrapper = styled.div`
 	gap: 20px;
 	padding: 23.5px 25px 20px 25px;
 	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
 `;
 
 export const NetworkHeader = styled.div`
@@ -107,6 +113,10 @@ export const NetworkHeaderDivider = styled.div`
 	height: 30px;
 	width: 1px;
 	border-right: 1px solid ${(props) => props.theme.colors.border.primary};
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		display: none;
+	}
 `;
 
 export const NetworkHeaderWallet = styled.div`
@@ -153,6 +163,10 @@ export const NetworkSectionsWrapper = styled.div`
 			border-right: 1px solid ${(props) => props.theme.colors.border.primary};
 		}
 	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		flex-direction: column;
+	}
 `;
 
 export const NetworkSection = styled.div`
@@ -180,6 +194,14 @@ export const NetworkSectionBody = styled.div`
 	> * {
 		&:not(:last-child) {
 			border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+		}
+	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		> * {
+			&:not(:last-child) {
+				border-bottom: none;
+			}
 		}
 	}
 `;
