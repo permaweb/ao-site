@@ -45,6 +45,7 @@ export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
 export const ETH_TOKEN_DENOMINATION = Math.pow(10, 18);
 
 export const ENDPOINTS = {
+	tx: (tx: string) => `https://arweave.net/${tx}`,
 	arBalance: (address: string) => `https://arweave.net/wallet/${address}/balance`,
 	arTotalSupply: `https://arweave.net/total_supply`,
 	arTxEndpoint: (txId: string) => `https://arweave.net/${txId}`,

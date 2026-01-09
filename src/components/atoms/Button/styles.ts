@@ -283,7 +283,9 @@ export const Alt2 = styled(Alt1)`
 
 export const IconAlt2 = styled(IconAlt1)`
 	svg {
-		margin: ${(props) => (props.leftAlign ? '3.5px 3.5px 0 0' : '3.5px 0 0 3.5px')};
+		height: 13.5px;
+		width: 13.5px;
+		margin: ${(props) => (props.leftAlign ? '2.5px 5.5px 0 0' : '2.5px 0 0 5.5px')};
 		color: ${(props) =>
 			props.disabled
 				? props.theme.colors.button.alt2.disabled.color

@@ -17,8 +17,8 @@ export default function Header() {
 	const [showPanel, setShowPanel] = React.useState<boolean>(false);
 
 	const paths: { path: string; label: string; target?: '_blank' }[] = [
-		// { path: URLS.delegate, label: 'DELEGATE' },
 		{ path: URLS.mint, label: language.mint },
+		{ path: URLS.delegate, label: language.delegate },
 		{ path: REDIRECTS.cookbook, label: language.build, target: '_blank' },
 	];
 

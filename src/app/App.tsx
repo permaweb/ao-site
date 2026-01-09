@@ -10,10 +10,9 @@ import * as S from './styles';
 
 const Landing = getLazyImport('Landing');
 const Mint = getLazyImport('Mint');
+const Delegate = getLazyImport('Delegate');
 const NotFound = getLazyImport('NotFound');
 const Policies = getLazyImport('Policies');
-const Fund = getLazyImport('Fund');
-const FundDashboard = getLazyImport('Fund/Dashboard');
 
 function getLazyImport(view: string) {
 	return lazy(() =>
@@ -91,9 +90,8 @@ export default function App() {
 					<Routes>
 						<Route path={URLS.base} element={<Landing />} />
 						<Route path={URLS.mint} element={<Mint />} />
+						<Route path={URLS.delegate} element={<Delegate />} />
 						<Route path={URLS.policies} element={<Policies />} />
-						<Route path={URLS.delegate} element={<Fund />} />
-						<Route path={URLS.delegateDashboard} element={<FundDashboard />} />
 						<Route path={'*'} element={<NotFound />} />
 					</Routes>
 				</Suspense>
