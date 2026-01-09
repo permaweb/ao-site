@@ -39,6 +39,8 @@ export default function Mint() {
 	const [aoSupply, setAOSupply] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
 	const [aoSupplyReset, setAOSupplyReset] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
 	const [currentMonth, setCurrentMonth] = React.useState<number | null>(null);
+	const [copiedAr, setCopiedAr] = React.useState<boolean>(false);
+	const [copiedEth, setCopiedEth] = React.useState<boolean>(false);
 
 	React.useEffect(() => {
 		setAOSupply({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
@@ -117,6 +119,22 @@ export default function Mint() {
 		return <EllipsisLoader />;
 	}
 
+	const copyArAddress = React.useCallback(async () => {
+		if (arProvider.walletAddress) {
+			await navigator.clipboard.writeText(arProvider.walletAddress);
+			setCopiedAr(true);
+			setTimeout(() => setCopiedAr(false), 2000);
+		}
+	}, [arProvider.walletAddress]);
+
+	const copyEthAddress = React.useCallback(async () => {
+		if (ethProvider.walletAddress) {
+			await navigator.clipboard.writeText(ethProvider.walletAddress);
+			setCopiedEth(true);
+			setTimeout(() => setCopiedEth(false), 2000);
+		}
+	}, [ethProvider.walletAddress]);
+
 	return (
 		<>
 			<S.Wrapper className={'fade-in'}>
@@ -148,24 +166,32 @@ export default function Mint() {
 								<p>{language.yourNetworkRewards}</p>
 							</S.NetworkHeader>
 							<S.NetworkHeaderDivider />
-							<S.NetworkHeaderWallet>
-								{arProvider.walletAddress ? (
-									<>
+							{arProvider.walletAddress ? (
+								<>
+									<S.NetworkHeaderWallet>
 										<p>{formatAddress(arProvider.walletAddress, false)}</p>
+									</S.NetworkHeaderWallet>
+									<S.NetworkHeaderWalletActions>
+										<Button
+											type={'alt2'}
+											label={copiedAr ? `${language.copied}!` : language.copyWalletAddress}
+											handlePress={copyArAddress}
+										/>
+										<S.NetworkHeaderDivider />
 										<Button
 											type={'alt2'}
 											label={language.disconnect}
 											handlePress={() => arProvider.handleDisconnect()}
 										/>
-									</>
-								) : (
-									<>
-										<span>
-											{language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
-										</span>
-									</>
-								)}
-							</S.NetworkHeaderWallet>
+									</S.NetworkHeaderWalletActions>
+								</>
+							) : (
+								<S.NetworkHeaderWallet>
+									<span>
+										{language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
+									</span>
+								</S.NetworkHeaderWallet>
+							)}
 						</S.NetworkHeaderWrapper>
 						<S.NetworkBodyWrapper>
 							{arProvider.walletAddress ? (
@@ -229,9 +255,62 @@ export default function Mint() {
 							)}
 						</S.NetworkBodyWrapper>
 					</S.NetworkWrapper>
-					<S.BalancesWrapper className={'border-wrapper-alt1'}>
+					<S.DepositsWrapper className={'fade-in border-wrapper-alt1'}>
+						<S.NetworkWrapper className={'border-wrapper-primary'}>
+							<S.NetworkHeaderWrapper>
+								<S.NetworkHeader>
+									<p>{language.deposits}</p>
+								</S.NetworkHeader>
+								<S.NetworkHeaderDivider />
+								{ethProvider.walletAddress ? (
+									<>
+										<S.NetworkHeaderWallet>
+											<p>{formatAddress(ethProvider.walletAddress, false)}</p>
+										</S.NetworkHeaderWallet>
+										<S.NetworkHeaderWalletActions>
+											<Button
+												type={'alt2'}
+												label={copiedEth ? `${language.copied}!` : language.copyWalletAddress}
+												handlePress={copyEthAddress}
+											/>
+											<S.NetworkHeaderDivider />
+											<Button
+												type={'alt2'}
+												label={language.disconnect}
+												handlePress={() => ethProvider.handleDisconnect()}
+											/>
+										</S.NetworkHeaderWalletActions>
+									</>
+								) : (
+									<S.NetworkHeaderWallet>
+										<span>
+											{language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
+										</span>
+									</S.NetworkHeaderWallet>
+								)}
+							</S.NetworkHeaderWrapper>
+							<S.NetworkBodyWrapper>
+								{ethProvider.walletAddress ? (
+									<S.NetworkBodyInfoLine>
+										<p>{language.depositInfo}</p>
+									</S.NetworkBodyInfoLine>
+								) : (
+									<S.NetworkDisconnected>
+										<ReactSVG src={ASSETS.wallet} />
+										<p>{language.connectEthWalletToViewDeposits}</p>
+										<Button
+											type={'primary'}
+											label={language.connectEthWallet}
+											handlePress={() => ethProvider.setWalletModalVisible(true)}
+											height={45}
+											width={175}
+										/>
+									</S.NetworkDisconnected>
+								)}
+							</S.NetworkBodyWrapper>
+						</S.NetworkWrapper>
 						<MintBalances />
-					</S.BalancesWrapper>
+					</S.DepositsWrapper>
 				</S.BodyWrapper>
 				<Footer />
 			</S.Wrapper>

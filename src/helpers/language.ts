@@ -30,6 +30,7 @@ export const language = {
 		connectToContinue: `Connect your wallet to continue`,
 		connecting: `Connecting`,
 		convert: `Convert`,
+		conversion: `Conversion`,
 		'convert-loading': `Converting...`,
 		copied: `Copied`,
 		copyWalletAddress: `Copy Wallet Address`,
@@ -91,8 +92,9 @@ export const language = {
 			<br />
 			<b>No Pre-mine, No Insider Allocation:</b> Ensuring a truly decentralized and equitable distribution.
 		`,
+		monthly: `Monthly`,
 		network: `Network`,
-		networkInfo: `Track overall network token emissions, total deposited assets, and your current and projected AO holdings.`,
+		depositInfo: `Track overall network token emissions, total deposited assets, and your current and projected AO holdings.`,
 		nextMintCycle: `Next Mint Cycle`,
 		none: `None`,
 		noProjectsFound: `No fair launch projects found`,
@@ -152,7 +154,8 @@ export const language = {
 		thirtyDayProjectionAO: `30d Projection (AO)`,
 		oneYearProjectionAO: `1y Projection (AO)`,
 		connectArweaveWalletToViewRewards: `Connect your Arweave Wallet to view rewards`,
-		connectEthWalletToViewRewards: `Connect ETH Wallet to view rewards`,
+		connectEthWalletToViewDeposits: `Connect ETH Wallet to view deposits`,
 		earnings: `Earnings`,
+		yearly: `Yearly`,
 	},
 };

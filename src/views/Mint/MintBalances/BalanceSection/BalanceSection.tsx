@@ -293,6 +293,22 @@ export default function BalanceSection(props: IProps) {
 		}
 	}
 
+	function renderConversionAmount(period: 'monthly' | 'yearly') {
+		return (
+			<S.BalanceQuantityFooter>
+				<p>{`${language[period]} ${language.conversion}: `}</p>
+				<div className={'quantity-divider'} />
+				{getTokenProjections() ? (
+					<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
+						getTokenProjections()[period].ratio
+					)} AO`}</span>
+				) : (
+					<span className={'primary-text'}>-</span>
+				)}
+			</S.BalanceQuantityFooter>
+		);
+	}
+
 	return token ? (
 		<>
 			<S.BalanceSection type={props.type} className={'fade-in'}>
@@ -304,7 +320,7 @@ export default function BalanceSection(props: IProps) {
 								<S.ApyRow>
 									{currentYield !== null ? (
 										<>
-											<S.ApyText>{`≈${currentYield.toFixed(1)}% APY`}</S.ApyText>
+											<S.ApyText>{`≈ ${currentYield.toFixed(1)}% APY`}</S.ApyText>
 										</>
 									) : (
 										<EllipsisLoader />
@@ -316,24 +332,9 @@ export default function BalanceSection(props: IProps) {
 									<S.TooltipWrapper>
 										<p>{language.apyExplanation}</p>
 										<span>{language.nativeYieldExplanation}</span>
-										<S.BalanceQuantityFooter>
-											{getTokenProjections() ? (
-												<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
-													getTokenProjections().monthly.ratio
-												)} AO`}</span>
-											) : (
-												<span className={'primary-text'}>-</span>
-											)}
-										</S.BalanceQuantityFooter>
-										<S.BalanceQuantityFooter>
-											{getTokenProjections() ? (
-												<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
-													getTokenProjections().yearly.ratio
-												)} AO`}</span>
-											) : (
-												<span className={'primary-text'}>-</span>
-											)}
-										</S.BalanceQuantityFooter>
+										<S.TooltipDivider />
+										{renderConversionAmount('monthly')}
+										{renderConversionAmount('yearly')}
 									</S.TooltipWrapper>
 								}
 							/>
@@ -392,6 +393,12 @@ export default function BalanceSection(props: IProps) {
 					{ethProvider.walletAddress ? (
 						<>
 							<S.BalanceQuantityLines>
+								<S.BalanceQuantityLine>
+									<span>{language.currentBalance}</span>
+									<p>
+										{ethProvider.tokens[props.type]?.balance?.display ?? '-'} {token.ticker}
+									</p>
+								</S.BalanceQuantityLine>
 								<S.BalanceQuantityLine>
 									<span>{token.balance.header}</span>
 									<p>
@@ -519,8 +526,8 @@ export default function BalanceSection(props: IProps) {
 						</>
 					) : (
 						<S.NetworkDisconnected>
-							<ReactSVG src={ASSETS.wallet} />
-							<p>{language.connectEthWalletToViewRewards}</p>
+							<ReactSVG src={ASSETS.info} />
+							<p>{language.connectEthWalletToViewDeposits}</p>
 							<Button type={'primary'} label={getWalletLabel()} handlePress={handleWalletPress} height={45} fullWidth />
 						</S.NetworkDisconnected>
 					)}

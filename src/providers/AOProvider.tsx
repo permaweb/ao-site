@@ -6,10 +6,12 @@ import { connect } from '@permaweb/aoconnect';
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 
 export const cu = connect({
+	MODE: 'legacy',
 	CU_URL: 'https://cu.ao-testnet.xyz',
 });
 
 export const afCu = connect({
+	MODE: 'legacy',
 	CU_URL: 'https://cu-af.dataos.so',
 });
 

@@ -83,6 +83,14 @@ export const GlobalSubSection = styled(GlobalSection)`
 	}
 `;
 
+export const DepositsWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	padding: 15px;
+`;
+
 export const NetworkWrapper = styled.div`
 	width: 100%;
 `;
@@ -110,7 +118,7 @@ export const NetworkHeader = styled.div`
 `;
 
 export const NetworkHeaderDivider = styled.div`
-	height: 30px;
+	height: 25px;
 	width: 1px;
 	border-right: 1px solid ${(props) => props.theme.colors.border.primary};
 
@@ -150,8 +158,27 @@ export const NetworkHeaderWallet = styled.div`
 	}
 `;
 
+export const NetworkHeaderWalletActions = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 17.5px;
+	margin: 0 0 0 auto;
+`;
+
 export const NetworkBodyWrapper = styled.div`
 	width: 100%;
+`;
+
+export const NetworkBodyInfoLine = styled.div`
+	width: 100%;
+	padding: 20px 25px;
+
+	p {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
 `;
 
 export const NetworkSectionsWrapper = styled.div`
@@ -251,10 +278,6 @@ export const NetworkDisconnected = styled.div`
 		color: ${(props) => props.theme.colors.font.primary};
 		fill: ${(props) => props.theme.colors.font.primary};
 	}
-`;
-
-export const BalancesWrapper = styled.div`
-	padding: 15px;
 `;
 
 export const ModalWrapper = styled.div`

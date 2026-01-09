@@ -65,6 +65,7 @@ export default defineConfig(({ mode }) => {
 		define: {
 			'process.env.REACT_APP_SUPABASE_URL': JSON.stringify(process.env.REACT_APP_SUPABASE_URL || ''),
 			'process.env.REACT_APP_SUPABASE_ANON_KEY': JSON.stringify(process.env.REACT_APP_SUPABASE_ANON_KEY || ''),
+			'process.browser': JSON.stringify(true),
 		},
 		build: {
 			sourcemap: false,

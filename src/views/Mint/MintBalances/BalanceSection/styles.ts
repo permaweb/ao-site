@@ -254,9 +254,36 @@ export const BalanceQuantityBody = styled.div`
 `;
 
 export const BalanceQuantityFooter = styled.div`
+	display: flex;
+	align-items: flex-end;
+	gap: 1.5px;
+	position: relative;
+
+	p {
+		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+		color: ${(props) => props.theme.colors.font.alt1} !important;
+		background: ${(props) => props.theme.colors.container.primary.background};
+		position: relative;
+		z-index: 1;
+		white-space: nowrap;
+	}
+
 	span {
-		font-size: ${(props) => props.theme.typography.size.xSmall};
-		color: ${(props) => props.theme.colors.font.alt1};
+		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+		font-weight: ${(props) => props.theme.typography.weight.medium} !important;
+		color: ${(props) => props.theme.colors.font.primary} !important;
+		margin-left: auto;
+		background: ${(props) => props.theme.colors.container.primary.background};
+		position: relative;
+		z-index: 1;
+		white-space: nowrap;
+	}
+
+	.quantity-divider {
+		height: 1px;
+		width: 100%;
+		border-top: 1px dotted ${(props) => props.theme.colors.border.alt2};
+		margin: 0 2.5px 5px 2.5px;
 	}
 `;
 
@@ -394,4 +421,11 @@ export const TooltipWrapper = styled.div`
 		font-size: ${(props) => props.theme.typography.size.xSmall};
 		color: ${(props) => props.theme.colors.font.alt1};
 	}
+`;
+
+export const TooltipDivider = styled.div`
+	height: 1px;
+	width: 100%;
+	border-top: 1px solid ${(props) => props.theme.colors.border.alt2};
+	margin: 12.5px 0;
 `;

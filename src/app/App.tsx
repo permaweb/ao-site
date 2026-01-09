@@ -50,7 +50,7 @@ export default function App() {
 
 		let lastScrollY = 0;
 		let ticking = false;
-		const borderColor = theme.colors.border.primary;
+		const borderColor = theme.colors.border.alt1;
 
 		const handleScroll = () => {
 			lastScrollY = window.scrollY;
