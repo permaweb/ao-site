@@ -43,6 +43,17 @@ export const BodyWrapper = styled.div`
 			border-right: 1px solid ${(props) => props.theme.colors.border.primary};
 		}
 	}
+
+	@media (max-width: ${STYLING.cutoffs.desktop}) {
+		flex-direction: column;
+
+		> * {
+			&:not(:last-child) {
+				border-right: none;
+				border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+			}
+		}
+	}
 `;
 
 export const BodySection = styled.div`
@@ -72,7 +83,7 @@ export const BodySectionHeader = styled.div`
 `;
 
 export const BodySectionDescription = styled.div`
-	min-height: 70px;
+	min-height: 100px;
 	margin: 10px 0 0 0;
 
 	p {

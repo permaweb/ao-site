@@ -32,7 +32,7 @@ export default function AllocationToken(props: IProps) {
 
 	const TOKENS = {
 		arweave: {
-			id: null, // TODO
+			id: null,
 			label: language.arLabel,
 			description: language.arDescription,
 			summary: language.arSummary,

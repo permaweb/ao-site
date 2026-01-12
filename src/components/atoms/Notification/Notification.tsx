@@ -33,7 +33,7 @@ export default function Notification(props: IProps) {
 
 	return show ? (
 		<Portal node={DOM.notification}>
-			<S.Wrapper warning={props.type === 'warning'} className={'info'}>
+			<S.Wrapper warning={props.type === 'warning'}>
 				<S.MessageWrapper>
 					<S.Icon warning={props.type === 'warning'}>
 						<ReactSVG src={props.type === 'warning' ? ASSETS.close : ASSETS.success} />

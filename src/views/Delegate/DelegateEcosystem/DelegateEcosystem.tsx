@@ -1,19 +1,51 @@
 import React from 'react';
-import { ReactSVG } from 'react-svg';
 
 import { Button } from 'components/atoms/Button';
-import { AO, ASSETS, ENDPOINTS } from 'helpers/config';
-import { formatPercentage } from 'helpers/utils';
+import { ASSETS, ENDPOINTS } from 'helpers/config';
+import { formatNumber, formatPercentage, getRelativeDate, parseBigIntAsNumber } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 
-function Project(props: { index: number; project: any }) {
+function Project(props: { index: number; project: any; totalDelegated: string }) {
+	const arProvider = useArweaveProvider();
+	const allocationProvider = useAllocationProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
+
+	function getAllocation() {
+		if (!arProvider.walletAddress) return <span>-</span>;
+
+		const existingRecord = allocationProvider.records?.find((allocation) => allocation.id === props.project.id);
+
+		if (existingRecord) {
+			return (
+				<>
+					<span>{formatPercentage(existingRecord.value)}</span>
+				</>
+			);
+		}
+
+		return (
+			<Button
+				type={'alt2'}
+				label={language.add}
+				handlePress={() =>
+					allocationProvider.addToken({
+						id: props.project.id,
+						label: props.project.flp_token_ticker,
+					})
+				}
+				icon={ASSETS.plus}
+			/>
+		);
+	}
+
 	return (
-		<S.TableBodyRow key={props.project.id}>
-			<S.TableBodyCell flex={0.075} align={'center'}>
+		<S.TableBodyRow>
+			<S.TableBodyCell flex={0.075} width={50} align={'center'}>
 				<span>{props.index}</span>
 			</S.TableBodyCell>
 			<S.TableBodyCell flex={1.5} align={'left'}>
@@ -25,16 +57,16 @@ function Project(props: { index: number; project: any }) {
 				<span>{props.project.flp_name ?? '-'}</span>
 			</S.TableBodyCell>
 			<S.TableBodyCell flex={1} align={'right'}>
-				<span>{props.project.accumulated_qty}</span>
+				<span>{formatNumber(props.totalDelegated)}</span>
 				<S.TableBodyImage hasImage={true} size={17.5}>
 					<img src={ASSETS.aoCircled} />
 				</S.TableBodyImage>
 			</S.TableBodyCell>
 			<S.TableBodyCell flex={1} align={'right'}>
-				<span>{props.project.created_at_ts}</span>
+				<span>{getRelativeDate(props.project.starts_at_ts)}</span>
 			</S.TableBodyCell>
 			<S.TableBodyCell flex={1} align={'right'}>
-				<span>25%</span>
+				{getAllocation()}
 			</S.TableBodyCell>
 		</S.TableBodyRow>
 	);
@@ -55,6 +87,19 @@ export default function DelegateEcosystem() {
 		}
 	}, [allocationProvider?.projects]);
 
+	const totalProjectYields = React.useMemo(() => {
+		if (!allocationProvider.totalDelegated || !allocationProvider.totalDelegated.combined) return {};
+
+		return Object.entries(allocationProvider.totalDelegated.combined).reduce((acc, [key, value]: any) => {
+			acc[key] = Number(parseBigIntAsNumber(value || '0', 12));
+			return acc;
+		}, {});
+	}, [allocationProvider.totalDelegated]);
+
+	const totalDelegatedByProject = (flpId) => {
+		return totalProjectYields[flpId] || 0;
+	};
+
 	return (
 		<S.Wrapper className={'border-wrapper-primary'}>
 			<S.HeaderWrapper>
@@ -64,7 +109,7 @@ export default function DelegateEcosystem() {
 			<S.BodyWrapper>
 				<S.TableNavigation></S.TableNavigation>
 				<S.TableHeaderRow>
-					<S.TableHeaderCell flex={0.075} align={'center'}>
+					<S.TableHeaderCell flex={0.075} width={50} align={'center'}>
 						<span>#</span>
 					</S.TableHeaderCell>
 					<S.TableHeaderCell flex={1.5} align={'left'}>
@@ -84,7 +129,14 @@ export default function DelegateEcosystem() {
 					{currentProjects ? (
 						<>
 							{currentProjects.map((project, index) => {
-								return <Project index={index} project={project} />;
+								return (
+									<Project
+										key={project.id}
+										index={index}
+										project={project}
+										totalDelegated={totalDelegatedByProject(project.id)}
+									/>
+								);
 							})}
 						</>
 					) : (

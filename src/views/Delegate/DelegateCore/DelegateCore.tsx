@@ -7,7 +7,6 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 
-// TODO
 export default function DelegateCore() {
 	const arProvider = useArweaveProvider();
 	const allocationProvider = useAllocationProvider();
@@ -20,6 +19,7 @@ export default function DelegateCore() {
 			name: 'Permaweb Index',
 			ticker: 'PI',
 			logo: ASSETS.pi,
+			disabled: false,
 			process: AO.piProcess,
 			description:
 				'Diversify your AO rewards with PI, a token representing the permaweb. PI is composed of 1/3 AO, 1/3 Arweave (AR), and 1/3 ecosystem project tokens.',
@@ -39,6 +39,7 @@ export default function DelegateCore() {
 			name: 'AO',
 			ticker: 'AO',
 			logo: ASSETS.aoCircled,
+			disabled: false,
 			process: arProvider.walletAddress,
 			description:
 				'Keep earning AO. Your AR holding yield and deposits will continue to accrue AO without any reallocation.',
@@ -59,7 +60,24 @@ export default function DelegateCore() {
 			);
 		}
 
-		return <Button type={'alt2'} label={language.add} handlePress={() => {}} icon={ASSETS.plus} />;
+		if (project.disabled) {
+			return <span>{`Coming Soon`}</span>;
+		}
+
+		return (
+			<Button
+				type={'alt2'}
+				label={language.add}
+				handlePress={() =>
+					allocationProvider.addToken({
+						id: project.id,
+						label: project.ticker,
+					})
+				}
+				disabled={project.disabled}
+				icon={ASSETS.plus}
+			/>
+		);
 	}
 
 	return (

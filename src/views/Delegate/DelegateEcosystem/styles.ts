@@ -57,8 +57,9 @@ export const TableHeaderRow = styled.div`
 	}
 `;
 
-export const TableHeaderCell = styled.div<{ flex: number; align: 'right' | 'left' | 'center' }>`
+export const TableHeaderCell = styled.div<{ flex: number; width?: number; align: 'right' | 'left' | 'center' }>`
 	height: 37.5px;
+	min-width: ${(props) => (props.width ? `${props.width}px` : 'none')};
 	display: flex;
 	align-items: center;
 	justify-content: ${(props) =>
@@ -97,8 +98,9 @@ export const TableBodyRow = styled.div`
 	}
 `;
 
-export const TableBodyCell = styled.div<{ flex: number; align: 'right' | 'left' | 'center' }>`
+export const TableBodyCell = styled.div<{ flex: number; width?: number; align: 'right' | 'left' | 'center' }>`
 	height: 50px;
+	min-width: ${(props) => (props.width ? `${props.width}px` : 'none')};
 	display: flex;
 	align-items: center;
 	justify-content: ${(props) =>

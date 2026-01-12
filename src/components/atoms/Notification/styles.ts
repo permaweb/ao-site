@@ -16,8 +16,11 @@ export const Wrapper = styled.div<{ warning: boolean | undefined }>`
 	align-items: center;
 	padding: 11.5px 17.5px !important;
 	gap: 45px;
+	background: ${(props) => props.theme.colors.tooltip.background} !important;
+	border-radius: ${STYLING.dimensions.radius.alt3};
 	border: 1px solid ${(props) => props.theme.colors.tooltip.background} !important;
 	border-radius: ${STYLING.dimensions.radius.alt2};
+	animation: ${open} ${transition1};
 
 	@media (max-width: ${STYLING.cutoffs.secondary}) {
 		min-width: 0;
@@ -60,7 +63,7 @@ export const Message = styled.span`
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	color: ${(props) => props.theme.colors.font.light1};
-	font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+	font-weight: ${(props) => props.theme.typography.weight.medium} !important;
 	font-size: ${(props) => props.theme.typography.size.small} !important;
 	font-family: ${(props) => props.theme.typography.family.primary};
 `;
@@ -70,7 +73,8 @@ export const Close = styled.div`
 	button {
 		span {
 			color: ${(props) => props.theme.colors.font.light1} !important;
-			font-size: ${(props) => props.theme.typography.size.small} !important;
+			font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+			font-weight: ${(props) => props.theme.typography.weight.medium} !important;
 			font-family: ${(props) => props.theme.typography.family.primary} !important;
 		}
 		&:hover {

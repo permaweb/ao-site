@@ -1,7 +1,6 @@
 import React from 'react';
 import { ReactSVG } from 'react-svg';
 
-import { ApyTooltip } from 'components/atoms/ApyTooltip';
 import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Notification } from 'components/atoms/Notification';
@@ -14,12 +13,10 @@ import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
-import { CloseHandler } from 'wrappers/CloseHandler';
 
 import * as S from './styles';
 import { IProps } from './types';
 
-// TODO: Tooltip with ao conversions included
 export default function BalanceSection(props: IProps) {
 	const arProvider = useArweaveProvider();
 	const ethProvider = useEthereumProvider();
@@ -44,7 +41,6 @@ export default function BalanceSection(props: IProps) {
 	const [showWalletDropdown, setShowWalletDropdown] = React.useState<boolean>(false);
 	const [showAction, setShowAction] = React.useState<boolean>(false);
 	const [actionResponse, setActionResponse] = React.useState<NotificationType | null>(null);
-	const [copied, setCopied] = React.useState<boolean>(false);
 	const [showDaiConvertModal, setShowDaiConvertModal] = React.useState<boolean>(false);
 
 	React.useEffect(() => {
@@ -234,13 +230,6 @@ export default function BalanceSection(props: IProps) {
 		return token?.wallet.label;
 	}
 
-	function handleWalletDisconnect() {
-		if (token.wallet.provider) {
-			token.wallet.provider.handleDisconnect();
-			setShowWalletDropdown(false);
-		}
-	}
-
 	function getPrimaryBalance() {
 		if (!token.wallet?.provider?.walletAddress) return '-';
 		switch (props.type) {
@@ -265,16 +254,6 @@ export default function BalanceSection(props: IProps) {
 				return null;
 		}
 	}
-
-	const copyAddress = React.useCallback(async (address: string) => {
-		if (address) {
-			if (address.length > 0) {
-				await navigator.clipboard.writeText(address);
-				setCopied(true);
-				setTimeout(() => setCopied(false), 2000);
-			}
-		}
-	}, []);
 
 	function renderProjectionAmount(period: 'monthly' | 'yearly') {
 		const projectionData = getTokenProjections();
@@ -344,50 +323,6 @@ export default function BalanceSection(props: IProps) {
 							Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
 						</S.NativeYieldText>
 					</S.BalanceHeader>
-					{/* <S.BalanceWalletWrapper>
-						<CloseHandler
-							callback={() => {
-								setShowWalletDropdown(false);
-							}}
-							active={showWalletDropdown}
-							disabled={!showWalletDropdown}
-						>
-							<S.BalanceWalletAction>
-								<Button
-									type={'primary'}
-									label={getWalletLabel()}
-									handlePress={handleWalletPress}
-									active={showWalletDropdown}
-									disabled={token.wallet.provider.connecting}
-									icon={token.wallet.icon}
-									iconLeftAlign
-									noTextTransform
-								/>
-							</S.BalanceWalletAction>
-							{showWalletDropdown && (
-								<S.BalanceWalletDropdown className={'border-wrapper-alt2 fade-in'}>
-									<S.BalanceWalletDropdownLine>
-										<p>{`${language.balance}:`}</p>
-										<ReactSVG src={token.wallet.icon} />
-										<p>
-											<b>{formatDisplayAmount(token.wallet.provider.balance)}</b>
-										</p>
-									</S.BalanceWalletDropdownLine>
-									<button onClick={() => copyAddress(token.wallet?.provider?.walletAddress)}>
-										<ReactSVG src={ASSETS.copy} /> {copied ? `${language.copied}!` : language.copyWalletAddress}
-									</button>
-									<button
-										onClick={() => window.open(token.wallet?.redirect(token.wallet?.provider?.walletAddress), '_blank')}
-									>
-										<ReactSVG src={ASSETS.view} /> {language.viewInExplorer}
-									</button>
-									<button id={'disconnect-action'} onClick={handleWalletDisconnect}>
-										<ReactSVG src={ASSETS.disconnect} /> {language.disconnect}
-									</button>
-								</S.BalanceWalletDropdown>
-							)}
-						</CloseHandler>
-					</S.BalanceWalletWrapper> */}
 				</S.BalanceHeaderWrapper>
 				<S.BalanceBodyWrapper>
 					{ethProvider.walletAddress ? (
@@ -414,87 +349,6 @@ export default function BalanceSection(props: IProps) {
 									<p>{renderProjectionAmount('yearly')}</p>
 								</S.BalanceQuantityLine>
 							</S.BalanceQuantityLines>
-							{/* <S.BalanceQuantitySection>
-								<S.BalanceQuantityHeader>
-									<span className={'primary-text'}>{token.balance.header}</span>
-								</S.BalanceQuantityHeader>
-								<S.BalanceQuantityBody>
-									<ReactSVG src={token.balance.icon} />
-									<p>{getPrimaryBalance()}</p>
-								</S.BalanceQuantityBody>
-							</S.BalanceQuantitySection> */}
-							{/* <S.BalancesQuantityFlexSection>
-								<S.BalanceQuantityEndSection>
-									<S.BalanceQuantityHeader>
-										<span className={'primary-text'}>{language.thirtyDayProjection}</span>
-									</S.BalanceQuantityHeader>
-									<S.BalanceQuantityBody>
-										<p>
-											{(() => {
-												const projectionData = getTokenProjections();
-												if (projectionData) {
-													const amount = projectionData.monthly.amount;
-													if (amount === null || amount === 0) {
-														return '-';
-													}
-													return (
-														<>
-															<span className={'indicator'}>+</span>
-															{formatDisplayAmount(amount)}
-														</>
-													);
-												} else {
-													return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
-												}
-											})()}
-										</p>
-									</S.BalanceQuantityBody>
-									<S.BalanceQuantityFooter>
-										{getTokenProjections() ? (
-											<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
-												getTokenProjections().monthly.ratio
-											)} AO`}</span>
-										) : (
-											<span className={'primary-text'}>-</span>
-										)}
-									</S.BalanceQuantityFooter>
-								</S.BalanceQuantityEndSection>
-								<S.BalanceQuantityEndSection>
-									<S.BalanceQuantityHeader>
-										<span className={'primary-text'}>{language.oneYearProjection}</span>
-									</S.BalanceQuantityHeader>
-									<S.BalanceQuantityBody>
-										<p>
-											{(() => {
-												const projectionData = getTokenProjections();
-												if (projectionData) {
-													const amount = projectionData.yearly.amount;
-													if (amount === null || amount === 0) {
-														return '-';
-													}
-													return (
-														<>
-															<span className={'indicator'}>+</span>
-															{formatDisplayAmount(amount)}
-														</>
-													);
-												} else {
-													return token.wallet?.provider?.walletAddress ? <EllipsisLoader /> : '-';
-												}
-											})()}
-										</p>
-									</S.BalanceQuantityBody>
-									<S.BalanceQuantityFooter>
-										{getTokenProjections() ? (
-											<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
-												getTokenProjections().yearly.ratio
-											)} AO`}</span>
-										) : (
-											<span className={'primary-text'}>-</span>
-										)}
-									</S.BalanceQuantityFooter>
-								</S.BalanceQuantityEndSection>
-							</S.BalancesQuantityFlexSection> */}
 							{token.action && (
 								<S.BalanceAction>
 									{props.type === EthTokenEnum.USDS &&

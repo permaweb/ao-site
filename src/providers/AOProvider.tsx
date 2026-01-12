@@ -1,38 +1,24 @@
 import React from 'react';
-import { cacheExchange, Client, fetchExchange, gql } from 'urql';
 
 import { connect } from '@permaweb/aoconnect';
 
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
+import { AONetworkStatus, AOPhase, MetricDataPoint } from 'helpers/types';
+
+const CACHE_DURATION = 6 * 60 * 60 * 1000;
 
 export const cu = connect({
 	MODE: 'legacy',
 	CU_URL: 'https://cu.ao-testnet.xyz',
 });
 
-export const afCu = connect({
+export const flpCu = connect({
 	MODE: 'legacy',
 	CU_URL: 'https://cu-af.dataos.so',
 });
 
-export const goldsky = new Client({
-	url: ENDPOINTS.goldsky,
-	exchanges: [cacheExchange, fetchExchange],
-});
-
-enum AOPhase {
-	Testnet = 'Testnet',
-	MainnetEarly = 'Mainnet Early',
-	Mainnet = 'Mainnet',
-}
-enum AONetworkStatus {
-	Live = 'Live',
-}
-
 interface AOContextState {
-	users: number | null;
-	messages: number | null;
-	processes: number | null;
+	metrics: MetricDataPoint[] | null;
 	phase: AOPhase | null;
 	status: AONetworkStatus | null;
 	mintedSupply: number | null;
@@ -42,6 +28,7 @@ const DEFAULT_CONTEXT = {
 	users: null,
 	messages: null,
 	processes: null,
+	metrics: null,
 	phase: null,
 	status: null,
 	mintedSupply: null,
@@ -54,10 +41,8 @@ export function useAOProvider(): AOContextState {
 }
 
 export function AOProvider(props: { children: React.ReactNode }) {
+	const [metrics, setMetrics] = React.useState<MetricDataPoint[] | null>(null);
 	const [mintedSupply, setMintedSupply] = React.useState<number | null>(null);
-	const [users, setUsers] = React.useState<number | null>(null);
-	const [messages, setMessages] = React.useState<number | null>(null);
-	const [processes, setProcesses] = React.useState<number | null>(null);
 
 	React.useEffect(() => {
 		const CACHE_KEY = 'mintedSupply';
@@ -93,85 +78,42 @@ export function AOProvider(props: { children: React.ReactNode }) {
 	React.useEffect(() => {
 		(async function () {
 			try {
-				const networkStats = await getNetworkStats();
+				const cacheKey = `aoMetricsCacheMainnet`;
+				const cachedData = localStorage.getItem(cacheKey);
 
-				setUsers(networkStats?.[networkStats?.length - 1]?.active_users);
-				setMessages(networkStats?.[networkStats?.length - 1]?.tx_count_rolling);
-				setProcesses(networkStats?.[networkStats?.length - 1]?.processes_rolling);
+				if (cachedData) {
+					const { data, timestamp } = JSON.parse(cachedData);
+					const now = Date.now();
+
+					if (now - timestamp < CACHE_DURATION) {
+						setMetrics(data);
+						return;
+					}
+				}
+
+				const response = await fetch(ENDPOINTS.metrics(30));
+				const data = await response.json();
+				const reversedData = data.reverse();
+
+				localStorage.setItem(
+					cacheKey,
+					JSON.stringify({
+						data: reversedData,
+						timestamp: Date.now(),
+					})
+				);
+
+				setMetrics(reversedData);
 			} catch (e: any) {
 				console.error(e);
 			}
 		})();
 	}, []);
 
-	const messageFields = gql`
-		fragment MessageFields on TransactionConnection {
-			edges {
-				cursor
-				node {
-					id
-					ingested_at
-					recipient
-					block {
-						timestamp
-						height
-					}
-					tags {
-						name
-						value
-					}
-					data {
-						size
-					}
-					owner {
-						address
-					}
-				}
-			}
-		}
-	`;
-
-	const networkStatsQuery = gql`
-		query {
-			transactions(
-				sort: HEIGHT_DESC
-				first: 1
-				owners: ["yqRGaljOLb2IvKkYVa87Wdcc8m_4w6FI58Gej05gorA"]
-				recipients: ["vdpaKV_BQNISuDgtZpLDfDlMJinKHqM3d2NWd3bzeSk"]
-				tags: [{ name: "Action", values: ["Update-Stats"] }]
-			) {
-				...MessageFields
-			}
-		}
-
-		${messageFields}
-	`;
-
-	// TODO: Atlas stats
-	async function getNetworkStats(): Promise<any[]> {
-		try {
-			const result = await goldsky.query<any>(networkStatsQuery, {}).toPromise();
-			if (!result.data) return [];
-
-			const { edges } = result.data.transactions;
-			const updateId = edges[0]?.node.id;
-
-			const data = await fetch(ENDPOINTS.arTxEndpoint(updateId));
-			const json = await data.json();
-
-			return json as any[];
-		} catch (error) {
-			console.error(error);
-			return [];
-		}
-	}
-
 	return (
 		<AOContext.Provider
 			value={{
-				users: users,
-				messages: messages,
-				processes: processes,
+				metrics: metrics,
 				phase: AOPhase.MainnetEarly,
 				status: AONetworkStatus.Live,
 				mintedSupply: mintedSupply,

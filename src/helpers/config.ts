@@ -49,6 +49,7 @@ export const ENDPOINTS = {
 	arBalance: (address: string) => `https://arweave.net/wallet/${address}/balance`,
 	arTotalSupply: `https://arweave.net/total_supply`,
 	arTxEndpoint: (txId: string) => `https://arweave.net/${txId}`,
+	metrics: (days: number) => `https://atlas-server.decent.land/mainnet/explorer/days?limit=${days}`,
 	goldsky: `https://arweave-search.goldsky.com/graphql`,
 	mainnetRpc: `https://ethereum.publicnode.com`,
 	aoStateNode: (token: string) => `https://state-a.forward.computer/${token}~process@1.0/`,

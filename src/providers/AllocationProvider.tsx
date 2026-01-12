@@ -7,12 +7,12 @@ import { Notification } from 'components/atoms/Notification';
 import { AO } from 'helpers/config';
 import { AllocationRecordType, AllocationTokenRecordType, NotificationType } from 'helpers/types';
 
-import { afCu } from './AOProvider';
+import { flpCu } from './AOProvider';
 import { useArweaveProvider } from './ArweaveProvider';
 import { useLanguageProvider } from './LanguageProvider';
 
 interface AllocationContextState {
-	records: AllocationRecordType[];
+	records: AllocationRecordType[] | null;
 	addToken: (token: AllocationTokenRecordType) => void;
 	addFullToken: (token: AllocationTokenRecordType) => void;
 	updateToken: (token: AllocationRecordType, multiplier: number | 'max') => void;
@@ -24,10 +24,11 @@ interface AllocationContextState {
 	isTokenDisabled: (token: AllocationTokenRecordType) => boolean;
 	unsavedChanges: boolean;
 	projects: any[];
+	totalDelegated: any;
 }
 
 const DEFAULT_CONTEXT: AllocationContextState = {
-	records: [],
+	records: null,
 	addToken: () => {},
 	addFullToken: () => {},
 	updateToken: () => {},
@@ -39,6 +40,7 @@ const DEFAULT_CONTEXT: AllocationContextState = {
 	isTokenDisabled: () => false,
 	unsavedChanges: false,
 	projects: [],
+	totalDelegated: null,
 };
 
 const AllocationContext = React.createContext<AllocationContextState>(DEFAULT_CONTEXT);
@@ -58,17 +60,19 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 
 	const [fetchingSetup, setFetchingSetup] = React.useState<boolean>(false);
 	const [showSetup, setShowSetup] = React.useState<boolean>(false);
-	const [records, setRecords] = React.useState<AllocationRecordType[]>([]);
 	const [originalRecords, setOriginalRecords] = React.useState<AllocationRecordType[]>([]);
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [response, setResponse] = React.useState<NotificationType | null>(null);
 	const [unsavedChanges, setUnsavedChanges] = React.useState<boolean>(false);
+
 	const [projects, setProjects] = React.useState<any>(null);
+	const [totalDelegated, setTotalDelegated] = React.useState<any>(null);
+	const [records, setRecords] = React.useState<AllocationRecordType[] | null>(null);
 
 	React.useEffect(() => {
 		(async function () {
 			try {
-				const response = await afCu.dryrun({
+				const response = await flpCu.dryrun({
 					process: AO.flpFactory,
 					tags: [{ name: 'Action', value: 'Get-FLPs' }],
 				});
@@ -78,6 +82,23 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 				}
 			} catch (e: any) {
 				setProjects([]);
+			}
+		})();
+	}, []);
+
+	React.useEffect(() => {
+		(async function () {
+			try {
+				const response = await flpCu.dryrun({
+					process: AO.yieldHistorian,
+					tags: [{ name: 'Action', value: 'Get-Total-Delegated-AO-By-Project' }],
+				});
+
+				if (response?.Messages?.[0]?.Data) {
+					setTotalDelegated(JSON.parse(response.Messages[0].Data));
+				}
+			} catch (e: any) {
+				console.error(e);
 			}
 		})();
 	}, []);
@@ -113,7 +134,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	const fetchSetup = async () => {
 		setFetchingSetup(true);
 		try {
-			const response = await afCu.dryrun({
+			const response = await flpCu.dryrun({
 				process: AO.delegationOracle,
 				tags: [
 					{ name: 'Action', value: 'Get-Delegations' },
@@ -149,6 +170,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 					setUnsavedChanges(false);
 				} else {
 					setShowSetup(true);
+					setRecords([]);
 				}
 			} else {
 				setShowSetup(true);
@@ -371,6 +393,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 					isTokenDisabled,
 					unsavedChanges,
 					projects,
+					totalDelegated,
 				}}
 			>
 				{props.children}

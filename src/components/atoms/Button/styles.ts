@@ -283,15 +283,15 @@ export const Alt2 = styled(Alt1)`
 
 export const IconAlt2 = styled(IconAlt1)`
 	svg {
-		height: 13.5px;
-		width: 13.5px;
-		margin: ${(props) => (props.leftAlign ? '2.5px 5.5px 0 0' : '2.5px 0 0 5.5px')};
+		height: 13.5px !important;
+		width: 13.5px !important;
+		margin: ${(props) => (props.leftAlign ? '2.5px 5.5px 0 0' : '2.5px 0 0 5.5px')} !important;
 		color: ${(props) =>
 			props.disabled
 				? props.theme.colors.button.alt2.disabled.color
 				: props.active
 				? props.theme.colors.button.alt2.active.color
-				: props.theme.colors.button.alt2.color};
+				: props.theme.colors.button.alt2.color} !important;
 	}
 `;
 

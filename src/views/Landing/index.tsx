@@ -17,6 +17,20 @@ export default function Landing() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
+	function renderMetricLine(label: string, field: string) {
+		const latestMetric = aoProvider.metrics?.[aoProvider.metrics.length - 1];
+		const value = latestMetric?.[field];
+
+		return (
+			<S.MetricsLine>
+				<span className={'primary-text'}>{label}</span>
+				<S.MetricsValue>
+					<p>{value ? formatCount(value.toString()) : <EllipsisLoader />}</p>
+				</S.MetricsValue>
+			</S.MetricsLine>
+		);
+	}
+
 	return (
 		<>
 			<S.Wrapper>
@@ -58,24 +72,9 @@ export default function Landing() {
 						})}
 					</S.LinksWrapper>
 					<S.MetricsSection className={'fade-in'}>
-						<S.MetricsLine>
-							<span className={'primary-text'}>{language.users}</span>
-							<S.MetricsValue>
-								<p>{aoProvider.users ? formatCount(aoProvider.users.toString()) : <EllipsisLoader />}</p>
-							</S.MetricsValue>
-						</S.MetricsLine>
-						<S.MetricsLine>
-							<span className={'primary-text'}>{language.messages}</span>
-							<S.MetricsValue>
-								<p>{aoProvider.messages ? formatCount(aoProvider.messages.toString()) : <EllipsisLoader />}</p>
-							</S.MetricsValue>
-						</S.MetricsLine>
-						<S.MetricsLine>
-							<span className={'primary-text'}>{language.processes}</span>
-							<S.MetricsValue>
-								<p>{aoProvider.processes ? formatCount(aoProvider.processes.toString()) : <EllipsisLoader />}</p>
-							</S.MetricsValue>
-						</S.MetricsLine>
+						{renderMetricLine(language.users, 'active_users_over_blocks')}
+						{renderMetricLine(language.messages, 'txs_roll')}
+						{renderMetricLine(language.processes, 'processes_roll')}
 					</S.MetricsSection>
 				</S.MetricsWrapper>
 			</S.Wrapper>
