@@ -272,7 +272,7 @@ export const Alt2 = styled(Alt1)`
 		width: fit-content;
 		text-overflow: ellipsis;
 		overflow: hidden;
-		font-size: ${(props) => props.theme.typography.size.small} !important;
+		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
 		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
 		font-family: ${(props) => props.theme.typography.family.primary} !important;
 		text-transform: none;

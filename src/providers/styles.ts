@@ -78,7 +78,13 @@ export const WalletLink = styled.div`
 export const TermsContainer = styled.div`
 	width: 100%;
 	padding: 15px 15px 0 15px;
-	border-top: 1px solid ${(props) => props.theme.colors.border.alt1};
+
+	> * {
+		&:not(:last-child) {
+			padding: 0 0 15px 0;
+			border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+		}
+	}
 `;
 
 export const TermsHeader = styled.h3`
@@ -90,20 +96,20 @@ export const TermsHeader = styled.h3`
 `;
 
 export const TermsSection = styled.p`
-	margin-bottom: 10px;
-	line-height: 1;
+	margin-bottom: 15px;
+	line-height: 1.5;
 `;
 
 export const TermsTitle = styled.b`
-	font-size: ${(props) => props.theme.typography.size.xxxSmall};
-	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	font-weight: ${(props) => props.theme.typography.weight.medium};
 	font-family: ${(props) => props.theme.typography.family.primary};
 	color: ${(props) => props.theme.colors.font.primary};
 	margin-bottom: 5px;
 `;
 
 export const TermsText = styled.span`
-	font-size: ${(props) => props.theme.typography.size.xxxSmall};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-weight: ${(props) => props.theme.typography.weight.medium};
 	font-family: ${(props) => props.theme.typography.family.primary};
 	color: ${(props) => props.theme.colors.font.alt1};

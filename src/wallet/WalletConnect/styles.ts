@@ -1,49 +1,5 @@
 import styled from 'styled-components';
 
-import { STYLING } from 'helpers/config';
-
-export const Wrapper = styled.div`
-	width: 100%;
-`;
-
-export const BodyWrapper = styled.div`
-	width: 100%;
-	display: flex;
-	gap: 25px;
-
-	@media (max-width: ${STYLING.cutoffs.desktop}) {
-		flex-direction: column-reverse;
-	}
-`;
-
-export const DelegationsWrapper = styled.div`
-	width: calc(100% - 400px);
-	display: flex;
-	flex-direction: column;
-	gap: 25px;
-
-	@media (max-width: ${STYLING.cutoffs.desktop}) {
-		width: 100%;
-	}
-`;
-
-export const SummaryWrapper = styled.div`
-	height: fit-content;
-	width: 400px;
-	display: flex;
-	flex-direction: column;
-	gap: 25px;
-	padding: 15px;
-	position: sticky;
-	top: 100px;
-
-	@media (max-width: ${STYLING.cutoffs.desktop}) {
-		width: 100%;
-		position: relative;
-		top: auto;
-	}
-`;
-
 export const ConnectWrapper = styled.div<{ isConnected: boolean }>`
 	display: flex;
 	align-items: center;

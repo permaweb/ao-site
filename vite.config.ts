@@ -24,18 +24,11 @@ export default defineConfig(({ mode }) => {
 		],
 		resolve: {
 			alias: {
-				api: path.resolve(__dirname, 'src/api'),
 				app: path.resolve(__dirname, 'src/app'),
-				arweave: path.resolve(__dirname, 'node_modules/arweave'),
-				assets: path.resolve(__dirname, 'src/assets'),
 				components: path.resolve(__dirname, 'src/components'),
 				helpers: path.resolve(__dirname, 'src/helpers'),
-				hooks: path.resolve(__dirname, 'src/hooks'),
 				navigation: path.resolve(__dirname, 'src/navigation'),
 				providers: path.resolve(__dirname, 'src/providers'),
-				root: path.resolve(__dirname, 'src/root'),
-				routes: path.resolve(__dirname, 'src/routes'),
-				store: path.resolve(__dirname, 'src/store'),
 				views: path.resolve(__dirname, 'src/views'),
 				wallet: path.resolve(__dirname, 'src/wallet'),
 				wrappers: path.resolve(__dirname, 'src/wrappers'),

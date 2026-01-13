@@ -17,10 +17,6 @@ export const AO = {
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
 	piProcess: 'H1I09hGlSlqrvlQid4zBp-lleynE8bNo2Ep1u8xq0fQ',
 	piBalanceProcess: '4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs',
-	// delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // Staging
-	// yieldHistorian: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY', // Staging
-	// flpFactory: 'JC0_BVWWf7xbmXUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // Staging
-	// piProcess: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots', // Staging
 };
 
 export const SUPABASE = {
@@ -90,10 +86,13 @@ export const ASSETS = {
 	pi: getTxEndpoint('fGTu1CGT6TAz6Uj55CPkpJRy_whPKRZH6OFFpVHWOS0'),
 	plus: getTxEndpoint('OUryhpUV-y709P_Tr575rN8gS-8c5rzlKXNymR9gsE4'),
 	remove: getTxEndpoint('aKjWuVXkSeYOKzGP0MnnhHwoYUXqTHFMJfVCbqzYEo0'),
+	search: getTxEndpoint('KpzIhvoBduBivOq-4vLxy-uRHjGbH-40YMG9e5FnYXc'),
+	searchList: getTxEndpoint('9et3owOcEeE63ZGVJHkIW5p3JhbJWgXdZq8CL4CNJVw'),
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
 	success: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
 	usds: getTxEndpoint('_BWFo1KkjR5t0Mg7mhS9Kme1q4JbxKZJYwg9sglm_UA'),
 	token: getTxEndpoint('f18VARM42GRSDY8UzZtEJrCsakbxluldOAnnED_V_Zk'),
+	trendUp: getTxEndpoint('Vhb94c_k1-QNjphRQpF4mwbAL79VseUTyZ-y_fo68yE'),
 	view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
 	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
 	wander: getTxEndpoint('0nDLgQik8oWPr0nSVEwI9B8D-XMEptQagNdsdr_y6Jk'),
@@ -106,7 +105,6 @@ export const ASSETS = {
 
 export const AR_WALLETS = [
 	{ type: ArWalletEnum.wander, logo: ASSETS.wander },
-	{ type: ArWalletEnum.othent, logo: ASSETS.othent },
 	{ type: ArWalletEnum.arweaveApp, logo: ASSETS.arweaveApp },
 ];
 

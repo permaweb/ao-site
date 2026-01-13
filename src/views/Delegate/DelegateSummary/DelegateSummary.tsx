@@ -51,6 +51,8 @@ export default function DelegateSummary() {
 	);
 
 	const { coreRecords, ecosystemRecords } = React.useMemo(() => {
+		if (!arProvider.walletAddress) return { coreRecords: [], ecosystemRecords: [] };
+
 		const coreIds = Object.values(coreMap).map((c) => c.id);
 		const recordsMap = new Map(allocationProvider?.records?.map((r) => [r.id, r]) || []);
 
@@ -76,13 +78,15 @@ export default function DelegateSummary() {
 		});
 
 		return { coreRecords: core, ecosystemRecords: ecosystem };
-	}, [allocationProvider?.records, coreMap]);
+	}, [arProvider.walletAddress, allocationProvider?.records, coreMap]);
 
 	const sortedRecords = React.useMemo(() => {
 		return [...coreRecords, ...ecosystemRecords];
 	}, [coreRecords, ecosystemRecords]);
 
 	React.useEffect(() => {
+		if (!arProvider.walletAddress) setData(null);
+
 		if (allocationProvider && sortedRecords.length > 0) {
 			const pieData: any = {
 				labels: sortedRecords.map((record: AllocationRecordType) => record.label),
@@ -105,7 +109,7 @@ export default function DelegateSummary() {
 
 			setData(pieData);
 		}
-	}, [sortedRecords, coreMap, keys, theme]);
+	}, [arProvider.walletAddress, sortedRecords, coreMap, keys, theme]);
 
 	function getMultiplier(record: AllocationRecordType, amount: number) {
 		return (
@@ -136,7 +140,9 @@ export default function DelegateSummary() {
 								<Pie
 									data={data}
 									options={{
-										animation: false as any,
+										animation: {
+											duration: 0,
+										},
 										plugins: {
 											legend: {
 												display: false,

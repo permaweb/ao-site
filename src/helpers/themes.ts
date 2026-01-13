@@ -188,8 +188,8 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 				shadow: currentTheme.negative2,
 			},
 			valid: {
-				outline: currentTheme.accent1,
-				shadow: currentTheme.accent2,
+				outline: currentTheme.neutralA2,
+				shadow: currentTheme.neutralA3,
 			},
 			disabled: {
 				background: currentTheme.neutral2,
@@ -233,7 +233,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			active: currentTheme.link2,
 		},
 		loader: {
-			primary: currentTheme.accent2,
+			primary: currentTheme.neutralA2,
 		},
 		overlay: {
 			primary: currentTheme.overlay1,

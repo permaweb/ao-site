@@ -34,14 +34,14 @@ export default function Landing() {
 	return (
 		<>
 			<S.Wrapper>
-				<S.ContentWrapper className={'fade-in'}>
+				<S.ContentWrapper>
 					<h4>{language.landingHeader1}</h4>
 					<h4>{language.landingHeader2}</h4>
 					<h4>{language.landingHeader3}</h4>
 					<p>{parse(language.landingSubheader)}</p>
 				</S.ContentWrapper>
 				<S.MetricsWrapper>
-					<S.MetricsSection className={'fade-in'}>
+					<S.MetricsSection>
 						<S.MetricsLine>
 							<span className={'primary-text'}>{language.phase}</span>
 							<S.MetricsValue>
@@ -71,7 +71,7 @@ export default function Landing() {
 							);
 						})}
 					</S.LinksWrapper>
-					<S.MetricsSection className={'fade-in'}>
+					<S.MetricsSection>
 						{renderMetricLine(language.users, 'active_users_over_blocks')}
 						{renderMetricLine(language.messages, 'txs_roll')}
 						{renderMetricLine(language.processes, 'processes_roll')}

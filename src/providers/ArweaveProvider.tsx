@@ -1,8 +1,7 @@
 import { ArweaveWebWallet } from 'arweave-wallet-connector';
-import { readHandler } from 'api';
 import React from 'react';
 
-import { Modal } from 'components/molecules/Modal';
+import { Modal } from 'components/atoms/Modal';
 import {
 	AO,
 	AO_TOKEN_DENOMINATION,
@@ -14,7 +13,6 @@ import {
 } from 'helpers/config';
 import { ArWalletEnum, TokenYieldProjectionsType } from 'helpers/types';
 import { getArReward } from 'helpers/utils';
-import Othent from 'helpers/wallet';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { useAOProvider } from './AOProvider';
@@ -65,36 +63,36 @@ function TermsAndConditions() {
 			<S.TermsSection>
 				<S.TermsTitle>Permaweb Index: </S.TermsTitle>
 				<S.TermsText>
-					'Pi is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of Pi does
+					Pi is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of Pi does
 					not violate applicable laws in your jurisdiction. The Permaweb Index is a collection of non-upgradeable
 					autonomous smart contracts. The index is not subject to human supervision or intervention, nor is it
 					registered with any central financial regulatory authority. Index "intelligence" and decision-making are
 					driven by programmatic aggregation and synthesis of user interaction data and not by any central actor or
 					responsible party. User interaction with the Permaweb Index is at each user's own risk. User interaction with
-					the Permaweb Index is at each user's own risk.'
+					the Permaweb Index is at each user's own risk.
 				</S.TermsText>
 			</S.TermsSection>
 			<S.TermsSection>
 				<S.TermsTitle>AR: </S.TermsTitle>
 				<S.TermsText>
-					'AR is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AR does
-					not violate applicable laws in your jurisdiction.'
+					AR is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AR does
+					not violate applicable laws in your jurisdiction.
 				</S.TermsText>
 			</S.TermsSection>
 			<S.TermsSection>
 				<S.TermsTitle>AO: </S.TermsTitle>
 				<S.TermsText>
-					'AO is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AO does
-					not violate applicable laws in your jurisdiction.'
+					AO is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AO does
+					not violate applicable laws in your jurisdiction.
 				</S.TermsText>
 			</S.TermsSection>
 			<S.TermsSection>
 				<S.TermsTitle>Consent Clause: </S.TermsTitle>
 				<S.TermsText>
-					'By connecting your wallet, you hereby consent, without reservation, to be bound by the foregoing terms,
+					By connecting your wallet, you hereby consent, without reservation, to be bound by the foregoing terms,
 					conditions, and disclaimers. Your wallet connection constitutes an irrevocable and unconditional agreement to
 					abide by these rules, and you acknowledge that you have reviewed and understood the risks and legal
-					obligations set forth above.'
+					obligations set forth above.
 				</S.TermsText>
 			</S.TermsSection>
 		</S.TermsContainer>
@@ -173,7 +171,7 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 		(async function () {
 			if (walletAddress) {
 				try {
-					const tokenBalance = await readHandler({
+					const tokenBalance = await aoProvider.read({
 						processId: AO.token,
 						action: 'Balance',
 						tags: [{ name: 'Recipient', value: walletAddress }],
@@ -221,21 +219,18 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 		}
 	}
 
-	async function handleConnect(walletType: ArWalletEnum.arConnect | ArWalletEnum.othent | ArWalletEnum.arweaveApp) {
+	async function handleConnect(walletType: ArWalletEnum.wander | ArWalletEnum.arweaveApp) {
 		let walletObj: any = null;
 		switch (walletType) {
-			case ArWalletEnum.arConnect:
-				handleArConnect();
-				break;
-			case ArWalletEnum.othent:
-				handleOthent();
+			case ArWalletEnum.wander:
+				handleWander();
 				break;
 			case ArWalletEnum.arweaveApp:
 				handleArweaveApp();
 				break;
 			default:
-				if (window.arweaveWallet || walletType === ArWalletEnum.arConnect) {
-					handleArConnect();
+				if (window.arweaveWallet || walletType === ArWalletEnum.wander) {
+					handleWander();
 					break;
 				}
 		}
@@ -243,30 +238,21 @@ export function ArweaveProvider(props: ArweaveProviderProps) {
 		return walletObj;
 	}
 
-	async function handleArConnect() {
+	async function handleWander() {
 		if (!walletAddress) {
 			if (window.arweaveWallet) {
 				try {
 					await global.window?.arweaveWallet?.connect(WALLET_PERMISSIONS as any);
 					setWalletAddress(await global.window.arweaveWallet.getActiveAddress());
 					setWallet(window.arweaveWallet);
-					setWalletType(ArWalletEnum.arConnect);
+					setWalletType(ArWalletEnum.wander);
 					setWalletModalVisible(false);
-					localStorage.setItem('walletType', ArWalletEnum.arConnect);
+					localStorage.setItem('walletType', ArWalletEnum.wander);
 				} catch (e: any) {
 					console.error(e);
 				}
 			}
 		}
-	}
-
-	async function handleOthent() {
-		Othent.init();
-		await window.arweaveWallet.connect(WALLET_PERMISSIONS as any);
-		setWallet(window.arweaveWallet);
-		setWalletAddress(Othent.getUserInfo().walletAddress);
-		setWalletType(ArWalletEnum.othent);
-		localStorage.setItem('walletType', ArWalletEnum.othent);
 	}
 
 	async function handleArweaveApp() {

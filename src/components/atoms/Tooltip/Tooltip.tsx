@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactSVG } from 'react-svg';
 
-import { Modal } from 'components/molecules/Modal';
+import { Modal } from 'components/atoms/Modal';
 import { ASSETS } from 'helpers/config';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 

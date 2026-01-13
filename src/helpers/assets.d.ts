@@ -1,3 +1,4 @@
+// Asset declarations
 declare module '*.png' {
 	const value: string;
 	export default value;
@@ -34,3 +35,32 @@ declare module '*.mp4' {
 	const src: string;
 	export default src;
 }
+
+declare module '*.riv' {
+	const content: any;
+	export default content;
+}
+
+declare module 'remark-code-blocks';
+
+// Styled components theme
+import 'styled-components';
+
+declare module 'styled-components' {
+	export interface DefaultTheme {
+		scheme: 'dark' | 'light';
+		colors: any;
+		typography: any;
+	}
+}
+
+// Global window extensions
+declare global {
+	interface Window {
+		arweaveWallet: any;
+		ethereum: any;
+		solana: any;
+	}
+}
+
+export {};

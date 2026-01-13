@@ -6,7 +6,6 @@ import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Notification } from 'components/atoms/Notification';
 import { Panel } from 'components/atoms/Panel';
 import { Tooltip } from 'components/atoms/Tooltip';
-import { EthExchange } from 'components/organisms/EthExchange';
 import { ASSETS, fetchTokenYield, REDIRECTS } from 'helpers/config';
 import { EthTokenEnum, EthTokensYieldProjectionsType, NotificationType } from 'helpers/types';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
@@ -14,6 +13,7 @@ import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
+import { EthExchange } from './EthExchange';
 import * as S from './styles';
 import { IProps } from './types';
 
@@ -290,7 +290,7 @@ export default function BalanceSection(props: IProps) {
 
 	return token ? (
 		<>
-			<S.BalanceSection type={props.type} className={'fade-in'}>
+			<S.BalanceSection type={props.type}>
 				<S.BalanceHeaderWrapper>
 					<S.BalanceHeader>
 						<S.HeaderRow>

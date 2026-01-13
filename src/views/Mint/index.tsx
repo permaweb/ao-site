@@ -1,60 +1,49 @@
-import parse from 'html-react-parser';
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
 import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
+import { Modal } from 'components/atoms/Modal';
 import { ViewHeader } from 'components/atoms/ViewHeader';
-import { Modal } from 'components/molecules/Modal';
-import { SupplyChart } from 'components/molecules/SupplyChart';
-import { URLTabs } from 'components/molecules/URLTabs';
-import { ASSETS, REDIRECTS, URLS } from 'helpers/config';
-import { DefaultTokenEarningsType, EthTokenEnum } from 'helpers/types';
-import { formatAddress, formatCount, formatDisplayAmount } from 'helpers/utils';
+import { ASSETS } from 'helpers/config';
+import { DefaultTokenEarningsType } from 'helpers/types';
+import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { Footer } from 'navigation/footer';
-import { useAOProvider } from 'providers/AOProvider';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
-import { Subtitle } from 'views/Fund/styles';
+import { WalletConnect } from 'wallet/WalletConnect';
 
-import { BalanceSection } from './MintBalances/BalanceSection';
-import { MintAllocation } from './MintAllocation';
 import { MintBalances } from './MintBalances';
 import * as S from './styles';
 
 export default function Mint() {
-	const { active } = useParams();
-	const navigate = useNavigate();
-
 	const arProvider = useArweaveProvider();
-	const aoProvider = useAOProvider();
 	const ethProvider = useEthereumProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
 	const [info, setInfo] = React.useState<string | null>(null);
 
-	const [aoSupply, setAOSupply] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
-	const [aoSupplyReset, setAOSupplyReset] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
-	const [currentMonth, setCurrentMonth] = React.useState<number | null>(null);
+	// const [aoSupply, setAOSupply] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
+	// const [aoSupplyReset, setAOSupplyReset] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
+	// const [currentMonth, setCurrentMonth] = React.useState<number | null>(null);
 	const [copiedAr, setCopiedAr] = React.useState<boolean>(false);
 	const [copiedEth, setCopiedEth] = React.useState<boolean>(false);
 
-	React.useEffect(() => {
-		setAOSupply({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
-		setAOSupplyReset({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
-	}, [aoProvider.mintedSupply]);
+	// React.useEffect(() => {
+	// 	setAOSupply({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
+	// 	setAOSupplyReset({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
+	// }, [aoProvider.mintedSupply]);
 
-	function getSupplyDate() {
-		const tokenReleaseDate = new Date();
-		tokenReleaseDate.setMonth(tokenReleaseDate.getMonth() - currentMonth);
-		const supplyDate = new Date(tokenReleaseDate);
-		supplyDate.setMonth(supplyDate.getMonth() + currentMonth + (aoSupply?.monthsFromNow ?? 0));
+	// function getSupplyDate() {
+	// 	const tokenReleaseDate = new Date();
+	// 	tokenReleaseDate.setMonth(tokenReleaseDate.getMonth() - currentMonth);
+	// 	const supplyDate = new Date(tokenReleaseDate);
+	// 	supplyDate.setMonth(supplyDate.getMonth() + currentMonth + (aoSupply?.monthsFromNow ?? 0));
 
-		return supplyDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
-	}
+	// 	return supplyDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+	// }
 
 	function getTokenBalance(token: DefaultTokenEarningsType) {
 		if (!arProvider?.walletAddress) return '-';
@@ -137,10 +126,10 @@ export default function Mint() {
 
 	return (
 		<>
-			<S.Wrapper className={'fade-in'}>
-				<ViewHeader header={language.mint} />
+			<S.Wrapper>
+				<ViewHeader header={language.mint} actions={[<WalletConnect />]} />
 				<S.BodyWrapper>
-					<S.GlobalWrapper className={'fade-in border-wrapper-primary'}>
+					<S.GlobalWrapper className={'border-wrapper-primary'}>
 						<S.GlobalSection>
 							<span>{language.globalFairLaunchDeposits}</span>
 							<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
@@ -160,7 +149,7 @@ export default function Mint() {
 							</S.GlobalSubSection>
 						</S.GlobalSectionsFlex>
 					</S.GlobalWrapper>
-					<S.NetworkWrapper className={'fade-in border-wrapper-primary'}>
+					<S.NetworkWrapper className={'border-wrapper-primary'}>
 						<S.NetworkHeaderWrapper>
 							<S.NetworkHeader>
 								<p>{language.yourNetworkRewards}</p>
@@ -255,7 +244,7 @@ export default function Mint() {
 							)}
 						</S.NetworkBodyWrapper>
 					</S.NetworkWrapper>
-					<S.DepositsWrapper className={'fade-in border-wrapper-alt1'}>
+					<S.DepositsWrapper className={'border-wrapper-alt1'}>
 						<S.NetworkWrapper className={'border-wrapper-primary'}>
 							<S.NetworkHeaderWrapper>
 								<S.NetworkHeader>

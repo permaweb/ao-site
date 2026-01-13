@@ -7,7 +7,6 @@ import torusModule from '@web3-onboard/torus';
 import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
-import { readHandler } from 'api';
 import React from 'react';
 import Web3, { EventLog } from 'web3';
 
@@ -429,15 +428,15 @@ export function EthereumProvider(props: EthereumProviderProps) {
 			if (tokens && totalDeposited && aoProvider.mintedSupply) {
 				try {
 					const [daiResp, stEthResp, usdsResp] = await Promise.all([
-						readHandler({
+						aoProvider.read({
 							processId: AO.daiPriceOracle,
 							action: 'Info',
 						}),
-						readHandler({
+						aoProvider.read({
 							processId: AO.stEthPriceOracle,
 							action: 'Info',
 						}),
-						readHandler({
+						aoProvider.read({
 							processId: AO.usdsPriceOracle,
 							action: 'Info',
 							ignoreDataResponse: true,

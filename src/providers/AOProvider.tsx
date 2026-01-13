@@ -3,16 +3,16 @@ import React from 'react';
 import { connect } from '@permaweb/aoconnect';
 
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
-import { AONetworkStatus, AOPhase, MetricDataPoint } from 'helpers/types';
+import { AONetworkStatus, AOPhase, MetricDataPoint, TagType } from 'helpers/types';
 
 const CACHE_DURATION = 6 * 60 * 60 * 1000;
 
-export const cu = connect({
+export const cu: any = connect({
 	MODE: 'legacy',
 	CU_URL: 'https://cu.ao-testnet.xyz',
 });
 
-export const flpCu = connect({
+export const flpCu: any = connect({
 	MODE: 'legacy',
 	CU_URL: 'https://cu-af.dataos.so',
 });
@@ -22,16 +22,15 @@ interface AOContextState {
 	phase: AOPhase | null;
 	status: AONetworkStatus | null;
 	mintedSupply: number | null;
+	read: any;
 }
 
 const DEFAULT_CONTEXT = {
-	users: null,
-	messages: null,
-	processes: null,
 	metrics: null,
 	phase: null,
 	status: null,
 	mintedSupply: null,
+	read: null,
 };
 
 const AOContext = React.createContext<AOContextState>(DEFAULT_CONTEXT);
@@ -110,6 +109,44 @@ export function AOProvider(props: { children: React.ReactNode }) {
 		})();
 	}, []);
 
+	async function read(args: {
+		processId: string;
+		action: string;
+		tags?: TagType[];
+		data?: any;
+		replyTag?: TagType;
+		ignoreDataResponse?: boolean;
+	}): Promise<any> {
+		const tags = [{ name: 'Action', value: args.action }];
+		if (args.tags) tags.push(...args.tags);
+
+		const response = await cu.dryrun({
+			process: args.processId,
+			tags: tags,
+			data: JSON.stringify(args.data || {}),
+		});
+
+		if (response.Messages && response.Messages.length) {
+			let message = response.Messages[0];
+			if (args.replyTag) {
+				message = response.Messages.find((msg: any) => {
+					return msg.Tags.some((tag: any) => tag.name === args.replyTag.name && tag.value === args.replyTag.value);
+				});
+			}
+
+			if (message.Data && !args.ignoreDataResponse) {
+				return JSON.parse(message.Data);
+			} else {
+				if (message.Tags) {
+					return message.Tags.reduce((acc: any, item: any) => {
+						acc[item.name] = item.value;
+						return acc;
+					}, {});
+				}
+			}
+		}
+	}
+
 	return (
 		<AOContext.Provider
 			value={{
@@ -117,6 +154,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				phase: AOPhase.MainnetEarly,
 				status: AONetworkStatus.Live,
 				mintedSupply: mintedSupply,
+				read: read,
 			}}
 		>
 			{props.children}

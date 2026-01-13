@@ -4,6 +4,7 @@ import { useTheme } from 'styled-components';
 
 import { Loader } from 'components/atoms/Loader';
 import { URLS } from 'helpers/config';
+import { serviceWorkerManager } from 'helpers/serviceWorkerManager';
 import { Header } from 'navigation/header';
 
 import * as S from './styles';
@@ -25,6 +26,18 @@ function getLazyImport(view: string) {
 export default function App() {
 	const theme = useTheme();
 	const location = useLocation();
+
+	const hasInitializedServiceWorkerRef = React.useRef(false);
+
+	React.useEffect(() => {
+		if (!hasInitializedServiceWorkerRef.current) {
+			hasInitializedServiceWorkerRef.current = true;
+			(async () => {
+				await serviceWorkerManager.register();
+				await serviceWorkerManager.checkArNSUpdate();
+			})();
+		}
+	}, []);
 
 	React.useEffect(() => {
 		document.body.style = '';

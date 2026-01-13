@@ -103,7 +103,7 @@ export const SummaryHeader = styled.div`
 `;
 
 export const SummarySubheader = styled.div`
-	padding: 12.5px 0 2.5px 0;
+	padding: 7.5px 0 2.5px 0;
 
 	span {
 		font-family: ${(props) => props.theme.typography.family.primary};

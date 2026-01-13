@@ -67,10 +67,8 @@ export type AllocationTokenRecordType = {
 export type AllocationRecordType = AllocationTokenRecordType & { value: number };
 
 export enum ArWalletEnum {
-	arConnect = 'arConnect',
-	othent = 'othent',
-	arweaveApp = 'arweave.app',
 	wander = 'wander',
+	arweaveApp = 'arweave.app',
 }
 
 export type SelectOptionType = { id: string; label: string; icon?: React.ReactNode };
@@ -112,3 +110,5 @@ export enum AOPhase {
 export enum AONetworkStatus {
 	Live = 'Live',
 }
+
+export type FLPTabType = 'featured' | 'all';
