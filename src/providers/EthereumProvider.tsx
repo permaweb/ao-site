@@ -466,7 +466,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							stEthPrice,
 							stEthYield,
 							daiPrice,
-							daiYield
+							daiYield,
+							totalDepositedUsds,
+							usdsPrice,
+							usdsYield
 						);
 					};
 
@@ -480,7 +483,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							stEthPrice,
 							stEthYield,
 							daiPrice,
-							daiYield
+							daiYield,
+							totalDepositedUsds,
+							usdsPrice,
+							usdsYield
 						);
 					};
 
@@ -505,8 +511,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						stEth: {
 							price: stEthPrice,
 							monthly: {
-								amount: ethReward(30, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
-								ratio: ethReward(30, 1),
+								amount: ethReward(30.44, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: ethReward(30.44, 1),
 							},
 							yearly: {
 								amount: ethReward(365, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
@@ -516,8 +522,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						dai: {
 							price: daiPrice,
 							monthly: {
-								amount: daiReward(30, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
-								ratio: daiReward(30, 1),
+								amount: daiReward(30.44, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: daiReward(30.44, 1),
 							},
 							yearly: {
 								amount: daiReward(365, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
@@ -527,8 +533,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						usds: {
 							price: usdsPrice,
 							monthly: {
-								amount: usdsReward(30, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
-								ratio: usdsReward(30, 1),
+								amount: usdsReward(30.44, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: usdsReward(30.44, 1),
 							},
 							yearly: {
 								amount: usdsReward(365, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),

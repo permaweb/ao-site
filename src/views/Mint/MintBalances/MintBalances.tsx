@@ -5,7 +5,6 @@ import { Modal } from 'components/atoms/Modal';
 import { ASSETS } from 'helpers/config';
 import { EthTokenEnum } from 'helpers/types';
 import { useLanguageProvider } from 'providers/LanguageProvider';
-import { DashboardLink, Subtitle } from 'views/Fund/styles';
 
 import { BalanceSection } from './BalanceSection';
 import * as S from './styles';

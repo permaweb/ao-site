@@ -172,13 +172,17 @@ export function getEthReward(
 	stEthPrice: number,
 	stEthYield: number,
 	daiPrice: number,
-	daiYield: number
+	daiYield: number,
+	totalUsdsBridged: number,
+	usdsPrice: number,
+	usdsYield: number
 ) {
 	const bridgeRewards = getRewardInDays(days, currentAoSupply) * (2 / 3);
 
 	const totalStEthYield = totalStEthBridged * stEthPrice * stEthYield;
 	const totalDaiYield = totalDaiBridged * daiPrice * daiYield;
-	const totalYield = totalStEthYield + totalDaiYield;
+	const totalUsdsYield = totalUsdsBridged * usdsPrice * usdsYield;
+	const totalYield = totalStEthYield + totalDaiYield + totalUsdsYield;
 
 	const userYield = stEthBridgedByUser * stEthPrice * stEthYield;
 	return bridgeRewards * (userYield / totalYield);
@@ -193,13 +197,17 @@ export function getDaiReward(
 	stEthPrice: number,
 	stEthYield: number,
 	daiPrice: number,
-	daiYield: number
+	daiYield: number,
+	totalUsdsBridged: number,
+	usdsPrice: number,
+	usdsYield: number
 ) {
 	const bridgeRewards = getRewardInDays(days, currentAoSupply) * (2 / 3);
 
 	const totalStEthYield = totalStEthBridged * stEthPrice * stEthYield;
 	const totalDaiYield = totalDaiBridged * daiPrice * daiYield;
-	const totalYield = totalStEthYield + totalDaiYield;
+	const totalUsdsYield = totalUsdsBridged * usdsPrice * usdsYield;
+	const totalYield = totalStEthYield + totalDaiYield + totalUsdsYield;
 
 	const userYield = daiBridgedByUser * daiPrice * daiYield;
 	return bridgeRewards * (userYield / totalYield);
