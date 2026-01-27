@@ -468,7 +468,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							stEthPrice,
 							stEthYield,
 							daiPrice,
-							daiYield
+							daiYield,
+							totalDepositedUsds,
+							usdsPrice,
+							usdsYield
 						);
 					};
 
@@ -482,7 +485,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							stEthPrice,
 							stEthYield,
 							daiPrice,
-							daiYield
+							daiYield,
+							totalDepositedUsds,
+							usdsPrice,
+							usdsYield
 						);
 					};
 
