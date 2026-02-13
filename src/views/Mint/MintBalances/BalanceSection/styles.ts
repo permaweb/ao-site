@@ -4,428 +4,428 @@ import { STYLING } from 'helpers/config';
 import { BridgeTokenEarningsType, EthTokenEnum } from 'helpers/types';
 
 function getBalanceWrapper(type: BridgeTokenEarningsType, theme: DefaultTheme) {
-	switch (type) {
-		case EthTokenEnum.StEth:
-		case EthTokenEnum.DAI:
-		case EthTokenEnum.USDS:
-			return `
+  switch (type) {
+    case EthTokenEnum.StEth:
+    case EthTokenEnum.DAI:
+    case EthTokenEnum.USDS:
+      return `
 				background: ${theme.colors.container.primary.background};
 				border: 1px solid ${theme.colors.border.primary};
 			`;
-	}
+  }
 }
 
 export const BalanceSection = styled.div<{ type: BridgeTokenEarningsType }>`
-	width: 100%;
-	${(props) => getBalanceWrapper(props.type, props.theme)};
+  width: 100%;
+  ${(props) => getBalanceWrapper(props.type, props.theme)};
 `;
 
 export const BalanceHeaderWrapper = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	gap: 20px;
-	padding: 20px;
-	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		flex-direction: column;
-		gap: 30px;
-	}
+  @media (max-width: ${STYLING.cutoffs.secondary}) {
+    flex-direction: column;
+    gap: 30px;
+  }
 `;
 
 export const BalanceHeader = styled.div`
-	width: 100%;
-	span {
-		line-height: 1;
-		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.primary};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		color: ${(props) => props.theme.colors.font.primary};
-	}
+  width: 100%;
+  span {
+    line-height: 1;
+    font-size: ${(props) => props.theme.typography.size.lg};
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+    color: ${(props) => props.theme.colors.font.primary};
+  }
 `;
 
 export const BalanceWalletWrapper = styled.div`
-	position: relative;
+  position: relative;
 
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		width: 100%;
-	}
+  @media (max-width: ${STYLING.cutoffs.secondary}) {
+    width: 100%;
+  }
 `;
 
 export const BalanceWalletAction = styled.div`
-	button span {
-		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
-	}
+  button span {
+    font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+  }
 
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		button {
-			height: 55px !important;
-			width: 100% !important;
-		}
-	}
+  @media (max-width: ${STYLING.cutoffs.secondary}) {
+    button {
+      height: 55px !important;
+      width: 100% !important;
+    }
+  }
 `;
 
 export const BalanceWalletDropdown = styled.div`
-	width: 300px;
-	max-width: 90vw;
-	position: absolute;
-	z-index: 1;
-	top: 47.5px;
-	right: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 15px;
-	padding: 12.5px 20px 13.5px 20px;
-	border-radius: ${STYLING.dimensions.radius.primary};
+  width: 300px;
+  max-width: 90vw;
+  position: absolute;
+  z-index: 1;
+  top: 47.5px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 12.5px 20px 13.5px 20px;
+  border-radius: ${STYLING.dimensions.radius.primary};
 
-	button {
-		width: fit-content;
-		display: flex;
-		align-items: center;
-		gap: 7.5px;
-		font-size: ${(props) => props.theme.typography.size.small};
-		font-family: ${(props) => props.theme.typography.family.primary};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		color: ${(props) => props.theme.colors.font.primary};
+  button {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 7.5px;
+    font-size: ${(props) => props.theme.typography.size.small};
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+    color: ${(props) => props.theme.colors.font.primary};
 
-		svg {
-			height: 15.5px;
-			width: 15.5px;
-			margin: 5.5px 0 0 0;
-			color: ${(props) => props.theme.colors.font.primary};
-			fill: ${(props) => props.theme.colors.font.primary};
-		}
+    svg {
+      height: 15.5px;
+      width: 15.5px;
+      margin: 5.5px 0 0 0;
+      color: ${(props) => props.theme.colors.font.primary};
+      fill: ${(props) => props.theme.colors.font.primary};
+    }
 
-		&:hover {
-			color: ${(props) => props.theme.colors.font.alt1};
+    &:hover {
+      color: ${(props) => props.theme.colors.font.alt1};
 
-			svg {
-				color: ${(props) => props.theme.colors.font.alt1};
-				fill: ${(props) => props.theme.colors.font.alt1};
-			}
-		}
-	}
+      svg {
+        color: ${(props) => props.theme.colors.font.alt1};
+        fill: ${(props) => props.theme.colors.font.alt1};
+      }
+    }
+  }
 
-	#disconnect-action {
-		&:hover {
-			color: ${(props) => props.theme.colors.warning.primary};
+  #disconnect-action {
+    &:hover {
+      color: ${(props) => props.theme.colors.warning.primary};
 
-			svg {
-				color: ${(props) => props.theme.colors.warning.primary};
-				fill: ${(props) => props.theme.colors.warning.primary};
-			}
-		}
-	}
+      svg {
+        color: ${(props) => props.theme.colors.warning.primary};
+        fill: ${(props) => props.theme.colors.warning.primary};
+      }
+    }
+  }
 
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		top: 60.5px;
-		right: auto;
-		left: 0;
-		width: 100%;
-	}
+  @media (max-width: ${STYLING.cutoffs.secondary}) {
+    top: 60.5px;
+    right: auto;
+    left: 0;
+    width: 100%;
+  }
 `;
 
 export const BalanceWalletDropdownLine = styled.div`
-	display: flex;
-	align-items: center;
-	gap: 5px;
-	padding: 0 0 10px 0;
-	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
-	p {
-		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.primary};
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+  p {
+    font-size: ${(props) => props.theme.typography.size.base};
+    font-family: ${(props) => props.theme.typography.family.primary};
 
-		b {
-			font-weight: ${(props) => props.theme.typography.weight.regular};
-		}
-	}
+    b {
+      font-weight: ${(props) => props.theme.typography.weight.regular};
+    }
+  }
 
-	svg {
-		height: 16.5px;
-		width: 16.5px;
-		margin: 6.5px 2.5px 0 5px;
-	}
+  svg {
+    height: 16.5px;
+    width: 16.5px;
+    margin: 6.5px 2.5px 0 5px;
+  }
 `;
 
 export const BalanceBodyWrapper = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	gap: 25px;
-	padding: 20px;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 25px;
+  padding: 20px;
 `;
 
 export const BalanceQuantityLines = styled.div`
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 export const BalanceQuantityLine = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 2.5px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5px;
 
-	span,
-	p {
-		display: flex;
-		align-items: center;
-		gap: 2.5px;
-		font-size: ${(props) => props.theme.typography.size.xSmall};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-	}
+  span,
+  p {
+    display: flex;
+    align-items: center;
+    gap: 2.5px;
+    font-size: ${(props) => props.theme.typography.size.xSmall};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+  }
 
-	span {
-		color: ${(props) => props.theme.colors.font.alt1};
-	}
+  span {
+    color: ${(props) => props.theme.colors.font.alt1};
+  }
 
-	p {
-		color: ${(props) => props.theme.colors.font.primary};
-	}
+  p {
+    color: ${(props) => props.theme.colors.font.primary};
+  }
 `;
 
 export const BalanceQuantitySection = styled.div`
-	width: 175px;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 2.5px;
+  width: 175px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.5px;
 `;
 
 export const BalanceQuantityEndSection = styled(BalanceQuantitySection)`
-	align-items: flex-end;
+  align-items: flex-end;
 
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		align-items: flex-start;
-	}
+  @media (max-width: ${STYLING.cutoffs.secondary}) {
+    align-items: flex-start;
+  }
 `;
 
 export const BalancesQuantityFlexSection = styled.div`
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 25px;
-	margin: 0 0 0 auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin: 0 0 0 auto;
 
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		margin: 0;
-	}
+  @media (max-width: ${STYLING.cutoffs.secondary}) {
+    margin: 0;
+  }
 `;
 
 export const BalanceQuantityHeader = styled.div`
-	span {
-		font-size: ${(props) => props.theme.typography.size.xSmall};
-		color: ${(props) => props.theme.colors.font.alt1};
-	}
+  span {
+    font-size: ${(props) => props.theme.typography.size.xSmall};
+    color: ${(props) => props.theme.colors.font.alt1};
+  }
 `;
 
 export const BalanceQuantityBody = styled.div`
-	display: flex;
-	align-items: center;
-	gap: 7.5px;
+  display: flex;
+  align-items: center;
+  gap: 7.5px;
 
-	p,
-	span {
-		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.primary};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-	}
+  p,
+  span {
+    font-size: ${(props) => props.theme.typography.size.lg};
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+  }
 
-	p {
-		display: flex;
-		align-items: center;
-		gap: 7.5px;
-		margin: 1.5px 0 0 0;
-	}
+  p {
+    display: flex;
+    align-items: center;
+    gap: 7.5px;
+    margin: 1.5px 0 0 0;
+  }
 
-	svg {
-		height: 20px;
-		width: 20px;
-		margin: 6.5px 0 0 0;
-	}
+  svg {
+    height: 20px;
+    width: 20px;
+    margin: 6.5px 0 0 0;
+  }
 `;
 
 export const BalanceQuantityFooter = styled.div`
-	display: flex;
-	align-items: flex-end;
-	gap: 1.5px;
-	position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5px;
+  position: relative;
 
-	p {
-		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		color: ${(props) => props.theme.colors.font.alt1} !important;
-		background: ${(props) => props.theme.colors.container.primary.background};
-		position: relative;
-		z-index: 1;
-		white-space: nowrap;
-	}
+  p {
+    font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+    color: ${(props) => props.theme.colors.font.alt1} !important;
+    background: ${(props) => props.theme.colors.container.primary.background};
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+  }
 
-	span {
-		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.medium} !important;
-		color: ${(props) => props.theme.colors.font.primary} !important;
-		margin-left: auto;
-		background: ${(props) => props.theme.colors.container.primary.background};
-		position: relative;
-		z-index: 1;
-		white-space: nowrap;
-	}
+  span {
+    font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+    font-weight: ${(props) => props.theme.typography.weight.medium} !important;
+    color: ${(props) => props.theme.colors.font.primary} !important;
+    margin-left: auto;
+    background: ${(props) => props.theme.colors.container.primary.background};
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+  }
 
-	.quantity-divider {
-		height: 1px;
-		width: 100%;
-		border-top: 1px dotted ${(props) => props.theme.colors.border.alt2};
-		margin: 0 2.5px 5px 2.5px;
-	}
+  .quantity-divider {
+    height: 1px;
+    width: 100%;
+    border-top: 1px dotted ${(props) => props.theme.colors.border.alt2};
+    margin: 0 2.5px 5px 2.5px;
+  }
 `;
 
 export const BalanceAction = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 
-	button {
-		width: 100%;
-		min-width: unset;
+  button {
+    width: 100%;
+    min-width: unset;
 
-		span {
-			font-size: ${(props) => props.theme.typography.size.small} !important;
-		}
+    span {
+      font-size: ${(props) => props.theme.typography.size.small} !important;
+    }
 
-		svg {
-			height: 17.5px !important;
-			width: 17.5px !important;
-			margin: 3.5px 9.5px 0 0 !important;
-		}
-	}
+    svg {
+      height: 17.5px !important;
+      width: 17.5px !important;
+      margin: 3.5px 9.5px 0 0 !important;
+    }
+  }
 `;
 
 export const ActionWrapper = styled.div`
-	width: 100%;
-	padding: 0 20px 20px 20px;
+  width: 100%;
+  padding: 0 20px 20px 20px;
 `;
 
 export const ApyRow = styled.div`
-	display: flex;
-	align-items: flex-start;
-	gap: 15px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
 `;
 
 export const ApyText = styled.span`
-	font-size: ${(props) => props.theme.typography.size.small} !important;
-	font-weight: ${(props) => props.theme.typography.weight.regular} !important;
-	color: ${(props) => props.theme.colors.indicator.active} !important;
-	display: flex;
-	margin: 0 0 1.5px 0;
+  font-size: ${(props) => props.theme.typography.size.small} !important;
+  font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+  color: ${(props) => props.theme.colors.indicator.active} !important;
+  display: flex;
+  margin: 0 0 1.5px 0;
 `;
 
 export const YieldContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 `;
 
 export const HeaderRow = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 5px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
 `;
 
 export const HeaderRowStart = styled.div`
-	display: flex;
-	align-items: center;
-	gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 `;
 
 export const NativeYieldText = styled.span`
-	color: ${(props) => props.theme.colors.font.alt1} !important;
-	font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-	font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+  color: ${(props) => props.theme.colors.font.alt1} !important;
+  font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+  font-weight: ${(props) => props.theme.typography.weight.regular} !important;
 `;
 
 export const ConvertButtonLabel = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
-	button & span {
-		font-size: ${(props) => props.theme.typography.size.xxSmall} !important;
-	}
+  button & span {
+    font-size: ${(props) => props.theme.typography.size.xxSmall} !important;
+  }
 
-	small {
-		font-size: ${(props) => props.theme.typography.size.xxxSmall};
-	}
+  small {
+    font-size: ${(props) => props.theme.typography.size.xxxSmall};
+  }
 `;
 
 export const ModalWrapper = styled.div`
-	p {
-		font-size: ${(props) => props.theme.typography.size.small};
-		color: ${(props) => props.theme.colors.font.primary.alt1};
-		line-height: 1.6;
-		margin: 0;
-	}
+  p {
+    font-size: ${(props) => props.theme.typography.size.small};
+    color: ${(props) => props.theme.colors.font.primary.alt1};
+    line-height: 1.6;
+    margin: 0;
+  }
 `;
 
 export const NetworkDisconnected = styled.div`
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 25px;
-	padding: 20px 0 0 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  padding: 20px 0 0 0;
 
-	p {
-		font-family: ${(props) => props.theme.typography.family.primary};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-size: ${(props) => props.theme.typography.size.xSmall};
-		color: ${(props) => props.theme.colors.font.primary};
-		margin: -10px 0 0 0;
-	}
+  p {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+    font-size: ${(props) => props.theme.typography.size.xSmall};
+    color: ${(props) => props.theme.colors.font.primary};
+    margin: -10px 0 0 0;
+  }
 
-	svg {
-		height: 25px;
-		width: 25px;
-		color: ${(props) => props.theme.colors.font.primary};
-		fill: ${(props) => props.theme.colors.font.primary};
-	}
+  svg {
+    height: 25px;
+    width: 25px;
+    color: ${(props) => props.theme.colors.font.primary};
+    fill: ${(props) => props.theme.colors.font.primary};
+  }
 `;
 
 export const TooltipWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 
-	p {
-		font-family: ${(props) => props.theme.typography.family.primary};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-size: ${(props) => props.theme.typography.size.small};
-		color: ${(props) => props.theme.colors.font.primary};
-	}
+  p {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+    font-size: ${(props) => props.theme.typography.size.small};
+    color: ${(props) => props.theme.colors.font.primary};
+  }
 
-	span {
-		font-family: ${(props) => props.theme.typography.family.primary};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-size: ${(props) => props.theme.typography.size.xSmall};
-		color: ${(props) => props.theme.colors.font.alt1};
-	}
+  span {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+    font-size: ${(props) => props.theme.typography.size.xSmall};
+    color: ${(props) => props.theme.colors.font.alt1};
+  }
 `;
 
 export const TooltipDivider = styled.div`
-	height: 1px;
-	width: 100%;
-	border-top: 1px solid ${(props) => props.theme.colors.border.alt2};
-	margin: 12.5px 0;
+  height: 1px;
+  width: 100%;
+  border-top: 1px solid ${(props) => props.theme.colors.border.alt2};
+  margin: 12.5px 0;
 `;

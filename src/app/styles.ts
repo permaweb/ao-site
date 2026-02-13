@@ -249,9 +249,9 @@ export const GlobalStyle = createGlobalStyle`
 `;
 
 export const View = styled.main`
-	min-height: calc(100vh - ${STYLING.dimensions.nav.height});
-	width: 100%;
-	max-width: ${STYLING.cutoffs.max};
-	padding: 0 20px;
-	margin: 0 auto;
+  min-height: calc(100vh - ${STYLING.dimensions.nav.height});
+  width: 100%;
+  max-width: ${STYLING.cutoffs.max};
+  padding: 0 20px;
+  margin: 0 auto;
 `;
