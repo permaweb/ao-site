@@ -5,8 +5,8 @@ export const lightTheme = {
 	positive1: '#279200',
 	positive2: '#217A00',
 	caution1: '#EEB700',
-	negative1: '#ED254E',
-	negative2: '#E2123C',
+	negative1: '#D0234F',
+	negative2: '#BD1A43',
 	neutral1: '#FFFFFF',
 	neutral2: '#F7F7F8',
 	neutral3: '#F0F1F1',
@@ -74,7 +74,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		},
 		button: {
 			primary: {
-				background: currentTheme.neutral2,
+				background: currentTheme.neutral1,
 				border: currentTheme.neutral4,
 				color: currentTheme.neutralA1,
 				active: {
@@ -104,13 +104,13 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 				},
 			},
 			alt2: {
-				background: currentTheme.neutral8,
-				border: currentTheme.neutral8,
-				color: currentTheme.neutral8,
+				background: currentTheme.neutralA1,
+				border: currentTheme.neutralA1,
+				color: currentTheme.neutralA1,
 				active: {
-					background: currentTheme.neutralA1,
-					border: currentTheme.neutralA1,
-					color: currentTheme.neutralA1,
+					background: currentTheme.neutralA5,
+					border: currentTheme.neutralA5,
+					color: currentTheme.neutralA5,
 				},
 				disabled: {
 					background: currentTheme.neutral3,
@@ -227,6 +227,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 		indicator: {
 			primary: currentTheme.positive1,
 			active: currentTheme.positive2,
+			contrast: currentTheme.negative1,
 		},
 		link: {
 			color: currentTheme.link1,
@@ -299,6 +300,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 			alt1: `'Roboto Mono', monospace`,
 		},
 		size: {
+			xxxxSmall: 'clamp(10px, 0.85vw, 11px)',
 			xxxSmall: 'clamp(11px, 1.15vw, 12px)',
 			xxSmall: 'clamp(12px, 1.25vw, 13px)',
 			xSmall: 'clamp(13px, 1.35vw, 14px)',

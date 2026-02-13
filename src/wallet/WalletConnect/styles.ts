@@ -20,7 +20,7 @@ export const ConnectWrapper = styled.div<{ isConnected: boolean }>`
 	p {
 		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-size: ${(props) => props.theme.typography.size.base};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;

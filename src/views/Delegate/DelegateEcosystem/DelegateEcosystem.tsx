@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
+import { AllocationDisplay } from 'components/atoms/AllocationDisplay';
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
 import { ASSETS, ENDPOINTS } from 'helpers/config';
@@ -11,55 +12,20 @@ import {
 	formatAddress,
 	formatDate,
 	formatNumber,
-	formatPercentage,
 	getRelativeDate,
 	parseBigIntAsNumber,
 } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
-import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
 
 function Project(props: { index: number; project: any; totalDelegated: string }) {
-	const arProvider = useArweaveProvider();
-	const allocationProvider = useAllocationProvider();
-	const languageProvider = useLanguageProvider();
-	const language = languageProvider.object[languageProvider.current];
-
 	const [open, setOpen] = React.useState<boolean>(false);
 	const [copied, setCopied] = React.useState<boolean>(false);
 
-	function getAllocation() {
-		if (!arProvider.walletAddress) return <span>-</span>;
-
-		const existingRecord = allocationProvider.records?.find((allocation) => allocation.id === props.project.id);
-
-		if (existingRecord) {
-			return (
-				<>
-					<span>{formatPercentage(existingRecord.value)}</span>
-				</>
-			);
-		}
-
-		return (
-			<Button
-				type={'alt2'}
-				label={language.add}
-				handlePress={(e: any) => {
-					e.preventDefault();
-					e.stopPropagation();
-
-					allocationProvider.addToken({
-						id: props.project.id,
-						label: props.project.flp_token_ticker,
-					});
-				}}
-				icon={ASSETS.plus}
-			/>
-		);
-	}
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
 	const copyTokenId = React.useCallback(async (address: string) => {
 		if (address) {
@@ -95,7 +61,12 @@ function Project(props: { index: number; project: any; totalDelegated: string })
 					<span>{getRelativeDate(props.project.starts_at_ts)}</span>
 				</S.TableBodyCell>
 				<S.TableBodyCell flex={1} align={'right'}>
-					{getAllocation()}
+					<AllocationDisplay
+						processId={props.project.id}
+						tokenId={props.project.id}
+						tokenLabel={props.project.flp_token_ticker}
+						showAllocatedLabel={true}
+					/>
 				</S.TableBodyCell>
 			</S.TableBodyRow>
 			{open && (
@@ -197,6 +168,7 @@ export default function DelegateEcosystem() {
 	const [currentTab, setCurrentTab] = React.useState<FLPTabType>('featured');
 	const [currentProjects, setCurrentProjects] = React.useState<any[] | null>(null);
 	const [searchQuery, setSearchQuery] = React.useState<string>('');
+	const [visibleCount, setVisibleCount] = React.useState<number>(10);
 
 	const totalProjectYields = React.useMemo(() => {
 		if (!allocationProvider.totalDelegated || !allocationProvider.totalDelegated.combined) return {};
@@ -243,92 +215,111 @@ export default function DelegateEcosystem() {
 		}
 	}, [allocationProvider?.projects, currentTab, totalProjectYields, searchQuery]);
 
+	React.useEffect(() => {
+		setVisibleCount(10);
+	}, [currentTab, searchQuery]);
+
 	return (
-		<S.Wrapper className={'border-wrapper-primary'}>
-			<S.HeaderWrapper>
-				<p>{`${language.explore}.`}</p>
-				<span>{`${language.pickEcosystemProjects}.`}</span>
-			</S.HeaderWrapper>
-			<S.BodyWrapper>
-				<S.TableNavigation>
-					<S.TabsWrapper>
-						<S.Tab active={currentTab === 'featured'}>
-							<Button
-								type={'primary'}
-								label={'Popular Delegations'}
-								handlePress={() => setCurrentTab('featured')}
-								active={currentTab === 'featured'}
-								icon={ASSETS.trendUp}
-								iconLeftAlign
+		<S.Wrapper>
+			<S.TableWrapper className={'border-wrapper-primary'}>
+				<S.HeaderWrapper>
+					<p>{`${language.explore}.`}</p>
+					<span>{`${language.pickEcosystemProjects}.`}</span>
+				</S.HeaderWrapper>
+				<S.BodyWrapper>
+					<S.TableNavigation>
+						<S.TabsWrapper>
+							<S.Tab active={currentTab === 'featured'}>
+								<Button
+									type={'primary'}
+									label={'Popular Delegations'}
+									handlePress={() => setCurrentTab('featured')}
+									active={currentTab === 'featured'}
+									icon={ASSETS.trendUp}
+									iconLeftAlign
+								/>
+							</S.Tab>
+							<S.Tab active={currentTab === 'all'}>
+								<Button
+									type={'primary'}
+									label={'Explore Delegations'}
+									handlePress={() => setCurrentTab('all')}
+									active={currentTab === 'all'}
+									icon={ASSETS.searchList}
+									iconLeftAlign
+								/>
+							</S.Tab>
+						</S.TabsWrapper>
+						<S.SearchWrapper>
+							<FormField
+								value={searchQuery}
+								onChange={(e: any) => setSearchQuery(e.target.value)}
+								disabled={false}
+								invalid={{ status: false, message: null }}
+								placeholder={'Search for Project...'}
+								hideErrorMessage
 							/>
-						</S.Tab>
-						<S.Tab active={currentTab === 'all'}>
-							<Button
-								type={'primary'}
-								label={'Explore Delegations'}
-								handlePress={() => setCurrentTab('all')}
-								active={currentTab === 'all'}
-								icon={ASSETS.searchList}
-								iconLeftAlign
-							/>
-						</S.Tab>
-					</S.TabsWrapper>
-					<S.SearchWrapper>
-						<FormField
-							value={searchQuery}
-							onChange={(e: any) => setSearchQuery(e.target.value)}
-							disabled={false}
-							invalid={{ status: false, message: null }}
-							placeholder={'Search for Project...'}
-							hideErrorMessage
-						/>
-						<ReactSVG src={ASSETS.search} />
-					</S.SearchWrapper>
-				</S.TableNavigation>
-				<S.TableHeaderRow>
-					<S.TableHeaderCell flex={0.075} width={50} align={'center'}>
-						<span>#</span>
-					</S.TableHeaderCell>
-					<S.TableHeaderCell flex={1.5} align={'left'}>
-						<span>Project</span>
-					</S.TableHeaderCell>
-					<S.TableHeaderCell flex={1} align={'right'}>
-						<span>Total AO Delegated</span>
-					</S.TableHeaderCell>
-					<S.TableHeaderCell flex={1} align={'right'}>
-						<span>Launched</span>
-					</S.TableHeaderCell>
-					<S.TableHeaderCell flex={1} align={'right'}>
-						<span>Allocation</span>
-					</S.TableHeaderCell>
-				</S.TableHeaderRow>
-				<S.Table>
-					{currentProjects ? (
-						<>
-							{currentProjects.length > 0 ? (
-								currentProjects.map((project, index) => {
-									return (
-										<Project
-											key={project.id}
-											index={index}
-											project={project}
-											totalDelegated={totalDelegatedByProject(project.id)}
-										/>
-									);
-								})
-							) : (
-								<S.TableEmpty>
-									<span>No Results</span>
-								</S.TableEmpty>
-							)}
-						</>
-					) : (
-						<S.TableEmpty>
-							<span>{`${language.loading}...`}</span>
-						</S.TableEmpty>
-					)}
-				</S.Table>
-			</S.BodyWrapper>
+							<ReactSVG src={ASSETS.search} />
+						</S.SearchWrapper>
+					</S.TableNavigation>
+					<S.TableHeaderRow>
+						<S.TableHeaderCell flex={0.075} width={50} align={'center'}>
+							<span>#</span>
+						</S.TableHeaderCell>
+						<S.TableHeaderCell flex={1.5} align={'left'}>
+							<span>Project</span>
+						</S.TableHeaderCell>
+						<S.TableHeaderCell flex={1} align={'right'}>
+							<span>Total AO Delegated</span>
+						</S.TableHeaderCell>
+						<S.TableHeaderCell flex={1} align={'right'}>
+							<span>Launched</span>
+						</S.TableHeaderCell>
+						<S.TableHeaderCell flex={1} align={'right'}>
+							<span>Allocation</span>
+						</S.TableHeaderCell>
+					</S.TableHeaderRow>
+					<S.Table>
+						{currentProjects ? (
+							<>
+								{currentProjects.length > 0 ? (
+									<>
+										{currentProjects.slice(0, visibleCount).map((project, index) => {
+											return (
+												<Project
+													key={project.id}
+													index={index + 1}
+													project={project}
+													totalDelegated={totalDelegatedByProject(project.id)}
+												/>
+											);
+										})}
+									</>
+								) : (
+									<S.TableEmpty>
+										<span>No Results</span>
+									</S.TableEmpty>
+								)}
+							</>
+						) : (
+							<S.TableEmpty>
+								<span>{`${language.loading}...`}</span>
+							</S.TableEmpty>
+						)}
+					</S.Table>
+				</S.BodyWrapper>
+			</S.TableWrapper>
+			{currentProjects && currentProjects.length > visibleCount && (
+				<S.LoadMoreWrapper>
+					<Button
+						type={'primary'}
+						label={'Load More'}
+						handlePress={() => setVisibleCount((prev) => prev + 10)}
+						height={45}
+						width={175}
+					/>
+				</S.LoadMoreWrapper>
+			)}
 		</S.Wrapper>
 	);
 }

@@ -61,11 +61,9 @@ export const ChartKeyLine = styled.div`
 `;
 
 export const ChartKey = styled.div<{ background: string }>`
-	min-height: 15px;
-	min-width: 15px;
+	min-height: 9.5px;
+	min-width: 9.5px;
 	background: ${(props) => props.background};
-	border: 1px solid ${(props) => props.theme.colors.border.alt4};
-	border-radius: 2.5px;
 `;
 
 export const ChartKeyText = styled.p`
@@ -175,15 +173,16 @@ export const SummaryLineActionsWrapper = styled.div`
 export const SummaryLineActions = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 17.5px;
+	gap: 12.5px;
 
 	button {
+		min-height: 0 !important;
+		height: auto !important;
+		padding: 2.5px 7.5px !important;
 		span {
 			font-family: ${(props) => props.theme.typography.family.primary} !important;
 			font-weight: ${(props) => props.theme.typography.weight.medium} !important;
-			font-size: ${(props) => props.theme.typography.size.xxSmall} !important;
-			text-decoration: underline;
-			text-decoration-thickness: 1.25px;
+			font-size: ${(props) => props.theme.typography.size.xxxxSmall} !important;
 		}
 	}
 

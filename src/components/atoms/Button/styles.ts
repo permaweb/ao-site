@@ -50,6 +50,7 @@ export const Primary = styled.button<{
 	active: boolean | undefined;
 	warning: boolean | undefined;
 	noTextTransform: boolean | undefined;
+	labelColor: string | undefined;
 }>`
 	position: relative;
 	background: ${(props) =>
@@ -129,7 +130,9 @@ export const Primary = styled.button<{
 		font-family: ${(props) => props.theme.typography.family.primary} !important;
 		letter-spacing: 0.35px;
 		color: ${(props) =>
-			props.warning
+			props.labelColor
+				? props.labelColor
+				: props.warning
 				? props.theme.colors.font.light1
 				: props.active
 				? props.theme.colors.button.primary.active.color

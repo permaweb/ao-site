@@ -1,7 +1,5 @@
-import { Button } from 'components/atoms/Button';
+import { AllocationDisplay } from 'components/atoms/AllocationDisplay';
 import { AO, ASSETS } from 'helpers/config';
-import { formatPercentage } from 'helpers/utils';
-import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
@@ -9,7 +7,6 @@ import * as S from './styles';
 
 export default function DelegateCore() {
 	const arProvider = useArweaveProvider();
-	const allocationProvider = useAllocationProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
@@ -46,40 +43,6 @@ export default function DelegateCore() {
 		},
 	];
 
-	function getSectionAllocation(project) {
-		if (!arProvider.walletAddress) return <span>-</span>;
-
-		const existingRecord = allocationProvider.records?.find((allocation) => allocation.id === project.process);
-
-		if (existingRecord) {
-			return (
-				<>
-					<p>{formatPercentage(existingRecord.value)}</p>
-					<span>{`Allocated`}</span>
-				</>
-			);
-		}
-
-		if (project.disabled) {
-			return <span>{`Coming Soon`}</span>;
-		}
-
-		return (
-			<Button
-				type={'alt2'}
-				label={language.add}
-				handlePress={() =>
-					allocationProvider.addToken({
-						id: project.id,
-						label: project.ticker,
-					})
-				}
-				disabled={project.disabled}
-				icon={ASSETS.plus}
-			/>
-		);
-	}
-
 	return (
 		<S.Wrapper className={'border-wrapper-primary'}>
 			<S.HeaderWrapper>
@@ -97,7 +60,15 @@ export default function DelegateCore() {
 							<S.BodySectionDescription>
 								<p>{project.description}</p>
 							</S.BodySectionDescription>
-							<S.BodySectionAction>{getSectionAllocation(project)}</S.BodySectionAction>
+							<S.BodySectionAction>
+								<AllocationDisplay
+									processId={project.process}
+									tokenId={project.id}
+									tokenLabel={project.ticker}
+									disabled={project.disabled}
+									showAllocatedLabel={true}
+								/>
+							</S.BodySectionAction>
 						</S.BodySection>
 					);
 				})}

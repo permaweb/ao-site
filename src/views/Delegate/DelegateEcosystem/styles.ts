@@ -4,6 +4,13 @@ import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
 	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+`;
+
+export const TableWrapper = styled.div`
+	width: 100%;
 `;
 
 export const HeaderWrapper = styled.div`
@@ -55,7 +62,7 @@ export const Tab = styled.div<{ active: boolean }>`
 	button {
 		border: none !important;
 		background: ${(props) =>
-			props.active ? props.theme.colors.container.primary.background : props.theme.colors.button.primary.background};
+			props.active ? props.theme.colors.container.primary.background : props.theme.colors.container.alt1.background};
 		border-right: 1px solid ${(props) => props.theme.colors.border.primary} !important;
 
 		span {
@@ -524,4 +531,11 @@ export const ProjectInfoLine = styled.div`
 		font-size: ${(props) => props.theme.typography.size.small};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
+`;
+
+export const LoadMoreWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `;

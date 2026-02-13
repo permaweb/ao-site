@@ -112,6 +112,7 @@ export default function Button(props: IProps) {
 				warning={props.warning || false}
 				noTextTransform={props.noTextTransform || false}
 				className={props.className || ''}
+				labelColor={props.labelColor}
 			>
 				{getLabel()}
 			</StyledButton>

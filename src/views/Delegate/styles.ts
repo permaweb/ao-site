@@ -10,6 +10,7 @@ export const BodyWrapper = styled.div`
 	width: 100%;
 	display: flex;
 	gap: 25px;
+	justify-content: space-between;
 
 	@media (max-width: ${STYLING.cutoffs.desktop}) {
 		flex-direction: column-reverse;
@@ -17,7 +18,7 @@ export const BodyWrapper = styled.div`
 `;
 
 export const DelegationsWrapper = styled.div`
-	width: calc(100% - 400px);
+	width: calc(100% - 350px);
 	display: flex;
 	flex-direction: column;
 	gap: 25px;
@@ -29,11 +30,11 @@ export const DelegationsWrapper = styled.div`
 
 export const SummaryWrapper = styled.div`
 	height: fit-content;
-	width: 400px;
+	width: 350px;
 	display: flex;
 	flex-direction: column;
 	gap: 25px;
-	padding: 15px;
+	padding: 10px;
 	position: sticky;
 	top: 100px;
 

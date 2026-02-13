@@ -16,6 +16,7 @@ interface AllocationContextState {
 	addToken: (token: AllocationTokenRecordType) => void;
 	addFullToken: (token: AllocationTokenRecordType) => void;
 	updateToken: (token: AllocationRecordType, multiplier: number | 'max') => void;
+	adjustTokenByPercentage: (token: AllocationRecordType, percentageChange: number) => void;
 	removeToken: (token: AllocationTokenRecordType) => void;
 	fetchingSetup: boolean;
 	showSetup: boolean;
@@ -25,6 +26,7 @@ interface AllocationContextState {
 	unsavedChanges: boolean;
 	projects: any[];
 	totalDelegated: any;
+	getClaimableBalance: (walletAddress: string, flpId: string) => Promise<string | null>;
 }
 
 const DEFAULT_CONTEXT: AllocationContextState = {
@@ -32,6 +34,7 @@ const DEFAULT_CONTEXT: AllocationContextState = {
 	addToken: () => {},
 	addFullToken: () => {},
 	updateToken: () => {},
+	adjustTokenByPercentage: () => {},
 	removeToken: () => {},
 	fetchingSetup: false,
 	showSetup: false,
@@ -41,6 +44,7 @@ const DEFAULT_CONTEXT: AllocationContextState = {
 	unsavedChanges: false,
 	projects: [],
 	totalDelegated: null,
+	getClaimableBalance: () => null,
 };
 
 const AllocationContext = React.createContext<AllocationContextState>(DEFAULT_CONTEXT);
@@ -182,6 +186,20 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		setFetchingSetup(false);
 	};
 
+	async function getClaimableBalance(walletAddress: string, flpId: string): Promise<string | null> {
+		const res = await flpCu.dryrun({
+			process: flpId,
+			tags: [
+				{ name: 'Action', value: 'Get-Claimable-Balance' },
+				{ name: 'Recipient', value: walletAddress },
+			],
+		});
+		if (!res.Messages.length) return null;
+		const data = res.Messages[0].Data;
+		console.log('onGetClaimableBalance', data);
+		return data;
+	}
+
 	const getCacheKey = () => {
 		return arProvider.walletAddress ? `allocation_${arProvider.walletAddress}` : null;
 	};
@@ -270,6 +288,48 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 			.filter((record: AllocationRecordType) => record.value > 0);
 
 		updateRecords(updatedRecords);
+	};
+
+	const adjustTokenByPercentage = (token: AllocationRecordType, percentageChange: number) => {
+		if (token.value === undefined || token.value === null) {
+			console.error('No value provided');
+			return;
+		}
+
+		const change = percentageChange / 100;
+		const newAmount = Math.max(0, Math.min(1, token.value + change));
+
+		if (newAmount === token.value) return;
+
+		const totalTokens = records.length;
+		if (totalTokens === 1) {
+			updateRecords([{ ...token, value: 1 }]);
+			return;
+		}
+
+		const amountChanged = newAmount - token.value;
+		const distributionFactor = -amountChanged / (totalTokens - 1);
+
+		const updatedRecords = records
+			.map((record) => {
+				if (token.id === record.id) {
+					return { ...record, value: newAmount };
+				} else {
+					return { ...record, value: Math.max(0, record.value + distributionFactor) };
+				}
+			})
+			.filter((record: AllocationRecordType) => record.value > 0);
+
+		const total = updatedRecords.reduce((sum, record) => sum + record.value, 0);
+		if (Math.abs(total - 1) > 0.001) {
+			const normalizedRecords = updatedRecords.map((record) => ({
+				...record,
+				value: record.value / total,
+			}));
+			updateRecords(normalizedRecords);
+		} else {
+			updateRecords(updatedRecords);
+		}
 	};
 
 	const removeToken = (token: AllocationTokenRecordType) => {
@@ -385,6 +445,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 					addToken,
 					addFullToken,
 					updateToken,
+					adjustTokenByPercentage,
 					removeToken,
 					fetchingSetup,
 					showSetup,
@@ -394,6 +455,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 					unsavedChanges,
 					projects,
 					totalDelegated,
+					getClaimableBalance,
 				}}
 			>
 				{props.children}

@@ -111,15 +111,23 @@ export default function DelegateSummary() {
 		}
 	}, [arProvider.walletAddress, sortedRecords, coreMap, keys, theme]);
 
-	function getMultiplier(record: AllocationRecordType, amount: number) {
+	function renderAdjustmentButtons(record: AllocationRecordType) {
 		return (
-			<Button
-				type={'alt2'}
-				id={'indicator'}
-				label={`${amount}x`}
-				handlePress={() => allocationProvider.updateToken(record, amount)}
-				disabled={allocationProvider.isTokenDisabled(record) || record.value * amount > 1}
-			/>
+			<S.SummaryLineActions>
+				<Button
+					type={'primary'}
+					label={'+5%'}
+					handlePress={() => allocationProvider.adjustTokenByPercentage(record, 5)}
+					disabled={allocationProvider.isTokenDisabled(record) || record.value >= 0.95}
+					labelColor={theme.colors.indicator.active}
+				/>
+				<Button
+					type={'primary'}
+					label={'-5%'}
+					handlePress={() => allocationProvider.adjustTokenByPercentage(record, -5)}
+					disabled={allocationProvider.isTokenDisabled(record) || record.value <= 0.05}
+				/>
+			</S.SummaryLineActions>
 		);
 	}
 
@@ -191,23 +199,7 @@ export default function DelegateSummary() {
 												<span>{record.label}</span>
 											</S.SummaryLineLabel>
 											<S.SummaryLineActionsWrapper>
-												<S.SummaryLineActions>
-													<Button
-														type={'alt2'}
-														label={language.none}
-														handlePress={() => allocationProvider.removeToken(record)}
-														disabled={true}
-													/>
-													{getMultiplier(record, 2)}
-													{getMultiplier(record, 4)}
-													<Button
-														type={'alt2'}
-														id={'indicator'}
-														label={language.all}
-														handlePress={() => allocationProvider.updateToken(record, 'max')}
-														disabled={allocationProvider.isTokenDisabled(record)}
-													/>
-												</S.SummaryLineActions>
+												{renderAdjustmentButtons(record)}
 												<S.SummaryLinePercentage>
 													<p>{formatPercentage(record.value)}</p>
 												</S.SummaryLinePercentage>
@@ -233,23 +225,7 @@ export default function DelegateSummary() {
 													<span>{record.label}</span>
 												</S.SummaryLineLabel>
 												<S.SummaryLineActionsWrapper>
-													<S.SummaryLineActions>
-														<Button
-															type={'alt2'}
-															label={language.none}
-															handlePress={() => allocationProvider.removeToken(record)}
-															disabled={allocationProvider.isTokenDisabled(record)}
-														/>
-														{getMultiplier(record, 2)}
-														{getMultiplier(record, 4)}
-														<Button
-															type={'alt2'}
-															id={'indicator'}
-															label={language.all}
-															handlePress={() => allocationProvider.updateToken(record, 'max')}
-															disabled={allocationProvider.isTokenDisabled(record)}
-														/>
-													</S.SummaryLineActions>
+													{renderAdjustmentButtons(record)}
 													<S.SummaryLinePercentage>
 														<p>{formatPercentage(record.value)}</p>
 													</S.SummaryLinePercentage>
