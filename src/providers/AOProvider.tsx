@@ -10,7 +10,8 @@ export const cu = connect({
 });
 
 export const afCu = connect({
-	CU_URL: 'https://cu-af.dataos.so',
+	// CU_URL: 'https://cu-af.dataos.so',
+	CU_URL: 'https://cu6200.ao-testnet.xyz',
 });
 
 export const goldsky = new Client({

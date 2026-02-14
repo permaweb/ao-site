@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 
-import { createDataItemSigner, message, result } from '@permaweb/aoconnect';
+import { connect, createDataItemSigner, message, result } from '@permaweb/aoconnect';
 
 import { Notification } from 'components/atoms/Notification';
 import { AO } from 'helpers/config';
@@ -68,7 +68,11 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	React.useEffect(() => {
 		(async function () {
 			try {
-				const response = await afCu.dryrun({
+				const cu = connect({
+					CU_URL: 'https://cu6205.ao-testnet.xyz',
+				});
+
+				const response = await cu.dryrun({
 					process: AO.flpFactory,
 					tags: [{ name: 'Action', value: 'Get-FLPs' }],
 				});
