@@ -67,9 +67,17 @@ export const DesktopNavWrapper = styled.div`
   animation: ${open} ${transition2};
 
   a {
-    font-size: ${(props) => props.theme.typography.size.xSmall};
-    font-family: ${(props) => props.theme.typography.family.alt1};
+    font-size: ${(props) => props.theme.typography.size.Small};
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.medium};
     line-height: 1;
+    text-transform: none;
+    transition: none;
+    opacity: 0.8;
+    
+      &:hover {
+        opacity: 1.0;
+      }
   }
 
   @media (max-width: ${STYLING.cutoffs.initial}) {
@@ -122,6 +130,10 @@ export const MobilePathsWrapper = styled.div`
     display: flex;
     align-items: center;
     padding: 0 20px;
+    font-size: ${(props) => props.theme.typography.size.xSmall};
+    font-family: ${(props) => props.theme.typography.family.primary};
+    text-transform: none;
+    transition: none;
   }
 `;
 

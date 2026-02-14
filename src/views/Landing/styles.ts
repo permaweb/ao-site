@@ -5,6 +5,7 @@ import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
   width: 100%;
+  padding-top: 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -167,6 +168,7 @@ export const MetricsLine = styled.div`
     display: block;
     color: ${(props) => props.theme.colors.font.alt1};
     font-size: ${(props) => props.theme.typography.size.xSmall};
+    text-transform: none;
   }
 `;
 
@@ -229,8 +231,9 @@ export const LinksWrapper = styled.div`
 
   a {
     font-size: ${(props) => props.theme.typography.size.xSmall};
-    font-family: ${(props) => props.theme.typography.family.alt1};
+    font-family: ${(props) => props.theme.typography.family.primary};
     line-height: 1;
+    text-transform: none;
   }
 
   @media (max-width: ${STYLING.cutoffs.initial}) {

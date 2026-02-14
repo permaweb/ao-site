@@ -58,7 +58,8 @@ export const GlobalStyle = createGlobalStyle`
 			"Ubuntu",
 			sans-serif;
 			font-family: ${(props) => props.theme.typography.family.primary};
-			font-weight: ${(props) => props.theme.typography.weight.medium};
+			font-weight: ${(props) => props.theme.typography.weight.regular};
+      font-feature-settings: 'ss03' on;
 			color: ${(props) => props.theme.colors.font.primary};
 			line-height: 1.5;
 			-webkit-font-smoothing: antialiased;

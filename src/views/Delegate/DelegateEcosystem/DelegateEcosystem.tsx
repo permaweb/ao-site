@@ -8,7 +8,6 @@ import { FormField } from 'components/atoms/FormField';
 import { ASSETS, ENDPOINTS } from 'helpers/config';
 import { FLPTabType } from 'helpers/types';
 import {
-  checkValidAddress,
   formatAddress,
   formatDate,
   formatNumber,
@@ -19,6 +18,9 @@ import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
+
+type ExploreSortKey = 'index' | 'project' | 'delegated' | 'launched' | 'allocation';
+type SortDirection = 'asc' | 'desc';
 
 function Project(props: {
   index: number;
@@ -54,7 +56,12 @@ function Project(props: {
               <img src={ENDPOINTS.tx(props.project.flp_token_logo)} alt={'Project Logo'} />
             )}
           </S.TableBodyImage>
-          <span>{props.project.flp_name ?? '-'}</span>
+          <S.ProjectNameWrapper>
+            <span>{props.project.flp_name ?? '-'}</span>
+            {props.project.flp_token_ticker && (
+              <span className={'ticker'}>{`$${props.project.flp_token_ticker}`}</span>
+            )}
+          </S.ProjectNameWrapper>
         </S.TableBodyCell>
         <S.TableBodyCell flex={1} align={'right'}>
           <span>{formatNumber(props.totalDelegated)}</span>
@@ -69,54 +76,15 @@ function Project(props: {
           <AllocationDisplay
             processId={props.project.id}
             tokenId={props.project.id}
-            tokenLabel={props.project.flp_token_ticker}
+            tokenLabel={props.project.flp_token_ticker ? `$${props.project.flp_token_ticker}` : ''}
             showAllocatedLabel={true}
           />
         </S.TableBodyCell>
       </S.TableBodyRow>
-      {props.isOpen && (
-        <S.TableBodyRowDetail>
+      <S.TableBodyRowDetail open={props.isOpen}>
+        <S.TableBodyRowDetailInner>
           <S.PanelWrapper>
             <S.PanelWrapperStart>
-              <S.ProjectHeader>
-                <S.ProjectHeaderDetails>
-                  <S.ProjectLogo>
-                    <img
-                      src={
-                        props.project?.flp_token_logo && checkValidAddress(props.project?.flp_token_logo)
-                          ? ENDPOINTS.arTxEndpoint(props.project.flp_token_logo)
-                          : ASSETS.token
-                      }
-                    />
-                  </S.ProjectLogo>
-                  <S.ProjectTitle>
-                    <span>{props.project?.flp_name}</span>
-                  </S.ProjectTitle>
-                </S.ProjectHeaderDetails>
-                <S.ProjectIndex active={false}>
-                  <span className={'indicator'}>{props.project?.flp_token_ticker}</span>
-                </S.ProjectIndex>
-              </S.ProjectHeader>
-              <S.ProjectLinks>
-                {props.project?.website_url && (
-                  <S.ProjectLink>
-                    <Link to={props.project.website_url} target={'_blank'} onClick={(e) => e.stopPropagation()}>
-                      <ReactSVG src={ASSETS.website} />
-                    </Link>
-                  </S.ProjectLink>
-                )}
-                {props.project?.twitter_handle && (
-                  <S.ProjectLink>
-                    <Link
-                      to={`https://x.com/${props.project.twitter_handle}`}
-                      target={'_blank'}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <ReactSVG src={ASSETS.x} />
-                    </Link>
-                  </S.ProjectLink>
-                )}
-              </S.ProjectLinks>
               <S.ProjectBody>
                 <S.ProjectId onClick={() => copyTokenId(props.project?.flp_token_process ?? '-')}>
                   <span>{`${language.tokenId}:`}</span>
@@ -137,16 +105,38 @@ function Project(props: {
                 )}
                 <S.ProjectLinesWrapper>
                   <S.ProjectLineWrapper>
-                    <S.ProjectInfoLine>
-                      <span className={'primary-text'}>{language.startDate}</span>
-                      <p>
-                        {props.project?.starts_at_ts ? formatDate(props.project.starts_at_ts, 'dateString') : 'None'}
-                      </p>
-                    </S.ProjectInfoLine>
-                    <S.ProjectInfoLine>
-                      <span className={'primary-text'}>{language.endDate}</span>
-                      <p>{props.project?.ends_at_ts ? formatDate(props.project.ends_at_ts, 'dateString') : 'None'}</p>
-                    </S.ProjectInfoLine>
+                    <S.ProjectLineDates>
+                      <S.ProjectInfoLine>
+                        <span>{language.startDate}</span>
+                        <p>
+                          {props.project?.starts_at_ts ? formatDate(props.project.starts_at_ts, 'dateString') : 'None'}
+                        </p>
+                      </S.ProjectInfoLine>
+                      <S.ProjectInfoLine>
+                        <span>{language.endDate}</span>
+                        <p>{props.project?.ends_at_ts ? formatDate(props.project.ends_at_ts, 'dateString') : 'None'}</p>
+                      </S.ProjectInfoLine>
+                    </S.ProjectLineDates>
+                    <S.ProjectLinks>
+                      {props.project?.website_url && (
+                        <S.ProjectLink>
+                          <Link to={props.project.website_url} target={'_blank'} onClick={(e) => e.stopPropagation()}>
+                            <ReactSVG src={ASSETS.website} />
+                          </Link>
+                        </S.ProjectLink>
+                      )}
+                      {props.project?.twitter_handle && (
+                        <S.ProjectLink>
+                          <Link
+                            to={`https://x.com/${props.project.twitter_handle}`}
+                            target={'_blank'}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ReactSVG src={ASSETS.x} />
+                          </Link>
+                        </S.ProjectLink>
+                      )}
+                    </S.ProjectLinks>
                   </S.ProjectLineWrapper>
                 </S.ProjectLinesWrapper>
               </S.ProjectBody>
@@ -159,8 +149,8 @@ function Project(props: {
               </S.PanelWrapperEnd>
             )}
           </S.PanelWrapper>
-        </S.TableBodyRowDetail>
-      )}
+        </S.TableBodyRowDetailInner>
+      </S.TableBodyRowDetail>
     </S.TableBodyRowWrapper>
   );
 }
@@ -175,6 +165,8 @@ export default function DelegateEcosystem() {
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [visibleCount, setVisibleCount] = React.useState<number>(10);
   const [openProjectId, setOpenProjectId] = React.useState<string | null>(null);
+  const [activeSortKey, setActiveSortKey] = React.useState<ExploreSortKey | null>(null);
+  const [sortDirection, setSortDirection] = React.useState<SortDirection>('desc');
 
   const totalProjectYields = React.useMemo(() => {
     if (!allocationProvider.totalDelegated || !allocationProvider.totalDelegated.combined) return {};
@@ -185,9 +177,78 @@ export default function DelegateEcosystem() {
     }, {});
   }, [allocationProvider.totalDelegated]);
 
-  const totalDelegatedByProject = (flpId) => {
-    return totalProjectYields[flpId] || 0;
-  };
+  const totalDelegatedByProject = React.useCallback(
+    (flpId: string) => {
+      return totalProjectYields[flpId] || 0;
+    },
+    [totalProjectYields]
+  );
+
+  const compareValues = React.useCallback((aValue: number | string | null, bValue: number | string | null) => {
+    const isEmpty = (value: number | string | null) => {
+      if (value === null || value === undefined) return true;
+      if (typeof value === 'string') return value.trim().length === 0;
+      if (typeof value === 'number') return Number.isNaN(value);
+      return false;
+    };
+
+    const aEmpty = isEmpty(aValue);
+    const bEmpty = isEmpty(bValue);
+
+    if (aEmpty && bEmpty) return 0;
+    if (aEmpty) return 1;
+    if (bEmpty) return -1;
+
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return aValue - bValue;
+    }
+
+    return String(aValue).localeCompare(String(bValue), undefined, { sensitivity: 'base' });
+  }, []);
+
+  const getAllocationValue = React.useCallback(
+    (projectId: string) => {
+      const allocationRecord = allocationProvider.records?.find((record) => record.id === projectId);
+      return typeof allocationRecord?.value === 'number' ? allocationRecord.value : null;
+    },
+    [allocationProvider.records]
+  );
+
+  const getSortValue = React.useCallback(
+    (
+      sortKey: ExploreSortKey,
+      project: any,
+      baseIndexMap: Map<string, number>
+    ): number | string | null => {
+      switch (sortKey) {
+        case 'index':
+          return baseIndexMap.get(project.id) ?? null;
+        case 'project':
+          return project.flp_name?.trim() ?? null;
+        case 'delegated':
+          return totalDelegatedByProject(project.id);
+        case 'launched':
+          return project.starts_at_ts ? Number(project.starts_at_ts) : null;
+        case 'allocation':
+          return getAllocationValue(project.id);
+        default:
+          return null;
+      }
+    },
+    [getAllocationValue, totalDelegatedByProject]
+  );
+
+  const handleSortHeader = React.useCallback((sortKey: ExploreSortKey) => {
+    setActiveSortKey((previous) => {
+      if (previous === sortKey) {
+        setSortDirection((previousDirection) => (previousDirection === 'asc' ? 'desc' : 'asc'));
+        return previous;
+      }
+
+      setSortDirection('asc');
+      return sortKey;
+    });
+  }, []);
 
   React.useEffect(() => {
     if (allocationProvider?.projects?.length > 0) {
@@ -206,7 +267,7 @@ export default function DelegateEcosystem() {
         );
       }
 
-      const sortedProjects = [...filteredProjects].sort((a, b) => {
+      const defaultSortedProjects = [...filteredProjects].sort((a, b) => {
         switch (currentTab) {
           case 'featured':
             const aDelegated = totalProjectYields[a.id] || 0;
@@ -217,9 +278,38 @@ export default function DelegateEcosystem() {
             return (b.starts_at_ts || 0) - (a.starts_at_ts || 0);
         }
       });
+
+      if (currentTab !== 'all' || !activeSortKey) {
+        setCurrentProjects(defaultSortedProjects);
+        return;
+      }
+
+      const baseIndexMap = new Map(defaultSortedProjects.map((project, index) => [project.id, index]));
+      const sortedProjects = [...defaultSortedProjects].sort((a, b) => {
+        const primaryComparison = compareValues(
+          getSortValue(activeSortKey, a, baseIndexMap),
+          getSortValue(activeSortKey, b, baseIndexMap)
+        );
+
+        if (primaryComparison === 0) {
+          return (baseIndexMap.get(a.id) || 0) - (baseIndexMap.get(b.id) || 0);
+        }
+
+        return sortDirection === 'asc' ? primaryComparison : -primaryComparison;
+      });
+
       setCurrentProjects(sortedProjects);
     }
-  }, [allocationProvider?.projects, currentTab, totalProjectYields, searchQuery]);
+  }, [
+    allocationProvider?.projects,
+    currentTab,
+    totalProjectYields,
+    searchQuery,
+    activeSortKey,
+    sortDirection,
+    compareValues,
+    getSortValue,
+  ]);
 
   React.useEffect(() => {
     setVisibleCount(10);
@@ -230,6 +320,22 @@ export default function DelegateEcosystem() {
       setOpenProjectId(null);
     }
   }, [currentProjects, openProjectId]);
+
+  const headerCells: Array<{
+    key: ExploreSortKey;
+    label: string;
+    flex: number;
+    width?: number;
+    align: 'left' | 'right' | 'center';
+  }> = [
+    { key: 'index', label: '#', flex: 0.075, width: 50, align: 'center' },
+    { key: 'project', label: 'Project', flex: 1.5, align: 'left' },
+    { key: 'delegated', label: 'Total AO Delegated', flex: 1, align: 'right' },
+    { key: 'launched', label: 'Launched', flex: 1, align: 'right' },
+    { key: 'allocation', label: 'Allocation', flex: 1, align: 'right' },
+  ];
+
+  const showExploreSort = currentTab === 'all';
 
   return (
     <S.Wrapper>
@@ -275,21 +381,37 @@ export default function DelegateEcosystem() {
             </S.SearchWrapper>
           </S.TableNavigation>
           <S.TableHeaderRow>
-            <S.TableHeaderCell flex={0.075} width={50} align={'center'}>
-              <span>#</span>
-            </S.TableHeaderCell>
-            <S.TableHeaderCell flex={1.5} align={'left'}>
-              <span>Project</span>
-            </S.TableHeaderCell>
-            <S.TableHeaderCell flex={1} align={'right'}>
-              <span>Total AO Delegated</span>
-            </S.TableHeaderCell>
-            <S.TableHeaderCell flex={1} align={'right'}>
-              <span>Launched</span>
-            </S.TableHeaderCell>
-            <S.TableHeaderCell flex={1} align={'right'}>
-              <span>Allocation</span>
-            </S.TableHeaderCell>
+            {headerCells.map((headerCell) => {
+              const isActive = showExploreSort && activeSortKey === headerCell.key;
+              const indicator = isActive ? (sortDirection === 'asc' ? '↑' : '↓') : '↕';
+
+              return (
+                <S.TableHeaderCell
+                  key={headerCell.key}
+                  flex={headerCell.flex}
+                  width={headerCell.width}
+                  align={headerCell.align}
+                  sortable={showExploreSort}
+                  active={isActive}
+                  onClick={showExploreSort ? () => handleSortHeader(headerCell.key) : undefined}
+                  onKeyDown={
+                    showExploreSort
+                      ? (event) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            handleSortHeader(headerCell.key);
+                          }
+                        }
+                      : undefined
+                  }
+                  role={showExploreSort ? 'button' : undefined}
+                  tabIndex={showExploreSort ? 0 : undefined}
+                >
+                  <span>{headerCell.label}</span>
+                  {showExploreSort && <S.SortIndicator active={isActive}>{indicator}</S.SortIndicator>}
+                </S.TableHeaderCell>
+              );
+            })}
           </S.TableHeaderRow>
           <S.Table>
             {currentProjects ? (

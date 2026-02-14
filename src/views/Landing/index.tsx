@@ -2,7 +2,6 @@ import parse from 'html-react-parser';
 import { Link } from 'react-router-dom';
 
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
-import { HyperTextLoad } from 'components/atoms/HyperTextLoad';
 import { ASSETS, NAV_REDIRECTS } from 'helpers/config';
 import { formatCount } from 'helpers/utils';
 import { useAOProvider } from 'providers/AOProvider';
@@ -66,7 +65,7 @@ export default function Landing() {
             {NAV_REDIRECTS.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
               return (
                 <Link key={index} to={element.path} target={'_blank'} className={'primary-text'}>
-                  <HyperTextLoad word={element.label} textType={'span'} speed={1} triggerOnLoad />
+                  <span>{element.label}</span>
                 </Link>
               );
             })}

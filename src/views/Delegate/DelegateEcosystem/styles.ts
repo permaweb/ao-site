@@ -160,22 +160,46 @@ export const TableHeaderRow = styled.div`
   }
 `;
 
-export const TableHeaderCell = styled.div<{ flex: number; width?: number; align: 'right' | 'left' | 'center' }>`
+export const TableHeaderCell = styled.div<{
+  flex: number;
+  width?: number;
+  align: 'right' | 'left' | 'center';
+  sortable?: boolean;
+  active?: boolean;
+}>`
   height: 37.5px;
   min-width: ${(props) => (props.width ? `${props.width}px` : 'none')};
   display: flex;
   align-items: center;
   justify-content: ${(props) =>
     props.align === 'right' ? 'flex-end' : props.align === 'center' ? 'center' : 'flex-start'};
+  gap: 5px;
   padding: 0 15px;
   flex: ${(props) => props.flex};
+  transition: color ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+  cursor: ${(props) => (props.sortable ? 'pointer' : 'default')};
 
   span {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
     font-size: ${(props) => props.theme.typography.size.xxSmall};
-    color: ${(props) => props.theme.colors.font.alt1};
+    color: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1)};
   }
+
+  &:hover {
+    span {
+      color: ${(props) =>
+        props.sortable ? props.theme.colors.font.primary : props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1};
+    }
+  }
+`;
+
+export const SortIndicator = styled.span<{ active?: boolean }>`
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-weight: ${(props) => props.theme.typography.weight.regular};
+  font-size: ${(props) => props.theme.typography.size.xxSmall};
+  color: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt2)};
+  line-height: 1;
 `;
 
 export const Table = styled.div`
@@ -197,7 +221,7 @@ export const TableBodyRowWrapper = styled.div`
 export const TableBodyRow = styled.div<{ open: boolean }>`
   width: 100%;
   display: flex;
-  transition: all 100ms;
+  transition: background ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
   background: ${(props) =>
     props.open ? props.theme.colors.container.primary.active : props.theme.colors.container.primary.background};
 
@@ -213,10 +237,22 @@ export const TableBodyRow = styled.div<{ open: boolean }>`
   }
 `;
 
-export const TableBodyRowDetail = styled.div`
+export const TableBodyRowDetail = styled.div<{ open: boolean }>`
   width: 100%;
-  border-top: 1px solid ${(props) => props.theme.colors.border.primary};
+  display: grid;
+  grid-template-rows: ${(props) => (props.open ? '1fr' : '0fr')};
+  opacity: ${(props) => (props.open ? 1 : 0)};
+  border-top: 1px solid ${(props) => (props.open ? props.theme.colors.border.primary : 'transparent')};
   background: ${(props) => props.theme.colors.container.primary.active};
+  pointer-events: ${(props) => (props.open ? 'auto' : 'none')};
+  transition:
+    grid-template-rows ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate},
+    opacity ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate},
+    border-color ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+`;
+
+export const TableBodyRowDetailInner = styled.div`
+  overflow: hidden;
 `;
 
 export const PanelWrapper = styled.div`
@@ -226,7 +262,7 @@ export const PanelWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 20px;
-  padding: 20px;
+  padding: 20px 15px 20px calc(50px + 15px);
 `;
 
 export const PanelWrapperStart = styled.div`
@@ -270,6 +306,24 @@ export const TableBodyCell = styled.div<{ flex: number; width?: number; align: '
     height: 22.5px;
     width: 22.5px;
     border-radius: 50%;
+  }
+`;
+
+export const ProjectNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  span {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.medium};
+    font-size: ${(props) => props.theme.typography.size.xSmall};
+    color: ${(props) => props.theme.colors.font.primary};
+  }
+
+  span.ticker {
+    font-size: ${(props) => props.theme.typography.size.xxSmall};
+    color: ${(props) => props.theme.colors.font.alt1};
   }
 `;
 
@@ -380,6 +434,15 @@ export const ProjectHeaderDetails = styled.div`
   align-items: center;
 `;
 
+export const ProjectHeaderLeft = styled.div`
+  width: 100%;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 12.5px;
+  align-items: center;
+`;
+
 export const ProjectLogo = styled.div`
   img {
     height: 25px;
@@ -389,11 +452,20 @@ export const ProjectLogo = styled.div`
 `;
 
 export const ProjectTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
   span {
     font-size: ${(props) => props.theme.typography.size.xLg};
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
     color: ${(props) => props.theme.colors.font.primary};
+  }
+
+  span.ticker {
+    font-size: ${(props) => props.theme.typography.size.xSmall};
+    color: ${(props) => props.theme.colors.font.alt1};
   }
 `;
 
@@ -448,6 +520,7 @@ export const ProjectId = styled.button`
 `;
 
 export const ProjectLinks = styled.div`
+  flex-shrink: 0;
   display: flex;
   gap: 15px;
   align-items: center;
@@ -470,7 +543,7 @@ export const ProjectLink = styled.div`
 export const ProjectBody = styled.div``;
 
 export const ProjectShortDescription = styled.div`
-  margin: 0 0 20px 0;
+  margin: 0 0 8px 0;
 
   p {
     height: 100%;
@@ -521,19 +594,17 @@ export const ProjectLineWrapper = styled.div`
   justify-content: space-between;
 
   > * {
-    &:first-child {
-      p,
-      span {
-        text-align: left;
-      }
-    }
-    &:last-child {
-      p,
-      span {
-        text-align: right;
-      }
+    p,
+    span {
+      text-align: left;
     }
   }
+`;
+
+export const ProjectLineDates = styled.div`
+  display: flex;
+  gap: 36px;
+  align-items: center;
 `;
 
 export const ProjectInfoLine = styled.div`
@@ -541,6 +612,8 @@ export const ProjectInfoLine = styled.div`
   flex-direction: column;
 
   span {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
     font-size: ${(props) => props.theme.typography.size.xxSmall};
     color: ${(props) => props.theme.colors.font.alt1};
   }

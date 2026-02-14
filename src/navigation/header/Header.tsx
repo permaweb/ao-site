@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
-import { HyperTextLoad } from 'components/atoms/HyperTextLoad';
 import { IconButton } from 'components/atoms/IconButton';
 import { Panel } from 'components/atoms/Panel';
 import { ASSETS, REDIRECTS, URLS } from 'helpers/config';
@@ -42,7 +41,7 @@ export default function Header() {
               {paths.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
                 return (
                   <Link key={index} to={element.path} target={element.target || ''} className={'primary-text'}>
-                    <HyperTextLoad word={element.label} textType={'span'} speed={1} triggerOnLoad />
+                    <span>{element.label}.</span>
                   </Link>
                 );
               })}
@@ -71,7 +70,7 @@ export default function Header() {
                 className={'primary-text'}
                 onClick={() => setShowPanel(false)}
               >
-                <HyperTextLoad word={element.label} textType={'span'} speed={1} triggerOnLoad />
+                <span>{element.label}.</span>
               </Link>
             );
           })}

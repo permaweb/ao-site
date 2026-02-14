@@ -157,7 +157,8 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
             } else if (record.walletTo === arProvider.walletAddress) {
               label = 'AO';
             } else {
-              label = projects.find((project) => project.id === record.walletTo).flp_token_ticker;
+              const ticker = projects.find((project) => project.id === record.walletTo)?.flp_token_ticker;
+              label = ticker ? `$${ticker}` : '-';
             }
             return {
               id: record.walletTo ?? '-',

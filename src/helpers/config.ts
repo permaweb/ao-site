@@ -138,6 +138,14 @@ export const STYLING = {
       alt3: '2.5px',
     },
   },
+  motion: {
+    duration: {
+      fast: '200ms',
+    },
+    easing: {
+      decelerate: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    },
+  },
 };
 
 function createURLs() {

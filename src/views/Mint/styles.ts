@@ -4,6 +4,7 @@ import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
   width: 100%;
+  margin-top: 32px;
 `;
 
 export const BodyWrapper = styled.div`

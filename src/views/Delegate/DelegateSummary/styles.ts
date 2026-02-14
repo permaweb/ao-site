@@ -151,7 +151,7 @@ export const SummaryLineLabel = styled.div`
   width: 140px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   span {
     width: 100%;
     display: block;
@@ -167,7 +167,7 @@ export const SummaryLineLabel = styled.div`
 export const SummaryLineActionsWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 `;
 
 export const SummaryLineActions = styled.div`
