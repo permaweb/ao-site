@@ -301,12 +301,32 @@ export default function BalanceSection(props: IProps) {
                     <>
                       <S.ApyText>{`≈ ${currentYield.toFixed(1)}% APY`}</S.ApyText>
                     </>
-                  ) : (
+                  ) : ethProvider.walletAddress ? (
                     <EllipsisLoader />
+                  ) : (
+                    <S.ApyText>-</S.ApyText>
                   )}
                 </S.ApyRow>
               </S.HeaderRowStart>
               <Tooltip
+                label={
+                  props.type === EthTokenEnum.StEth
+                    ? 'stETH Info'
+                    : props.type === EthTokenEnum.USDS
+                    ? 'USDS Info'
+                    : props.type === EthTokenEnum.DAI
+                    ? 'DAI Info'
+                    : undefined
+                }
+                header={
+                  props.type === EthTokenEnum.StEth
+                    ? 'stETH Info'
+                    : props.type === EthTokenEnum.USDS
+                    ? 'USDS Info'
+                    : props.type === EthTokenEnum.DAI
+                    ? 'DAI Info'
+                    : undefined
+                }
                 content={
                   <S.TooltipWrapper>
                     <p>{language.apyExplanation}</p>
@@ -380,8 +400,10 @@ export default function BalanceSection(props: IProps) {
             </>
           ) : (
             <S.NetworkDisconnected>
-              <ReactSVG src={ASSETS.info} />
-              <p>{language.connectEthWalletToViewDeposits}</p>
+              <S.NetworkDisconnectedIconText>
+                <ReactSVG src={ASSETS.wallet} />
+                <p>{language.connectEthWalletToViewDeposits}</p>
+              </S.NetworkDisconnectedIconText>
               <Button type={'primary'} label={getWalletLabel()} handlePress={handleWalletPress} height={45} fullWidth />
             </S.NetworkDisconnected>
           )}

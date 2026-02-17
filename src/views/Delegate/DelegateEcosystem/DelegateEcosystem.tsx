@@ -5,15 +5,9 @@ import { ReactSVG } from 'react-svg';
 import { AllocationDisplay } from 'components/atoms/AllocationDisplay';
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
-import { ASSETS, ENDPOINTS } from 'helpers/config';
+import { ASSETS, ENDPOINTS, STYLING } from 'helpers/config';
 import { FLPTabType } from 'helpers/types';
-import {
-  formatAddress,
-  formatDate,
-  formatNumber,
-  getRelativeDate,
-  parseBigIntAsNumber,
-} from 'helpers/utils';
+import { formatAddress, formatDate, formatNumber, getRelativeDate, parseBigIntAsNumber } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
@@ -28,6 +22,7 @@ function Project(props: {
   totalDelegated: number;
   isOpen: boolean;
   onToggle: () => void;
+  useCompactDelegatedNumbers: boolean;
 }) {
   const [copied, setCopied] = React.useState<boolean>(false);
 
@@ -44,6 +39,21 @@ function Project(props: {
     }
   }, []);
 
+  const formatCompactDelegatedNumber = React.useCallback((value: number) => {
+    if (!Number.isFinite(value)) return '-';
+
+    const absValue = Math.abs(value);
+    if (absValue >= 1_000_000) return `${Number((value / 1_000_000).toFixed(2)).toString()}m`;
+    if (absValue >= 1_000) return `${Number((value / 1_000).toFixed(2)).toString()}k`;
+
+    return formatNumber(value, { maximumFractionDigits: 2 });
+  }, []);
+
+  const fullDelegatedValue = formatNumber(props.totalDelegated);
+  const delegatedValue = props.useCompactDelegatedNumbers
+    ? formatCompactDelegatedNumber(props.totalDelegated)
+    : fullDelegatedValue;
+
   return (
     <S.TableBodyRowWrapper>
       <S.TableBodyRow onClick={props.onToggle} open={props.isOpen}>
@@ -58,13 +68,11 @@ function Project(props: {
           </S.TableBodyImage>
           <S.ProjectNameWrapper>
             <span>{props.project.flp_name ?? '-'}</span>
-            {props.project.flp_token_ticker && (
-              <span className={'ticker'}>{`$${props.project.flp_token_ticker}`}</span>
-            )}
+            {props.project.flp_token_ticker && <span className={'ticker'}>{`$${props.project.flp_token_ticker}`}</span>}
           </S.ProjectNameWrapper>
         </S.TableBodyCell>
         <S.TableBodyCell flex={1} align={'right'}>
-          <span>{formatNumber(props.totalDelegated)}</span>
+          <span title={fullDelegatedValue}>{delegatedValue}</span>
           <S.TableBodyImage hasImage={true} size={17.5}>
             <img src={ASSETS.aoCircled} />
           </S.TableBodyImage>
@@ -167,6 +175,38 @@ export default function DelegateEcosystem() {
   const [openProjectId, setOpenProjectId] = React.useState<string | null>(null);
   const [activeSortKey, setActiveSortKey] = React.useState<ExploreSortKey | null>(null);
   const [sortDirection, setSortDirection] = React.useState<SortDirection>('desc');
+  const [useShortTabLabels, setUseShortTabLabels] = React.useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia(`(max-width: ${STYLING.cutoffs.tablet})`).matches;
+  });
+  const [useCompactDelegatedNumbers, setUseCompactDelegatedNumbers] = React.useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia(`(max-width: ${STYLING.cutoffs.mobile})`).matches;
+  });
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const tabletMediaQuery = window.matchMedia(`(max-width: ${STYLING.cutoffs.tablet})`);
+    const updateTabLabels = (event: MediaQueryListEvent) => setUseShortTabLabels(event.matches);
+
+    setUseShortTabLabels(tabletMediaQuery.matches);
+    tabletMediaQuery.addEventListener('change', updateTabLabels);
+
+    return () => tabletMediaQuery.removeEventListener('change', updateTabLabels);
+  }, []);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const mobileMediaQuery = window.matchMedia(`(max-width: ${STYLING.cutoffs.mobile})`);
+    const updateDelegatedFormat = (event: MediaQueryListEvent) => setUseCompactDelegatedNumbers(event.matches);
+
+    setUseCompactDelegatedNumbers(mobileMediaQuery.matches);
+    mobileMediaQuery.addEventListener('change', updateDelegatedFormat);
+
+    return () => mobileMediaQuery.removeEventListener('change', updateDelegatedFormat);
+  }, []);
 
   const totalProjectYields = React.useMemo(() => {
     if (!allocationProvider.totalDelegated || !allocationProvider.totalDelegated.combined) return {};
@@ -215,11 +255,7 @@ export default function DelegateEcosystem() {
   );
 
   const getSortValue = React.useCallback(
-    (
-      sortKey: ExploreSortKey,
-      project: any,
-      baseIndexMap: Map<string, number>
-    ): number | string | null => {
+    (sortKey: ExploreSortKey, project: any, baseIndexMap: Map<string, number>): number | string | null => {
       switch (sortKey) {
         case 'index':
           return baseIndexMap.get(project.id) ?? null;
@@ -350,7 +386,7 @@ export default function DelegateEcosystem() {
               <S.Tab active={currentTab === 'featured'}>
                 <Button
                   type={'primary'}
-                  label={'Popular Delegations'}
+                  label={useShortTabLabels ? 'Popular' : 'Popular Delegations'}
                   handlePress={() => setCurrentTab('featured')}
                   active={currentTab === 'featured'}
                   icon={ASSETS.trendUp}
@@ -360,7 +396,7 @@ export default function DelegateEcosystem() {
               <S.Tab active={currentTab === 'all'}>
                 <Button
                   type={'primary'}
-                  label={'Explore Delegations'}
+                  label={useShortTabLabels ? 'Explore' : 'Explore Delegations'}
                   handlePress={() => setCurrentTab('all')}
                   active={currentTab === 'all'}
                   icon={ASSETS.searchList}
@@ -427,6 +463,7 @@ export default function DelegateEcosystem() {
                           totalDelegated={totalDelegatedByProject(project.id)}
                           isOpen={openProjectId === project.id}
                           onToggle={() => setOpenProjectId((previous) => (previous === project.id ? null : project.id))}
+                          useCompactDelegatedNumbers={useCompactDelegatedNumbers}
                         />
                       );
                     })}

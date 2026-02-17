@@ -196,7 +196,7 @@ export const BalanceQuantitySection = styled.div`
 export const BalanceQuantityEndSection = styled(BalanceQuantitySection)`
   align-items: flex-end;
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     align-items: flex-start;
   }
 `;

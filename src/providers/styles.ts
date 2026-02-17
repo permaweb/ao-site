@@ -12,7 +12,7 @@ export const WalletListContainer = styled.div`
   flex-wrap: wrap;
   padding: 20px 0 40px 0;
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     flex-direction: column;
   }
 `;
@@ -40,7 +40,7 @@ export const WalletListItem = styled.button`
     border: 1px solid ${(props) => props.theme.colors.border.alt4} !important;
   }
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     width: calc(100% - 40px);
     margin: auto;
     padding: 25px 15px;

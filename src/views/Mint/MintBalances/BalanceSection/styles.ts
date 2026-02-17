@@ -30,7 +30,7 @@ export const BalanceHeaderWrapper = styled.div`
   padding: 20px;
   border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     flex-direction: column;
     gap: 30px;
   }
@@ -50,7 +50,7 @@ export const BalanceHeader = styled.div`
 export const BalanceWalletWrapper = styled.div`
   position: relative;
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     width: 100%;
   }
 `;
@@ -60,7 +60,7 @@ export const BalanceWalletAction = styled.div`
     font-weight: ${(props) => props.theme.typography.weight.regular} !important;
   }
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     button {
       height: 55px !important;
       width: 100% !important;
@@ -120,7 +120,7 @@ export const BalanceWalletDropdown = styled.div`
     }
   }
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     top: 60.5px;
     right: auto;
     left: 0;
@@ -203,7 +203,7 @@ export const BalanceQuantitySection = styled.div`
 export const BalanceQuantityEndSection = styled(BalanceQuantitySection)`
   align-items: flex-end;
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     align-items: flex-start;
   }
 `;
@@ -215,7 +215,7 @@ export const BalancesQuantityFlexSection = styled.div`
   gap: 25px;
   margin: 0 0 0 auto;
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     margin: 0;
   }
 `;
@@ -378,29 +378,36 @@ export const ModalWrapper = styled.div`
   }
 `;
 
-export const NetworkDisconnected = styled.div`
-  width: 100%;
+export const NetworkDisconnectedIconText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 25px;
-  padding: 20px 0 0 0;
+  gap: 10px;
 
   p {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
     font-size: ${(props) => props.theme.typography.size.xSmall};
     color: ${(props) => props.theme.colors.font.primary};
-    margin: -10px 0 0 0;
+    margin: 0;
   }
 
   svg {
-    height: 25px;
-    width: 25px;
+    height: 18px;
+    width: 18px;
     color: ${(props) => props.theme.colors.font.primary};
     fill: ${(props) => props.theme.colors.font.primary};
   }
+`;
+
+export const NetworkDisconnected = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 20px 0 0 0;
 `;
 
 export const TooltipWrapper = styled.div`

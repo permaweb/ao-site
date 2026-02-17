@@ -68,9 +68,9 @@ export default function AllocationDisplay(props: IProps) {
 
   if (!arProvider.walletAddress) {
     return (
-      <S.Wrapper>
-        <span>-</span>
-      </S.Wrapper>
+      <S.DisabledAction>
+        <Button type={'alt2'} label={language.add} handlePress={() => {}} disabled={true} icon={ASSETS.plus} />
+      </S.DisabledAction>
     );
   }
 

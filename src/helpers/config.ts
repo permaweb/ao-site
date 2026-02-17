@@ -79,7 +79,7 @@ export const ASSETS = {
   exchange: getTxEndpoint('KfE6Dh0j2pTLo4Z8U6fmk6mCRsB6O6NgxJpI_Vm0_wY'),
   arrowRight: getTxEndpoint('Xkqtxc5_R8KSczygjl9iOk0LHv-GSbD8xhIw5IPIIuc'),
   github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
-  info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
+  info: getTxEndpoint('XnaFbPesz-Hib7zpxlvJ0Bpeigl__8wrBtCfYpkWfWk'),
   landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),
   link: getTxEndpoint('UMfjnj-8e7fb3lYRdcFygu8c4JoBZq3hB-mzycYT4DU'),
   menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
@@ -94,7 +94,7 @@ export const ASSETS = {
   token: getTxEndpoint('f18VARM42GRSDY8UzZtEJrCsakbxluldOAnnED_V_Zk'),
   trendUp: getTxEndpoint('Vhb94c_k1-QNjphRQpF4mwbAL79VseUTyZ-y_fo68yE'),
   view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
-  wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
+  wallet: getTxEndpoint('667ltlFnNixyTj_CbCcOP_CWMz7MzLrfv5bAjZtKux4'),
   wander: getTxEndpoint('0nDLgQik8oWPr0nSVEwI9B8D-XMEptQagNdsdr_y6Jk'),
   warning: getTxEndpoint('667ltlFnNixyTj_CbCcOP_CWMz7MzLrfv5bAjZtKux4'),
   website: getTxEndpoint('YBilSmUhX--T9vffUIDsCCrWoakxaxPqPVw7NCZNNVs'),
@@ -121,7 +121,7 @@ export const STYLING = {
     max: '1600px',
     tablet: '840px',
     tabletSecondary: '768px',
-    secondary: '540px',
+    mobile: '540px',
   },
   dimensions: {
     button: {

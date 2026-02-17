@@ -1,6 +1,7 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['import', '@typescript-eslint', 'simple-import-sort'],
+  ignorePatterns: ['dist/**'],
   extends: [],
   rules: {
     'import/no-duplicates': 'error',

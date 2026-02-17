@@ -78,8 +78,8 @@ export const theme = (currentTheme: any): DefaultTheme => ({
         border: currentTheme.neutral4,
         color: currentTheme.neutralA1,
         active: {
-          background: currentTheme.neutral4,
-          border: currentTheme.neutralA7,
+          background: currentTheme.neutral2,
+          border: currentTheme.neutral5,
           color: currentTheme.neutralA1,
         },
         disabled: {
@@ -93,7 +93,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
         border: currentTheme.primary1,
         color: currentTheme.light1,
         active: {
-          background: currentTheme.primary2,
+          background: currentTheme.neutral2,
           border: currentTheme.primary2,
           color: currentTheme.light1,
         },

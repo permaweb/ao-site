@@ -74,10 +74,10 @@ export const DesktopNavWrapper = styled.div`
     text-transform: none;
     transition: none;
     opacity: 0.8;
-    
-      &:hover {
-        opacity: 1.0;
-      }
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   @media (max-width: ${STYLING.cutoffs.initial}) {

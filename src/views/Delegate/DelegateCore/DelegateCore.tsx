@@ -54,7 +54,10 @@ export default function DelegateCore() {
           return (
             <S.BodySection key={project.id}>
               <S.BodySectionHeader>
-                <p>{project.name}</p>
+                <S.BodySectionName>
+                  <img src={project.logo} alt={`${project.name} logo`} />
+                  <p>{project.name}</p>
+                </S.BodySectionName>
                 <span>{`$${project.ticker}`}</span>
               </S.BodySectionHeader>
               <S.BodySectionDescription>

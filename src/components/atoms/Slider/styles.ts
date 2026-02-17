@@ -198,7 +198,7 @@ export const LabelWrapper = styled.div`
   flex-wrap: wrap;
   gap: 10px;
   margin: 0 0 10px 0;
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     flex-direction: column;
     align-items: flex-start;
   }

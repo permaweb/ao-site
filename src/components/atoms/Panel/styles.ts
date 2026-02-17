@@ -31,7 +31,7 @@ export const Container = styled.div<{
   transform: translateX(${(props) => (props.open ? '0' : 'calc(100% + 10px)')});
   transition: transform ${transition2};
   box-shadow: -1px 0 10px ${(props) => props.theme.colors.shadow.alt1};
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     min-width: calc(100vw - 20px);
   }
 `;

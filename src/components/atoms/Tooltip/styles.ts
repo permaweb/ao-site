@@ -85,7 +85,6 @@ export const Icon = styled.div`
     height: 16.5px;
     width: 16.5px;
     color: ${(props) => props.theme.colors.font.primary};
-    fill: ${(props) => props.theme.colors.font.primary};
     transition: all 100ms;
   }
 

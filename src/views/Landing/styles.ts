@@ -24,16 +24,16 @@ export const GraphicWrapper = styled.div`
     top: ${STYLING.dimensions.nav.height};
     left: 0;
     z-index: 2;
-    opacity: 0.85;
+    opacity: 0.5;
     pointer-events: none;
   }
 `;
 
 export const ContentWrapper = styled.div`
-  width: fit-content;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: flex-end;
   margin: 0 0 0 auto;
 
@@ -41,7 +41,7 @@ export const ContentWrapper = styled.div`
     line-height: 1.35;
     position: relative;
     transition: ${open} ${fadeIn2};
-    padding: 0 0 0 20px;
+    padding: 0 20px 0 0px;
 
     &:before {
       content: '';
@@ -57,22 +57,21 @@ export const ContentWrapper = styled.div`
   }
 
   p {
-    max-width: 445px;
+    max-width: 350px;
+    text-wrap: balance;
     line-height: 1.5;
-    font-size: ${(props) => props.theme.typography.size.lg};
-    font-size: clamp(16px, 1.65vw, 18px);
+    font-size: clamp(15px, 1.65vw, 17px);
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
     color: ${(props) => props.theme.colors.font.primary};
-    text-align: right;
-    padding: 30px 0 20px 20px;
+    text-align: left;
+    padding: 30px 20px 20px 0px;
     margin: -10px 0 0 0;
     position: relative;
     transition: ${open} ${fadeIn2};
 
     a {
-      font-size: ${(props) => props.theme.typography.size.lg};
-      font-size: clamp(16px, 1.65vw, 18px);
+      font-size: clamp(14px, 1.65vw, 16px);
       font-family: ${(props) => props.theme.typography.family.primary};
       font-weight: ${(props) => props.theme.typography.weight.regular};
       color: ${(props) => props.theme.colors.font.primary};

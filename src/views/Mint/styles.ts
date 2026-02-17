@@ -257,28 +257,35 @@ export const NetworkSectionBodyValue = styled.div`
   }
 `;
 
-export const NetworkDisconnected = styled.div`
+export const NetworkDisconnectedIconText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 25px;
-  padding: 40px 15px;
+  gap: 10px;
 
   p {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
     font-size: ${(props) => props.theme.typography.size.base};
     color: ${(props) => props.theme.colors.font.primary};
-    margin: -10px 0 0 0;
+    margin: 0;
   }
 
   svg {
-    height: 35px;
-    width: 35px;
+    height: 18px;
+    width: 18px;
     color: ${(props) => props.theme.colors.font.primary};
     fill: ${(props) => props.theme.colors.font.primary};
   }
+`;
+
+export const NetworkDisconnected = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 40px 15px;
 `;
 
 export const ModalWrapper = styled.div`

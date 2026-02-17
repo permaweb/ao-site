@@ -31,13 +31,17 @@ export const HeaderWrapper = styled.div`
   span {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
-    font-size: ${(props) => props.theme.typography.size.base};
+    font-size: ${(props) => `clamp(${props.theme.typography.size.xSmall}, 2vw, ${props.theme.typography.size.base})`};
     color: ${(props) => props.theme.colors.font.alt1};
   }
 
   @media (max-width: ${STYLING.cutoffs.initial}) {
     justify-content: space-between;
     flex-wrap: wrap;
+  }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    padding: 18px 16px 16px 16px;
   }
 `;
 
@@ -52,18 +56,35 @@ export const TableNavigation = styled.div`
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid ${(props) => props.theme.colors.border.primary} !important;
+
+  @media (max-width: ${STYLING.cutoffs.tabletSecondary}) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 export const TabsWrapper = styled.div`
   display: flex;
+
+  @media (max-width: ${STYLING.cutoffs.tabletSecondary}) {
+    width: 100%;
+  }
 `;
 
 export const Tab = styled.div<{ active: boolean }>`
+  @media (max-width: ${STYLING.cutoffs.tabletSecondary}) {
+    flex: 1;
+  }
+
   button {
     border: none !important;
     background: ${(props) =>
       props.active ? props.theme.colors.container.primary.background : props.theme.colors.container.alt1.background};
     border-right: 1px solid ${(props) => props.theme.colors.border.primary} !important;
+
+    @media (max-width: ${STYLING.cutoffs.tabletSecondary}) {
+      width: 100%;
+    }
 
     span {
       color: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1)} !important;
@@ -107,6 +128,11 @@ export const SearchWrapper = styled.div`
   min-width: 240px;
   position: relative;
 
+  @media (max-width: ${STYLING.cutoffs.tabletSecondary}) {
+    width: 100%;
+    min-width: 0;
+  }
+
   > * {
     margin: 0 !important;
   }
@@ -117,6 +143,12 @@ export const SearchWrapper = styled.div`
     border: none !important;
     border-left: 1px solid ${(props) => props.theme.colors.border.primary} !important;
     background: ${(props) => props.theme.colors.container.alt1.background} !important;
+    font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+
+    @media (max-width: ${STYLING.cutoffs.tabletSecondary}) {
+      border-left: none !important;
+      border-top: 1px solid ${(props) => props.theme.colors.border.primary} !important;
+    }
   }
 
   svg {
@@ -158,6 +190,24 @@ export const TableHeaderRow = styled.div`
       border-right: 1px solid ${(props) => props.theme.colors.border.primary};
     }
   }
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    > :nth-child(1) {
+      display: none;
+    }
+  }
+
+  @media (max-width: ${STYLING.cutoffs.tabletSecondary}) {
+    > :nth-child(4) {
+      display: none;
+    }
+
+    > :nth-child(2),
+    > :nth-child(3),
+    > :nth-child(5) {
+      flex: 1;
+    }
+  }
 `;
 
 export const TableHeaderCell = styled.div<{
@@ -189,7 +239,11 @@ export const TableHeaderCell = styled.div<{
   &:hover {
     span {
       color: ${(props) =>
-        props.sortable ? props.theme.colors.font.primary : props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1};
+        props.sortable
+          ? props.theme.colors.font.primary
+          : props.active
+          ? props.theme.colors.font.primary
+          : props.theme.colors.font.alt1};
     }
   }
 `;
@@ -235,6 +289,24 @@ export const TableBodyRow = styled.div<{ open: boolean }>`
       border-right: 1px solid ${(props) => props.theme.colors.border.primary};
     }
   }
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    > :nth-child(1) {
+      display: none;
+    }
+  }
+
+  @media (max-width: ${STYLING.cutoffs.tabletSecondary}) {
+    > :nth-child(4) {
+      display: none;
+    }
+
+    > :nth-child(2),
+    > :nth-child(3),
+    > :nth-child(5) {
+      flex: 1;
+    }
+  }
 `;
 
 export const TableBodyRowDetail = styled.div<{ open: boolean }>`
@@ -245,8 +317,7 @@ export const TableBodyRowDetail = styled.div<{ open: boolean }>`
   border-top: 1px solid ${(props) => (props.open ? props.theme.colors.border.primary : 'transparent')};
   background: ${(props) => props.theme.colors.container.primary.active};
   pointer-events: ${(props) => (props.open ? 'auto' : 'none')};
-  transition:
-    grid-template-rows ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate},
+  transition: grid-template-rows ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate},
     opacity ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate},
     border-color ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
 `;
@@ -263,6 +334,10 @@ export const PanelWrapper = styled.div`
   justify-content: space-between;
   gap: 20px;
   padding: 20px 15px 20px calc(50px + 15px);
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    padding: 20px 15px;
+  }
 `;
 
 export const PanelWrapperStart = styled.div`
@@ -294,6 +369,11 @@ export const TableBodyCell = styled.div<{ flex: number; width?: number; align: '
   gap: 12.5px;
   flex: ${(props) => props.flex};
 
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    padding: 0 10px;
+    gap: 8px;
+  }
+
   span {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.medium};
@@ -324,6 +404,10 @@ export const ProjectNameWrapper = styled.div`
   span.ticker {
     font-size: ${(props) => props.theme.typography.size.xxSmall};
     color: ${(props) => props.theme.colors.font.alt1};
+
+    @media (max-width: ${STYLING.cutoffs.tablet}) {
+      display: none;
+    }
   }
 `;
 
@@ -344,6 +428,16 @@ export const TableBodyImage = styled.div<{ hasImage: boolean; size?: number }>`
     width: 17.5px;
     color: ${(props) => props.theme.colors.font.primary};
     fill: ${(props) => props.theme.colors.font.primary};
+  }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    height: ${(props) => (props.size ? `${props.size}px` : '18px')};
+    width: ${(props) => (props.size ? `${props.size}px` : '18px')};
+
+    img {
+      height: ${(props) => (props.size ? `${props.size}px` : '18px')};
+      width: ${(props) => (props.size ? `${props.size}px` : '18px')};
+    }
   }
 `;
 

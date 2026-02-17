@@ -19,7 +19,7 @@ export const BodyWrapper = styled.div`
 `;
 
 export const DelegationsWrapper = styled.div`
-  width: calc(100% - 350px);
+  width: calc(100% - 300px);
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -31,11 +31,11 @@ export const DelegationsWrapper = styled.div`
 
 export const SummaryWrapper = styled.div`
   height: fit-content;
-  width: 350px;
+  width: 300px;
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  padding: 10px;
+  gap: 20px;
+  padding: 8px;
   position: sticky;
   top: 100px;
 

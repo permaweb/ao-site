@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
-  padding: 20px;
+  padding: 16px;
 `;
 
 export const Header = styled.div`
@@ -27,10 +27,10 @@ export const ChartWrapper = styled.div`
 `;
 
 export const ChartHeader = styled.div`
-  margin: 0 0 20px 0;
+  margin: 0 0 16px 0;
 
   span {
-    font-size: ${(props) => props.theme.typography.size.small};
+    font-size: ${(props) => props.theme.typography.size.xSmall};
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
     color: ${(props) => props.theme.colors.font.alt1};
@@ -43,15 +43,15 @@ export const Chart = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
 `;
 
 export const ChartKeyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  gap: 20px;
-  margin: 20px 0 0 0;
+  gap: 16px;
+  margin: 16px 0 0 0;
 `;
 
 export const ChartKeyLine = styled.div`
@@ -85,7 +85,7 @@ export const Percentage = styled.p`
 `;
 
 export const SummaryWrapper = styled.div`
-  margin: 30px 0 0 0;
+  margin: 24px 0 0 0;
 `;
 
 export const SummaryHeader = styled.div`
@@ -124,12 +124,12 @@ export const SummaryInfoLine = styled.div`
 export const SummaryBody = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12.5px;
-  margin: 12.5px 0 0 0;
+  gap: 10px;
+  margin: 10px 0 0 0;
 
   > * {
     &:not(:last-child) {
-      padding: 0 0 12.5px 0;
+      padding: 0 0 10px 0;
       border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
     }
   }
@@ -148,7 +148,7 @@ export const SummaryLine = styled.div`
 `;
 
 export const SummaryLineLabel = styled.div`
-  width: 140px;
+  width: 120px;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -210,7 +210,7 @@ export const SummaryLineActions = styled.div`
     }
   }
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     display: none;
   }
 `;
@@ -232,7 +232,7 @@ export const ActionMain = styled.div`
 `;
 
 export const InfoWrapper = styled.div`
-  margin: 40px 0;
+  margin: 28px 0;
 
   P {
     font-family: ${(props) => props.theme.typography.family.primary};

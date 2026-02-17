@@ -20,6 +20,10 @@ export const Wrapper = styled.div`
   }
 `;
 
+export const DisabledAction = styled.div`
+  opacity: 0.45;
+`;
+
 export const Indicator = styled.div<{ color: string }>`
   height: 9.5px;
   width: 9.5px;

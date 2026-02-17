@@ -22,7 +22,7 @@ export const Wrapper = styled.div<{ warning: boolean | undefined }>`
   border-radius: ${STYLING.dimensions.radius.alt2};
   animation: ${open} ${transition1};
 
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     min-width: 0;
     max-width: none;
     width: 90vw;

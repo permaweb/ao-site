@@ -231,8 +231,10 @@ export default function Mint() {
                 </S.NetworkSectionsWrapper>
               ) : (
                 <S.NetworkDisconnected>
-                  <ReactSVG src={ASSETS.wallet} />
-                  <p>{language.connectArweaveWalletToViewRewards}</p>
+                  <S.NetworkDisconnectedIconText>
+                    <ReactSVG src={ASSETS.wallet} />
+                    <p>{language.connectArweaveWalletToViewRewards}</p>
+                  </S.NetworkDisconnectedIconText>
                   <Button
                     type={'primary'}
                     label={language.connectWallet}
@@ -285,8 +287,10 @@ export default function Mint() {
                   </S.NetworkBodyInfoLine>
                 ) : (
                   <S.NetworkDisconnected>
-                    <ReactSVG src={ASSETS.wallet} />
-                    <p>{language.connectEthWalletToViewDeposits}</p>
+                    <S.NetworkDisconnectedIconText>
+                      <ReactSVG src={ASSETS.wallet} />
+                      <p>{language.connectEthWalletToViewDeposits}</p>
+                    </S.NetworkDisconnectedIconText>
                     <Button
                       type={'primary'}
                       label={language.connectEthWallet}

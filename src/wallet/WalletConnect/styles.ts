@@ -1,11 +1,28 @@
 import styled from 'styled-components';
 
+export const Icon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > div > div {
+    display: flex;
+    align-items: center;
+  }
+
+  svg {
+    height: 18px;
+    width: 18px;
+    fill: ${(props) => props.theme.colors.icon.primary.fill};
+  }
+`;
+
 export const ConnectWrapper = styled.div<{ isConnected: boolean }>`
   display: flex;
   align-items: center;
-  gap: 17.5px;
-  padding: 10px 17.5px;
-  transition: all 100ms;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 17.5px;
 
   &:hover {
     background: ${(props) =>

@@ -24,13 +24,17 @@ export const HeaderWrapper = styled.div`
   span {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
-    font-size: ${(props) => props.theme.typography.size.base};
+    font-size: ${(props) => `clamp(${props.theme.typography.size.xSmall}, 2vw, ${props.theme.typography.size.base})`};
     color: ${(props) => props.theme.colors.font.alt1};
   }
 
   @media (max-width: ${STYLING.cutoffs.initial}) {
     justify-content: space-between;
     flex-wrap: wrap;
+  }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    padding: 18px 16px 16px 16px;
   }
 `;
 
@@ -60,6 +64,14 @@ export const BodySection = styled.div`
   flex: 1;
   position: relative;
   padding: 20px 25px;
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    padding: 16px 20px;
+  }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    padding: 16px;
+  }
 `;
 
 export const BodySectionHeader = styled.div`
@@ -82,9 +94,26 @@ export const BodySectionHeader = styled.div`
   }
 `;
 
+export const BodySectionName = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  img {
+    height: 23px;
+    width: 23px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+`;
+
 export const BodySectionDescription = styled.div`
   min-height: 100px;
   margin: 10px 0 0 0;
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    min-height: 72px;
+  }
 
   p {
     font-family: ${(props) => props.theme.typography.family.primary};
@@ -99,6 +128,10 @@ export const BodySectionAction = styled.div`
   align-items: center;
   gap: 7.5px;
   margin: 40px 0 0 0;
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    margin: 24px 0 0 0;
+  }
 
   p {
     font-family: ${(props) => props.theme.typography.family.primary};

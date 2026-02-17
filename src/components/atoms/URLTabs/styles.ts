@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
 `;
 
 export const TabsHeader = styled.div<{ useFixed: boolean }>`
-  @media (max-width: ${STYLING.cutoffs.secondary}) {
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
     position: relative;
     top: auto;
   }

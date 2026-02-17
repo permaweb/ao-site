@@ -1,4 +1,7 @@
+import { ReactSVG } from 'react-svg';
+
 import { Button } from 'components/atoms/Button';
+import { ASSETS } from 'helpers/config';
 import { formatAddress } from 'helpers/utils';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -20,6 +23,11 @@ export default function WalletConnect() {
       onClick={() => (arProvider.walletAddress ? {} : arProvider.setWalletModalVisible(true))}
       isConnected={!!arProvider.walletAddress}
     >
+      {!arProvider.walletAddress && (
+        <S.Icon>
+          <ReactSVG src={ASSETS.wallet} />
+        </S.Icon>
+      )}
       <p>{label}</p>
       {arProvider.walletAddress && (
         <Button type={'alt2'} label={language.disconnect} handlePress={() => arProvider.handleDisconnect()} />

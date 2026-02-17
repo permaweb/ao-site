@@ -25,6 +25,21 @@ export default function DelegateSummary() {
 
   const [data, setData] = React.useState<any>(null);
 
+  const emptyData = React.useMemo(
+    () => ({
+      labels: ['Empty'],
+      datasets: [
+        {
+          data: [1],
+          backgroundColor: [theme.colors.border.primary],
+          borderColor: [theme.colors.border.alt3],
+          borderWidth: 1.15,
+        },
+      ],
+    }),
+    [theme]
+  );
+
   const keys = React.useMemo(() => {
     return [
       theme.colors.stats.primary,
@@ -131,6 +146,9 @@ export default function DelegateSummary() {
     );
   }
 
+  const hasAllocationData = Boolean(data && allocationProvider.records?.length > 0);
+  const isWalletConnected = Boolean(arProvider.walletAddress);
+
   return (
     <>
       <S.Wrapper className={'border-wrapper-primary'}>
@@ -143,7 +161,7 @@ export default function DelegateSummary() {
               <span>{language.allocationSummaryDescription}</span>
             </S.ChartHeader>
 
-            {data && allocationProvider.records?.length > 0 ? (
+            {hasAllocationData ? (
               <S.Chart>
                 <Pie
                   data={data}
@@ -167,59 +185,50 @@ export default function DelegateSummary() {
                 />
               </S.Chart>
             ) : (
-              <S.InfoWrapper>
-                <p>
-                  {!arProvider.walletAddress
-                    ? 'Wallet Not Connected'
-                    : allocationProvider?.records !== null
-                    ? 'No Records Found'
-                    : 'Loading...'}
-                </p>
-              </S.InfoWrapper>
+              <>
+                <S.Chart style={{ opacity: 0.45, filter: 'grayscale(35%)', pointerEvents: 'none' }}>
+                  <Pie
+                    data={emptyData}
+                    options={{
+                      animation: {
+                        duration: 0,
+                      },
+                      plugins: {
+                        legend: {
+                          display: false,
+                        },
+                        tooltip: {
+                          enabled: false,
+                        },
+                      },
+                    }}
+                  />
+                </S.Chart>
+                {isWalletConnected ? (
+                  <S.InfoWrapper>
+                    <p>{allocationProvider?.records !== null ? 'No Records Found' : 'Loading...'}</p>
+                  </S.InfoWrapper>
+                ) : null}
+              </>
             )}
           </S.ChartWrapper>
-          <S.SummaryWrapper>
-            <S.SummaryHeader>
-              <span>{language.summary}</span>
-            </S.SummaryHeader>
-            <S.SummarySubheader>
-              <span>Core Tokens</span>
-            </S.SummarySubheader>
-            <S.SummaryBody>
-              {coreRecords
-                .filter((record) => record.value > 0)
-                .map((record: AllocationRecordType, index: number) => {
-                  const coreEntry = Object.values(coreMap).find((c) => c.id === record.id);
-                  const backgroundColor = coreEntry?.color || keys[index % keys.length];
-
-                  return (
-                    <S.SummaryLine key={`core-${index}`}>
-                      <S.SummaryLineLabel>
-                        <S.ChartKey background={backgroundColor} />
-                        <span>{record.label}</span>
-                      </S.SummaryLineLabel>
-                      <S.SummaryLineActionsWrapper>
-                        {renderAdjustmentButtons(record)}
-                        <S.SummaryLinePercentage>
-                          <p>{formatPercentage(record.value)}</p>
-                        </S.SummaryLinePercentage>
-                      </S.SummaryLineActionsWrapper>
-                    </S.SummaryLine>
-                  );
-                })}
-            </S.SummaryBody>
-            <S.SummaryDivider />
-            <S.SummarySubheader>
-              <span>Ecosystem Projects</span>
-            </S.SummarySubheader>
-            <S.SummaryBody>
-              {ecosystemRecords.length > 0 ? (
-                <>
-                  {ecosystemRecords.map((record: AllocationRecordType, index: number) => {
-                    const backgroundColor = keys[(index + 3) % keys.length];
+          {isWalletConnected ? (
+            <S.SummaryWrapper>
+              <S.SummaryHeader>
+                <span>{language.summary}</span>
+              </S.SummaryHeader>
+              <S.SummarySubheader>
+                <span>Core Tokens</span>
+              </S.SummarySubheader>
+              <S.SummaryBody>
+                {coreRecords
+                  .filter((record) => record.value > 0)
+                  .map((record: AllocationRecordType, index: number) => {
+                    const coreEntry = Object.values(coreMap).find((c) => c.id === record.id);
+                    const backgroundColor = coreEntry?.color || keys[index % keys.length];
 
                     return (
-                      <S.SummaryLine key={`ecosystem-${index}`}>
+                      <S.SummaryLine key={`core-${index}`}>
                         <S.SummaryLineLabel>
                           <S.ChartKey background={backgroundColor} />
                           <span>{record.label}</span>
@@ -233,22 +242,49 @@ export default function DelegateSummary() {
                       </S.SummaryLine>
                     );
                   })}
-                </>
-              ) : (
-                <S.SummaryInfoLine>
-                  <span>No Allocations</span>
-                </S.SummaryInfoLine>
-              )}
-            </S.SummaryBody>
-          </S.SummaryWrapper>
+              </S.SummaryBody>
+              <S.SummaryDivider />
+              <S.SummarySubheader>
+                <span>Ecosystem Projects</span>
+              </S.SummarySubheader>
+              <S.SummaryBody>
+                {ecosystemRecords.length > 0 ? (
+                  <>
+                    {ecosystemRecords.map((record: AllocationRecordType, index: number) => {
+                      const backgroundColor = keys[(index + 3) % keys.length];
+
+                      return (
+                        <S.SummaryLine key={`ecosystem-${index}`}>
+                          <S.SummaryLineLabel>
+                            <S.ChartKey background={backgroundColor} />
+                            <span>{record.label}</span>
+                          </S.SummaryLineLabel>
+                          <S.SummaryLineActionsWrapper>
+                            {renderAdjustmentButtons(record)}
+                            <S.SummaryLinePercentage>
+                              <p>{formatPercentage(record.value)}</p>
+                            </S.SummaryLinePercentage>
+                          </S.SummaryLineActionsWrapper>
+                        </S.SummaryLine>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <S.SummaryInfoLine>
+                    <span>No Allocations</span>
+                  </S.SummaryInfoLine>
+                )}
+              </S.SummaryBody>
+            </S.SummaryWrapper>
+          ) : null}
         </S.Body>
       </S.Wrapper>
       <S.ActionMain>
         <Button
           type={'alt1'}
-          label={language.saveChanges}
+          label={isWalletConnected ? language.saveChanges : 'Connect Wallet For Your Allocation'}
           handlePress={() => allocationProvider.savePreferences()}
-          disabled={allocationProvider.loading || !allocationProvider.unsavedChanges}
+          disabled={!isWalletConnected || allocationProvider.loading || !allocationProvider.unsavedChanges}
           loading={allocationProvider.loading}
           height={60}
           fullWidth
