@@ -169,7 +169,7 @@ export const Alt1 = styled(Primary)`
   border: 1px solid
     ${(props) => (props.active ? props.theme.colors.button.alt1.active.border : props.theme.colors.button.alt1.border)};
   &:hover {
-    background: ${(props) => `color-mix(in srgb, ${props.theme.colors.button.alt1.background} 8 0%, transparent)`};
+    background: ${(props) => `color-mix(in srgb, ${props.theme.colors.button.alt1.background} 80%, transparent)`};
     span {
       color: ${(props) => props.theme.colors.font.light1} !important;
     }

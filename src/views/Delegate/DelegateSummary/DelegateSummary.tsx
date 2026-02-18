@@ -140,8 +140,16 @@ export default function DelegateSummary() {
   }, [arProvider.walletAddress, sortedRecords, coreMap, keys, theme]);
 
   function renderAdjustmentButtons(record: AllocationRecordType) {
+    const canRemove = allocationProvider.records && allocationProvider.records.length > 1;
     return (
       <S.SummaryLineActions>
+        <Button
+          type={'primary'}
+          label={'×'}
+          tooltip={language.remove}
+          handlePress={() => allocationProvider.removeToken(record)}
+          disabled={!canRemove || allocationProvider.isTokenDisabled(record)}
+        />
         <Button
           type={'primary'}
           label={'+5%'}

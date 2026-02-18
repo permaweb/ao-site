@@ -170,13 +170,13 @@ export const SummaryLineLabel = styled.div`
 export const SummaryLineActionsWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 `;
 
 export const SummaryLineActions = styled.div`
   display: flex;
   align-items: center;
-  gap: 12.5px;
+  gap: 6px;
 
   button {
     min-height: 0 !important;
@@ -184,7 +184,7 @@ export const SummaryLineActions = styled.div`
     padding: 0.5px 3.5px !important;
     span {
       font-family: ${(props) => props.theme.typography.family.primary} !important;
-      font-weight: ${(props) => props.theme.typography.weight.medium} !important;
+      font-weight: ${(props) => props.theme.typography.weight.regular} !important;
       font-size: ${(props) => props.theme.typography.size.xxxxSmall} !important;
     }
   }
