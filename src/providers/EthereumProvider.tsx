@@ -7,7 +7,7 @@ import torusModule from '@web3-onboard/torus';
 import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
-import { readHandler } from 'api';
+import { readHandler, readProcess } from 'api';
 import React from 'react';
 import Web3, { EventLog } from 'web3';
 
@@ -19,6 +19,8 @@ import {
 	Erc20_ABI,
 	ETH_CONTRACTS,
 	ETH_TOKEN_DENOMINATION,
+	HB,
+	PATCH_MAP,
 	PRICE_FEED_ABI,
 	StEthBridge_ABI,
 	UsdsBridge_ABI,
@@ -66,7 +68,6 @@ async function getPriceForToken(processId: string): Promise<{ usd_price: number;
 		}
 
 		const data = await response.json();
-		console.log(data); // Should contain usd_price and denominator fields
 		return data;
 	} catch (error) {
 		console.error('Error fetching price from Supabase:', error);
@@ -444,6 +445,58 @@ export function EthereumProvider(props: EthereumProviderProps) {
 							ignoreDataResponse: true,
 						}),
 					]);
+
+					const [daiRespPrice, stEthRespPrice, usdsRespPrice] = await Promise.all([
+						readProcess({
+							processId: PATCH_MAP.dai.processId,
+							node: { url: HB.read3 },
+							path: `${PATCH_MAP.dai.ticker}/usd`,
+							appendPath: true,
+						}),
+						readProcess({
+							processId: PATCH_MAP.stEth.processId,
+							node: { url: HB.read3 },
+							path: `${PATCH_MAP.stEth.ticker}/usd`,
+							appendPath: true,
+						}),
+						readProcess({
+							processId: PATCH_MAP.usds.processId,
+							node: { url: HB.read3 },
+							path: `${PATCH_MAP.usds.ticker}/usd`,
+							appendPath: true,
+						}),
+					]);
+
+					const [daiRespYield, stEthRespYield, usdsRespYield] = await Promise.all([
+						readProcess({
+							processId: PATCH_MAP.dai.processId,
+							node: { url: HB.read3 },
+							path: `yield/bps`,
+							appendPath: true,
+						}),
+						readProcess({
+							processId: PATCH_MAP.stEth.processId,
+							node: { url: HB.read3 },
+							path: `yield/bps`,
+							appendPath: true,
+						}),
+						readProcess({
+							processId: PATCH_MAP.usds.processId,
+							node: { url: HB.read3 },
+							path: `yield/bps`,
+							appendPath: true,
+						}),
+					]);
+
+					console.log(daiResp);
+
+					console.log(daiRespPrice);
+					console.log(stEthRespPrice);
+					console.log(usdsRespPrice);
+
+					console.log(daiRespYield);
+					console.log(stEthRespYield);
+					console.log(usdsRespYield);
 
 					const daiPrice = Number(daiResp?.['Last-Price']) / 10000;
 					const daiYield = Number(daiResp?.['Last-Yield']) / 10000;

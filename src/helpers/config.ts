@@ -28,6 +28,28 @@ export const SUPABASE = {
 	anonKey: process.env.REACT_APP_SUPABASE_ANON_KEY || '',
 };
 
+export const HB = {
+	defaultNode: 'https://forward.computer',
+	read1: 'https://state.forward.computer',
+	read2: 'https://state-a.forward.computer',
+	read3: 'https://state-b.forward.computer',
+};
+
+export const PATCH_MAP = {
+	stEth: {
+		processId: 'U4IrjxcKVsEya5kQbZPbjLCoj868P129Z4IlArMOzuc',
+		ticker: 'eth',
+	},
+	dai: {
+		processId: 'QzWis3AEZTl1se17kvHXko-dfhPdWXJezhuyy0e3NTg',
+		ticker: 'dai',
+	},
+	usds: {
+		processId: 'JJPMirAJb2RR7mqIAilAGWjA3EwHIEXAnc__CfNKqNs',
+		ticker: 'usds', // sky
+	},
+};
+
 export const ETH_CONTRACTS = {
 	stEth: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
 	stEthBridge: '0xfE08D40Eee53d64936D3128838867c867602665c',
