@@ -6,6 +6,7 @@ import { STYLING } from 'helpers/config';
 export const Wrapper = styled.div`
   width: 100%;
   padding-top: 32px;
+  padding-bottom: 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -166,7 +167,7 @@ export const MetricsLine = styled.div`
     height: 22.5px;
     display: block;
     color: ${(props) => props.theme.colors.font.alt1};
-    font-size: ${(props) => props.theme.typography.size.xSmall};
+    font-size: ${(props) => props.theme.typography.size.small};
     text-transform: none;
   }
 `;

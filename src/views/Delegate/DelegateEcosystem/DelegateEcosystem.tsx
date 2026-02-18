@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
+import { useTheme } from 'styled-components';
 
 import { AllocationDisplay } from 'components/atoms/AllocationDisplay';
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
-import { ASSETS, ENDPOINTS, STYLING } from 'helpers/config';
+import { AO, ASSETS, ENDPOINTS, STYLING } from 'helpers/config';
 import { FLPTabType } from 'helpers/types';
 import { formatAddress, formatDate, formatNumber, getRelativeDate, parseBigIntAsNumber } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
+import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
@@ -26,8 +28,42 @@ function Project(props: {
 }) {
   const [copied, setCopied] = React.useState<boolean>(false);
 
+  const theme = useTheme();
+  const arProvider = useArweaveProvider();
+  const allocationProvider = useAllocationProvider();
   const languageProvider = useLanguageProvider();
   const language = languageProvider.object[languageProvider.current];
+  const keys = React.useMemo(
+    () => [
+      theme.colors.stats.primary,
+      theme.colors.stats.alt1,
+      theme.colors.stats.alt2,
+      theme.colors.stats.alt3,
+      theme.colors.stats.alt4,
+      theme.colors.stats.alt5,
+      theme.colors.stats.alt6,
+      theme.colors.stats.alt7,
+      theme.colors.stats.alt8,
+      theme.colors.stats.alt9,
+      theme.colors.stats.alt10,
+      theme.colors.stats.alt11,
+      theme.colors.stats.alt12,
+      theme.colors.stats.alt13,
+      theme.colors.stats.alt14,
+      theme.colors.stats.alt15,
+      theme.colors.stats.alt16,
+      theme.colors.stats.alt17,
+    ],
+    [theme]
+  );
+  const coreMap = React.useMemo(
+    () => ({
+      ao: { color: theme.colors.stats.alt1, id: arProvider?.walletAddress || '' },
+      pi: { color: theme.colors.stats.primary, id: AO.piProcess },
+      arweave: { color: theme.colors.stats.alt2, id: '' },
+    }),
+    [theme, arProvider?.walletAddress]
+  );
 
   const copyTokenId = React.useCallback(async (address: string) => {
     if (address) {
@@ -53,6 +89,45 @@ function Project(props: {
   const delegatedValue = props.useCompactDelegatedNumbers
     ? formatCompactDelegatedNumber(props.totalDelegated)
     : fullDelegatedValue;
+  const tokenLabel = props.project.flp_token_ticker ? `$${props.project.flp_token_ticker}` : '';
+  const hasAllocation = Boolean(allocationProvider.records?.find((record) => record.id === props.project.id));
+  const canAddFromCell = Boolean(arProvider.walletAddress && !hasAllocation);
+  const hoverColor = React.useMemo(() => {
+    const coreEntry = Object.values(coreMap).find((entry) => entry.id === props.project.id);
+    if (coreEntry) return coreEntry.color;
+
+    const coreIds = Object.values(coreMap).map((entry) => entry.id);
+    const ecosystemRecords = allocationProvider.records?.filter((r) => !coreIds.includes(r.id)) || [];
+    const ecosystemIndex = ecosystemRecords.findIndex((r) => r.id === props.project.id);
+
+    const coreColors = new Set(Object.values(coreMap).map((entry) => entry.color));
+    const availableColors = keys.filter((color) => !coreColors.has(color));
+    const coreCount = Object.keys(coreMap).length;
+
+    if (ecosystemIndex !== -1) {
+      return availableColors[(ecosystemIndex + coreCount) % availableColors.length] || theme.colors.stats.primary;
+    }
+
+    // Project not yet in allocation: use next slot color (matches color it will get when added)
+    return (
+      availableColors[(coreCount + ecosystemRecords.length) % availableColors.length] || theme.colors.stats.primary
+    );
+  }, [allocationProvider.records, coreMap, keys, props.project.id, theme]);
+
+  const handleAllocationCellClick = React.useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (!canAddFromCell) return;
+
+      allocationProvider.addToken({
+        id: props.project.id,
+        label: tokenLabel,
+      });
+    },
+    [allocationProvider, canAddFromCell, props.project.id, tokenLabel]
+  );
 
   return (
     <S.TableBodyRowWrapper>
@@ -80,11 +155,17 @@ function Project(props: {
         <S.TableBodyCell flex={1} align={'right'}>
           <span>{getRelativeDate(props.project.starts_at_ts)}</span>
         </S.TableBodyCell>
-        <S.TableBodyCell flex={1} align={'right'}>
+        <S.TableBodyCell
+          flex={1}
+          align={'right'}
+          interactive={canAddFromCell}
+          hoverColor={hoverColor}
+          onClick={canAddFromCell ? handleAllocationCellClick : undefined}
+        >
           <AllocationDisplay
             processId={props.project.id}
             tokenId={props.project.id}
-            tokenLabel={props.project.flp_token_ticker ? `$${props.project.flp_token_ticker}` : ''}
+            tokenLabel={tokenLabel}
             showAllocatedLabel={true}
           />
         </S.TableBodyCell>
@@ -94,13 +175,35 @@ function Project(props: {
           <S.PanelWrapper>
             <S.PanelWrapperStart>
               <S.ProjectBody>
-                <S.ProjectId onClick={() => copyTokenId(props.project?.flp_token_process ?? '-')}>
-                  <span>{`${language.tokenId}:`}</span>
-                  <p>
-                    {props.project?.flp_token_process ? formatAddress(props.project.flp_token_process, false) : '-'}
-                  </p>
-                  <ReactSVG src={copied ? ASSETS.checkmark : ASSETS.copy} />
-                </S.ProjectId>
+                <S.ProjectIdRow>
+                  <S.ProjectId onClick={() => copyTokenId(props.project?.flp_token_process ?? '-')}>
+                    <span>{`${language.tokenId}:`}</span>
+                    <p>
+                      {props.project?.flp_token_process ? formatAddress(props.project.flp_token_process, false) : '-'}
+                    </p>
+                    <ReactSVG src={copied ? ASSETS.checkmark : ASSETS.copy} />
+                  </S.ProjectId>
+                  <S.ProjectLinks>
+                    {props.project?.website_url && (
+                      <S.ProjectLink>
+                        <Link to={props.project.website_url} target={'_blank'} onClick={(e) => e.stopPropagation()}>
+                          {language.visitWebsite}
+                        </Link>
+                      </S.ProjectLink>
+                    )}
+                    {props.project?.twitter_handle && (
+                      <S.ProjectLink>
+                        <Link
+                          to={`https://x.com/${props.project.twitter_handle}`}
+                          target={'_blank'}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {language.visitX}
+                        </Link>
+                      </S.ProjectLink>
+                    )}
+                  </S.ProjectLinks>
+                </S.ProjectIdRow>
                 {props.project?.flp_short_description && (
                   <S.ProjectShortDescription>
                     <p>{props.project?.flp_short_description ?? 'No description'}</p>
@@ -125,26 +228,6 @@ function Project(props: {
                         <p>{props.project?.ends_at_ts ? formatDate(props.project.ends_at_ts, 'dateString') : 'None'}</p>
                       </S.ProjectInfoLine>
                     </S.ProjectLineDates>
-                    <S.ProjectLinks>
-                      {props.project?.website_url && (
-                        <S.ProjectLink>
-                          <Link to={props.project.website_url} target={'_blank'} onClick={(e) => e.stopPropagation()}>
-                            <ReactSVG src={ASSETS.website} />
-                          </Link>
-                        </S.ProjectLink>
-                      )}
-                      {props.project?.twitter_handle && (
-                        <S.ProjectLink>
-                          <Link
-                            to={`https://x.com/${props.project.twitter_handle}`}
-                            target={'_blank'}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <ReactSVG src={ASSETS.x} />
-                          </Link>
-                        </S.ProjectLink>
-                      )}
-                    </S.ProjectLinks>
                   </S.ProjectLineWrapper>
                 </S.ProjectLinesWrapper>
               </S.ProjectBody>
@@ -488,7 +571,7 @@ export default function DelegateEcosystem() {
             type={'primary'}
             label={'Load More'}
             handlePress={() => setVisibleCount((prev) => prev + 10)}
-            height={45}
+            height={32}
             width={175}
           />
         </S.LoadMoreWrapper>

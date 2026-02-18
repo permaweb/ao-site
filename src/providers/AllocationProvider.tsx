@@ -21,6 +21,7 @@ interface AllocationContextState {
   fetchingSetup: boolean;
   showSetup: boolean;
   savePreferences: (initialSave?: boolean) => Promise<void>;
+  resetPreferences: () => void;
   loading: boolean;
   isTokenDisabled: (token: AllocationTokenRecordType) => boolean;
   unsavedChanges: boolean;
@@ -39,6 +40,7 @@ const DEFAULT_CONTEXT: AllocationContextState = {
   fetchingSetup: false,
   showSetup: false,
   savePreferences: async () => {},
+  resetPreferences: () => {},
   loading: false,
   isTokenDisabled: () => false,
   unsavedChanges: false,
@@ -438,6 +440,12 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
     }
   };
 
+  const resetPreferences = () => {
+    const resetRecords = originalRecords.map((record) => ({ ...record }));
+    setRecords(resetRecords);
+    setCachedRecords(resetRecords);
+  };
+
   return (
     <>
       <AllocationContext.Provider
@@ -451,6 +459,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
           fetchingSetup,
           showSetup,
           savePreferences,
+          resetPreferences,
           loading,
           isTokenDisabled,
           unsavedChanges,

@@ -2,6 +2,27 @@ import styled from 'styled-components';
 
 import { STYLING } from 'helpers/config';
 
+const withOpacity = (color: string, opacity: number): string => {
+  const clamped = Math.max(0, Math.min(1, opacity));
+
+  if (/^#([0-9a-fA-F]{6})$/.test(color)) {
+    const alpha = Math.round(clamped * 255)
+      .toString(16)
+      .padStart(2, '0');
+    return `${color}${alpha}`;
+  }
+
+  if (/^#([0-9a-fA-F]{3})$/.test(color)) {
+    const expanded = `#${color[1]}${color[1]}${color[2]}${color[2]}${color[3]}${color[3]}`;
+    const alpha = Math.round(clamped * 255)
+      .toString(16)
+      .padStart(2, '0');
+    return `${expanded}${alpha}`;
+  }
+
+  return color;
+};
+
 export const Wrapper = styled.div`
   width: 100%;
   display: flex;
@@ -356,7 +377,13 @@ export const PanelActionsWrapper = styled.div`
   gap: 20px;
 `;
 
-export const TableBodyCell = styled.div<{ flex: number; width?: number; align: 'right' | 'left' | 'center' }>`
+export const TableBodyCell = styled.div<{
+  flex: number;
+  width?: number;
+  align: 'right' | 'left' | 'center';
+  interactive?: boolean;
+  hoverColor?: string;
+}>`
   height: 50px;
   min-width: ${(props) => (props.width ? `${props.width}px` : 'none')};
   display: flex;
@@ -368,6 +395,13 @@ export const TableBodyCell = styled.div<{ flex: number; width?: number; align: '
   align-items: center;
   gap: 12.5px;
   flex: ${(props) => props.flex};
+  transition: background ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+  cursor: ${(props) => (props.interactive ? 'pointer' : 'default')};
+
+  &:hover {
+    background: ${(props) =>
+      props.interactive && props.hoverColor ? withOpacity(props.hoverColor, 0.1) : 'transparent'};
+  }
 
   @media (max-width: ${STYLING.cutoffs.mobile}) {
     padding: 0 10px;
@@ -572,11 +606,20 @@ export const ProjectIndex = styled.div<{ active: boolean }>`
   }
 `;
 
+export const ProjectIdRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 12.5px 0;
+`;
+
 export const ProjectId = styled.button`
   display: flex;
   gap: 7.5px;
   align-items: center;
-  margin: 0 0 12.5px 0;
+  margin: 0;
 
   p,
   span {
@@ -621,15 +664,13 @@ export const ProjectLinks = styled.div`
 `;
 
 export const ProjectLink = styled.div`
-  svg {
-    height: 17.5px;
-    width: 17.5px;
+  a {
+    font-size: ${(props) => props.theme.typography.size.xxSmall};
     color: ${(props) => props.theme.colors.font.alt1};
-    fill: ${(props) => props.theme.colors.font.alt1};
+    text-decoration: none;
 
     &:hover {
       color: ${(props) => props.theme.colors.font.primary};
-      fill: ${(props) => props.theme.colors.font.primary};
     }
   }
 `;
@@ -647,6 +688,7 @@ export const ProjectShortDescription = styled.div`
     font-size: ${(props) => props.theme.typography.size.xxSmall};
     color: ${(props) => props.theme.colors.font.alt1};
     text-align: left;
+    text-wrap: balance;
   }
 `;
 
@@ -663,6 +705,7 @@ export const ProjectLongDescription = styled.div`
     font-weight: ${(props) => props.theme.typography.weight.regular};
     color: ${(props) => props.theme.colors.font.primary};
     text-align: left;
+    text-wrap: balance;
   }
 `;
 

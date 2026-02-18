@@ -169,28 +169,23 @@ export const Alt1 = styled(Primary)`
   border: 1px solid
     ${(props) => (props.active ? props.theme.colors.button.alt1.active.border : props.theme.colors.button.alt1.border)};
   &:hover {
-    background: ${(props) => props.theme.colors.button.alt1.active.background};
-    border: 1px solid ${(props) => props.theme.colors.button.alt1.active.border};
+    background: ${(props) => `color-mix(in srgb, ${props.theme.colors.button.alt1.background} 8 0%, transparent)`};
     span {
-      color: ${(props) => props.theme.colors.button.alt1.active.color} !important;
+      color: ${(props) => props.theme.colors.font.light1} !important;
     }
     svg {
-      fill: ${(props) => props.theme.colors.button.alt1.active.color} !important;
-      color: ${(props) => props.theme.colors.button.alt1.active.color} !important;
+      fill: ${(props) => props.theme.colors.button.alt1.color} !important;
+      color: ${(props) => props.theme.colors.button.alt1.color} !important;
     }
   }
   &:focus {
-    background: ${(props) =>
-      props.active
-        ? props.theme.colors.button.alt1.active.background
-        : props.theme.colors.button.alt1.active.background};
-    border: 1px solid ${(props) => props.theme.colors.button.alt1.active.border};
+    background: ${(props) => `color-mix(in srgb, ${props.theme.colors.button.alt1.background} 80%, transparent)`};
     span {
-      color: ${(props) => props.theme.colors.button.alt1.active.color} !important;
+      color: ${(props) => props.theme.colors.font.light1} !important;
     }
     svg {
-      fill: ${(props) => props.theme.colors.button.alt1.active.color} !important;
-      color: ${(props) => props.theme.colors.button.alt1.active.color} !important;
+      fill: ${(props) => props.theme.colors.button.alt1.color} !important;
+      color: ${(props) => props.theme.colors.button.alt1.color} !important;
     }
   }
   &:disabled {

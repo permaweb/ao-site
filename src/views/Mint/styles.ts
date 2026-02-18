@@ -57,6 +57,7 @@ export const GlobalSection = styled.div`
 
   @media (max-width: ${STYLING.cutoffs.initial}) {
     padding: 25px;
+    border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
     p,
     span {
@@ -81,6 +82,11 @@ export const GlobalSubSection = styled(GlobalSection)`
   @media (max-width: ${STYLING.cutoffs.initial}) {
     padding: 25px;
     border-left: none;
+    border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 `;
 
@@ -244,13 +250,13 @@ export const NetworkSectionBodyValue = styled.div`
   p {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
-    font-size: ${(props) => props.theme.typography.size.xLg};
+    font-size: ${(props) => props.theme.typography.size.lg};
     color: ${(props) => props.theme.colors.font.primary};
   }
 
   svg {
-    height: 30px;
-    width: 30px;
+    height: 24px;
+    width: 24px;
     color: ${(props) => props.theme.colors.font.alt1};
     fill: ${(props) => props.theme.colors.font.alt1};
     margin: 5.5px 0 0 0;
@@ -266,7 +272,7 @@ export const NetworkDisconnectedIconText = styled.div`
   p {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
-    font-size: ${(props) => props.theme.typography.size.base};
+    font-size: ${(props) => props.theme.typography.size.xSmall};
     color: ${(props) => props.theme.colors.font.primary};
     margin: 0;
   }

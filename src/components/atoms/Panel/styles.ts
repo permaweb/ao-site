@@ -29,8 +29,7 @@ export const Container = styled.div<{
   top: 0;
   right: 0;
   transform: translateX(${(props) => (props.open ? '0' : 'calc(100% + 10px)')});
-  transition: transform ${transition2};
-  box-shadow: -1px 0 10px ${(props) => props.theme.colors.shadow.alt1};
+  transition: transform 500ms ${STYLING.motion.easing.decelerate} 0ms;
   @media (max-width: ${STYLING.cutoffs.mobile}) {
     min-width: calc(100vw - 20px);
   }

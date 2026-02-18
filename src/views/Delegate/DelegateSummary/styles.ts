@@ -89,6 +89,9 @@ export const SummaryWrapper = styled.div`
 `;
 
 export const SummaryHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 0 0 7.5px 0;
   border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
@@ -178,7 +181,7 @@ export const SummaryLineActions = styled.div`
   button {
     min-height: 0 !important;
     height: auto !important;
-    padding: 2.5px 7.5px !important;
+    padding: 0.5px 3.5px !important;
     span {
       font-family: ${(props) => props.theme.typography.family.primary} !important;
       font-weight: ${(props) => props.theme.typography.weight.medium} !important;
@@ -229,6 +232,30 @@ export const SummaryLinePercentage = styled.div`
 
 export const ActionMain = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const ActionSave = styled.div`
+  flex: 1;
+  width: 100%;
+`;
+
+export const ActionReset = styled.div`
+  button {
+    min-height: 0 !important;
+    height: auto !important;
+    min-width: 0 !important;
+    width: fit-content !important;
+    padding: 0 !important;
+    span {
+      font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+      font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+      color: ${(props) => props.theme.colors.font.alt1} !important;
+    }
+  }
 `;
 
 export const InfoWrapper = styled.div`

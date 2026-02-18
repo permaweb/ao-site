@@ -31,6 +31,13 @@ export default function AllocationDisplay(props: IProps) {
       theme.colors.stats.alt8,
       theme.colors.stats.alt9,
       theme.colors.stats.alt10,
+      theme.colors.stats.alt11,
+      theme.colors.stats.alt12,
+      theme.colors.stats.alt13,
+      theme.colors.stats.alt14,
+      theme.colors.stats.alt15,
+      theme.colors.stats.alt16,
+      theme.colors.stats.alt17,
     ];
   }, [theme]);
 
@@ -38,7 +45,7 @@ export default function AllocationDisplay(props: IProps) {
     () => ({
       ao: { color: theme.colors.stats.alt1, id: arProvider?.walletAddress || '' },
       pi: { color: theme.colors.stats.primary, id: AO.piProcess },
-      arweave: { color: theme.colors.stats.alt3, id: '' },
+      arweave: { color: theme.colors.stats.alt2, id: '' },
     }),
     [theme, arProvider?.walletAddress]
   );
@@ -57,7 +64,8 @@ export default function AllocationDisplay(props: IProps) {
       if (ecosystemIndex !== -1) {
         const assignedColors = new Set(Object.values(coreMap).map((c) => c.color));
         const availableColors = keys.filter((color) => !assignedColors.has(color));
-        return availableColors[ecosystemIndex % availableColors.length];
+        const coreCount = Object.keys(coreMap).length;
+        return availableColors[(ecosystemIndex + coreCount) % availableColors.length];
       }
 
       // Fallback
@@ -69,7 +77,14 @@ export default function AllocationDisplay(props: IProps) {
   if (!arProvider.walletAddress) {
     return (
       <S.DisabledAction>
-        <Button type={'alt2'} label={language.add} handlePress={() => {}} disabled={true} icon={ASSETS.plus} />
+        <Button
+          type={'alt2'}
+          label={language.add}
+          handlePress={() => {}}
+          disabled={true}
+          icon={ASSETS.plus}
+          tooltip={'connect wallet to add'}
+        />
       </S.DisabledAction>
     );
   }
@@ -104,7 +119,7 @@ export default function AllocationDisplay(props: IProps) {
         e.stopPropagation();
 
         allocationProvider.addToken({
-          id: props.tokenId,
+          id: props.processId,
           label: props.tokenLabel,
         });
       }}

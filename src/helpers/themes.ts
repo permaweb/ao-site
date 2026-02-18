@@ -27,7 +27,7 @@ export const lightTheme = {
   overlay2: 'rgb(0, 0, 0, .5)',
   shadow1: 'rgb(150, 150, 150, .5)',
   shadow2: 'rgb(75, 75, 75, .5)',
-  primary1: '#279200',
+  primary1: '#105A00',
   primary2: '#217A00',
   accent1: '#279200',
   accent2: '#217A00',
@@ -41,17 +41,24 @@ export const lightTheme = {
   chart1: '#C78135',
   chart2: '#FBF5EE',
   stats: {
-    primary: '#ddece7',
-    alt1: '#e8eae6',
-    alt2: '#e9e2d3',
-    alt3: '#e7e3ec',
-    alt4: '#e2e4e8',
-    alt5: '#d9e3e2',
-    alt6: '#dadbd7',
-    alt7: '#f4f2ef',
-    alt8: '#dcd8e4',
-    alt9: '#f0eae0',
-    alt10: '#e3e1e8',
+    primary: '#5bd1f4', // PI - Splashing Wave (1)
+    alt1: '#289cd3', // AO - Blue Burst (2)
+    alt2: '#197ab8', // AR - Star of Life (3)
+    alt3: '#0e5b90', // Hyper Blue (4)
+    alt4: '#053951', // Maniac Mansion (5)
+    alt5: '#072714', // Nightmare (6)
+    alt6: '#d9c128', // Indian Pale Ale (7)
+    alt7: '#cadd33', // Greenivorous (8)
+    alt8: '#b6ea44', // Sour Apple Candy (9)
+    alt9: '#94e54c', // Poisonous Potion (10)
+    alt10: '#63cf5e', // Koopa Green Shell (11)
+    alt11: '#36ad7b', // Cosmic Green (12)
+    alt12: '#5bd1f4', // Splashing Wave (13)
+    alt13: '#289cd3', // Blue Burst (14)
+    alt14: '#197ab8', // Star of Life (15)
+    alt15: '#0e5b90', // Hyper Blue (16)
+    alt16: '#053951', // Maniac Mansion (17)
+    alt17: '#072714', // Nightmare (18)
   },
 };
 
@@ -94,7 +101,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
         color: currentTheme.light1,
         active: {
           background: currentTheme.neutral2,
-          border: currentTheme.primary2,
+          border: currentTheme.primary1,
           color: currentTheme.light1,
         },
         disabled: {
@@ -225,8 +232,8 @@ export const theme = (currentTheme: any): DefaultTheme => ({
       },
     },
     indicator: {
-      primary: currentTheme.positive1,
-      active: currentTheme.positive2,
+      primary: currentTheme.primary1,
+      active: currentTheme.primary1,
       contrast: currentTheme.negative1,
     },
     link: {
@@ -252,6 +259,13 @@ export const theme = (currentTheme: any): DefaultTheme => ({
       alt8: currentTheme.stats.alt8,
       alt9: currentTheme.stats.alt9,
       alt10: currentTheme.stats.alt10,
+      alt11: currentTheme.stats.alt11,
+      alt12: currentTheme.stats.alt12,
+      alt13: currentTheme.stats.alt13,
+      alt14: currentTheme.stats.alt14,
+      alt15: currentTheme.stats.alt15,
+      alt16: currentTheme.stats.alt16,
+      alt17: currentTheme.stats.alt17,
     },
     row: {
       active: {

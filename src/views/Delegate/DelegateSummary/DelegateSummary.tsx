@@ -4,7 +4,7 @@ import { Pie } from 'react-chartjs-2';
 import { useTheme } from 'styled-components';
 
 import { Button } from 'components/atoms/Button';
-import { AO } from 'helpers/config';
+import { AO, ASSETS } from 'helpers/config';
 import { AllocationRecordType } from 'helpers/types';
 import { formatPercentage } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
@@ -32,8 +32,8 @@ export default function DelegateSummary() {
         {
           data: [1],
           backgroundColor: [theme.colors.border.primary],
-          borderColor: [theme.colors.border.alt3],
-          borderWidth: 1.15,
+          borderColor: ['rgba(1, 1, 1, 0.1)'],
+          borderWidth: 0,
         },
       ],
     }),
@@ -53,6 +53,13 @@ export default function DelegateSummary() {
       theme.colors.stats.alt8,
       theme.colors.stats.alt9,
       theme.colors.stats.alt10,
+      theme.colors.stats.alt11,
+      theme.colors.stats.alt12,
+      theme.colors.stats.alt13,
+      theme.colors.stats.alt14,
+      theme.colors.stats.alt15,
+      theme.colors.stats.alt16,
+      theme.colors.stats.alt17,
     ];
   }, [theme]);
 
@@ -60,7 +67,7 @@ export default function DelegateSummary() {
     () => ({
       ao: { color: theme.colors.stats.alt1, label: 'AO', id: arProvider?.walletAddress || '' },
       pi: { color: theme.colors.stats.primary, label: 'PI', id: AO.piProcess },
-      arweave: { color: theme.colors.stats.alt3, label: 'AR', id: '' },
+      arweave: { color: theme.colors.stats.alt2, label: 'AR', id: '' },
     }),
     [theme, arProvider?.walletAddress]
   );
@@ -99,6 +106,12 @@ export default function DelegateSummary() {
     return [...coreRecords, ...ecosystemRecords];
   }, [coreRecords, ecosystemRecords]);
 
+  const assignedColors = React.useMemo(() => new Set(Object.values(coreMap).map((c) => c.color)), [coreMap]);
+  const availableColors = React.useMemo(
+    () => keys.filter((color) => !assignedColors.has(color)),
+    [keys, assignedColors]
+  );
+
   React.useEffect(() => {
     if (!arProvider.walletAddress) setData(null);
 
@@ -108,18 +121,18 @@ export default function DelegateSummary() {
         datasets: [],
       };
 
-      const assignedColors = new Set(Object.values(coreMap).map((c) => c.color));
-      const availableColors = keys.filter((color) => !assignedColors.has(color));
+      const assignedColorsSet = new Set(Object.values(coreMap).map((c) => c.color));
+      const availableColorsForPie = keys.filter((color) => !assignedColorsSet.has(color));
       const backgroundColors = sortedRecords.map((record: AllocationRecordType, index: number) => {
         const coreEntry = Object.values(coreMap).find((c) => c.id === record.id);
-        return coreEntry?.color || availableColors[index % availableColors.length];
+        return coreEntry?.color || availableColorsForPie[index % availableColorsForPie.length];
       });
 
       pieData.datasets.push({
         data: sortedRecords.map((record: AllocationRecordType) => record.value),
         backgroundColor: backgroundColors,
-        borderColor: [theme.colors.border.alt3],
-        borderWidth: 1.15,
+        borderColor: backgroundColors.map(() => 'rgb(0, 0, 0, 0.1)'),
+        borderWidth: 1,
       });
 
       setData(pieData);
@@ -216,6 +229,16 @@ export default function DelegateSummary() {
             <S.SummaryWrapper>
               <S.SummaryHeader>
                 <span>{language.summary}</span>
+                <S.ActionReset>
+                  <Button
+                    type={'alt2'}
+                    label={language.reset}
+                    icon={ASSETS.exchange}
+                    iconLeftAlign
+                    handlePress={() => allocationProvider.resetPreferences()}
+                    disabled={!isWalletConnected || allocationProvider.loading || !allocationProvider.unsavedChanges}
+                  />
+                </S.ActionReset>
               </S.SummaryHeader>
               <S.SummarySubheader>
                 <span>Core Tokens</span>
@@ -251,7 +274,7 @@ export default function DelegateSummary() {
                 {ecosystemRecords.length > 0 ? (
                   <>
                     {ecosystemRecords.map((record: AllocationRecordType, index: number) => {
-                      const backgroundColor = keys[(index + 3) % keys.length];
+                      const backgroundColor = availableColors[(index + coreRecords.length) % availableColors.length];
 
                       return (
                         <S.SummaryLine key={`ecosystem-${index}`}>
@@ -280,15 +303,17 @@ export default function DelegateSummary() {
         </S.Body>
       </S.Wrapper>
       <S.ActionMain>
-        <Button
-          type={'alt1'}
-          label={isWalletConnected ? language.saveChanges : 'Connect Wallet For Your Allocation'}
-          handlePress={() => allocationProvider.savePreferences()}
-          disabled={!isWalletConnected || allocationProvider.loading || !allocationProvider.unsavedChanges}
-          loading={allocationProvider.loading}
-          height={60}
-          fullWidth
-        />
+        <S.ActionSave>
+          <Button
+            type={'alt1'}
+            label={isWalletConnected ? language.saveChanges : 'Connect Wallet For Your Allocation'}
+            handlePress={() => allocationProvider.savePreferences()}
+            disabled={!isWalletConnected || allocationProvider.loading || !allocationProvider.unsavedChanges}
+            loading={allocationProvider.loading}
+            height={60}
+            fullWidth
+          />
+        </S.ActionSave>
       </S.ActionMain>
     </>
   );
