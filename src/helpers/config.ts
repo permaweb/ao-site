@@ -153,6 +153,7 @@ function createURLs() {
   const mint = `${base}mint/`;
   return {
     base: base,
+    blog: `${base}blog/`,
     mint: mint,
     mintDeposits: `${mint}deposits/`,
     mintYield: `${mint}yield/`,

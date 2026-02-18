@@ -10,6 +10,8 @@ import { Header } from 'navigation/header';
 import * as S from './styles';
 
 const Landing = getLazyImport('Landing');
+const Blog = getLazyImport('Blog');
+const BlogPost = getLazyImport('BlogPost');
 const Mint = getLazyImport('Mint');
 const Delegate = getLazyImport('Delegate');
 const NotFound = getLazyImport('NotFound');
@@ -102,6 +104,8 @@ export default function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path={URLS.base} element={<Landing />} />
+            <Route path={URLS.blog} element={<Blog />} />
+            <Route path={`${URLS.blog}:slug`} element={<BlogPost />} />
             <Route path={URLS.mint} element={<Mint />} />
             <Route path={URLS.delegate} element={<Delegate />} />
             <Route path={URLS.policies} element={<Policies />} />

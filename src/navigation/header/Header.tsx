@@ -18,6 +18,7 @@ export default function Header() {
   const paths: { path: string; label: string; target?: '_blank' }[] = [
     { path: URLS.mint, label: language.mint },
     { path: URLS.delegate, label: language.delegate },
+    { path: URLS.blog, label: language.blog },
     { path: REDIRECTS.cookbook, label: language.build, target: '_blank' },
   ];
 
