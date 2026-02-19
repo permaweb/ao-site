@@ -5,8 +5,7 @@ import { URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
-import { BlogPost as BlogPostType, getBlogPostBySlug } from '../Blog/data';
-import { fetchPermawebBlogPostBySlug } from '../Blog/permaweb';
+import { getBlogPostBySlug } from '../Blog/data';
 
 import * as S from './styles';
 
@@ -14,62 +13,7 @@ export default function BlogPost() {
   const { slug } = useParams();
   const languageProvider = useLanguageProvider();
   const language = languageProvider.object[languageProvider.current];
-  const staticPost = getBlogPostBySlug(slug);
-  const [post, setPost] = React.useState<BlogPostType | null>(staticPost);
-  const [loading, setLoading] = React.useState(!staticPost);
-
-  React.useEffect(() => {
-    if (!slug) {
-      setPost(null);
-      setLoading(false);
-      return;
-    }
-
-    const nextStaticPost = getBlogPostBySlug(slug);
-    if (nextStaticPost) {
-      setPost(nextStaticPost);
-      setLoading(false);
-      return;
-    }
-
-    let cancelled = false;
-    setLoading(true);
-
-    (async function () {
-      try {
-        const permawebPost = await fetchPermawebBlogPostBySlug(slug);
-        if (!cancelled) {
-          setPost(permawebPost);
-        }
-      } catch (e) {
-        console.error(e);
-        if (!cancelled) {
-          setPost(null);
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <S.Wrapper>
-        <S.NotFound>
-          <p>Loading post...</p>
-        </S.NotFound>
-        <S.FooterWrapper>
-          <Footer />
-        </S.FooterWrapper>
-      </S.Wrapper>
-    );
-  }
+  const post = React.useMemo(() => getBlogPostBySlug(slug), [slug]);
 
   if (!post) {
     return (

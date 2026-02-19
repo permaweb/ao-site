@@ -30,6 +30,81 @@ export const IntroTitle = styled.h1`
   letter-spacing: -0.02em;
 `;
 
+export const FeaturedSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 80px;
+`;
+
+export const FeaturedLabel = styled.span`
+  display: inline-flex;
+  width: fit-content;
+  padding: 4px 10px;
+  border: 1px solid ${(props) => props.theme.colors.border.alt3};
+  background: ${(props) => props.theme.colors.container.alt1.background};
+  font-family: ${(props) => props.theme.typography.family.alt1};
+  font-size: ${(props) => props.theme.typography.size.xxxxSmall};
+  font-weight: ${(props) => props.theme.typography.weight.medium};
+  color: ${(props) => props.theme.colors.font.alt2};
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+`;
+
+export const FeaturedCardLink = styled(Link)`
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 18px;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover h3 {
+    color: ${(props) => props.theme.colors.font.alt2};
+  }
+
+  &:hover img {
+    transform: scale(1.02);
+  }
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const FeaturedImageWrapper = styled.div`
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border: 1px solid ${(props) => props.theme.colors.border.primary};
+  background: ${(props) => props.theme.colors.container.alt1.background};
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+  }
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    height: 240px;
+  }
+`;
+
+export const FeaturedCard = styled.article`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 18px;
+  background: ${(props) => props.theme.colors.container.alt1.background};
+`;
+
+export const FeaturedCardContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
 export const ControlsRow = styled.div`
   display: flex;
   align-items: center;
