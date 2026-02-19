@@ -87,18 +87,21 @@ export default function BlogPost() {
 
   return (
     <S.Wrapper>
-      <S.HeroWrapper>
+      <S.Article>
+        <S.KickerRow>
+          <S.Kicker>{post.category}</S.Kicker>
+          <S.AuthorIcon />
+          <S.MetaSecondary>{post.publishedAt}</S.MetaSecondary>
+        </S.KickerRow>
+        <S.Title>{post.title}</S.Title>
+        <S.Subtitle>{post.excerpt}</S.Subtitle>
         <S.HeroImageWrapper>
           <img src={post.imageUrl} alt="" />
         </S.HeroImageWrapper>
-      </S.HeroWrapper>
-      <S.Article>
-        <S.Title>{post.title}</S.Title>
-        <S.Subtitle>{post.excerpt}</S.Subtitle>
         <S.MetaRow>
-          <S.AuthorIcon />
           <S.AuthorName>{post.author}</S.AuthorName>
-          <S.MetaSecondary>{post.publishedAt}</S.MetaSecondary>
+          <S.AuthorIcon />
+          <S.MetaSecondary>{post.readTime}</S.MetaSecondary>
         </S.MetaRow>
         {post.sections.map((section) => (
           <S.Section key={section.heading}>

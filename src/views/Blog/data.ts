@@ -1,9 +1,12 @@
-// Pinterest image URLs (736x). Note: Pinterest may block hotlinking; if images fail, consider Unsplash.
-const PINTEREST_IMAGES = {
-  grid: 'https://i.pinimg.com/736x/e1/dc/06/e1dc06cd0fc5873f13727b40969aa02c.jpg',
-  nodes: 'https://i.pinimg.com/736x/7d/17/c3/7d17c33aa7df5fa9809ca10e41b5f3c3.jpg',
-  flow: 'https://i.pinimg.com/736x/f9/13/e5/f913e5f233b0736b9164f347e6796fa2.jpg',
-  circuit: 'https://i.pinimg.com/736x/e1/dc/06/e1dc06cd0fc5873f13727b40969aa02c.jpg',
+// Are.na block images (display size, 1200px)
+// https://www.are.na/block/43234373, 43118741, 43116980, 43633599
+const ARE_NA_IMAGES = {
+  grid: 'https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI0MzIzNDM3My9vcmlnaW5hbF83MjMyOTAxNDU4YTlhZTc1MmIzZWVkODI2ZTdiY2Y5Ny5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjEyMDAsImhlaWdodCI6MTIwMCwiZml0IjoiaW5zaWRlIiwid2l0aG91dEVubGFyZ2VtZW50Ijp0cnVlfSwid2VicCI6eyJxdWFsaXR5Ijo3NX0sImpwZWciOnsicXVhbGl0eSI6NzV9LCJyb3RhdGUiOm51bGx9fQ==?bc=0',
+  nodes:
+    'https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI0MzExODc0MS9vcmlnaW5hbF8zNzk0Y2Y5OWY3MWZlOWRiNGQ4ODhjOGJlMjQ1NGIxYy5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjEyMDAsImhlaWdodCI6MTIwMCwiZml0IjoiaW5zaWRlIiwid2l0aG91dEVubGFyZ2VtZW50Ijp0cnVlfSwid2VicCI6eyJxdWFsaXR5Ijo3NX0sImpwZWciOnsicXVhbGl0eSI6NzV9LCJyb3RhdGUiOm51bGx9fQ==?bc=0',
+  flow: 'https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI0MzExNjk4MC9vcmlnaW5hbF9kN2IyNDhkYTUzYjBlMWE3MjhiMTA3MTkwM2E4YmU5MS5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjEyMDAsImhlaWdodCI6MTIwMCwiZml0IjoiaW5zaWRlIiwid2l0aG91dEVubGFyZ2VtZW50Ijp0cnVlfSwid2VicCI6eyJxdWFsaXR5Ijo3NX0sImpwZWciOnsicXVhbGl0eSI6NzV9LCJyb3RhdGUiOm51bGx9fQ==?bc=0',
+  circuit:
+    'https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI0MzYzMzU5OS9vcmlnaW5hbF80ZTU5OGE3MjRmZmY2MTZlZmMwMDMzZmRlZDRhYjBiZi5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjEyMDAsImhlaWdodCI6MTIwMCwiZml0IjoiaW5zaWRlIiwid2l0aG91dEVubGFyZ2VtZW50Ijp0cnVlfSwid2VicCI6eyJxdWFsaXR5Ijo3NX0sImpwZWciOnsicXVhbGl0eSI6NzV9LCJyb3RhdGUiOm51bGx9fQ==?bc=0',
 } as const;
 
 export type BlogPostSection = {
@@ -26,14 +29,14 @@ export type BlogPost = {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'legacynet-sunset-update',
-    title: '🌇 Legacynet Sunset Update.',
+    title: 'Legacynet Sunset Update.',
     excerpt:
       'The migration to AO mainnet is nearly complete. Forward Research is deploying a whitelist for old processes on legacynet nodes.',
     publishedAt: 'Feb 17, 2026',
     author: 'Forward Research',
     category: 'Update',
     readTime: '1 min read',
-    imageUrl: PINTEREST_IMAGES.grid,
+    imageUrl: ARE_NA_IMAGES.grid,
     sections: [
       {
         heading: "What's changing.",
@@ -58,7 +61,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: 'AO Team',
     category: 'Deep Dive',
     readTime: '2 min read',
-    imageUrl: PINTEREST_IMAGES.nodes,
+    imageUrl: ARE_NA_IMAGES.nodes,
     sections: [
       {
         heading: 'From packages to process state.',
@@ -81,7 +84,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: 'AO Team',
     category: 'Dev',
     readTime: '2 min read',
-    imageUrl: PINTEREST_IMAGES.flow,
+    imageUrl: ARE_NA_IMAGES.flow,
     sections: [
       {
         heading: 'Why AO for apps.',
@@ -107,7 +110,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: 'AO Team',
     category: 'Dev',
     readTime: '2 min read',
-    imageUrl: PINTEREST_IMAGES.circuit,
+    imageUrl: ARE_NA_IMAGES.circuit,
     sections: [
       {
         heading: 'Treat content like product.',

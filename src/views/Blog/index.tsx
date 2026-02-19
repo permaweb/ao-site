@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { ViewHeader } from 'components/atoms/ViewHeader';
 import { URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -13,6 +12,7 @@ export default function Blog() {
   const languageProvider = useLanguageProvider();
   const language = languageProvider.object[languageProvider.current];
   const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [permawebPosts, setPermawebPosts] = React.useState<BlogPost[]>([]);
 
   React.useEffect(() => {
@@ -36,41 +36,69 @@ export default function Blog() {
 
   const allPosts = React.useMemo(() => [...BLOG_POSTS, ...permawebPosts], [permawebPosts]);
   const categories = React.useMemo(() => [...new Set(allPosts.map((p) => p.category))].sort(), [allPosts]);
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
 
-  const filteredPosts = selectedCategory ? allPosts.filter((p) => p.category === selectedCategory) : allPosts;
+  const filteredPosts = React.useMemo(() => {
+    return allPosts.filter((post) => {
+      const matchesCategory = selectedCategory ? post.category === selectedCategory : true;
+      if (!matchesCategory) return false;
+      if (!normalizedSearchQuery) return true;
+
+      const searchable = [post.title, post.excerpt, post.author, post.category].join(' ').toLowerCase();
+      return searchable.includes(normalizedSearchQuery);
+    });
+  }, [allPosts, normalizedSearchQuery, selectedCategory]);
 
   return (
     <S.Wrapper>
-      <ViewHeader header={language.blog} />
-      <S.FilterRow>
-        <S.FilterButton $active={!selectedCategory} onClick={() => setSelectedCategory(null)} type="button">
-          {language.all}
-        </S.FilterButton>
-        {categories.map((cat) => (
-          <S.FilterButton
-            key={cat}
-            $active={selectedCategory === cat}
-            onClick={() => setSelectedCategory(cat)}
-            type="button"
-          >
-            {cat}
+      <S.Intro>
+        <S.IntroTitle>{language.blog}</S.IntroTitle>
+      </S.Intro>
+      <S.ControlsRow>
+        <S.FilterRow>
+          <S.FilterButton $active={!selectedCategory} onClick={() => setSelectedCategory(null)} type="button">
+            {language.all}
           </S.FilterButton>
-        ))}
-      </S.FilterRow>
+          {categories.map((cat) => (
+            <S.FilterButton
+              key={cat}
+              $active={selectedCategory === cat}
+              onClick={() => setSelectedCategory(cat)}
+              type="button"
+            >
+              {cat}
+            </S.FilterButton>
+          ))}
+        </S.FilterRow>
+        <S.SearchWrapper>
+          <S.SearchIcon aria-hidden="true">
+            <span />
+          </S.SearchIcon>
+          <S.SearchInput
+            aria-label="Search blog posts"
+            placeholder="Search..."
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </S.SearchWrapper>
+      </S.ControlsRow>
       {filteredPosts.length > 0 && (
         <S.Grid>
           {filteredPosts.map((post: BlogPost) => (
             <S.CardLink key={post.slug} to={`${URLS.blog}${post.slug}`}>
+              <S.CardImageWrapper>
+                <img src={post.imageUrl} alt="" />
+              </S.CardImageWrapper>
               <S.Card>
-                <S.CardImageWrapper>
-                  <img src={post.imageUrl} alt="" />
-                </S.CardImageWrapper>
                 <S.CardContent>
-                  <S.Category>{post.category}</S.Category>
+                  <S.MetaLine>
+                    <S.Category>{post.category}</S.Category>
+                    <S.Dot />
+                    <S.PostMeta>{post.publishedAt}</S.PostMeta>
+                  </S.MetaLine>
                   <S.GridTitle>{post.title}</S.GridTitle>
                   <S.Excerpt>{post.excerpt}</S.Excerpt>
-                  <S.Author>By {post.author}</S.Author>
-                  <S.PostMeta>{post.publishedAt}</S.PostMeta>
                 </S.CardContent>
               </S.Card>
             </S.CardLink>
