@@ -47,16 +47,6 @@ export const Category = styled.span`
   background: ${(props) => props.theme.colors.container.alt2.background};
 `;
 
-export const FeaturedTitle = styled.h2`
-  font-family: ${(props) => props.theme.typography.family.primary};
-  font-size: ${(props) => props.theme.typography.size.xxLg};
-  font-weight: ${(props) => props.theme.typography.weight.bold};
-  color: ${(props) => props.theme.colors.font.primary};
-  line-height: 1.15;
-  letter-spacing: -0.3px;
-  transition: color ${STYLING.motion.duration.fast};
-`;
-
 export const GridTitle = styled.h3`
   font-family: ${(props) => props.theme.typography.family.primary};
   font-size: ${(props) => props.theme.typography.size.xLg};
@@ -92,67 +82,10 @@ export const PostMeta = styled.span`
   padding-top: 6px;
 `;
 
-export const FeaturedImageWrapper = styled.div`
-  width: 100%;
-  min-height: 420px;
-
-  overflow: hidden;
-
-  img {
-    width: 100%;
-    height: 100%;
-    min-height: 420px;
-    object-fit: cover;
-    transition: transform ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
-
-    @media (max-width: ${STYLING.cutoffs.tablet}) {
-      min-height: 240px;
-    }
-  }
-
-  @media (max-width: ${STYLING.cutoffs.tablet}) {
-    min-height: 240px;
-  }
-`;
-
-export const FeaturedCard = styled.article`
-  width: 100%;
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  column-gap: 32px;
-  align-items: start;
-
-  @media (max-width: ${STYLING.cutoffs.tablet}) {
-    grid-template-columns: 1fr;
-    row-gap: 20px;
-  }
-`;
-
-export const FeaturedLink = styled(Link)`
-  display: block;
-  text-decoration: none;
-  color: inherit;
-
-  &:hover ${FeaturedTitle} {
-    color: ${(props) => props.theme.colors.font.alt1};
-  }
-
-  &:hover ${FeaturedImageWrapper} img {
-    transform: scale(1.05);
-  }
-`;
-
-export const FeaturedContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 8px 0 0 0;
-`;
-
 export const Grid = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 32px;
 
   @media (max-width: ${STYLING.cutoffs.tablet}) {

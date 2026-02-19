@@ -1,3 +1,11 @@
+// Pinterest image URLs (736x). Note: Pinterest may block hotlinking; if images fail, consider Unsplash.
+const PINTEREST_IMAGES = {
+  grid: 'https://i.pinimg.com/736x/e1/dc/06/e1dc06cd0fc5873f13727b40969aa02c.jpg',
+  nodes: 'https://i.pinimg.com/736x/7d/17/c3/7d17c33aa7df5fa9809ca10e41b5f3c3.jpg',
+  flow: 'https://i.pinimg.com/736x/f9/13/e5/f913e5f233b0736b9164f347e6796fa2.jpg',
+  circuit: 'https://i.pinimg.com/736x/e1/dc/06/e1dc06cd0fc5873f13727b40969aa02c.jpg',
+} as const;
+
 export type BlogPostSection = {
   heading: string;
   paragraphs: string[];
@@ -25,7 +33,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: 'Forward Research',
     category: 'Update',
     readTime: '1 min read',
-    imageUrl: 'https://picsum.photos/seed/ao1/800/450',
+    imageUrl: PINTEREST_IMAGES.grid,
     sections: [
       {
         heading: "What's changing.",
@@ -50,7 +58,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: 'AO Team',
     category: 'Deep Dive',
     readTime: '2 min read',
-    imageUrl: 'https://picsum.photos/seed/ao2/800/450',
+    imageUrl: PINTEREST_IMAGES.nodes,
     sections: [
       {
         heading: 'From packages to process state.',
@@ -73,7 +81,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: 'AO Team',
     category: 'Dev',
     readTime: '2 min read',
-    imageUrl: 'https://picsum.photos/seed/ao3/800/450',
+    imageUrl: PINTEREST_IMAGES.flow,
     sections: [
       {
         heading: 'Why AO for apps.',
@@ -99,7 +107,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: 'AO Team',
     category: 'Dev',
     readTime: '2 min read',
-    imageUrl: 'https://picsum.photos/seed/ao4/800/450',
+    imageUrl: PINTEREST_IMAGES.circuit,
     sections: [
       {
         heading: 'Treat content like product.',

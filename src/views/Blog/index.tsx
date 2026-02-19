@@ -6,17 +6,38 @@ import { Footer } from 'navigation/footer';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { BLOG_POSTS, BlogPost } from './data';
+import { fetchPermawebBlogPosts } from './permaweb';
 import * as S from './styles';
-
-const CATEGORIES = [...new Set(BLOG_POSTS.map((p) => p.category))].sort();
 
 export default function Blog() {
   const languageProvider = useLanguageProvider();
   const language = languageProvider.object[languageProvider.current];
   const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
+  const [permawebPosts, setPermawebPosts] = React.useState<BlogPost[]>([]);
 
-  const filteredPosts = selectedCategory ? BLOG_POSTS.filter((p) => p.category === selectedCategory) : BLOG_POSTS;
-  const [featured, ...rest] = filteredPosts;
+  React.useEffect(() => {
+    let cancelled = false;
+
+    (async function () {
+      try {
+        const dynamicPosts = await fetchPermawebBlogPosts();
+        if (!cancelled) {
+          setPermawebPosts(dynamicPosts);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const allPosts = React.useMemo(() => [...BLOG_POSTS, ...permawebPosts], [permawebPosts]);
+  const categories = React.useMemo(() => [...new Set(allPosts.map((p) => p.category))].sort(), [allPosts]);
+
+  const filteredPosts = selectedCategory ? allPosts.filter((p) => p.category === selectedCategory) : allPosts;
 
   return (
     <S.Wrapper>
@@ -25,7 +46,7 @@ export default function Blog() {
         <S.FilterButton $active={!selectedCategory} onClick={() => setSelectedCategory(null)} type="button">
           {language.all}
         </S.FilterButton>
-        {CATEGORIES.map((cat) => (
+        {categories.map((cat) => (
           <S.FilterButton
             key={cat}
             $active={selectedCategory === cat}
@@ -36,25 +57,9 @@ export default function Blog() {
           </S.FilterButton>
         ))}
       </S.FilterRow>
-      {featured && (
-        <S.FeaturedLink to={`${URLS.blog}${featured.slug}`}>
-          <S.FeaturedCard>
-            <S.FeaturedImageWrapper>
-              <img src={featured.imageUrl} alt="" />
-            </S.FeaturedImageWrapper>
-            <S.FeaturedContent>
-              <S.Category>{featured.category}</S.Category>
-              <S.FeaturedTitle>{featured.title}</S.FeaturedTitle>
-              <S.Excerpt>{featured.excerpt}</S.Excerpt>
-              <S.Author>By {featured.author}</S.Author>
-              <S.PostMeta>{featured.publishedAt}</S.PostMeta>
-            </S.FeaturedContent>
-          </S.FeaturedCard>
-        </S.FeaturedLink>
-      )}
-      {rest.length > 0 && (
+      {filteredPosts.length > 0 && (
         <S.Grid>
-          {rest.map((post: BlogPost) => (
+          {filteredPosts.map((post: BlogPost) => (
             <S.CardLink key={post.slug} to={`${URLS.blog}${post.slug}`}>
               <S.Card>
                 <S.CardImageWrapper>
