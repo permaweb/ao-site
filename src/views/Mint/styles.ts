@@ -134,6 +134,61 @@ export const NetworkHeaderDivider = styled.div`
   }
 `;
 
+export const NetworkHeaderArweave = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  span {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+    font-size: ${(props) => props.theme.typography.size.small};
+    color: ${(props) => props.theme.colors.font.alt1};
+    white-space: nowrap;
+  }
+
+  p {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+    font-size: ${(props) => props.theme.typography.size.small};
+    color: ${(props) => props.theme.colors.font.primary};
+  }
+`;
+
+export const NetworkHeaderAddress = styled.p`
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const NetworkHeaderAddressRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .network-header-logo,
+  .network-header-logo > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .network-header-logo {
+    flex-shrink: 0;
+    line-height: 0;
+  }
+
+  .network-header-logo svg {
+    height: 18px;
+    width: 18px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+`;
+
 export const NetworkHeaderWallet = styled.div`
   display: flex;
   align-items: center;

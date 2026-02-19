@@ -296,9 +296,9 @@ export const theme = (currentTheme: any): DefaultTheme => ({
       },
     },
     tooltip: {
-      background: currentTheme.dark2,
+      background: currentTheme.neutral3,
       border: currentTheme.neutral9,
-      color: currentTheme.light1,
+      color: currentTheme.neutralA1,
     },
     view: {
       background: currentTheme.neutral1,

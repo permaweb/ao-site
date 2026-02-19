@@ -1,5 +1,6 @@
 import { ReactSVG } from 'react-svg';
 
+import { AddressTooltip } from 'components/atoms/AddressTooltip';
 import { Button } from 'components/atoms/Button';
 import { ASSETS } from 'helpers/config';
 import { formatAddress } from 'helpers/utils';
@@ -28,7 +29,9 @@ export default function WalletConnect() {
           <ReactSVG src={ASSETS.wallet} />
         </S.Icon>
       )}
-      <p>{label}</p>
+      <p>
+        <AddressTooltip address={arProvider.walletAddress ?? null}>{label}</AddressTooltip>
+      </p>
       {arProvider.walletAddress && (
         <Button type={'alt2'} label={language.disconnect} handlePress={() => arProvider.handleDisconnect()} />
       )}

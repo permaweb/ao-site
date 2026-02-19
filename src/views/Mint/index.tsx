@@ -1,6 +1,7 @@
 import React from 'react';
 import { ReactSVG } from 'react-svg';
 
+import { AddressTooltip } from 'components/atoms/AddressTooltip';
 import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Modal } from 'components/atoms/Modal';
@@ -30,6 +31,7 @@ export default function Mint() {
   // const [currentMonth, setCurrentMonth] = React.useState<number | null>(null);
   const [copiedAr, setCopiedAr] = React.useState<boolean>(false);
   const [copiedEth, setCopiedEth] = React.useState<boolean>(false);
+  const [copiedDepositArweave, setCopiedDepositArweave] = React.useState<boolean>(false);
 
   // React.useEffect(() => {
   // 	setAOSupply({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
@@ -124,6 +126,14 @@ export default function Mint() {
     }
   }, [ethProvider.walletAddress]);
 
+  const copyDepositArweaveAddress = React.useCallback(async () => {
+    if (ethProvider.lastArweaveAddress) {
+      await navigator.clipboard.writeText(ethProvider.lastArweaveAddress);
+      setCopiedDepositArweave(true);
+      setTimeout(() => setCopiedDepositArweave(false), 2000);
+    }
+  }, [ethProvider.lastArweaveAddress]);
+
   return (
     <>
       <S.Wrapper>
@@ -158,15 +168,16 @@ export default function Mint() {
               {arProvider.walletAddress ? (
                 <>
                   <S.NetworkHeaderWallet>
-                    <p>{formatAddress(arProvider.walletAddress, false)}</p>
+                    <S.NetworkHeaderAddressRow>
+                      <ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
+                      <AddressTooltip address={arProvider.walletAddress}>
+                        <S.NetworkHeaderAddress onClick={copiedAr ? undefined : copyArAddress}>
+                          {copiedAr ? `${language.copied}!` : formatAddress(arProvider.walletAddress, false)}
+                        </S.NetworkHeaderAddress>
+                      </AddressTooltip>
+                    </S.NetworkHeaderAddressRow>
                   </S.NetworkHeaderWallet>
                   <S.NetworkHeaderWalletActions>
-                    <Button
-                      type={'alt2'}
-                      label={copiedAr ? `${language.copied}!` : language.copyWalletAddress}
-                      handlePress={copyArAddress}
-                    />
-                    <S.NetworkHeaderDivider />
                     <Button
                       type={'alt2'}
                       label={language.disconnect}
@@ -256,15 +267,36 @@ export default function Mint() {
                 {ethProvider.walletAddress ? (
                   <>
                     <S.NetworkHeaderWallet>
-                      <p>{formatAddress(ethProvider.walletAddress, false)}</p>
+                      <S.NetworkHeaderAddressRow>
+                        <ReactSVG className={'network-header-logo'} src={ASSETS.ethereum} />
+                        <AddressTooltip address={ethProvider.walletAddress}>
+                          <S.NetworkHeaderAddress onClick={copiedEth ? undefined : copyEthAddress}>
+                            {copiedEth ? `${language.copied}!` : formatAddress(ethProvider.walletAddress, false)}
+                          </S.NetworkHeaderAddress>
+                        </AddressTooltip>
+                      </S.NetworkHeaderAddressRow>
+                      {ethProvider.lastArweaveAddress && (
+                        <>
+                          <S.NetworkHeaderDivider />
+                          <S.NetworkHeaderArweave>
+                            <span>{language.depositArweaveLabel}</span>
+                            <S.NetworkHeaderAddressRow>
+                              <ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
+                              <AddressTooltip address={ethProvider.lastArweaveAddress}>
+                                <S.NetworkHeaderAddress
+                                  onClick={copiedDepositArweave ? undefined : copyDepositArweaveAddress}
+                                >
+                                  {copiedDepositArweave
+                                    ? `${language.copied}!`
+                                    : formatAddress(ethProvider.lastArweaveAddress, false)}
+                                </S.NetworkHeaderAddress>
+                              </AddressTooltip>
+                            </S.NetworkHeaderAddressRow>
+                          </S.NetworkHeaderArweave>
+                        </>
+                      )}
                     </S.NetworkHeaderWallet>
                     <S.NetworkHeaderWalletActions>
-                      <Button
-                        type={'alt2'}
-                        label={copiedEth ? `${language.copied}!` : language.copyWalletAddress}
-                        handlePress={copyEthAddress}
-                      />
-                      <S.NetworkHeaderDivider />
                       <Button
                         type={'alt2'}
                         label={language.disconnect}

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { ReactSVG } from 'react-svg';
 import Web3 from 'web3';
 
+import { AddressTooltip } from 'components/atoms/AddressTooltip';
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
 import {
@@ -496,7 +497,11 @@ export default function EthExchange(props: IProps) {
       <S.Wrapper>
         <S.HeaderWrapper>
           <ReactSVG src={ASSETS.ethereum} />
-          <p>{formatAddress(ethProvider.walletAddress ?? '-', true)}</p>
+          <p>
+            <AddressTooltip address={ethProvider.walletAddress ?? null} wrap={true}>
+              {formatAddress(ethProvider.walletAddress ?? '-', true)}
+            </AddressTooltip>
+          </p>
         </S.HeaderWrapper>
         {props.conversionFlow ? (
           getStepperComponent()

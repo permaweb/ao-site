@@ -41,7 +41,6 @@ export const IconGroup = styled.div`
   p {
     color: ${(props) => props.theme.colors.font.alt1};
     font-size: ${(props) => props.theme.typography.size.xSmall};
-    font-weight: ${(props) => props.theme.typography.weight.regular};
   }
 `;
 

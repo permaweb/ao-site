@@ -1,18 +1,13 @@
 import React from 'react';
 
-import { IconButton } from 'components/atoms/IconButton';
 import { Portal } from 'components/atoms/Portal';
-import { ASSETS, DOM } from 'helpers/config';
-import { useLanguageProvider } from 'providers/LanguageProvider';
+import { DOM } from 'helpers/config';
 import { CloseHandler } from 'wrappers/CloseHandler';
 
 import * as S from './styles';
 import { IProps } from './types';
 
 export default function Panel(props: IProps) {
-  const languageProvider = useLanguageProvider();
-  const language = languageProvider.object[languageProvider.current];
-
   React.useEffect(() => {
     if (props.open) {
       hideDocumentBody();
@@ -38,6 +33,12 @@ export default function Panel(props: IProps) {
       document.removeEventListener('keydown', escFunction, false);
     };
   }, [escFunction]);
+
+  const handleOverlayClick = React.useCallback(() => {
+    if (props.handleClose && !props.closeHandlerDisabled) {
+      props.handleClose();
+    }
+  }, [props]);
 
   function getHeader() {
     switch (typeof props.header) {
@@ -65,17 +66,6 @@ export default function Panel(props: IProps) {
             {props.header && (
               <S.Header>
                 <S.LT>{getHeader()}</S.LT>
-                {props.handleClose && (
-                  <S.Close>
-                    <IconButton
-                      type={'alt1'}
-                      src={ASSETS.close}
-                      handlePress={() => props.handleClose()}
-                      dimensions={{ wrapper: 30, icon: 16.5 }}
-                      tooltip={language.close}
-                    />
-                  </S.Close>
-                )}
               </S.Header>
             )}
             <S.Body className={'scroll-wrapper'}>{props.children}</S.Body>
@@ -88,7 +78,7 @@ export default function Panel(props: IProps) {
   return (
     <Portal node={DOM.overlay}>
       {getBody()}
-      <S.PanelOverlay open={props.open} />
+      <S.PanelOverlay open={props.open} onClick={handleOverlayClick} />
     </Portal>
   );
 }
