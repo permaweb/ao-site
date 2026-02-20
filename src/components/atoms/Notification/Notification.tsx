@@ -11,39 +11,39 @@ import * as S from './styles';
 import { IProps } from './types';
 
 export default function Notification(props: IProps) {
-	const languageProvider = useLanguageProvider();
-	const language = languageProvider.object[languageProvider.current];
+  const languageProvider = useLanguageProvider();
+  const language = languageProvider.object[languageProvider.current];
 
-	const [show, setShow] = React.useState<boolean>(true);
+  const [show, setShow] = React.useState<boolean>(true);
 
-	function handleClose() {
-		setShow(false);
-		if (props.callback) props.callback();
-	}
+  function handleClose() {
+    setShow(false);
+    if (props.callback) props.callback();
+  }
 
-	React.useEffect(() => {
-		if (show && props.type !== 'warning') {
-			const timer = setTimeout(() => {
-				handleClose();
-			}, 5000);
+  React.useEffect(() => {
+    if (show && props.type !== 'warning') {
+      const timer = setTimeout(() => {
+        handleClose();
+      }, 5000);
 
-			return () => clearTimeout(timer);
-		}
-	}, [show, props.type]);
+      return () => clearTimeout(timer);
+    }
+  }, [show, props.type]);
 
-	return show ? (
-		<Portal node={DOM.notification}>
-			<S.Wrapper warning={props.type === 'warning'}>
-				<S.MessageWrapper>
-					<S.Icon warning={props.type === 'warning'}>
-						<ReactSVG src={props.type === 'warning' ? ASSETS.close : ASSETS.success} />
-					</S.Icon>
-					<S.Message>{props.message}</S.Message>
-				</S.MessageWrapper>
-				<S.Close>
-					<Button type={'alt2'} label={language.dismiss} handlePress={handleClose} />
-				</S.Close>
-			</S.Wrapper>
-		</Portal>
-	) : null;
+  return show ? (
+    <Portal node={DOM.notification}>
+      <S.Wrapper warning={props.type === 'warning'}>
+        <S.MessageWrapper>
+          <S.Icon warning={props.type === 'warning'}>
+            <ReactSVG src={props.type === 'warning' ? ASSETS.close : ASSETS.success} />
+          </S.Icon>
+          <S.Message>{props.message}</S.Message>
+        </S.MessageWrapper>
+        <S.Close>
+          <Button type={'alt2'} label={language.dismiss} handlePress={handleClose} />
+        </S.Close>
+      </S.Wrapper>
+    </Portal>
+  ) : null;
 }

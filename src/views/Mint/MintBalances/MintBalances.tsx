@@ -10,17 +10,17 @@ import { BalanceSection } from './BalanceSection';
 import * as S from './styles';
 
 export default function MintBalances() {
-	const languageProvider = useLanguageProvider();
-	const language = languageProvider.object[languageProvider.current];
+  const languageProvider = useLanguageProvider();
+  const language = languageProvider.object[languageProvider.current];
 
-	const [info, setInfo] = React.useState<string | null>(null);
+  const [info, setInfo] = React.useState<string | null>(null);
 
-	return (
-		<>
-			<S.BalancesWrapper>
-				<S.BalancesBodyWrapper>
-					<S.BalancesBreakdownWrapper>
-						{/* <div>
+  return (
+    <>
+      <S.BalancesWrapper>
+        <S.BalancesBodyWrapper>
+          <S.BalancesBreakdownWrapper>
+            {/* <div>
 							<S.HeaderWrapper>
 								<S.HeaderInfoWrapper>
 									<S.HeaderInfo>
@@ -70,27 +70,27 @@ export default function MintBalances() {
 							</Subtitle>
 						</div>
 						<BalanceSection type={'arweave'} /> */}
-						<S.BalancesFlexWrapper>
-							<S.BalanceFlexSection>
-								<BalanceSection type={EthTokenEnum.StEth} />
-							</S.BalanceFlexSection>
-							<S.BalanceFlexSection>
-								<BalanceSection type={EthTokenEnum.USDS} />
-							</S.BalanceFlexSection>
-							<S.BalanceFlexSection>
-								<BalanceSection type={EthTokenEnum.DAI} />
-							</S.BalanceFlexSection>
-						</S.BalancesFlexWrapper>
-					</S.BalancesBreakdownWrapper>
-				</S.BalancesBodyWrapper>
-			</S.BalancesWrapper>
-			{info && (
-				<Modal header={'Earnings'} handleClose={() => setInfo(null)}>
-					<S.ModalWrapper className={'modal-wrapper'}>
-						<span>{info}</span>
-					</S.ModalWrapper>
-				</Modal>
-			)}
-		</>
-	);
+            <S.BalancesFlexWrapper>
+              <S.BalanceFlexSection>
+                <BalanceSection type={EthTokenEnum.StEth} />
+              </S.BalanceFlexSection>
+              <S.BalanceFlexSection>
+                <BalanceSection type={EthTokenEnum.USDS} />
+              </S.BalanceFlexSection>
+              <S.BalanceFlexSection>
+                <BalanceSection type={EthTokenEnum.DAI} />
+              </S.BalanceFlexSection>
+            </S.BalancesFlexWrapper>
+          </S.BalancesBreakdownWrapper>
+        </S.BalancesBodyWrapper>
+      </S.BalancesWrapper>
+      {info && (
+        <Modal header={'Earnings'} handleClose={() => setInfo(null)}>
+          <S.ModalWrapper className={'modal-wrapper'}>
+            <span>{info}</span>
+          </S.ModalWrapper>
+        </Modal>
+      )}
+    </>
+  );
 }

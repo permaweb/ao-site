@@ -1,20 +1,20 @@
 import { URLViewType } from 'helpers/types';
 
 export interface ITProps {
-	label: string;
-	icon: string | null;
-	disabled: boolean;
-	active: boolean;
-	handlePress: (url: string) => void;
-	url: string;
+  label: string;
+  icon: string | null;
+  disabled: boolean;
+  active: boolean;
+  handlePress: (url: string) => void;
+  url: string;
 }
 
 export interface ICProps {
-	tabs: URLViewType[];
+  tabs: URLViewType[];
 }
 
 export interface IUProps {
-	tabs: URLViewType[];
-	activeUrl: string;
-	useFixed?: boolean;
+  tabs: URLViewType[];
+  activeUrl: string;
+  useFixed?: boolean;
 }
