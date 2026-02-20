@@ -7,18 +7,19 @@ import torusModule from '@web3-onboard/torus';
 import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
-import { readHandler } from 'api';
+import { readProcess } from 'api';
 import React from 'react';
 import Web3, { EventLog } from 'web3';
 
 import {
-	AO,
 	ASSETS,
 	DaiBridge_ABI,
 	ENDPOINTS,
 	Erc20_ABI,
 	ETH_CONTRACTS,
 	ETH_TOKEN_DENOMINATION,
+	HB,
+	PATCH_MAP,
 	PRICE_FEED_ABI,
 	StEthBridge_ABI,
 	UsdsBridge_ABI,
@@ -66,7 +67,6 @@ async function getPriceForToken(processId: string): Promise<{ usd_price: number;
 		}
 
 		const data = await response.json();
-		console.log(data); // Should contain usd_price and denominator fields
 		return data;
 	} catch (error) {
 		console.error('Error fetching price from Supabase:', error);
@@ -429,30 +429,58 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		(async function () {
 			if (tokens && totalDeposited && aoProvider.mintedSupply) {
 				try {
-					const [daiResp, stEthResp, usdsResp] = await Promise.all([
-						readHandler({
-							processId: AO.daiPriceOracle,
-							action: 'Info',
+					const currentNode = HB.read3;
+
+					const [daiRespPrice, stEthRespPrice, usdsRespPrice] = await Promise.all([
+						readProcess({
+							processId: PATCH_MAP.dai.processId,
+							node: { url: currentNode },
+							path: `${PATCH_MAP.dai.ticker}/usd`,
+							appendPath: true,
 						}),
-						readHandler({
-							processId: AO.stEthPriceOracle,
-							action: 'Info',
+						readProcess({
+							processId: PATCH_MAP.stEth.processId,
+							node: { url: currentNode },
+							path: `${PATCH_MAP.stEth.ticker}/usd`,
+							appendPath: true,
 						}),
-						readHandler({
-							processId: AO.usdsPriceOracle,
-							action: 'Info',
-							ignoreDataResponse: true,
+						readProcess({
+							processId: PATCH_MAP.usds.processId,
+							node: { url: currentNode },
+							path: `${PATCH_MAP.usds.ticker}/usd`,
+							appendPath: true,
 						}),
 					]);
 
-					const daiPrice = Number(daiResp?.['Last-Price']) / 10000;
-					const daiYield = Number(daiResp?.['Last-Yield']) / 10000;
+					const [daiRespYield, stEthRespYield, usdsRespYield] = await Promise.all([
+						readProcess({
+							processId: PATCH_MAP.dai.processId,
+							node: { url: currentNode },
+							path: `yield/bps`,
+							appendPath: true,
+						}),
+						readProcess({
+							processId: PATCH_MAP.stEth.processId,
+							node: { url: currentNode },
+							path: `yield/bps`,
+							appendPath: true,
+						}),
+						readProcess({
+							processId: PATCH_MAP.usds.processId,
+							node: { url: currentNode },
+							path: `yield/bps`,
+							appendPath: true,
+						}),
+					]);
 
-					const stEthPrice = Number(stEthResp?.['Last-Price']) / 10000;
-					const stEthYield = Number(stEthResp?.['Last-Yield']) / 10000;
+					const daiPrice = Number(daiRespPrice);
+					const daiYield = Number(daiRespYield);
 
-					const usdsPrice = Number(usdsResp?.['Last-Price']) / 10000;
-					const usdsYield = Number(usdsResp?.['Last-Yield']) / 10000;
+					const stEthPrice = Number(stEthRespPrice);
+					const stEthYield = Number(stEthRespYield);
+
+					const usdsPrice = Number(usdsRespPrice);
+					const usdsYield = Number(usdsRespYield);
 
 					const totalDepositedSteth = Number(totalDeposited?.stEth?.value ?? BigInt(0));
 					const totalDepositedDai = Number(totalDeposited?.dai?.value ?? BigInt(0));
