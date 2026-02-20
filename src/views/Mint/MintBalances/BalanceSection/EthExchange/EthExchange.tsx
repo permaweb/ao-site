@@ -609,15 +609,6 @@ export default function EthExchange(props: IProps) {
         <S.EndWrapper>
           <ExchangeInfo token={effectiveToken} />
         </S.EndWrapper>
-        <S.EndActionsWrapper>
-          <Button
-            type={'primary'}
-            label={language.close}
-            handlePress={() => props.handleClose()}
-            disabled={loading}
-            loading={false}
-          />
-        </S.EndActionsWrapper>
       </S.Wrapper>
     </>
   );
