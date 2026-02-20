@@ -15,8 +15,7 @@ export const HeaderWrapper = styled.div`
 
   p {
     color: ${(props) => props.theme.colors.font.primary};
-    font-size: ${(props) => props.theme.typography.size.lg};
-    font-weight: ${(props) => props.theme.typography.weight.bold};
+    font-size: ${(props) => props.theme.typography.size.base};
     font-family: ${(props) => props.theme.typography.family.primary};
   }
 
@@ -44,9 +43,8 @@ export const TabButton = styled.button<{ active: boolean; disabled: boolean }>`
   background: none;
   border: none;
   padding: 12px 0;
-  font-size: ${(props) => props.theme.typography.size.base};
+  font-size: ${(props) => props.theme.typography.size.lg};
   font-family: ${(props) => props.theme.typography.family.primary};
-  font-weight: ${(props) => props.theme.typography.weight.bold};
   color: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.primary.alt1)};
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   position: relative;
@@ -96,7 +94,6 @@ export const StepperStep = styled.div<{ active: boolean; completed: boolean }>`
   align-items: center;
   justify-content: center;
   font-size: ${(props) => props.theme.typography.size.small};
-  font-weight: ${(props) => props.theme.typography.weight.bold};
   font-family: ${(props) => props.theme.typography.family.primary};
   border: 2px solid;
   margin-bottom: 8px;
@@ -127,7 +124,7 @@ export const StepperStep = styled.div<{ active: boolean; completed: boolean }>`
 
 export const StepperLabel = styled.span<{ active: boolean; completed: boolean }>`
   font-size: ${(props) => props.theme.typography.size.xSmall};
-  font-weight: ${(props) => props.theme.typography.weight.bold};
+  font-family: ${(props) => props.theme.typography.family.primary};
   font-family: ${(props) => props.theme.typography.family.primary};
   text-align: center;
   transition: color 0.3s ease;
@@ -162,7 +159,6 @@ export const Form = styled.div<{ invalid: boolean }>`
     height: 75px;
     font-size: ${(props) => props.theme.typography.size.xLg};
     font-family: ${(props) => props.theme.typography.family.primary};
-    font-weight: ${(props) => props.theme.typography.weight.xBold};
     color: ${(props) =>
       !props.invalid ? props.theme.colors.font.primary : props.theme.colors.warning.primary} !important;
     padding: 15px;
@@ -196,7 +192,6 @@ export const FormHeader = styled.div`
     color: ${(props) => props.theme.colors.font.primary};
     font-size: ${(props) => props.theme.typography.size.xSmall};
     font-family: ${(props) => props.theme.typography.family.primary};
-    font-weight: ${(props) => props.theme.typography.weight.bold};
   }
 `;
 
@@ -216,7 +211,6 @@ export const YieldHeader = styled.div`
     color: ${(props) => props.theme.colors.font.primary};
     font-size: ${(props) => props.theme.typography.size.xSmall};
     font-family: ${(props) => props.theme.typography.family.primary};
-    font-weight: ${(props) => props.theme.typography.weight.bold};
   }
 `;
 
@@ -256,11 +250,10 @@ export const YieldToken = styled.div`
     color: ${(props) => props.theme.colors.font.primary};
     font-size: ${(props) => props.theme.typography.size.small};
     font-family: ${(props) => props.theme.typography.family.primary};
-    font-weight: ${(props) => props.theme.typography.weight.bold};
 
     &.yield {
       color: ${(props) => props.theme.colors.button.alt1.background};
-      font-weight: ${(props) => props.theme.typography.weight.bold};
+
       margin-left: auto;
     }
   }
@@ -276,14 +269,13 @@ export const YieldDisplay = styled.div`
   span {
     &.yield {
       color: ${(props) => props.theme.colors.button.alt1.background};
-      font-weight: ${(props) => props.theme.typography.weight.bold};
+
       font-size: ${(props) => props.theme.typography.size.small};
     }
 
     &.native {
       color: ${(props) => props.theme.colors.font.primary.alt1};
       font-size: ${(props) => props.theme.typography.size.xSmall};
-      font-weight: ${(props) => props.theme.typography.weight.regular};
     }
   }
 `;
@@ -311,7 +303,6 @@ export const FormFieldLabel = styled.div<{ disabled: boolean }>`
     color: ${(props) =>
       props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
     font-size: ${(props) => props.theme.typography.size.xLg};
-    font-weight: ${(props) => props.theme.typography.weight.bold};
     font-family: ${(props) => props.theme.typography.family.primary};
     text-transform: uppercase;
   }
@@ -321,7 +312,6 @@ export const FormMessage = styled.div`
   p {
     color: ${(props) => props.theme.colors.warning.primary};
     font-size: ${(props) => props.theme.typography.size.xSmall};
-    font-weight: ${(props) => props.theme.typography.weight.bold};
     font-family: ${(props) => props.theme.typography.family.primary};
   }
 `;
@@ -366,9 +356,8 @@ export const UpgradeCheckboxWrapper = styled.label`
     }
   }
 
-  font-size: ${(props) => props.theme.typography.size.xSmall};
+  font-size: ${(props) => props.theme.typography.size.small};
   color: ${(props) => props.theme.colors.font.primary.alt1};
-  font-weight: ${(props) => props.theme.typography.weight.medium};
   cursor: pointer;
 `;
 
@@ -411,15 +400,14 @@ export const CompleteIcon = styled.div`
 
 export const CompleteTitle = styled.h2`
   color: ${(props) => props.theme.colors.font.primary};
-  font-size: ${(props) => props.theme.typography.size.lg};
-  font-weight: ${(props) => props.theme.typography.weight.bold};
+  font-size: ${(props) => props.theme.typography.size.xLg};
   font-family: ${(props) => props.theme.typography.family.primary};
   margin: 0;
 `;
 
 export const CompleteMessage = styled.p`
   color: ${(props) => props.theme.colors.font.primary.alt1};
-  font-size: ${(props) => props.theme.typography.size.base};
+  font-size: ${(props) => props.theme.typography.size.small};
   font-family: ${(props) => props.theme.typography.family.primary};
   margin: 0;
 `;
@@ -435,7 +423,6 @@ export const TxHashWrapper = styled.div`
 export const TxHashLabel = styled.span`
   color: ${(props) => props.theme.colors.font.primary};
   font-size: ${(props) => props.theme.typography.size.small};
-  font-weight: ${(props) => props.theme.typography.weight.bold};
   font-family: ${(props) => props.theme.typography.family.primary};
 `;
 

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-import { open, transition2 } from 'helpers/animations';
 import { STYLING } from 'helpers/config';
 
 export const PanelOverlay = styled.div<{ open: boolean }>`
@@ -11,8 +10,9 @@ export const PanelOverlay = styled.div<{ open: boolean }>`
   top: 0;
   left: 0;
   background: ${(props) => props.theme.colors.overlay.primary};
-  animation: ${open} ${transition2};
-  display: ${(props) => (props.open ? 'block' : 'none')};
+  opacity: ${(props) => (props.open ? 1 : 0)};
+  pointer-events: ${(props) => (props.open ? 'auto' : 'none')};
+  transition: opacity 300ms cubic-bezier(0, 0, 0.2, 1);
 `;
 
 export const Container = styled.div<{
@@ -29,7 +29,7 @@ export const Container = styled.div<{
   top: 0;
   right: 0;
   transform: translateX(${(props) => (props.open ? '0' : 'calc(100% + 10px)')});
-  transition: transform 500ms ${STYLING.motion.easing.decelerate} 0ms;
+  transition: transform ${(props) => (props.open ? '800ms' : '400ms')} ${STYLING.motion.easing.decelerate} 0ms;
   @media (max-width: ${STYLING.cutoffs.mobile}) {
     min-width: calc(100vw - 20px);
   }
@@ -52,8 +52,8 @@ export const LT = styled.div`
 
 export const Title = styled.p`
   color: ${(props) => props.theme.colors.font.primary};
-  font-size: ${(props) => props.theme.typography.size.lg};
-  font-weight: ${(props) => props.theme.typography.weight.medium};
+  font-size: ${(props) => props.theme.typography.size.xLg};
+  font-weight: ${(props) => props.theme.typography.weight.regular};
   line-height: calc(${(props) => props.theme.typography.size.lg} + 5px);
   font-family: ${(props) => props.theme.typography.family.primary};
   white-space: nowrap;

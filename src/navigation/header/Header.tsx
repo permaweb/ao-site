@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
 import { IconButton } from 'components/atoms/IconButton';
@@ -12,6 +12,7 @@ import * as S from './styles';
 export default function Header() {
   const languageProvider = useLanguageProvider();
   const language = languageProvider.object[languageProvider.current];
+  const location = useLocation();
 
   const [showPanel, setShowPanel] = React.useState<boolean>(false);
 
@@ -28,6 +29,10 @@ export default function Header() {
     { redirect: REDIRECTS.discord, icon: ASSETS.discord },
   ];
 
+  const isPathActive = (path: string): boolean => {
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
+
   return (
     <>
       <S.Wrapper id={'navigation-header'}>
@@ -41,7 +46,12 @@ export default function Header() {
             <S.DesktopNavWrapper>
               {paths.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
                 return (
-                  <Link key={index} to={element.path} target={element.target || ''} className={'primary-text'}>
+                  <Link
+                    key={index}
+                    to={element.path}
+                    target={element.target || ''}
+                    className={`primary-text ${!element.target && isPathActive(element.path) ? 'active-route' : ''}`}
+                  >
                     <span>{element.label}.</span>
                   </Link>
                 );

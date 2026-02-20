@@ -67,17 +67,21 @@ export const DesktopNavWrapper = styled.div`
   animation: ${open} ${transition2};
 
   a {
-    font-size: ${(props) => props.theme.typography.size.Small};
+    font-size: ${(props) => props.theme.typography.size.xSmall};
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.medium};
     line-height: 1;
     text-transform: none;
     transition: none;
-    opacity: 0.8;
+    opacity: 0.6;
 
     &:hover {
       opacity: 1;
     }
+  }
+
+  a.active-route {
+    opacity: 1;
   }
 
   @media (max-width: ${STYLING.cutoffs.initial}) {

@@ -296,9 +296,9 @@ export const theme = (currentTheme: any): DefaultTheme => ({
       },
     },
     tooltip: {
-      background: currentTheme.dark2,
+      background: currentTheme.neutral3,
       border: currentTheme.neutral9,
-      color: currentTheme.light1,
+      color: currentTheme.neutralA1,
     },
     view: {
       background: currentTheme.neutral1,
@@ -323,6 +323,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
       lg: 'clamp(16px, 1.65vw, 18px)',
       xLg: 'clamp(18px, 1.75vw, 24px)',
       xxLg: 'clamp(28px, 2.75vw, 34px)',
+      xxxLg: 'clamp(32px, 3.2vw, 42px)',
       h1: 'clamp(27px, 2.625vw, 42px)',
       h2: 'clamp(24px, 2.4375vw, 37.5px)',
       h4: 'clamp(21px, 2.25vw, 28.5px)',

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { AddressTooltip } from 'components/atoms/AddressTooltip';
 import { formatAddress } from 'helpers/utils';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
@@ -26,7 +27,9 @@ export default function TxAddress(props: IProps) {
     <>
       <S.Wrapper disabled={copied}>
         <p onClick={copied ? () => {} : copyAddress}>
-          {copied ? `${language.copied}!` : formatAddress(props.address, props.wrap)}
+          <AddressTooltip address={props.address ?? null} wrap={props.wrap}>
+            {copied ? `${language.copied}!` : formatAddress(props.address, props.wrap)}
+          </AddressTooltip>
         </p>
       </S.Wrapper>
     </>

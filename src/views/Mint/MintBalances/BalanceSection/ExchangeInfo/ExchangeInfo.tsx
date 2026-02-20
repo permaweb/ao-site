@@ -19,7 +19,7 @@ export default function ExchangeInfo(props: { token: BridgeTokenEarningsType }) 
       </S.Description>
       <S.IconsWrapper>
         <S.IconGroup>
-          <p className={'primary-text'}>{language.baseContractAudits}</p>
+          <p>{language.baseContractAudits}</p>
           <S.IconsLine>
             <Link to={ETH_EXCHANGE_REDIRECTS.codehawks} target={'_blank'}>
               <div className={'codehawks-audit'}>
@@ -39,7 +39,7 @@ export default function ExchangeInfo(props: { token: BridgeTokenEarningsType }) 
           </S.IconsLine>
         </S.IconGroup>
         <S.IconGroup>
-          <p className={'primary-text'}>{language.aoAudit}</p>
+          <p>{language.aoAudit}</p>
           <S.IconsLine>
             <Link to={ETH_EXCHANGE_REDIRECTS.ncc1} target={'_blank'}>
               <div className={'ncc-audit-wrapper'}>

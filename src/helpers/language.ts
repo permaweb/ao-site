@@ -101,6 +101,7 @@ export const language = {
     monthly: `Monthly`,
     network: `Network`,
     delegate: `Delegate`,
+    depositArweaveLabel: `AO rewards sent to`,
     depositInfo: `Track overall network token emissions, total deposited assets, and your current and projected AO holdings.`,
     nextMintCycle: `Next Mint Cycle`,
     none: `None`,

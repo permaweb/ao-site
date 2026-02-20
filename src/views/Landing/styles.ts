@@ -43,6 +43,7 @@ export const ContentWrapper = styled.div`
     position: relative;
     transition: ${open} ${fadeIn2};
     padding: 0 20px 0 0px;
+    font-size: ${(props) => props.theme.typography.size.xxxLg};
 
     &:before {
       content: '';
@@ -191,21 +192,31 @@ export const MetricsValue = styled.div`
 `;
 
 export const Indicator = styled.div`
-  height: 11.5px;
-  width: 11.5px;
+  height: 6px;
+  width: 6px;
   background: ${(props) => props.theme.colors.indicator.active};
   border-radius: 50%;
-  animation: pulse 1.075s infinite;
+  position: relative;
+  flex-shrink: 0;
 
-  @keyframes pulse {
-    0%,
-    100% {
-      background: ${(props) => props.theme.colors.indicator.active};
+  &:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: ${(props) => props.theme.colors.indicator.active};
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes ping {
+    0% {
       transform: scale(1);
+      opacity: 0.75;
     }
-    50% {
-      background: ${(props) => props.theme.colors.indicator.primary};
-      transform: scale(1.15);
+    75%,
+    100% {
+      transform: scale(2.8);
+      opacity: 0;
     }
   }
 `;

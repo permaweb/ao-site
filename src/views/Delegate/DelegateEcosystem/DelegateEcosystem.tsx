@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 import { useTheme } from 'styled-components';
 
+import { AddressTooltip } from 'components/atoms/AddressTooltip';
 import { AllocationDisplay } from 'components/atoms/AllocationDisplay';
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
@@ -179,7 +180,9 @@ function Project(props: {
                   <S.ProjectId onClick={() => copyTokenId(props.project?.flp_token_process ?? '-')}>
                     <span>{`${language.tokenId}:`}</span>
                     <p>
-                      {props.project?.flp_token_process ? formatAddress(props.project.flp_token_process, false) : '-'}
+                      <AddressTooltip address={props.project?.flp_token_process ?? null}>
+                        {props.project?.flp_token_process ? formatAddress(props.project.flp_token_process, false) : '-'}
+                      </AddressTooltip>
                     </p>
                     <ReactSVG src={copied ? ASSETS.checkmark : ASSETS.copy} />
                   </S.ProjectId>
