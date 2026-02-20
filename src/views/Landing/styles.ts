@@ -43,7 +43,7 @@ export const ContentWrapper = styled.div`
     position: relative;
     transition: ${open} ${fadeIn2};
     padding: 0 20px 0 0px;
-    font-size: ${(props) => props.theme.typography.size.xxLg};
+    font-size: ${(props) => props.theme.typography.size.xxxLg};
 
     &:before {
       content: '';
