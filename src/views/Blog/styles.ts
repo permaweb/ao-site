@@ -341,3 +341,18 @@ export const MetaLine = styled.div`
   align-items: center;
   gap: 6px;
 `;
+
+export const Status = styled.div`
+  width: 100%;
+  padding: 12px;
+  border: 1px solid ${(props) => props.theme.colors.border.primary};
+  background: ${(props) => props.theme.colors.container.alt1.background};
+`;
+
+export const StatusMessage = styled.p`
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.xSmall};
+  font-weight: ${(props) => props.theme.typography.weight.regular};
+  color: ${(props) => props.theme.colors.font.alt2};
+  line-height: 1.5;
+`;

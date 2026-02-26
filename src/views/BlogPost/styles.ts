@@ -133,6 +133,42 @@ export const Paragraph = styled.p`
   line-height: 1.75;
 `;
 
+export const MarkdownBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  p,
+  li {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-size: ${(props) => props.theme.typography.size.base};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+    color: ${(props) => props.theme.colors.font.primary};
+    line-height: 1.75;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    color: ${(props) => props.theme.colors.font.primary};
+    line-height: 1.2;
+    margin-top: 8px;
+  }
+
+  h1 {
+    font-size: ${(props) => props.theme.typography.size.h3};
+  }
+
+  h2 {
+    font-size: ${(props) => props.theme.typography.size.h4};
+  }
+
+  h3 {
+    font-size: ${(props) => props.theme.typography.size.xLg};
+  }
+`;
+
 export const BackLinkWrapper = styled.div`
   margin-top: 16px;
   padding-top: 24px;
