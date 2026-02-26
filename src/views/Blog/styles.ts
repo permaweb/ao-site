@@ -1,10 +1,28 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 import { STYLING } from 'helpers/config';
 
 const BLOG_MAX_WIDTH = 1020;
-const BLOG_LOADING_OFFSET = 68;
+const skeletonShimmer = keyframes`
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+`;
+
+const skeletonSurface = css`
+  background: linear-gradient(
+    90deg,
+    ${(props) => props.theme.colors.container.alt3.background} 25%,
+    ${(props) => props.theme.colors.container.alt2.background} 37%,
+    ${(props) => props.theme.colors.container.alt3.background} 63%
+  );
+  background-size: 240% 100%;
+  animation: ${skeletonShimmer} 1.5s linear infinite;
+`;
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -91,7 +109,13 @@ export const FeaturedImageWrapper = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+    opacity: 0;
+    transition: opacity ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate},
+      transform ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+  }
+
+  img.is-loaded {
+    opacity: 1;
   }
 
   @media (max-width: ${STYLING.cutoffs.tablet}) {
@@ -302,7 +326,13 @@ export const CardImageWrapper = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+    opacity: 0;
+    transition: opacity ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate},
+      transform ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+  }
+
+  img.is-loaded {
+    opacity: 1;
   }
 
   @media (max-width: ${STYLING.cutoffs.tablet}) {
@@ -357,25 +387,124 @@ export const Status = styled.div`
   background: ${(props) => props.theme.colors.container.alt1.background};
 `;
 
-export const LoadingState = styled.div`
+export const FeaturedSkeletonLayout = styled.div`
   width: 100%;
-  flex: 1;
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  transform: translateY(calc(-${BLOG_LOADING_OFFSET}px - 5vh));
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 18px;
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    grid-template-columns: 1fr;
+  }
 `;
 
-export const LoadingMessage = styled.p`
-  font-family: ${(props) => props.theme.typography.family.primary};
-  font-size: ${(props) => props.theme.typography.size.xSmall};
-  font-weight: ${(props) => props.theme.typography.weight.regular};
-  color: ${(props) => props.theme.colors.font.alt2};
-  line-height: 1.5;
-  text-align: center;
+export const SkeletonLabel = styled.div`
+  width: 64px;
+  height: 26px;
+`;
+
+export const SkeletonImage = styled.div<{ $featured?: boolean }>`
+  width: 100%;
+  height: ${(props) => (props.$featured ? '300px' : '270px')};
+  border: 1px solid ${(props) => props.theme.colors.border.primary};
+  ${skeletonSurface}
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    height: 240px;
+  }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    height: ${(props) => (props.$featured ? '240px' : '210px')};
+  }
+`;
+
+export const SkeletonFeaturedCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px;
+  background: ${(props) => props.theme.colors.container.alt1.background};
+`;
+
+export const SkeletonCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+`;
+
+export const SkeletonCardContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const SkeletonMetaLine = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+export const SkeletonCategory = styled.div`
+  width: 72px;
+  height: 10px;
+  border-radius: 999px;
+  ${skeletonSurface}
+`;
+
+export const SkeletonDot = styled.div`
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  ${skeletonSurface}
+`;
+
+export const SkeletonMeta = styled.div`
+  width: 92px;
+  height: 10px;
+  border-radius: 999px;
+  ${skeletonSurface}
+`;
+
+export const SkeletonTitle = styled.div<{ $featured?: boolean }>`
+  width: ${(props) => (props.$featured ? '92%' : '90%')};
+  height: ${(props) => (props.$featured ? '24px' : '20px')};
+  border-radius: 4px;
+  ${skeletonSurface}
+`;
+
+export const SkeletonLine = styled.div<{ width: string }>`
+  width: ${(props) => props.width};
+  height: 12px;
+  border-radius: 999px;
+  ${skeletonSurface}
+`;
+
+export const SkeletonFilterRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+`;
+
+export const SkeletonChip = styled.div`
+  width: 78px;
+  height: 14px;
+  border-radius: 999px;
+  ${skeletonSurface}
+`;
+
+export const SkeletonSearch = styled.div`
+  height: 40px;
+  min-width: 240px;
+  max-width: 310px;
+  width: 100%;
+  border: 1px solid ${(props) => props.theme.colors.border.primary};
+  ${skeletonSurface}
+
+  @media (max-width: ${STYLING.cutoffs.tablet}) {
+    max-width: 100%;
+  }
 `;
 
 export const StatusMessage = styled.p`

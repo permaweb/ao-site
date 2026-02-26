@@ -160,6 +160,13 @@ export const BalanceBodyWrapper = styled.div`
   padding: 20px;
 `;
 
+export const BalanceContent = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+`;
+
 export const BalanceQuantityLines = styled.div`
   width: 100%;
   display: flex;

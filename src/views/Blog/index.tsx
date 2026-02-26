@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Loader } from 'components/atoms/Loader';
 import { AO, URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -10,6 +9,21 @@ import * as S from './styles';
 
 const PINNED_POST_SLUG = 'legacynet-sunset';
 const BLOG_ID = 'aodevblog';
+const SKELETON_CARD_COUNT = 6;
+
+function FadeInImage(props: { src: string; alt: string; loading?: 'eager' | 'lazy' }) {
+  const [isLoaded, setIsLoaded] = React.useState(false);
+
+  return (
+    <img
+      src={props.src}
+      alt={props.alt}
+      loading={props.loading ?? 'lazy'}
+      className={isLoaded ? 'is-loaded' : undefined}
+      onLoad={() => setIsLoaded(true)}
+    />
+  );
+}
 
 export default function Blog() {
   const languageProvider = useLanguageProvider();
@@ -74,16 +88,52 @@ export default function Blog() {
 
   return (
     <S.Wrapper>
-      <S.Intro>
-        <S.IntroTitle>{language.blog}</S.IntroTitle>
-      </S.Intro>
       {isLoading ? (
-        <S.LoadingState>
-          <Loader relative noMargins />
-          <S.LoadingMessage>
-            AO, the decentralized network is retrieving the latest updates happening in the ecosystem.
-          </S.LoadingMessage>
-        </S.LoadingState>
+        <S.Content>
+          <S.FeaturedSection>
+            <S.SkeletonLabel />
+            <S.FeaturedSkeletonLayout>
+              <S.SkeletonImage $featured />
+              <S.SkeletonFeaturedCard>
+                <S.SkeletonMetaLine>
+                  <S.SkeletonCategory />
+                  <S.SkeletonDot />
+                  <S.SkeletonMeta />
+                </S.SkeletonMetaLine>
+                <S.SkeletonTitle $featured />
+                <S.SkeletonLine width={'88%'} />
+                <S.SkeletonLine width={'80%'} />
+                <S.SkeletonLine width={'62%'} />
+              </S.SkeletonFeaturedCard>
+            </S.FeaturedSkeletonLayout>
+          </S.FeaturedSection>
+          <S.ControlsRow>
+            <S.SkeletonFilterRow>
+              <S.SkeletonChip />
+              <S.SkeletonChip />
+              <S.SkeletonChip />
+              <S.SkeletonChip />
+            </S.SkeletonFilterRow>
+            <S.SkeletonSearch />
+          </S.ControlsRow>
+          <S.Grid>
+            {Array.from({ length: SKELETON_CARD_COUNT }).map((_, index) => (
+              <S.SkeletonCard key={`blog-skeleton-card-${index}`}>
+                <S.SkeletonImage />
+                <S.SkeletonCardContent>
+                  <S.SkeletonMetaLine>
+                    <S.SkeletonCategory />
+                    <S.SkeletonDot />
+                    <S.SkeletonMeta />
+                  </S.SkeletonMetaLine>
+                  <S.SkeletonTitle />
+                  <S.SkeletonLine width={'86%'} />
+                  <S.SkeletonLine width={'74%'} />
+                </S.SkeletonCardContent>
+              </S.SkeletonCard>
+            ))}
+          </S.Grid>
+        </S.Content>
       ) : (
         <S.Content className={'fade-in'}>
           {error && (
@@ -96,7 +146,7 @@ export default function Blog() {
               <S.FeaturedLabel>Pinned</S.FeaturedLabel>
               <S.FeaturedCardLink to={`${URLS.blog}${pinnedPost.slug}`}>
                 <S.FeaturedImageWrapper>
-                  <img src={pinnedPost.imageUrl} alt="" />
+                  <FadeInImage src={pinnedPost.imageUrl} alt="" loading={'eager'} />
                 </S.FeaturedImageWrapper>
                 <S.FeaturedCard>
                   <S.FeaturedCardContent>
@@ -146,7 +196,7 @@ export default function Blog() {
               {filteredPosts.map((post: AoBlogPost) => (
                 <S.CardLink key={post.slug} to={`${URLS.blog}${post.slug}`}>
                   <S.CardImageWrapper>
-                    <img src={post.imageUrl} alt="" />
+                    <FadeInImage src={post.imageUrl} alt="" />
                   </S.CardImageWrapper>
                   <S.Card>
                     <S.CardContent>

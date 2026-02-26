@@ -362,7 +362,7 @@ export default function BalanceSection(props: IProps) {
         </S.BalanceHeaderWrapper>
         <S.BalanceBodyWrapper>
           {ethProvider.walletAddress ? (
-            <>
+            <S.BalanceContent className={'fade-in'}>
               <S.BalanceQuantityLines>
                 <S.BalanceQuantityLine>
                   <span>{language.currentBalance}</span>
@@ -419,9 +419,9 @@ export default function BalanceSection(props: IProps) {
                   />
                 </S.BalanceAction>
               )}
-            </>
+            </S.BalanceContent>
           ) : (
-            <S.NetworkDisconnected>
+            <S.NetworkDisconnected className={'fade-in'}>
               <S.NetworkDisconnectedIconText>
                 <ReactSVG src={ASSETS.wallet} />
                 <p>{language.connectEthWalletToViewDeposits}</p>

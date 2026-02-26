@@ -192,7 +192,7 @@ export default function Mint() {
                   </S.NetworkHeaderWalletActions>
                 </>
               ) : (
-                <S.NetworkHeaderWallet>
+                <S.NetworkHeaderWallet className={'fade-in'}>
                   <span>
                     {language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
                   </span>
@@ -247,7 +247,7 @@ export default function Mint() {
                   </S.NetworkSection>
                 </S.NetworkSectionsWrapper>
               ) : (
-                <S.NetworkDisconnected>
+                <S.NetworkDisconnected className={'fade-in'}>
                   <S.NetworkDisconnectedIconText>
                     <ReactSVG src={ASSETS.wallet} />
                     <p>{language.connectArweaveWalletToViewRewards}</p>
@@ -315,7 +315,7 @@ export default function Mint() {
                     </S.NetworkHeaderWalletActions>
                   </>
                 ) : (
-                  <S.NetworkHeaderWallet>
+                  <S.NetworkHeaderWallet className={'fade-in'}>
                     <span>
                       {language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
                     </span>
@@ -328,7 +328,7 @@ export default function Mint() {
                     <p>{language.depositInfo}</p>
                   </S.NetworkBodyInfoLine>
                 ) : (
-                  <S.NetworkDisconnected>
+                  <S.NetworkDisconnected className={'fade-in'}>
                     <S.NetworkDisconnectedIconText>
                       <ReactSVG src={ASSETS.wallet} />
                       <p>{language.connectEthWalletToViewDeposits}</p>

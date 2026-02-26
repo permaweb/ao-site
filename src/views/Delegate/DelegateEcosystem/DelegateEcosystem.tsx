@@ -18,6 +18,7 @@ import * as S from './styles';
 
 type ExploreSortKey = 'index' | 'project' | 'delegated' | 'launched' | 'allocation';
 type SortDirection = 'asc' | 'desc';
+const LOADING_PLACEHOLDER_ROWS = 10;
 
 function Project(props: {
   index: number;
@@ -255,7 +256,6 @@ export default function DelegateEcosystem() {
   const allocationProvider = useAllocationProvider();
   const languageProvider = useLanguageProvider();
   const language = languageProvider.object[languageProvider.current];
-  const loadingMessage = 'AO, the decentralized network is retrieving the latest delegation activity in the ecosystem.';
 
   const [currentTab, setCurrentTab] = React.useState<FLPTabType>('featured');
   const [currentProjects, setCurrentProjects] = React.useState<any[] | null>(null);
@@ -564,9 +564,31 @@ export default function DelegateEcosystem() {
                 )}
               </>
             ) : (
-              <S.TableEmpty $isLoading>
-                <span>{loadingMessage}</span>
-              </S.TableEmpty>
+              <>
+                {Array.from({ length: LOADING_PLACEHOLDER_ROWS }).map((_, index) => (
+                  <S.TableBodyRowWrapper key={`loading-row-${index}`}>
+                    <S.TableBodyRow open={false} $isPlaceholder>
+                      <S.TableBodyCell flex={0.075} width={50} align={'center'}>
+                        <S.PlaceholderLine width={'12px'} align={'center'} />
+                      </S.TableBodyCell>
+                      <S.TableBodyCell flex={1.5} align={'left'}>
+                        <S.PlaceholderCircle />
+                        <S.PlaceholderLine width={'38%'} />
+                      </S.TableBodyCell>
+                      <S.TableBodyCell flex={1} align={'right'}>
+                        <S.PlaceholderLine width={'68px'} align={'right'} />
+                        <S.PlaceholderCircle size={17.5} />
+                      </S.TableBodyCell>
+                      <S.TableBodyCell flex={1} align={'right'}>
+                        <S.PlaceholderLine width={'84px'} align={'right'} />
+                      </S.TableBodyCell>
+                      <S.TableBodyCell flex={1} align={'right'}>
+                        <S.PlaceholderLine width={'74px'} align={'right'} />
+                      </S.TableBodyCell>
+                    </S.TableBodyRow>
+                  </S.TableBodyRowWrapper>
+                ))}
+              </>
             )}
           </S.Table>
         </S.BodyWrapper>
