@@ -188,7 +188,10 @@ export default function DelegateSummary() {
                   data={data}
                   options={{
                     animation: {
-                      duration: 0,
+                      duration: 200,
+                      easing: 'easeOutQuart',
+                      animateRotate: false,
+                      animateScale: false,
                     },
                     plugins: {
                       legend: {
@@ -212,7 +215,10 @@ export default function DelegateSummary() {
                     data={emptyData}
                     options={{
                       animation: {
-                        duration: 0,
+                        duration: 350,
+                        easing: 'easeOutQuart',
+                        animateRotate: false,
+                        animateScale: false,
                       },
                       plugins: {
                         legend: {
