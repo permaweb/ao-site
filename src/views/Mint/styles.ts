@@ -4,6 +4,7 @@ import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
   width: 100%;
+  min-height: 100vh;
   margin-top: 32px;
 `;
 
@@ -15,7 +16,18 @@ export const BodyWrapper = styled.div`
 `;
 
 export const GlobalWrapper = styled.div`
+  --global-pad-top: 23.5px;
+  --global-pad-bottom: 20px;
+  --global-row-gap: 5px;
+  --global-label-line-height: 1.5em;
+  --global-value-height: 27.5px;
+  --global-section-min-height: calc(
+    var(--global-pad-top) + var(--global-pad-bottom) + var(--global-row-gap) + var(--global-label-line-height) +
+      var(--global-value-height)
+  );
+
   width: 100%;
+  min-height: var(--global-section-min-height);
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -38,14 +50,26 @@ export const GlobalSectionsFlex = styled.div`
 export const GlobalSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  justify-content: center;
+  gap: var(--global-row-gap);
+  min-height: var(--global-section-min-height);
   padding: 23.5px 25px 20px 25px;
+  flex: 1;
+  min-width: 0;
 
   p {
+    min-height: var(--global-value-height);
+    min-width: 14ch;
+    display: inline-flex;
+    align-items: center;
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
     font-size: ${(props) => props.theme.typography.size.xLg};
     color: ${(props) => props.theme.colors.font.primary};
+    line-height: var(--global-value-height);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' on;
   }
 
   span {
@@ -56,6 +80,7 @@ export const GlobalSection = styled.div`
   }
 
   @media (max-width: ${STYLING.cutoffs.initial}) {
+    min-height: auto;
     padding: 25px;
     border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 

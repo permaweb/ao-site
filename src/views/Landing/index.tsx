@@ -32,7 +32,7 @@ export default function Landing() {
 
   return (
     <>
-      <S.Wrapper>
+      <S.Wrapper className={'fade-in'}>
         <S.ContentWrapper>
           <h4>{language.landingHeader1}</h4>
           <h4>{language.landingHeader2}</h4>
@@ -77,7 +77,7 @@ export default function Landing() {
           </S.MetricsSection>
         </S.MetricsWrapper>
       </S.Wrapper>
-      <S.GraphicWrapper>
+      <S.GraphicWrapper className={'fade-in'}>
         <video autoPlay muted loop playsInline preload={'auto'}>
           <source src={ASSETS.landingGraphic} type={'video/mp4'} />
           Your browser does not support the video tag.

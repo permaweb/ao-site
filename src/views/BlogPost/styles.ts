@@ -5,10 +5,33 @@ import { STYLING } from 'helpers/config';
 
 const BLOG_CONTENT_MAX_WIDTH = 600;
 const BLOG_IMAGE_EXTENSION = 100;
+const BLOG_LOADING_OFFSET = 68;
 
 export const Wrapper = styled.div`
   width: 100%;
+  min-height: 100vh;
   padding: 28px 0 40px 0;
+`;
+
+export const LoadingState = styled.div`
+  width: 100%;
+  min-height: calc(100vh - ${BLOG_LOADING_OFFSET}px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transform: translateY(-${BLOG_LOADING_OFFSET}px);
+`;
+
+export const LoadingMessage = styled.p`
+  max-width: 520px;
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.xSmall};
+  font-weight: ${(props) => props.theme.typography.weight.regular};
+  color: ${(props) => props.theme.colors.font.alt2};
+  line-height: 1.5;
+  text-align: center;
 `;
 
 export const HeroImageWrapper = styled.div`
@@ -177,16 +200,110 @@ export const BackLinkWrapper = styled.div`
 
 export const BackLink = styled(Link)`
   font-family: ${(props) => props.theme.typography.family.primary};
-  font-size: ${(props) => props.theme.typography.size.small};
+  font-size: ${(props) => props.theme.typography.size.xSmall};
   font-weight: ${(props) => props.theme.typography.weight.medium};
-  color: ${(props) => props.theme.colors.link.color};
+  line-height: 1;
+  text-transform: none;
+  transition: none;
+  opacity: 0.6;
+  color: ${(props) => props.theme.colors.font.primary};
   text-decoration: none;
 
   &:hover {
-    color: ${(props) => props.theme.colors.link.active};
-    text-decoration: underline;
-    text-decoration-thickness: 1.25px;
+    opacity: 1;
   }
+`;
+
+export const SuggestedSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 4px;
+  padding-top: 22px;
+  border-top: 1px solid ${(props) => props.theme.colors.border.primary};
+`;
+
+export const SuggestedHeading = styled.h3`
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.small};
+  font-weight: ${(props) => props.theme.typography.weight.medium};
+  color: ${(props) => props.theme.colors.font.primary};
+  line-height: 1.3;
+`;
+
+export const SuggestedList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const SuggestedCard = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  padding: 8px;
+  border: 1px solid ${(props) => props.theme.colors.border.primary};
+  background: ${(props) => props.theme.colors.container.alt1.background};
+  transition: border-color ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+
+  &:hover {
+    border-color: ${(props) => props.theme.colors.border.alt3};
+  }
+`;
+
+export const SuggestedImage = styled.div<{ hasImage: boolean }>`
+  width: 76px;
+  height: 52px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid ${(props) => props.theme.colors.border.primary};
+  background: ${(props) =>
+    props.hasImage ? props.theme.colors.container.primary.background : props.theme.colors.container.alt2.background};
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+export const SuggestedContent = styled.div`
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+`;
+
+export const SuggestedType = styled.span`
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.xxxxSmall};
+  font-weight: ${(props) => props.theme.typography.weight.medium};
+  color: ${(props) => props.theme.colors.font.alt1};
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+`;
+
+export const SuggestedTitle = styled.p`
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.xSmall};
+  font-weight: ${(props) => props.theme.typography.weight.medium};
+  color: ${(props) => props.theme.colors.font.primary};
+  line-height: 1.35;
+`;
+
+export const SuggestedDate = styled.span`
+  flex-shrink: 0;
+  align-self: center;
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.xxxSmall};
+  font-weight: ${(props) => props.theme.typography.weight.regular};
+  color: ${(props) => props.theme.colors.font.alt1};
+  line-height: 1.4;
 `;
 
 export const NotFound = styled.div`

@@ -13,7 +13,7 @@ export default function Delegate() {
   const language = languageProvider.object[languageProvider.current];
 
   return (
-    <S.Wrapper>
+    <S.Wrapper className={'fade-in'}>
       <ViewHeader header={language.delegate} actions={[<WalletConnect />]} />
       <S.BodyWrapper>
         <S.DelegationsWrapper>

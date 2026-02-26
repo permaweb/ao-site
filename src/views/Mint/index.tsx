@@ -32,6 +32,10 @@ export default function Mint() {
   const [copiedAr, setCopiedAr] = React.useState<boolean>(false);
   const [copiedEth, setCopiedEth] = React.useState<boolean>(false);
   const [copiedDepositArweave, setCopiedDepositArweave] = React.useState<boolean>(false);
+  const totalDepositedUsd = ethProvider.totalDeposited?.usdTotal?.display;
+  const totalDepositedStEth = ethProvider.totalDeposited?.stEth?.display;
+  const totalDepositedDai = ethProvider.totalDeposited?.dai?.display;
+  const totalDepositedUsds = ethProvider.totalDeposited?.usds?.display;
 
   // React.useEffect(() => {
   // 	setAOSupply({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
@@ -63,7 +67,7 @@ export default function Mint() {
         return null;
     }
 
-    if (arProvider[balance] !== null) return <p>{formatDisplayAmount(arProvider[balance])}</p>;
+    if (arProvider[balance] !== null) return <p className={'fade-in'}>{formatDisplayAmount(arProvider[balance])}</p>;
 
     return <EllipsisLoader />;
   }
@@ -105,7 +109,7 @@ export default function Mint() {
   function getTokenProjectionsDisplay(token: DefaultTokenEarningsType, period: 'monthly' | 'yearly') {
     const projection = getTokenProjections(token)?.[period]?.amount;
 
-    if (projection) return <p>{formatDisplayAmount(projection)}</p>;
+    if (projection) return <p className={'fade-in'}>{formatDisplayAmount(projection)}</p>;
 
     return <EllipsisLoader />;
   }
@@ -136,26 +140,28 @@ export default function Mint() {
 
   return (
     <>
-      <S.Wrapper>
+      <S.Wrapper className={'fade-in'}>
         <ViewHeader header={language.mint} actions={[<WalletConnect />]} />
         <S.BodyWrapper>
           <S.GlobalWrapper className={'border-wrapper-primary'}>
             <S.GlobalSection>
               <span>{language.globalFairLaunchDeposits}</span>
-              <p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
+              <p className={totalDepositedUsd ? 'fade-in' : undefined}>{totalDepositedUsd ?? <EllipsisLoader />}</p>
             </S.GlobalSection>
             <S.GlobalSectionsFlex>
               <S.GlobalSubSection>
                 <span>{language.totalStEthBridged}</span>
-                <p>{ethProvider.totalDeposited?.stEth?.display ?? <EllipsisLoader />}</p>
+                <p className={totalDepositedStEth ? 'fade-in' : undefined}>
+                  {totalDepositedStEth ?? <EllipsisLoader />}
+                </p>
               </S.GlobalSubSection>
               <S.GlobalSubSection>
                 <span>{language.totalDaiBridged}</span>
-                <p>{ethProvider.totalDeposited?.dai?.display ?? <EllipsisLoader />}</p>
+                <p className={totalDepositedDai ? 'fade-in' : undefined}>{totalDepositedDai ?? <EllipsisLoader />}</p>
               </S.GlobalSubSection>
               <S.GlobalSubSection>
                 <span>{language.totalUsdsBridged}</span>
-                <p>{ethProvider.totalDeposited?.usds?.display ?? <EllipsisLoader />}</p>
+                <p className={totalDepositedUsds ? 'fade-in' : undefined}>{totalDepositedUsds ?? <EllipsisLoader />}</p>
               </S.GlobalSubSection>
             </S.GlobalSectionsFlex>
           </S.GlobalWrapper>
@@ -167,11 +173,11 @@ export default function Mint() {
               <S.NetworkHeaderDivider />
               {arProvider.walletAddress ? (
                 <>
-                  <S.NetworkHeaderWallet>
+                  <S.NetworkHeaderWallet className={'fade-in'}>
                     <S.NetworkHeaderAddressRow>
                       <ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
                       <AddressTooltip address={arProvider.walletAddress}>
-                        <S.NetworkHeaderAddress onClick={copiedAr ? undefined : copyArAddress}>
+                        <S.NetworkHeaderAddress className={'fade-in'} onClick={copiedAr ? undefined : copyArAddress}>
                           {copiedAr ? `${language.copied}!` : formatAddress(arProvider.walletAddress, false)}
                         </S.NetworkHeaderAddress>
                       </AddressTooltip>
@@ -195,7 +201,7 @@ export default function Mint() {
             </S.NetworkHeaderWrapper>
             <S.NetworkBodyWrapper>
               {arProvider.walletAddress ? (
-                <S.NetworkSectionsWrapper>
+                <S.NetworkSectionsWrapper className={'fade-in'}>
                   <S.NetworkSection>
                     <S.NetworkSectionHeader>
                       <span>{language.asset}</span>
@@ -266,11 +272,14 @@ export default function Mint() {
                 <S.NetworkHeaderDivider />
                 {ethProvider.walletAddress ? (
                   <>
-                    <S.NetworkHeaderWallet>
+                    <S.NetworkHeaderWallet className={'fade-in'}>
                       <S.NetworkHeaderAddressRow>
                         <ReactSVG className={'network-header-logo'} src={ASSETS.ethereum} />
                         <AddressTooltip address={ethProvider.walletAddress}>
-                          <S.NetworkHeaderAddress onClick={copiedEth ? undefined : copyEthAddress}>
+                          <S.NetworkHeaderAddress
+                            className={'fade-in'}
+                            onClick={copiedEth ? undefined : copyEthAddress}
+                          >
                             {copiedEth ? `${language.copied}!` : formatAddress(ethProvider.walletAddress, false)}
                           </S.NetworkHeaderAddress>
                         </AddressTooltip>
@@ -284,6 +293,7 @@ export default function Mint() {
                               <ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
                               <AddressTooltip address={ethProvider.lastArweaveAddress}>
                                 <S.NetworkHeaderAddress
+                                  className={'fade-in'}
                                   onClick={copiedDepositArweave ? undefined : copyDepositArweaveAddress}
                                 >
                                   {copiedDepositArweave
@@ -314,7 +324,7 @@ export default function Mint() {
               </S.NetworkHeaderWrapper>
               <S.NetworkBodyWrapper>
                 {ethProvider.walletAddress ? (
-                  <S.NetworkBodyInfoLine>
+                  <S.NetworkBodyInfoLine className={'fade-in'}>
                     <p>{language.depositInfo}</p>
                   </S.NetworkBodyInfoLine>
                 ) : (

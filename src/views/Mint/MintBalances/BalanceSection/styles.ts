@@ -192,6 +192,11 @@ export const BalanceQuantityLine = styled.div`
   }
 `;
 
+export const AssetTicker = styled.span`
+  margin-left: 4px;
+  color: ${(props) => props.theme.colors.font.alt1};
+`;
+
 export const BalanceQuantitySection = styled.div`
   width: 175px;
   display: flex;
@@ -350,9 +355,25 @@ export const HeaderRowStart = styled.div`
 `;
 
 export const NativeYieldText = styled.span`
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+`;
+
+export const NativeYieldLabel = styled.span`
   color: ${(props) => props.theme.colors.font.alt1} !important;
-  font-size: ${(props) => props.theme.typography.size.xSmall} !important;
+  font-size: ${(props) => props.theme.typography.size.xxSmall} !important;
   font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+  line-height: 1.35;
+  letter-spacing: 0;
+`;
+
+export const NativeYieldValue = styled.span`
+  color: ${(props) => props.theme.colors.font.primary} !important;
+  font-size: ${(props) => props.theme.typography.size.small} !important;
+  font-weight: ${(props) => props.theme.typography.weight.semiBold} !important;
+  line-height: 1.35;
+  letter-spacing: 0;
 `;
 
 export const ConvertButtonLabel = styled.div`

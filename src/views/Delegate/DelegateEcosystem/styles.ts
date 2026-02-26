@@ -277,10 +277,12 @@ export const SortIndicator = styled.span<{ active?: boolean }>`
   line-height: 1;
 `;
 
-export const Table = styled.div`
+export const Table = styled.div<{ $isLoading?: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: column;
+  min-height: ${(props) => (props.$isLoading ? '420px' : '0')};
+  justify-content: flex-start;
 
   > * {
     &:not(:last-child) {
@@ -301,7 +303,7 @@ export const TableBodyRow = styled.div<{ open: boolean }>`
     props.open ? props.theme.colors.container.primary.active : props.theme.colors.container.primary.background};
 
   &:hover {
-    cursor: pointer;
+    cursor: ${(props) => (props.open ? 'zoom-out' : 'zoom-in')};
     background: ${(props) => props.theme.colors.container.primary.active};
   }
 
@@ -396,7 +398,7 @@ export const TableBodyCell = styled.div<{
   gap: 12.5px;
   flex: ${(props) => props.flex};
   transition: background ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
-  cursor: ${(props) => (props.interactive ? 'pointer' : 'default')};
+  cursor: ${(props) => (props.interactive ? 'pointer' : 'inherit')};
 
   &:hover {
     background: ${(props) =>
@@ -475,11 +477,12 @@ export const TableBodyImage = styled.div<{ hasImage: boolean; size?: number }>`
   }
 `;
 
-export const TableEmpty = styled.div`
-  height: 45px;
+export const TableEmpty = styled.div<{ $isLoading?: boolean }>`
+  height: ${(props) => (props.$isLoading ? 'auto' : '45px')};
+  min-height: ${(props) => (props.$isLoading ? '84px' : '0')};
   display: flex;
-  align-items: center;
-  padding: 0 15px;
+  align-items: ${(props) => (props.$isLoading ? 'flex-start' : 'center')};
+  padding: ${(props) => (props.$isLoading ? '15px' : '0 15px')};
 
   span {
     font-family: ${(props) => props.theme.typography.family.primary};

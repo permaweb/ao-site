@@ -58,3 +58,22 @@ export const Wrapper = styled.div`
     width: 100%;
   }
 `;
+
+export const LoadingState = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+`;
+
+export const LoadingMessage = styled.p`
+  max-width: 520px;
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.xSmall};
+  font-weight: ${(props) => props.theme.typography.weight.regular};
+  color: ${(props) => props.theme.colors.font.alt2};
+  line-height: 1.5;
+  text-align: center;
+`;

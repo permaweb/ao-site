@@ -131,7 +131,7 @@ function Project(props: {
   );
 
   return (
-    <S.TableBodyRowWrapper>
+    <S.TableBodyRowWrapper className={'fade-in'}>
       <S.TableBodyRow onClick={props.onToggle} open={props.isOpen}>
         <S.TableBodyCell flex={0.075} width={50} align={'center'}>
           <span>{props.index}</span>
@@ -148,7 +148,9 @@ function Project(props: {
           </S.ProjectNameWrapper>
         </S.TableBodyCell>
         <S.TableBodyCell flex={1} align={'right'}>
-          <span title={fullDelegatedValue}>{delegatedValue}</span>
+          <span className={'fade-in'} title={fullDelegatedValue}>
+            {delegatedValue}
+          </span>
           <S.TableBodyImage hasImage={true} size={17.5}>
             <img src={ASSETS.aoCircled} />
           </S.TableBodyImage>
@@ -253,6 +255,7 @@ export default function DelegateEcosystem() {
   const allocationProvider = useAllocationProvider();
   const languageProvider = useLanguageProvider();
   const language = languageProvider.object[languageProvider.current];
+  const loadingMessage = 'AO, the decentralized network is retrieving the latest delegation activity in the ecosystem.';
 
   const [currentTab, setCurrentTab] = React.useState<FLPTabType>('featured');
   const [currentProjects, setCurrentProjects] = React.useState<any[] | null>(null);
@@ -535,7 +538,7 @@ export default function DelegateEcosystem() {
               );
             })}
           </S.TableHeaderRow>
-          <S.Table>
+          <S.Table $isLoading={!currentProjects} className={currentProjects ? 'fade-in' : undefined}>
             {currentProjects ? (
               <>
                 {currentProjects.length > 0 ? (
@@ -561,8 +564,8 @@ export default function DelegateEcosystem() {
                 )}
               </>
             ) : (
-              <S.TableEmpty>
-                <span>{`${language.loading}...`}</span>
+              <S.TableEmpty $isLoading>
+                <span>{loadingMessage}</span>
               </S.TableEmpty>
             )}
           </S.Table>

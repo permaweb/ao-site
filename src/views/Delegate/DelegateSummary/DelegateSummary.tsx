@@ -240,7 +240,7 @@ export default function DelegateSummary() {
             )}
           </S.ChartWrapper>
           {isWalletConnected ? (
-            <S.SummaryWrapper>
+            <S.SummaryWrapper className={'fade-in'}>
               <S.SummaryHeader>
                 <span>{language.summary}</span>
                 <S.ActionReset>
@@ -273,7 +273,7 @@ export default function DelegateSummary() {
                         <S.SummaryLineActionsWrapper>
                           {renderAdjustmentButtons(record)}
                           <S.SummaryLinePercentage>
-                            <p>{formatPercentage(record.value)}</p>
+                            <p className={'fade-in'}>{formatPercentage(record.value)}</p>
                           </S.SummaryLinePercentage>
                         </S.SummaryLineActionsWrapper>
                       </S.SummaryLine>
@@ -299,7 +299,7 @@ export default function DelegateSummary() {
                           <S.SummaryLineActionsWrapper>
                             {renderAdjustmentButtons(record)}
                             <S.SummaryLinePercentage>
-                              <p>{formatPercentage(record.value)}</p>
+                              <p className={'fade-in'}>{formatPercentage(record.value)}</p>
                             </S.SummaryLinePercentage>
                           </S.SummaryLineActionsWrapper>
                         </S.SummaryLine>
@@ -320,7 +320,13 @@ export default function DelegateSummary() {
         <S.ActionSave>
           <Button
             type={'alt1'}
-            label={isWalletConnected ? language.saveChanges : 'Connect Wallet For Your Allocation'}
+            label={
+              isWalletConnected ? (
+                <span className={'fade-in'}>{language.saveChanges}</span>
+              ) : (
+                'Connect Wallet For Your Allocation'
+              )
+            }
             handlePress={() => allocationProvider.savePreferences()}
             disabled={!isWalletConnected || allocationProvider.loading || !allocationProvider.unsavedChanges}
             loading={allocationProvider.loading}

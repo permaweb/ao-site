@@ -4,10 +4,12 @@ import styled from 'styled-components';
 import { STYLING } from 'helpers/config';
 
 const BLOG_MAX_WIDTH = 1020;
+const BLOG_LOADING_OFFSET = 68;
 
 export const Wrapper = styled.div`
   width: 100%;
   max-width: ${BLOG_MAX_WIDTH}px;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 22px 0 40px 0;
   display: flex;
@@ -19,6 +21,12 @@ export const Intro = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6px;
+`;
+
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 `;
 
 export const IntroTitle = styled.h1`
@@ -347,6 +355,27 @@ export const Status = styled.div`
   padding: 12px;
   border: 1px solid ${(props) => props.theme.colors.border.primary};
   background: ${(props) => props.theme.colors.container.alt1.background};
+`;
+
+export const LoadingState = styled.div`
+  width: 100%;
+  flex: 1;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transform: translateY(calc(-${BLOG_LOADING_OFFSET}px - 5vh));
+`;
+
+export const LoadingMessage = styled.p`
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.xSmall};
+  font-weight: ${(props) => props.theme.typography.weight.regular};
+  color: ${(props) => props.theme.colors.font.alt2};
+  line-height: 1.5;
+  text-align: center;
 `;
 
 export const StatusMessage = styled.p`

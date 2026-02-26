@@ -10,7 +10,7 @@ import { IProps } from './types';
 
 export default function Loader(props: IProps) {
   React.useEffect(() => {
-    if (!props.sm && !props.xSm && !props.placeholder) {
+    if (!props.sm && !props.xSm && !props.placeholder && !props.relative) {
       windowUtils.scrollTo(0, 0);
       windowUtils.hideDocumentBody();
       return () => {

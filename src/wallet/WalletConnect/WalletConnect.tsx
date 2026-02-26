@@ -14,9 +14,7 @@ export default function WalletConnect() {
   const languageProvider = useLanguageProvider();
   const language = languageProvider.object[languageProvider.current];
 
-  let label = language.connectWallet;
-
-  if (arProvider.walletAddress) label = formatAddress(arProvider.walletAddress, false);
+  const label = arProvider.walletAddress ? formatAddress(arProvider.walletAddress, false) : language.connectWallet;
 
   return (
     <S.ConnectWrapper
@@ -29,7 +27,7 @@ export default function WalletConnect() {
           <ReactSVG src={ASSETS.wallet} />
         </S.Icon>
       )}
-      <p>
+      <p className={arProvider.walletAddress ? 'fade-in' : undefined}>
         <AddressTooltip address={arProvider.walletAddress ?? null}>{label}</AddressTooltip>
       </p>
       {arProvider.walletAddress && (

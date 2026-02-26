@@ -19,10 +19,15 @@ export default function Policies() {
   }, []);
 
   return policy ? (
-    <S.Wrapper>
+    <S.Wrapper className={'fade-in'}>
       <ReactMarkdown children={policy} />
     </S.Wrapper>
   ) : (
-    <Loader />
+    <S.LoadingState>
+      <Loader relative noMargins />
+      <S.LoadingMessage>
+        AO, the decentralized network is retrieving the latest updates happening in the ecosystem.
+      </S.LoadingMessage>
+    </S.LoadingState>
   );
 }

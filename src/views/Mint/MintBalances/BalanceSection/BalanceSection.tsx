@@ -219,14 +219,16 @@ export default function BalanceSection(props: IProps) {
   }
 
   function getActionLabel() {
-    if (token?.wallet.provider.connecting) return `Connecting...`;
+    if (token?.wallet.provider.connecting) return <span className={'fade-in'}>Connecting...</span>;
     if (!token?.wallet.provider.walletAddress) return token.wallet.label;
-    return token?.action.label;
+    return <span className={'fade-in'}>{token?.action.label}</span>;
   }
 
   function getWalletLabel() {
-    if (token?.wallet.provider.connecting) return `Connecting...`;
-    if (token?.wallet.provider.walletAddress) return formatAddress(token.wallet.provider.walletAddress, false);
+    if (token?.wallet.provider.connecting) return <span className={'fade-in'}>Connecting...</span>;
+    if (token?.wallet.provider.walletAddress) {
+      return <span className={'fade-in'}>{formatAddress(token.wallet.provider.walletAddress, false)}</span>;
+    }
     return token?.wallet.label;
   }
 
@@ -235,9 +237,17 @@ export default function BalanceSection(props: IProps) {
     switch (props.type) {
       case EthTokenEnum.StEth:
       case EthTokenEnum.DAI:
-        return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ?? <EllipsisLoader />;
+        return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ? (
+          <span className={'fade-in'}>{token.wallet.provider.tokens[props.type].deposited.display}</span>
+        ) : (
+          <EllipsisLoader />
+        );
       case EthTokenEnum.USDS:
-        return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ?? <EllipsisLoader />;
+        return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ? (
+          <span className={'fade-in'}>{token.wallet.provider.tokens[props.type].deposited.display}</span>
+        ) : (
+          <EllipsisLoader />
+        );
       default:
         return '-';
     }
@@ -264,7 +274,8 @@ export default function BalanceSection(props: IProps) {
       }
       return (
         <>
-          {formatDisplayAmount(amount)} {token.ticker}
+          <span className={'fade-in'}>{formatDisplayAmount(amount)}</span>
+          <S.AssetTicker>{token.ticker}</S.AssetTicker>
         </>
       );
     } else {
@@ -299,7 +310,7 @@ export default function BalanceSection(props: IProps) {
                 <S.ApyRow>
                   {currentYield !== null ? (
                     <>
-                      <S.ApyText>{`≈ ${currentYield.toFixed(1)}% APY`}</S.ApyText>
+                      <S.ApyText className={'fade-in'}>{`≈ ${currentYield.toFixed(1)}% APY`}</S.ApyText>
                     </>
                   ) : ethProvider.walletAddress ? (
                     <EllipsisLoader />
@@ -340,7 +351,12 @@ export default function BalanceSection(props: IProps) {
               {/* <ApyTooltip /> */}
             </S.HeaderRow>
             <S.NativeYieldText>
-              Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
+              <S.NativeYieldLabel>Native Yield:</S.NativeYieldLabel>
+              {currentNativeYield !== null ? (
+                <S.NativeYieldValue className={'fade-in'}>{`${currentNativeYield.toFixed(1)}%`}</S.NativeYieldValue>
+              ) : (
+                <S.NativeYieldValue>-</S.NativeYieldValue>
+              )}
             </S.NativeYieldText>
           </S.BalanceHeader>
         </S.BalanceHeaderWrapper>
@@ -351,13 +367,19 @@ export default function BalanceSection(props: IProps) {
                 <S.BalanceQuantityLine>
                   <span>{language.currentBalance}</span>
                   <p>
-                    {ethProvider.tokens[props.type]?.balance?.display ?? '-'} {token.ticker}
+                    {ethProvider.tokens[props.type]?.balance?.display ? (
+                      <span className={'fade-in'}>{ethProvider.tokens[props.type].balance.display}</span>
+                    ) : (
+                      '-'
+                    )}
+                    <S.AssetTicker>{token.ticker}</S.AssetTicker>
                   </p>
                 </S.BalanceQuantityLine>
                 <S.BalanceQuantityLine>
                   <span>{token.balance.header}</span>
                   <p>
-                    {getPrimaryBalance()} {token.ticker}
+                    {getPrimaryBalance()}
+                    <S.AssetTicker>{token.ticker}</S.AssetTicker>
                   </p>
                 </S.BalanceQuantityLine>
                 <S.BalanceQuantityLine>
