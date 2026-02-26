@@ -17,6 +17,7 @@ export const AO = {
   flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
   piProcess: 'H1I09hGlSlqrvlQid4zBp-lleynE8bNo2Ep1u8xq0fQ',
   piBalanceProcess: '4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs',
+  blogIndexProcessId: import.meta.env.VITE_AO_BLOG_INDEX_PROCESS_ID || 'C4kkpJM1GlyDxtqeLf4LAhCL1Prr3bgV65FmJ1qDGkg',
 };
 
 export const SUPABASE = {
