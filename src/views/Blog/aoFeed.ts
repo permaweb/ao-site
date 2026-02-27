@@ -42,6 +42,7 @@ type AoPostSummary = {
 };
 
 export type AoBlogPost = {
+  postId: string;
   slug: string;
   title: string;
   excerpt: string;
@@ -60,7 +61,7 @@ export type AoBlogPostBody = {
 };
 
 const FEED_CACHE_TTL_MS = 30_000;
-const feedCache = new Map<string, { expiresAt: number; posts: AoBlogPost[] }>();
+const feedCache = new Map<string, { expiresAt: number; posts: AoBlogPost[]; pinnedPostId: string }>();
 
 const formatPublishedAt = (iso?: string) => {
   if (!iso) return '';
@@ -177,6 +178,7 @@ const mapPost = (input: {
   fallbackSlug?: string;
 }): AoBlogPost | null => {
   const meta = input.meta ?? {};
+  const postId = meta.postId || input.key || '';
   const slug = meta.slug || meta.postId || input.fallbackSlug || input.key || '';
   const title = meta.title || '';
   if (!slug || !title) return null;
@@ -190,6 +192,7 @@ const mapPost = (input: {
   const latestTxId = meta.latestTxId || input.txid || '';
 
   return {
+    postId,
     slug,
     title,
     excerpt,
@@ -201,6 +204,27 @@ const mapPost = (input: {
     latestTxId,
     createdAtMs,
   };
+};
+
+const fetchPinnedByBlog = async (processId: string) => {
+  const response = await fetch(`${AO_CACHE_ROOT(processId)}/pinned_by_blog/serialize~json@1.0`, {
+    cache: 'no-store',
+  });
+  if (!response.ok) {
+    throw new Error(`AO pinned_by_blog fetch failed: ${response.status}`);
+  }
+  return (await response.json()) as Record<string, unknown>;
+};
+
+const resolvePinnedPostId = (raw: unknown, blogId: string) => {
+  if (!raw || typeof raw !== 'object') return '';
+  const normalizedBlogId = normalizeBlogId(blogId);
+  const map = raw as Record<string, unknown>;
+  const direct = map[blogId];
+  if (typeof direct === 'string' && direct.trim()) return direct.trim();
+  const normalized = map[normalizedBlogId];
+  if (typeof normalized === 'string' && normalized.trim()) return normalized.trim();
+  return '';
 };
 
 const fetchBlogCards = async (processId: string, blogId: string) => {
@@ -274,15 +298,21 @@ const fetchAoBlogPostsLegacy = async (processId: string, blogId: string) => {
     .sort((a, b) => b.createdAtMs - a.createdAtMs);
 };
 
-export const fetchAoBlogPosts = async (processId: string, blogId: string) => {
+export const fetchAoBlogPosts = async (
+  processId: string,
+  blogId: string
+): Promise<{ posts: AoBlogPost[]; pinnedPostId: string }> => {
   const cacheKey = normalizeBlogId(blogId);
   const cached = feedCache.get(cacheKey);
   if (cached && cached.expiresAt > Date.now()) {
-    return cached.posts;
+    return cached;
   }
 
   try {
-    const summaries = await fetchBlogCards(processId, blogId);
+    const [summaries, pinnedMap] = await Promise.all([
+      fetchBlogCards(processId, blogId),
+      fetchPinnedByBlog(processId).catch(() => ({})),
+    ]);
 
     const posts = summaries
       .map((summary) => {
@@ -308,20 +338,27 @@ export const fetchAoBlogPosts = async (processId: string, blogId: string) => {
       .filter((post): post is AoBlogPost => Boolean(post))
       .sort((a, b) => b.createdAtMs - a.createdAtMs);
 
+    const pinnedPostId = resolvePinnedPostId(pinnedMap, blogId);
     feedCache.set(cacheKey, {
       expiresAt: Date.now() + FEED_CACHE_TTL_MS,
       posts,
+      pinnedPostId,
     });
 
-    return posts;
+    return { posts, pinnedPostId };
   } catch (error) {
     console.warn('[AO Blog] fast summaries path failed, falling back to legacy crawl:', error);
-    const posts = await fetchAoBlogPostsLegacy(processId, blogId);
+    const [posts, pinnedMap] = await Promise.all([
+      fetchAoBlogPostsLegacy(processId, blogId),
+      fetchPinnedByBlog(processId).catch(() => ({})),
+    ]);
+    const pinnedPostId = resolvePinnedPostId(pinnedMap, blogId);
     feedCache.set(cacheKey, {
       expiresAt: Date.now() + FEED_CACHE_TTL_MS,
       posts,
+      pinnedPostId,
     });
-    return posts;
+    return { posts, pinnedPostId };
   }
 };
 
@@ -364,7 +401,7 @@ export const fetchAoBlogPostBySlug = async (processId: string, blogId: string, s
     });
   } catch (error) {
     console.warn('[AO Blog] slug index path failed, falling back to list lookup:', error);
-    const posts = await fetchAoBlogPosts(processId, blogId);
+    const { posts } = await fetchAoBlogPosts(processId, blogId);
     return posts.find((post) => normalizeSlug(post.slug) === normalizedSlug) ?? null;
   }
 };

@@ -50,7 +50,7 @@ export default function BlogPost() {
         }
 
         if (match) {
-          const allPosts = await fetchAoBlogPosts(processId, BLOG_ID);
+          const { posts: allPosts } = await fetchAoBlogPosts(processId, BLOG_ID);
           if (isMounted) {
             setSuggestedPosts(allPosts.filter((entry) => entry.slug !== match.slug).slice(0, 3));
           }

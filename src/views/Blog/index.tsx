@@ -7,7 +7,7 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 import { AoBlogPost, fetchAoBlogPosts } from './aoFeed';
 import * as S from './styles';
 
-const PINNED_POST_SLUG = 'legacynet-sunset';
+const PINNED_POST_FALLBACK_SLUG = 'arweave-gateways-with-hyperbeam';
 const BLOG_ID = 'aodevblog';
 const SKELETON_CARD_COUNT = 6;
 
@@ -31,6 +31,7 @@ export default function Blog() {
   const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [allPosts, setAllPosts] = React.useState<AoBlogPost[]>([]);
+  const [pinnedPostId, setPinnedPostId] = React.useState<string>('');
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -43,9 +44,10 @@ export default function Blog() {
         if (!processId) {
           throw new Error('Missing AO blog process id.');
         }
-        const posts = await fetchAoBlogPosts(processId, BLOG_ID);
+        const { posts, pinnedPostId: resolvedPinned } = await fetchAoBlogPosts(processId, BLOG_ID);
         if (isMounted) {
           setAllPosts(posts);
+          setPinnedPostId(resolvedPinned || '');
           setError(posts.length ? null : 'AO feed returned 0 posts. Check browser console for [AO Blog] logs.');
         }
       } catch (err) {
@@ -66,10 +68,17 @@ export default function Blog() {
     };
   }, []);
 
-  const pinnedPost = React.useMemo(
-    () => allPosts.find((post) => post.slug === PINNED_POST_SLUG) ?? allPosts[0] ?? null,
-    [allPosts]
-  );
+  const pinnedPost = React.useMemo(() => {
+    const pinned = pinnedPostId.trim();
+    if (pinned) {
+      const fromAo =
+        allPosts.find((post) => post.postId === pinned) ??
+        allPosts.find((post) => post.slug === pinned) ??
+        allPosts.find((post) => post.latestTxId === pinned);
+      if (fromAo) return fromAo;
+    }
+    return allPosts.find((post) => post.slug === PINNED_POST_FALLBACK_SLUG) ?? allPosts[0] ?? null;
+  }, [allPosts, pinnedPostId]);
   const categories = React.useMemo(() => [...new Set(allPosts.map((p) => p.category))].sort(), [allPosts]);
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
 
