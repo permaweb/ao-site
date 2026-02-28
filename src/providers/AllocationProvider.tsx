@@ -68,9 +68,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	React.useEffect(() => {
 		(async function () {
 			try {
-				const cu = connect({
-					CU_URL: 'https://cu6205.ao-testnet.xyz',
-				});
+				const cu = connect({});
 
 				const response = await cu.dryrun({
 					process: AO.flpFactory,
