@@ -228,9 +228,7 @@ export async function getFlps(processId: string, statusFilter?: string): Promise
 	try {
 		const tags = [{ name: 'Action', value: 'Get-FLPs' }];
 		if (statusFilter) tags.push({ name: 'Status-Filter', value: statusFilter });
-		const cu = connect({
-			CU_URL: 'https://cu6205.ao-testnet.xyz',
-		});
+		const cu = connect({});
 		const res = await cu.dryrun({ process: processId, tags });
 		let list = res.Messages.length ? JSON.parse(res.Messages[0].Data) : [];
 		console.log('onFlps', list);
