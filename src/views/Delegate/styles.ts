@@ -4,7 +4,11 @@ import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
 	width: 100%;
-	margin-top: 32px;
+	margin: 32px 0 0 0;
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		margin: 0;
+	}
 `;
 
 export const BodyWrapper = styled.div`

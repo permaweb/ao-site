@@ -419,3 +419,27 @@ export async function getPriceForToken(
 		return null;
 	}
 }
+
+// Helper function to get AO/USD price from redstone
+export async function getAoPrice(): Promise<number | null> {
+	try {
+		const response = await fetch('https://api.redstone.finance/prices?symbols=AO&provider=redstone');
+
+		if (!response.ok) {
+			throw new Error(`HTTP error - status: ${response.status}`);
+		}
+
+		const data = await response.json();
+		const aoPrice = data?.AO?.value;
+
+		if (typeof aoPrice !== 'number') {
+			console.error('invalid AO price response from redstone:', data);
+			return null;
+		}
+
+		return aoPrice;
+	} catch (error) {
+		console.error('error fetching AO price from redstone:', error);
+		return null;
+	}
+}

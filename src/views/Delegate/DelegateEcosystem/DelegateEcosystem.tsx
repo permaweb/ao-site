@@ -9,16 +9,13 @@ import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
 import { Notification } from 'components/atoms/Notification';
 import { AO, ASSETS, ENDPOINTS, STYLING } from 'helpers/config';
-import { FLPTabType, NotificationType } from 'helpers/types';
+import { ExploreSortKey, FLPTabType, NotificationType, SortDirection } from 'helpers/types';
 import { formatAddress, formatDate, formatNumber, getRelativeDate, parseBigIntAsNumber } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
-
-type ExploreSortKey = 'index' | 'project' | 'delegated' | 'launched' | 'allocation';
-type SortDirection = 'asc' | 'desc';
 
 function Project(props: {
 	index: number;

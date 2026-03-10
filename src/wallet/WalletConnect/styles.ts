@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { STYLING } from 'helpers/config';
+
 export const Icon = styled.div`
 	display: flex;
 	align-items: center;
@@ -39,5 +41,10 @@ export const ConnectWrapper = styled.div<{ isConnected: boolean }>`
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
 		color: ${(props) => props.theme.colors.font.primary};
+	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		width: 100%;
+		justify-content: space-between;
 	}
 `;

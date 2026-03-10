@@ -308,6 +308,10 @@ export const BalanceAction = styled.div`
 			margin: 3.5px 9.5px 0 0 !important;
 		}
 	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		flex-direction: column;
+	}
 `;
 
 export const ActionWrapper = styled.div`

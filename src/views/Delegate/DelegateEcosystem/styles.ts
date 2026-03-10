@@ -229,6 +229,23 @@ export const TableHeaderRow = styled.div`
 			flex: 1;
 		}
 	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		> :nth-child(3) {
+			display: none;
+		}
+
+		> :nth-child(2),
+		> :nth-child(5) {
+			flex: 1;
+		}
+
+		> * {
+			&:not(:last-child) {
+				border-right: none;
+			}
+		}
+	}
 `;
 
 export const TableHeaderCell = styled.div<{
@@ -328,6 +345,23 @@ export const TableBodyRow = styled.div<{ open: boolean }>`
 			flex: 1;
 		}
 	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		> :nth-child(3) {
+			display: none;
+		}
+
+		> :nth-child(2),
+		> :nth-child(5) {
+			flex: 1;
+		}
+
+		> * {
+			&:not(:last-child) {
+				border-right: none;
+			}
+		}
+	}
 `;
 
 export const TableBodyRowDetail = styled.div<{ open: boolean }>`
@@ -424,15 +458,22 @@ export const TableBodyCell = styled.div<{
 `;
 
 export const ProjectNameWrapper = styled.div`
+	width: 100%;
 	display: flex;
 	align-items: center;
 	gap: 8px;
+	overflow: hidden;
 
 	span {
 		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
 		color: ${(props) => props.theme.colors.font.primary};
+		display: block;
+		max-width: 95%;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	span.ticker {

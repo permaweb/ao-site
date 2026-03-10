@@ -12,7 +12,6 @@ import React from 'react';
 import Web3, { EventLog } from 'web3';
 
 import {
-	AO,
 	ASSETS,
 	DaiBridge_ABI,
 	ENDPOINTS,
@@ -23,7 +22,6 @@ import {
 	PATCH_MAP,
 	PRICE_FEED_ABI,
 	StEthBridge_ABI,
-	SUPABASE,
 	UsdsBridge_ABI,
 } from 'helpers/config';
 import gnosisModule from 'helpers/customGnosis';
@@ -34,9 +32,9 @@ import {
 	evmBytesToArweaveAddress,
 	formatDisplayAmount,
 	formatUSDAmount,
+	getAoPrice,
 	getDaiReward,
 	getEthReward,
-	getPriceForToken,
 	getUsdsReward,
 } from 'helpers/utils';
 
@@ -552,10 +550,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 	React.useEffect(() => {
 		(async function () {
 			try {
-				const priceResp = await getPriceForToken(AO.token, SUPABASE.url, SUPABASE.anonKey);
+				const price = await getAoPrice();
 
-				if (priceResp) {
-					setAoPrice(priceResp.usd_price);
+				if (price !== null) {
+					setAoPrice(price);
 				}
 			} catch (e: any) {
 				console.error('Error fetching AO price:', e);
