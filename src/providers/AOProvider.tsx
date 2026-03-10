@@ -5,7 +5,7 @@ import { connect } from '@permaweb/aoconnect';
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 import { AONetworkStatus, AOPhase, MetricDataPoint, TagType } from 'helpers/types';
 
-const CACHE_DURATION = 6 * 60 * 60 * 1000;
+const CACHE_DURATION = 0;
 
 export const cu: any = connect({
 	MODE: 'legacy',
@@ -100,7 +100,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 
 				if (dataMainnet?.length > 0) {
 					for (const elementMainnet of dataMainnet) {
-						const dayLegacy = dataLegacy.find((elementLegacy: any) => elementLegacy.day === elementMainnet.day);
+						const dayLegacy = dataLegacy?.find((elementLegacy: any) => elementLegacy.day === elementMainnet.day);
 
 						if (dayLegacy) {
 							mergedData.push({
@@ -128,12 +128,12 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				localStorage.setItem(
 					cacheKey,
 					JSON.stringify({
-						data: mergedData.reverse(),
+						data: mergedData,
 						timestamp: Date.now(),
 					})
 				);
 
-				setMetrics(mergedData.reverse());
+				setMetrics(mergedData);
 			} catch (e: any) {
 				console.error(e);
 			}
