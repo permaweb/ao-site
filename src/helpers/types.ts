@@ -2,7 +2,9 @@ import React from 'react';
 
 export type AllocationTokenType = 'pi' | 'ao' | 'arweave';
 
-export type TokenEarningsType = 'ao' | 'arweave' | EthTokenEnum.StEth | EthTokenEnum.DAI | EthTokenEnum.USDS;
+export type DefaultTokenEarningsType = 'ao' | 'arweave';
+
+export type BridgeTokenEarningsType = EthTokenEnum.StEth | EthTokenEnum.DAI | EthTokenEnum.USDS;
 
 export enum EthTokenEnum {
 	StEth = 'stEth',
@@ -65,10 +67,8 @@ export type AllocationTokenRecordType = {
 export type AllocationRecordType = AllocationTokenRecordType & { value: number };
 
 export enum ArWalletEnum {
-	arConnect = 'arConnect',
-	othent = 'othent',
-	arweaveApp = 'arweave.app',
 	wander = 'wander',
+	arweaveApp = 'arweave.app',
 }
 
 export type SelectOptionType = { id: string; label: string; icon?: React.ReactNode };
@@ -85,3 +85,34 @@ export type TagType = { name: string; value: string };
 export type ButtonType = 'primary' | 'alt1' | 'alt2' | 'alt3' | 'alt4' | 'indicator' | 'warning';
 
 export type NotificationType = { message: string | null; status: 'success' | 'warning' };
+
+export type MetricDataPoint = {
+	active_processes_over_blocks: number;
+	active_users_over_blocks: number;
+	day: string;
+	evals: number;
+	modules_roll: number;
+	new_modules_over_blocks: number;
+	new_processes_over_blocks: number;
+	processed_blocks: number;
+	processes_roll: number;
+	transfers: number;
+	txs: number;
+	txs_roll: number;
+};
+
+export enum AOPhase {
+	Testnet = 'Testnet',
+	MainnetEarly = 'Mainnet Early',
+	Mainnet = 'Mainnet',
+}
+
+export enum AONetworkStatus {
+	Live = 'Live',
+}
+
+export type FLPTabType = 'featured' | 'all';
+
+export type ExploreSortKey = 'index' | 'project' | 'delegated' | 'launched' | 'allocation';
+
+export type SortDirection = 'asc' | 'desc';

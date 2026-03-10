@@ -24,4 +24,5 @@ export interface IProps {
 	warning?: boolean;
 	className?: string;
 	noTextTransform?: boolean;
+	labelColor?: string;
 }

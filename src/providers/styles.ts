@@ -12,7 +12,7 @@ export const WalletListContainer = styled.div`
 	flex-wrap: wrap;
 	padding: 20px 0 40px 0;
 
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
 		flex-direction: column;
 	}
 `;
@@ -33,14 +33,14 @@ export const WalletListItem = styled.button`
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.small};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 	}
 	&:hover {
 		background: ${(props) => props.theme.colors.container.primary.active};
 		border: 1px solid ${(props) => props.theme.colors.border.alt4} !important;
 	}
 
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
 		width: calc(100% - 40px);
 		margin: auto;
 		padding: 25px 15px;
@@ -65,7 +65,7 @@ export const WalletLink = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.small};
 		font-weight: ${(props) => props.theme.typography.weight.medium};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 	}
 	a {
 		text-decoration: underline;
@@ -78,33 +78,39 @@ export const WalletLink = styled.div`
 export const TermsContainer = styled.div`
 	width: 100%;
 	padding: 15px 15px 0 15px;
-	border-top: 1px solid ${(props) => props.theme.colors.border.alt1};
+
+	> * {
+		&:not(:last-child) {
+			padding: 0 0 15px 0;
+			border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+		}
+	}
 `;
 
 export const TermsHeader = styled.h3`
 	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	color: ${(props) => props.theme.colors.font.primary};
 	margin-bottom: 15px;
 `;
 
 export const TermsSection = styled.p`
-	margin-bottom: 10px;
-	line-height: 1;
+	margin-bottom: 15px;
+	line-height: 1.5;
 `;
 
 export const TermsTitle = styled.b`
-	font-size: ${(props) => props.theme.typography.size.xxxSmall};
-	font-weight: ${(props) => props.theme.typography.weight.bold};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	font-weight: ${(props) => props.theme.typography.weight.medium};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	color: ${(props) => props.theme.colors.font.primary};
 	margin-bottom: 5px;
 `;
 
 export const TermsText = styled.span`
-	font-size: ${(props) => props.theme.typography.size.xxxSmall};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-weight: ${(props) => props.theme.typography.weight.medium};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	color: ${(props) => props.theme.colors.font.alt1};
 `;

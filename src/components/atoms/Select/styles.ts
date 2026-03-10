@@ -43,7 +43,7 @@ export const Dropdown = styled.button<{ active: boolean }>`
 		width: fit-content;
 		text-overflow: ellipsis;
 		overflow: hidden;
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-size: ${(props) => props.theme.typography.size.xLg} !important;
 		font-weight: ${(props) => props.theme.typography.weight.light} !important;
 		color: ${(props) => props.theme.colors.button.primary.color} !important;

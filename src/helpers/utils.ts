@@ -238,6 +238,59 @@ export function getUsdsReward(
 	return bridgeRewards * (userYield / totalYield);
 }
 
+export function formatPercentage(percentage: any) {
+	if (isNaN(percentage)) return '0%';
+
+	let multiplied = percentage * 100;
+	let decimalPart = multiplied.toString().split('.')[1];
+
+	if (!decimalPart) {
+		return `${multiplied.toFixed(0)}%`;
+	}
+
+	if (decimalPart.length > 6 && decimalPart.substring(0, 6) === '000000') {
+		return `${multiplied.toFixed(0)}%`;
+	}
+
+	let nonZeroIndex = decimalPart.length;
+	for (let i = 0; i < decimalPart.length; i++) {
+		if (decimalPart[i] !== '0') {
+			nonZeroIndex = i + 1;
+			break;
+		}
+	}
+
+	return `${multiplied.toFixed(nonZeroIndex)}%`;
+}
+
+export function getRelativeDate(timestamp: number) {
+	if (!timestamp) return '-';
+	const currentDate = new Date();
+	const inputDate = new Date(timestamp);
+
+	const timeDifference: number = currentDate.getTime() - inputDate.getTime();
+	const secondsDifference = Math.floor(timeDifference / 1000);
+	const minutesDifference = Math.floor(secondsDifference / 60);
+	const hoursDifference = Math.floor(minutesDifference / 60);
+	const daysDifference = Math.floor(hoursDifference / 24);
+	const monthsDifference = Math.floor(daysDifference / 30.44); // Average days in a month
+	const yearsDifference = Math.floor(monthsDifference / 12);
+
+	if (yearsDifference > 0) {
+		return `${yearsDifference} year${yearsDifference > 1 ? 's' : ''} ago`;
+	} else if (monthsDifference > 0) {
+		return `${monthsDifference} month${monthsDifference > 1 ? 's' : ''} ago`;
+	} else if (daysDifference > 0) {
+		return `${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
+	} else if (hoursDifference > 0) {
+		return `${hoursDifference} hour${hoursDifference > 1 ? 's' : ''} ago`;
+	} else if (minutesDifference > 0) {
+		return `${minutesDifference} minute${minutesDifference > 1 ? 's' : ''} ago`;
+	} else {
+		return `${secondsDifference} second${secondsDifference !== 1 ? 's' : ''} ago`;
+	}
+}
+
 export function formatCount(count: string): string {
 	if (count === '0' || !Number(count)) return '0';
 
@@ -274,4 +327,119 @@ export function formatCount(count: string): string {
 
 export function formatUSDAmount(amount: string): string {
 	return `$ ${formatCount(amount)}`;
+}
+
+/**
+ * Parse a bigint to a string containing a decimal number (float), based on a token denomination
+ */
+export function parseBigIntAsNumber(value?: bigint | string, denomination = 0, maximumFractionDigits = denomination) {
+	try {
+		if (!value) return '0';
+
+		// Handle negative values by capturing the sign
+		const isNegative = value.toString().startsWith('-');
+		const absValue = isNegative
+			? (typeof value === 'string' ? BigInt(value) : value) * BigInt(-1)
+			: typeof value === 'string'
+			? BigInt(value)
+			: value;
+
+		// Multiplier according to the denomination using a loop instead of exponentiation
+		let dMul = BigInt(1);
+		for (let i = 0; i < denomination; i++) {
+			dMul *= BigInt(10);
+		}
+
+		// Fractional and integer parts
+		const integerPart = absValue / dMul;
+		let result = integerPart.toString();
+
+		// Add fractions
+		if (maximumFractionDigits !== 0) {
+			// Starting index of the fractional part
+			const fractionalPartStart = integerPart !== BigInt(0) ? integerPart.toString().length : 0;
+
+			// Calculate fractional part
+			let fractions = absValue
+				.toString()
+				.slice(fractionalPartStart)
+				.padStart(denomination, '0')
+				.slice(0, maximumFractionDigits);
+
+			if (fractions !== '' && BigInt(fractions) > BigInt(0)) {
+				result += '.' + fractions.replace(/0*$/, '');
+			}
+		}
+
+		// Reapply the negative sign if necessary
+		if (isNegative) result = '-' + result;
+
+		return result;
+	} catch (error) {
+		console.error('Cannot parse BigInt as number', value, denomination, maximumFractionDigits, error);
+		return '0';
+	}
+}
+
+export function formatNumber(number: number | string, options: Intl.NumberFormatOptions = {}, locale?: string) {
+	return new Intl.NumberFormat(locale, options).format(Number(number));
+}
+
+// Helper function to get price from Supabase
+export async function getPriceForToken(
+	processId: string,
+	supabaseUrl: string,
+	supabaseAnonKey: string
+): Promise<{ usd_price: number; denominator: number } | null> {
+	try {
+		if (!supabaseUrl || !supabaseAnonKey) {
+			console.error('Supabase configuration missing');
+			return null;
+		}
+
+		const response = await fetch(`${supabaseUrl}/functions/v1/usd-price`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${supabaseAnonKey}`,
+			},
+			body: JSON.stringify({
+				processId: processId,
+			}),
+		});
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error('Error fetching price from Supabase:', error);
+		return null;
+	}
+}
+
+// Helper function to get AO/USD price from redstone
+export async function getAoPrice(): Promise<number | null> {
+	try {
+		const response = await fetch('https://api.redstone.finance/prices?symbols=AO&provider=redstone');
+
+		if (!response.ok) {
+			throw new Error(`HTTP error - status: ${response.status}`);
+		}
+
+		const data = await response.json();
+		const aoPrice = data?.AO?.value;
+
+		if (typeof aoPrice !== 'number') {
+			console.error('invalid AO price response from redstone:', data);
+			return null;
+		}
+
+		return aoPrice;
+	} catch (error) {
+		console.error('error fetching AO price from redstone:', error);
+		return null;
+	}
 }

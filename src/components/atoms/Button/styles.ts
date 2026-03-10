@@ -20,8 +20,8 @@ function getWidth(_noMinWidth: boolean | undefined, width: number | undefined, f
 
 export const Tooltip = styled.div<{ useBottom: boolean }>`
 	position: absolute;
-	top: ${(props) => (props.useBottom ? 'auto' : '-32.5px')};
-	bottom: ${(props) => (props.useBottom ? '-32.5px' : 'auto')};
+	top: ${(props) => (props.useBottom ? 'auto' : '-26.5px')};
+	bottom: ${(props) => (props.useBottom ? '-26.5px' : 'auto')};
 	left: 50%;
 	transform: translate(-50%, 0);
 	z-index: 2;
@@ -33,11 +33,14 @@ export const Wrapper = styled.div`
 	width: fit-content;
 	&:hover {
 		${Tooltip} {
-			display: block;
+			display: flex;
 		}
 	}
 	.info {
-		padding: 0px 10px 2.5px 10px !important;
+		height: 21.5px;
+		padding: 0px 7.5px !important;
+		align-items: center;
+		justify-content: center;
 	}
 `;
 
@@ -50,8 +53,8 @@ export const Primary = styled.button<{
 	active: boolean | undefined;
 	warning: boolean | undefined;
 	noTextTransform: boolean | undefined;
+	labelColor: string | undefined;
 }>`
-	border-radius: 4px;
 	position: relative;
 	background: ${(props) =>
 		props.warning
@@ -66,7 +69,8 @@ export const Primary = styled.button<{
 	max-width: ${(props) => (props.useMaxWidth ? STYLING.dimensions.button.width : '100%')};
 	overflow: hidden;
 	text-overflow: ellipsis;
-	padding: 0 15px;
+	padding: 8px 17.5px;
+	transition: none;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -126,11 +130,13 @@ export const Primary = styled.button<{
 		text-overflow: ellipsis;
 		overflow: hidden;
 		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.medium} !important;
-		font-family: ${(props) => props.theme.typography.family.alt1} !important;
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+		font-family: ${(props) => props.theme.typography.family.primary} !important;
 		letter-spacing: 0.35px;
 		color: ${(props) =>
-			props.warning
+			props.labelColor
+				? props.labelColor
+				: props.warning
 				? props.theme.colors.font.light1
 				: props.active
 				? props.theme.colors.button.primary.active.color
@@ -166,28 +172,23 @@ export const Alt1 = styled(Primary)`
 	border: 1px solid
 		${(props) => (props.active ? props.theme.colors.button.alt1.active.border : props.theme.colors.button.alt1.border)};
 	&:hover {
-		background: ${(props) => props.theme.colors.button.alt1.active.background};
-		border: 1px solid ${(props) => props.theme.colors.button.alt1.active.border};
+		background: ${(props) => `color-mix(in srgb, ${props.theme.colors.button.alt1.background} 80%, transparent)`};
 		span {
-			color: ${(props) => props.theme.colors.button.alt1.active.color} !important;
+			color: ${(props) => props.theme.colors.font.light1} !important;
 		}
 		svg {
-			fill: ${(props) => props.theme.colors.button.alt1.active.color} !important;
-			color: ${(props) => props.theme.colors.button.alt1.active.color} !important;
+			fill: ${(props) => props.theme.colors.button.alt1.color} !important;
+			color: ${(props) => props.theme.colors.button.alt1.color} !important;
 		}
 	}
 	&:focus {
-		background: ${(props) =>
-			props.active
-				? props.theme.colors.button.alt1.active.background
-				: props.theme.colors.button.alt1.active.background};
-		border: 1px solid ${(props) => props.theme.colors.button.alt1.active.border};
+		background: ${(props) => `color-mix(in srgb, ${props.theme.colors.button.alt1.background} 80%, transparent)`};
 		span {
-			color: ${(props) => props.theme.colors.button.alt1.active.color} !important;
+			color: ${(props) => props.theme.colors.font.light1} !important;
 		}
 		svg {
-			fill: ${(props) => props.theme.colors.button.alt1.active.color} !important;
-			color: ${(props) => props.theme.colors.button.alt1.active.color} !important;
+			fill: ${(props) => props.theme.colors.button.alt1.color} !important;
+			color: ${(props) => props.theme.colors.button.alt1.color} !important;
 		}
 	}
 	&:disabled {
@@ -274,7 +275,8 @@ export const Alt2 = styled(Alt1)`
 		text-overflow: ellipsis;
 		overflow: hidden;
 		font-size: ${(props) => props.theme.typography.size.xSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+		font-family: ${(props) => props.theme.typography.family.primary} !important;
 		text-transform: none;
 		color: ${(props) =>
 			props.active ? props.theme.colors.button.alt2.active.color : props.theme.colors.button.alt2.color} !important;
@@ -283,13 +285,15 @@ export const Alt2 = styled(Alt1)`
 
 export const IconAlt2 = styled(IconAlt1)`
 	svg {
-		margin: ${(props) => (props.leftAlign ? '3.5px 3.5px 0 0' : '3.5px 0 0 3.5px')};
+		height: 13.5px !important;
+		width: 13.5px !important;
+		margin: ${(props) => (props.leftAlign ? '2.5px 5.5px 0 0' : '2.5px 0 0 5.5px')} !important;
 		color: ${(props) =>
 			props.disabled
 				? props.theme.colors.button.alt2.disabled.color
 				: props.active
 				? props.theme.colors.button.alt2.active.color
-				: props.theme.colors.button.alt2.color};
+				: props.theme.colors.button.alt2.color} !important;
 	}
 `;
 
@@ -315,7 +319,7 @@ export const Alt3 = styled(Primary)`
 
 	span {
 		font-size: ${(props) => props.theme.typography.size.xxxSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
 		color: ${(props) =>
 			props.warning
 				? props.theme.colors.font.light1
@@ -415,7 +419,7 @@ export const Alt4 = styled(Primary)`
 
 	span {
 		font-size: ${(props) => props.theme.typography.size.xxxSmall} !important;
-		font-weight: ${(props) => props.theme.typography.weight.bold} !important;
+		font-weight: ${(props) => props.theme.typography.weight.regular} !important;
 		color: ${(props) =>
 			props.warning
 				? props.theme.colors.font.light1

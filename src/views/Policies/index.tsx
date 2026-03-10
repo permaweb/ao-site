@@ -19,7 +19,7 @@ export default function Policies() {
 	}, []);
 
 	return policy ? (
-		<S.Wrapper className={'fade-in'}>
+		<S.Wrapper>
 			<ReactMarkdown children={policy} />
 		</S.Wrapper>
 	) : (

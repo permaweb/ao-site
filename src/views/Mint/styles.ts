@@ -4,14 +4,18 @@ import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
 	width: 100%;
+	margin: 32px 0 0 0;
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		margin: 0;
+	}
+`;
+
+export const BodyWrapper = styled.div`
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	gap: 40px;
-	padding: 10px 0 35px 0;
-
-	@media (max-width: ${STYLING.cutoffs.initial}) {
-		padding: 0 0 40px 0;
-	}
 `;
 
 export const GlobalWrapper = styled.div`
@@ -22,334 +26,375 @@ export const GlobalWrapper = styled.div`
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {
 		flex-direction: column;
-		gap: 40px;
+		gap: 0;
+	}
+`;
+
+export const GlobalSectionsFlex = styled.div`
+	display: flex;
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		flex-direction: column;
 	}
 `;
 
 export const GlobalSection = styled.div`
-	height: fit-content;
-	width: calc(50% - 20px);
-
-	@media (max-width: ${STYLING.cutoffs.initial}) {
-		width: 100%;
-	}
-`;
-
-export const HeaderWrapper = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	gap: 10px;
-`;
-
-export const HeaderInfoWrapper = styled.div`
-	display: flex;
-	align-items: center;
-	gap: 20px;
-`;
-
-export const HeaderInfo = styled.div`
-	h6 {
-		font-size: 29px;
-		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		color: ${(props) => props.theme.colors.font.primary};
-	}
-`;
-
-export const HeaderTooltip = styled.div`
-	button {
-		display: flex;
-		align-items: center;
-		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
-		font-size: ${(props) => props.theme.typography.size.base};
-		color: ${(props) => props.theme.colors.link.color};
-
-		svg {
-			height: 15px;
-			width: 15px;
-			fill: ${(props) => props.theme.colors.link.color};
-			margin: 5.5px 5.5px 0 0;
-		}
-
-		&:hover {
-			color: ${(props) => props.theme.colors.link.active};
-
-			svg {
-				color: ${(props) => props.theme.colors.link.active};
-			}
-		}
-		&:focus {
-			color: ${(props) => props.theme.colors.link.active};
-
-			svg {
-				color: ${(props) => props.theme.colors.link.active};
-			}
-		}
-	}
-`;
-
-export const InfoWrapper = styled(GlobalSection)``;
-
-export const InfoHeader = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	gap: 7.5px;
-
-	p {
-		font-size: 29px;
-		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		color: ${(props) => props.theme.colors.font.primary};
-	}
-
-	svg {
-		height: 12px;
-		width: 12px;
-		color: ${(props) => props.theme.colors.indicator.primary};
-		fill: ${(props) => props.theme.colors.indicator.primary};
-		margin: 7.5px 0 0 0;
-	}
-
-	@media (max-width: ${STYLING.cutoffs.initial}) {
-		h6 {
-			line-height: 1.5;
-		}
-	}
-`;
-
-export const InfoBody = styled.div`
-	p {
-		font-size: 12px;
-		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
-		color: #6b6b6b;
-
-		b {
-			font-weight: ${(props) => props.theme.typography.weight.xBold};
-		}
-	}
-
-	a {
-		width: fit-content;
-		display: block;
-		margin: 20px 0 0 0;
-		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-size: ${(props) => props.theme.typography.size.xSmall};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
-		color: ${(props) => props.theme.colors.link.color};
-		text-decoration: underline;
-		text-decoration-thickness: 1.25px;
-
-		&:hover {
-			color: ${(props) => props.theme.colors.link.active};
-		}
-	}
-
-	#info-body-subheader {
-		font-size: ${(props) => props.theme.typography.size.lg};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
-	}
-`;
-
-export const MetricsWrapper = styled(GlobalSection)`
-	position: relative;
-`;
-
-export const Metrics = styled.div`
-	width: fit-content;
-	display: flex;
-	gap: 15px;
-	flex-direction: column;
-	position: absolute;
-	z-index: 1;
-	top: 0;
-	left: 0;
-	padding: 0 10px 10px 0;
-
-	&:before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: ${(props) => props.theme.colors.view.background};
-		z-index: -1;
-		filter: blur(5px);
-	}
-
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		position: relative;
-	}
-`;
-
-export const MetricsSection = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 2.5px;
+	gap: 5px;
+	padding: 23.5px 25px 20px 25px;
 
-	@media (max-width: ${STYLING.cutoffs.tablet}) {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 20px;
-	}
-`;
-
-export const MetricsValue = styled.div`
 	p {
-		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.xBold};
-		color: ${(props) => props.theme.colors.font.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.xLg};
+		color: ${(props) => props.theme.colors.font.primary};
 	}
 
 	span {
-		line-height: 1;
-		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
 		color: ${(props) => props.theme.colors.font.alt1};
 	}
-`;
 
-export const MetricsValueMain = styled(MetricsValue)`
-	display: flex;
-	align-items: center;
-	gap: 10.5px;
-	p {
-		font-size: ${(props) => props.theme.typography.size.xLg};
-		color: ${(props) => props.theme.colors.font.primary};
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		padding: 25px;
+		border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
+		p,
 		span {
-			font-size: ${(props) => props.theme.typography.size.xLg};
+			text-align: center;
 		}
-	}
-
-	svg {
-		height: 20px;
-		width: 20px;
-		margin: 6.5px 0 0 0;
-	}
-
-	#ao-logo {
-		svg {
-			height: 30px;
-			width: 30px;
-		}
-	}
-
-	#text-loader {
-		min-height: 40px;
 	}
 `;
 
-export const BalancesPrimaryWrapper = styled.div`
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 25px;
-	margin: 0 0 20px 0;
-`;
-
-export const BalancesBreakdownWrapper = styled(BalancesPrimaryWrapper)``;
-
-export const BalanceQuantityBody = styled.div`
-	display: flex;
-	align-items: center;
-	gap: 7.5px;
+export const GlobalSubSection = styled(GlobalSection)`
+	min-width: 250px;
+	max-width: 100%;
+	border-left: 1px solid ${(props) => props.theme.colors.border.primary};
+	padding: 23.5px 35px 20px 35px;
 
 	p,
 	span {
-		font-size: ${(props) => props.theme.typography.size.lg};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		display: flex;
+		justify-content: center;
+		text-align: center;
+	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		padding: 25px;
+		border-left: none;
+		border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+`;
+
+export const DepositsWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	padding: 15px;
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		padding: 0;
+		background: ${(props) => props.theme.colors.container.alt1.background} !important;
+	}
+`;
+
+export const NetworkWrapper = styled.div`
+	width: 100%;
+`;
+
+export const NetworkHeaderWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 23.5px 25px 20px 25px;
+	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		flex-direction: column;
+	}
+`;
+
+export const NetworkHeader = styled.div`
+	p {
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.xLg};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const NetworkHeaderDivider = styled.div`
+	height: 25px;
+	width: 1px;
+	border-right: 1px solid ${(props) => props.theme.colors.border.primary};
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		display: none;
+	}
+`;
+
+export const NetworkHeaderArweave = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+
+	span {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.alt1};
+		white-space: nowrap;
 	}
 
 	p {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		flex-direction: column;
+	}
+`;
+
+export const NetworkHeaderAddress = styled.p<{ disabled?: boolean }>`
+	cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+	user-select: none;
+	opacity: ${(props) => (props.disabled ? 0.6 : 1)};
+
+	&:hover {
+		text-decoration: ${(props) => (props.disabled ? 'none' : 'underline')};
+	}
+`;
+
+export const NetworkHeaderAddressRow = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 7.5px;
+
+	.network-header-logo,
+	.network-header-logo > div {
 		display: flex;
 		align-items: center;
-		gap: 7.5px;
+		justify-content: center;
+	}
+
+	.network-header-logo {
+		flex-shrink: 0;
+		line-height: 0;
+	}
+
+	.network-header-logo svg {
+		height: 17px;
+		width: 17px;
+		margin: 0;
+		flex-shrink: 0;
+	}
+`;
+
+export const NetworkHeaderWallet = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 20px;
+
+	p {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.lg};
+		color: ${(props) => props.theme.colors.font.primary};
+	}
+
+	span {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.alt1};
+
+		svg {
+			height: 17.5px;
+			width: 17.5px;
+			color: ${(props) => props.theme.colors.font.alt1};
+			fill: ${(props) => props.theme.colors.font.alt1};
+			margin: 5.5px 0 0 0;
+		}
+	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		flex-direction: column;
+	}
+`;
+
+export const NetworkHeaderWalletActions = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 17.5px;
+	margin: 0 0 0 auto;
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		margin: 0 auto;
+	}
+`;
+
+export const NetworkBodyWrapper = styled.div`
+	width: 100%;
+`;
+
+export const NetworkBodyInfoLine = styled.div`
+	width: 100%;
+	padding: 20px 25px;
+
+	p {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+`;
+
+export const NetworkSectionsWrapper = styled.div`
+	width: 100%;
+	display: flex;
+
+	> * {
+		&:not(:last-child) {
+			border-right: 1px solid ${(props) => props.theme.colors.border.primary};
+		}
+	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		flex-direction: column;
+
+		> * {
+			&:not(:last-child) {
+				border-right: none;
+				border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+			}
+		}
+	}
+`;
+
+export const NetworkSection = styled.div`
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		padding: 15px 0 0 0;
+	}
+`;
+
+export const NetworkSectionHeader = styled.div`
+	height: 50px;
+	display: flex;
+	align-items: center;
+	padding: 0 25px;
+	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+
+	span {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.small};
+		color: ${(props) => props.theme.colors.font.alt1};
+	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		border-bottom: none;
+	}
+`;
+
+export const NetworkSectionBody = styled.div`
+	> * {
+		&:not(:last-child) {
+			border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+		}
+	}
+
+	@media (max-width: ${STYLING.cutoffs.initial}) {
+		> * {
+			&:not(:last-child) {
+				border-bottom: none;
+			}
+		}
+	}
+`;
+
+export const NetworkSectionBodyValue = styled.div`
+	height: 80px;
+	display: flex;
+	align-items: center;
+	gap: 17.5px;
+	padding: 0 25px;
+
+	p {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-size: ${(props) => props.theme.typography.size.lg};
+		color: ${(props) => props.theme.colors.font.primary};
 	}
 
 	svg {
-		height: 20px;
-		width: 20px;
-		margin: 6.5px 0 0 0;
-	}
-
-	#ao-logo {
-		svg {
-			height: 30px;
-			width: 30px;
-			margin: 6.5px 3.5px 0 0;
-		}
+		height: 24px;
+		width: 24px;
+		color: ${(props) => props.theme.colors.font.alt1};
+		fill: ${(props) => props.theme.colors.font.alt1};
+		margin: 5.5px 0 0 0;
 	}
 `;
 
-export const BalancesGlobalWrapper = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	gap: 20px;
-	padding: 24.5px 20px 20px 20px;
-
-	${BalanceQuantityBody} {
-		p,
-		span {
-			font-size: ${(props) => props.theme.typography.size.xLg};
-		}
-
-		#text-loader {
-			min-height: 40px;
-		}
-	}
-
-	@media (max-width: ${STYLING.cutoffs.tablet}) {
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: flex-start;
-	}
-`;
-
-export const BalancesPrimaryFlexWrapper = styled.div`
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 20px 100px;
-`;
-
-export const BalanceQuantitySection = styled.div`
-	width: 175px;
+export const NetworkDisconnectedIconText = styled.div`
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
-	gap: 2.5px;
-`;
+	align-items: center;
+	gap: 10px;
 
-export const BalanceQuantityEndSection = styled(BalanceQuantitySection)`
-	align-items: flex-end;
-
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
-		align-items: flex-start;
-	}
-`;
-
-export const BalanceQuantityHeader = styled.div`
-	span {
+	p {
+		font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
-		color: ${(props) => props.theme.colors.font.alt1};
+		color: ${(props) => props.theme.colors.font.primary};
+		margin: 0;
 	}
+
+	svg {
+		height: 18px;
+		width: 18px;
+		color: ${(props) => props.theme.colors.font.primary};
+		fill: ${(props) => props.theme.colors.font.primary};
+	}
+`;
+
+export const NetworkDisconnected = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 24px;
+	padding: 40px 15px;
 `;
 
 export const ModalWrapper = styled.div`
 	span {
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
 `;

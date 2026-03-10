@@ -5,6 +5,8 @@ import { STYLING } from 'helpers/config';
 
 export const Wrapper = styled.div`
 	width: 100%;
+	padding-top: 32px;
+	padding-bottom: 32px;
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
@@ -23,16 +25,16 @@ export const GraphicWrapper = styled.div`
 		top: ${STYLING.dimensions.nav.height};
 		left: 0;
 		z-index: 2;
-		opacity: 0.85;
+		opacity: 0.5;
 		pointer-events: none;
 	}
 `;
 
 export const ContentWrapper = styled.div`
-	width: fit-content;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-end;
+	align-items: flex-start;
 	justify-content: flex-end;
 	margin: 0 0 0 auto;
 
@@ -40,7 +42,8 @@ export const ContentWrapper = styled.div`
 		line-height: 1.35;
 		position: relative;
 		transition: ${open} ${fadeIn2};
-		padding: 0 0 0 20px;
+		padding: 0 20px 0 0px;
+		font-size: ${(props) => props.theme.typography.size.xxxLg};
 
 		&:before {
 			content: '';
@@ -56,23 +59,22 @@ export const ContentWrapper = styled.div`
 	}
 
 	p {
-		max-width: 445px;
+		max-width: 350px;
+		text-wrap: balance;
 		line-height: 1.5;
-		font-size: ${(props) => props.theme.typography.size.lg};
-		font-size: clamp(16px, 1.65vw, 18px);
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-size: clamp(15px, 1.65vw, 17px);
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
-		text-align: right;
-		padding: 30px 0 20px 20px;
+		text-align: left;
+		padding: 30px 20px 20px 0px;
 		margin: -10px 0 0 0;
 		position: relative;
 		transition: ${open} ${fadeIn2};
 
 		a {
-			font-size: ${(props) => props.theme.typography.size.lg};
-			font-size: clamp(16px, 1.65vw, 18px);
-			font-family: ${(props) => props.theme.typography.family.alt1};
+			font-size: clamp(14px, 1.65vw, 16px);
+			font-family: ${(props) => props.theme.typography.family.primary};
 			font-weight: ${(props) => props.theme.typography.weight.regular};
 			color: ${(props) => props.theme.colors.font.primary};
 			text-decoration: underline;
@@ -166,7 +168,8 @@ export const MetricsLine = styled.div`
 		height: 22.5px;
 		display: block;
 		color: ${(props) => props.theme.colors.font.alt1};
-		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-size: ${(props) => props.theme.typography.size.small};
+		text-transform: none;
 	}
 `;
 
@@ -178,7 +181,7 @@ export const MetricsValue = styled.div`
 		height: 22.5px;
 		display: block;
 		font-size: ${(props) => props.theme.typography.size.base};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 		color: ${(props) => props.theme.colors.font.primary};
 	}
@@ -189,21 +192,31 @@ export const MetricsValue = styled.div`
 `;
 
 export const Indicator = styled.div`
-	height: 11.5px;
-	width: 11.5px;
+	height: 6px;
+	width: 6px;
 	background: ${(props) => props.theme.colors.indicator.active};
 	border-radius: 50%;
-	animation: pulse 1.075s infinite;
+	position: relative;
+	flex-shrink: 0;
 
-	@keyframes pulse {
-		0%,
-		100% {
-			background: ${(props) => props.theme.colors.indicator.active};
+	&:before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 50%;
+		background: ${(props) => props.theme.colors.indicator.active};
+		animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+	}
+
+	@keyframes ping {
+		0% {
 			transform: scale(1);
+			opacity: 0.75;
 		}
-		50% {
-			background: ${(props) => props.theme.colors.indicator.primary};
-			transform: scale(1.15);
+		75%,
+		100% {
+			transform: scale(2.8);
+			opacity: 0;
 		}
 	}
 `;
@@ -228,8 +241,10 @@ export const LinksWrapper = styled.div`
 	}
 
 	a {
-		font-size: ${(props) => props.theme.typography.size.xxSmall};
+		font-size: ${(props) => props.theme.typography.size.xSmall};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		line-height: 1;
+		text-transform: none;
 	}
 
 	@media (max-width: ${STYLING.cutoffs.initial}) {

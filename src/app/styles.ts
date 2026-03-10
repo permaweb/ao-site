@@ -58,7 +58,8 @@ export const GlobalStyle = createGlobalStyle`
 			"Ubuntu",
 			sans-serif;
 			font-family: ${(props) => props.theme.typography.family.primary};
-			font-weight: ${(props) => props.theme.typography.weight.medium};
+			font-weight: ${(props) => props.theme.typography.weight.regular};
+      font-feature-settings: 'ss03' on;
 			color: ${(props) => props.theme.colors.font.primary};
 			line-height: 1.5;
 			-webkit-font-smoothing: antialiased;
@@ -83,10 +84,9 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: ${(props) => props.theme.typography.family.alt1};
-		font-weight: ${(props) => props.theme.typography.weight.medium};
+    font-family: ${(props) => props.theme.typography.family.primary};
+		font-weight: ${(props) => props.theme.typography.weight.regular};
     color: ${(props) => props.theme.colors.font.primary};
-		letter-spacing: 1.15px;
 		overflow-wrap: anywhere;
   }
 
@@ -161,20 +161,24 @@ export const GlobalStyle = createGlobalStyle`
   .border-wrapper-primary {
     background: ${(props) => props.theme.colors.container.primary.background};
     border: 1px solid ${(props) => props.theme.colors.border.primary};
+		border-radius: ${STYLING.dimensions.radius.primary};
   }
 
   .border-wrapper-alt1 {
-    background: ${(props) => props.theme.colors.container.alt1.background};
+    background: ${(props) => props.theme.colors.container.alt2.background};
+		border-radius: ${STYLING.dimensions.radius.primary};
   }
 
 	.border-wrapper-alt2 {
     background: ${(props) => props.theme.colors.container.alt1.background};
 		border: 1px solid ${(props) => props.theme.colors.border.alt4};
+		border-radius: ${STYLING.dimensions.radius.primary};
   }
 
   .border-wrapper-alt3 {
     background: ${(props) => props.theme.colors.container.primary.background};
 		border: 1px solid ${(props) => props.theme.colors.border.alt4};
+		border-radius: ${STYLING.dimensions.radius.primary};
   }
 
   .max-view-wrapper {
@@ -195,15 +199,15 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	.info {
-    padding: 0 5px 0.5px 5px;
-    background: ${(props) => props.theme.colors.tooltip.background};
-    border-radius: ${STYLING.dimensions.radius.alt2};
-    animation: ${open} ${transition2};
+    padding: 2.25px 5px;
+    background: ${(props) => props.theme.colors.tooltip.background} !important;
+    border-radius: ${STYLING.dimensions.radius.alt3};
+    animation: ${open} ${transition1};
     span {
-      color: ${(props) => props.theme.colors.tooltip.color};
-      font-size: ${(props) => props.theme.typography.size.xxxSmall};
-			font-family: ${(props) => props.theme.typography.family.alt1};
-      font-weight: ${(props) => props.theme.typography.weight.bold};
+      color: ${(props) => props.theme.colors.tooltip.color} !important;
+      font-size: ${(props) => props.theme.typography.size.xxxxSmall} !important;
+			font-family: ${(props) => props.theme.typography.family.primary} !important;
+      font-weight: ${(props) => props.theme.typography.weight.bold} !important;
       white-space: nowrap;
 	  }
   }

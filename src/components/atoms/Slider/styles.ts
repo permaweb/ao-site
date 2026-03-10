@@ -198,7 +198,7 @@ export const LabelWrapper = styled.div`
 	flex-wrap: wrap;
 	gap: 10px;
 	margin: 0 0 10px 0;
-	@media (max-width: ${STYLING.cutoffs.secondary}) {
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
 		flex-direction: column;
 		align-items: flex-start;
 	}
@@ -217,7 +217,7 @@ export const Value = styled(Label)`
 	p {
 		color: ${(props) => props.theme.colors.font.primary};
 		font-size: ${(props) => props.theme.typography.size.xSmall};
-		font-family: ${(props) => props.theme.typography.family.alt1};
+		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.bold};
 	}
 `;

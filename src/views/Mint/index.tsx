@@ -1,177 +1,330 @@
-import parse from 'html-react-parser';
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
+import { AddressTooltip } from 'components/atoms/AddressTooltip';
+import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
-import { Modal } from 'components/molecules/Modal';
-import { SupplyChart } from 'components/molecules/SupplyChart';
-import { URLTabs } from 'components/molecules/URLTabs';
-import { ASSETS, REDIRECTS, URLS } from 'helpers/config';
-import { formatCount } from 'helpers/utils';
+import { Modal } from 'components/atoms/Modal';
+import { ViewHeader } from 'components/atoms/ViewHeader';
+import { ASSETS } from 'helpers/config';
+import { DefaultTokenEarningsType } from 'helpers/types';
+import { formatAddress, formatDisplayAmount } from 'helpers/utils';
 import { Footer } from 'navigation/footer';
-import { useAOProvider } from 'providers/AOProvider';
+import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useEthereumProvider } from 'providers/EthereumProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
-import { Subtitle } from 'views/Fund/styles';
+import { WalletConnect } from 'wallet/WalletConnect';
 
-import { BalanceSection } from './MintBalances/BalanceSection';
-import { MintAllocation } from './MintAllocation';
 import { MintBalances } from './MintBalances';
 import * as S from './styles';
 
 export default function Mint() {
-	const { active } = useParams();
-	const navigate = useNavigate();
-
-	const aoProvider = useAOProvider();
+	const arProvider = useArweaveProvider();
 	const ethProvider = useEthereumProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
 	const [info, setInfo] = React.useState<string | null>(null);
 
-	const [aoSupply, setAOSupply] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
-	const [aoSupplyReset, setAOSupplyReset] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
-	const [currentMonth, setCurrentMonth] = React.useState<number | null>(null);
+	const [copiedAr, setCopiedAr] = React.useState<boolean>(false);
+	const [copiedEth, setCopiedEth] = React.useState<boolean>(false);
+	const [copiedDepositArweave, setCopiedDepositArweave] = React.useState<boolean>(false);
 
-	React.useEffect(() => {
-		if (!active) navigate(URLS.mintDeposits);
-	}, [navigate]);
+	function getTokenBalance(token: DefaultTokenEarningsType) {
+		if (!arProvider?.walletAddress) return '-';
 
-	React.useEffect(() => {
-		setAOSupply({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
-		setAOSupplyReset({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
-	}, [aoProvider.mintedSupply]);
+		let balance;
 
-	function getSupplyDate() {
-		const tokenReleaseDate = new Date();
-		tokenReleaseDate.setMonth(tokenReleaseDate.getMonth() - currentMonth);
-		const supplyDate = new Date(tokenReleaseDate);
-		supplyDate.setMonth(supplyDate.getMonth() + currentMonth + (aoSupply?.monthsFromNow ?? 0));
+		switch (token) {
+			case 'ao':
+				balance = 'aoBalance';
+				break;
+			case 'arweave':
+				balance = 'balance';
+				break;
+			default:
+				return null;
+		}
 
-		return supplyDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+		if (arProvider[balance] !== null) return <p>{formatDisplayAmount(arProvider[balance])}</p>;
+
+		return <EllipsisLoader />;
 	}
+
+	function getTokenProjections(token: DefaultTokenEarningsType) {
+		switch (token) {
+			case 'ao':
+				return mergeTokenProjections();
+			case 'arweave':
+				return arProvider?.projections;
+			default:
+				return null;
+		}
+	}
+
+	function mergeTokenProjections() {
+		if (!arProvider.projections && !ethProvider.projections) return null;
+
+		return {
+			monthly: {
+				amount:
+					(arProvider.projections?.monthly?.amount ?? 0) +
+					(ethProvider.projections?.stEth?.monthly?.amount ?? 0) +
+					(ethProvider.projections?.dai?.monthly?.amount ?? 0) +
+					(ethProvider.projections?.usds?.monthly?.amount ?? 0),
+				ratio: null,
+			},
+			yearly: {
+				amount:
+					(arProvider.projections?.yearly?.amount ?? 0) +
+					(ethProvider.projections?.stEth?.yearly?.amount ?? 0) +
+					(ethProvider.projections?.dai?.yearly?.amount ?? 0) +
+					(ethProvider.projections?.usds?.yearly?.amount ?? 0),
+				ratio: null,
+			},
+		};
+	}
+
+	function getTokenProjectionsDisplay(token: DefaultTokenEarningsType, period: 'monthly' | 'yearly') {
+		const projection = getTokenProjections(token)?.[period]?.amount;
+
+		if (projection) return <p>{formatDisplayAmount(projection)}</p>;
+
+		return <EllipsisLoader />;
+	}
+
+	const copyArAddress = React.useCallback(async () => {
+		if (arProvider.walletAddress) {
+			await navigator.clipboard.writeText(arProvider.walletAddress);
+			setCopiedAr(true);
+			setTimeout(() => setCopiedAr(false), 2000);
+		}
+	}, [arProvider.walletAddress]);
+
+	const copyEthAddress = React.useCallback(async () => {
+		if (ethProvider.walletAddress) {
+			await navigator.clipboard.writeText(ethProvider.walletAddress);
+			setCopiedEth(true);
+			setTimeout(() => setCopiedEth(false), 2000);
+		}
+	}, [ethProvider.walletAddress]);
+
+	const copyDepositArweaveAddress = React.useCallback(async () => {
+		if (ethProvider.lastArweaveAddress) {
+			await navigator.clipboard.writeText(ethProvider.lastArweaveAddress);
+			setCopiedDepositArweave(true);
+			setTimeout(() => setCopiedDepositArweave(false), 2000);
+		}
+	}, [ethProvider.lastArweaveAddress]);
 
 	return (
 		<>
 			<S.Wrapper>
-				<S.GlobalWrapper>
-					<S.InfoWrapper className={'fade-in'}>
-						<S.InfoHeader>
-							<ReactSVG src={ASSETS.plus} />
-							<p>{language.fairLaunch}</p>
-						</S.InfoHeader>
-						<S.InfoBody>
-							<p>{parse(language.mintSubheader)}</p>
-							<a href={REDIRECTS.tokenomics} target={'_blank'}>
-								{language.learnMore}
-							</a>
-						</S.InfoBody>
-					</S.InfoWrapper>
-					<S.MetricsWrapper className={'fade-in'}>
-						<S.Metrics>
-							<S.MetricsSection>
-								<S.MetricsValue>
-									<span className={'primary-text'}>{language.totalAOSupply}</span>
-								</S.MetricsValue>
-								<S.MetricsValueMain>
-									<ReactSVG id={'ao-logo'} src={ASSETS.ao} />
-									<p>
-										{aoSupply?.amount !== null ? (
-											aoSupply?.amount > 0 ? (
-												formatCount(aoSupply.amount.toFixed(4).toString())
-											) : (
-												'-'
-											)
-										) : (
-											<EllipsisLoader />
-										)}
-									</p>
-								</S.MetricsValueMain>
-								<S.MetricsValue>
-									<p>{getSupplyDate()}</p>
-								</S.MetricsValue>
-							</S.MetricsSection>
-						</S.Metrics>
-						<SupplyChart
-							currentValue={{ months: aoSupply?.monthsFromNow, supply: aoSupply?.amount }}
-							setCurrentValue={(updatedValue: { months: number; supply: number }) =>
-								setAOSupply({
-									monthsFromNow: updatedValue.months,
-									amount: updatedValue.supply,
-								})
-							}
-							setCurrentMonth={(value: number) => setCurrentMonth(value)}
-							handleReset={() => setAOSupply(aoSupplyReset)}
-						/>
-					</S.MetricsWrapper>
-				</S.GlobalWrapper>
-				<S.BalancesPrimaryWrapper>
-					<div>
-						<S.HeaderWrapper>
-							<S.HeaderInfoWrapper>
-								<S.HeaderInfo>
-									<h6>{language.network}</h6>
-								</S.HeaderInfo>
-							</S.HeaderInfoWrapper>
-							<S.HeaderTooltip>
-								<button onClick={() => setInfo(language.networkInfo)}>
-									<ReactSVG src={ASSETS.info} />
-									{language.infoTooltip}
-								</button>
-							</S.HeaderTooltip>
-						</S.HeaderWrapper>
-						<Subtitle>
-							Track overall network token emissions, total deposited assets, and your current and projected AO holdings.
-						</Subtitle>
-					</div>
-					<S.BalancesGlobalWrapper className={'border-wrapper-primary'}>
-						<S.BalanceQuantitySection>
-							<S.BalanceQuantityHeader>
-								<span className={'primary-text'}>{language.fairLaunchDeposits}</span>
-							</S.BalanceQuantityHeader>
-							<S.BalanceQuantityBody>
-								<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
-							</S.BalanceQuantityBody>
-						</S.BalanceQuantitySection>
-						<S.BalancesPrimaryFlexWrapper>
-							<S.BalanceQuantityEndSection>
-								<S.BalanceQuantityHeader>
-									<span className={'primary-text'}>{language.totalStEthBridged}</span>
-								</S.BalanceQuantityHeader>
-								<S.BalanceQuantityBody>
-									<ReactSVG src={ASSETS.stEth} />
-									<p>{ethProvider.totalDeposited?.stEth?.display ?? <EllipsisLoader />}</p>
-								</S.BalanceQuantityBody>
-							</S.BalanceQuantityEndSection>
-							<S.BalanceQuantityEndSection>
-								<S.BalanceQuantityHeader>
-									<span className={'primary-text'}>{language.totalDaiBridged}</span>
-								</S.BalanceQuantityHeader>
-								<S.BalanceQuantityBody>
-									<ReactSVG src={ASSETS.dai} />
-									<p>{ethProvider.totalDeposited?.dai?.display ?? <EllipsisLoader />}</p>
-								</S.BalanceQuantityBody>
-							</S.BalanceQuantityEndSection>
-							<S.BalanceQuantityEndSection>
-								<S.BalanceQuantityHeader>
-									<span className={'primary-text'}>{language.totalUsdsBridged}</span>
-								</S.BalanceQuantityHeader>
-								<S.BalanceQuantityBody>
-									<ReactSVG src={ASSETS.usds} />
-									<p>{ethProvider.totalDeposited?.usds?.display ?? <EllipsisLoader />}</p>
-								</S.BalanceQuantityBody>
-							</S.BalanceQuantityEndSection>
-						</S.BalancesPrimaryFlexWrapper>
-					</S.BalancesGlobalWrapper>
-					<BalanceSection type={'ao'} />
-				</S.BalancesPrimaryWrapper>
-				<MintBalances />
+				<ViewHeader header={language.mint} actions={[<WalletConnect />]} />
+				<S.BodyWrapper>
+					<S.GlobalWrapper className={'border-wrapper-primary'}>
+						<S.GlobalSection>
+							<span>{language.globalFairLaunchDeposits}</span>
+							<p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
+						</S.GlobalSection>
+						<S.GlobalSectionsFlex>
+							<S.GlobalSubSection>
+								<span>{language.totalStEthBridged}</span>
+								<p>{ethProvider.totalDeposited?.stEth?.display ?? <EllipsisLoader />}</p>
+							</S.GlobalSubSection>
+							<S.GlobalSubSection>
+								<span>{language.totalDaiBridged}</span>
+								<p>{ethProvider.totalDeposited?.dai?.display ?? <EllipsisLoader />}</p>
+							</S.GlobalSubSection>
+							<S.GlobalSubSection>
+								<span>{language.totalUsdsBridged}</span>
+								<p>{ethProvider.totalDeposited?.usds?.display ?? <EllipsisLoader />}</p>
+							</S.GlobalSubSection>
+						</S.GlobalSectionsFlex>
+					</S.GlobalWrapper>
+					<S.NetworkWrapper className={'border-wrapper-primary'}>
+						<S.NetworkHeaderWrapper>
+							<S.NetworkHeader>
+								<p>{language.yourNetworkRewards}</p>
+							</S.NetworkHeader>
+							<S.NetworkHeaderDivider />
+							{arProvider.walletAddress ? (
+								<>
+									<S.NetworkHeaderWallet>
+										<S.NetworkHeaderAddressRow>
+											<ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
+											<AddressTooltip address={arProvider.walletAddress}>
+												<S.NetworkHeaderAddress disabled={copiedAr} onClick={copiedAr ? undefined : copyArAddress}>
+													{copiedAr ? `${language.copied}!` : formatAddress(arProvider.walletAddress, false)}
+												</S.NetworkHeaderAddress>
+											</AddressTooltip>
+										</S.NetworkHeaderAddressRow>
+									</S.NetworkHeaderWallet>
+									<S.NetworkHeaderWalletActions>
+										<Button
+											type={'alt2'}
+											label={language.disconnect}
+											handlePress={() => arProvider.handleDisconnect()}
+										/>
+									</S.NetworkHeaderWalletActions>
+								</>
+							) : (
+								<S.NetworkHeaderWallet>
+									<span>
+										{language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
+									</span>
+								</S.NetworkHeaderWallet>
+							)}
+						</S.NetworkHeaderWrapper>
+						<S.NetworkBodyWrapper>
+							{arProvider.walletAddress ? (
+								<S.NetworkSectionsWrapper>
+									<S.NetworkSection>
+										<S.NetworkSectionHeader>
+											<span>{language.asset}</span>
+										</S.NetworkSectionHeader>
+										<S.NetworkSectionBody>
+											<S.NetworkSectionBodyValue>
+												<ReactSVG src={ASSETS.ao} />
+												{getTokenBalance('ao')}
+											</S.NetworkSectionBodyValue>
+											<S.NetworkSectionBodyValue>
+												<ReactSVG src={ASSETS.arweave} />
+												{getTokenBalance('arweave')}
+											</S.NetworkSectionBodyValue>
+										</S.NetworkSectionBody>
+									</S.NetworkSection>
+
+									<S.NetworkSection>
+										<S.NetworkSectionHeader>
+											<span>{language.thirtyDayProjectionAO}</span>
+										</S.NetworkSectionHeader>
+										<S.NetworkSectionBody>
+											<S.NetworkSectionBodyValue>
+												{getTokenProjectionsDisplay('ao', 'monthly')}
+											</S.NetworkSectionBodyValue>
+											<S.NetworkSectionBodyValue>
+												{getTokenProjectionsDisplay('arweave', 'monthly')}
+											</S.NetworkSectionBodyValue>
+										</S.NetworkSectionBody>
+									</S.NetworkSection>
+
+									<S.NetworkSection>
+										<S.NetworkSectionHeader>
+											<span>{language.oneYearProjectionAO}</span>
+										</S.NetworkSectionHeader>
+										<S.NetworkSectionBody>
+											<S.NetworkSectionBodyValue>
+												{getTokenProjectionsDisplay('ao', 'yearly')}
+											</S.NetworkSectionBodyValue>
+											<S.NetworkSectionBodyValue>
+												{getTokenProjectionsDisplay('arweave', 'yearly')}
+											</S.NetworkSectionBodyValue>
+										</S.NetworkSectionBody>
+									</S.NetworkSection>
+								</S.NetworkSectionsWrapper>
+							) : (
+								<S.NetworkDisconnected>
+									<S.NetworkDisconnectedIconText>
+										<ReactSVG src={ASSETS.wallet} />
+										<p>{language.connectArweaveWalletToViewRewards}</p>
+									</S.NetworkDisconnectedIconText>
+									<Button
+										type={'primary'}
+										label={language.connectWallet}
+										handlePress={() => arProvider.setWalletModalVisible(true)}
+										height={45}
+										width={175}
+									/>
+								</S.NetworkDisconnected>
+							)}
+						</S.NetworkBodyWrapper>
+					</S.NetworkWrapper>
+					<S.DepositsWrapper className={'border-wrapper-alt1'}>
+						<S.NetworkWrapper className={'border-wrapper-primary'}>
+							<S.NetworkHeaderWrapper>
+								<S.NetworkHeader>
+									<p>{language.deposits}</p>
+								</S.NetworkHeader>
+								<S.NetworkHeaderDivider />
+								{ethProvider.walletAddress ? (
+									<>
+										<S.NetworkHeaderWallet>
+											<S.NetworkHeaderAddressRow>
+												<ReactSVG className={'network-header-logo'} src={ASSETS.ethereum} />
+												<AddressTooltip address={ethProvider.walletAddress}>
+													<S.NetworkHeaderAddress disabled={copiedEth} onClick={copiedEth ? undefined : copyEthAddress}>
+														{copiedEth ? `${language.copied}!` : formatAddress(ethProvider.walletAddress, false)}
+													</S.NetworkHeaderAddress>
+												</AddressTooltip>
+											</S.NetworkHeaderAddressRow>
+											{ethProvider.lastArweaveAddress && (
+												<>
+													<S.NetworkHeaderDivider />
+													<S.NetworkHeaderArweave>
+														<span>{language.depositArweaveLabel}</span>
+														<S.NetworkHeaderAddressRow>
+															<ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
+															<AddressTooltip address={ethProvider.lastArweaveAddress}>
+																<S.NetworkHeaderAddress
+																	disabled={copiedDepositArweave}
+																	onClick={copiedDepositArweave ? undefined : copyDepositArweaveAddress}
+																>
+																	{copiedDepositArweave
+																		? `${language.copied}!`
+																		: formatAddress(ethProvider.lastArweaveAddress, false)}
+																</S.NetworkHeaderAddress>
+															</AddressTooltip>
+														</S.NetworkHeaderAddressRow>
+													</S.NetworkHeaderArweave>
+												</>
+											)}
+										</S.NetworkHeaderWallet>
+										<S.NetworkHeaderWalletActions>
+											<Button
+												type={'alt2'}
+												label={language.disconnect}
+												handlePress={() => ethProvider.handleDisconnect()}
+											/>
+										</S.NetworkHeaderWalletActions>
+									</>
+								) : (
+									<S.NetworkHeaderWallet>
+										<span>
+											{language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
+										</span>
+									</S.NetworkHeaderWallet>
+								)}
+							</S.NetworkHeaderWrapper>
+							<S.NetworkBodyWrapper>
+								{ethProvider.walletAddress ? (
+									<S.NetworkBodyInfoLine>
+										<p>{language.depositInfo}</p>
+									</S.NetworkBodyInfoLine>
+								) : (
+									<S.NetworkDisconnected>
+										<S.NetworkDisconnectedIconText>
+											<ReactSVG src={ASSETS.wallet} />
+											<p>{language.connectEthWalletToViewDeposits}</p>
+										</S.NetworkDisconnectedIconText>
+										<Button
+											type={'primary'}
+											label={language.connectEthWallet}
+											handlePress={() => ethProvider.setWalletModalVisible(true)}
+											height={45}
+											width={175}
+										/>
+									</S.NetworkDisconnected>
+								)}
+							</S.NetworkBodyWrapper>
+						</S.NetworkWrapper>
+						<MintBalances />
+					</S.DepositsWrapper>
+				</S.BodyWrapper>
 				<Footer />
 			</S.Wrapper>
 			{info && (
-				<Modal header={'Earnings'} handleClose={() => setInfo(null)}>
+				<Modal header={language.earnings} handleClose={() => setInfo(null)}>
 					<S.ModalWrapper className={'modal-wrapper'}>
 						<span>{info}</span>
 					</S.ModalWrapper>

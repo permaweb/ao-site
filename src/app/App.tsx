@@ -1,76 +1,113 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { useTheme } from 'styled-components';
 
-// import localforage from 'localforage';
-// import { Loader } from 'components/atoms/Loader';
-// import { ASSETS } from 'helpers/config';
+import { Loader } from 'components/atoms/Loader';
+import { URLS } from 'helpers/config';
+import { serviceWorkerManager } from 'helpers/serviceWorkerManager';
 import { Header } from 'navigation/header';
-import { Routes } from 'routes';
 
-import AsciiArt from './AsciiArt';
 import * as S from './styles';
 
+const Landing = getLazyImport('Landing');
+const Mint = getLazyImport('Mint');
+const Delegate = getLazyImport('Delegate');
+const NotFound = getLazyImport('NotFound');
+const Policies = getLazyImport('Policies');
+
+function getLazyImport(view: string) {
+	return lazy(() =>
+		import(`../views/${view}/index.tsx`).then((module) => ({
+			default: module.default,
+		}))
+	);
+}
+
 export default function App() {
-	// const [loading, setLoading] = React.useState<boolean>(true);
+	const theme = useTheme();
+	const location = useLocation();
+
+	const hasInitializedServiceWorkerRef = React.useRef(false);
 
 	React.useEffect(() => {
-		AsciiArt();
+		if (!hasInitializedServiceWorkerRef.current) {
+			hasInitializedServiceWorkerRef.current = true;
+			(async () => {
+				await serviceWorkerManager.register();
+				await serviceWorkerManager.checkArNSUpdate();
+			})();
+		}
 	}, []);
 
-	// React.useEffect(() => {
-	// 	preloadAssets().then(() => setLoading(false));
-	// }, []);
+	React.useEffect(() => {
+		document.body.style = '';
+		const loader = document.getElementById('page-loader');
+		if (loader) {
+			loader.style.display = 'none';
+		}
+	}, []);
 
-	// function blobToDataURL(blob: Blob): Promise<string> {
-	// 	return new Promise((resolve, reject) => {
-	// 		const reader = new FileReader();
-	// 		reader.onloadend = () => resolve(reader.result as string);
-	// 		reader.onerror = reject;
-	// 		reader.readAsDataURL(blob);
-	// 	});
-	// }
+	React.useEffect(() => {
+		const header = document.getElementById('navigation-header');
+		if (!header) return;
 
-	// async function preloadAssets(): Promise<void> {
-	// 	const cacheKey = 'ASSET_CACHE';
-	// 	const cachedAssets = await localforage.getItem<{ [key: string]: string }>(cacheKey);
-	// 	if (cachedAssets) {
-	// 		Object.assign(ASSETS, cachedAssets);
-	// 		return;
-	// 	}
+		/* Restyle subroutes */
+		if (location.pathname !== '/') {
+			document.body.style.background = theme.colors.container.alt1.background;
+			header.style.background = theme.colors.container.alt1.background;
+		} else {
+			document.body.style.background = theme.colors.view.background;
+			header.style.background = theme.colors.view.background;
+		}
 
-	// 	const assetCache: { [key: string]: string } = {};
-	// 	const assetEntries = Object.entries(ASSETS);
+		let lastScrollY = 0;
+		let ticking = false;
+		const borderColor = theme.colors.border.alt1;
 
-	// 	await Promise.all(
-	// 		assetEntries.map(async ([key, url]) => {
-	// 			try {
-	// 				const response = await fetch(url);
-	// 				if (!response.ok) {
-	// 					throw new Error(`Failed to load ${key} from ${url}`);
-	// 				}
-	// 				const isSVG = url.toLowerCase().endsWith('.svg');
-	// 				const content = isSVG ? await response.text() : await blobToDataURL(await response.blob());
-	// 				assetCache[key] = content;
-	// 			} catch (error) {
-	// 				console.error(`Error loading asset "${key}":`, error);
-	// 			}
-	// 		})
-	// 	);
+		const handleScroll = () => {
+			lastScrollY = window.scrollY;
+			if (!ticking) {
+				window.requestAnimationFrame(() => {
+					const parts = window.location.href.split('/');
+					const isEditorPage = parts.some((part) => part === 'post' || part === 'page');
+					if (!isEditorPage) {
+						header.style.borderBottom = lastScrollY > 0 ? `1px solid ${borderColor}` : '1px solid transparent';
+					} else {
+						const subheader = document.getElementById('toolbar-wrapper');
+						if (!subheader) return;
 
-	// 	Object.assign(ASSETS, assetCache);
-	// 	try {
-	// 		await localforage.setItem(cacheKey, assetCache);
-	// 	} catch (error) {
-	// 		console.warn('Could not save asset cache:', error);
-	// 	}
-	// }
+						subheader.style.borderBottom = lastScrollY > 0 ? `1px solid ${borderColor}` : '1px solid transparent';
+					}
+					ticking = false;
+				});
+				ticking = true;
+			}
+		};
 
-	// if (loading) return <Loader />;
+		window.addEventListener('scroll', handleScroll, { passive: true });
+		handleScroll();
+
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, [
+		location.pathname,
+		theme.colors.border.primary,
+		theme.colors.container.alt1.background,
+		theme.colors.view.background,
+	]);
 
 	return (
 		<>
 			<Header />
 			<S.View>
-				<Routes />
+				<Suspense fallback={<Loader />}>
+					<Routes>
+						<Route path={URLS.base} element={<Landing />} />
+						<Route path={URLS.mint} element={<Mint />} />
+						<Route path={URLS.delegate} element={<Delegate />} />
+						<Route path={URLS.policies} element={<Policies />} />
+						<Route path={'*'} element={<NotFound />} />
+					</Routes>
+				</Suspense>
 			</S.View>
 		</>
 	);

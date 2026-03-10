@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" href="favicon.svg" />
+		<link rel="manifest" href="manifest.json" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="AO: The Hyper Parallel Computer" />
+		<meta property="og:title" content="AO" />
+		<meta property="og:description" content="AO: The Hyper Parallel Computer" />
+		<meta property="og:image" href="favicon.svg" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<title>AO</title>
+	</head>
+	<body>
+		<div id="root"></div>
+		<div id="page-loader">
+			<svg width="24" height="12" viewBox="0 0 24 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<g clip-path="url(#clip0_209_2030)">
+					<g clip-path="url(#clip1_209_2030)">
+						<g clip-path="url(#clip2_209_2030)">
+							<path d="M0.00201416 11.99H3.99442L4.80919 9.78673L2.97595 6.03296L0.00201416 11.99Z" fill="black" />
+							<path
+								d="M10.5941 9.01148L6.1536 0.0759277L4.8092 3.13605L9.00531 11.99H12.028L10.5941 9.01148Z"
+								fill="black"
+							/>
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M18.013 11.99C21.3184 11.99 23.998 9.31042 23.998 6.00502C23.998 2.69959 21.3184 0.0200195 18.013 0.0200195C14.7076 0.0200195 12.028 2.69959 12.028 6.00502C12.028 9.31042 14.7076 11.99 18.013 11.99ZM18.013 9.64077C20.0209 9.64077 21.6487 8.01301 21.6487 6.00502C21.6487 3.99705 20.0209 2.36927 18.013 2.36927C16.005 2.36927 14.3772 3.99705 14.3772 6.00502C14.3772 8.01301 16.005 9.64077 18.013 9.64077Z"
+								fill="black"
+							/>
+						</g>
+					</g>
+				</g>
+				<defs>
+					<clipPath id="clip0_209_2030">
+						<rect width="24" height="11.97" fill="white" transform="translate(0 0.0200195)" />
+					</clipPath>
+					<clipPath id="clip1_209_2030">
+						<rect width="24" height="11.97" fill="white" transform="translate(0 0.0200195)" />
+					</clipPath>
+					<clipPath id="clip2_209_2030">
+						<rect width="24" height="11.97" fill="white" transform="translate(0 0.0200195)" />
+					</clipPath>
+				</defs>
+			</svg>
+		</div>
+		<style>
+			#page-loader {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 9999;
+			}
+
+			#page-loader svg {
+				width: 50px;
+				height: 50px;
+				animation: open 150ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+			}
+
+			@keyframes open {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+		</style>
+		<script>
+			const theme = 'light';
+			const backgroundColor = '#F7F7F8';
+			document.body.style.backgroundColor = backgroundColor;
+
+			const iconColor = '#444444';
+			const loaderIcon = document.querySelector('#page-loader svg');
+
+			if (loaderIcon) {
+				loaderIcon.style.color = iconColor;
+				loaderIcon.style.fill = iconColor;
+			}
+
+			window.hideAppLoader = function () {
+				const loader = document.getElementById('page-loader');
+				if (loader) {
+					loader.style.display = 'none';
+				}
+			};
+		</script>
+		<script type="module" src="/src/index.tsx"></script>
+		<script
+			async
+			src="https://analytics.forward.computer/tracker.js"
+			data-ackee-server="https://analytics.forward.computer"
+			data-ackee-domain-id="7109ed8e-ecac-43bf-b655-e21d1f2cdd69"
+		></script>
+	</body>
+</html>

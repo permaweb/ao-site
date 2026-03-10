@@ -17,15 +17,12 @@ export const AO = {
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
 	piProcess: 'H1I09hGlSlqrvlQid4zBp-lleynE8bNo2Ep1u8xq0fQ',
 	piBalanceProcess: '4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs',
-	// delegationOracle: '2AjNEkmSIzUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
-	// yieldHistorian: 'veRuOU7Y_r_6aEXef8aRtSAzROoOPlujaUdCE6hwJTY', // staging
-	// flpFactory: 'JC0_BVWWf7xbmXUeotKpHFiYEf8sMuh7ph11cjKx66GZdcc', // staging
-	// piProcess: 'ashzRmPuxsO6xSZulIeZl-rQ-DsFsjwLYc8IIlY-Ots', // staging
 };
 
 export const SUPABASE = {
-	url: process.env.REACT_APP_SUPABASE_URL || '',
-	anonKey: process.env.REACT_APP_SUPABASE_ANON_KEY || '',
+	url: 'https://kzmzniagsfcfnhgsjkpv.supabase.co',
+	anonKey:
+		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6bXpuaWFnc2ZjZm5oZ3Nqa3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0MjI5NDEsImV4cCI6MjA2Mzk5ODk0MX0.IjB7j34CjhqUXQcO_dKM_9k3okmSomSpu9dtyPV2agU',
 };
 
 export const HB = {
@@ -33,6 +30,7 @@ export const HB = {
 	read1: 'https://state.forward.computer',
 	read2: 'https://state-a.forward.computer',
 	read3: 'https://state-b.forward.computer',
+	app1: 'https://app-1.forward.computer',
 };
 
 export const PATCH_MAP = {
@@ -46,7 +44,7 @@ export const PATCH_MAP = {
 	},
 	usds: {
 		processId: 'JJPMirAJb2RR7mqIAilAGWjA3EwHIEXAnc__CfNKqNs',
-		ticker: 'usds', // sky
+		ticker: 'usds',
 	},
 };
 
@@ -67,9 +65,12 @@ export const AO_TOKEN_DENOMINATION = Math.pow(10, 12);
 export const ETH_TOKEN_DENOMINATION = Math.pow(10, 18);
 
 export const ENDPOINTS = {
+	tx: (tx: string) => `https://arweave.net/${tx}`,
 	arBalance: (address: string) => `https://arweave.net/wallet/${address}/balance`,
 	arTotalSupply: `https://arweave.net/total_supply`,
 	arTxEndpoint: (txId: string) => `https://arweave.net/${txId}`,
+	metrics: (days: number) => `https://atlas-server.decent.land/mainnet/explorer/days?limit=${days}`,
+	metricsLegacy: (days: number) => `https://atlas-server.decent.land/explorer/days?limit=${days}`,
 	goldsky: `https://arweave-search.goldsky.com/graphql`,
 	mainnetRpc: `https://ethereum.publicnode.com`,
 	aoStateNode: (token: string) => `https://state-a.forward.computer/${token}~process@1.0/`,
@@ -103,21 +104,24 @@ export const ASSETS = {
 	exchange: getTxEndpoint('KfE6Dh0j2pTLo4Z8U6fmk6mCRsB6O6NgxJpI_Vm0_wY'),
 	arrowRight: getTxEndpoint('Xkqtxc5_R8KSczygjl9iOk0LHv-GSbD8xhIw5IPIIuc'),
 	github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
-	info: getTxEndpoint('QQ4EJ_wH2EY1_ElfSNKffixnzVcbnvd2547lmluvT-0'),
+	info: getTxEndpoint('XnaFbPesz-Hib7zpxlvJ0Bpeigl__8wrBtCfYpkWfWk'),
 	landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),
 	link: getTxEndpoint('UMfjnj-8e7fb3lYRdcFygu8c4JoBZq3hB-mzycYT4DU'),
 	menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
 	pi: getTxEndpoint('fGTu1CGT6TAz6Uj55CPkpJRy_whPKRZH6OFFpVHWOS0'),
 	plus: getTxEndpoint('OUryhpUV-y709P_Tr575rN8gS-8c5rzlKXNymR9gsE4'),
 	remove: getTxEndpoint('aKjWuVXkSeYOKzGP0MnnhHwoYUXqTHFMJfVCbqzYEo0'),
+	search: getTxEndpoint('KpzIhvoBduBivOq-4vLxy-uRHjGbH-40YMG9e5FnYXc'),
+	searchList: getTxEndpoint('9et3owOcEeE63ZGVJHkIW5p3JhbJWgXdZq8CL4CNJVw'),
 	stEth: getTxEndpoint('0SmAFjMZ5BmFPB_wlPeVJLhWGZ9JqAlV3sNozIPV2yk'),
 	success: getTxEndpoint('mVnNwxm-F6CV043zVtORE-EaMWfd2j8w6HHX70IcVbI'),
 	usds: getTxEndpoint('_BWFo1KkjR5t0Mg7mhS9Kme1q4JbxKZJYwg9sglm_UA'),
 	token: getTxEndpoint('f18VARM42GRSDY8UzZtEJrCsakbxluldOAnnED_V_Zk'),
+	trendUp: getTxEndpoint('Vhb94c_k1-QNjphRQpF4mwbAL79VseUTyZ-y_fo68yE'),
 	view: getTxEndpoint('LOxVL3vN3EkCqjbSxwuenYTTsbLtFJzK-lLJ6P4k59w'),
-	wallet: getTxEndpoint('MMIDwWfe33ob3yD34eforpwPkhK-1BDVrTla6ZTX-3A'),
+	wallet: getTxEndpoint('667ltlFnNixyTj_CbCcOP_CWMz7MzLrfv5bAjZtKux4'),
 	wander: getTxEndpoint('0nDLgQik8oWPr0nSVEwI9B8D-XMEptQagNdsdr_y6Jk'),
-	warning: getTxEndpoint('BASlMnOWcLCcLUSrO2wUybQL_06231dLONeVkdTWs3o'),
+	warning: getTxEndpoint('667ltlFnNixyTj_CbCcOP_CWMz7MzLrfv5bAjZtKux4'),
 	website: getTxEndpoint('YBilSmUhX--T9vffUIDsCCrWoakxaxPqPVw7NCZNNVs'),
 	withdraw: getTxEndpoint('QOJLKefBz2xCPUbO8dEKB22aWv_zdQ6FYA_UWUriyJw'),
 	x: getTxEndpoint('8j0KOYorbeN1EI2_tO-o9tUYi4LJkDwFCDStu0sWMV8'),
@@ -126,7 +130,6 @@ export const ASSETS = {
 
 export const AR_WALLETS = [
 	{ type: ArWalletEnum.wander, logo: ASSETS.wander },
-	{ type: ArWalletEnum.othent, logo: ASSETS.othent },
 	{ type: ArWalletEnum.arweaveApp, logo: ASSETS.arweaveApp },
 ];
 
@@ -140,10 +143,10 @@ export const STYLING = {
 	cutoffs: {
 		desktop: '1200px',
 		initial: '1024px',
-		max: '1460px',
+		max: '1600px',
 		tablet: '840px',
 		tabletSecondary: '768px',
-		secondary: '540px',
+		mobile: '540px',
 	},
 	dimensions: {
 		button: {
@@ -154,10 +157,18 @@ export const STYLING = {
 			height: '75px',
 		},
 		radius: {
-			primary: '10px',
+			primary: '0px',
 			alt1: '15px',
 			alt2: '5px',
 			alt3: '2.5px',
+		},
+	},
+	motion: {
+		duration: {
+			fast: '200ms',
+		},
+		easing: {
+			decelerate: 'cubic-bezier(0.16, 1, 0.3, 1)',
 		},
 	},
 };

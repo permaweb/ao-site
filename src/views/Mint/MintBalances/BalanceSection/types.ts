@@ -1,5 +1,5 @@
-import { TokenEarningsType } from 'helpers/types';
+import { BridgeTokenEarningsType } from 'helpers/types';
 
 export interface IProps {
-	type: TokenEarningsType;
+	type: BridgeTokenEarningsType;
 }

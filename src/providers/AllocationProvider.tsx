@@ -1,44 +1,54 @@
 import _ from 'lodash';
 import React from 'react';
 
-import { connect, createDataItemSigner, message, result } from '@permaweb/aoconnect';
+import { createDataItemSigner, message, result } from '@permaweb/aoconnect';
 
 import { Notification } from 'components/atoms/Notification';
 import { AO } from 'helpers/config';
 import { AllocationRecordType, AllocationTokenRecordType, NotificationType } from 'helpers/types';
 
-import { afCu } from './AOProvider';
+import { flpCu } from './AOProvider';
 import { useArweaveProvider } from './ArweaveProvider';
 import { useLanguageProvider } from './LanguageProvider';
 
 interface AllocationContextState {
-	records: AllocationRecordType[];
+	records: AllocationRecordType[] | null;
 	addToken: (token: AllocationTokenRecordType) => void;
 	addFullToken: (token: AllocationTokenRecordType) => void;
 	updateToken: (token: AllocationRecordType, multiplier: number | 'max') => void;
+	adjustTokenByPercentage: (token: AllocationRecordType, percentageChange: number) => void;
 	removeToken: (token: AllocationTokenRecordType) => void;
 	fetchingSetup: boolean;
 	showSetup: boolean;
 	savePreferences: (initialSave?: boolean) => Promise<void>;
+	resetPreferences: () => void;
 	loading: boolean;
 	isTokenDisabled: (token: AllocationTokenRecordType) => boolean;
 	unsavedChanges: boolean;
 	projects: any[];
+	totalDelegated: any;
+	getClaimableBalance: (walletAddress: string, flpId: string) => Promise<string | null>;
+	withdrawFLPToken: (flpId: string) => Promise<string>;
 }
 
 const DEFAULT_CONTEXT: AllocationContextState = {
-	records: [],
+	records: null,
 	addToken: () => {},
 	addFullToken: () => {},
 	updateToken: () => {},
+	adjustTokenByPercentage: () => {},
 	removeToken: () => {},
 	fetchingSetup: false,
 	showSetup: false,
 	savePreferences: async () => {},
+	resetPreferences: () => {},
 	loading: false,
 	isTokenDisabled: () => false,
 	unsavedChanges: false,
 	projects: [],
+	totalDelegated: null,
+	getClaimableBalance: () => null,
+	withdrawFLPToken: async () => '',
 };
 
 const AllocationContext = React.createContext<AllocationContextState>(DEFAULT_CONTEXT);
@@ -58,19 +68,19 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 
 	const [fetchingSetup, setFetchingSetup] = React.useState<boolean>(false);
 	const [showSetup, setShowSetup] = React.useState<boolean>(false);
-	const [records, setRecords] = React.useState<AllocationRecordType[]>([]);
 	const [originalRecords, setOriginalRecords] = React.useState<AllocationRecordType[]>([]);
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [response, setResponse] = React.useState<NotificationType | null>(null);
 	const [unsavedChanges, setUnsavedChanges] = React.useState<boolean>(false);
+
 	const [projects, setProjects] = React.useState<any>(null);
+	const [totalDelegated, setTotalDelegated] = React.useState<any>(null);
+	const [records, setRecords] = React.useState<AllocationRecordType[] | null>(null);
 
 	React.useEffect(() => {
 		(async function () {
 			try {
-				const cu = connect({});
-
-				const response = await cu.dryrun({
+				const response = await flpCu.dryrun({
 					process: AO.flpFactory,
 					tags: [{ name: 'Action', value: 'Get-FLPs' }],
 				});
@@ -80,6 +90,23 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 				}
 			} catch (e: any) {
 				setProjects([]);
+			}
+		})();
+	}, []);
+
+	React.useEffect(() => {
+		(async function () {
+			try {
+				const response = await flpCu.dryrun({
+					process: AO.yieldHistorian,
+					tags: [{ name: 'Action', value: 'Get-Total-Delegated-AO-By-Project' }],
+				});
+
+				if (response?.Messages?.[0]?.Data) {
+					setTotalDelegated(JSON.parse(response.Messages[0].Data));
+				}
+			} catch (e: any) {
+				console.error(e);
 			}
 		})();
 	}, []);
@@ -115,7 +142,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	const fetchSetup = async () => {
 		setFetchingSetup(true);
 		try {
-			const response = await afCu.dryrun({
+			const response = await flpCu.dryrun({
 				process: AO.delegationOracle,
 				tags: [
 					{ name: 'Action', value: 'Get-Delegations' },
@@ -134,7 +161,8 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 						} else if (record.walletTo === arProvider.walletAddress) {
 							label = 'AO';
 						} else {
-							label = projects.find((project) => project.id === record.walletTo).flp_token_ticker;
+							const ticker = projects.find((project) => project.id === record.walletTo)?.flp_token_ticker;
+							label = ticker ? `$${ticker}` : '-';
 						}
 						return {
 							id: record.walletTo ?? '-',
@@ -151,6 +179,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 					setUnsavedChanges(false);
 				} else {
 					setShowSetup(true);
+					setRecords([]);
 				}
 			} else {
 				setShowSetup(true);
@@ -161,6 +190,48 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		}
 		setFetchingSetup(false);
 	};
+
+	async function getClaimableBalance(walletAddress: string, flpId: string): Promise<string | null> {
+		const res = await flpCu.dryrun({
+			process: flpId,
+			tags: [
+				{ name: 'Action', value: 'Get-Claimable-Balance' },
+				{ name: 'Recipient', value: walletAddress },
+			],
+		});
+		if (!res.Messages.length) return null;
+		const data = res.Messages[0].Data;
+		return data;
+	}
+
+	async function withdrawFLPToken(flpId: string): Promise<string> {
+		console.log('Claim rewards', flpId);
+		const msgId = await message({
+			process: flpId,
+			signer: createDataItemSigner(window.arweaveWallet),
+			tags: [{ name: 'Action', value: 'Withdraw-FLP-Token' }],
+		});
+		console.log('Claim rewards msgId', msgId);
+		const computedResult = await result({ message: msgId, process: flpId });
+
+		console.log('Claim rewards result', computedResult);
+
+		if (computedResult.Messages.length === 0 && computedResult.Spawns.length === 0 && computedResult.Output.data) {
+			throw new Error(computedResult.Output.data);
+		}
+
+		if (computedResult.Messages.length === 0 && computedResult.Spawns.length === 0 && computedResult.Error) {
+			throw new Error(computedResult.Error);
+		}
+
+		const reponseMsg = computedResult.Messages[0];
+		const responseStatus = reponseMsg.Tags.find((tag: any) => tag.name === 'Status');
+
+		if (responseStatus?.value === 'Error')
+			throw new Error(reponseMsg.Tags.find((tag: any) => tag.name === 'Reason')?.value || reponseMsg.Data);
+
+		return msgId;
+	}
 
 	const getCacheKey = () => {
 		return arProvider.walletAddress ? `allocation_${arProvider.walletAddress}` : null;
@@ -252,6 +323,48 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		updateRecords(updatedRecords);
 	};
 
+	const adjustTokenByPercentage = (token: AllocationRecordType, percentageChange: number) => {
+		if (token.value === undefined || token.value === null) {
+			console.error('No value provided');
+			return;
+		}
+
+		const change = percentageChange / 100;
+		const newAmount = Math.max(0, Math.min(1, token.value + change));
+
+		if (newAmount === token.value) return;
+
+		const totalTokens = records.length;
+		if (totalTokens === 1) {
+			updateRecords([{ ...token, value: 1 }]);
+			return;
+		}
+
+		const amountChanged = newAmount - token.value;
+		const distributionFactor = -amountChanged / (totalTokens - 1);
+
+		const updatedRecords = records
+			.map((record) => {
+				if (token.id === record.id) {
+					return { ...record, value: newAmount };
+				} else {
+					return { ...record, value: Math.max(0, record.value + distributionFactor) };
+				}
+			})
+			.filter((record: AllocationRecordType) => record.value > 0);
+
+		const total = updatedRecords.reduce((sum, record) => sum + record.value, 0);
+		if (Math.abs(total - 1) > 0.001) {
+			const normalizedRecords = updatedRecords.map((record) => ({
+				...record,
+				value: record.value / total,
+			}));
+			updateRecords(normalizedRecords);
+		} else {
+			updateRecords(updatedRecords);
+		}
+	};
+
 	const removeToken = (token: AllocationTokenRecordType) => {
 		if (records.length === 1) {
 			console.error('Cannot remove the only token');
@@ -335,7 +448,6 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 				}
 
 				for (const messageToSend of messages) {
-					console.log(messageToSend);
 					const response = await message(messageToSend);
 					const updateResult = await result({
 						process: AO.delegationOracle,
@@ -357,6 +469,12 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 		}
 	};
 
+	const resetPreferences = () => {
+		const resetRecords = originalRecords.map((record) => ({ ...record }));
+		setRecords(resetRecords);
+		setCachedRecords(resetRecords);
+	};
+
 	return (
 		<>
 			<AllocationContext.Provider
@@ -365,14 +483,19 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 					addToken,
 					addFullToken,
 					updateToken,
+					adjustTokenByPercentage,
 					removeToken,
 					fetchingSetup,
 					showSetup,
 					savePreferences,
+					resetPreferences,
 					loading,
 					isTokenDisabled,
 					unsavedChanges,
 					projects,
+					totalDelegated,
+					getClaimableBalance,
+					withdrawFLPToken,
 				}}
 			>
 				{props.children}

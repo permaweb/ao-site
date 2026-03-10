@@ -29,7 +29,7 @@ export const TWrapper = styled.div`
 export const Label = styled.label`
 	color: ${(props) => props.theme.colors.font.primary};
 	font-size: ${(props) => props.theme.typography.size.xSmall};
-	font-family: ${(props) => props.theme.typography.family.alt1};
+	font-family: ${(props) => props.theme.typography.family.primary};
 	font-weight: ${(props) => props.theme.typography.weight.bold};
 `;
 
@@ -50,9 +50,9 @@ export const Input = styled.input<{
 	height: 50px;
 	color: ${(props) =>
 		props.disabled ? props.theme.colors.button.primary.disabled.color : props.theme.colors.font.primary};
-	font-family: ${(props) => props.theme.typography.family.alt1};
-	font-size: ${(props) => props.theme.typography.size.lg};
-	font-weight: ${(props) => props.theme.typography.weight.bold};
+	font-family: ${(props) => props.theme.typography.family.primary};
+	font-size: ${(props) => props.theme.typography.size.base};
+	font-weight: ${(props) => props.theme.typography.weight.regular};
 	margin: 5px 0 0 0;
 	background: ${(props) => props.theme.colors.form.background};
 	border: 1px solid

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
-import { HyperTextLoad } from 'components/atoms/HyperTextLoad';
 import { IconButton } from 'components/atoms/IconButton';
 import { Panel } from 'components/atoms/Panel';
 import { ASSETS, REDIRECTS, URLS } from 'helpers/config';
@@ -13,12 +12,13 @@ import * as S from './styles';
 export default function Header() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
+	const location = useLocation();
 
 	const [showPanel, setShowPanel] = React.useState<boolean>(false);
 
 	const paths: { path: string; label: string; target?: '_blank' }[] = [
-		{ path: URLS.delegate, label: 'DELEGATE' },
-		{ path: URLS.mintDeposits, label: language.mint },
+		{ path: URLS.mint, label: language.mint },
+		{ path: URLS.delegate, label: language.delegate },
 		{ path: REDIRECTS.cookbook, label: language.build, target: '_blank' },
 	];
 
@@ -28,10 +28,14 @@ export default function Header() {
 		{ redirect: REDIRECTS.discord, icon: ASSETS.discord },
 	];
 
+	const isPathActive = (path: string): boolean => {
+		return location.pathname === path || location.pathname.startsWith(`${path}/`);
+	};
+
 	return (
 		<>
-			<S.Wrapper id={'site-header'}>
-				<S.Content className={'max-view-wrapper fade-in'}>
+			<S.Wrapper id={'navigation-header'}>
+				<S.Content className={'max-view-wrapper'}>
 					<S.SectionStart>
 						<S.LogoWrapper>
 							<Link to={URLS.base}>
@@ -41,23 +45,19 @@ export default function Header() {
 						<S.DesktopNavWrapper>
 							{paths.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
 								return (
-									<Link key={index} to={element.path} target={element.target || ''} className={'primary-text'}>
-										<HyperTextLoad word={element.label} textType={'span'} speed={1} triggerOnLoad />
+									<Link
+										key={index}
+										to={element.path}
+										target={element.target || ''}
+										className={`primary-text ${!element.target && isPathActive(element.path) ? 'active-route' : ''}`}
+									>
+										<span>{element.label}.</span>
 									</Link>
 								);
 							})}
 						</S.DesktopNavWrapper>
 					</S.SectionStart>
 					<S.SectionEnd>
-						{/* <S.DesktopSocialWrapper>
-							{socials.map((element: { redirect: string; icon: string }, index: number) => {
-								return (
-									<Link key={index} to={element.redirect} target={'_blank'}>
-										<ReactSVG src={element.icon} />
-									</Link>
-								);
-							})}
-						</S.DesktopSocialWrapper> */}
 						<S.MobileNavWrapper>
 							<IconButton
 								type={'alt1'}
@@ -80,7 +80,7 @@ export default function Header() {
 								className={'primary-text'}
 								onClick={() => setShowPanel(false)}
 							>
-								<HyperTextLoad word={element.label} textType={'span'} speed={1} triggerOnLoad />
+								<span>{element.label}.</span>
 							</Link>
 						);
 					})}

@@ -32,36 +32,13 @@ import {
 	evmBytesToArweaveAddress,
 	formatDisplayAmount,
 	formatUSDAmount,
+	getAoPrice,
 	getDaiReward,
 	getEthReward,
 	getUsdsReward,
 } from 'helpers/utils';
 
 import { useAOProvider } from './AOProvider';
-
-// Helper function to get AO/USD price from redstone
-async function getAoPrice(): Promise<number | null> {
-	try {
-		const response = await fetch('https://api.redstone.finance/prices?symbols=AO&provider=redstone');
-
-		if (!response.ok) {
-			throw new Error(`HTTP error - status: ${response.status}`);
-		}
-
-		const data = await response.json();
-		const aoPrice = data?.AO?.value;
-
-		if (typeof aoPrice !== 'number') {
-			console.error('invalid AO price response from redstone:', data);
-			return null;
-		}
-
-		return aoPrice;
-	} catch (error) {
-		console.error('error fetching AO price from redstone:', error);
-		return null;
-	}
-}
 
 const injected = injectedModule();
 const trust = trustModule();
@@ -161,6 +138,27 @@ export const useEthereumProvider = () => React.useContext(EthereumContext);
 
 export function EthereumProvider(props: EthereumProviderProps) {
 	const aoProvider = useAOProvider();
+
+	// Suppress ENS reverse lookup errors from Web3-Onboard
+	React.useEffect(() => {
+		const originalError = console.error;
+		console.error = (...args: any[]) => {
+			const errorMessage = args[0]?.toString() || '';
+			// Filter out ENS reverse lookup errors
+			if (
+				errorMessage.includes('ContractFunctionExecutionError') &&
+				errorMessage.includes('reverse') &&
+				errorMessage.includes('Internal error')
+			) {
+				return; // Suppress this specific error
+			}
+			originalError.apply(console, args);
+		};
+
+		return () => {
+			console.error = originalError;
+		};
+	}, []);
 
 	const [walletAddress, setWalletAddress] = React.useState<string | null>(null);
 	const [balance, setBalance] = React.useState<string | null>(null);
@@ -418,58 +416,37 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		(async function () {
 			if (tokens && totalDeposited && aoProvider.mintedSupply) {
 				try {
-					const currentNode = HB.read3;
+					const currentNode = HB.app1;
 
-					const [daiRespPrice, stEthRespPrice, usdsRespPrice] = await Promise.all([
+					const [daiResp, stEthResp, usdsResp] = await Promise.all([
 						readProcess({
 							processId: PATCH_MAP.dai.processId,
 							node: { url: currentNode },
-							path: `${PATCH_MAP.dai.ticker}/usd`,
+							path: `price-data`,
 							appendPath: true,
 						}),
 						readProcess({
 							processId: PATCH_MAP.stEth.processId,
 							node: { url: currentNode },
-							path: `${PATCH_MAP.stEth.ticker}/usd`,
+							path: `price-data`,
 							appendPath: true,
 						}),
 						readProcess({
 							processId: PATCH_MAP.usds.processId,
 							node: { url: currentNode },
-							path: `${PATCH_MAP.usds.ticker}/usd`,
+							path: `price-data`,
 							appendPath: true,
 						}),
 					]);
 
-					const [daiRespYield, stEthRespYield, usdsRespYield] = await Promise.all([
-						readProcess({
-							processId: PATCH_MAP.dai.processId,
-							node: { url: currentNode },
-							path: `yield/bps`,
-							appendPath: true,
-						}),
-						readProcess({
-							processId: PATCH_MAP.stEth.processId,
-							node: { url: currentNode },
-							path: `yield/bps`,
-							appendPath: true,
-						}),
-						readProcess({
-							processId: PATCH_MAP.usds.processId,
-							node: { url: currentNode },
-							path: `yield/bps`,
-							appendPath: true,
-						}),
-					]);
+					const daiPrice = Number(daiResp?.price?.usd ?? 0);
+					const daiYield = Number(daiResp?.yield?.bps ?? 0);
 
-					const daiPrice = Number(daiRespPrice);
-					const daiYield = Number(daiRespYield);
+					const stEthPrice = Number(stEthResp?.price?.usd ?? 0);
+					const stEthYield = Number(stEthResp?.yield?.bps ?? 0);
 
-					const stEthPrice = Number(stEthRespPrice);
-					const stEthYield = Number(stEthRespYield);
-
-					const usdsPrice = Number(usdsRespPrice);
-					const usdsYield = Number(usdsRespYield);
+					const usdsPrice = Number(usdsResp?.price?.usd ?? 0);
+					const usdsYield = Number(usdsResp?.yield?.bps ?? 0);
 
 					const totalDepositedSteth = Number(totalDeposited?.stEth?.value ?? BigInt(0));
 					const totalDepositedDai = Number(totalDeposited?.dai?.value ?? BigInt(0));
@@ -530,8 +507,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						stEth: {
 							price: stEthPrice,
 							monthly: {
-								amount: ethReward(30, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
-								ratio: ethReward(30, 1),
+								amount: ethReward(30.44, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: ethReward(30.44, 1),
 							},
 							yearly: {
 								amount: ethReward(365, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
@@ -541,8 +518,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						dai: {
 							price: daiPrice,
 							monthly: {
-								amount: daiReward(30, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
-								ratio: daiReward(30, 1),
+								amount: daiReward(30.44, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: daiReward(30.44, 1),
 							},
 							yearly: {
 								amount: daiReward(365, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
@@ -552,8 +529,8 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						usds: {
 							price: usdsPrice,
 							monthly: {
-								amount: usdsReward(30, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
-								ratio: usdsReward(30, 1),
+								amount: usdsReward(30.44, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								ratio: usdsReward(30.44, 1),
 							},
 							yearly: {
 								amount: usdsReward(365, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
@@ -617,26 +594,31 @@ export function EthereumProvider(props: EthereumProviderProps) {
 		const lastConnectedWallet = JSON.parse(localStorage.getItem('onboard.js:last_connected_wallet'));
 		if (lastConnectedWallet && lastConnectedWallet.length > 0) {
 			setConnecting(true);
-			const [primaryWallet] = await onboard.connectWallet({
-				autoSelect: { label: lastConnectedWallet[0], disableModals: true },
-			});
+			try {
+				const [primaryWallet] = await onboard.connectWallet({
+					autoSelect: { label: lastConnectedWallet[0], disableModals: true },
+				});
 
-			if (primaryWallet) {
-				const success = await onboard.setChain({ chainId: '0x1' });
-				if (!success) return;
+				if (primaryWallet) {
+					const success = await onboard.setChain({ chainId: '0x1' });
+					if (!success) return;
 
-				setWeb3Provider(primaryWallet.provider);
+					setWeb3Provider(primaryWallet.provider);
 
-				const provider = new Web3Provider(primaryWallet.provider);
-				const signer = provider.getSigner();
-				const address = await signer.getAddress();
-				setWalletAddress(address);
+					const provider = new Web3Provider(primaryWallet.provider);
+					const signer = provider.getSigner();
+					const address = await signer.getAddress();
+					setWalletAddress(address);
+					setConnecting(false);
+
+					const ethBalance = await signer.getBalance();
+					const formattedEth = formatEther(ethBalance);
+
+					setBalance(formattedEth);
+				}
+			} catch (error) {
+				console.error('Error recovering connection:', error);
 				setConnecting(false);
-
-				const ethBalance = await signer.getBalance();
-				const formattedEth = formatEther(ethBalance);
-
-				setBalance(formattedEth);
 			}
 		} else {
 			setConnecting(false);

@@ -1,49 +1,36 @@
 import React from 'react';
-import { cacheExchange, Client, fetchExchange, gql } from 'urql';
 
 import { connect } from '@permaweb/aoconnect';
 
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
+import { AONetworkStatus, AOPhase, MetricDataPoint, TagType } from 'helpers/types';
 
-export const cu = connect({
+const CACHE_DURATION = 6 * 60 * 60 * 1000;
+
+export const cu: any = connect({
+	MODE: 'legacy',
 	CU_URL: 'https://cu.ao-testnet.xyz',
 });
 
-export const afCu = connect({
-	// CU_URL: 'https://cu-af.dataos.so',
-	CU_URL: 'https://cu6200.ao-testnet.xyz',
+export const flpCu: any = connect({
+	MODE: 'legacy',
+	CU_URL: 'https://cu.ao-testnet.xyz',
 });
-
-export const goldsky = new Client({
-	url: ENDPOINTS.goldsky,
-	exchanges: [cacheExchange, fetchExchange],
-});
-
-enum AOPhase {
-	Testnet = 'Testnet',
-	MainnetEarly = 'Mainnet Early',
-	Mainnet = 'Mainnet',
-}
-enum AONetworkStatus {
-	Live = 'Live',
-}
 
 interface AOContextState {
-	users: number | null;
-	messages: number | null;
-	processes: number | null;
+	metrics: MetricDataPoint[] | null;
 	phase: AOPhase | null;
 	status: AONetworkStatus | null;
 	mintedSupply: number | null;
+	read: any;
 }
 
 const DEFAULT_CONTEXT = {
-	users: null,
-	messages: null,
-	processes: null,
+	metrics: null,
 	phase: null,
 	status: null,
 	mintedSupply: null,
+	read: null,
 };
 
 const AOContext = React.createContext<AOContextState>(DEFAULT_CONTEXT);
@@ -53,10 +40,8 @@ export function useAOProvider(): AOContextState {
 }
 
 export function AOProvider(props: { children: React.ReactNode }) {
+	const [metrics, setMetrics] = React.useState<MetricDataPoint[] | null>(null);
 	const [mintedSupply, setMintedSupply] = React.useState<number | null>(null);
-	const [users, setUsers] = React.useState<number | null>(null);
-	const [messages, setMessages] = React.useState<number | null>(null);
-	const [processes, setProcesses] = React.useState<number | null>(null);
 
 	React.useEffect(() => {
 		const CACHE_KEY = 'mintedSupply';
@@ -84,7 +69,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				localStorage.setItem(CACHE_KEY, value.toString());
 				localStorage.setItem(TIMESTAMP_KEY, now.toString());
 			} catch (error) {
-				console.error('Error during afCu.dryrun:', error);
+				console.error('Error:', error);
 			}
 		})();
 	}, []);
@@ -92,87 +77,115 @@ export function AOProvider(props: { children: React.ReactNode }) {
 	React.useEffect(() => {
 		(async function () {
 			try {
-				const networkStats = await getNetworkStats();
+				const cacheKey = `aoMetricsCacheMainnet`;
+				const cachedData = localStorage.getItem(cacheKey);
 
-				setUsers(networkStats?.[networkStats?.length - 1]?.active_users);
-				setMessages(networkStats?.[networkStats?.length - 1]?.tx_count_rolling);
-				setProcesses(networkStats?.[networkStats?.length - 1]?.processes_rolling);
+				if (cachedData) {
+					const { data, timestamp } = JSON.parse(cachedData);
+					const now = Date.now();
+
+					if (now - timestamp < CACHE_DURATION) {
+						setMetrics(data);
+						return;
+					}
+				}
+
+				const responseMainnet = await fetch(ENDPOINTS.metrics(30));
+				const dataMainnet = await responseMainnet.json();
+
+				const responseLegacy = await fetch(ENDPOINTS.metricsLegacy(30));
+				const dataLegacy = await responseLegacy.json();
+
+				let mergedData = [];
+
+				if (dataMainnet?.length > 0) {
+					for (const elementMainnet of dataMainnet) {
+						const dayLegacy = dataLegacy.find((elementLegacy: any) => elementLegacy.day === elementMainnet.day);
+
+						if (dayLegacy) {
+							mergedData.push({
+								active_processes_over_blocks:
+									(elementMainnet.active_processes_over_blocks ?? 0) + (dayLegacy.active_processes_over_blocks ?? 0),
+								active_users_over_blocks:
+									(elementMainnet.active_users_over_blocks ?? 0) + (dayLegacy.active_users_over_blocks ?? 0),
+								day: elementMainnet.day,
+								evals: (elementMainnet.evals ?? 0) + (dayLegacy.evals ?? 0),
+								modules_roll: (elementMainnet.modules_roll ?? 0) + (dayLegacy.modules_roll ?? 0),
+								new_modules_over_blocks:
+									(elementMainnet.new_modules_over_blocks ?? 0) + (dayLegacy.new_modules_over_blocks ?? 0),
+								processed_blocks: (elementMainnet.processed_blocks ?? 0) + (dayLegacy.processed_blocks ?? 0),
+								processes_roll: (elementMainnet.processes_roll ?? 0) + (dayLegacy.processes_roll ?? 0),
+								transfers: (elementMainnet.transfers ?? 0) + (dayLegacy.transfers ?? 0),
+								txs: (elementMainnet.txs ?? 0) + (dayLegacy.txs ?? 0),
+								txs_roll: (elementMainnet.txs_roll ?? 0) + (dayLegacy.txs_roll ?? 0),
+							});
+						} else {
+							mergedData.push(elementMainnet);
+						}
+					}
+				}
+
+				localStorage.setItem(
+					cacheKey,
+					JSON.stringify({
+						data: mergedData.reverse(),
+						timestamp: Date.now(),
+					})
+				);
+
+				setMetrics(mergedData.reverse());
 			} catch (e: any) {
 				console.error(e);
 			}
 		})();
 	}, []);
 
-	const messageFields = gql`
-		fragment MessageFields on TransactionConnection {
-			edges {
-				cursor
-				node {
-					id
-					ingested_at
-					recipient
-					block {
-						timestamp
-						height
-					}
-					tags {
-						name
-						value
-					}
-					data {
-						size
-					}
-					owner {
-						address
-					}
+	async function read(args: {
+		processId: string;
+		action: string;
+		tags?: TagType[];
+		data?: any;
+		replyTag?: TagType;
+		ignoreDataResponse?: boolean;
+	}): Promise<any> {
+		const tags = [{ name: 'Action', value: args.action }];
+		if (args.tags) tags.push(...args.tags);
+
+		const response = await cu.dryrun({
+			process: args.processId,
+			tags: tags,
+			data: JSON.stringify(args.data || {}),
+		});
+
+		if (response.Messages && response.Messages.length) {
+			let message = response.Messages[0];
+			if (args.replyTag) {
+				message = response.Messages.find((msg: any) => {
+					return msg.Tags.some((tag: any) => tag.name === args.replyTag.name && tag.value === args.replyTag.value);
+				});
+			}
+
+			if (message.Data && !args.ignoreDataResponse) {
+				return JSON.parse(message.Data);
+			} else {
+				if (message.Tags) {
+					return message.Tags.reduce((acc: any, item: any) => {
+						acc[item.name] = item.value;
+						return acc;
+					}, {});
 				}
 			}
-		}
-	`;
-
-	const networkStatsQuery = gql`
-		query {
-			transactions(
-				sort: HEIGHT_DESC
-				first: 1
-				owners: ["yqRGaljOLb2IvKkYVa87Wdcc8m_4w6FI58Gej05gorA"]
-				recipients: ["vdpaKV_BQNISuDgtZpLDfDlMJinKHqM3d2NWd3bzeSk"]
-				tags: [{ name: "Action", values: ["Update-Stats"] }]
-			) {
-				...MessageFields
-			}
-		}
-
-		${messageFields}
-	`;
-
-	async function getNetworkStats(): Promise<any[]> {
-		try {
-			const result = await goldsky.query<any>(networkStatsQuery, {}).toPromise();
-			if (!result.data) return [];
-
-			const { edges } = result.data.transactions;
-			const updateId = edges[0]?.node.id;
-
-			const data = await fetch(ENDPOINTS.arTxEndpoint(updateId));
-			const json = await data.json();
-
-			return json as any[];
-		} catch (error) {
-			console.error(error);
-			return [];
 		}
 	}
 
 	return (
 		<AOContext.Provider
 			value={{
-				users: users,
-				messages: messages,
-				processes: processes,
+				metrics: metrics,
 				phase: AOPhase.MainnetEarly,
 				status: AONetworkStatus.Live,
 				mintedSupply: mintedSupply,
+				read: read,
 			}}
 		>
 			{props.children}
