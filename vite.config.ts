@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
+        api: path.resolve(__dirname, 'src/api'),
         app: path.resolve(__dirname, 'src/app'),
         components: path.resolve(__dirname, 'src/components'),
         helpers: path.resolve(__dirname, 'src/helpers'),
@@ -76,12 +77,6 @@ export default defineConfig(({ mode }) => {
             }
             if (id.includes('arweave')) {
               return 'arweave';
-            }
-            if (id.includes('ethers')) {
-              return 'ethers';
-            }
-            if (id.includes('@web3-onboard') || id.includes('wagmi') || id.includes('viem')) {
-              return 'web3';
             }
             if (id.includes('react-markdown') || id.includes('katex') || id.includes('marked')) {
               return 'markdown';

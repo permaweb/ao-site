@@ -112,3 +112,7 @@ export enum AONetworkStatus {
 }
 
 export type FLPTabType = 'featured' | 'all';
+
+export type ExploreSortKey = 'index' | 'project' | 'delegated' | 'launched' | 'allocation';
+
+export type SortDirection = 'asc' | 'desc';

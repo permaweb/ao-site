@@ -21,8 +21,32 @@ export const AO = {
 };
 
 export const SUPABASE = {
-  url: process.env.REACT_APP_SUPABASE_URL || '',
-  anonKey: process.env.REACT_APP_SUPABASE_ANON_KEY || '',
+  url: 'https://kzmzniagsfcfnhgsjkpv.supabase.co',
+  anonKey:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6bXpuaWFnc2ZjZm5oZ3Nqa3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0MjI5NDEsImV4cCI6MjA2Mzk5ODk0MX0.IjB7j34CjhqUXQcO_dKM_9k3okmSomSpu9dtyPV2agU',
+};
+
+export const HB = {
+  defaultNode: 'https://forward.computer',
+  read1: 'https://state.forward.computer',
+  read2: 'https://state-a.forward.computer',
+  read3: 'https://state-b.forward.computer',
+  app1: 'https://app-1.forward.computer',
+};
+
+export const PATCH_MAP = {
+  stEth: {
+    processId: 'U4IrjxcKVsEya5kQbZPbjLCoj868P129Z4IlArMOzuc',
+    ticker: 'eth',
+  },
+  dai: {
+    processId: 'QzWis3AEZTl1se17kvHXko-dfhPdWXJezhuyy0e3NTg',
+    ticker: 'dai',
+  },
+  usds: {
+    processId: 'JJPMirAJb2RR7mqIAilAGWjA3EwHIEXAnc__CfNKqNs',
+    ticker: 'usds',
+  },
 };
 
 export const ETH_CONTRACTS = {
@@ -47,6 +71,7 @@ export const ENDPOINTS = {
   arTotalSupply: `https://arweave.net/total_supply`,
   arTxEndpoint: (txId: string) => `https://arweave.net/${txId}`,
   metrics: (days: number) => `https://atlas-server.decent.land/mainnet/explorer/days?limit=${days}`,
+  metricsLegacy: (days: number) => `https://atlas-server.decent.land/explorer/days?limit=${days}`,
   goldsky: `https://arweave-search.goldsky.com/graphql`,
   mainnetRpc: `https://ethereum.publicnode.com`,
   aoStateNode: (token: string) => `https://state-a.forward.computer/${token}~process@1.0/`,

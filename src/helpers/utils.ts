@@ -384,3 +384,62 @@ export function parseBigIntAsNumber(value?: bigint | string, denomination = 0, m
 export function formatNumber(number: number | string, options: Intl.NumberFormatOptions = {}, locale?: string) {
   return new Intl.NumberFormat(locale, options).format(Number(number));
 }
+
+// Helper function to get price from Supabase
+export async function getPriceForToken(
+  processId: string,
+  supabaseUrl: string,
+  supabaseAnonKey: string
+): Promise<{ usd_price: number; denominator: number } | null> {
+  try {
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error('Supabase configuration missing');
+      return null;
+    }
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/usd-price`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${supabaseAnonKey}`,
+      },
+      body: JSON.stringify({
+        processId: processId,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching price from Supabase:', error);
+    return null;
+  }
+}
+
+// Helper function to get AO/USD price from redstone
+export async function getAoPrice(): Promise<number | null> {
+  try {
+    const response = await fetch('https://api.redstone.finance/prices?symbols=AO&provider=redstone');
+
+    if (!response.ok) {
+      throw new Error(`HTTP error - status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const aoPrice = data?.AO?.value;
+
+    if (typeof aoPrice !== 'number') {
+      console.error('invalid AO price response from redstone:', data);
+      return null;
+    }
+
+    return aoPrice;
+  } catch (error) {
+    console.error('error fetching AO price from redstone:', error);
+    return null;
+  }
+}

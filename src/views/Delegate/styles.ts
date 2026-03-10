@@ -6,6 +6,10 @@ export const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   margin-top: 32px;
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    margin: 0;
+  }
 `;
 
 export const BodyWrapper = styled.div`
@@ -20,7 +24,7 @@ export const BodyWrapper = styled.div`
 `;
 
 export const DelegationsWrapper = styled.div`
-  width: calc(100% - 300px);
+  width: calc(100% - 301.25px);
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -32,7 +36,7 @@ export const DelegationsWrapper = styled.div`
 
 export const SummaryWrapper = styled.div`
   height: fit-content;
-  width: 300px;
+  width: 301.25px;
   display: flex;
   flex-direction: column;
   gap: 20px;

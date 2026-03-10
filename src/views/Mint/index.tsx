@@ -26,30 +26,9 @@ export default function Mint() {
 
   const [info, setInfo] = React.useState<string | null>(null);
 
-  // const [aoSupply, setAOSupply] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
-  // const [aoSupplyReset, setAOSupplyReset] = React.useState<{ monthsFromNow: number; amount: number } | null>(null);
-  // const [currentMonth, setCurrentMonth] = React.useState<number | null>(null);
   const [copiedAr, setCopiedAr] = React.useState<boolean>(false);
   const [copiedEth, setCopiedEth] = React.useState<boolean>(false);
   const [copiedDepositArweave, setCopiedDepositArweave] = React.useState<boolean>(false);
-  const totalDepositedUsd = ethProvider.totalDeposited?.usdTotal?.display;
-  const totalDepositedStEth = ethProvider.totalDeposited?.stEth?.display;
-  const totalDepositedDai = ethProvider.totalDeposited?.dai?.display;
-  const totalDepositedUsds = ethProvider.totalDeposited?.usds?.display;
-
-  // React.useEffect(() => {
-  // 	setAOSupply({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
-  // 	setAOSupplyReset({ monthsFromNow: 0, amount: aoProvider.mintedSupply });
-  // }, [aoProvider.mintedSupply]);
-
-  // function getSupplyDate() {
-  // 	const tokenReleaseDate = new Date();
-  // 	tokenReleaseDate.setMonth(tokenReleaseDate.getMonth() - currentMonth);
-  // 	const supplyDate = new Date(tokenReleaseDate);
-  // 	supplyDate.setMonth(supplyDate.getMonth() + currentMonth + (aoSupply?.monthsFromNow ?? 0));
-
-  // 	return supplyDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
-  // }
 
   function getTokenBalance(token: DefaultTokenEarningsType) {
     if (!arProvider?.walletAddress) return '-';
@@ -70,17 +49,6 @@ export default function Mint() {
     if (arProvider[balance] !== null) return <p className={'fade-in'}>{formatDisplayAmount(arProvider[balance])}</p>;
 
     return <EllipsisLoader />;
-  }
-
-  function getTokenProjections(token: DefaultTokenEarningsType) {
-    switch (token) {
-      case 'ao':
-        return mergeTokenProjections();
-      case 'arweave':
-        return arProvider?.projections;
-      default:
-        return null;
-    }
   }
 
   function mergeTokenProjections() {
@@ -104,6 +72,17 @@ export default function Mint() {
         ratio: null,
       },
     };
+  }
+
+  function getTokenProjections(token: DefaultTokenEarningsType) {
+    switch (token) {
+      case 'ao':
+        return mergeTokenProjections();
+      case 'arweave':
+        return arProvider?.projections;
+      default:
+        return null;
+    }
   }
 
   function getTokenProjectionsDisplay(token: DefaultTokenEarningsType, period: 'monthly' | 'yearly') {
@@ -146,22 +125,20 @@ export default function Mint() {
           <S.GlobalWrapper className={'border-wrapper-primary'}>
             <S.GlobalSection>
               <span>{language.globalFairLaunchDeposits}</span>
-              <p className={totalDepositedUsd ? 'fade-in' : undefined}>{totalDepositedUsd ?? <EllipsisLoader />}</p>
+              <p>{ethProvider.totalDeposited?.usdTotal?.display ?? <EllipsisLoader />}</p>
             </S.GlobalSection>
             <S.GlobalSectionsFlex>
               <S.GlobalSubSection>
                 <span>{language.totalStEthBridged}</span>
-                <p className={totalDepositedStEth ? 'fade-in' : undefined}>
-                  {totalDepositedStEth ?? <EllipsisLoader />}
-                </p>
+                <p>{ethProvider.totalDeposited?.stEth?.display ?? <EllipsisLoader />}</p>
               </S.GlobalSubSection>
               <S.GlobalSubSection>
                 <span>{language.totalDaiBridged}</span>
-                <p className={totalDepositedDai ? 'fade-in' : undefined}>{totalDepositedDai ?? <EllipsisLoader />}</p>
+                <p>{ethProvider.totalDeposited?.dai?.display ?? <EllipsisLoader />}</p>
               </S.GlobalSubSection>
               <S.GlobalSubSection>
                 <span>{language.totalUsdsBridged}</span>
-                <p className={totalDepositedUsds ? 'fade-in' : undefined}>{totalDepositedUsds ?? <EllipsisLoader />}</p>
+                <p>{ethProvider.totalDeposited?.usds?.display ?? <EllipsisLoader />}</p>
               </S.GlobalSubSection>
             </S.GlobalSectionsFlex>
           </S.GlobalWrapper>
@@ -173,11 +150,11 @@ export default function Mint() {
               <S.NetworkHeaderDivider />
               {arProvider.walletAddress ? (
                 <>
-                  <S.NetworkHeaderWallet className={'fade-in'}>
+                  <S.NetworkHeaderWallet>
                     <S.NetworkHeaderAddressRow>
                       <ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
                       <AddressTooltip address={arProvider.walletAddress}>
-                        <S.NetworkHeaderAddress className={'fade-in'} onClick={copiedAr ? undefined : copyArAddress}>
+                        <S.NetworkHeaderAddress disabled={copiedAr} onClick={copiedAr ? undefined : copyArAddress}>
                           {copiedAr ? `${language.copied}!` : formatAddress(arProvider.walletAddress, false)}
                         </S.NetworkHeaderAddress>
                       </AddressTooltip>
@@ -192,7 +169,7 @@ export default function Mint() {
                   </S.NetworkHeaderWalletActions>
                 </>
               ) : (
-                <S.NetworkHeaderWallet className={'fade-in'}>
+                <S.NetworkHeaderWallet>
                   <span>
                     {language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
                   </span>
@@ -201,7 +178,7 @@ export default function Mint() {
             </S.NetworkHeaderWrapper>
             <S.NetworkBodyWrapper>
               {arProvider.walletAddress ? (
-                <S.NetworkSectionsWrapper className={'fade-in'}>
+                <S.NetworkSectionsWrapper>
                   <S.NetworkSection>
                     <S.NetworkSectionHeader>
                       <span>{language.asset}</span>
@@ -247,7 +224,7 @@ export default function Mint() {
                   </S.NetworkSection>
                 </S.NetworkSectionsWrapper>
               ) : (
-                <S.NetworkDisconnected className={'fade-in'}>
+                <S.NetworkDisconnected>
                   <S.NetworkDisconnectedIconText>
                     <ReactSVG src={ASSETS.wallet} />
                     <p>{language.connectArweaveWalletToViewRewards}</p>
@@ -272,14 +249,11 @@ export default function Mint() {
                 <S.NetworkHeaderDivider />
                 {ethProvider.walletAddress ? (
                   <>
-                    <S.NetworkHeaderWallet className={'fade-in'}>
+                    <S.NetworkHeaderWallet>
                       <S.NetworkHeaderAddressRow>
                         <ReactSVG className={'network-header-logo'} src={ASSETS.ethereum} />
                         <AddressTooltip address={ethProvider.walletAddress}>
-                          <S.NetworkHeaderAddress
-                            className={'fade-in'}
-                            onClick={copiedEth ? undefined : copyEthAddress}
-                          >
+                          <S.NetworkHeaderAddress disabled={copiedEth} onClick={copiedEth ? undefined : copyEthAddress}>
                             {copiedEth ? `${language.copied}!` : formatAddress(ethProvider.walletAddress, false)}
                           </S.NetworkHeaderAddress>
                         </AddressTooltip>
@@ -293,7 +267,7 @@ export default function Mint() {
                               <ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
                               <AddressTooltip address={ethProvider.lastArweaveAddress}>
                                 <S.NetworkHeaderAddress
-                                  className={'fade-in'}
+                                  disabled={copiedDepositArweave}
                                   onClick={copiedDepositArweave ? undefined : copyDepositArweaveAddress}
                                 >
                                   {copiedDepositArweave
@@ -315,7 +289,7 @@ export default function Mint() {
                     </S.NetworkHeaderWalletActions>
                   </>
                 ) : (
-                  <S.NetworkHeaderWallet className={'fade-in'}>
+                  <S.NetworkHeaderWallet>
                     <span>
                       {language.noWalletConnected} <ReactSVG src={ASSETS.warning} />
                     </span>
@@ -324,11 +298,11 @@ export default function Mint() {
               </S.NetworkHeaderWrapper>
               <S.NetworkBodyWrapper>
                 {ethProvider.walletAddress ? (
-                  <S.NetworkBodyInfoLine className={'fade-in'}>
+                  <S.NetworkBodyInfoLine>
                     <p>{language.depositInfo}</p>
                   </S.NetworkBodyInfoLine>
                 ) : (
-                  <S.NetworkDisconnected className={'fade-in'}>
+                  <S.NetworkDisconnected>
                     <S.NetworkDisconnectedIconText>
                       <ReactSVG src={ASSETS.wallet} />
                       <p>{language.connectEthWalletToViewDeposits}</p>

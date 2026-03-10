@@ -6,6 +6,10 @@ export const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   margin-top: 32px;
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    margin: 0;
+  }
 `;
 
 export const BodyWrapper = styled.div`
@@ -35,7 +39,6 @@ export const GlobalWrapper = styled.div`
   @media (max-width: ${STYLING.cutoffs.initial}) {
     flex-direction: column;
     gap: 0;
-    padding: 15px 0;
   }
 `;
 
@@ -121,6 +124,11 @@ export const DepositsWrapper = styled.div`
   flex-direction: column;
   gap: 15px;
   padding: 15px;
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    padding: 0;
+    background: ${(props) => props.theme.colors.container.alt1.background} !important;
+  }
 `;
 
 export const NetworkWrapper = styled.div`
@@ -137,6 +145,10 @@ export const NetworkHeaderWrapper = styled.div`
   @media (max-width: ${STYLING.cutoffs.initial}) {
     justify-content: space-between;
     flex-wrap: wrap;
+  }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    flex-direction: column;
   }
 `;
 
@@ -161,6 +173,7 @@ export const NetworkHeaderDivider = styled.div`
 
 export const NetworkHeaderArweave = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 
@@ -178,21 +191,26 @@ export const NetworkHeaderArweave = styled.div`
     font-size: ${(props) => props.theme.typography.size.small};
     color: ${(props) => props.theme.colors.font.primary};
   }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    flex-direction: column;
+  }
 `;
 
-export const NetworkHeaderAddress = styled.p`
-  cursor: pointer;
+export const NetworkHeaderAddress = styled.p<{ disabled?: boolean }>`
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   user-select: none;
+  opacity: ${(props) => (props.disabled ? 0.6 : 1)};
 
   &:hover {
-    text-decoration: underline;
+    text-decoration: ${(props) => (props.disabled ? 'none' : 'underline')};
   }
 `;
 
 export const NetworkHeaderAddressRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7.5px;
 
   .network-header-logo,
   .network-header-logo > div {
@@ -207,8 +225,8 @@ export const NetworkHeaderAddressRow = styled.div`
   }
 
   .network-header-logo svg {
-    height: 18px;
-    width: 18px;
+    height: 17px;
+    width: 17px;
     margin: 0;
     flex-shrink: 0;
   }
@@ -216,6 +234,7 @@ export const NetworkHeaderAddressRow = styled.div`
 
 export const NetworkHeaderWallet = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 20px;
 
@@ -243,6 +262,10 @@ export const NetworkHeaderWallet = styled.div`
       margin: 5.5px 0 0 0;
     }
   }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    flex-direction: column;
+  }
 `;
 
 export const NetworkHeaderWalletActions = styled.div`
@@ -250,6 +273,10 @@ export const NetworkHeaderWalletActions = styled.div`
   align-items: center;
   gap: 17.5px;
   margin: 0 0 0 auto;
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    margin: 0 auto;
+  }
 `;
 
 export const NetworkBodyWrapper = styled.div`
@@ -280,6 +307,13 @@ export const NetworkSectionsWrapper = styled.div`
 
   @media (max-width: ${STYLING.cutoffs.initial}) {
     flex-direction: column;
+
+    > * {
+      &:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+      }
+    }
   }
 `;
 
@@ -287,6 +321,10 @@ export const NetworkSection = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: ${STYLING.cutoffs.initial}) {
+    padding: 15px 0 0 0;
+  }
 `;
 
 export const NetworkSectionHeader = styled.div`
@@ -301,6 +339,10 @@ export const NetworkSectionHeader = styled.div`
     font-weight: ${(props) => props.theme.typography.weight.regular};
     font-size: ${(props) => props.theme.typography.size.small};
     color: ${(props) => props.theme.colors.font.alt1};
+  }
+
+  @media (max-width: ${STYLING.cutoffs.initial}) {
+    border-bottom: none;
   }
 `;
 

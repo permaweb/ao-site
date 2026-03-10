@@ -5,6 +5,7 @@ export const Help = styled.div<{ position: string }>`
   z-index: 2;
   display: none;
   white-space: nowrap;
+  padding: 3.25px 5px 2.25px 5px;
 
   ${(props) => {
     switch (props.position) {

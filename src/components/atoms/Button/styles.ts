@@ -20,8 +20,8 @@ function getWidth(_noMinWidth: boolean | undefined, width: number | undefined, f
 
 export const Tooltip = styled.div<{ useBottom: boolean }>`
   position: absolute;
-  top: ${(props) => (props.useBottom ? 'auto' : '-32.5px')};
-  bottom: ${(props) => (props.useBottom ? '-32.5px' : 'auto')};
+  top: ${(props) => (props.useBottom ? 'auto' : '-26.5px')};
+  bottom: ${(props) => (props.useBottom ? '-26.5px' : 'auto')};
   left: 50%;
   transform: translate(-50%, 0);
   z-index: 2;
@@ -33,11 +33,14 @@ export const Wrapper = styled.div`
   width: fit-content;
   &:hover {
     ${Tooltip} {
-      display: block;
+      display: flex;
     }
   }
   .info {
-    padding: 0px 10px 2.5px 10px !important;
+    height: 21.5px;
+    padding: 0px 7.5px !important;
+    align-items: center;
+    justify-content: center;
   }
 `;
 

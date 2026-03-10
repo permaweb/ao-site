@@ -41,24 +41,24 @@ export const lightTheme = {
   chart1: '#C78135',
   chart2: '#FBF5EE',
   stats: {
-    primary: '#5bd1f4', // PI - Splashing Wave (1)
-    alt1: '#289cd3', // AO - Blue Burst (2)
-    alt2: '#197ab8', // AR - Star of Life (3)
-    alt3: '#0e5b90', // Hyper Blue (4)
-    alt4: '#053951', // Maniac Mansion (5)
-    alt5: '#072714', // Nightmare (6)
-    alt6: '#d9c128', // Indian Pale Ale (7)
-    alt7: '#cadd33', // Greenivorous (8)
-    alt8: '#b6ea44', // Sour Apple Candy (9)
-    alt9: '#94e54c', // Poisonous Potion (10)
-    alt10: '#63cf5e', // Koopa Green Shell (11)
-    alt11: '#36ad7b', // Cosmic Green (12)
-    alt12: '#5bd1f4', // Splashing Wave (13)
-    alt13: '#289cd3', // Blue Burst (14)
-    alt14: '#197ab8', // Star of Life (15)
-    alt15: '#0e5b90', // Hyper Blue (16)
-    alt16: '#053951', // Maniac Mansion (17)
-    alt17: '#072714', // Nightmare (18)
+    primary: '#5bd1f4',
+    alt1: '#289cd3',
+    alt2: '#197ab8',
+    alt3: '#0e5b90',
+    alt4: '#053951',
+    alt5: '#072714',
+    alt6: '#d9c128',
+    alt7: '#cadd33',
+    alt8: '#b6ea44',
+    alt9: '#94e54c',
+    alt10: '#63cf5e',
+    alt11: '#36ad7b',
+    alt12: '#5bd1f4',
+    alt13: '#289cd3',
+    alt14: '#197ab8',
+    alt15: '#0e5b90',
+    alt16: '#053951',
+    alt17: '#072714',
   },
 };
 
@@ -101,8 +101,8 @@ export const theme = (currentTheme: any): DefaultTheme => ({
         color: currentTheme.light1,
         active: {
           background: currentTheme.neutral2,
-          border: currentTheme.primary1,
-          color: currentTheme.light1,
+          border: currentTheme.neutral5,
+          color: currentTheme.neutralA1,
         },
         disabled: {
           background: currentTheme.neutral3,
@@ -296,9 +296,9 @@ export const theme = (currentTheme: any): DefaultTheme => ({
       },
     },
     tooltip: {
-      background: currentTheme.neutral3,
+      background: currentTheme.dark2,
       border: currentTheme.neutral9,
-      color: currentTheme.neutralA1,
+      color: currentTheme.light1,
     },
     view: {
       background: currentTheme.neutral1,

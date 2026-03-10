@@ -5,7 +5,7 @@ import { connect } from '@permaweb/aoconnect';
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 import { AONetworkStatus, AOPhase, MetricDataPoint, TagType } from 'helpers/types';
 
-const CACHE_DURATION = 6 * 60 * 60 * 1000;
+const CACHE_DURATION = 0;
 
 export const cu: any = connect({
   MODE: 'legacy',
@@ -14,7 +14,7 @@ export const cu: any = connect({
 
 export const flpCu: any = connect({
   MODE: 'legacy',
-  CU_URL: 'https://cu-af.dataos.so',
+  CU_URL: 'https://cu.ao-testnet.xyz',
 });
 
 interface AOContextState {
@@ -90,19 +90,50 @@ export function AOProvider(props: { children: React.ReactNode }) {
           }
         }
 
-        const response = await fetch(ENDPOINTS.metrics(30));
-        const data = await response.json();
-        const reversedData = data.reverse();
+        const responseMainnet = await fetch(ENDPOINTS.metrics(30));
+        const dataMainnet = await responseMainnet.json();
+
+        const responseLegacy = await fetch(ENDPOINTS.metricsLegacy(30));
+        const dataLegacy = await responseLegacy.json();
+
+        let mergedData = [];
+
+        if (dataMainnet?.length > 0) {
+          for (const elementMainnet of dataMainnet) {
+            const dayLegacy = dataLegacy?.find((elementLegacy: any) => elementLegacy.day === elementMainnet.day);
+
+            if (dayLegacy) {
+              mergedData.push({
+                active_processes_over_blocks:
+                  (elementMainnet.active_processes_over_blocks ?? 0) + (dayLegacy.active_processes_over_blocks ?? 0),
+                active_users_over_blocks:
+                  (elementMainnet.active_users_over_blocks ?? 0) + (dayLegacy.active_users_over_blocks ?? 0),
+                day: elementMainnet.day,
+                evals: (elementMainnet.evals ?? 0) + (dayLegacy.evals ?? 0),
+                modules_roll: (elementMainnet.modules_roll ?? 0) + (dayLegacy.modules_roll ?? 0),
+                new_modules_over_blocks:
+                  (elementMainnet.new_modules_over_blocks ?? 0) + (dayLegacy.new_modules_over_blocks ?? 0),
+                processed_blocks: (elementMainnet.processed_blocks ?? 0) + (dayLegacy.processed_blocks ?? 0),
+                processes_roll: (elementMainnet.processes_roll ?? 0) + (dayLegacy.processes_roll ?? 0),
+                transfers: (elementMainnet.transfers ?? 0) + (dayLegacy.transfers ?? 0),
+                txs: (elementMainnet.txs ?? 0) + (dayLegacy.txs ?? 0),
+                txs_roll: (elementMainnet.txs_roll ?? 0) + (dayLegacy.txs_roll ?? 0),
+              });
+            } else {
+              mergedData.push(elementMainnet);
+            }
+          }
+        }
 
         localStorage.setItem(
           cacheKey,
           JSON.stringify({
-            data: reversedData,
+            data: mergedData,
             timestamp: Date.now(),
           })
         );
 
-        setMetrics(reversedData);
+        setMetrics(mergedData);
       } catch (e: any) {
         console.error(e);
       }

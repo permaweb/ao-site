@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-export const Tooltip = styled.div<{ position: string }>`
+export const Tooltip = styled.span<{ position: string }>`
   position: absolute;
   z-index: 2;
-  display: none;
+  display: none !important;
   white-space: nowrap;
   max-width: 90vw;
   overflow: hidden;
@@ -58,10 +58,10 @@ export const Tooltip = styled.div<{ position: string }>`
 
 export const Wrapper = styled.span`
   position: relative;
-  display: inline;
+  display: inline-block;
   &:hover {
     ${Tooltip} {
-      display: block;
+      display: block !important;
     }
   }
 `;

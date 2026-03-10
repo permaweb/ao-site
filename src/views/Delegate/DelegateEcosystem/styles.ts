@@ -238,6 +238,23 @@ export const TableHeaderRow = styled.div`
       flex: 1;
     }
   }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    > :nth-child(3) {
+      display: none;
+    }
+
+    > :nth-child(2),
+    > :nth-child(5) {
+      flex: 1;
+    }
+
+    > * {
+      &:not(:last-child) {
+        border-right: none;
+      }
+    }
+  }
 `;
 
 export const TableHeaderCell = styled.div<{
@@ -343,6 +360,23 @@ export const TableBodyRow = styled.div<{ open: boolean; $isPlaceholder?: boolean
     > :nth-child(3),
     > :nth-child(5) {
       flex: 1;
+    }
+  }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    > :nth-child(3) {
+      display: none;
+    }
+
+    > :nth-child(2),
+    > :nth-child(5) {
+      flex: 1;
+    }
+
+    > * {
+      &:not(:last-child) {
+        border-right: none;
+      }
     }
   }
 `;
@@ -473,15 +507,22 @@ export const TableBodyCell = styled.div<{
 `;
 
 export const ProjectNameWrapper = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 8px;
+  overflow: hidden;
 
   span {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.medium};
     font-size: ${(props) => props.theme.typography.size.xSmall};
     color: ${(props) => props.theme.colors.font.primary};
+    display: block;
+    max-width: 95%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   span.ticker {
@@ -739,7 +780,6 @@ export const ProjectShortDescription = styled.div`
     font-size: ${(props) => props.theme.typography.size.xxSmall};
     color: ${(props) => props.theme.colors.font.alt1};
     text-align: left;
-    text-wrap: balance;
   }
 `;
 
@@ -756,7 +796,6 @@ export const ProjectLongDescription = styled.div`
     font-weight: ${(props) => props.theme.typography.weight.regular};
     color: ${(props) => props.theme.colors.font.primary};
     text-align: left;
-    text-wrap: balance;
   }
 `;
 
@@ -818,4 +857,74 @@ export const LoadMoreWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+export const ClaimWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 20px;
+  margin: 0 0 20px 0;
+  border: 1px solid ${(props) => props.theme.colors.border.primary};
+  background: ${(props) => props.theme.colors.container.alt1.background};
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+`;
+
+export const ClaimInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  span {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.regular};
+    font-size: ${(props) => props.theme.typography.size.xxSmall};
+    color: ${(props) => props.theme.colors.font.alt1};
+  }
+
+  p {
+    font-family: ${(props) => props.theme.typography.family.primary};
+    font-weight: ${(props) => props.theme.typography.weight.medium};
+    font-size: ${(props) => props.theme.typography.size.small};
+    color: ${(props) => props.theme.colors.font.primary};
+  }
+`;
+
+export const ClaimButton = styled.button<{ disabled?: boolean }>`
+  height: 36px;
+  padding: 0 20px;
+  border: 1px solid ${(props) => props.theme.colors.border.primary};
+  background: ${(props) =>
+    props.disabled ? props.theme.colors.container.alt2.background : props.theme.colors.container.primary.background};
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.xSmall};
+  font-weight: ${(props) => props.theme.typography.weight.medium};
+  color: ${(props) => (props.disabled ? props.theme.colors.font.alt2 : props.theme.colors.font.primary)};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  transition: all ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    background: ${(props) => props.theme.colors.container.primary.active};
+    border-color: ${(props) => props.theme.colors.font.primary};
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    width: 100%;
+    height: 32px;
+    padding: 0 16px;
+  }
 `;

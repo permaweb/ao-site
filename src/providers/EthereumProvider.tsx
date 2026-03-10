@@ -7,17 +7,19 @@ import torusModule from '@web3-onboard/torus';
 import trezorModule from '@web3-onboard/trezor';
 import trustModule from '@web3-onboard/trust';
 import walletConnectModule from '@web3-onboard/walletconnect';
+import { readProcess } from 'api';
 import React from 'react';
 import Web3, { EventLog } from 'web3';
 
 import {
-  AO,
   ASSETS,
   DaiBridge_ABI,
   ENDPOINTS,
   Erc20_ABI,
   ETH_CONTRACTS,
   ETH_TOKEN_DENOMINATION,
+  HB,
+  PATCH_MAP,
   PRICE_FEED_ABI,
   StEthBridge_ABI,
   UsdsBridge_ABI,
@@ -30,47 +32,13 @@ import {
   evmBytesToArweaveAddress,
   formatDisplayAmount,
   formatUSDAmount,
+  getAoPrice,
   getDaiReward,
   getEthReward,
   getUsdsReward,
 } from 'helpers/utils';
 
 import { useAOProvider } from './AOProvider';
-
-// Helper function to get price from Supabase
-async function getPriceForToken(processId: string): Promise<{ usd_price: number; denominator: number } | null> {
-  try {
-    const SUPABASE_URL = 'https://kzmzniagsfcfnhgsjkpv.supabase.co';
-    const SUPABASE_ANON_KEY =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6bXpuaWFnc2ZjZm5oZ3Nqa3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0MjI5NDEsImV4cCI6MjA2Mzk5ODk0MX0.IjB7j34CjhqUXQcO_dKM_9k3okmSomSpu9dtyPV2agU';
-
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      console.error('Supabase configuration missing');
-      return null;
-    }
-
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/usd-price`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-      },
-      body: JSON.stringify({
-        processId: processId,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching price from Supabase:', error);
-    return null;
-  }
-}
 
 const injected = injectedModule();
 const trust = trustModule();
@@ -170,6 +138,27 @@ export const useEthereumProvider = () => React.useContext(EthereumContext);
 
 export function EthereumProvider(props: EthereumProviderProps) {
   const aoProvider = useAOProvider();
+
+  // Suppress ENS reverse lookup errors from Web3-Onboard
+  React.useEffect(() => {
+    const originalError = console.error;
+    console.error = (...args: any[]) => {
+      const errorMessage = args[0]?.toString() || '';
+      // Filter out ENS reverse lookup errors
+      if (
+        errorMessage.includes('ContractFunctionExecutionError') &&
+        errorMessage.includes('reverse') &&
+        errorMessage.includes('Internal error')
+      ) {
+        return; // Suppress this specific error
+      }
+      originalError.apply(console, args);
+    };
+
+    return () => {
+      console.error = originalError;
+    };
+  }, []);
 
   const [walletAddress, setWalletAddress] = React.useState<string | null>(null);
   const [balance, setBalance] = React.useState<string | null>(null);
@@ -427,30 +416,37 @@ export function EthereumProvider(props: EthereumProviderProps) {
     (async function () {
       if (tokens && totalDeposited && aoProvider.mintedSupply) {
         try {
+          const currentNode = HB.app1;
+
           const [daiResp, stEthResp, usdsResp] = await Promise.all([
-            aoProvider.read({
-              processId: AO.daiPriceOracle,
-              action: 'Info',
+            readProcess({
+              processId: PATCH_MAP.dai.processId,
+              node: { url: currentNode },
+              path: `price-data`,
+              appendPath: true,
             }),
-            aoProvider.read({
-              processId: AO.stEthPriceOracle,
-              action: 'Info',
+            readProcess({
+              processId: PATCH_MAP.stEth.processId,
+              node: { url: currentNode },
+              path: `price-data`,
+              appendPath: true,
             }),
-            aoProvider.read({
-              processId: AO.usdsPriceOracle,
-              action: 'Info',
-              ignoreDataResponse: true,
+            readProcess({
+              processId: PATCH_MAP.usds.processId,
+              node: { url: currentNode },
+              path: `price-data`,
+              appendPath: true,
             }),
           ]);
 
-          const daiPrice = Number(daiResp?.['Last-Price']) / 10000;
-          const daiYield = Number(daiResp?.['Last-Yield']) / 10000;
+          const daiPrice = Number(daiResp?.price?.usd ?? 0);
+          const daiYield = Number(daiResp?.yield?.bps ?? 0);
 
-          const stEthPrice = Number(stEthResp?.['Last-Price']) / 10000;
-          const stEthYield = Number(stEthResp?.['Last-Yield']) / 10000;
+          const stEthPrice = Number(stEthResp?.price?.usd ?? 0);
+          const stEthYield = Number(stEthResp?.yield?.bps ?? 0);
 
-          const usdsPrice = Number(usdsResp?.['Last-Price']) / 10000;
-          const usdsYield = Number(usdsResp?.['Last-Yield']) / 10000;
+          const usdsPrice = Number(usdsResp?.price?.usd ?? 0);
+          const usdsYield = Number(usdsResp?.yield?.bps ?? 0);
 
           const totalDepositedSteth = Number(totalDeposited?.stEth?.value ?? BigInt(0));
           const totalDepositedDai = Number(totalDeposited?.dai?.value ?? BigInt(0));
@@ -554,10 +550,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
   React.useEffect(() => {
     (async function () {
       try {
-        const priceResp = await getPriceForToken('0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc');
+        const price = await getAoPrice();
 
-        if (priceResp) {
-          setAoPrice(priceResp.usd_price);
+        if (price !== null) {
+          setAoPrice(price);
         }
       } catch (e: any) {
         console.error('Error fetching AO price:', e);
@@ -598,26 +594,31 @@ export function EthereumProvider(props: EthereumProviderProps) {
     const lastConnectedWallet = JSON.parse(localStorage.getItem('onboard.js:last_connected_wallet'));
     if (lastConnectedWallet && lastConnectedWallet.length > 0) {
       setConnecting(true);
-      const [primaryWallet] = await onboard.connectWallet({
-        autoSelect: { label: lastConnectedWallet[0], disableModals: true },
-      });
+      try {
+        const [primaryWallet] = await onboard.connectWallet({
+          autoSelect: { label: lastConnectedWallet[0], disableModals: true },
+        });
 
-      if (primaryWallet) {
-        const success = await onboard.setChain({ chainId: '0x1' });
-        if (!success) return;
+        if (primaryWallet) {
+          const success = await onboard.setChain({ chainId: '0x1' });
+          if (!success) return;
 
-        setWeb3Provider(primaryWallet.provider);
+          setWeb3Provider(primaryWallet.provider);
 
-        const provider = new Web3Provider(primaryWallet.provider);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        setWalletAddress(address);
+          const provider = new Web3Provider(primaryWallet.provider);
+          const signer = provider.getSigner();
+          const address = await signer.getAddress();
+          setWalletAddress(address);
+          setConnecting(false);
+
+          const ethBalance = await signer.getBalance();
+          const formattedEth = formatEther(ethBalance);
+
+          setBalance(formattedEth);
+        }
+      } catch (error) {
+        console.error('Error recovering connection:', error);
         setConnecting(false);
-
-        const ethBalance = await signer.getBalance();
-        const formattedEth = formatEther(ethBalance);
-
-        setBalance(formattedEth);
       }
     } else {
       setConnecting(false);

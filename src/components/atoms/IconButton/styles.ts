@@ -5,6 +5,7 @@ export const Tooltip = styled.div<{ position: string }>`
   z-index: 2;
   display: none;
   white-space: nowrap;
+  padding: 1.5px 5px 0.5px 5px !important;
 
   ${(props) => {
     switch (props.position) {

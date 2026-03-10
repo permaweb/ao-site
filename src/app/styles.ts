@@ -205,7 +205,7 @@ export const GlobalStyle = createGlobalStyle`
     animation: ${open} ${transition1};
     span {
       color: ${(props) => props.theme.colors.tooltip.color} !important;
-      font-size: ${(props) => props.theme.typography.size.xxxSmall} !important;
+      font-size: ${(props) => props.theme.typography.size.xxxxSmall} !important;
 			font-family: ${(props) => props.theme.typography.family.primary} !important;
       font-weight: ${(props) => props.theme.typography.weight.bold} !important;
       white-space: nowrap;
