@@ -172,7 +172,7 @@ export function EthereumProvider(props: EthereumProviderProps) {
   const [aoPrice, setAoPrice] = React.useState<number | null>(null);
   const [lastArweaveAddress, setLastArweaveAddress] = React.useState<string | null>(null);
 
-  const [connecting, setConnecting] = React.useState<boolean>(true);
+  const [connecting, setConnecting] = React.useState<boolean>(false);
   const [disconnected, setDisconnected] = React.useState(false);
 
   React.useEffect(() => {
@@ -601,7 +601,10 @@ export function EthereumProvider(props: EthereumProviderProps) {
 
         if (primaryWallet) {
           const success = await onboard.setChain({ chainId: '0x1' });
-          if (!success) return;
+          if (!success) {
+            setConnecting(false);
+            return;
+          }
 
           setWeb3Provider(primaryWallet.provider);
 
@@ -615,13 +618,13 @@ export function EthereumProvider(props: EthereumProviderProps) {
           const formattedEth = formatEther(ethBalance);
 
           setBalance(formattedEth);
+        } else {
+          setConnecting(false);
         }
       } catch (error) {
         console.error('Error recovering connection:', error);
         setConnecting(false);
       }
-    } else {
-      setConnecting(false);
     }
   }, [onboard, disconnected]);
 

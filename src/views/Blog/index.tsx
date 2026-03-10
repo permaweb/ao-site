@@ -7,7 +7,6 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 import { AoBlogPost, fetchAoBlogPosts } from './aoFeed';
 import * as S from './styles';
 
-const PINNED_POST_SLUG = 'legacynet-sunset';
 const BLOG_ID = 'aodevblog';
 const SKELETON_CARD_COUNT = 6;
 
@@ -33,6 +32,7 @@ export default function Blog() {
   const [allPosts, setAllPosts] = React.useState<AoBlogPost[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const [debugPostLimit, setDebugPostLimit] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     let isMounted = true;
@@ -66,15 +66,16 @@ export default function Blog() {
     };
   }, []);
 
-  const pinnedPost = React.useMemo(
-    () => allPosts.find((post) => post.slug === PINNED_POST_SLUG) ?? allPosts[0] ?? null,
-    [allPosts]
+  const displayedPosts = React.useMemo(
+    () => (debugPostLimit !== null ? allPosts.slice(0, debugPostLimit) : allPosts),
+    [allPosts, debugPostLimit]
   );
-  const categories = React.useMemo(() => [...new Set(allPosts.map((p) => p.category))].sort(), [allPosts]);
+  const pinnedPost = React.useMemo(() => displayedPosts[0] ?? null, [displayedPosts]);
+  const categories = React.useMemo(() => [...new Set(displayedPosts.map((p) => p.category))].sort(), [displayedPosts]);
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
 
   const filteredPosts = React.useMemo(() => {
-    return allPosts.filter((post) => {
+    return displayedPosts.filter((post) => {
       if (pinnedPost?.slug && post.slug === pinnedPost.slug) return false;
 
       const matchesCategory = selectedCategory ? post.category === selectedCategory : true;
@@ -84,7 +85,7 @@ export default function Blog() {
       const searchable = [post.title, post.excerpt, post.author, post.category].join(' ').toLowerCase();
       return searchable.includes(normalizedSearchQuery);
     });
-  }, [allPosts, normalizedSearchQuery, pinnedPost?.slug, selectedCategory]);
+  }, [displayedPosts, normalizedSearchQuery, pinnedPost?.slug, selectedCategory]);
 
   return (
     <S.Wrapper>
@@ -136,6 +137,20 @@ export default function Blog() {
         </S.Content>
       ) : (
         <S.Content className={'fade-in'}>
+          {!error && allPosts.length > 0 && (
+            <S.DebugBox>
+              <S.DebugLabel>Debug: Simulate post count</S.DebugLabel>
+              <S.DebugButton $active={debugPostLimit === null} onClick={() => setDebugPostLimit(null)} type="button">
+                All ({allPosts.length})
+              </S.DebugButton>
+              <S.DebugButton $active={debugPostLimit === 1} onClick={() => setDebugPostLimit(1)} type="button">
+                1 post
+              </S.DebugButton>
+              <S.DebugButton $active={debugPostLimit === 2} onClick={() => setDebugPostLimit(2)} type="button">
+                2 posts
+              </S.DebugButton>
+            </S.DebugBox>
+          )}
           {error && (
             <S.Status>
               <S.StatusMessage>{error}</S.StatusMessage>
@@ -215,7 +230,7 @@ export default function Blog() {
           )}
           {!error && filteredPosts.length === 0 && (
             <S.Status>
-              <S.StatusMessage>No posts found.</S.StatusMessage>
+              <S.StatusMessage>{displayedPosts.length === 1 ? 'More coming soon.' : 'No posts found.'}</S.StatusMessage>
             </S.Status>
           )}
         </S.Content>

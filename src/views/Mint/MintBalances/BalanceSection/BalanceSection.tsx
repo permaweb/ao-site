@@ -422,10 +422,12 @@ export default function BalanceSection(props: IProps) {
             </S.BalanceContent>
           ) : (
             <S.NetworkDisconnected className={'fade-in'}>
-              <S.NetworkDisconnectedIconText>
-                <ReactSVG src={ASSETS.wallet} />
-                <p>{language.connectEthWalletToViewDeposits}</p>
-              </S.NetworkDisconnectedIconText>
+              <S.NetworkDisconnectedContent>
+                <S.NetworkDisconnectedIconText>
+                  <ReactSVG src={ASSETS.wallet} />
+                  <p>{language.connectEthWalletToViewDeposits}</p>
+                </S.NetworkDisconnectedIconText>
+              </S.NetworkDisconnectedContent>
               <Button type={'primary'} label={getWalletLabel()} handlePress={handleWalletPress} height={45} fullWidth />
             </S.NetworkDisconnected>
           )}

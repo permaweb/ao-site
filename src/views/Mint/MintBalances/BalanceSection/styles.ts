@@ -152,6 +152,7 @@ export const BalanceWalletDropdownLine = styled.div`
 
 export const BalanceBodyWrapper = styled.div`
   width: 100%;
+  min-height: 250px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -410,36 +411,61 @@ export const ModalWrapper = styled.div`
   }
 `;
 
+export const NetworkDisconnectedContent = styled.div`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const NetworkDisconnectedIconText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
+  margin-top: -16px;
 
   p {
     font-family: ${(props) => props.theme.typography.family.primary};
     font-weight: ${(props) => props.theme.typography.weight.regular};
-    font-size: ${(props) => props.theme.typography.size.xSmall};
+    font-size: ${(props) => props.theme.typography.size.xxSmall};
     color: ${(props) => props.theme.colors.font.primary};
     margin: 0;
   }
 
+  /* ReactSVG wrapper - ensure icon container is visible */
+  > span,
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+    flex-shrink: 0;
+  }
+
   svg {
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
+    min-height: 16px;
+    min-width: 16px;
+    fill: ${(props) => props.theme.colors.icon.primary.fill};
     color: ${(props) => props.theme.colors.font.primary};
-    fill: ${(props) => props.theme.colors.font.primary};
   }
 `;
 
 export const NetworkDisconnected = styled.div`
   width: 100%;
+  min-height: 240px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 24px;
   padding: 20px 0 0 0;
+
+  > *:last-child {
+    flex-shrink: 0;
+    width: 100%;
+  }
 `;
 
 export const TooltipWrapper = styled.div`
