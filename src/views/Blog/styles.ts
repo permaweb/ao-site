@@ -514,33 +514,3 @@ export const StatusMessage = styled.p`
   color: ${(props) => props.theme.colors.font.alt2};
   line-height: 1.5;
 `;
-
-export const DebugBox = styled.div`
-  padding: 12px 16px;
-  margin-bottom: 8px;
-  border: 2px dashed ${(props) => props.theme.colors.border.alt3};
-  background: ${(props) => props.theme.colors.container.alt1.background};
-  font-family: ${(props) => props.theme.typography.family.primary};
-  font-size: ${(props) => props.theme.typography.size.xSmall};
-`;
-
-export const DebugLabel = styled.span`
-  color: ${(props) => props.theme.colors.font.alt2};
-  margin-right: 10px;
-`;
-
-export const DebugButton = styled.button<{ $active?: boolean }>`
-  margin-right: 6px;
-  padding: 4px 10px;
-  font-size: ${(props) => props.theme.typography.size.xxxxSmall};
-  background: ${(props) =>
-    props.$active ? props.theme.colors.font.alt2 : props.theme.colors.container.alt2.background};
-  color: ${(props) => (props.$active ? props.theme.colors.container.alt1.background : props.theme.colors.font.primary)};
-  border: 1px solid ${(props) => props.theme.colors.border.primary};
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.9;
-  }
-`;

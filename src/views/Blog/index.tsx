@@ -32,7 +32,6 @@ export default function Blog() {
   const [allPosts, setAllPosts] = React.useState<AoBlogPost[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-  const [debugPostLimit, setDebugPostLimit] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     let isMounted = true;
@@ -66,10 +65,7 @@ export default function Blog() {
     };
   }, []);
 
-  const displayedPosts = React.useMemo(
-    () => (debugPostLimit !== null ? allPosts.slice(0, debugPostLimit) : allPosts),
-    [allPosts, debugPostLimit]
-  );
+  const displayedPosts = allPosts;
   const pinnedPost = React.useMemo(() => displayedPosts[0] ?? null, [displayedPosts]);
   const categories = React.useMemo(() => [...new Set(displayedPosts.map((p) => p.category))].sort(), [displayedPosts]);
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
@@ -137,20 +133,6 @@ export default function Blog() {
         </S.Content>
       ) : (
         <S.Content className={'fade-in'}>
-          {!error && allPosts.length > 0 && (
-            <S.DebugBox>
-              <S.DebugLabel>Debug: Simulate post count</S.DebugLabel>
-              <S.DebugButton $active={debugPostLimit === null} onClick={() => setDebugPostLimit(null)} type="button">
-                All ({allPosts.length})
-              </S.DebugButton>
-              <S.DebugButton $active={debugPostLimit === 1} onClick={() => setDebugPostLimit(1)} type="button">
-                1 post
-              </S.DebugButton>
-              <S.DebugButton $active={debugPostLimit === 2} onClick={() => setDebugPostLimit(2)} type="button">
-                2 posts
-              </S.DebugButton>
-            </S.DebugBox>
-          )}
           {error && (
             <S.Status>
               <S.StatusMessage>{error}</S.StatusMessage>
