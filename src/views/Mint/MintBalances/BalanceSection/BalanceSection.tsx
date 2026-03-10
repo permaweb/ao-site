@@ -264,7 +264,7 @@ export default function BalanceSection(props: IProps) {
 			}
 			return (
 				<>
-					{formatDisplayAmount(amount)} {token.ticker}
+					{formatDisplayAmount(amount)} {language.ao}
 				</>
 			);
 		} else {
