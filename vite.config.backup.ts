@@ -67,6 +67,24 @@ export default defineConfig(({ mode }) => {
 			emptyOutDir: true,
 			rollupOptions: {
 				plugins: [polyfillNode()],
+				output: {
+					manualChunks: (id: string) => {
+						if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+							return 'vendor';
+						}
+						if (id.includes('@permaweb/aoconnect')) {
+							return 'ao-connect';
+						}
+						if (id.includes('arweave')) {
+							return 'arweave';
+						}
+						if (id.includes('react-markdown') || id.includes('katex') || id.includes('marked')) {
+							return 'markdown';
+						}
+
+						return undefined;
+					},
+				},
 			},
 		},
 		server: {
