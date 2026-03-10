@@ -12,467 +12,497 @@ import { useArweaveProvider } from './ArweaveProvider';
 import { useLanguageProvider } from './LanguageProvider';
 
 interface AllocationContextState {
-  records: AllocationRecordType[] | null;
-  addToken: (token: AllocationTokenRecordType) => void;
-  addFullToken: (token: AllocationTokenRecordType) => void;
-  updateToken: (token: AllocationRecordType, multiplier: number | 'max') => void;
-  adjustTokenByPercentage: (token: AllocationRecordType, percentageChange: number) => void;
-  removeToken: (token: AllocationTokenRecordType) => void;
-  fetchingSetup: boolean;
-  showSetup: boolean;
-  savePreferences: (initialSave?: boolean) => Promise<void>;
-  resetPreferences: () => void;
-  loading: boolean;
-  isTokenDisabled: (token: AllocationTokenRecordType) => boolean;
-  unsavedChanges: boolean;
-  projects: any[];
-  totalDelegated: any;
-  getClaimableBalance: (walletAddress: string, flpId: string) => Promise<string | null>;
+	records: AllocationRecordType[] | null;
+	addToken: (token: AllocationTokenRecordType) => void;
+	addFullToken: (token: AllocationTokenRecordType) => void;
+	updateToken: (token: AllocationRecordType, multiplier: number | 'max') => void;
+	adjustTokenByPercentage: (token: AllocationRecordType, percentageChange: number) => void;
+	removeToken: (token: AllocationTokenRecordType) => void;
+	fetchingSetup: boolean;
+	showSetup: boolean;
+	savePreferences: (initialSave?: boolean) => Promise<void>;
+	resetPreferences: () => void;
+	loading: boolean;
+	isTokenDisabled: (token: AllocationTokenRecordType) => boolean;
+	unsavedChanges: boolean;
+	projects: any[];
+	totalDelegated: any;
+	getClaimableBalance: (walletAddress: string, flpId: string) => Promise<string | null>;
+	withdrawFLPToken: (flpId: string) => Promise<string>;
 }
 
 const DEFAULT_CONTEXT: AllocationContextState = {
-  records: null,
-  addToken: () => {},
-  addFullToken: () => {},
-  updateToken: () => {},
-  adjustTokenByPercentage: () => {},
-  removeToken: () => {},
-  fetchingSetup: false,
-  showSetup: false,
-  savePreferences: async () => {},
-  resetPreferences: () => {},
-  loading: false,
-  isTokenDisabled: () => false,
-  unsavedChanges: false,
-  projects: [],
-  totalDelegated: null,
-  getClaimableBalance: () => null,
+	records: null,
+	addToken: () => {},
+	addFullToken: () => {},
+	updateToken: () => {},
+	adjustTokenByPercentage: () => {},
+	removeToken: () => {},
+	fetchingSetup: false,
+	showSetup: false,
+	savePreferences: async () => {},
+	resetPreferences: () => {},
+	loading: false,
+	isTokenDisabled: () => false,
+	unsavedChanges: false,
+	projects: [],
+	totalDelegated: null,
+	getClaimableBalance: () => null,
+	withdrawFLPToken: async () => '',
 };
 
 const AllocationContext = React.createContext<AllocationContextState>(DEFAULT_CONTEXT);
 
 export function useAllocationProvider(): AllocationContextState {
-  const context = React.useContext(AllocationContext);
-  if (!context) {
-    throw new Error('useAllocationProvider must be used within an AllocationProvider');
-  }
-  return context;
+	const context = React.useContext(AllocationContext);
+	if (!context) {
+		throw new Error('useAllocationProvider must be used within an AllocationProvider');
+	}
+	return context;
 }
 
 export function AllocationProvider(props: { children: React.ReactNode }) {
-  const arProvider = useArweaveProvider();
-  const languageProvider = useLanguageProvider();
-  const language = languageProvider.object[languageProvider.current];
+	const arProvider = useArweaveProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
-  const [fetchingSetup, setFetchingSetup] = React.useState<boolean>(false);
-  const [showSetup, setShowSetup] = React.useState<boolean>(false);
-  const [originalRecords, setOriginalRecords] = React.useState<AllocationRecordType[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [response, setResponse] = React.useState<NotificationType | null>(null);
-  const [unsavedChanges, setUnsavedChanges] = React.useState<boolean>(false);
+	const [fetchingSetup, setFetchingSetup] = React.useState<boolean>(false);
+	const [showSetup, setShowSetup] = React.useState<boolean>(false);
+	const [originalRecords, setOriginalRecords] = React.useState<AllocationRecordType[]>([]);
+	const [loading, setLoading] = React.useState<boolean>(false);
+	const [response, setResponse] = React.useState<NotificationType | null>(null);
+	const [unsavedChanges, setUnsavedChanges] = React.useState<boolean>(false);
 
-  const [projects, setProjects] = React.useState<any>(null);
-  const [totalDelegated, setTotalDelegated] = React.useState<any>(null);
-  const [records, setRecords] = React.useState<AllocationRecordType[] | null>(null);
+	const [projects, setProjects] = React.useState<any>(null);
+	const [totalDelegated, setTotalDelegated] = React.useState<any>(null);
+	const [records, setRecords] = React.useState<AllocationRecordType[] | null>(null);
 
-  React.useEffect(() => {
-    (async function () {
-      try {
-        const response = await flpCu.dryrun({
-          process: AO.flpFactory,
-          tags: [{ name: 'Action', value: 'Get-FLPs' }],
-        });
+	React.useEffect(() => {
+		(async function () {
+			try {
+				const response = await flpCu.dryrun({
+					process: AO.flpFactory,
+					tags: [{ name: 'Action', value: 'Get-FLPs' }],
+				});
 
-        if (response?.Messages?.[0]?.Data) {
-          setProjects(JSON.parse(response.Messages[0].Data));
-        }
-      } catch (e: any) {
-        setProjects([]);
-      }
-    })();
-  }, []);
+				if (response?.Messages?.[0]?.Data) {
+					setProjects(JSON.parse(response.Messages[0].Data));
+				}
+			} catch (e: any) {
+				setProjects([]);
+			}
+		})();
+	}, []);
 
-  React.useEffect(() => {
-    (async function () {
-      try {
-        const response = await flpCu.dryrun({
-          process: AO.yieldHistorian,
-          tags: [{ name: 'Action', value: 'Get-Total-Delegated-AO-By-Project' }],
-        });
+	React.useEffect(() => {
+		(async function () {
+			try {
+				const response = await flpCu.dryrun({
+					process: AO.yieldHistorian,
+					tags: [{ name: 'Action', value: 'Get-Total-Delegated-AO-By-Project' }],
+				});
 
-        if (response?.Messages?.[0]?.Data) {
-          setTotalDelegated(JSON.parse(response.Messages[0].Data));
-        }
-      } catch (e: any) {
-        console.error(e);
-      }
-    })();
-  }, []);
+				if (response?.Messages?.[0]?.Data) {
+					setTotalDelegated(JSON.parse(response.Messages[0].Data));
+				}
+			} catch (e: any) {
+				console.error(e);
+			}
+		})();
+	}, []);
 
-  React.useEffect(() => {
-    if (arProvider.walletAddress && projects) {
-      const cached = getCachedRecords();
-      if (cached && cached.length > 0) {
-        setRecords(cached);
-        setOriginalRecords(cached);
-        setShowSetup(false);
-      }
-      fetchSetup();
-    } else {
-      setShowSetup(true);
-    }
-  }, [arProvider.walletAddress, projects]);
+	React.useEffect(() => {
+		if (arProvider.walletAddress && projects) {
+			const cached = getCachedRecords();
+			if (cached && cached.length > 0) {
+				setRecords(cached);
+				setOriginalRecords(cached);
+				setShowSetup(false);
+			}
+			fetchSetup();
+		} else {
+			setShowSetup(true);
+		}
+	}, [arProvider.walletAddress, projects]);
 
-  React.useEffect(() => {
-    const normalizeRecords = (arr: AllocationRecordType[]) =>
-      _.sortBy(arr, ['id']).map((record) => ({
-        ...record,
-        value: parseFloat(record.value.toFixed(10)),
-      }));
+	React.useEffect(() => {
+		const normalizeRecords = (arr: AllocationRecordType[]) =>
+			_.sortBy(arr, ['id']).map((record) => ({
+				...record,
+				value: parseFloat(record.value.toFixed(10)),
+			}));
 
-    if (_.isEqual(normalizeRecords(records), normalizeRecords(originalRecords))) {
-      setUnsavedChanges(false);
-    } else {
-      setUnsavedChanges(true);
-    }
-  }, [records, originalRecords]);
+		if (_.isEqual(normalizeRecords(records), normalizeRecords(originalRecords))) {
+			setUnsavedChanges(false);
+		} else {
+			setUnsavedChanges(true);
+		}
+	}, [records, originalRecords]);
 
-  const fetchSetup = async () => {
-    setFetchingSetup(true);
-    try {
-      const response = await flpCu.dryrun({
-        process: AO.delegationOracle,
-        tags: [
-          { name: 'Action', value: 'Get-Delegations' },
-          { name: 'Wallet', value: arProvider.walletAddress },
-        ],
-      });
+	const fetchSetup = async () => {
+		setFetchingSetup(true);
+		try {
+			const response = await flpCu.dryrun({
+				process: AO.delegationOracle,
+				tags: [
+					{ name: 'Action', value: 'Get-Delegations' },
+					{ name: 'Wallet', value: arProvider.walletAddress },
+				],
+			});
 
-      if (response?.Messages?.[0]?.Data) {
-        const remoteRecords = JSON.parse(response.Messages[0].Data).delegationPrefs;
+			if (response?.Messages?.[0]?.Data) {
+				const remoteRecords = JSON.parse(response.Messages[0].Data).delegationPrefs;
 
-        if (remoteRecords?.length > 0) {
-          const parsedRecords = remoteRecords.map((record) => {
-            let label: string;
-            if (record.walletTo === AO.piProcess) {
-              label = 'PI';
-            } else if (record.walletTo === arProvider.walletAddress) {
-              label = 'AO';
-            } else {
-              const ticker = projects.find((project) => project.id === record.walletTo)?.flp_token_ticker;
-              label = ticker ? `$${ticker}` : '-';
-            }
-            return {
-              id: record.walletTo ?? '-',
-              label: label,
-              value: parseInt(record.factor ?? '0', 10) / 10000,
-            };
-          });
+				if (remoteRecords?.length > 0) {
+					const parsedRecords = remoteRecords.map((record) => {
+						let label: string;
+						if (record.walletTo === AO.piProcess) {
+							label = 'PI';
+						} else if (record.walletTo === arProvider.walletAddress) {
+							label = 'AO';
+						} else {
+							const ticker = projects.find((project) => project.id === record.walletTo)?.flp_token_ticker;
+							label = ticker ? `$${ticker}` : '-';
+						}
+						return {
+							id: record.walletTo ?? '-',
+							label: label,
+							value: parseInt(record.factor ?? '0', 10) / 10000,
+						};
+					});
 
-          setRecords(parsedRecords);
-          setOriginalRecords(parsedRecords);
-          setCachedRecords(parsedRecords);
+					setRecords(parsedRecords);
+					setOriginalRecords(parsedRecords);
+					setCachedRecords(parsedRecords);
 
-          setShowSetup(false);
-          setUnsavedChanges(false);
-        } else {
-          setShowSetup(true);
-          setRecords([]);
-        }
-      } else {
-        setShowSetup(true);
-      }
-    } catch (e: any) {
-      console.error(e);
-      setShowSetup(true);
-    }
-    setFetchingSetup(false);
-  };
+					setShowSetup(false);
+					setUnsavedChanges(false);
+				} else {
+					setShowSetup(true);
+					setRecords([]);
+				}
+			} else {
+				setShowSetup(true);
+			}
+		} catch (e: any) {
+			console.error(e);
+			setShowSetup(true);
+		}
+		setFetchingSetup(false);
+	};
 
-  async function getClaimableBalance(walletAddress: string, flpId: string): Promise<string | null> {
-    const res = await flpCu.dryrun({
-      process: flpId,
-      tags: [
-        { name: 'Action', value: 'Get-Claimable-Balance' },
-        { name: 'Recipient', value: walletAddress },
-      ],
-    });
-    if (!res.Messages.length) return null;
-    const data = res.Messages[0].Data;
-    console.log('onGetClaimableBalance', data);
-    return data;
-  }
+	async function getClaimableBalance(walletAddress: string, flpId: string): Promise<string | null> {
+		const res = await flpCu.dryrun({
+			process: flpId,
+			tags: [
+				{ name: 'Action', value: 'Get-Claimable-Balance' },
+				{ name: 'Recipient', value: walletAddress },
+			],
+		});
+		if (!res.Messages.length) return null;
+		const data = res.Messages[0].Data;
+		return data;
+	}
 
-  const getCacheKey = () => {
-    return arProvider.walletAddress ? `allocation_${arProvider.walletAddress}` : null;
-  };
+	async function withdrawFLPToken(flpId: string): Promise<string> {
+		console.log('Claim rewards', flpId);
+		const msgId = await message({
+			process: flpId,
+			signer: createDataItemSigner(window.arweaveWallet),
+			tags: [{ name: 'Action', value: 'Withdraw-FLP-Token' }],
+		});
+		console.log('Claim rewards msgId', msgId);
+		const computedResult = await result({ message: msgId, process: flpId });
 
-  const getCachedRecords = (): AllocationRecordType[] | null => {
-    const key = getCacheKey();
-    if (key) {
-      const cached = localStorage.getItem(key);
-      if (cached) {
-        try {
-          return JSON.parse(cached);
-        } catch (e) {
-          console.error('Error parsing cached records:', e);
-        }
-      }
-    }
-    return null;
-  };
+		console.log('Claim rewards result', computedResult);
 
-  const setCachedRecords = (records: AllocationRecordType[]) => {
-    const key = getCacheKey();
-    if (key) {
-      localStorage.setItem(key, JSON.stringify(records));
-    }
-  };
+		if (computedResult.Messages.length === 0 && computedResult.Spawns.length === 0 && computedResult.Output.data) {
+			throw new Error(computedResult.Output.data);
+		}
 
-  const updateRecords = (newRecords: AllocationRecordType[]) => {
-    setRecords(newRecords);
-    setCachedRecords(newRecords);
-  };
+		if (computedResult.Messages.length === 0 && computedResult.Spawns.length === 0 && computedResult.Error) {
+			throw new Error(computedResult.Error);
+		}
 
-  const addToken = (token: AllocationTokenRecordType) => {
-    const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
+		const reponseMsg = computedResult.Messages[0];
+		const responseStatus = reponseMsg.Tags.find((tag: any) => tag.name === 'Status');
 
-    if (existingRecord) {
-      console.error(`Token ${token.label} already exists.`);
-      return;
-    }
+		if (responseStatus?.value === 'Error')
+			throw new Error(reponseMsg.Tags.find((tag: any) => tag.name === 'Reason')?.value || reponseMsg.Data);
 
-    const evenShare = 1 / (records.length + 1);
-    const updatedRecords = records.map((record: AllocationRecordType) => ({
-      ...record,
-      value: evenShare,
-    }));
-    updatedRecords.push({ ...token, value: evenShare });
+		return msgId;
+	}
 
-    updateRecords(updatedRecords);
-  };
+	const getCacheKey = () => {
+		return arProvider.walletAddress ? `allocation_${arProvider.walletAddress}` : null;
+	};
 
-  const addFullToken = (token: AllocationTokenRecordType) => {
-    updateRecords([{ ...token, value: 1 }]);
-  };
+	const getCachedRecords = (): AllocationRecordType[] | null => {
+		const key = getCacheKey();
+		if (key) {
+			const cached = localStorage.getItem(key);
+			if (cached) {
+				try {
+					return JSON.parse(cached);
+				} catch (e) {
+					console.error('Error parsing cached records:', e);
+				}
+			}
+		}
+		return null;
+	};
 
-  const updateToken = (token: AllocationRecordType, multiplier: number | 'max') => {
-    if (token.value === undefined || token.value === null) {
-      console.error('No value provided');
-      return;
-    }
+	const setCachedRecords = (records: AllocationRecordType[]) => {
+		const key = getCacheKey();
+		if (key) {
+			localStorage.setItem(key, JSON.stringify(records));
+		}
+	};
 
-    let newAmount: number;
-    if (multiplier === 'max') newAmount = 1;
-    else newAmount = token.value * multiplier;
+	const updateRecords = (newRecords: AllocationRecordType[]) => {
+		setRecords(newRecords);
+		setCachedRecords(newRecords);
+	};
 
-    if (newAmount < 0 || newAmount > 1) {
-      console.error('Invalid amount provided, must be between 0 and 1');
-      return;
-    }
+	const addToken = (token: AllocationTokenRecordType) => {
+		const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
 
-    const totalTokens = records.length;
-    if (totalTokens === 1) {
-      updateRecords([{ ...token, value: 1 }]);
-      return;
-    }
+		if (existingRecord) {
+			console.error(`Token ${token.label} already exists.`);
+			return;
+		}
 
-    const remainingAmount = 1 - newAmount;
-    const newShareForOthers = remainingAmount / (totalTokens - 1);
+		const evenShare = 1 / (records.length + 1);
+		const updatedRecords = records.map((record: AllocationRecordType) => ({
+			...record,
+			value: evenShare,
+		}));
+		updatedRecords.push({ ...token, value: evenShare });
 
-    const updatedRecords = records
-      .map((record) => {
-        if (token.id === record.id) {
-          return { ...record, value: newAmount };
-        } else {
-          return { ...record, value: newShareForOthers };
-        }
-      })
-      .filter((record: AllocationRecordType) => record.value > 0);
+		updateRecords(updatedRecords);
+	};
 
-    updateRecords(updatedRecords);
-  };
+	const addFullToken = (token: AllocationTokenRecordType) => {
+		updateRecords([{ ...token, value: 1 }]);
+	};
 
-  const adjustTokenByPercentage = (token: AllocationRecordType, percentageChange: number) => {
-    if (token.value === undefined || token.value === null) {
-      console.error('No value provided');
-      return;
-    }
+	const updateToken = (token: AllocationRecordType, multiplier: number | 'max') => {
+		if (token.value === undefined || token.value === null) {
+			console.error('No value provided');
+			return;
+		}
 
-    const change = percentageChange / 100;
-    const newAmount = Math.max(0, Math.min(1, token.value + change));
+		let newAmount: number;
+		if (multiplier === 'max') newAmount = 1;
+		else newAmount = token.value * multiplier;
 
-    if (newAmount === token.value) return;
+		if (newAmount < 0 || newAmount > 1) {
+			console.error('Invalid amount provided, must be between 0 and 1');
+			return;
+		}
 
-    const totalTokens = records.length;
-    if (totalTokens === 1) {
-      updateRecords([{ ...token, value: 1 }]);
-      return;
-    }
+		const totalTokens = records.length;
+		if (totalTokens === 1) {
+			updateRecords([{ ...token, value: 1 }]);
+			return;
+		}
 
-    const amountChanged = newAmount - token.value;
-    const distributionFactor = -amountChanged / (totalTokens - 1);
+		const remainingAmount = 1 - newAmount;
+		const newShareForOthers = remainingAmount / (totalTokens - 1);
 
-    const updatedRecords = records
-      .map((record) => {
-        if (token.id === record.id) {
-          return { ...record, value: newAmount };
-        } else {
-          return { ...record, value: Math.max(0, record.value + distributionFactor) };
-        }
-      })
-      .filter((record: AllocationRecordType) => record.value > 0);
+		const updatedRecords = records
+			.map((record) => {
+				if (token.id === record.id) {
+					return { ...record, value: newAmount };
+				} else {
+					return { ...record, value: newShareForOthers };
+				}
+			})
+			.filter((record: AllocationRecordType) => record.value > 0);
 
-    const total = updatedRecords.reduce((sum, record) => sum + record.value, 0);
-    if (Math.abs(total - 1) > 0.001) {
-      const normalizedRecords = updatedRecords.map((record) => ({
-        ...record,
-        value: record.value / total,
-      }));
-      updateRecords(normalizedRecords);
-    } else {
-      updateRecords(updatedRecords);
-    }
-  };
+		updateRecords(updatedRecords);
+	};
 
-  const removeToken = (token: AllocationTokenRecordType) => {
-    if (records.length === 1) {
-      console.error('Cannot remove the only token');
-      return;
-    }
+	const adjustTokenByPercentage = (token: AllocationRecordType, percentageChange: number) => {
+		if (token.value === undefined || token.value === null) {
+			console.error('No value provided');
+			return;
+		}
 
-    const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
+		const change = percentageChange / 100;
+		const newAmount = Math.max(0, Math.min(1, token.value + change));
 
-    if (!existingRecord) {
-      console.error(`Token ${token.label} does not exist.`);
-      return;
-    }
+		if (newAmount === token.value) return;
 
-    const updatedRecords = records.filter((record: AllocationRecordType) => record.id !== token.id);
+		const totalTokens = records.length;
+		if (totalTokens === 1) {
+			updateRecords([{ ...token, value: 1 }]);
+			return;
+		}
 
-    if (updatedRecords.length > 0) {
-      const evenShare = 1 / updatedRecords.length;
-      const redistributedRecords = updatedRecords.map((record: AllocationRecordType) => ({
-        ...record,
-        value: evenShare,
-      }));
-      updateRecords(redistributedRecords);
-    } else {
-      updateRecords([]);
-    }
-  };
+		const amountChanged = newAmount - token.value;
+		const distributionFactor = -amountChanged / (totalTokens - 1);
 
-  const isTokenDisabled = (token: AllocationRecordType) => {
-    const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
-    if (!existingRecord) return false;
-    if (records.length === 1) return true;
-  };
+		const updatedRecords = records
+			.map((record) => {
+				if (token.id === record.id) {
+					return { ...record, value: newAmount };
+				} else {
+					return { ...record, value: Math.max(0, record.value + distributionFactor) };
+				}
+			})
+			.filter((record: AllocationRecordType) => record.value > 0);
 
-  const savePreferences = async (initialSave?: boolean) => {
-    if (arProvider.walletAddress) {
-      setLoading(true);
-      setResponse(null);
-      try {
-        const messages = [];
+		const total = updatedRecords.reduce((sum, record) => sum + record.value, 0);
+		if (Math.abs(total - 1) > 0.001) {
+			const normalizedRecords = updatedRecords.map((record) => ({
+				...record,
+				value: record.value / total,
+			}));
+			updateRecords(normalizedRecords);
+		} else {
+			updateRecords(updatedRecords);
+		}
+	};
 
-        const createMessage = (id, factor) => ({
-          process: AO.delegationOracle,
-          signer: createDataItemSigner(arProvider.wallet),
-          tags: [{ name: 'Action', value: 'Set-Delegation' }],
-          data: JSON.stringify({
-            walletFrom: arProvider.walletAddress,
-            walletTo: id,
-            factor: factor,
-          }),
-        });
+	const removeToken = (token: AllocationTokenRecordType) => {
+		if (records.length === 1) {
+			console.error('Cannot remove the only token');
+			return;
+		}
 
-        const newIds = records.map((record) => record.id);
+		const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
 
-        originalRecords.forEach((originalRecord) => {
-          if (!newIds.includes(originalRecord.id)) {
-            messages.push(createMessage(originalRecord.id, 0));
-          }
-        });
+		if (!existingRecord) {
+			console.error(`Token ${token.label} does not exist.`);
+			return;
+		}
 
-        records.forEach((newRecord) => {
-          const factor = Math.floor((newRecord.value ?? 0) * 10000);
-          messages.push(createMessage(newRecord.id, factor));
-        });
+		const updatedRecords = records.filter((record: AllocationRecordType) => record.id !== token.id);
 
-        messages.sort((a, b) => {
-          const factorA = JSON.parse(a.data).factor;
-          const factorB = JSON.parse(b.data).factor;
+		if (updatedRecords.length > 0) {
+			const evenShare = 1 / updatedRecords.length;
+			const redistributedRecords = updatedRecords.map((record: AllocationRecordType) => ({
+				...record,
+				value: evenShare,
+			}));
+			updateRecords(redistributedRecords);
+		} else {
+			updateRecords([]);
+		}
+	};
 
-          if (factorA === 0 && factorB !== 0) return -1;
-          if (factorA !== 0 && factorB === 0) return 1;
-          return factorA - factorB;
-        });
+	const isTokenDisabled = (token: AllocationRecordType) => {
+		const existingRecord = records.find((record: AllocationRecordType) => record.id === token.id);
+		if (!existingRecord) return false;
+		if (records.length === 1) return true;
+	};
 
-        for (const messageToSend of messages) {
-          const factor = JSON.parse(messageToSend.data).factor;
-          if (factor > 0 && factor < 500) {
-            setResponse({ status: 'warning', message: language.allocationTooLow });
-            setLoading(false);
-            return;
-          }
-        }
+	const savePreferences = async (initialSave?: boolean) => {
+		if (arProvider.walletAddress) {
+			setLoading(true);
+			setResponse(null);
+			try {
+				const messages = [];
 
-        for (const messageToSend of messages) {
-          console.log(messageToSend);
-          const response = await message(messageToSend);
-          const updateResult = await result({
-            process: AO.delegationOracle,
-            message: response,
-          });
-          console.log(updateResult);
-        }
+				const createMessage = (id, factor) => ({
+					process: AO.delegationOracle,
+					signer: createDataItemSigner(arProvider.wallet),
+					tags: [{ name: 'Action', value: 'Set-Delegation' }],
+					data: JSON.stringify({
+						walletFrom: arProvider.walletAddress,
+						walletTo: id,
+						factor: factor,
+					}),
+				});
 
-        setResponse({ status: 'success', message: `${language.preferencesUpdated}!` });
+				const newIds = records.map((record) => record.id);
 
-        if (initialSave) await fetchSetup();
-      } catch (e: any) {
-        setResponse({
-          status: 'warning',
-          message: e.message ?? language.errorSavingPreferences,
-        });
-      }
-      setLoading(false);
-    }
-  };
+				originalRecords.forEach((originalRecord) => {
+					if (!newIds.includes(originalRecord.id)) {
+						messages.push(createMessage(originalRecord.id, 0));
+					}
+				});
 
-  const resetPreferences = () => {
-    const resetRecords = originalRecords.map((record) => ({ ...record }));
-    setRecords(resetRecords);
-    setCachedRecords(resetRecords);
-  };
+				records.forEach((newRecord) => {
+					const factor = Math.floor((newRecord.value ?? 0) * 10000);
+					messages.push(createMessage(newRecord.id, factor));
+				});
 
-  return (
-    <>
-      <AllocationContext.Provider
-        value={{
-          records,
-          addToken,
-          addFullToken,
-          updateToken,
-          adjustTokenByPercentage,
-          removeToken,
-          fetchingSetup,
-          showSetup,
-          savePreferences,
-          resetPreferences,
-          loading,
-          isTokenDisabled,
-          unsavedChanges,
-          projects,
-          totalDelegated,
-          getClaimableBalance,
-        }}
-      >
-        {props.children}
-      </AllocationContext.Provider>
-      {response && (
-        <Notification message={response.message} type={response.status} callback={() => setResponse(null)} />
-      )}
-    </>
-  );
+				messages.sort((a, b) => {
+					const factorA = JSON.parse(a.data).factor;
+					const factorB = JSON.parse(b.data).factor;
+
+					if (factorA === 0 && factorB !== 0) return -1;
+					if (factorA !== 0 && factorB === 0) return 1;
+					return factorA - factorB;
+				});
+
+				for (const messageToSend of messages) {
+					const factor = JSON.parse(messageToSend.data).factor;
+					if (factor > 0 && factor < 500) {
+						setResponse({ status: 'warning', message: language.allocationTooLow });
+						setLoading(false);
+						return;
+					}
+				}
+
+				for (const messageToSend of messages) {
+					const response = await message(messageToSend);
+					const updateResult = await result({
+						process: AO.delegationOracle,
+						message: response,
+					});
+					console.log(updateResult);
+				}
+
+				setResponse({ status: 'success', message: `${language.preferencesUpdated}!` });
+
+				if (initialSave) await fetchSetup();
+			} catch (e: any) {
+				setResponse({
+					status: 'warning',
+					message: e.message ?? language.errorSavingPreferences,
+				});
+			}
+			setLoading(false);
+		}
+	};
+
+	const resetPreferences = () => {
+		const resetRecords = originalRecords.map((record) => ({ ...record }));
+		setRecords(resetRecords);
+		setCachedRecords(resetRecords);
+	};
+
+	return (
+		<>
+			<AllocationContext.Provider
+				value={{
+					records,
+					addToken,
+					addFullToken,
+					updateToken,
+					adjustTokenByPercentage,
+					removeToken,
+					fetchingSetup,
+					showSetup,
+					savePreferences,
+					resetPreferences,
+					loading,
+					isTokenDisabled,
+					unsavedChanges,
+					projects,
+					totalDelegated,
+					getClaimableBalance,
+					withdrawFLPToken,
+				}}
+			>
+				{props.children}
+			</AllocationContext.Provider>
+			{response && (
+				<Notification message={response.message} type={response.status} callback={() => setResponse(null)} />
+			)}
+		</>
+	);
 }

@@ -9,20 +9,20 @@ import * as S from './styles';
 const POLICY = 'pNhXNZpzv1v7eRE_vnjMNd9gJiXQ9F_pwc3wevdslvw';
 
 export default function Policies() {
-  const [policy, setPolicy] = React.useState<any>(null);
+	const [policy, setPolicy] = React.useState<any>(null);
 
-  React.useEffect(() => {
-    (async function () {
-      const response = await fetch(ENDPOINTS.arTxEndpoint(POLICY));
-      setPolicy(await response.text());
-    })();
-  }, []);
+	React.useEffect(() => {
+		(async function () {
+			const response = await fetch(ENDPOINTS.arTxEndpoint(POLICY));
+			setPolicy(await response.text());
+		})();
+	}, []);
 
-  return policy ? (
-    <S.Wrapper>
-      <ReactMarkdown children={policy} />
-    </S.Wrapper>
-  ) : (
-    <Loader />
-  );
+	return policy ? (
+		<S.Wrapper>
+			<ReactMarkdown children={policy} />
+		</S.Wrapper>
+	) : (
+		<Loader />
+	);
 }
