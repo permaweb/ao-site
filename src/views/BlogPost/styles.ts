@@ -107,12 +107,12 @@ export const ImageZoomIndicator = styled.span`
   position: absolute;
   right: 12px;
   bottom: 12px;
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 999px;
-  border: 1px solid ${(props) => props.theme.colors.border.primary};
   background: rgba(0, 0, 0, 0.45);
   opacity: 0;
   transform: translateY(4px);
@@ -122,18 +122,20 @@ export const ImageZoomIndicator = styled.span`
 
   span {
     position: relative;
-    width: 12px;
-    height: 12px;
-    border: 2px solid #ffffff;
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid #ffffff;
     border-radius: 999px;
+    /* Offset to optically center the icon (handle adds weight to bottom-right) */
+    transform: translate(-1px, -1px);
 
     &::after {
       content: '';
       position: absolute;
-      width: 7px;
-      height: 2px;
-      right: -6px;
-      bottom: -4px;
+      width: 5px;
+      height: 1.5px;
+      right: -4px;
+      bottom: -3px;
       background: #ffffff;
       transform: rotate(45deg);
       transform-origin: center;
@@ -351,13 +353,27 @@ export const MarkdownBody = styled.div`
   gap: 12px;
 
   a {
-    color: ${(props) => props.theme.colors.link.color};
-    text-decoration: underline;
-    text-decoration-thickness: 1.25px;
-    text-underline-offset: 0.12em;
+    color: white;
+    text-decoration: none;
 
     &:hover {
-      color: ${(props) => props.theme.colors.link.active};
+      color: #e0e0e0;
+    }
+
+    &[data-link-index='0'] {
+      background-color: red;
+    }
+
+    &[data-link-index='1'] {
+      background-color: green;
+    }
+
+    &[data-link-index='2'] {
+      background-color: blue;
+    }
+
+    &[data-link-index='3'] {
+      background-color: black;
     }
   }
 
@@ -386,7 +402,7 @@ export const MarkdownBody = styled.div`
 
   li {
     margin: 6px 0;
-    padding-left: 4px;
+    padding-left: 12px;
   }
 
   li::marker {
@@ -424,7 +440,6 @@ export const MarkdownBody = styled.div`
   h2 {
     font-size: ${(props) => props.theme.typography.size.h4};
     margin-top: 40px;
-    margin-bottom: 20px;
   }
 
   h3 {

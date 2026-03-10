@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { RgbCycleText } from 'components/atoms/RgbCycleText';
 import { AO, URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
 import { useLanguageProvider } from 'providers/LanguageProvider';
@@ -140,7 +141,9 @@ export default function Blog() {
           )}
           {pinnedPost && (
             <S.FeaturedSection>
-              <S.FeaturedLabel>Pinned</S.FeaturedLabel>
+              <S.FeaturedLabel>
+                <RgbCycleText text="PINNED" />
+              </S.FeaturedLabel>
               <S.FeaturedCardLink to={`${URLS.blog}${pinnedPost.slug}`}>
                 <S.FeaturedImageWrapper>
                   <FadeInImage src={pinnedPost.imageUrl} alt="" loading={'eager'} />

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
+import { LinkPreview, prefetchLinksFromMarkdown } from 'components/atoms/LinkPreview';
 import { Loader } from 'components/atoms/Loader';
 import { AO, ENDPOINTS, URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
@@ -114,6 +115,7 @@ export default function BlogPost() {
   );
   const [isLightboxClosing, setIsLightboxClosing] = React.useState(false);
   const closeLightboxTimeoutRef = React.useRef<number | null>(null);
+  const linkIndexRef = React.useRef(0);
   const normalizedMarkdown = React.useMemo(() => {
     if (!postBody.markdown) return null;
     return normalizeMarkdownForRendering(postBody.markdown);
@@ -225,6 +227,10 @@ export default function BlogPost() {
     setIsImageLoaded(false);
   }, [post?.imageUrl]);
 
+  React.useEffect(() => {
+    if (normalizedMarkdown) prefetchLinksFromMarkdown(normalizedMarkdown);
+  }, [normalizedMarkdown]);
+
   if (isLoading) {
     return (
       <S.Wrapper>
@@ -280,77 +286,93 @@ export default function BlogPost() {
           <S.MetaSecondary>{computedReadTime ?? post.readTime}</S.MetaSecondary>
         </S.MetaRow>
         <S.Section>
-          {normalizedMarkdown && (
-            <S.MarkdownBody className={'fade-in'}>
-              <ReactMarkdown
-                components={{
-                  pre({ children }) {
-                    const child = React.Children.toArray(children)[0] as
-                      | React.ReactElement<{ className?: string; children?: React.ReactNode }>
-                      | undefined;
-                    const className = child?.props?.className || '';
-                    const match = /language-(\w+)/.exec(className);
-                    const codeString = String(child?.props?.children ?? '').replace(/\n$/, '');
+          {normalizedMarkdown &&
+            (() => {
+              linkIndexRef.current = 0;
+              return (
+                <S.MarkdownBody className={'fade-in'}>
+                  <ReactMarkdown
+                    components={{
+                      pre({ children }) {
+                        const child = React.Children.toArray(children)[0] as
+                          | React.ReactElement<{ className?: string; children?: React.ReactNode }>
+                          | undefined;
+                        const className = child?.props?.className || '';
+                        const match = /language-(\w+)/.exec(className);
+                        const codeString = String(child?.props?.children ?? '').replace(/\n$/, '');
 
-                    return (
-                      <S.CodeBlock>
-                        <SyntaxHighlighter
-                          style={oneLight}
-                          language={match?.[1] || 'text'}
-                          PreTag="div"
-                          customStyle={{ margin: 0, border: 'none', borderRadius: 0 }}
-                          codeTagProps={{ style: { border: 'none' } }}
-                        >
-                          {codeString}
-                        </SyntaxHighlighter>
-                      </S.CodeBlock>
-                    );
-                  },
-                  img({ src, alt }) {
-                    if (!src) return null;
-                    return (
-                      <S.MarkdownImageFrame
-                        data-article-image
-                        role="button"
-                        tabIndex={0}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          const paragraph = event.currentTarget.closest('p');
-                          const caption = paragraph?.querySelector('em')?.textContent?.trim() || '';
-                          openExpandedImage(src, alt, caption);
-                        }}
-                        onKeyDown={(event) => {
-                          if (event.key === 'Enter' || event.key === ' ') {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            const paragraph = event.currentTarget.closest('p');
-                            const caption = paragraph?.querySelector('em')?.textContent?.trim() || '';
-                            openExpandedImage(src, alt, caption);
-                          }
-                        }}
-                        aria-label="Expand article image"
-                      >
-                        <img src={src} alt={alt || ''} loading="lazy" />
-                        <S.ImageZoomIndicator aria-hidden="true">
-                          <span />
-                        </S.ImageZoomIndicator>
-                      </S.MarkdownImageFrame>
-                    );
-                  },
-                  code({ className, children, ...rest }) {
-                    return (
-                      <code className={className} {...rest}>
-                        {children}
-                      </code>
-                    );
-                  },
-                }}
-              >
-                {normalizedMarkdown}
-              </ReactMarkdown>
-            </S.MarkdownBody>
-          )}
+                        return (
+                          <S.CodeBlock>
+                            <SyntaxHighlighter
+                              style={oneLight}
+                              language={match?.[1] || 'text'}
+                              PreTag="div"
+                              customStyle={{ margin: 0, border: 'none', borderRadius: 0 }}
+                              codeTagProps={{ style: { border: 'none' } }}
+                            >
+                              {codeString}
+                            </SyntaxHighlighter>
+                          </S.CodeBlock>
+                        );
+                      },
+                      img({ src, alt }) {
+                        if (!src) return null;
+                        return (
+                          <S.MarkdownImageFrame
+                            data-article-image
+                            role="button"
+                            tabIndex={0}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              const paragraph = event.currentTarget.closest('p');
+                              const caption = paragraph?.querySelector('em')?.textContent?.trim() || '';
+                              openExpandedImage(src, alt, caption);
+                            }}
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter' || event.key === ' ') {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                const paragraph = event.currentTarget.closest('p');
+                                const caption = paragraph?.querySelector('em')?.textContent?.trim() || '';
+                                openExpandedImage(src, alt, caption);
+                              }
+                            }}
+                            aria-label="Expand article image"
+                          >
+                            <img src={src} alt={alt || ''} loading="lazy" />
+                            <S.ImageZoomIndicator aria-hidden="true">
+                              <span />
+                            </S.ImageZoomIndicator>
+                          </S.MarkdownImageFrame>
+                        );
+                      },
+                      code({ className, children, ...rest }) {
+                        return (
+                          <code className={className} {...rest}>
+                            {children}
+                          </code>
+                        );
+                      },
+                      a({ href, children, ...rest }) {
+                        if (!href) return <>{children}</>;
+                        const index = linkIndexRef.current++;
+                        const colorIndex = index % 4;
+                        return (
+                          <LinkPreview href={href}>
+                            <a href={href} data-link-index={colorIndex} {...rest}>
+                              {children}
+                            </a>
+                          </LinkPreview>
+                        );
+                      },
+                    }}
+                  >
+                    {normalizedMarkdown}
+                  </ReactMarkdown>
+                </S.MarkdownBody>
+              );
+            })()}
           {!postBody.markdown && !postBody.html && <S.Paragraph className={'fade-in'}>{post.excerpt}</S.Paragraph>}
         </S.Section>
         {!isBodyLoading && suggestedPosts.length > 0 && (
