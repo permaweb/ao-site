@@ -1,2 +1,0 @@
-# GitHub collapses "generated" files in PR diffs (binary has no effect on GitHub)
-package-lock.json linguist-generated=true
