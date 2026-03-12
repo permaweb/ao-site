@@ -1,4 +1,5 @@
 import parse from 'html-react-parser';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
@@ -11,6 +12,17 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 import * as S from './styles';
 
 export default function Landing() {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const [videoReady, setVideoReady] = React.useState(false);
+  const hasPlaceholder = Boolean(ASSETS.landingGraphicPlaceholder);
+
+  React.useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const onCanPlay = () => setVideoReady(true);
+    video.addEventListener('canplay', onCanPlay);
+    return () => video.removeEventListener('canplay', onCanPlay);
+  }, []);
   const aoProvider = useAOProvider();
   const ethProvider = useEthereumProvider();
   const languageProvider = useLanguageProvider();
@@ -78,10 +90,23 @@ export default function Landing() {
         </S.MetricsWrapper>
       </S.Wrapper>
       <S.GraphicWrapper className={'fade-in'}>
-        <video autoPlay muted loop playsInline preload={'auto'}>
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload={'auto'}
+          poster={ASSETS.landingGraphicPlaceholder}
+        >
           <source src={ASSETS.landingGraphic} type={'video/mp4'} />
           Your browser does not support the video tag.
         </video>
+        {hasPlaceholder && (
+          <S.PlaceholderOverlay $visible={!videoReady} aria-hidden>
+            <img src={ASSETS.landingGraphicPlaceholder} alt="" />
+          </S.PlaceholderOverlay>
+        )}
       </S.GraphicWrapper>
     </>
   );

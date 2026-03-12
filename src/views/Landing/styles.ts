@@ -17,6 +17,8 @@ export const Wrapper = styled.div`
 `;
 
 export const GraphicWrapper = styled.div`
+  position: relative;
+
   video {
     height: calc(100vh - (${STYLING.dimensions.nav.height} + 20px));
     width: 100vw;
@@ -27,6 +29,24 @@ export const GraphicWrapper = styled.div`
     z-index: 2;
     opacity: 0.5;
     pointer-events: none;
+  }
+`;
+
+export const PlaceholderOverlay = styled.div<{ $visible: boolean }>`
+  position: fixed;
+  top: ${STYLING.dimensions.nav.height};
+  left: 0;
+  height: calc(100vh - (${STYLING.dimensions.nav.height} + 20px));
+  width: 100vw;
+  z-index: 3;
+  pointer-events: none;
+  opacity: ${(props) => (props.$visible ? 0.5 : 0)};
+  transition: opacity 0.5s ease-out;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 
