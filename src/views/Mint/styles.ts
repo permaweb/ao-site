@@ -390,6 +390,7 @@ export const NetworkDisconnectedIconText = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  margin-top: -12px;
 
   p {
     font-family: ${(props) => props.theme.typography.family.primary};
