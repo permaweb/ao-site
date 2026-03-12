@@ -19,6 +19,7 @@
     "@ethersproject/providers": "^5.7.2",
     "@ethersproject/units": "^5.7.0",
     "@permaweb/aoconnect": "0.0.93",
+    "@phosphor-icons/react": "^2.1.10",
     "@safe-global/safe-apps-provider": "^0.18.3",
     "@safe-global/safe-apps-sdk": "^8.1.0",
     "@web3-onboard/coinbase": "^2.4.1",
