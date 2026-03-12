@@ -79,6 +79,12 @@ export const ENDPOINTS = {
 
 const getTxEndpoint = (txId: string) => ENDPOINTS.arTxEndpoint(txId);
 
+/**
+ * ASSETS: Icons and images hosted on Arweave via getTxEndpoint.
+ * To add new icons: 1) Add SVG to public/icons/ 2) Deploy with
+ *   npm run deploy:icon -- --deploy-file ./public/icons/<name>.svg --arns-name ao
+ * 3) Add txId here via getTxEndpoint(txId) and remove the local file.
+ */
 export const ASSETS = {
   arconnect: getTxEndpoint('1Q5zOfpHzHnNtD2BS6Rg50WWT2H8aq3GYThDV3x6Qo0'),
   arweaveApp: getTxEndpoint('CNZKujmn8vo0QM7Ssq18-3d0k6Azv1xsj20yAWt1Vew'),
@@ -105,8 +111,10 @@ export const ASSETS = {
   exchange: getTxEndpoint('KfE6Dh0j2pTLo4Z8U6fmk6mCRsB6O6NgxJpI_Vm0_wY'),
   arrowRight: getTxEndpoint('Xkqtxc5_R8KSczygjl9iOk0LHv-GSbD8xhIw5IPIIuc'),
   github: getTxEndpoint('7JXQVvywkWNFXAyAPJ8WdC5VSk7d0q0E-c-6v-oM3iM'),
+  hammer: getTxEndpoint('pn4Go4GauR4_m9lyV77xJu3nzzxeIjfTQYfl9_fOx70'),
   info: getTxEndpoint('XnaFbPesz-Hib7zpxlvJ0Bpeigl__8wrBtCfYpkWfWk'),
   landingGraphic: getTxEndpoint('H6009sE8L1EOCjUOZzUVAH9gAI0ZMaQYPnEGcR63oJI'),
+  landingGraphicPlaceholder: getTxEndpoint('9MYLUUkcF5gbTuLLlliTzWnRwuJwcHlsLjFrwDiyx0Y'),
   link: getTxEndpoint('UMfjnj-8e7fb3lYRdcFygu8c4JoBZq3hB-mzycYT4DU'),
   menu: getTxEndpoint('0La3-o2_gGMDbkfV4zVVUMjTYQ7Cn9YWQ2JO-FbjAIk'),
   pi: getTxEndpoint('fGTu1CGT6TAz6Uj55CPkpJRy_whPKRZH6OFFpVHWOS0'),

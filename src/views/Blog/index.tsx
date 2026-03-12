@@ -1,8 +1,8 @@
-import { Hammer } from '@phosphor-icons/react';
 import React from 'react';
+import { ReactSVG } from 'react-svg';
 
 import { RgbCycleText } from 'components/atoms/RgbCycleText';
-import { AO, URLS } from 'helpers/config';
+import { AO, ASSETS, URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
@@ -220,7 +220,7 @@ export default function Blog() {
                 {displayedPosts.length === 1 ? (
                   <>
                     <S.HammerIcon aria-hidden="true">
-                      <Hammer size={20} />
+                      <ReactSVG src={ASSETS.hammer} />
                     </S.HammerIcon>
                     More coming soon, building is in progress.
                   </>

@@ -144,7 +144,7 @@ export const ImageZoomIndicator = styled.span`
   }
 `;
 
-export const MarkdownImageFrame = styled.div`
+export const MarkdownImageFrame = styled.span`
   position: relative;
   display: block;
   width: calc(100% + ${BLOG_IMAGE_EXTENSION}px);

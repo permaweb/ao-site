@@ -45,13 +45,22 @@ export const PreviewContent = styled.div`
   padding: 6px 10px;
 `;
 
-export const IconWrapper = styled.svg`
+export const IconContainer = styled.div`
   width: 14px;
   height: 14px;
   flex-shrink: 0;
   margin-top: 2px;
   color: ${(props) => props.theme.colors.font.alt2};
   opacity: 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
 `;
 
 export const PreviewText = styled.div`

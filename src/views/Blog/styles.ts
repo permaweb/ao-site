@@ -516,7 +516,7 @@ export const SkeletonSearch = styled.div`
   }
 `;
 
-export const StatusMessage = styled.p`
+export const StatusMessage = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
