@@ -24,6 +24,15 @@ const skeletonSurface = css`
   animation: ${skeletonShimmer} 1.5s linear infinite;
 `;
 
+const hammerSwing = keyframes`
+  0%, 100% {
+    transform: rotate(-25deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+`;
+
 export const Wrapper = styled.div`
   width: 100%;
   max-width: ${BLOG_MAX_WIDTH}px;
@@ -508,9 +517,25 @@ export const SkeletonSearch = styled.div`
 `;
 
 export const StatusMessage = styled.p`
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: ${(props) => props.theme.typography.family.primary};
   font-size: ${(props) => props.theme.typography.size.xSmall};
   font-weight: ${(props) => props.theme.typography.weight.regular};
   color: ${(props) => props.theme.colors.font.alt2};
   line-height: 1.5;
+`;
+
+export const HammerIcon = styled.span`
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  animation: ${hammerSwing} 1s ease-in-out infinite;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;

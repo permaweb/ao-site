@@ -62,6 +62,19 @@ export type AoBlogPostBody = {
 const FEED_CACHE_TTL_MS = 30_000;
 const feedCache = new Map<string, { expiresAt: number; posts: AoBlogPost[] }>();
 
+const EXCLUDED_PATTERNS = ['the-route-to-decentralization', 'route-to-decentralization', 'route to decentralization'];
+
+const isExcludedPost = (post: AoBlogPost): boolean => {
+  const slug = post.slug.toLowerCase();
+  const title = post.title.toLowerCase();
+  return EXCLUDED_PATTERNS.some((pattern) => slug.includes(pattern) || title.includes(pattern.replace(/-/g, ' ')));
+};
+
+export const filterDisplayablePosts = (posts: AoBlogPost[]): AoBlogPost[] =>
+  posts.filter((post) => !isExcludedPost(post));
+
+export { isExcludedPost };
+
 const formatPublishedAt = (iso?: string) => {
   if (!iso) return '';
   const date = new Date(iso);

@@ -16,6 +16,8 @@ import {
   fetchAoBlogPostBody,
   fetchAoBlogPostBySlug,
   fetchAoBlogPosts,
+  filterDisplayablePosts,
+  isExcludedPost,
 } from '../Blog/aoFeed';
 
 import * as S from './styles';
@@ -177,27 +179,30 @@ export default function BlogPost() {
         }
 
         const match = await fetchAoBlogPostBySlug(processId, BLOG_ID, slug);
+        const excluded = match && isExcludedPost(match);
+        const effectiveMatch = excluded ? null : match;
+
         if (isMounted) {
-          setPost(match);
+          setPost(effectiveMatch);
           setSuggestedPosts([]);
-          setError(match ? null : 'Post not found.');
+          setError(effectiveMatch ? null : 'Post not found.');
           setIsLoading(false);
         }
 
-        if (match) {
-          const allPosts = await fetchAoBlogPosts(processId, BLOG_ID);
+        if (effectiveMatch) {
+          const allPosts = filterDisplayablePosts(await fetchAoBlogPosts(processId, BLOG_ID)).slice(0, 1);
           if (isMounted) {
-            setSuggestedPosts(allPosts.filter((entry) => entry.slug !== match.slug).slice(0, 3));
+            setSuggestedPosts(allPosts.filter((entry) => entry.slug !== effectiveMatch.slug).slice(0, 3));
           }
         }
 
-        if (match?.latestTxId) {
+        if (effectiveMatch?.latestTxId) {
           if (isMounted) {
             setIsBodyLoading(true);
           }
-          const postBodyUrl = ENDPOINTS.arTxEndpoint(match.latestTxId);
+          const postBodyUrl = ENDPOINTS.arTxEndpoint(effectiveMatch.latestTxId);
           console.info('[AO Blog] Hydrating post body from tx:', postBodyUrl);
-          const body = await fetchAoBlogPostBody(match.latestTxId);
+          const body = await fetchAoBlogPostBody(effectiveMatch.latestTxId);
           if (isMounted) {
             setPostBody(body);
             setIsBodyLoading(false);

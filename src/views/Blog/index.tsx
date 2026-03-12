@@ -1,3 +1,4 @@
+import { Hammer } from '@phosphor-icons/react';
 import React from 'react';
 
 import { RgbCycleText } from 'components/atoms/RgbCycleText';
@@ -5,7 +6,7 @@ import { AO, URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
-import { AoBlogPost, fetchAoBlogPosts } from './aoFeed';
+import { AoBlogPost, fetchAoBlogPosts, filterDisplayablePosts } from './aoFeed';
 import * as S from './styles';
 
 const BLOG_ID = 'aodevblog';
@@ -45,7 +46,7 @@ export default function Blog() {
         }
         const posts = await fetchAoBlogPosts(processId, BLOG_ID);
         if (isMounted) {
-          setAllPosts(posts);
+          setAllPosts(filterDisplayablePosts(posts).slice(0, 1));
           setError(posts.length ? null : 'AO feed returned 0 posts. Check browser console for [AO Blog] logs.');
         }
       } catch (err) {
@@ -215,7 +216,18 @@ export default function Blog() {
           )}
           {!error && filteredPosts.length === 0 && (
             <S.Status>
-              <S.StatusMessage>{displayedPosts.length === 1 ? 'More coming soon.' : 'No posts found.'}</S.StatusMessage>
+              <S.StatusMessage>
+                {displayedPosts.length === 1 ? (
+                  <>
+                    <S.HammerIcon aria-hidden="true">
+                      <Hammer size={20} />
+                    </S.HammerIcon>
+                    More coming soon, building is in progress.
+                  </>
+                ) : (
+                  'No posts found.'
+                )}
+              </S.StatusMessage>
             </S.Status>
           )}
         </S.Content>
