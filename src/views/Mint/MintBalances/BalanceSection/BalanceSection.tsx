@@ -18,415 +18,439 @@ import * as S from './styles';
 import { IProps } from './types';
 
 export default function BalanceSection(props: IProps) {
-	const arProvider = useArweaveProvider();
-	const ethProvider = useEthereumProvider();
-	const languageProvider = useLanguageProvider();
-	const language = languageProvider.object[languageProvider.current];
+  const arProvider = useArweaveProvider();
+  const ethProvider = useEthereumProvider();
+  const languageProvider = useLanguageProvider();
+  const language = languageProvider.object[languageProvider.current];
 
-	const [currentYield, setCurrentYield] = React.useState<number | null>(null);
-	const [currentNativeYield, setCurrentNativeYield] = React.useState<number | null>(null);
+  const [currentYield, setCurrentYield] = React.useState<number | null>(null);
+  const [currentNativeYield, setCurrentNativeYield] = React.useState<number | null>(null);
 
-	const [token, setToken] = React.useState<{
-		ticker: string;
-		wallet: { label: string; icon: string; provider: any; redirect: (address: string) => string };
-		balance: { header: string; icon: string };
-		action?: {
-			label: string;
-			icon: string;
-			fn: () => void;
-			component: React.ReactNode;
-		};
-	} | null>(null);
+  const [token, setToken] = React.useState<{
+    ticker: string;
+    wallet: { label: string; icon: string; provider: any; redirect: (address: string) => string };
+    balance: { header: string; icon: string };
+    action?: {
+      label: string;
+      icon: string;
+      fn: () => void;
+      component: React.ReactNode;
+    };
+  } | null>(null);
 
-	const [showWalletDropdown, setShowWalletDropdown] = React.useState<boolean>(false);
-	const [showAction, setShowAction] = React.useState<boolean>(false);
-	const [actionResponse, setActionResponse] = React.useState<NotificationType | null>(null);
-	const [showDaiConvertModal, setShowDaiConvertModal] = React.useState<boolean>(false);
+  const [showWalletDropdown, setShowWalletDropdown] = React.useState<boolean>(false);
+  const [showAction, setShowAction] = React.useState<boolean>(false);
+  const [actionResponse, setActionResponse] = React.useState<NotificationType | null>(null);
+  const [showDaiConvertModal, setShowDaiConvertModal] = React.useState<boolean>(false);
 
-	React.useEffect(() => {
-		const fetchYields = async () => {
-			try {
-				let nativeYieldValue = null;
+  React.useEffect(() => {
+    const fetchYields = async () => {
+      try {
+        let nativeYieldValue = null;
 
-				switch (props.type) {
-					case EthTokenEnum.StEth:
-						nativeYieldValue = await fetchTokenYield('stEth');
-						break;
-					case EthTokenEnum.DAI:
-						nativeYieldValue = await fetchTokenYield('dai');
-						break;
-					case EthTokenEnum.USDS:
-						nativeYieldValue = await fetchTokenYield('usds');
-						break;
-					default:
-						break;
-				}
+        switch (props.type) {
+          case EthTokenEnum.StEth:
+            nativeYieldValue = await fetchTokenYield('stEth');
+            break;
+          case EthTokenEnum.DAI:
+            nativeYieldValue = await fetchTokenYield('dai');
+            break;
+          case EthTokenEnum.USDS:
+            nativeYieldValue = await fetchTokenYield('usds');
+            break;
+          default:
+            break;
+        }
 
-				setCurrentNativeYield(nativeYieldValue);
-			} catch (error) {
-				console.error('Error fetching yields:', error);
-			}
-		};
+        setCurrentNativeYield(nativeYieldValue);
+      } catch (error) {
+        console.error('Error fetching yields:', error);
+      }
+    };
 
-		fetchYields();
-	}, [props.type]);
+    fetchYields();
+  }, [props.type]);
 
-	React.useEffect(() => {
-		const allProjections = token?.wallet?.provider?.projections as EthTokensYieldProjectionsType;
-		const projections = getTokenProjections();
-		const aoPrice = token?.wallet?.provider?.aoPrice;
+  React.useEffect(() => {
+    const allProjections = token?.wallet?.provider?.projections as EthTokensYieldProjectionsType;
+    const projections = getTokenProjections();
+    const aoPrice = token?.wallet?.provider?.aoPrice;
 
-		if (projections?.yearly?.ratio && aoPrice) {
-			let assetPrice;
+    if (projections?.yearly?.ratio && aoPrice) {
+      let assetPrice;
 
-			switch (props.type) {
-				case EthTokenEnum.StEth:
-					assetPrice = allProjections[EthTokenEnum.StEth].price;
-					break;
-				case EthTokenEnum.DAI:
-					assetPrice = allProjections[EthTokenEnum.DAI].price;
-					break;
-				case EthTokenEnum.USDS:
-					assetPrice = allProjections[EthTokenEnum.USDS].price;
-					break;
-			}
+      switch (props.type) {
+        case EthTokenEnum.StEth:
+          assetPrice = allProjections[EthTokenEnum.StEth].price;
+          break;
+        case EthTokenEnum.DAI:
+          assetPrice = allProjections[EthTokenEnum.DAI].price;
+          break;
+        case EthTokenEnum.USDS:
+          assetPrice = allProjections[EthTokenEnum.USDS].price;
+          break;
+      }
 
-			const apy = ((projections.yearly.ratio * aoPrice) / assetPrice) * 100;
-			setCurrentYield(apy);
-		}
-	}, [token?.wallet?.provider?.projections, props.type]);
+      const apy = ((projections.yearly.ratio * aoPrice) / assetPrice) * 100;
+      setCurrentYield(apy);
+    }
+  }, [token?.wallet?.provider?.projections, props.type]);
 
-	const tokens = React.useMemo(() => {
-		return {
-			stEth: {
-				ticker: language.stEth,
-				wallet: {
-					label: language.connectEthWallet,
-					icon: ASSETS.ethereum,
-					provider: ethProvider,
-					redirect: (address: string) => REDIRECTS.etherscan(address),
-				},
-				balance: { header: language.amountDeposited, icon: ASSETS.stEth },
-				action: {
-					label: language.depositStEth,
-					icon: ASSETS.exchange,
-					fn: () => setShowAction(true),
-					component: getEthExchange(EthTokenEnum.StEth),
-				},
-			},
-			dai: {
-				ticker: language.dai,
-				wallet: {
-					label: language.connectEthWallet,
-					icon: ASSETS.ethereum,
-					provider: ethProvider,
-					redirect: (address: string) => REDIRECTS.etherscan(address),
-				},
-				balance: { header: language.amountDeposited, icon: ASSETS.dai },
-				action: {
-					label: language.depositDai,
-					icon: ASSETS.exchange,
-					fn: () => setShowAction(true),
-					component: showDaiConvertModal ? getEthExchange(EthTokenEnum.USDS, true) : getEthExchange(EthTokenEnum.DAI),
-				},
-			},
-			usds: {
-				ticker: language.usds,
-				wallet: {
-					label: language.connectEthWallet,
-					icon: ASSETS.ethereum,
-					provider: ethProvider,
-					redirect: (address: string) => REDIRECTS.etherscan(address),
-				},
-				balance: { header: language.amountDeposited, icon: ASSETS.usds },
-				action: {
-					label: language.depositUsds,
-					icon: ASSETS.exchange,
-					fn: () => setShowAction(true),
-					component: showDaiConvertModal ? getEthExchange(EthTokenEnum.USDS, true) : getEthExchange(EthTokenEnum.USDS),
-				},
-			},
-		};
-	}, [arProvider, ethProvider, language, showAction, currentYield, showDaiConvertModal]);
+  const tokens = React.useMemo(() => {
+    return {
+      stEth: {
+        ticker: language.stEth,
+        wallet: {
+          label: language.connectEthWallet,
+          icon: ASSETS.ethereum,
+          provider: ethProvider,
+          redirect: (address: string) => REDIRECTS.etherscan(address),
+        },
+        balance: { header: language.amountDeposited, icon: ASSETS.stEth },
+        action: {
+          label: language.depositStEth,
+          icon: ASSETS.exchange,
+          fn: () => setShowAction(true),
+          component: getEthExchange(EthTokenEnum.StEth),
+        },
+      },
+      dai: {
+        ticker: language.dai,
+        wallet: {
+          label: language.connectEthWallet,
+          icon: ASSETS.ethereum,
+          provider: ethProvider,
+          redirect: (address: string) => REDIRECTS.etherscan(address),
+        },
+        balance: { header: language.amountDeposited, icon: ASSETS.dai },
+        action: {
+          label: language.depositDai,
+          icon: ASSETS.exchange,
+          fn: () => setShowAction(true),
+          component: showDaiConvertModal ? getEthExchange(EthTokenEnum.USDS, true) : getEthExchange(EthTokenEnum.DAI),
+        },
+      },
+      usds: {
+        ticker: language.usds,
+        wallet: {
+          label: language.connectEthWallet,
+          icon: ASSETS.ethereum,
+          provider: ethProvider,
+          redirect: (address: string) => REDIRECTS.etherscan(address),
+        },
+        balance: { header: language.amountDeposited, icon: ASSETS.usds },
+        action: {
+          label: language.depositUsds,
+          icon: ASSETS.exchange,
+          fn: () => setShowAction(true),
+          component: showDaiConvertModal ? getEthExchange(EthTokenEnum.USDS, true) : getEthExchange(EthTokenEnum.USDS),
+        },
+      },
+    };
+  }, [arProvider, ethProvider, language, showAction, currentYield, showDaiConvertModal]);
 
-	React.useEffect(() => {
-		switch (props.type) {
-			case EthTokenEnum.StEth:
-				setToken({ ...tokens.stEth });
-				break;
-			case EthTokenEnum.DAI:
-				setToken({ ...tokens.dai });
-				break;
-			case EthTokenEnum.USDS:
-				setToken({ ...tokens.usds });
-				break;
-			default:
-				break;
-		}
-	}, [props.type, tokens]);
+  React.useEffect(() => {
+    switch (props.type) {
+      case EthTokenEnum.StEth:
+        setToken({ ...tokens.stEth });
+        break;
+      case EthTokenEnum.DAI:
+        setToken({ ...tokens.dai });
+        break;
+      case EthTokenEnum.USDS:
+        setToken({ ...tokens.usds });
+        break;
+      default:
+        break;
+    }
+  }, [props.type, tokens]);
 
-	React.useEffect(() => {
-		setToken((prev) => ({
-			...prev,
-			provider: token?.wallet?.provider ?? null,
-		}));
-	}, [token?.wallet?.provider]);
+  React.useEffect(() => {
+    setToken((prev) => ({
+      ...prev,
+      provider: token?.wallet?.provider ?? null,
+    }));
+  }, [token?.wallet?.provider]);
 
-	React.useEffect(() => {
-		if (!showAction) {
-			setShowDaiConvertModal(false);
-		}
-	}, [showAction]);
+  React.useEffect(() => {
+    if (!showAction) {
+      setShowDaiConvertModal(false);
+    }
+  }, [showAction]);
 
-	function getEthExchange(token: EthTokenEnum, conversionFlow?: boolean) {
-		return (
-			<EthExchange
-				open={showAction}
-				token={token}
-				setResponse={(response: NotificationType) => setActionResponse(response)}
-				handleClose={() => setShowAction(false)}
-				conversionFlow={conversionFlow}
-			/>
-		);
-	}
+  function getEthExchange(token: EthTokenEnum, conversionFlow?: boolean) {
+    return (
+      <EthExchange
+        open={showAction}
+        token={token}
+        setResponse={(response: NotificationType) => setActionResponse(response)}
+        handleClose={() => setShowAction(false)}
+        conversionFlow={conversionFlow}
+      />
+    );
+  }
 
-	function handleWalletPress() {
-		if (!token.wallet.provider.walletAddress) {
-			token.wallet.provider.setWalletModalVisible(true);
-			return;
-		}
+  function handleWalletPress() {
+    if (!token.wallet.provider.walletAddress) {
+      token.wallet.provider.setWalletModalVisible(true);
+      return;
+    }
 
-		setShowWalletDropdown(!showWalletDropdown);
-	}
+    setShowWalletDropdown(!showWalletDropdown);
+  }
 
-	function handleActionPress() {
-		if (!token.wallet.provider.walletAddress) {
-			token.wallet.provider.setWalletModalVisible(true);
-			return;
-		}
+  function handleActionPress() {
+    if (!token.wallet.provider.walletAddress) {
+      token.wallet.provider.setWalletModalVisible(true);
+      return;
+    }
 
-		if (token.action) token.action.fn();
-	}
+    if (token.action) token.action.fn();
+  }
 
-	function handleConvertPress() {
-		if (!token.wallet.provider.walletAddress) {
-			token.wallet.provider.setWalletModalVisible(true);
-			return;
-		}
+  function handleConvertPress() {
+    if (!token.wallet.provider.walletAddress) {
+      token.wallet.provider.setWalletModalVisible(true);
+      return;
+    }
 
-		setShowDaiConvertModal(true);
-		setShowAction(true);
-	}
+    setShowDaiConvertModal(true);
+    setShowAction(true);
+  }
 
-	function getActionLabel() {
-		if (token?.wallet.provider.connecting) return `Connecting...`;
-		if (!token?.wallet.provider.walletAddress) return token.wallet.label;
-		return token?.action.label;
-	}
+  function getActionLabel() {
+    if (token?.wallet.provider.connecting) return <span className={'fade-in'}>Connecting...</span>;
+    if (!token?.wallet.provider.walletAddress) return token.wallet.label;
+    return <span className={'fade-in'}>{token?.action.label}</span>;
+  }
 
-	function getWalletLabel() {
-		if (token?.wallet.provider.connecting) return `Connecting...`;
-		if (token?.wallet.provider.walletAddress) return formatAddress(token.wallet.provider.walletAddress, false);
-		return token?.wallet.label;
-	}
+  function getWalletLabel() {
+    if (token?.wallet.provider.connecting) return <span className={'fade-in'}>Connecting...</span>;
+    if (token?.wallet.provider.walletAddress) {
+      return <span className={'fade-in'}>{formatAddress(token.wallet.provider.walletAddress, false)}</span>;
+    }
+    return token?.wallet.label;
+  }
 
-	function getPrimaryBalance() {
-		if (!token.wallet?.provider?.walletAddress) return '-';
-		switch (props.type) {
-			case EthTokenEnum.StEth:
-			case EthTokenEnum.DAI:
-				return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ?? <EllipsisLoader />;
-			case EthTokenEnum.USDS:
-				return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ?? <EllipsisLoader />;
-			default:
-				return '-';
-		}
-	}
+  function getPrimaryBalance() {
+    if (!token.wallet?.provider?.walletAddress) return '-';
+    switch (props.type) {
+      case EthTokenEnum.StEth:
+      case EthTokenEnum.DAI:
+        return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ? (
+          <span className={'fade-in'}>{token.wallet.provider.tokens[props.type].deposited.display}</span>
+        ) : (
+          <EllipsisLoader />
+        );
+      case EthTokenEnum.USDS:
+        return token.wallet?.provider?.tokens?.[props.type]?.deposited?.display ? (
+          <span className={'fade-in'}>{token.wallet.provider.tokens[props.type].deposited.display}</span>
+        ) : (
+          <EllipsisLoader />
+        );
+      default:
+        return '-';
+    }
+  }
 
-	function getTokenProjections() {
-		switch (props.type) {
-			case EthTokenEnum.StEth:
-			case EthTokenEnum.DAI:
-				return token?.wallet?.provider?.projections?.[props.type];
-			case EthTokenEnum.USDS:
-				return token?.wallet?.provider?.projections?.[props.type];
-			default:
-				return null;
-		}
-	}
+  function getTokenProjections() {
+    switch (props.type) {
+      case EthTokenEnum.StEth:
+      case EthTokenEnum.DAI:
+        return token?.wallet?.provider?.projections?.[props.type];
+      case EthTokenEnum.USDS:
+        return token?.wallet?.provider?.projections?.[props.type];
+      default:
+        return null;
+    }
+  }
 
-	function renderProjectionAmount(period: 'monthly' | 'yearly') {
-		const projectionData = getTokenProjections();
-		if (projectionData) {
-			const amount = projectionData[period].amount;
-			if (amount === null || amount === 0) {
-				return '-';
-			}
-			return (
-				<>
-					{formatDisplayAmount(amount)} {language.ao}
-				</>
-			);
-		} else {
-			return token.wallet?.provider?.walletAddress ? 'Loading...' : '-';
-		}
-	}
+  function renderProjectionAmount(period: 'monthly' | 'yearly') {
+    const projectionData = getTokenProjections();
+    if (projectionData) {
+      const amount = projectionData[period].amount;
+      if (amount === null || amount === 0) {
+        return '-';
+      }
+      return (
+        <>
+          <span className={'fade-in'}>{formatDisplayAmount(amount)}</span>
+          <S.AssetTicker>{token.ticker}</S.AssetTicker>
+        </>
+      );
+    } else {
+      return token.wallet?.provider?.walletAddress ? 'Loading...' : '-';
+    }
+  }
 
-	function renderConversionAmount(period: 'monthly' | 'yearly') {
-		return (
-			<S.BalanceQuantityFooter>
-				<p>{`${language[period]} ${language.conversion}: `}</p>
-				<div className={'quantity-divider'} />
-				{getTokenProjections() ? (
-					<span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
-						getTokenProjections()[period].ratio
-					)} AO`}</span>
-				) : (
-					<span className={'primary-text'}>-</span>
-				)}
-			</S.BalanceQuantityFooter>
-		);
-	}
+  function renderConversionAmount(period: 'monthly' | 'yearly') {
+    return (
+      <S.BalanceQuantityFooter>
+        <p>{`${language[period]} ${language.conversion}: `}</p>
+        <div className={'quantity-divider'} />
+        {getTokenProjections() ? (
+          <span className={'primary-text'}>{`1 ${token.ticker} = ${formatDisplayAmount(
+            getTokenProjections()[period].ratio
+          )} AO`}</span>
+        ) : (
+          <span className={'primary-text'}>-</span>
+        )}
+      </S.BalanceQuantityFooter>
+    );
+  }
 
-	return token ? (
-		<>
-			<S.BalanceSection type={props.type}>
-				<S.BalanceHeaderWrapper>
-					<S.BalanceHeader>
-						<S.HeaderRow>
-							<S.HeaderRowStart>
-								{token.ticker}
-								<S.ApyRow>
-									{currentYield !== null ? (
-										<>
-											<S.ApyText>{`≈ ${currentYield.toFixed(1)}% APY`}</S.ApyText>
-										</>
-									) : ethProvider.walletAddress ? (
-										<EllipsisLoader />
-									) : (
-										<S.ApyText>-</S.ApyText>
-									)}
-								</S.ApyRow>
-							</S.HeaderRowStart>
-							<Tooltip
-								label={
-									props.type === EthTokenEnum.StEth
-										? 'stETH Info'
-										: props.type === EthTokenEnum.USDS
-										? 'USDS Info'
-										: props.type === EthTokenEnum.DAI
-										? 'DAI Info'
-										: undefined
-								}
-								header={
-									props.type === EthTokenEnum.StEth
-										? 'stETH Info'
-										: props.type === EthTokenEnum.USDS
-										? 'USDS Info'
-										: props.type === EthTokenEnum.DAI
-										? 'DAI Info'
-										: undefined
-								}
-								content={
-									<S.TooltipWrapper>
-										<p>{language.apyExplanation}</p>
-										<span>{language.nativeYieldExplanation}</span>
-										<S.TooltipDivider />
-										{renderConversionAmount('monthly')}
-										{renderConversionAmount('yearly')}
-									</S.TooltipWrapper>
-								}
-							/>
-							{/* <ApyTooltip /> */}
-						</S.HeaderRow>
-						<S.NativeYieldText>
-							Native Yield: {currentNativeYield !== null ? `${currentNativeYield.toFixed(1)}%` : '-'}
-						</S.NativeYieldText>
-					</S.BalanceHeader>
-				</S.BalanceHeaderWrapper>
-				<S.BalanceBodyWrapper>
-					{ethProvider.walletAddress ? (
-						<>
-							<S.BalanceQuantityLines>
-								<S.BalanceQuantityLine>
-									<span>{language.currentBalance}</span>
-									<p>
-										{ethProvider.tokens[props.type]?.balance?.display ?? '-'} {token.ticker}
-									</p>
-								</S.BalanceQuantityLine>
-								<S.BalanceQuantityLine>
-									<span>{token.balance.header}</span>
-									<p>
-										{getPrimaryBalance()} {token.ticker}
-									</p>
-								</S.BalanceQuantityLine>
-								<S.BalanceQuantityLine>
-									<span>{language.thirtyDayProjection}</span>
-									<p>{renderProjectionAmount('monthly')}</p>
-								</S.BalanceQuantityLine>
-								<S.BalanceQuantityLine>
-									<span>{language.oneYearProjection}</span>
-									<p>{renderProjectionAmount('yearly')}</p>
-								</S.BalanceQuantityLine>
-							</S.BalanceQuantityLines>
-							{token.action && (
-								<S.BalanceAction>
-									{props.type === EthTokenEnum.USDS &&
-										ethProvider?.tokens?.[EthTokenEnum.DAI]?.balance?.value > 0 &&
-										ethProvider?.tokens?.[EthTokenEnum.USDS]?.balance?.value <= 0 && (
-											<Button
-												type={'primary'}
-												label={
-													<S.ConvertButtonLabel>
-														<span>Swap DAI → USDS</span>
-													</S.ConvertButtonLabel>
-												}
-												handlePress={handleConvertPress}
-												disabled={showAction || token.wallet.provider.connecting}
-												height={55}
-												fullWidth
-											/>
-										)}
-									<Button
-										type={'primary'}
-										label={getActionLabel()}
-										handlePress={handleActionPress}
-										disabled={showAction || token.wallet.provider.connecting}
-										height={55}
-										fullWidth
-									/>
-								</S.BalanceAction>
-							)}
-						</>
-					) : (
-						<S.NetworkDisconnected>
-							<S.NetworkDisconnectedIconText>
-								<ReactSVG src={ASSETS.wallet} />
-								<p>{language.connectEthWalletToViewDeposits}</p>
-							</S.NetworkDisconnectedIconText>
-							<Button type={'primary'} label={getWalletLabel()} handlePress={handleWalletPress} height={45} fullWidth />
-						</S.NetworkDisconnected>
-					)}
-				</S.BalanceBodyWrapper>
-			</S.BalanceSection>
-			{token.action && (
-				<Panel
-					open={showAction}
-					width={550}
-					header={showDaiConvertModal ? language.convertDai : token.action.label}
-					handleClose={() => setShowAction(false)}
-					closeHandlerDisabled
-				>
-					<S.ActionWrapper>{token.action.component}</S.ActionWrapper>
-				</Panel>
-			)}
-			{actionResponse && (
-				<Notification
-					message={actionResponse.message}
-					type={actionResponse.status}
-					callback={() => setActionResponse(null)}
-				/>
-			)}
-		</>
-	) : null;
+  return token ? (
+    <>
+      <S.BalanceSection type={props.type}>
+        <S.BalanceHeaderWrapper>
+          <S.BalanceHeader>
+            <S.HeaderRow>
+              <S.HeaderRowStart>
+                {token.ticker}
+                <S.ApyRow>
+                  {currentYield !== null ? (
+                    <>
+                      <S.ApyText className={'fade-in'}>{`≈ ${currentYield.toFixed(1)}% APY`}</S.ApyText>
+                    </>
+                  ) : ethProvider.walletAddress ? (
+                    <EllipsisLoader />
+                  ) : (
+                    <S.ApyText>-</S.ApyText>
+                  )}
+                </S.ApyRow>
+              </S.HeaderRowStart>
+              <Tooltip
+                label={
+                  props.type === EthTokenEnum.StEth
+                    ? 'stETH Info'
+                    : props.type === EthTokenEnum.USDS
+                    ? 'USDS Info'
+                    : props.type === EthTokenEnum.DAI
+                    ? 'DAI Info'
+                    : undefined
+                }
+                header={
+                  props.type === EthTokenEnum.StEth
+                    ? 'stETH Info'
+                    : props.type === EthTokenEnum.USDS
+                    ? 'USDS Info'
+                    : props.type === EthTokenEnum.DAI
+                    ? 'DAI Info'
+                    : undefined
+                }
+                content={
+                  <S.TooltipWrapper>
+                    <p>{language.apyExplanation}</p>
+                    <span>{language.nativeYieldExplanation}</span>
+                    <S.TooltipDivider />
+                    {renderConversionAmount('monthly')}
+                    {renderConversionAmount('yearly')}
+                  </S.TooltipWrapper>
+                }
+              />
+              {/* <ApyTooltip /> */}
+            </S.HeaderRow>
+            <S.NativeYieldText>
+              <S.NativeYieldLabel>Native Yield:</S.NativeYieldLabel>
+              {currentNativeYield !== null ? (
+                <S.NativeYieldValue className={'fade-in'}>{`${currentNativeYield.toFixed(1)}%`}</S.NativeYieldValue>
+              ) : (
+                <S.NativeYieldValue>-</S.NativeYieldValue>
+              )}
+            </S.NativeYieldText>
+          </S.BalanceHeader>
+        </S.BalanceHeaderWrapper>
+        <S.BalanceBodyWrapper>
+          {ethProvider.walletAddress ? (
+            <S.BalanceContent className={'fade-in'}>
+              <S.BalanceQuantityLines>
+                <S.BalanceQuantityLine>
+                  <span>{language.currentBalance}</span>
+                  <p>
+                    {ethProvider.tokens[props.type]?.balance?.display ? (
+                      <span className={'fade-in'}>{ethProvider.tokens[props.type].balance.display}</span>
+                    ) : (
+                      '-'
+                    )}
+                    <S.AssetTicker>{token.ticker}</S.AssetTicker>
+                  </p>
+                </S.BalanceQuantityLine>
+                <S.BalanceQuantityLine>
+                  <span>{token.balance.header}</span>
+                  <p>
+                    {getPrimaryBalance()}
+                    <S.AssetTicker>{token.ticker}</S.AssetTicker>
+                  </p>
+                </S.BalanceQuantityLine>
+                <S.BalanceQuantityLine>
+                  <span>{language.thirtyDayProjection}</span>
+                  <p>{renderProjectionAmount('monthly')}</p>
+                </S.BalanceQuantityLine>
+                <S.BalanceQuantityLine>
+                  <span>{language.oneYearProjection}</span>
+                  <p>{renderProjectionAmount('yearly')}</p>
+                </S.BalanceQuantityLine>
+              </S.BalanceQuantityLines>
+              {token.action && (
+                <S.BalanceAction>
+                  {props.type === EthTokenEnum.USDS &&
+                    ethProvider?.tokens?.[EthTokenEnum.DAI]?.balance?.value > 0 &&
+                    ethProvider?.tokens?.[EthTokenEnum.USDS]?.balance?.value <= 0 && (
+                      <Button
+                        type={'primary'}
+                        label={
+                          <S.ConvertButtonLabel>
+                            <span>Swap DAI → USDS</span>
+                          </S.ConvertButtonLabel>
+                        }
+                        handlePress={handleConvertPress}
+                        disabled={showAction || token.wallet.provider.connecting}
+                        height={55}
+                        fullWidth
+                      />
+                    )}
+                  <Button
+                    type={'primary'}
+                    label={getActionLabel()}
+                    handlePress={handleActionPress}
+                    disabled={showAction || token.wallet.provider.connecting}
+                    height={55}
+                    fullWidth
+                  />
+                </S.BalanceAction>
+              )}
+            </S.BalanceContent>
+          ) : (
+            <S.NetworkDisconnected className={'fade-in'}>
+              <S.NetworkDisconnectedContent>
+                <S.NetworkDisconnectedIconText>
+                  <ReactSVG src={ASSETS.wallet} />
+                  <p>{language.connectEthWalletToViewDeposits}</p>
+                </S.NetworkDisconnectedIconText>
+              </S.NetworkDisconnectedContent>
+              <Button type={'primary'} label={getWalletLabel()} handlePress={handleWalletPress} height={45} fullWidth />
+            </S.NetworkDisconnected>
+          )}
+        </S.BalanceBodyWrapper>
+      </S.BalanceSection>
+      {token.action && (
+        <Panel
+          open={showAction}
+          width={550}
+          header={showDaiConvertModal ? language.convertDai : token.action.label}
+          handleClose={() => setShowAction(false)}
+          closeHandlerDisabled
+        >
+          <S.ActionWrapper>{token.action.component}</S.ActionWrapper>
+        </Panel>
+      )}
+      {actionResponse && (
+        <Notification
+          message={actionResponse.message}
+          type={actionResponse.status}
+          callback={() => setActionResponse(null)}
+        />
+      )}
+    </>
+  ) : null;
 }

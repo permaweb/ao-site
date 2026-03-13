@@ -17,37 +17,37 @@ import 'zlib';
 import 'path';
 
 const config = createConfig({
-	chains: [mainnet],
-	connectors: [metaMask({ extensionOnly: true, injectProvider: false })],
-	transports: {
-		[mainnet.id]: http(),
-	},
+  chains: [mainnet],
+  connectors: [metaMask({ extensionOnly: true, injectProvider: false })],
+  transports: {
+    [mainnet.id]: http(),
+  },
 });
 
 function Root() {
-	return (
-		<WagmiProvider config={config}>
-			<CustomThemeProvider>
-				<LanguageProvider>
-					<HashRouter>
-						<GlobalStyle />
-						<AOProvider>
-							<EthereumProvider>
-								<ArweaveProvider>
-									<AllocationProvider>
-										<div id={'loader'} />
-										<div id={'notification'} />
-										<div id={'overlay'} />
-										<App />
-									</AllocationProvider>
-								</ArweaveProvider>
-							</EthereumProvider>
-						</AOProvider>
-					</HashRouter>
-				</LanguageProvider>
-			</CustomThemeProvider>
-		</WagmiProvider>
-	);
+  return (
+    <WagmiProvider config={config}>
+      <CustomThemeProvider>
+        <LanguageProvider>
+          <HashRouter>
+            <GlobalStyle />
+            <AOProvider>
+              <EthereumProvider>
+                <ArweaveProvider>
+                  <AllocationProvider>
+                    <div id={'loader'} />
+                    <div id={'notification'} />
+                    <div id={'overlay'} />
+                    <App />
+                  </AllocationProvider>
+                </ArweaveProvider>
+              </EthereumProvider>
+            </AOProvider>
+          </HashRouter>
+        </LanguageProvider>
+      </CustomThemeProvider>
+    </WagmiProvider>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<Root />);

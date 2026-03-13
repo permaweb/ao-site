@@ -250,9 +250,29 @@ export const GlobalStyle = createGlobalStyle`
 `;
 
 export const View = styled.main`
-	min-height: calc(100vh - ${STYLING.dimensions.nav.height});
-	width: 100%;
-	max-width: ${STYLING.cutoffs.max};
-	padding: 0 20px;
-	margin: 0 auto;
+  min-height: calc(100vh - ${STYLING.dimensions.nav.height});
+  width: 100%;
+  max-width: ${STYLING.cutoffs.max};
+  padding: 0 20px;
+  margin: 0 auto;
+`;
+
+export const RouteLoadingState = styled.div`
+  width: 100%;
+  min-height: calc(100vh - ${STYLING.dimensions.nav.height});
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+`;
+
+export const RouteLoadingMessage = styled.p`
+  max-width: 560px;
+  font-family: ${(props) => props.theme.typography.family.primary};
+  font-size: ${(props) => props.theme.typography.size.xSmall};
+  font-weight: ${(props) => props.theme.typography.weight.regular};
+  color: ${(props) => props.theme.colors.font.alt2};
+  line-height: 1.5;
+  text-align: center;
 `;

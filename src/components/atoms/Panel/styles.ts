@@ -3,82 +3,82 @@ import styled from 'styled-components';
 import { STYLING } from 'helpers/config';
 
 export const PanelOverlay = styled.div<{ open: boolean }>`
-	height: 100vh;
-	width: 100%;
-	position: fixed;
-	z-index: 5;
-	top: 0;
-	left: 0;
-	background: ${(props) => props.theme.colors.overlay.primary};
-	opacity: ${(props) => (props.open ? 1 : 0)};
-	pointer-events: ${(props) => (props.open ? 'auto' : 'none')};
-	transition: opacity 300ms cubic-bezier(0, 0, 0.2, 1);
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  background: ${(props) => props.theme.colors.overlay.primary};
+  opacity: ${(props) => (props.open ? 1 : 0)};
+  pointer-events: ${(props) => (props.open ? 'auto' : 'none')};
+  transition: opacity 300ms cubic-bezier(0, 0, 0.2, 1);
 `;
 
 export const Container = styled.div<{
-	open: boolean;
-	noHeader: boolean;
-	width?: number;
+  open: boolean;
+  noHeader: boolean;
+  width?: number;
 }>`
-	height: 100dvh;
-	width: ${(props) => (props.width ? `${props.width.toString()}px` : 'fit-content')};
-	max-width: calc(100vw - 20px);
-	position: fixed;
-	z-index: 10;
-	overflow: hidden;
-	top: 0;
-	right: 0;
-	transform: translateX(${(props) => (props.open ? '0' : 'calc(100% + 10px)')});
-	transition: transform ${(props) => (props.open ? '800ms' : '400ms')} ${STYLING.motion.easing.decelerate} 0ms;
-	@media (max-width: ${STYLING.cutoffs.mobile}) {
-		min-width: calc(100vw - 20px);
-	}
+  height: 100dvh;
+  width: ${(props) => (props.width ? `${props.width.toString()}px` : 'fit-content')};
+  max-width: calc(100vw - 20px);
+  position: fixed;
+  z-index: 10;
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  transform: translateX(${(props) => (props.open ? '0' : 'calc(100% + 10px)')});
+  transition: transform ${(props) => (props.open ? '800ms' : '400ms')} ${STYLING.motion.easing.decelerate} 0ms;
+  @media (max-width: ${STYLING.cutoffs.mobile}) {
+    min-width: calc(100vw - 20px);
+  }
 `;
 
 export const Header = styled.div`
-	height: 65px;
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0 20px;
+  height: 65px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
 `;
 
 export const LT = styled.div`
-	max-width: 75%;
-	display: flex;
-	align-items: center;
+  max-width: 75%;
+  display: flex;
+  align-items: center;
 `;
 
 export const Title = styled.p`
-	color: ${(props) => props.theme.colors.font.primary};
-	font-size: ${(props) => props.theme.typography.size.xLg};
-	font-weight: ${(props) => props.theme.typography.weight.regular};
-	line-height: calc(${(props) => props.theme.typography.size.lg} + 5px);
-	font-family: ${(props) => props.theme.typography.family.primary};
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	margin: 2.5px 0 0 0;
+  color: ${(props) => props.theme.colors.font.primary};
+  font-size: ${(props) => props.theme.typography.size.xLg};
+  font-weight: ${(props) => props.theme.typography.weight.regular};
+  line-height: calc(${(props) => props.theme.typography.size.lg} + 5px);
+  font-family: ${(props) => props.theme.typography.family.primary};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 2.5px 0 0 0;
 `;
 
 export const Close = styled.div`
-	padding: 2.5px 0 0 0;
+  padding: 2.5px 0 0 0;
 `;
 
 export const Body = styled.div`
-	height: calc(100% - 65px);
-	width: 100%;
-	overflow-y: auto;
-	scrollbar-color: transparent transparent;
-	position: relative;
+  height: calc(100% - 65px);
+  width: 100%;
+  overflow-y: auto;
+  scrollbar-color: transparent transparent;
+  position: relative;
 
-	overflow-y: auto;
-	scrollbar-width: none;
-	-ms-overflow-style: none;
-	position: relative;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  position: relative;
 
-	&::-webkit-scrollbar {
-		width: 0;
-	}
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;

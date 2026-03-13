@@ -8,85 +8,85 @@ import * as S from './styles';
 import { ICProps, ITProps, IUProps } from './types';
 
 function Tab(props: ITProps) {
-	function handlePress(e: any) {
-		e.preventDefault();
-		props.handlePress(props.url);
-	}
+  function handlePress(e: any) {
+    e.preventDefault();
+    props.handlePress(props.url);
+  }
 
-	return (
-		<S.Tab>
-			<S.TabAction active={props.active} onClick={handlePress} icon={props.icon !== null}>
-				{props.icon && (
-					<S.Icon active={props.active}>
-						<ReactSVG src={props.icon} />
-					</S.Icon>
-				)}
-				{props.label}
-			</S.TabAction>
-		</S.Tab>
-	);
+  return (
+    <S.Tab>
+      <S.TabAction active={props.active} onClick={handlePress} icon={props.icon !== null}>
+        {props.icon && (
+          <S.Icon active={props.active}>
+            <ReactSVG src={props.icon} />
+          </S.Icon>
+        )}
+        {props.label}
+      </S.TabAction>
+    </S.Tab>
+  );
 }
 
 function TabContent(props: ICProps) {
-	const { id, active, subActive } = useParams();
+  const { id, active, subActive } = useParams();
 
-	let TabView: React.ComponentType<any> | null = null;
-	for (let i = 0; i < props.tabs.length; i++) {
-		const url = typeof props.tabs[i].url === 'function' ? props.tabs[i].url(id) : props.tabs[i].url;
-		if (url.includes(active)) {
-			TabView = props.tabs[i].view;
-			break;
-		}
-	}
+  let TabView: React.ComponentType<any> | null = null;
+  for (let i = 0; i < props.tabs.length; i++) {
+    const url = typeof props.tabs[i].url === 'function' ? props.tabs[i].url(id) : props.tabs[i].url;
+    if (url.includes(active)) {
+      TabView = props.tabs[i].view;
+      break;
+    }
+  }
 
-	if (!TabView) {
-		TabView = NotFound;
-	}
+  if (!TabView) {
+    TabView = NotFound;
+  }
 
-	return <S.View>{TabView && <TabView subActive={subActive} />}</S.View>;
+  return <S.View>{TabView && <TabView subActive={subActive} />}</S.View>;
 }
 
 export default function URLTabs(props: IUProps) {
-	const navigate = useNavigate();
-	const { id, active } = useParams();
+  const navigate = useNavigate();
+  const { id, active } = useParams();
 
-	React.useEffect(() => {
-		if (!active) {
-			navigate(props.activeUrl);
-		}
-	}, [active, navigate, props.activeUrl, props.tabs]);
+  React.useEffect(() => {
+    if (!active) {
+      navigate(props.activeUrl);
+    }
+  }, [active, navigate, props.activeUrl, props.tabs]);
 
-	const handleRedirect = (url: string) => {
-		if (active !== url) {
-			navigate(url);
-		}
-	};
+  const handleRedirect = (url: string) => {
+    if (active !== url) {
+      navigate(url);
+    }
+  };
 
-	return (
-		<S.Wrapper>
-			<S.TabsHeader useFixed={props.useFixed ? props.useFixed : false}>
-				<S.Tabs>
-					{props.tabs.map((elem, index) => {
-						const url = typeof elem.url === 'function' ? elem.url(id) : elem.url;
-						let isActive = url.includes(active);
+  return (
+    <S.Wrapper>
+      <S.TabsHeader useFixed={props.useFixed ? props.useFixed : false}>
+        <S.Tabs>
+          {props.tabs.map((elem, index) => {
+            const url = typeof elem.url === 'function' ? elem.url(id) : elem.url;
+            let isActive = url.includes(active);
 
-						return (
-							<Tab
-								key={index}
-								url={url}
-								label={elem.label}
-								icon={elem.icon}
-								disabled={elem.disabled}
-								active={isActive}
-								handlePress={() => handleRedirect(url)}
-							/>
-						);
-					})}
-				</S.Tabs>
-			</S.TabsHeader>
-			<S.Content>
-				<TabContent tabs={props.tabs} />
-			</S.Content>
-		</S.Wrapper>
-	);
+            return (
+              <Tab
+                key={index}
+                url={url}
+                label={elem.label}
+                icon={elem.icon}
+                disabled={elem.disabled}
+                active={isActive}
+                handlePress={() => handleRedirect(url)}
+              />
+            );
+          })}
+        </S.Tabs>
+      </S.TabsHeader>
+      <S.Content>
+        <TabContent tabs={props.tabs} />
+      </S.Content>
+    </S.Wrapper>
+  );
 }
