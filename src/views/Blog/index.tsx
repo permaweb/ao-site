@@ -10,6 +10,7 @@ import { AoBlogPost, fetchAoBlogPosts, filterDisplayablePosts } from './aoFeed';
 import * as S from './styles';
 
 const BLOG_ID = 'aodevblog';
+const FEATURED_POST_PATTERN = 'unlocking trust-minimized arweave gateways with hyperbeam';
 const SKELETON_CARD_COUNT = 6;
 
 function FadeInImage(props: { src: string; alt: string; loading?: 'eager' | 'lazy' }) {
@@ -34,6 +35,7 @@ export default function Blog() {
   const [allPosts, setAllPosts] = React.useState<AoBlogPost[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const [debugPostLimit, setDebugPostLimit] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     let isMounted = true;
@@ -46,7 +48,9 @@ export default function Blog() {
         }
         const posts = await fetchAoBlogPosts(processId, BLOG_ID);
         if (isMounted) {
-          setAllPosts(filterDisplayablePosts(posts).slice(0, 1));
+          const filtered = filterDisplayablePosts(posts);
+          const featuredOnly = filtered.filter((p) => p.title.toLowerCase().includes(FEATURED_POST_PATTERN));
+          setAllPosts(featuredOnly);
           setError(posts.length ? null : 'AO feed returned 0 posts. Check browser console for [AO Blog] logs.');
         }
       } catch (err) {
@@ -67,7 +71,10 @@ export default function Blog() {
     };
   }, []);
 
-  const displayedPosts = allPosts;
+  const displayedPosts = React.useMemo(
+    () => (debugPostLimit !== null ? allPosts.slice(0, debugPostLimit) : allPosts),
+    [allPosts, debugPostLimit]
+  );
   const pinnedPost = React.useMemo(() => displayedPosts[0] ?? null, [displayedPosts]);
   const categories = React.useMemo(() => [...new Set(displayedPosts.map((p) => p.category))].sort(), [displayedPosts]);
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
@@ -135,6 +142,20 @@ export default function Blog() {
         </S.Content>
       ) : (
         <S.Content className={'fade-in'}>
+          {!error && allPosts.length > 0 && (
+            <S.DebugBox>
+              <S.DebugLabel>Debug: Simulate post count</S.DebugLabel>
+              <S.DebugButton $active={debugPostLimit === null} onClick={() => setDebugPostLimit(null)} type="button">
+                All ({allPosts.length})
+              </S.DebugButton>
+              <S.DebugButton $active={debugPostLimit === 1} onClick={() => setDebugPostLimit(1)} type="button">
+                1 post
+              </S.DebugButton>
+              <S.DebugButton $active={debugPostLimit === 2} onClick={() => setDebugPostLimit(2)} type="button">
+                2 posts
+              </S.DebugButton>
+            </S.DebugBox>
+          )}
           {error && (
             <S.Status>
               <S.StatusMessage>{error}</S.StatusMessage>
