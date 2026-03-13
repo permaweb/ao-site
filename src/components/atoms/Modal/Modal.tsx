@@ -9,80 +9,80 @@ import * as S from './styles';
 import { IProps } from './types';
 
 export default function Modal(props: IProps) {
-  const languageProvider = useLanguageProvider();
-  const language = languageProvider.object[languageProvider.current];
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
-  React.useEffect(() => {
-    hideDocumentBody();
-    return () => {
-      showDocumentBody();
-    };
-  }, []);
+	React.useEffect(() => {
+		hideDocumentBody();
+		return () => {
+			showDocumentBody();
+		};
+	}, []);
 
-  const escFunction = React.useCallback(
-    (e: any) => {
-      if (e.key === 'Escape' && props.handleClose) {
-        props.handleClose();
-      }
-    },
-    [props]
-  );
+	const escFunction = React.useCallback(
+		(e: any) => {
+			if (e.key === 'Escape' && props.handleClose) {
+				props.handleClose();
+			}
+		},
+		[props]
+	);
 
-  React.useEffect(() => {
-    document.addEventListener('keydown', escFunction, false);
+	React.useEffect(() => {
+		document.addEventListener('keydown', escFunction, false);
 
-    return () => {
-      document.removeEventListener('keydown', escFunction, false);
-    };
-  }, [escFunction]);
+		return () => {
+			document.removeEventListener('keydown', escFunction, false);
+		};
+	}, [escFunction]);
 
-  function getBody() {
-    return (
-      <>
-        <S.Container noHeader={!props.header}>
-          {props.header && (
-            <S.Header>
-              <S.LT>
-                <S.Title>{props.header}</S.Title>
-              </S.LT>
-              {props.handleClose && (
-                <S.Close>
-                  <IconButton
-                    type={'alt1'}
-                    src={ASSETS.close}
-                    handlePress={() => props.handleClose()}
-                    dimensions={{ wrapper: 30, icon: 16.5 }}
-                    tooltip={language.close}
-                  />
-                </S.Close>
-              )}
-            </S.Header>
-          )}
-          <S.Body className={'scroll-wrapper'}>{props.children}</S.Body>
-        </S.Container>
-      </>
-    );
-  }
+	function getBody() {
+		return (
+			<>
+				<S.Container noHeader={!props.header}>
+					{props.header && (
+						<S.Header>
+							<S.LT>
+								<S.Title>{props.header}</S.Title>
+							</S.LT>
+							{props.handleClose && (
+								<S.Close>
+									<IconButton
+										type={'alt1'}
+										src={ASSETS.close}
+										handlePress={() => props.handleClose()}
+										dimensions={{ wrapper: 30, icon: 16.5 }}
+										tooltip={language.close}
+									/>
+								</S.Close>
+							)}
+						</S.Header>
+					)}
+					<S.Body className={'scroll-wrapper'}>{props.children}</S.Body>
+				</S.Container>
+			</>
+		);
+	}
 
-  return (
-    <Portal node={DOM.overlay}>
-      <S.Wrapper noHeader={!props.header} top={window ? (window as any).pageYOffset : 0}>
-        {getBody()}
-      </S.Wrapper>
-    </Portal>
-  );
+	return (
+		<Portal node={DOM.overlay}>
+			<S.Wrapper noHeader={!props.header} top={window ? (window as any).pageYOffset : 0}>
+				{getBody()}
+			</S.Wrapper>
+		</Portal>
+	);
 }
 
 let modalOpenCounter = 0;
 
 const showDocumentBody = () => {
-  modalOpenCounter -= 1;
-  if (modalOpenCounter === 0) {
-    document.body.style.overflow = 'auto';
-  }
+	modalOpenCounter -= 1;
+	if (modalOpenCounter === 0) {
+		document.body.style.overflow = 'auto';
+	}
 };
 
 const hideDocumentBody = () => {
-  modalOpenCounter += 1;
-  document.body.style.overflow = 'hidden';
+	modalOpenCounter += 1;
+	document.body.style.overflow = 'hidden';
 };

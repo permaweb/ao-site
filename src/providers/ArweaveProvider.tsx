@@ -3,13 +3,13 @@ import React from 'react';
 
 import { Modal } from 'components/atoms/Modal';
 import {
-  AO,
-  AO_TOKEN_DENOMINATION,
-  AR_WALLETS,
-  ASSETS,
-  ENDPOINTS,
-  REDIRECTS,
-  WALLET_PERMISSIONS,
+	AO,
+	AO_TOKEN_DENOMINATION,
+	AR_WALLETS,
+	ASSETS,
+	ENDPOINTS,
+	REDIRECTS,
+	WALLET_PERMISSIONS,
 } from 'helpers/config';
 import { ArWalletEnum, TokenYieldProjectionsType } from 'helpers/types';
 import { getArReward } from 'helpers/utils';
@@ -19,309 +19,312 @@ import { useAOProvider } from './AOProvider';
 import * as S from './styles';
 
 interface ArweaveContextState {
-  wallets: { type: ArWalletEnum; logo: string }[];
-  wallet: any;
-  walletAddress: string | null;
-  walletType: ArWalletEnum | null;
-  balance: number | string | null;
-  aoBalance: string | null;
-  projections: TokenYieldProjectionsType | null;
-  handleConnect: any;
-  handleDisconnect: () => void;
-  walletModalVisible: boolean;
-  setWalletModalVisible: (open: boolean) => void;
+	wallets: { type: ArWalletEnum; logo: string }[];
+	wallet: any;
+	walletAddress: string | null;
+	walletType: ArWalletEnum | null;
+	balance: number | string | null;
+	aoBalance: string | null;
+	projections: TokenYieldProjectionsType | null;
+	handleConnect: any;
+	handleDisconnect: () => void;
+	walletModalVisible: boolean;
+	setWalletModalVisible: (open: boolean) => void;
 }
 
 interface ArweaveProviderProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
 
 const DEFAULT_CONTEXT = {
-  wallets: [],
-  wallet: null,
-  walletAddress: null,
-  walletType: null,
-  balance: null,
-  aoBalance: null,
-  projections: null,
-  handleConnect() {},
-  handleDisconnect() {},
-  walletModalVisible: false,
-  setWalletModalVisible(_open: boolean) {},
+	wallets: [],
+	wallet: null,
+	walletAddress: null,
+	walletType: null,
+	balance: null,
+	aoBalance: null,
+	projections: null,
+	handleConnect() {},
+	handleDisconnect() {},
+	walletModalVisible: false,
+	setWalletModalVisible(_open: boolean) {},
 };
 
 const ARContext = React.createContext<ArweaveContextState>(DEFAULT_CONTEXT);
 
 export function useArweaveProvider(): ArweaveContextState {
-  return React.useContext(ARContext);
+	return React.useContext(ARContext);
 }
 
 function TermsAndConditions() {
-  return (
-    <S.TermsContainer>
-      <S.TermsHeader>Terms and Conditions</S.TermsHeader>
-      <S.TermsSection>
-        <S.TermsTitle>Permaweb Index: </S.TermsTitle>
-        <S.TermsText>
-          Pi is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of Pi does
-          not violate applicable laws in your jurisdiction. The Permaweb Index is a collection of non-upgradeable
-          autonomous smart contracts. The index is not subject to human supervision or intervention, nor is it
-          registered with any central financial regulatory authority. Index "intelligence" and decision-making are
-          driven by programmatic aggregation and synthesis of user interaction data and not by any central actor or
-          responsible party. User interaction with the Permaweb Index is at each user's own risk. User interaction with
-          the Permaweb Index is at each user's own risk.
-        </S.TermsText>
-      </S.TermsSection>
-      <S.TermsSection>
-        <S.TermsTitle>AR: </S.TermsTitle>
-        <S.TermsText>
-          AR is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AR does
-          not violate applicable laws in your jurisdiction.
-        </S.TermsText>
-      </S.TermsSection>
-      <S.TermsSection>
-        <S.TermsTitle>AO: </S.TermsTitle>
-        <S.TermsText>
-          AO is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AO does
-          not violate applicable laws in your jurisdiction.
-        </S.TermsText>
-      </S.TermsSection>
-      <S.TermsSection>
-        <S.TermsTitle>Consent Clause: </S.TermsTitle>
-        <S.TermsText>
-          By connecting your wallet, you hereby consent, without reservation, to be bound by the foregoing terms,
-          conditions, and disclaimers. Your wallet connection constitutes an irrevocable and unconditional agreement to
-          abide by these rules, and you acknowledge that you have reviewed and understood the risks and legal
-          obligations set forth above.
-        </S.TermsText>
-      </S.TermsSection>
-    </S.TermsContainer>
-  );
+	return (
+		<S.TermsContainer>
+			<S.TermsHeader>Terms and Conditions</S.TermsHeader>
+			<S.TermsSection>
+				<S.TermsTitle>Permaweb Index: </S.TermsTitle>
+				<S.TermsText>
+					Pi is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of
+					Pi does not violate applicable laws in your jurisdiction. The Permaweb Index is a collection of
+					non-upgradeable autonomous smart contracts. The index is not subject to human supervision or
+					intervention, nor is it registered with any central financial regulatory authority. Index
+					"intelligence" and decision-making are driven by programmatic aggregation and synthesis of user
+					interaction data and not by any central actor or responsible party. User interaction with the
+					Permaweb Index is at each user's own risk. User interaction with the Permaweb Index is at each
+					user's own risk.
+				</S.TermsText>
+			</S.TermsSection>
+			<S.TermsSection>
+				<S.TermsTitle>AR: </S.TermsTitle>
+				<S.TermsText>
+					AR is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of
+					AR does not violate applicable laws in your jurisdiction.
+				</S.TermsText>
+			</S.TermsSection>
+			<S.TermsSection>
+				<S.TermsTitle>AO: </S.TermsTitle>
+				<S.TermsText>
+					AO is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of
+					AO does not violate applicable laws in your jurisdiction.
+				</S.TermsText>
+			</S.TermsSection>
+			<S.TermsSection>
+				<S.TermsTitle>Consent Clause: </S.TermsTitle>
+				<S.TermsText>
+					By connecting your wallet, you hereby consent, without reservation, to be bound by the foregoing
+					terms, conditions, and disclaimers. Your wallet connection constitutes an irrevocable and
+					unconditional agreement to abide by these rules, and you acknowledge that you have reviewed and
+					understood the risks and legal obligations set forth above.
+				</S.TermsText>
+			</S.TermsSection>
+		</S.TermsContainer>
+	);
 }
 
 function WalletList(props: { handleConnect: any }) {
-  return (
-    <S.WalletListContainer>
-      {AR_WALLETS.map((wallet: any, index: number) => (
-        <S.WalletListItem key={index} onClick={() => props.handleConnect(wallet.type)}>
-          <S.WalletItemImageWrapper>{wallet.logo && <img src={`${wallet.logo}`} alt={''} />}</S.WalletItemImageWrapper>
-          <span>{wallet.type.charAt(0).toUpperCase() + wallet.type.slice(1)}</span>
-        </S.WalletListItem>
-      ))}
-      <S.WalletLink>
-        <span>
-          Don't have an Arweave Wallet? You can create one{' '}
-          <a href={REDIRECTS.wander} target={'_blank'}>
-            here.
-          </a>
-        </span>
-      </S.WalletLink>
-      <TermsAndConditions />
-    </S.WalletListContainer>
-  );
+	return (
+		<S.WalletListContainer>
+			{AR_WALLETS.map((wallet: any, index: number) => (
+				<S.WalletListItem key={index} onClick={() => props.handleConnect(wallet.type)}>
+					<S.WalletItemImageWrapper>
+						{wallet.logo && <img src={`${wallet.logo}`} alt={''} />}
+					</S.WalletItemImageWrapper>
+					<span>{wallet.type.charAt(0).toUpperCase() + wallet.type.slice(1)}</span>
+				</S.WalletListItem>
+			))}
+			<S.WalletLink>
+				<span>
+					Don't have an Arweave Wallet? You can create one{' '}
+					<a href={REDIRECTS.wander} target={'_blank'}>
+						here.
+					</a>
+				</span>
+			</S.WalletLink>
+			<TermsAndConditions />
+		</S.WalletListContainer>
+	);
 }
 
 export function ArweaveProvider(props: ArweaveProviderProps) {
-  const aoProvider = useAOProvider();
-  const languageProvider = useLanguageProvider();
-  const language = languageProvider.object[languageProvider.current];
+	const aoProvider = useAOProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
-  const wallets = AR_WALLETS;
+	const wallets = AR_WALLETS;
 
-  const [wallet, setWallet] = React.useState<any>(null);
-  const [walletType, setWalletType] = React.useState<ArWalletEnum | null>(null);
-  const [walletModalVisible, setWalletModalVisible] = React.useState<boolean>(false);
-  const [walletAddress, setWalletAddress] = React.useState<string | null>(null);
+	const [wallet, setWallet] = React.useState<any>(null);
+	const [walletType, setWalletType] = React.useState<ArWalletEnum | null>(null);
+	const [walletModalVisible, setWalletModalVisible] = React.useState<boolean>(false);
+	const [walletAddress, setWalletAddress] = React.useState<string | null>(null);
 
-  const [balance, setBalance] = React.useState<number | string | null>(null);
-  const [aoBalance, setAoBalance] = React.useState<string | null>(null);
-  const [projections, setProjections] = React.useState<TokenYieldProjectionsType | null>(null);
+	const [balance, setBalance] = React.useState<number | string | null>(null);
+	const [aoBalance, setAoBalance] = React.useState<string | null>(null);
+	const [projections, setProjections] = React.useState<TokenYieldProjectionsType | null>(null);
 
-  React.useEffect(() => {
-    (async function () {
-      await handleWallet();
-    })();
-  }, []);
+	React.useEffect(() => {
+		(async function () {
+			await handleWallet();
+		})();
+	}, []);
 
-  React.useEffect(() => {
-    handleWallet();
+	React.useEffect(() => {
+		handleWallet();
 
-    window.addEventListener('arweaveWalletLoaded', handleWallet);
-    window.addEventListener('walletSwitch', handleWallet);
+		window.addEventListener('arweaveWalletLoaded', handleWallet);
+		window.addEventListener('walletSwitch', handleWallet);
 
-    return () => {
-      window.removeEventListener('arweaveWalletLoaded', handleWallet);
-      window.removeEventListener('walletSwitch', handleWallet);
-    };
-  }, []);
+		return () => {
+			window.removeEventListener('arweaveWalletLoaded', handleWallet);
+			window.removeEventListener('walletSwitch', handleWallet);
+		};
+	}, []);
 
-  React.useEffect(() => {
-    (async function () {
-      if (walletAddress) {
-        try {
-          setBalance(await getARBalance(walletAddress));
-        } catch (e: any) {
-          console.error(e);
-        }
-      }
-    })();
-  }, [walletAddress]);
+	React.useEffect(() => {
+		(async function () {
+			if (walletAddress) {
+				try {
+					setBalance(await getARBalance(walletAddress));
+				} catch (e: any) {
+					console.error(e);
+				}
+			}
+		})();
+	}, [walletAddress]);
 
-  React.useEffect(() => {
-    (async function () {
-      if (walletAddress) {
-        try {
-          const tokenBalance = await aoProvider.read({
-            processId: AO.token,
-            action: 'Balance',
-            tags: [{ name: 'Recipient', value: walletAddress }],
-          });
-          if (tokenBalance != null) setAoBalance((tokenBalance / AO_TOKEN_DENOMINATION).toString());
-          else setAoBalance('0');
-        } catch (e: any) {
-          console.error(e);
-        }
-      }
-    })();
-  }, [walletAddress]);
+	React.useEffect(() => {
+		(async function () {
+			if (walletAddress) {
+				try {
+					const tokenBalance = await aoProvider.read({
+						processId: AO.token,
+						action: 'Balance',
+						tags: [{ name: 'Recipient', value: walletAddress }],
+					});
+					if (tokenBalance != null) setAoBalance((tokenBalance / AO_TOKEN_DENOMINATION).toString());
+					else setAoBalance('0');
+				} catch (e: any) {
+					console.error(e);
+				}
+			}
+		})();
+	}, [walletAddress]);
 
-  React.useEffect(() => {
-    (async function () {
-      if (walletAddress && balance !== null && aoProvider.mintedSupply) {
-        try {
-          let arBalance = Number(balance);
-          let arSupply = 66000000;
+	React.useEffect(() => {
+		(async function () {
+			if (walletAddress && balance !== null && aoProvider.mintedSupply) {
+				try {
+					let arBalance = Number(balance);
+					let arSupply = 66000000;
 
-          setProjections({
-            monthly: {
-              amount: getArReward(30, arBalance, arSupply, aoProvider.mintedSupply),
-              ratio: getArReward(30, 1, arSupply, aoProvider.mintedSupply),
-            },
-            yearly: {
-              amount: getArReward(365, arBalance, arSupply, aoProvider.mintedSupply),
-              ratio: getArReward(365, 1, arSupply, aoProvider.mintedSupply),
-            },
-          });
-        } catch (e: any) {
-          console.error(e);
-        }
-      }
-    })();
-  }, [walletAddress, balance, aoProvider.mintedSupply]);
+					setProjections({
+						monthly: {
+							amount: getArReward(30, arBalance, arSupply, aoProvider.mintedSupply),
+							ratio: getArReward(30, 1, arSupply, aoProvider.mintedSupply),
+						},
+						yearly: {
+							amount: getArReward(365, arBalance, arSupply, aoProvider.mintedSupply),
+							ratio: getArReward(365, 1, arSupply, aoProvider.mintedSupply),
+						},
+					});
+				} catch (e: any) {
+					console.error(e);
+				}
+			}
+		})();
+	}, [walletAddress, balance, aoProvider.mintedSupply]);
 
-  async function handleWallet() {
-    if (localStorage.getItem('walletType')) {
-      try {
-        await handleConnect(localStorage.getItem('walletType') as any);
-      } catch (e: any) {
-        console.error(e);
-      }
-    }
-  }
+	async function handleWallet() {
+		if (localStorage.getItem('walletType')) {
+			try {
+				await handleConnect(localStorage.getItem('walletType') as any);
+			} catch (e: any) {
+				console.error(e);
+			}
+		}
+	}
 
-  async function handleConnect(walletType: ArWalletEnum.wander | ArWalletEnum.arweaveApp) {
-    let walletObj: any = null;
-    switch (walletType) {
-      case ArWalletEnum.wander:
-        handleWander();
-        break;
-      case ArWalletEnum.arweaveApp:
-        handleArweaveApp();
-        break;
-      default:
-        if (window.arweaveWallet || walletType === ArWalletEnum.wander) {
-          handleWander();
-          break;
-        }
-    }
-    setWalletModalVisible(false);
-    return walletObj;
-  }
+	async function handleConnect(walletType: ArWalletEnum.wander | ArWalletEnum.arweaveApp) {
+		let walletObj: any = null;
+		switch (walletType) {
+			case ArWalletEnum.wander:
+				handleWander();
+				break;
+			case ArWalletEnum.arweaveApp:
+				handleArweaveApp();
+				break;
+			default:
+				if (window.arweaveWallet || walletType === ArWalletEnum.wander) {
+					handleWander();
+					break;
+				}
+		}
+		setWalletModalVisible(false);
+		return walletObj;
+	}
 
-  async function handleWander() {
-    if (!walletAddress) {
-      if (window.arweaveWallet) {
-        try {
-          await global.window?.arweaveWallet?.connect(WALLET_PERMISSIONS as any);
-          setWalletAddress(await global.window.arweaveWallet.getActiveAddress());
-          setWallet(window.arweaveWallet);
-          setWalletType(ArWalletEnum.wander);
-          setWalletModalVisible(false);
-          localStorage.setItem('walletType', ArWalletEnum.wander);
-        } catch (e: any) {
-          console.error(e);
-        }
-      }
-    }
-  }
+	async function handleWander() {
+		if (!walletAddress) {
+			if (window.arweaveWallet) {
+				try {
+					await global.window?.arweaveWallet?.connect(WALLET_PERMISSIONS as any);
+					setWalletAddress(await global.window.arweaveWallet.getActiveAddress());
+					setWallet(window.arweaveWallet);
+					setWalletType(ArWalletEnum.wander);
+					setWalletModalVisible(false);
+					localStorage.setItem('walletType', ArWalletEnum.wander);
+				} catch (e: any) {
+					console.error(e);
+				}
+			}
+		}
+	}
 
-  async function handleArweaveApp() {
-    try {
-      const wallet = new ArweaveWebWallet({
-        name: language.appName,
-        logo: ASSETS.arweaveApp,
-      });
-      wallet.setUrl(ArWalletEnum.arweaveApp);
-      await wallet.connect();
-      wallet.on('disconnect', () => {
-        setWallet(null);
-        setWalletAddress(null);
-        if (localStorage.getItem('walletType')) localStorage.removeItem('walletType');
-      });
-      setWalletAddress(await global.window.arweaveWallet.getActiveAddress());
-      setWallet(wallet);
-      setWalletType(ArWalletEnum.arweaveApp);
-      localStorage.setItem('walletType', ArWalletEnum.arweaveApp);
-    } catch (e: any) {
-      console.error('Arweave.app connection failure', e);
-    }
-  }
+	async function handleArweaveApp() {
+		try {
+			const wallet = new ArweaveWebWallet({
+				name: language.appName,
+				logo: ASSETS.arweaveApp,
+			});
+			wallet.setUrl(ArWalletEnum.arweaveApp);
+			await wallet.connect();
+			wallet.on('disconnect', () => {
+				setWallet(null);
+				setWalletAddress(null);
+				if (localStorage.getItem('walletType')) localStorage.removeItem('walletType');
+			});
+			setWalletAddress(await global.window.arweaveWallet.getActiveAddress());
+			setWallet(wallet);
+			setWalletType(ArWalletEnum.arweaveApp);
+			localStorage.setItem('walletType', ArWalletEnum.arweaveApp);
+		} catch (e: any) {
+			console.error('Arweave.app connection failure', e);
+		}
+	}
 
-  async function handleDisconnect() {
-    try {
-      setWallet(null);
-      setWalletAddress(null);
-      if (localStorage.getItem('walletType')) localStorage.removeItem('walletType');
-      await global.window?.arweaveWallet?.disconnect();
-    } catch (e: any) {
-      console.error('ArweaveProvider disconnect error', e);
-    }
-  }
+	async function handleDisconnect() {
+		try {
+			setWallet(null);
+			setWalletAddress(null);
+			if (localStorage.getItem('walletType')) localStorage.removeItem('walletType');
+			await global.window?.arweaveWallet?.disconnect();
+		} catch (e: any) {
+			console.error('ArweaveProvider disconnect error', e);
+		}
+	}
 
-  async function getARBalance(walletAddress: string) {
-    try {
-      const rawBalance = await fetch(ENDPOINTS.arBalance(walletAddress));
-      const jsonBalance = await rawBalance.json();
-      return jsonBalance / 1e12;
-    } catch (e: any) {
-      return 'Error';
-    }
-  }
+	async function getARBalance(walletAddress: string) {
+		try {
+			const rawBalance = await fetch(ENDPOINTS.arBalance(walletAddress));
+			const jsonBalance = await rawBalance.json();
+			return jsonBalance / 1e12;
+		} catch (e: any) {
+			return 'Error';
+		}
+	}
 
-  return (
-    <>
-      {walletModalVisible && (
-        <Modal header={language.connectWallet} handleClose={() => setWalletModalVisible(false)}>
-          <WalletList handleConnect={handleConnect} />
-        </Modal>
-      )}
-      <ARContext.Provider
-        value={{
-          wallet,
-          walletAddress,
-          walletType,
-          balance,
-          aoBalance,
-          projections,
-          handleConnect,
-          handleDisconnect,
-          wallets,
-          walletModalVisible,
-          setWalletModalVisible,
-        }}
-      >
-        {props.children}
-      </ARContext.Provider>
-    </>
-  );
+	return (
+		<>
+			{walletModalVisible && (
+				<Modal header={language.connectWallet} handleClose={() => setWalletModalVisible(false)}>
+					<WalletList handleConnect={handleConnect} />
+				</Modal>
+			)}
+			<ARContext.Provider
+				value={{
+					wallet,
+					walletAddress,
+					walletType,
+					balance,
+					aoBalance,
+					projections,
+					handleConnect,
+					handleDisconnect,
+					wallets,
+					walletModalVisible,
+					setWalletModalVisible,
+				}}
+			>
+				{props.children}
+			</ARContext.Provider>
+		</>
+	);
 }

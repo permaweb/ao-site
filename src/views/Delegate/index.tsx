@@ -9,22 +9,22 @@ import { DelegateSummary } from './DelegateSummary';
 import * as S from './styles';
 
 export default function Delegate() {
-  const languageProvider = useLanguageProvider();
-  const language = languageProvider.object[languageProvider.current];
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
-  return (
-    <S.Wrapper className={'fade-in'}>
-      <ViewHeader header={language.delegate} actions={[<WalletConnect />]} />
-      <S.BodyWrapper>
-        <S.DelegationsWrapper>
-          <DelegateCore />
-          <DelegateEcosystem />
-        </S.DelegationsWrapper>
-        <S.SummaryWrapper className={'border-wrapper-alt1'}>
-          <DelegateSummary />
-        </S.SummaryWrapper>
-      </S.BodyWrapper>
-      <Footer />
-    </S.Wrapper>
-  );
+	return (
+		<S.Wrapper className={'fade-in'}>
+			<ViewHeader header={language.delegate} actions={[<WalletConnect />]} />
+			<S.BodyWrapper>
+				<S.DelegationsWrapper>
+					<DelegateCore />
+					<DelegateEcosystem />
+				</S.DelegationsWrapper>
+				<S.SummaryWrapper className={'border-wrapper-alt1'}>
+					<DelegateSummary />
+				</S.SummaryWrapper>
+			</S.BodyWrapper>
+			<Footer />
+		</S.Wrapper>
+	);
 }
