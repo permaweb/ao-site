@@ -10,29 +10,29 @@ import { useLanguageProvider } from 'providers/LanguageProvider';
 import * as S from './styles';
 
 export default function WalletConnect() {
-  const arProvider = useArweaveProvider();
-  const languageProvider = useLanguageProvider();
-  const language = languageProvider.object[languageProvider.current];
+	const arProvider = useArweaveProvider();
+	const languageProvider = useLanguageProvider();
+	const language = languageProvider.object[languageProvider.current];
 
-  const label = arProvider.walletAddress ? formatAddress(arProvider.walletAddress, false) : language.connectWallet;
+	const label = arProvider.walletAddress ? formatAddress(arProvider.walletAddress, false) : language.connectWallet;
 
-  return (
-    <S.ConnectWrapper
-      className={'border-wrapper-primary'}
-      onClick={() => (arProvider.walletAddress ? {} : arProvider.setWalletModalVisible(true))}
-      isConnected={!!arProvider.walletAddress}
-    >
-      {!arProvider.walletAddress && (
-        <S.Icon>
-          <ReactSVG src={ASSETS.wallet} />
-        </S.Icon>
-      )}
-      <p className={arProvider.walletAddress ? 'fade-in' : undefined}>
-        <AddressTooltip address={arProvider.walletAddress ?? null}>{label}</AddressTooltip>
-      </p>
-      {arProvider.walletAddress && (
-        <Button type={'alt2'} label={language.disconnect} handlePress={() => arProvider.handleDisconnect()} />
-      )}
-    </S.ConnectWrapper>
-  );
+	return (
+		<S.ConnectWrapper
+			className={'border-wrapper-primary'}
+			onClick={() => (arProvider.walletAddress ? {} : arProvider.setWalletModalVisible(true))}
+			isConnected={!!arProvider.walletAddress}
+		>
+			{!arProvider.walletAddress && (
+				<S.Icon>
+					<ReactSVG src={ASSETS.wallet} />
+				</S.Icon>
+			)}
+			<p className={arProvider.walletAddress ? 'fade-in' : undefined}>
+				<AddressTooltip address={arProvider.walletAddress ?? null}>{label}</AddressTooltip>
+			</p>
+			{arProvider.walletAddress && (
+				<Button type={'alt2'} label={language.disconnect} handlePress={() => arProvider.handleDisconnect()} />
+			)}
+		</S.ConnectWrapper>
+	);
 }
