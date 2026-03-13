@@ -5,7 +5,8 @@ import { connect } from '@permaweb/aoconnect';
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 import { AONetworkStatus, AOPhase, MetricDataPoint, TagType } from 'helpers/types';
 
-const CACHE_DURATION = 0;
+const METRICS_CACHE_DURATION = 24 * 60 * 60 * 1000;
+const SUPPLY_CACHE_DURATION = 24 * 60 * 60 * 1000;
 
 export const cu: any = connect({
   MODE: 'legacy',
@@ -46,13 +47,12 @@ export function AOProvider(props: { children: React.ReactNode }) {
   React.useEffect(() => {
     const CACHE_KEY = 'mintedSupply';
     const TIMESTAMP_KEY = 'mintedSupplyTimestamp';
-    const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
     const cachedValue = localStorage.getItem(CACHE_KEY);
     const cachedTimestamp = localStorage.getItem(TIMESTAMP_KEY);
     const now = Date.now();
 
-    if (!isNaN(Number(cachedValue)) && cachedTimestamp && now - parseInt(cachedTimestamp, 10) < CACHE_DURATION) {
+    if (!isNaN(Number(cachedValue)) && cachedTimestamp && now - parseInt(cachedTimestamp, 10) < SUPPLY_CACHE_DURATION) {
       setMintedSupply(Number(cachedValue));
       return;
     }
@@ -84,7 +84,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
           const { data, timestamp } = JSON.parse(cachedData);
           const now = Date.now();
 
-          if (now - timestamp < CACHE_DURATION) {
+          if (now - timestamp < METRICS_CACHE_DURATION) {
             setMetrics(data);
             return;
           }

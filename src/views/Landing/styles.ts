@@ -80,7 +80,6 @@ export const ContentWrapper = styled.div`
 
   p {
     max-width: 350px;
-    text-wrap: balance;
     line-height: 1.5;
     font-size: clamp(15px, 1.65vw, 17px);
     font-family: ${(props) => props.theme.typography.family.primary};

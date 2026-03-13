@@ -264,7 +264,7 @@ export const RouteLoadingState = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 15px;
 `;
 
 export const RouteLoadingMessage = styled.p`

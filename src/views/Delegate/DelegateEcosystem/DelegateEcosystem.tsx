@@ -7,18 +7,15 @@ import { AddressTooltip } from 'components/atoms/AddressTooltip';
 import { AllocationDisplay } from 'components/atoms/AllocationDisplay';
 import { Button } from 'components/atoms/Button';
 import { FormField } from 'components/atoms/FormField';
+import { Notification } from 'components/atoms/Notification';
 import { AO, ASSETS, ENDPOINTS, STYLING } from 'helpers/config';
-import { FLPTabType } from 'helpers/types';
+import { ExploreSortKey, FLPTabType, NotificationType, SortDirection } from 'helpers/types';
 import { formatAddress, formatDate, formatNumber, getRelativeDate, parseBigIntAsNumber } from 'helpers/utils';
 import { useAllocationProvider } from 'providers/AllocationProvider';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import * as S from './styles';
-
-type ExploreSortKey = 'index' | 'project' | 'delegated' | 'launched' | 'allocation';
-type SortDirection = 'asc' | 'desc';
-const LOADING_PLACEHOLDER_ROWS = 10;
 
 function Project(props: {
   index: number;
@@ -132,7 +129,7 @@ function Project(props: {
   );
 
   return (
-    <S.TableBodyRowWrapper className={'fade-in'}>
+    <S.TableBodyRowWrapper>
       <S.TableBodyRow onClick={props.onToggle} open={props.isOpen}>
         <S.TableBodyCell flex={0.075} width={50} align={'center'}>
           <span>{props.index}</span>
@@ -149,9 +146,7 @@ function Project(props: {
           </S.ProjectNameWrapper>
         </S.TableBodyCell>
         <S.TableBodyCell flex={1} align={'right'}>
-          <span className={'fade-in'} title={fullDelegatedValue}>
-            {delegatedValue}
-          </span>
+          <span title={fullDelegatedValue}>{delegatedValue}</span>
           <S.TableBodyImage hasImage={true} size={17.5}>
             <img src={ASSETS.aoCircled} />
           </S.TableBodyImage>
@@ -174,81 +169,165 @@ function Project(props: {
           />
         </S.TableBodyCell>
       </S.TableBodyRow>
-      <S.TableBodyRowDetail open={props.isOpen}>
-        <S.TableBodyRowDetailInner>
-          <S.PanelWrapper>
-            <S.PanelWrapperStart>
-              <S.ProjectBody>
-                <S.ProjectIdRow>
-                  <S.ProjectId onClick={() => copyTokenId(props.project?.flp_token_process ?? '-')}>
-                    <span>{`${language.tokenId}:`}</span>
-                    <p>
-                      <AddressTooltip address={props.project?.flp_token_process ?? null}>
-                        {props.project?.flp_token_process ? formatAddress(props.project.flp_token_process, false) : '-'}
-                      </AddressTooltip>
-                    </p>
-                    <ReactSVG src={copied ? ASSETS.checkmark : ASSETS.copy} />
-                  </S.ProjectId>
-                  <S.ProjectLinks>
-                    {props.project?.website_url && (
-                      <S.ProjectLink>
-                        <Link to={props.project.website_url} target={'_blank'} onClick={(e) => e.stopPropagation()}>
-                          {language.visitWebsite}
-                        </Link>
-                      </S.ProjectLink>
-                    )}
-                    {props.project?.twitter_handle && (
-                      <S.ProjectLink>
-                        <Link
-                          to={`https://x.com/${props.project.twitter_handle}`}
-                          target={'_blank'}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {language.visitX}
-                        </Link>
-                      </S.ProjectLink>
-                    )}
-                  </S.ProjectLinks>
-                </S.ProjectIdRow>
-                {props.project?.flp_short_description && (
-                  <S.ProjectShortDescription>
-                    <p>{props.project?.flp_short_description ?? 'No description'}</p>
-                  </S.ProjectShortDescription>
-                )}
-                {props.project?.flp_long_description && (
-                  <S.ProjectLongDescription>
-                    <p>{props.project.flp_long_description}</p>
-                  </S.ProjectLongDescription>
-                )}
-                <S.ProjectLinesWrapper>
-                  <S.ProjectLineWrapper>
-                    <S.ProjectLineDates>
-                      <S.ProjectInfoLine>
-                        <span>{language.startDate}</span>
-                        <p>
-                          {props.project?.starts_at_ts ? formatDate(props.project.starts_at_ts, 'dateString') : 'None'}
-                        </p>
-                      </S.ProjectInfoLine>
-                      <S.ProjectInfoLine>
-                        <span>{language.endDate}</span>
-                        <p>{props.project?.ends_at_ts ? formatDate(props.project.ends_at_ts, 'dateString') : 'None'}</p>
-                      </S.ProjectInfoLine>
-                    </S.ProjectLineDates>
-                  </S.ProjectLineWrapper>
-                </S.ProjectLinesWrapper>
-              </S.ProjectBody>
-            </S.PanelWrapperStart>
-            {props.project?.disclaimer && (
-              <S.PanelWrapperEnd>
-                <S.ProjectDisclaimer>
-                  <p>{props.project.disclaimer}</p>
-                </S.ProjectDisclaimer>
-              </S.PanelWrapperEnd>
-            )}
-          </S.PanelWrapper>
-        </S.TableBodyRowDetailInner>
-      </S.TableBodyRowDetail>
+      {props.isOpen && (
+        <S.TableBodyRowDetail open={true}>
+          <S.TableBodyRowDetailInner>
+            <S.PanelWrapper>
+              <S.PanelWrapperStart>
+                <ClaimSection projectId={props.project.id} tokenLabel={tokenLabel} />
+                <S.ProjectBody>
+                  <S.ProjectIdRow>
+                    <S.ProjectId onClick={() => copyTokenId(props.project?.flp_token_process ?? '-')}>
+                      <span>{`${language.tokenId}:`}</span>
+                      <p>
+                        <AddressTooltip address={props.project?.flp_token_process ?? null}>
+                          {props.project?.flp_token_process
+                            ? formatAddress(props.project.flp_token_process, false)
+                            : '-'}
+                        </AddressTooltip>
+                      </p>
+                      <ReactSVG src={copied ? ASSETS.checkmark : ASSETS.copy} />
+                    </S.ProjectId>
+                    <S.ProjectLinks>
+                      {props.project?.website_url && (
+                        <S.ProjectLink>
+                          <Link to={props.project.website_url} target={'_blank'} onClick={(e) => e.stopPropagation()}>
+                            {language.visitWebsite}
+                          </Link>
+                        </S.ProjectLink>
+                      )}
+                      {props.project?.twitter_handle && (
+                        <S.ProjectLink>
+                          <Link
+                            to={`https://x.com/${props.project.twitter_handle}`}
+                            target={'_blank'}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {language.visitX}
+                          </Link>
+                        </S.ProjectLink>
+                      )}
+                    </S.ProjectLinks>
+                  </S.ProjectIdRow>
+                  {props.project?.flp_short_description && (
+                    <S.ProjectShortDescription>
+                      <p>{props.project?.flp_short_description ?? 'No description'}</p>
+                    </S.ProjectShortDescription>
+                  )}
+                  {props.project?.flp_long_description && (
+                    <S.ProjectLongDescription>
+                      <p>{props.project.flp_long_description}</p>
+                    </S.ProjectLongDescription>
+                  )}
+                  <S.ProjectLinesWrapper>
+                    <S.ProjectLineWrapper>
+                      <S.ProjectLineDates>
+                        <S.ProjectInfoLine>
+                          <span>{language.startDate}</span>
+                          <p>
+                            {props.project?.starts_at_ts
+                              ? formatDate(props.project.starts_at_ts, 'dateString')
+                              : 'None'}
+                          </p>
+                        </S.ProjectInfoLine>
+                        <S.ProjectInfoLine>
+                          <span>{language.endDate}</span>
+                          <p>
+                            {props.project?.ends_at_ts ? formatDate(props.project.ends_at_ts, 'dateString') : 'None'}
+                          </p>
+                        </S.ProjectInfoLine>
+                      </S.ProjectLineDates>
+                    </S.ProjectLineWrapper>
+                  </S.ProjectLinesWrapper>
+                </S.ProjectBody>
+              </S.PanelWrapperStart>
+              {props.project?.disclaimer && (
+                <S.PanelWrapperEnd>
+                  <S.ProjectDisclaimer>
+                    <p>{props.project.disclaimer}</p>
+                  </S.ProjectDisclaimer>
+                </S.PanelWrapperEnd>
+              )}
+            </S.PanelWrapper>
+          </S.TableBodyRowDetailInner>
+        </S.TableBodyRowDetail>
+      )}
     </S.TableBodyRowWrapper>
+  );
+}
+
+function ClaimSection(props: { projectId: string; tokenLabel: string }) {
+  const arProvider = useArweaveProvider();
+  const allocationProvider = useAllocationProvider();
+  const [claimableBalance, setClaimableBalance] = React.useState<string | null>(null);
+  const [isClaiming, setIsClaiming] = React.useState<boolean>(false);
+  const [claimNotification, setClaimNotification] = React.useState<NotificationType | null>(null);
+
+  React.useEffect(() => {
+    if (arProvider.walletAddress && props.projectId) {
+      allocationProvider.getClaimableBalance(arProvider.walletAddress, props.projectId).then((balance) => {
+        setClaimableBalance(balance);
+      });
+    }
+  }, [arProvider.walletAddress, props.projectId, allocationProvider]);
+
+  const handleClaim = React.useCallback(
+    async (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (!claimableBalance || claimableBalance === '0' || isClaiming) return;
+
+      try {
+        setClaimNotification(null);
+        setIsClaiming(true);
+        await allocationProvider.withdrawFLPToken(props.projectId);
+        const updatedBalance = await allocationProvider.getClaimableBalance(arProvider.walletAddress, props.projectId);
+        setClaimableBalance(updatedBalance);
+        setClaimNotification({
+          message: `Successfully claimed ${props.tokenLabel} tokens`,
+          status: 'success',
+        });
+      } catch (error) {
+        console.error('Error claiming FLP tokens:', error);
+        setClaimNotification({
+          message: error instanceof Error ? error.message : 'Failed to claim tokens',
+          status: 'warning',
+        });
+      } finally {
+        setIsClaiming(false);
+      }
+    },
+    [claimableBalance, isClaiming, allocationProvider, props.projectId, arProvider.walletAddress, props.tokenLabel]
+  );
+
+  if (!arProvider.walletAddress || !claimableBalance || claimableBalance === '0') {
+    return null;
+  }
+
+  const displayBalance = formatNumber(parseBigIntAsNumber(claimableBalance, 12));
+
+  return (
+    <>
+      <S.ClaimWrapper>
+        <S.ClaimInfo>
+          <span>Claimable Balance:</span>
+          <p>
+            {displayBalance} {props.tokenLabel}
+          </p>
+        </S.ClaimInfo>
+        <S.ClaimButton onClick={handleClaim} disabled={isClaiming || !claimableBalance || claimableBalance === '0'}>
+          {isClaiming ? 'Claiming...' : 'Claim'}
+        </S.ClaimButton>
+      </S.ClaimWrapper>
+      {claimNotification && (
+        <Notification
+          message={claimNotification.message}
+          type={claimNotification.status}
+          callback={() => setClaimNotification(null)}
+        />
+      )}
+    </>
   );
 }
 
@@ -455,7 +534,7 @@ export default function DelegateEcosystem() {
   }> = [
     { key: 'index', label: '#', flex: 0.075, width: 50, align: 'center' },
     { key: 'project', label: 'Project', flex: 1.5, align: 'left' },
-    { key: 'delegated', label: 'Total AO Delegated', flex: 1, align: 'right' },
+    { key: 'delegated', label: 'AO Earned', flex: 1, align: 'right' },
     { key: 'launched', label: 'Launched', flex: 1, align: 'right' },
     { key: 'allocation', label: 'Allocation', flex: 1, align: 'right' },
   ];
@@ -538,7 +617,7 @@ export default function DelegateEcosystem() {
               );
             })}
           </S.TableHeaderRow>
-          <S.Table $isLoading={!currentProjects} className={currentProjects ? 'fade-in' : undefined}>
+          <S.Table>
             {currentProjects ? (
               <>
                 {currentProjects.length > 0 ? (
@@ -564,31 +643,9 @@ export default function DelegateEcosystem() {
                 )}
               </>
             ) : (
-              <>
-                {Array.from({ length: LOADING_PLACEHOLDER_ROWS }).map((_, index) => (
-                  <S.TableBodyRowWrapper key={`loading-row-${index}`}>
-                    <S.TableBodyRow open={false} $isPlaceholder>
-                      <S.TableBodyCell flex={0.075} width={50} align={'center'}>
-                        <S.PlaceholderLine width={'12px'} align={'center'} />
-                      </S.TableBodyCell>
-                      <S.TableBodyCell flex={1.5} align={'left'}>
-                        <S.PlaceholderCircle />
-                        <S.PlaceholderLine width={'38%'} />
-                      </S.TableBodyCell>
-                      <S.TableBodyCell flex={1} align={'right'}>
-                        <S.PlaceholderLine width={'68px'} align={'right'} />
-                        <S.PlaceholderCircle size={17.5} />
-                      </S.TableBodyCell>
-                      <S.TableBodyCell flex={1} align={'right'}>
-                        <S.PlaceholderLine width={'84px'} align={'right'} />
-                      </S.TableBodyCell>
-                      <S.TableBodyCell flex={1} align={'right'}>
-                        <S.PlaceholderLine width={'74px'} align={'right'} />
-                      </S.TableBodyCell>
-                    </S.TableBodyRow>
-                  </S.TableBodyRowWrapper>
-                ))}
-              </>
+              <S.TableEmpty>
+                <span>{`${language.loading}...`}</span>
+              </S.TableEmpty>
             )}
           </S.Table>
         </S.BodyWrapper>
@@ -599,7 +656,7 @@ export default function DelegateEcosystem() {
             type={'primary'}
             label={'Load More'}
             handlePress={() => setVisibleCount((prev) => prev + 10)}
-            height={32}
+            height={40}
             width={175}
           />
         </S.LoadMoreWrapper>

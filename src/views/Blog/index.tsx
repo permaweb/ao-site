@@ -35,6 +35,7 @@ export default function Blog() {
   const [allPosts, setAllPosts] = React.useState<AoBlogPost[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+
   React.useEffect(() => {
     let isMounted = true;
 

@@ -28,12 +28,11 @@ function getLazyImport(view: string) {
 export default function App() {
   const theme = useTheme();
   const location = useLocation();
-  const shouldShowRouteLoader = React.useMemo(
-    () => location.pathname.startsWith(URLS.blog) || location.pathname.startsWith(URLS.read),
-    [location.pathname]
-  );
   const routeLoadingMessage = React.useMemo(() => {
-    return 'AO, the decentralized network is retrieving the latest updates happening in the ecosystem.';
+    if (location.pathname.startsWith(URLS.blog) || location.pathname.startsWith(URLS.read)) {
+      return 'AO, the decentralized network is retrieving the latest updates happening in the ecosystem.';
+    }
+    return null;
   }, [location.pathname]);
 
   const hasInitializedServiceWorkerRef = React.useRef(false);
@@ -110,12 +109,16 @@ export default function App() {
       <S.View>
         <Suspense
           fallback={
-            shouldShowRouteLoader ? (
+            routeLoadingMessage ? (
               <S.RouteLoadingState>
                 <Loader relative noMargins />
                 <S.RouteLoadingMessage>{routeLoadingMessage}</S.RouteLoadingMessage>
               </S.RouteLoadingState>
-            ) : null
+            ) : (
+              <S.RouteLoadingState>
+                <Loader relative noMargins />
+              </S.RouteLoadingState>
+            )
           }
         >
           <Routes>

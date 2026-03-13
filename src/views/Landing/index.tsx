@@ -13,16 +13,7 @@ import * as S from './styles';
 
 export default function Landing() {
   const videoRef = React.useRef<HTMLVideoElement>(null);
-  const [videoReady, setVideoReady] = React.useState(false);
-  const hasPlaceholder = Boolean(ASSETS.landingGraphicPlaceholder);
 
-  React.useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    const onCanPlay = () => setVideoReady(true);
-    video.addEventListener('canplay', onCanPlay);
-    return () => video.removeEventListener('canplay', onCanPlay);
-  }, []);
   const aoProvider = useAOProvider();
   const ethProvider = useEthereumProvider();
   const languageProvider = useLanguageProvider();
@@ -44,7 +35,7 @@ export default function Landing() {
 
   return (
     <>
-      <S.Wrapper className={'fade-in'}>
+      <S.Wrapper>
         <S.ContentWrapper>
           <h4>{language.landingHeader1}</h4>
           <h4>{language.landingHeader2}</h4>
@@ -89,24 +80,11 @@ export default function Landing() {
           </S.MetricsSection>
         </S.MetricsWrapper>
       </S.Wrapper>
-      <S.GraphicWrapper className={'fade-in'}>
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload={'auto'}
-          poster={ASSETS.landingGraphicPlaceholder}
-        >
+      <S.GraphicWrapper>
+        <video ref={videoRef} autoPlay muted loop playsInline preload={'auto'}>
           <source src={ASSETS.landingGraphic} type={'video/mp4'} />
           Your browser does not support the video tag.
         </video>
-        {hasPlaceholder && (
-          <S.PlaceholderOverlay $visible={!videoReady} aria-hidden>
-            <img src={ASSETS.landingGraphicPlaceholder} alt="" />
-          </S.PlaceholderOverlay>
-        )}
       </S.GraphicWrapper>
     </>
   );

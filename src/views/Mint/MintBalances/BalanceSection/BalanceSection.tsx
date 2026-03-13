@@ -275,7 +275,7 @@ export default function BalanceSection(props: IProps) {
       return (
         <>
           <span className={'fade-in'}>{formatDisplayAmount(amount)}</span>
-          <S.AssetTicker>{token.ticker}</S.AssetTicker>
+          <S.AssetTicker>{language.ao}</S.AssetTicker>
         </>
       );
     } else {

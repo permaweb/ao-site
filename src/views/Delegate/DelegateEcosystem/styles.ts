@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { STYLING } from 'helpers/config';
 
@@ -22,15 +22,6 @@ const withOpacity = (color: string, opacity: number): string => {
 
   return color;
 };
-
-const skeletonShimmer = keyframes`
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-`;
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -303,13 +294,10 @@ export const SortIndicator = styled.span<{ active?: boolean }>`
   line-height: 1;
 `;
 
-export const Table = styled.div<{ $isLoading?: boolean }>`
+export const Table = styled.div`
   width: 100%;
-  position: relative;
   display: flex;
   flex-direction: column;
-  min-height: ${(props) => (props.$isLoading ? '420px' : '0')};
-  justify-content: flex-start;
 
   > * {
     &:not(:last-child) {
@@ -322,7 +310,7 @@ export const TableBodyRowWrapper = styled.div`
   width: 100%;
 `;
 
-export const TableBodyRow = styled.div<{ open: boolean; $isPlaceholder?: boolean }>`
+export const TableBodyRow = styled.div<{ open: boolean }>`
   width: 100%;
   display: flex;
   transition: background ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
@@ -330,13 +318,8 @@ export const TableBodyRow = styled.div<{ open: boolean; $isPlaceholder?: boolean
     props.open ? props.theme.colors.container.primary.active : props.theme.colors.container.primary.background};
 
   &:hover {
-    cursor: ${(props) => (props.$isPlaceholder ? 'default' : props.open ? 'zoom-out' : 'zoom-in')};
-    background: ${(props) =>
-      props.$isPlaceholder
-        ? props.open
-          ? props.theme.colors.container.primary.active
-          : props.theme.colors.container.primary.background
-        : props.theme.colors.container.primary.active};
+    cursor: pointer;
+    background: ${(props) => props.theme.colors.container.primary.active};
   }
 
   > * {
@@ -379,38 +362,6 @@ export const TableBodyRow = styled.div<{ open: boolean; $isPlaceholder?: boolean
       }
     }
   }
-`;
-
-export const PlaceholderCircle = styled.div<{ size?: number }>`
-  height: ${(props) => (props.size ? `${props.size}px` : '22.5px')};
-  width: ${(props) => (props.size ? `${props.size}px` : '22.5px')};
-  border-radius: 50%;
-  background: linear-gradient(
-    90deg,
-    ${(props) => props.theme.colors.container.alt3.background} 25%,
-    ${(props) => props.theme.colors.container.alt2.background} 37%,
-    ${(props) => props.theme.colors.container.alt3.background} 63%
-  );
-  background-size: 240% 100%;
-  animation: ${skeletonShimmer} 1.5s linear infinite;
-  opacity: 0.62;
-`;
-
-export const PlaceholderLine = styled.div<{ width: string; height?: number; align?: 'left' | 'right' | 'center' }>`
-  width: ${(props) => props.width};
-  height: ${(props) => (props.height ? `${props.height}px` : '10px')};
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    ${(props) => props.theme.colors.container.alt3.background} 25%,
-    ${(props) => props.theme.colors.container.alt2.background} 37%,
-    ${(props) => props.theme.colors.container.alt3.background} 63%
-  );
-  background-size: 240% 100%;
-  animation: ${skeletonShimmer} 1.5s linear infinite;
-  opacity: 0.62;
-  margin-left: ${(props) => (props.align === 'right' ? 'auto' : props.align === 'center' ? 'auto' : '0')};
-  margin-right: ${(props) => (props.align === 'left' ? 'auto' : props.align === 'center' ? 'auto' : '0')};
 `;
 
 export const TableBodyRowDetail = styled.div<{ open: boolean }>`
@@ -479,7 +430,7 @@ export const TableBodyCell = styled.div<{
   gap: 12.5px;
   flex: ${(props) => props.flex};
   transition: background ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
-  cursor: ${(props) => (props.interactive ? 'pointer' : 'inherit')};
+  cursor: pointer;
 
   &:hover {
     background: ${(props) =>
@@ -565,13 +516,11 @@ export const TableBodyImage = styled.div<{ hasImage: boolean; size?: number }>`
   }
 `;
 
-export const TableEmpty = styled.div<{ $isLoading?: boolean }>`
-  height: ${(props) => (props.$isLoading ? 'auto' : '45px')};
-  min-height: ${(props) => (props.$isLoading ? '84px' : '0')};
+export const TableEmpty = styled.div`
+  height: 45px;
   display: flex;
-  align-items: ${(props) => (props.$isLoading ? 'flex-start' : 'center')};
-  gap: ${(props) => (props.$isLoading ? '12px' : '0')};
-  padding: ${(props) => (props.$isLoading ? '15px' : '0 15px')};
+  align-items: center;
+  padding: 0 15px;
 
   span {
     font-family: ${(props) => props.theme.typography.family.primary};
