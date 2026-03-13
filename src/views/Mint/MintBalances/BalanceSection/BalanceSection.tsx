@@ -127,7 +127,9 @@ export default function BalanceSection(props: IProps) {
 					label: language.depositDai,
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
-					component: showDaiConvertModal ? getEthExchange(EthTokenEnum.USDS, true) : getEthExchange(EthTokenEnum.DAI),
+					component: showDaiConvertModal
+						? getEthExchange(EthTokenEnum.USDS, true)
+						: getEthExchange(EthTokenEnum.DAI),
 				},
 			},
 			usds: {
@@ -143,7 +145,9 @@ export default function BalanceSection(props: IProps) {
 					label: language.depositUsds,
 					icon: ASSETS.exchange,
 					fn: () => setShowAction(true),
-					component: showDaiConvertModal ? getEthExchange(EthTokenEnum.USDS, true) : getEthExchange(EthTokenEnum.USDS),
+					component: showDaiConvertModal
+						? getEthExchange(EthTokenEnum.USDS, true)
+						: getEthExchange(EthTokenEnum.USDS),
 				},
 			},
 		};
@@ -310,7 +314,9 @@ export default function BalanceSection(props: IProps) {
 								<S.ApyRow>
 									{currentYield !== null ? (
 										<>
-											<S.ApyText className={'fade-in'}>{`≈ ${currentYield.toFixed(1)}% APY`}</S.ApyText>
+											<S.ApyText className={'fade-in'}>{`≈ ${currentYield.toFixed(
+												1
+											)}% APY`}</S.ApyText>
 										</>
 									) : ethProvider.walletAddress ? (
 										<EllipsisLoader />
@@ -353,7 +359,9 @@ export default function BalanceSection(props: IProps) {
 						<S.NativeYieldText>
 							<S.NativeYieldLabel>Native Yield:</S.NativeYieldLabel>
 							{currentNativeYield !== null ? (
-								<S.NativeYieldValue className={'fade-in'}>{`${currentNativeYield.toFixed(1)}%`}</S.NativeYieldValue>
+								<S.NativeYieldValue className={'fade-in'}>{`${currentNativeYield.toFixed(
+									1
+								)}%`}</S.NativeYieldValue>
 							) : (
 								<S.NativeYieldValue>-</S.NativeYieldValue>
 							)}
@@ -368,7 +376,9 @@ export default function BalanceSection(props: IProps) {
 									<span>{language.currentBalance}</span>
 									<p>
 										{ethProvider.tokens[props.type]?.balance?.display ? (
-											<span className={'fade-in'}>{ethProvider.tokens[props.type].balance.display}</span>
+											<span className={'fade-in'}>
+												{ethProvider.tokens[props.type].balance.display}
+											</span>
 										) : (
 											'-'
 										)}
@@ -428,7 +438,13 @@ export default function BalanceSection(props: IProps) {
 									<p>{language.connectEthWalletToViewDeposits}</p>
 								</S.NetworkDisconnectedIconText>
 							</S.NetworkDisconnectedContent>
-							<Button type={'primary'} label={getWalletLabel()} handlePress={handleWalletPress} height={45} fullWidth />
+							<Button
+								type={'primary'}
+								label={getWalletLabel()}
+								handlePress={handleWalletPress}
+								height={45}
+								fullWidth
+							/>
 						</S.NetworkDisconnected>
 					)}
 				</S.BalanceBodyWrapper>

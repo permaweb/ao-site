@@ -300,11 +300,17 @@ export default function BlogPost() {
 										components={{
 											pre({ children }) {
 												const child = React.Children.toArray(children)[0] as
-													| React.ReactElement<{ className?: string; children?: React.ReactNode }>
+													| React.ReactElement<{
+															className?: string;
+															children?: React.ReactNode;
+													  }>
 													| undefined;
 												const className = child?.props?.className || '';
 												const match = /language-(\w+)/.exec(className);
-												const codeString = String(child?.props?.children ?? '').replace(/\n$/, '');
+												const codeString = String(child?.props?.children ?? '').replace(
+													/\n$/,
+													''
+												);
 
 												return (
 													<S.CodeBlock>
@@ -331,7 +337,9 @@ export default function BlogPost() {
 															event.preventDefault();
 															event.stopPropagation();
 															const paragraph = event.currentTarget.closest('p');
-															const caption = paragraph?.querySelector('em')?.textContent?.trim() || '';
+															const caption =
+																paragraph?.querySelector('em')?.textContent?.trim() ||
+																'';
 															openExpandedImage(src, alt, caption);
 														}}
 														onKeyDown={(event) => {
@@ -339,7 +347,10 @@ export default function BlogPost() {
 																event.preventDefault();
 																event.stopPropagation();
 																const paragraph = event.currentTarget.closest('p');
-																const caption = paragraph?.querySelector('em')?.textContent?.trim() || '';
+																const caption =
+																	paragraph
+																		?.querySelector('em')
+																		?.textContent?.trim() || '';
 																openExpandedImage(src, alt, caption);
 															}
 														}}
@@ -378,7 +389,9 @@ export default function BlogPost() {
 								</S.MarkdownBody>
 							);
 						})()}
-					{!postBody.markdown && !postBody.html && <S.Paragraph className={'fade-in'}>{post.excerpt}</S.Paragraph>}
+					{!postBody.markdown && !postBody.html && (
+						<S.Paragraph className={'fade-in'}>{post.excerpt}</S.Paragraph>
+					)}
 				</S.Section>
 				{!isBodyLoading && suggestedPosts.length > 0 && (
 					<S.SuggestedSection className={'fade-in'}>
@@ -416,8 +429,14 @@ export default function BlogPost() {
 						<S.ImageLightboxCloseIndicator aria-hidden="true">
 							<span />
 						</S.ImageLightboxCloseIndicator>
-						<S.ImageLightboxImage src={expandedImage.src} alt={expandedImage.alt} $closing={isLightboxClosing} />
-						{expandedImage.description && <S.ImageLightboxCaption>{expandedImage.description}</S.ImageLightboxCaption>}
+						<S.ImageLightboxImage
+							src={expandedImage.src}
+							alt={expandedImage.alt}
+							$closing={isLightboxClosing}
+						/>
+						{expandedImage.description && (
+							<S.ImageLightboxCaption>{expandedImage.description}</S.ImageLightboxCaption>
+						)}
 					</S.ImageLightboxContent>
 				</S.ImageLightbox>
 			)}

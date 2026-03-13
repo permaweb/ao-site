@@ -10,7 +10,11 @@ interface gnosisOptions {
 
 function gnosis(options?: gnosisOptions) {
 	const {
-		whitelistedDomains = [/^https:\/\/gnosis-safe\.io$/, /^https:\/\/app\.safe\.global$/, /^https:\/\/safe\.global$/],
+		whitelistedDomains = [
+			/^https:\/\/gnosis-safe\.io$/,
+			/^https:\/\/app\.safe\.global$/,
+			/^https:\/\/safe\.global$/,
+		],
 	} = options || {};
 	return () => ({
 		label: 'Gnosis Safe',
@@ -23,7 +27,10 @@ function gnosis(options?: gnosisOptions) {
 				whitelistedDomains,
 			};
 			const appsSdk = new SafeAppProviderConstructor(opts);
-			const safe = await Promise.race([appsSdk.safe.getInfo(), new Promise((resolve) => setTimeout(resolve, 200))]);
+			const safe = await Promise.race([
+				appsSdk.safe.getInfo(),
+				new Promise((resolve) => setTimeout(resolve, 200)),
+			]);
 			if (!safe) {
 				throw new Error(
 					`App must be loaded in a Safe App context, head to <a href="https://gnosis-safe.io/app">the Safe</a> and open this website as an app.`

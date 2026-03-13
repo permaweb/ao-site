@@ -46,7 +46,8 @@ export default function Mint() {
 				return null;
 		}
 
-		if (arProvider[balance] !== null) return <p className={'fade-in'}>{formatDisplayAmount(arProvider[balance])}</p>;
+		if (arProvider[balance] !== null)
+			return <p className={'fade-in'}>{formatDisplayAmount(arProvider[balance])}</p>;
 
 		return <EllipsisLoader />;
 	}
@@ -154,8 +155,13 @@ export default function Mint() {
 										<S.NetworkHeaderAddressRow>
 											<ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
 											<AddressTooltip address={arProvider.walletAddress}>
-												<S.NetworkHeaderAddress disabled={copiedAr} onClick={copiedAr ? undefined : copyArAddress}>
-													{copiedAr ? `${language.copied}!` : formatAddress(arProvider.walletAddress, false)}
+												<S.NetworkHeaderAddress
+													disabled={copiedAr}
+													onClick={copiedAr ? undefined : copyArAddress}
+												>
+													{copiedAr
+														? `${language.copied}!`
+														: formatAddress(arProvider.walletAddress, false)}
 												</S.NetworkHeaderAddress>
 											</AddressTooltip>
 										</S.NetworkHeaderAddressRow>
@@ -253,8 +259,13 @@ export default function Mint() {
 											<S.NetworkHeaderAddressRow>
 												<ReactSVG className={'network-header-logo'} src={ASSETS.ethereum} />
 												<AddressTooltip address={ethProvider.walletAddress}>
-													<S.NetworkHeaderAddress disabled={copiedEth} onClick={copiedEth ? undefined : copyEthAddress}>
-														{copiedEth ? `${language.copied}!` : formatAddress(ethProvider.walletAddress, false)}
+													<S.NetworkHeaderAddress
+														disabled={copiedEth}
+														onClick={copiedEth ? undefined : copyEthAddress}
+													>
+														{copiedEth
+															? `${language.copied}!`
+															: formatAddress(ethProvider.walletAddress, false)}
 													</S.NetworkHeaderAddress>
 												</AddressTooltip>
 											</S.NetworkHeaderAddressRow>
@@ -264,15 +275,25 @@ export default function Mint() {
 													<S.NetworkHeaderArweave>
 														<span>{language.depositArweaveLabel}</span>
 														<S.NetworkHeaderAddressRow>
-															<ReactSVG className={'network-header-logo'} src={ASSETS.arweave} />
+															<ReactSVG
+																className={'network-header-logo'}
+																src={ASSETS.arweave}
+															/>
 															<AddressTooltip address={ethProvider.lastArweaveAddress}>
 																<S.NetworkHeaderAddress
 																	disabled={copiedDepositArweave}
-																	onClick={copiedDepositArweave ? undefined : copyDepositArweaveAddress}
+																	onClick={
+																		copiedDepositArweave
+																			? undefined
+																			: copyDepositArweaveAddress
+																	}
 																>
 																	{copiedDepositArweave
 																		? `${language.copied}!`
-																		: formatAddress(ethProvider.lastArweaveAddress, false)}
+																		: formatAddress(
+																				ethProvider.lastArweaveAddress,
+																				false
+																		  )}
 																</S.NetworkHeaderAddress>
 															</AddressTooltip>
 														</S.NetworkHeaderAddressRow>

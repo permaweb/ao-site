@@ -140,7 +140,12 @@ export function evmBytesToArweaveAddress(evmBytes: string): string | null {
 
 	// Arweave addresses are typically 43 characters long
 	if (base64UrlAddress.length !== 43) {
-		console.warn('Converted Arweave address has an unexpected length:', base64UrlAddress, 'Original hex:', evmBytes);
+		console.warn(
+			'Converted Arweave address has an unexpected length:',
+			base64UrlAddress,
+			'Original hex:',
+			evmBytes
+		);
 	}
 
 	return base64UrlAddress;

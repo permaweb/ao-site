@@ -2,8 +2,7 @@
 // https://www.are.na/block/43234373, 43118741, 43116980, 43633599
 const ARE_NA_IMAGES = {
 	grid: 'https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI0MzIzNDM3My9vcmlnaW5hbF83MjMyOTAxNDU4YTlhZTc1MmIzZWVkODI2ZTdiY2Y5Ny5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjEyMDAsImhlaWdodCI6MTIwMCwiZml0IjoiaW5zaWRlIiwid2l0aG91dEVubGFyZ2VtZW50Ijp0cnVlfSwid2VicCI6eyJxdWFsaXR5Ijo3NX0sImpwZWciOnsicXVhbGl0eSI6NzV9LCJyb3RhdGUiOm51bGx9fQ==?bc=0',
-	nodes:
-		'https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI0MzExODc0MS9vcmlnaW5hbF8zNzk0Y2Y5OWY3MWZlOWRiNGQ4ODhjOGJlMjQ1NGIxYy5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjEyMDAsImhlaWdodCI6MTIwMCwiZml0IjoiaW5zaWRlIiwid2l0aG91dEVubGFyZ2VtZW50Ijp0cnVlfSwid2VicCI6eyJxdWFsaXR5Ijo3NX0sImpwZWciOnsicXVhbGl0eSI6NzV9LCJyb3RhdGUiOm51bGx9fQ==?bc=0',
+	nodes: 'https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI0MzExODc0MS9vcmlnaW5hbF8zNzk0Y2Y5OWY3MWZlOWRiNGQ4ODhjOGJlMjQ1NGIxYy5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjEyMDAsImhlaWdodCI6MTIwMCwiZml0IjoiaW5zaWRlIiwid2l0aG91dEVubGFyZ2VtZW50Ijp0cnVlfSwid2VicCI6eyJxdWFsaXR5Ijo3NX0sImpwZWciOnsicXVhbGl0eSI6NzV9LCJyb3RhdGUiOm51bGx9fQ==?bc=0',
 	flow: 'https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI0MzExNjk4MC9vcmlnaW5hbF9kN2IyNDhkYTUzYjBlMWE3MjhiMTA3MTkwM2E4YmU5MS5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjEyMDAsImhlaWdodCI6MTIwMCwiZml0IjoiaW5zaWRlIiwid2l0aG91dEVubGFyZ2VtZW50Ijp0cnVlfSwid2VicCI6eyJxdWFsaXR5Ijo3NX0sImpwZWciOnsicXVhbGl0eSI6NzV9LCJyb3RhdGUiOm51bGx9fQ==?bc=0',
 	circuit:
 		'https://images.are.na/eyJidWNrZXQiOiJhcmVuYV9pbWFnZXMiLCJrZXkiOiI0MzYzMzU5OS9vcmlnaW5hbF80ZTU5OGE3MjRmZmY2MTZlZmMwMDMzZmRlZDRhYjBiZi5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjEyMDAsImhlaWdodCI6MTIwMCwiZml0IjoiaW5zaWRlIiwid2l0aG91dEVubGFyZ2VtZW50Ijp0cnVlfSwid2VicCI6eyJxdWFsaXR5Ijo3NX0sImpwZWciOnsicXVhbGl0eSI6NzV9LCJyb3RhdGUiOm51bGx9fQ==?bc=0',
@@ -105,7 +104,8 @@ export const BLOG_POSTS: BlogPost[] = [
 	{
 		slug: 'ship-faster-with-permaweb',
 		title: 'Ship Faster with Permaweb-Native Workflows.',
-		excerpt: 'How to structure product releases so content, code references, and updates stay consistent over time.',
+		excerpt:
+			'How to structure product releases so content, code references, and updates stay consistent over time.',
 		publishedAt: 'Feb 14, 2026',
 		author: 'AO Team',
 		category: 'Dev',

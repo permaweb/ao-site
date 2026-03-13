@@ -32,7 +32,9 @@ export default function EthExchange(props: IProps) {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
-	const [exchangeType, setExchangeType] = React.useState<EthExchangeType>(props.conversionFlow ? 'convert' : 'deposit');
+	const [exchangeType, setExchangeType] = React.useState<EthExchangeType>(
+		props.conversionFlow ? 'convert' : 'deposit'
+	);
 
 	useEffect(() => {
 		setExchangeType(props.conversionFlow ? 'convert' : 'deposit');
@@ -94,7 +96,10 @@ export default function EthExchange(props: IProps) {
 
 	/* Check DAI and USDS Stake Lockup Period */
 	React.useEffect(() => {
-		if ((effectiveToken === EthTokenEnum.DAI || effectiveToken === EthTokenEnum.USDS) && exchangeType === 'withdraw') {
+		if (
+			(effectiveToken === EthTokenEnum.DAI || effectiveToken === EthTokenEnum.USDS) &&
+			exchangeType === 'withdraw'
+		) {
 			const lastStake = BigInt(ethProvider?.tokens?.[effectiveToken]?.deposited?.lastStake || 0);
 			const lockupWindow = BigInt(64800);
 			const currentTime = BigInt(Math.floor(Date.now() / 1000));
@@ -138,7 +143,9 @@ export default function EthExchange(props: IProps) {
 				break;
 			case 'deposit':
 				setDisabled(
-					amountInWei > ethProvider?.tokens?.[effectiveToken]?.balance?.value || !recipient || getInvalidRecipient()
+					amountInWei > ethProvider?.tokens?.[effectiveToken]?.balance?.value ||
+						!recipient ||
+						getInvalidRecipient()
 				);
 				break;
 			case 'withdraw':
@@ -246,26 +253,34 @@ export default function EthExchange(props: IProps) {
 							.allowance(ethProvider.walletAddress, upgradeContractAddress)
 							.call();
 						if (Number(upgradeAllowance) < Number(amountInWei)) {
-							const upgradeApproval = await daiTokenContract.methods.approve(upgradeContractAddress, amountInWei).send({
-								from: ethProvider.walletAddress,
-							});
+							const upgradeApproval = await daiTokenContract.methods
+								.approve(upgradeContractAddress, amountInWei)
+								.send({
+									from: ethProvider.walletAddress,
+								});
 							console.log('DAI Upgrade Approval transaction:', upgradeApproval);
-							const upgradeApprovalReceipt = await checkTransactionReceipt(upgradeApproval.transactionHash);
+							const upgradeApprovalReceipt = await checkTransactionReceipt(
+								upgradeApproval.transactionHash
+							);
 							if (!upgradeApprovalReceipt || !upgradeApprovalReceipt.status) {
 								throw new Error('DAI to USDS upgrade approval failed');
 							}
 							console.log('DAI Upgrade Approval transaction confirmed:', upgradeApprovalReceipt);
 						}
 
-						const upgradeTx = await upgradeContract.methods.daiToUsds(ethProvider.walletAddress, amountInWei).send({
-							from: ethProvider.walletAddress,
-						});
+						const upgradeTx = await upgradeContract.methods
+							.daiToUsds(ethProvider.walletAddress, amountInWei)
+							.send({
+								from: ethProvider.walletAddress,
+							});
 						console.log('DAI to USDS Upgrade transaction:', upgradeTx);
 						await checkTransactionReceipt(upgradeTx.transactionHash);
 						console.log('DAI to USDS Upgrade transaction confirmed:', upgradeTx);
 						break;
 					case 'deposit':
-						const allowance = await tokenContract.methods.allowance(ethProvider.walletAddress, bridgeAddress).call();
+						const allowance = await tokenContract.methods
+							.allowance(ethProvider.walletAddress, bridgeAddress)
+							.call();
 						if (Number(allowance) < Number(amountInWei)) {
 							const approval = await tokenContract.methods.approve(bridgeAddress, amountInWei).send({
 								from: ethProvider.walletAddress,
@@ -281,9 +296,11 @@ export default function EthExchange(props: IProps) {
 						if (currentToken === EthTokenEnum.USDS) {
 							let gas = undefined;
 							try {
-								const gasEstimate = await bridgeContract.methods.stake(amountInWei, arweaveRecipient).estimateGas({
-									from: ethProvider.walletAddress,
-								});
+								const gasEstimate = await bridgeContract.methods
+									.stake(amountInWei, arweaveRecipient)
+									.estimateGas({
+										from: ethProvider.walletAddress,
+									});
 								gas = ((BigInt(gasEstimate) * BigInt(11)) / BigInt(10)).toString();
 							} catch (error) {
 								console.error('Error estimating gas:', error);
@@ -296,9 +313,11 @@ export default function EthExchange(props: IProps) {
 							await checkTransactionReceipt(stake.transactionHash);
 							console.log('Stake transaction confirmed:', stake);
 						} else {
-							const stake = await bridgeContract.methods.stake(poolId, amountInWei, arweaveRecipient).send({
-								from: ethProvider.walletAddress,
-							});
+							const stake = await bridgeContract.methods
+								.stake(poolId, amountInWei, arweaveRecipient)
+								.send({
+									from: ethProvider.walletAddress,
+								});
 							console.log('Stake transaction:', stake);
 							await checkTransactionReceipt(stake.transactionHash);
 							console.log('Stake transaction confirmed:', stake);
@@ -308,9 +327,11 @@ export default function EthExchange(props: IProps) {
 						if (effectiveToken === EthTokenEnum.USDS) {
 							let gas = undefined;
 							try {
-								const gasEstimate = await bridgeContract.methods.withdraw(amountInWei, arweaveRecipient).estimateGas({
-									from: ethProvider.walletAddress,
-								});
+								const gasEstimate = await bridgeContract.methods
+									.withdraw(amountInWei, arweaveRecipient)
+									.estimateGas({
+										from: ethProvider.walletAddress,
+									});
 								gas = ((BigInt(gasEstimate) * BigInt(11)) / BigInt(10)).toString();
 							} catch (error) {
 								console.error('Error estimating gas:', error);
@@ -323,9 +344,11 @@ export default function EthExchange(props: IProps) {
 							await checkTransactionReceipt(withdraw.transactionHash);
 							console.log('Withdraw transaction confirmed:', withdraw);
 						} else {
-							const withdraw = await bridgeContract.methods.withdraw(poolId, amountInWei, arweaveRecipient).send({
-								from: ethProvider.walletAddress,
-							});
+							const withdraw = await bridgeContract.methods
+								.withdraw(poolId, amountInWei, arweaveRecipient)
+								.send({
+									from: ethProvider.walletAddress,
+								});
 							console.log('Withdraw transaction:', withdraw);
 							await checkTransactionReceipt(withdraw.transactionHash);
 							console.log('Withdraw transaction confirmed:', withdraw);
@@ -529,13 +552,24 @@ export default function EthExchange(props: IProps) {
 												<ReactSVG src={ASSETS.dai} />
 												<span>DAI</span>
 												<S.YieldDisplay>
-													<span className="yield">{daiYield !== null ? `≈${daiYield.toFixed(1)}% APY` : '-'}</span>
+													<span className="yield">
+														{daiYield !== null ? `≈${daiYield.toFixed(1)}% APY` : '-'}
+													</span>
 													<span className="native">
-														Native: {daiNativeYield !== null ? `${daiNativeYield.toFixed(1)}%` : '-'}
+														Native:{' '}
+														{daiNativeYield !== null
+															? `${daiNativeYield.toFixed(1)}%`
+															: '-'}
 													</span>
 												</S.YieldDisplay>
 											</S.YieldToken>
-											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<svg
+												width="16"
+												height="16"
+												viewBox="0 0 24 24"
+												fill="none"
+												xmlns="http://www.w3.org/2000/svg"
+											>
 												<path
 													d="M5 12h14m-7-7l7 7-7 7"
 													stroke="currentColor"
@@ -548,9 +582,14 @@ export default function EthExchange(props: IProps) {
 												<ReactSVG src={ASSETS.usds} />
 												<span>USDS</span>
 												<S.YieldDisplay>
-													<span className="yield">{usdsYield !== null ? `≈${usdsYield.toFixed(1)}% APY` : '-'}</span>
+													<span className="yield">
+														{usdsYield !== null ? `≈${usdsYield.toFixed(1)}% APY` : '-'}
+													</span>
 													<span className="native">
-														Native: {usdsNativeYield !== null ? `${usdsNativeYield.toFixed(1)}%` : '-'}
+														Native:{' '}
+														{usdsNativeYield !== null
+															? `${usdsNativeYield.toFixed(1)}%`
+															: '-'}
 													</span>
 												</S.YieldDisplay>
 											</S.YieldToken>
@@ -597,7 +636,13 @@ export default function EthExchange(props: IProps) {
 						type={'alt1'}
 						label={processed ? 'Done' : errorButtonLabel || language[exchangeType]}
 						handlePress={() => (processed ? handleClear() : handleSubmit())}
-						icon={errorButtonLabel ? undefined : exchangeType === 'convert' ? ASSETS.exchange : ASSETS[exchangeType]}
+						icon={
+							errorButtonLabel
+								? undefined
+								: exchangeType === 'convert'
+								? ASSETS.exchange
+								: ASSETS[exchangeType]
+						}
 						iconLeftAlign
 						disabled={processed ? false : disabled}
 						loading={loading}

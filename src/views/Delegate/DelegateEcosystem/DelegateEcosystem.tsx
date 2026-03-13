@@ -109,7 +109,8 @@ function Project(props: {
 
 		// Project not yet in allocation: use next slot color (matches color it will get when added)
 		return (
-			availableColors[(coreCount + ecosystemRecords.length) % availableColors.length] || theme.colors.stats.primary
+			availableColors[(coreCount + ecosystemRecords.length) % availableColors.length] ||
+			theme.colors.stats.primary
 		);
 	}, [allocationProvider.records, coreMap, keys, props.project.id, theme]);
 
@@ -142,7 +143,9 @@ function Project(props: {
 					</S.TableBodyImage>
 					<S.ProjectNameWrapper>
 						<span>{props.project.flp_name ?? '-'}</span>
-						{props.project.flp_token_ticker && <span className={'ticker'}>{`$${props.project.flp_token_ticker}`}</span>}
+						{props.project.flp_token_ticker && (
+							<span className={'ticker'}>{`$${props.project.flp_token_ticker}`}</span>
+						)}
 					</S.ProjectNameWrapper>
 				</S.TableBodyCell>
 				<S.TableBodyCell flex={1} align={'right'}>
@@ -177,7 +180,9 @@ function Project(props: {
 								<ClaimSection projectId={props.project.id} tokenLabel={tokenLabel} />
 								<S.ProjectBody>
 									<S.ProjectIdRow>
-										<S.ProjectId onClick={() => copyTokenId(props.project?.flp_token_process ?? '-')}>
+										<S.ProjectId
+											onClick={() => copyTokenId(props.project?.flp_token_process ?? '-')}
+										>
 											<span>{`${language.tokenId}:`}</span>
 											<p>
 												<AddressTooltip address={props.project?.flp_token_process ?? null}>
@@ -191,7 +196,11 @@ function Project(props: {
 										<S.ProjectLinks>
 											{props.project?.website_url && (
 												<S.ProjectLink>
-													<Link to={props.project.website_url} target={'_blank'} onClick={(e) => e.stopPropagation()}>
+													<Link
+														to={props.project.website_url}
+														target={'_blank'}
+														onClick={(e) => e.stopPropagation()}
+													>
 														{language.visitWebsite}
 													</Link>
 												</S.ProjectLink>
@@ -233,7 +242,9 @@ function Project(props: {
 												<S.ProjectInfoLine>
 													<span>{language.endDate}</span>
 													<p>
-														{props.project?.ends_at_ts ? formatDate(props.project.ends_at_ts, 'dateString') : 'None'}
+														{props.project?.ends_at_ts
+															? formatDate(props.project.ends_at_ts, 'dateString')
+															: 'None'}
 													</p>
 												</S.ProjectInfoLine>
 											</S.ProjectLineDates>
@@ -282,7 +293,10 @@ function ClaimSection(props: { projectId: string; tokenLabel: string }) {
 				setClaimNotification(null);
 				setIsClaiming(true);
 				await allocationProvider.withdrawFLPToken(props.projectId);
-				const updatedBalance = await allocationProvider.getClaimableBalance(arProvider.walletAddress, props.projectId);
+				const updatedBalance = await allocationProvider.getClaimableBalance(
+					arProvider.walletAddress,
+					props.projectId
+				);
 				setClaimableBalance(updatedBalance);
 				setClaimNotification({
 					message: `Successfully claimed ${props.tokenLabel} tokens`,
@@ -316,7 +330,10 @@ function ClaimSection(props: { projectId: string; tokenLabel: string }) {
 						{displayBalance} {props.tokenLabel}
 					</p>
 				</S.ClaimInfo>
-				<S.ClaimButton onClick={handleClaim} disabled={isClaiming || !claimableBalance || claimableBalance === '0'}>
+				<S.ClaimButton
+					onClick={handleClaim}
+					disabled={isClaiming || !claimableBalance || claimableBalance === '0'}
+				>
 					{isClaiming ? 'Claiming...' : 'Claim'}
 				</S.ClaimButton>
 			</S.ClaimWrapper>
@@ -612,7 +629,9 @@ export default function DelegateEcosystem() {
 									tabIndex={showExploreSort ? 0 : undefined}
 								>
 									<span>{headerCell.label}</span>
-									{showExploreSort && <S.SortIndicator active={isActive}>{indicator}</S.SortIndicator>}
+									{showExploreSort && (
+										<S.SortIndicator active={isActive}>{indicator}</S.SortIndicator>
+									)}
 								</S.TableHeaderCell>
 							);
 						})}
@@ -630,7 +649,11 @@ export default function DelegateEcosystem() {
 													project={project}
 													totalDelegated={totalDelegatedByProject(project.id)}
 													isOpen={openProjectId === project.id}
-													onToggle={() => setOpenProjectId((previous) => (previous === project.id ? null : project.id))}
+													onToggle={() =>
+														setOpenProjectId((previous) =>
+															previous === project.id ? null : project.id
+														)
+													}
 													useCompactDelegatedNumbers={useCompactDelegatedNumbers}
 												/>
 											);

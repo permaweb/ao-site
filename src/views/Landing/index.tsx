@@ -65,13 +65,15 @@ export default function Landing() {
 						</S.MetricsLine>
 					</S.MetricsSection>
 					<S.LinksWrapper>
-						{NAV_REDIRECTS.map((element: { path: string; label: string; target?: '_blank' }, index: number) => {
-							return (
-								<Link key={index} to={element.path} target={'_blank'} className={'primary-text'}>
-									<span>{element.label}</span>
-								</Link>
-							);
-						})}
+						{NAV_REDIRECTS.map(
+							(element: { path: string; label: string; target?: '_blank' }, index: number) => {
+								return (
+									<Link key={index} to={element.path} target={'_blank'} className={'primary-text'}>
+										<span>{element.label}</span>
+									</Link>
+								);
+							}
+						)}
 					</S.LinksWrapper>
 					<S.MetricsSection>
 						{renderMetricLine(language.users, 'active_users_over_blocks')}

@@ -17,7 +17,8 @@ export const Input = styled.input<{ image: string }>`
 	background: ${(props) =>
 		props.checked ? props.theme.colors.checkbox.active.background : props.theme.colors.checkbox.background};
 	border: 1px solid
-		${(props) => (props.checked ? props.theme.colors.checkbox.active.background : props.theme.colors.border.primary)};
+		${(props) =>
+			props.checked ? props.theme.colors.checkbox.active.background : props.theme.colors.border.primary};
 	border-radius: 2.5px;
 	height: 12.5px;
 	width: 12.5px;

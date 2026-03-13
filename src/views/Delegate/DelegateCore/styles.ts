@@ -24,7 +24,8 @@ export const HeaderWrapper = styled.div`
 	span {
 		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-size: ${(props) => `clamp(${props.theme.typography.size.xSmall}, 2vw, ${props.theme.typography.size.base})`};
+		font-size: ${(props) =>
+			`clamp(${props.theme.typography.size.xSmall}, 2vw, ${props.theme.typography.size.base})`};
 		color: ${(props) => props.theme.colors.font.alt1};
 	}
 

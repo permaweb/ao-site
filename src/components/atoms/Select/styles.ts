@@ -26,7 +26,9 @@ export const Dropdown = styled.button<{ active: boolean }>`
 	gap: 4px;
 	align-items: center;
 	background: ${(props) =>
-		props.active ? props.theme.colors.button.primary.active.background : props.theme.colors.button.primary.background};
+		props.active
+			? props.theme.colors.button.primary.active.background
+			: props.theme.colors.button.primary.background};
 	transition: all 100ms;
 	&:disabled {
 		background: ${(props) => props.theme.colors.button.primary.disabled.background};

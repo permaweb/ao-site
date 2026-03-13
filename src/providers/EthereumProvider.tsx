@@ -283,8 +283,12 @@ export function EthereumProvider(props: EthereumProviderProps) {
 					const usdsContract = new web3.eth.Contract(Erc20_ABI, ETH_CONTRACTS.usds);
 					const usdsBridgeContract = new web3.eth.Contract(UsdsBridge_ABI, ETH_CONTRACTS.usdsBridge);
 
-					const stEthBalanceOf = (await stEthContract.methods.balanceOf(walletAddress).call()) as any as bigint;
-					const stEthUsersData = (await stEthBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
+					const stEthBalanceOf = (await stEthContract.methods
+						.balanceOf(walletAddress)
+						.call()) as any as bigint;
+					const stEthUsersData = (await stEthBridgeContract.methods
+						.usersData(walletAddress, 0)
+						.call()) as any;
 
 					const daiBalanceOf = (await daiContract.methods.balanceOf(walletAddress).call()) as any as bigint;
 					const daiUsersData = (await daiBridgeContract.methods.usersData(walletAddress, 0).call()) as any;
@@ -507,33 +511,51 @@ export function EthereumProvider(props: EthereumProviderProps) {
 						stEth: {
 							price: stEthPrice,
 							monthly: {
-								amount: ethReward(30.44, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								amount: ethReward(
+									30.44,
+									Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION
+								),
 								ratio: ethReward(30.44, 1),
 							},
 							yearly: {
-								amount: ethReward(365, Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								amount: ethReward(
+									365,
+									Number(tokens.stEth?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION
+								),
 								ratio: ethReward(365, 1),
 							},
 						},
 						dai: {
 							price: daiPrice,
 							monthly: {
-								amount: daiReward(30.44, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								amount: daiReward(
+									30.44,
+									Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION
+								),
 								ratio: daiReward(30.44, 1),
 							},
 							yearly: {
-								amount: daiReward(365, Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								amount: daiReward(
+									365,
+									Number(tokens.dai?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION
+								),
 								ratio: daiReward(365, 1),
 							},
 						},
 						usds: {
 							price: usdsPrice,
 							monthly: {
-								amount: usdsReward(30.44, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								amount: usdsReward(
+									30.44,
+									Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION
+								),
 								ratio: usdsReward(30.44, 1),
 							},
 							yearly: {
-								amount: usdsReward(365, Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION),
+								amount: usdsReward(
+									365,
+									Number(tokens.usds?.deposited?.value ?? BigInt(0)) / ETH_TOKEN_DENOMINATION
+								),
 								ratio: usdsReward(365, 1),
 							},
 						},

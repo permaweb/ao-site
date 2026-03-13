@@ -79,12 +79,14 @@ export default function App() {
 					const parts = window.location.href.split('/');
 					const isEditorPage = parts.some((part) => part === 'post' || part === 'page');
 					if (!isEditorPage) {
-						header.style.borderBottom = lastScrollY > 0 ? `1px solid ${borderColor}` : '1px solid transparent';
+						header.style.borderBottom =
+							lastScrollY > 0 ? `1px solid ${borderColor}` : '1px solid transparent';
 					} else {
 						const subheader = document.getElementById('toolbar-wrapper');
 						if (!subheader) return;
 
-						subheader.style.borderBottom = lastScrollY > 0 ? `1px solid ${borderColor}` : '1px solid transparent';
+						subheader.style.borderBottom =
+							lastScrollY > 0 ? `1px solid ${borderColor}` : '1px solid transparent';
 					}
 					ticking = false;
 				});

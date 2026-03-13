@@ -23,7 +23,10 @@ export default function FormField(props: IProps) {
 	return (
 		<>
 			{props.tooltip && showTooltip && (
-				<Modal header={props.tooltipLabel ? props.tooltipLabel : props.label} handleClose={() => setShowTooltip(false)}>
+				<Modal
+					header={props.tooltipLabel ? props.tooltipLabel : props.label}
+					handleClose={() => setShowTooltip(false)}
+				>
 					<S.Tooltip>
 						<p>{props.tooltip}</p>
 					</S.Tooltip>
@@ -32,7 +35,9 @@ export default function FormField(props: IProps) {
 			<S.Wrapper sm={props.sm}>
 				{(props.label || props.tooltip) && (
 					<S.TWrapper>
-						{props.label && <S.Label>{props.required ? formatRequiredField(props.label) : props.label}</S.Label>}
+						{props.label && (
+							<S.Label>{props.required ? formatRequiredField(props.label) : props.label}</S.Label>
+						)}
 						{props.tooltip && (
 							<IconButton
 								type={'primary'}
@@ -63,7 +68,9 @@ export default function FormField(props: IProps) {
 					</S.EndTextContainer>
 				)}
 				{!props.hideErrorMessage && (
-					<S.ErrorContainer>{props.invalid.message && <S.Error>{props.invalid.message}</S.Error>}</S.ErrorContainer>
+					<S.ErrorContainer>
+						{props.invalid.message && <S.Error>{props.invalid.message}</S.Error>}
+					</S.ErrorContainer>
 				)}
 			</S.Wrapper>
 		</>

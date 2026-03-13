@@ -205,7 +205,8 @@ export const ImageLightboxImage = styled.img<{ $closing: boolean }>`
 	border: 1px solid ${(props) => props.theme.colors.border.primary};
 	background: ${(props) => props.theme.colors.container.alt1.background};
 	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-	animation: ${(props) => (props.$closing ? imageZoomOut : imageZoomIn)} ${IMAGE_LIGHTBOX_ANIMATION_MS}ms ease forwards;
+	animation: ${(props) => (props.$closing ? imageZoomOut : imageZoomIn)} ${IMAGE_LIGHTBOX_ANIMATION_MS}ms ease
+		forwards;
 `;
 
 export const ImageLightboxCaption = styled.span`
@@ -549,7 +550,9 @@ export const SuggestedImage = styled.div<{ hasImage: boolean }>`
 	overflow: hidden;
 	border: 1px solid ${(props) => props.theme.colors.border.primary};
 	background: ${(props) =>
-		props.hasImage ? props.theme.colors.container.primary.background : props.theme.colors.container.alt2.background};
+		props.hasImage
+			? props.theme.colors.container.primary.background
+			: props.theme.colors.container.alt2.background};
 
 	img {
 		width: 100%;

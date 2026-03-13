@@ -52,7 +52,11 @@ export function AOProvider(props: { children: React.ReactNode }) {
 		const cachedTimestamp = localStorage.getItem(TIMESTAMP_KEY);
 		const now = Date.now();
 
-		if (!isNaN(Number(cachedValue)) && cachedTimestamp && now - parseInt(cachedTimestamp, 10) < SUPPLY_CACHE_DURATION) {
+		if (
+			!isNaN(Number(cachedValue)) &&
+			cachedTimestamp &&
+			now - parseInt(cachedTimestamp, 10) < SUPPLY_CACHE_DURATION
+		) {
 			setMintedSupply(Number(cachedValue));
 			return;
 		}
@@ -100,20 +104,26 @@ export function AOProvider(props: { children: React.ReactNode }) {
 
 				if (dataMainnet?.length > 0) {
 					for (const elementMainnet of dataMainnet) {
-						const dayLegacy = dataLegacy?.find((elementLegacy: any) => elementLegacy.day === elementMainnet.day);
+						const dayLegacy = dataLegacy?.find(
+							(elementLegacy: any) => elementLegacy.day === elementMainnet.day
+						);
 
 						if (dayLegacy) {
 							mergedData.push({
 								active_processes_over_blocks:
-									(elementMainnet.active_processes_over_blocks ?? 0) + (dayLegacy.active_processes_over_blocks ?? 0),
+									(elementMainnet.active_processes_over_blocks ?? 0) +
+									(dayLegacy.active_processes_over_blocks ?? 0),
 								active_users_over_blocks:
-									(elementMainnet.active_users_over_blocks ?? 0) + (dayLegacy.active_users_over_blocks ?? 0),
+									(elementMainnet.active_users_over_blocks ?? 0) +
+									(dayLegacy.active_users_over_blocks ?? 0),
 								day: elementMainnet.day,
 								evals: (elementMainnet.evals ?? 0) + (dayLegacy.evals ?? 0),
 								modules_roll: (elementMainnet.modules_roll ?? 0) + (dayLegacy.modules_roll ?? 0),
 								new_modules_over_blocks:
-									(elementMainnet.new_modules_over_blocks ?? 0) + (dayLegacy.new_modules_over_blocks ?? 0),
-								processed_blocks: (elementMainnet.processed_blocks ?? 0) + (dayLegacy.processed_blocks ?? 0),
+									(elementMainnet.new_modules_over_blocks ?? 0) +
+									(dayLegacy.new_modules_over_blocks ?? 0),
+								processed_blocks:
+									(elementMainnet.processed_blocks ?? 0) + (dayLegacy.processed_blocks ?? 0),
 								processes_roll: (elementMainnet.processes_roll ?? 0) + (dayLegacy.processes_roll ?? 0),
 								transfers: (elementMainnet.transfers ?? 0) + (dayLegacy.transfers ?? 0),
 								txs: (elementMainnet.txs ?? 0) + (dayLegacy.txs ?? 0),
@@ -161,7 +171,9 @@ export function AOProvider(props: { children: React.ReactNode }) {
 			let message = response.Messages[0];
 			if (args.replyTag) {
 				message = response.Messages.find((msg: any) => {
-					return msg.Tags.some((tag: any) => tag.name === args.replyTag.name && tag.value === args.replyTag.value);
+					return msg.Tags.some(
+						(tag: any) => tag.name === args.replyTag.name && tag.value === args.replyTag.value
+					);
 				});
 			}
 

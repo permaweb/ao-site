@@ -10,6 +10,7 @@ import { AoBlogPost, fetchAoBlogPosts, filterDisplayablePosts } from './aoFeed';
 import * as S from './styles';
 
 const BLOG_ID = 'aodevblog';
+const FEATURED_POST_PATTERN = 'unlocking trust-minimized arweave gateways with hyperbeam';
 const SKELETON_CARD_COUNT = 6;
 
 function FadeInImage(props: { src: string; alt: string; loading?: 'eager' | 'lazy' }) {
@@ -46,8 +47,12 @@ export default function Blog() {
 				}
 				const posts = await fetchAoBlogPosts(processId, BLOG_ID);
 				if (isMounted) {
-					setAllPosts(filterDisplayablePosts(posts).slice(0, 1));
-					setError(posts.length ? null : 'AO feed returned 0 posts. Check browser console for [AO Blog] logs.');
+					const filtered = filterDisplayablePosts(posts);
+					const featuredOnly = filtered.filter((p) => p.title.toLowerCase().includes(FEATURED_POST_PATTERN));
+					setAllPosts(featuredOnly);
+					setError(
+						posts.length ? null : 'AO feed returned 0 posts. Check browser console for [AO Blog] logs.'
+					);
 				}
 			} catch (err) {
 				if (isMounted) {
@@ -69,7 +74,10 @@ export default function Blog() {
 
 	const displayedPosts = allPosts;
 	const pinnedPost = React.useMemo(() => displayedPosts[0] ?? null, [displayedPosts]);
-	const categories = React.useMemo(() => [...new Set(displayedPosts.map((p) => p.category))].sort(), [displayedPosts]);
+	const categories = React.useMemo(
+		() => [...new Set(displayedPosts.map((p) => p.category))].sort(),
+		[displayedPosts]
+	);
 	const normalizedSearchQuery = searchQuery.trim().toLowerCase();
 
 	const filteredPosts = React.useMemo(() => {
@@ -165,7 +173,11 @@ export default function Blog() {
 					)}
 					<S.ControlsRow>
 						<S.FilterRow>
-							<S.FilterButton $active={!selectedCategory} onClick={() => setSelectedCategory(null)} type="button">
+							<S.FilterButton
+								$active={!selectedCategory}
+								onClick={() => setSelectedCategory(null)}
+								type="button"
+							>
 								{language.all}
 							</S.FilterButton>
 							{categories.map((cat) => (

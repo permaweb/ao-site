@@ -36,7 +36,8 @@ export const TextArea = styled.textarea<{
 	&:focus {
 		outline: 0;
 		border: 1px solid
-			${(props) => (props.invalid ? props.theme.colors.form.invalid.outline : props.theme.colors.form.valid.outline)};
+			${(props) =>
+				props.invalid ? props.theme.colors.form.invalid.outline : props.theme.colors.form.valid.outline};
 		transition: box-shadow, border 225ms ease-in-out;
 	}
 	&:disabled {

@@ -52,7 +52,8 @@ export const HeaderWrapper = styled.div`
 	span {
 		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-size: ${(props) => `clamp(${props.theme.typography.size.xSmall}, 2vw, ${props.theme.typography.size.base})`};
+		font-size: ${(props) =>
+			`clamp(${props.theme.typography.size.xSmall}, 2vw, ${props.theme.typography.size.base})`};
 		color: ${(props) => props.theme.colors.font.alt1};
 	}
 
@@ -100,7 +101,9 @@ export const Tab = styled.div<{ active: boolean }>`
 	button {
 		border: none !important;
 		background: ${(props) =>
-			props.active ? props.theme.colors.container.primary.background : props.theme.colors.container.alt1.background};
+			props.active
+				? props.theme.colors.container.primary.background
+				: props.theme.colors.container.alt1.background};
 		border-right: 1px solid ${(props) => props.theme.colors.border.primary} !important;
 
 		@media (max-width: ${STYLING.cutoffs.tabletSecondary}) {
@@ -108,12 +111,15 @@ export const Tab = styled.div<{ active: boolean }>`
 		}
 
 		span {
-			color: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1)} !important;
+			color: ${(props) =>
+				props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1} !important;
 		}
 
 		svg {
-			color: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1)} !important;
-			fill: ${(props) => (props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1)} !important;
+			color: ${(props) =>
+				props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1} !important;
+			fill: ${(props) =>
+				props.active ? props.theme.colors.font.primary : props.theme.colors.font.alt1} !important;
 		}
 
 		&:hover {
@@ -852,7 +858,9 @@ export const ClaimButton = styled.button<{ disabled?: boolean }>`
 	padding: 0 20px;
 	border: 1px solid ${(props) => props.theme.colors.border.primary};
 	background: ${(props) =>
-		props.disabled ? props.theme.colors.container.alt2.background : props.theme.colors.container.primary.background};
+		props.disabled
+			? props.theme.colors.container.alt2.background
+			: props.theme.colors.container.primary.background};
 	font-family: ${(props) => props.theme.typography.family.primary};
 	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-weight: ${(props) => props.theme.typography.weight.medium};

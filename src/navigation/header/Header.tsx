@@ -50,7 +50,9 @@ export default function Header() {
 										key={index}
 										to={element.path}
 										target={element.target || ''}
-										className={`primary-text ${!element.target && isPathActive(element.path) ? 'active-route' : ''}`}
+										className={`primary-text ${
+											!element.target && isPathActive(element.path) ? 'active-route' : ''
+										}`}
 									>
 										<span>{element.label}.</span>
 									</Link>
@@ -89,7 +91,12 @@ export default function Header() {
 				<S.MobileSocialWrapper>
 					{socials.map((element: { redirect: string; icon: string }, index: number) => {
 						return (
-							<Link key={index} to={element.redirect} target={'_blank'} onClick={() => setShowPanel(false)}>
+							<Link
+								key={index}
+								to={element.redirect}
+								target={'_blank'}
+								onClick={() => setShowPanel(false)}
+							>
 								<ReactSVG src={element.icon} />
 							</Link>
 						);

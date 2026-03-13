@@ -63,36 +63,37 @@ function TermsAndConditions() {
 			<S.TermsSection>
 				<S.TermsTitle>Permaweb Index: </S.TermsTitle>
 				<S.TermsText>
-					Pi is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of Pi does
-					not violate applicable laws in your jurisdiction. The Permaweb Index is a collection of non-upgradeable
-					autonomous smart contracts. The index is not subject to human supervision or intervention, nor is it
-					registered with any central financial regulatory authority. Index "intelligence" and decision-making are
-					driven by programmatic aggregation and synthesis of user interaction data and not by any central actor or
-					responsible party. User interaction with the Permaweb Index is at each user's own risk. User interaction with
-					the Permaweb Index is at each user's own risk.
+					Pi is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of
+					Pi does not violate applicable laws in your jurisdiction. The Permaweb Index is a collection of
+					non-upgradeable autonomous smart contracts. The index is not subject to human supervision or
+					intervention, nor is it registered with any central financial regulatory authority. Index
+					"intelligence" and decision-making are driven by programmatic aggregation and synthesis of user
+					interaction data and not by any central actor or responsible party. User interaction with the
+					Permaweb Index is at each user's own risk. User interaction with the Permaweb Index is at each
+					user's own risk.
 				</S.TermsText>
 			</S.TermsSection>
 			<S.TermsSection>
 				<S.TermsTitle>AR: </S.TermsTitle>
 				<S.TermsText>
-					AR is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AR does
-					not violate applicable laws in your jurisdiction.
+					AR is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of
+					AR does not violate applicable laws in your jurisdiction.
 				</S.TermsText>
 			</S.TermsSection>
 			<S.TermsSection>
 				<S.TermsTitle>AO: </S.TermsTitle>
 				<S.TermsText>
-					AO is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of AO does
-					not violate applicable laws in your jurisdiction.
+					AO is not available in restricted jurisdictions. It is your obligation to ensure your acquisition of
+					AO does not violate applicable laws in your jurisdiction.
 				</S.TermsText>
 			</S.TermsSection>
 			<S.TermsSection>
 				<S.TermsTitle>Consent Clause: </S.TermsTitle>
 				<S.TermsText>
-					By connecting your wallet, you hereby consent, without reservation, to be bound by the foregoing terms,
-					conditions, and disclaimers. Your wallet connection constitutes an irrevocable and unconditional agreement to
-					abide by these rules, and you acknowledge that you have reviewed and understood the risks and legal
-					obligations set forth above.
+					By connecting your wallet, you hereby consent, without reservation, to be bound by the foregoing
+					terms, conditions, and disclaimers. Your wallet connection constitutes an irrevocable and
+					unconditional agreement to abide by these rules, and you acknowledge that you have reviewed and
+					understood the risks and legal obligations set forth above.
 				</S.TermsText>
 			</S.TermsSection>
 		</S.TermsContainer>
@@ -104,7 +105,9 @@ function WalletList(props: { handleConnect: any }) {
 		<S.WalletListContainer>
 			{AR_WALLETS.map((wallet: any, index: number) => (
 				<S.WalletListItem key={index} onClick={() => props.handleConnect(wallet.type)}>
-					<S.WalletItemImageWrapper>{wallet.logo && <img src={`${wallet.logo}`} alt={''} />}</S.WalletItemImageWrapper>
+					<S.WalletItemImageWrapper>
+						{wallet.logo && <img src={`${wallet.logo}`} alt={''} />}
+					</S.WalletItemImageWrapper>
 					<span>{wallet.type.charAt(0).toUpperCase() + wallet.type.slice(1)}</span>
 				</S.WalletListItem>
 			))}

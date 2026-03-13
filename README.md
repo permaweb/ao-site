@@ -14,8 +14,8 @@ AO enables computation without protocol-enforced limitations on size and form wh
 
 Before running the AO Dashboard, ensure the following dependencies are installed:
 
-- Node.js version 18.0 or higher
-- `npm`
+-   Node.js version 18.0 or higher
+-   `npm`
 
 #### Development
 

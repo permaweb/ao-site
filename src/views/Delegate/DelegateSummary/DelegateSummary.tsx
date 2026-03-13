@@ -233,7 +233,9 @@ export default function DelegateSummary() {
 								</S.Chart>
 								{isWalletConnected ? (
 									<S.InfoWrapper>
-										<p>{allocationProvider?.records !== null ? 'No Records Found' : 'Loading...'}</p>
+										<p>
+											{allocationProvider?.records !== null ? 'No Records Found' : 'Loading...'}
+										</p>
 									</S.InfoWrapper>
 								) : null}
 							</>
@@ -250,7 +252,11 @@ export default function DelegateSummary() {
 										icon={ASSETS.exchange}
 										iconLeftAlign
 										handlePress={() => allocationProvider.resetPreferences()}
-										disabled={!isWalletConnected || allocationProvider.loading || !allocationProvider.unsavedChanges}
+										disabled={
+											!isWalletConnected ||
+											allocationProvider.loading ||
+											!allocationProvider.unsavedChanges
+										}
 									/>
 								</S.ActionReset>
 							</S.SummaryHeader>
@@ -288,7 +294,8 @@ export default function DelegateSummary() {
 								{ecosystemRecords.length > 0 ? (
 									<>
 										{ecosystemRecords.map((record: AllocationRecordType, index: number) => {
-											const backgroundColor = availableColors[(index + coreRecords.length) % availableColors.length];
+											const backgroundColor =
+												availableColors[(index + coreRecords.length) % availableColors.length];
 
 											return (
 												<S.SummaryLine key={`ecosystem-${index}`}>
@@ -299,7 +306,9 @@ export default function DelegateSummary() {
 													<S.SummaryLineActionsWrapper>
 														{renderAdjustmentButtons(record)}
 														<S.SummaryLinePercentage>
-															<p className={'fade-in'}>{formatPercentage(record.value)}</p>
+															<p className={'fade-in'}>
+																{formatPercentage(record.value)}
+															</p>
 														</S.SummaryLinePercentage>
 													</S.SummaryLineActionsWrapper>
 												</S.SummaryLine>
@@ -328,7 +337,9 @@ export default function DelegateSummary() {
 							)
 						}
 						handlePress={() => allocationProvider.savePreferences()}
-						disabled={!isWalletConnected || allocationProvider.loading || !allocationProvider.unsavedChanges}
+						disabled={
+							!isWalletConnected || allocationProvider.loading || !allocationProvider.unsavedChanges
+						}
 						loading={allocationProvider.loading}
 						height={60}
 						fullWidth
