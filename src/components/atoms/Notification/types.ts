@@ -1,5 +1,5 @@
 export interface IProps {
-  message: string;
-  callback: () => void | null;
-  type: 'success' | 'warning';
+	message: string;
+	callback: () => void | null;
+	type: 'success' | 'warning';
 }

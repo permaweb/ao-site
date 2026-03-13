@@ -1,5 +1,5 @@
 export interface IProps {
-  checked: boolean;
-  handleSelect: () => void;
-  disabled: boolean;
+	checked: boolean;
+	handleSelect: () => void;
+	disabled: boolean;
 }

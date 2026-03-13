@@ -3,18 +3,18 @@ import React from 'react';
 import * as S from './styles';
 
 export default function EllipsisLoader(props: { className?: string }) {
-  const [dots, setDots] = React.useState('');
+	const [dots, setDots] = React.useState('');
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setDots((prev) => (prev === '...' ? '' : prev + '.'));
-    }, 150);
-    return () => clearInterval(interval);
-  }, []);
+	React.useEffect(() => {
+		const interval = setInterval(() => {
+			setDots((prev) => (prev === '...' ? '' : prev + '.'));
+		}, 150);
+		return () => clearInterval(interval);
+	}, []);
 
-  return (
-    <S.Ellipsis id={'text-loader'} className={props.className ?? ''}>
-      {dots}
-    </S.Ellipsis>
-  );
+	return (
+		<S.Ellipsis id={'text-loader'} className={props.className ?? ''}>
+			{dots}
+		</S.Ellipsis>
+	);
 }

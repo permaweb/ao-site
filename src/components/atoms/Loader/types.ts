@@ -1,9 +1,9 @@
 export interface IProps {
-  sm?: boolean;
-  xSm?: boolean;
-  disabled?: boolean;
-  placeholder?: boolean;
-  message?: string;
-  relative?: boolean;
-  noMargins?: boolean;
+	sm?: boolean;
+	xSm?: boolean;
+	disabled?: boolean;
+	placeholder?: boolean;
+	message?: string;
+	relative?: boolean;
+	noMargins?: boolean;
 }
