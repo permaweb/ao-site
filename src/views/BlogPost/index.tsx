@@ -393,6 +393,7 @@ export default function BlogPost() {
 						<S.Paragraph className={'fade-in'}>{post.excerpt}</S.Paragraph>
 					)}
 				</S.Section>
+				{/* Suggested reading – commented out for now
 				{!isBodyLoading && suggestedPosts.length > 0 && (
 					<S.SuggestedSection className={'fade-in'}>
 						<S.SuggestedHeading>Suggested Reading</S.SuggestedHeading>
@@ -412,6 +413,7 @@ export default function BlogPost() {
 						</S.SuggestedList>
 					</S.SuggestedSection>
 				)}
+				*/}
 				{!isBodyLoading && (
 					<S.BackLinkWrapper>
 						<S.BackLink to={URLS.blog}>{'< View All'}</S.BackLink>
