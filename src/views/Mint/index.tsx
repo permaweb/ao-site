@@ -6,6 +6,7 @@ import { Button } from 'components/atoms/Button';
 import { EllipsisLoader } from 'components/atoms/EllipsisLoader';
 import { Modal } from 'components/atoms/Modal';
 import { ViewHeader } from 'components/atoms/ViewHeader';
+import { TokenSupply } from 'components/molecules/TokenSupply';
 import { ASSETS } from 'helpers/config';
 import { DefaultTokenEarningsType } from 'helpers/types';
 import { formatAddress, formatDisplayAmount } from 'helpers/utils';
@@ -121,7 +122,7 @@ export default function Mint() {
 	return (
 		<>
 			<S.Wrapper className={'fade-in'}>
-				<ViewHeader header={language.mint} actions={[<WalletConnect />]} />
+				<ViewHeader header={language.mint} actions={[<WalletConnect />, <TokenSupply />]} />
 				<S.BodyWrapper>
 					<S.GlobalWrapper className={'border-wrapper-primary'}>
 						<S.GlobalSection>

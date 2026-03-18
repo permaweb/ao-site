@@ -5,7 +5,6 @@ import { STYLING } from 'helpers/config';
 export const Wrapper = styled.div`
 	width: 100%;
 	min-height: 100vh;
-	margin-top: 32px;
 
 	@media (max-width: ${STYLING.cutoffs.mobile}) {
 		margin: 0;
@@ -86,10 +85,12 @@ export const GlobalSection = styled.div`
 		min-height: auto;
 		padding: 25px;
 		border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
+		align-items: center;
 
 		p,
 		span {
 			text-align: center;
+			justify-content: center;
 		}
 	}
 `;

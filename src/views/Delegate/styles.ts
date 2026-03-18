@@ -5,7 +5,6 @@ import { STYLING } from 'helpers/config';
 export const Wrapper = styled.div`
 	width: 100%;
 	min-height: 100vh;
-	margin-top: 32px;
 
 	@media (max-width: ${STYLING.cutoffs.mobile}) {
 		margin: 0;

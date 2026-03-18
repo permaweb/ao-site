@@ -7,4 +7,5 @@ export interface IProps {
 	open: boolean;
 	width?: number;
 	closeHandlerDisabled?: boolean;
+	className?: string;
 }

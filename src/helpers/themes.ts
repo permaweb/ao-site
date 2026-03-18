@@ -38,8 +38,8 @@ export const lightTheme = {
 	dark2: '#333333',
 	link1: '#3344FF',
 	link2: '#091DFF',
-	chart1: '#C78135',
-	chart2: '#FBF5EE',
+	chart1: '#217A00',
+	chart2: '#f4f4f4',
 	stats: {
 		primary: '#5bd1f4',
 		alt1: '#289cd3',
