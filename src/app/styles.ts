@@ -194,7 +194,7 @@ export const GlobalStyle = createGlobalStyle`
 
 	.primary-text {
 		font-family: ${(props) => props.theme.typography.family.primary};
-		font-weight: ${(props) => props.theme.typography.weight.regular};
+		font-weight: ${(props) => props.theme.typography.weight.medium};
     text-transform: uppercase;
 	}
 

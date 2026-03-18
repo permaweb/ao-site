@@ -86,13 +86,13 @@ export const language = {
 		mintInfo2: `Please set your basic preference now. You can customize this further on the next screen.`,
 		mintInfo3: `These preferences will take effect on March 14th. Until then, you'll receive AO tokens.`,
 		mintSubheader: `
-			<span id={'info-body-subheader'}>Just like Bitcoin, every $AO is minted by the community.</span>
+			<span id={'info-body-subheader'}>Just like Bitcoin, every <b>$AO</b> is minted by the community.</span>
 			<br />
 			<br />
 			<b>21 Million Tokens:</b> A fixed supply with a continuous halving emission curve.
 			<br />
 			<br />
-			<b>Bridge Assets to Mint $AO:</b> Participate by bridging qualified assets like stETH and DAI, or by
+			<b>Bridge Assets to Mint $AO:</b> Participate by bridging qualified assets like stETH, DAI, USDS, or by
 			holding AR.
 			<br />
 			<br />
@@ -137,6 +137,7 @@ export const language = {
 		thirtyDayProjection: `30 Day Projection`,
 		tokenCustomization: `Token Customization`,
 		tokenId: `Token ID`,
+		tokenSupply: `Token Supply`,
 		totalAOSupply: `Total AO Supply`,
 		totalDaiBridged: `Total DAI Bridged`,
 		totalStEthBridged: `Total stETH Bridged`,
