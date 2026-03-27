@@ -68,7 +68,7 @@ const prefetchedImageUrls = new Set<string>();
 let manifestIdCache: { expiresAt: number; manifestId: string } | null = null;
 
 const AO_BLOG_NODE = 'https://push-1.forward.computer';
-const FALLBACK_MANIFEST_TX_ID = 'PkD63ksUDD0qhdm-faQwx1Rt9oWoBmGhfoWsnN2TJZI';
+const FALLBACK_MANIFEST_TX_ID = 'rdfXnvpnTSfhiiaFxsMxbjymEJFnCKPQOPX23y7pSa4';
 
 const FRONTMATTER_PATTERN = /^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n|$)/;
 
