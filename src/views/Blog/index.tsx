@@ -2,15 +2,13 @@ import React from 'react';
 import { ReactSVG } from 'react-svg';
 
 import { RgbCycleText } from 'components/atoms/RgbCycleText';
-import { AO, ASSETS, URLS } from 'helpers/config';
+import { ASSETS, URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
 import { AoBlogPost, fetchAoBlogPosts, filterDisplayablePosts } from './aoFeed';
 import * as S from './styles';
 
-const BLOG_ID = 'aodevblog';
-const FEATURED_POST_PATTERN = 'unlocking trust-minimized arweave gateways with hyperbeam';
 const SKELETON_CARD_COUNT = 6;
 
 function FadeInImage(props: { src: string; alt: string; loading?: 'eager' | 'lazy' }) {
@@ -41,15 +39,10 @@ export default function Blog() {
 
 		const loadPosts = async () => {
 			try {
-				const processId = AO.blogIndexProcessId;
-				if (!processId) {
-					throw new Error('Missing AO blog process id.');
-				}
-				const posts = await fetchAoBlogPosts(processId, BLOG_ID);
+				const posts = await fetchAoBlogPosts();
 				if (isMounted) {
 					const filtered = filterDisplayablePosts(posts);
-					const featuredOnly = filtered.filter((p) => p.title.toLowerCase().includes(FEATURED_POST_PATTERN));
-					setAllPosts(featuredOnly);
+					setAllPosts(filtered);
 					setError(
 						posts.length ? null : 'AO feed returned 0 posts. Check browser console for [AO Blog] logs.'
 					);

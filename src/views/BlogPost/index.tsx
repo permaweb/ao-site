@@ -6,7 +6,7 @@ import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { LinkPreview, prefetchLinksFromMarkdown } from 'components/atoms/LinkPreview';
 import { Loader } from 'components/atoms/Loader';
-import { AO, ENDPOINTS, URLS } from 'helpers/config';
+import { ENDPOINTS, URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 
@@ -17,12 +17,10 @@ import {
 	fetchAoBlogPostBySlug,
 	fetchAoBlogPosts,
 	filterDisplayablePosts,
-	isExcludedPost,
 } from '../Blog/aoFeed';
 
 import * as S from './styles';
 
-const BLOG_ID = 'aodevblog';
 const LIGHTBOX_CLOSE_MS = 180;
 const WORDS_PER_MINUTE = 200;
 const COMMAND_PREFIX_RE = /^(curl|npm|npx|yarn|pnpm|node|bun|git|docker|lua>|aos>|python|python3|pip)\b/i;
@@ -173,14 +171,11 @@ export default function BlogPost() {
 
 		const loadPost = async () => {
 			try {
-				const processId = AO.blogIndexProcessId;
-				if (!processId || !slug) {
+				if (!slug) {
 					throw new Error('Missing blog post identifier.');
 				}
 
-				const match = await fetchAoBlogPostBySlug(processId, BLOG_ID, slug);
-				const excluded = match && isExcludedPost(match);
-				const effectiveMatch = excluded ? null : match;
+				const effectiveMatch = await fetchAoBlogPostBySlug('', '', slug);
 
 				if (isMounted) {
 					setPost(effectiveMatch);
@@ -190,7 +185,7 @@ export default function BlogPost() {
 				}
 
 				if (effectiveMatch) {
-					const allPosts = filterDisplayablePosts(await fetchAoBlogPosts(processId, BLOG_ID)).slice(0, 1);
+					const allPosts = filterDisplayablePosts(await fetchAoBlogPosts()).slice(0, 1);
 					if (isMounted) {
 						setSuggestedPosts(allPosts.filter((entry) => entry.slug !== effectiveMatch.slug).slice(0, 3));
 					}
