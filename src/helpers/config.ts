@@ -17,7 +17,12 @@ export const AO = {
 	flpFactory: 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE',
 	piProcess: 'H1I09hGlSlqrvlQid4zBp-lleynE8bNo2Ep1u8xq0fQ',
 	piBalanceProcess: '4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs',
-	blogIndexProcessId: import.meta.env.VITE_AO_BLOG_INDEX_PROCESS_ID || 'C4kkpJM1GlyDxtqeLf4LAhCL1Prr3bgV65FmJ1qDGkg',
+	blogIndexProcessId: import.meta.env.VITE_AO_BLOG_INDEX_PROCESS_ID || 'xr1mnj8gaabHwPaOSws0f0a5ltX71aPibSpvqn4ISbQ',
+};
+
+export const BLOG = {
+	portalPublicationId: import.meta.env.VITE_PORTAL_PUBLICATION_ID || '0akIdTrZmLVrOaaJNrlrYXLXJfdqD1ulMljPhB1dIp0',
+	portalBaseUrl: import.meta.env.VITE_PORTAL_BASE_URL || 'https://hb.portalinto.com',
 };
 
 export const SUPABASE = {
@@ -75,6 +80,12 @@ export const ENDPOINTS = {
 	goldsky: `https://arweave-search.goldsky.com/graphql`,
 	mainnetRpc: `https://ethereum.publicnode.com`,
 	aoStateNode: (token: string) => `https://state-a.forward.computer/${token}~process@1.0/`,
+	portalPublication: (publicationId: string) =>
+		`${BLOG.portalBaseUrl}/${publicationId}~process@1.0/compute?require-codec=application/json&accept-bundle=true`,
+	portalPosts: (publicationId: string) =>
+		`${BLOG.portalBaseUrl}/${publicationId}~process@1.0/compute/posts?require-codec=application/json&accept-bundle=true`,
+	portalAsset: (assetId: string) =>
+		`${BLOG.portalBaseUrl}/${assetId}~process@1.0/compute/asset?require-codec=application/json&accept-bundle=true`,
 };
 
 const getTxEndpoint = (txId: string) => ENDPOINTS.arTxEndpoint(txId);
