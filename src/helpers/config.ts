@@ -202,6 +202,7 @@ function createURLs() {
 		mint: mint,
 		mintDeposits: `${mint}deposits/`,
 		mintYield: `${mint}yield/`,
+		nasa: `${base}nasa/`,
 		policies: `${base}policies/`,
 		read: `${base}read/`,
 		delegate: `${base}delegate/`,
