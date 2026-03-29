@@ -24,16 +24,8 @@ export const TabButton = styled.button<{ $active?: boolean }>`
 	color: ${(props) => (props.$active ? props.theme.colors.font.primary : props.theme.colors.font.alt1)};
 	font-family: ${(props) => props.theme.typography.family.primary};
 	font-weight: ${(props) => props.theme.typography.weight.regular};
-	font-size: 32px;
+	font-size: ${(props) => props.theme.typography.size.xLg};
 	padding: 24px 20px;
-
-	@media (max-width: ${STYLING.cutoffs.tablet}) {
-		font-size: 24px;
-	}
-
-	@media (max-width: ${STYLING.cutoffs.mobile}) {
-		font-size: ${(props) => props.theme.typography.size.lg};
-	}
 `;
 
 export const StatsGrid = styled.div`
@@ -72,16 +64,10 @@ export const StatCell = styled.div`
 	p {
 		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-size: 40px;
+		font-size: ${(props) => props.theme.typography.size.xxLg};
 		color: ${(props) => props.theme.colors.font.primary};
 		margin: 0;
 		font-variant-numeric: tabular-nums;
-	}
-
-	@media (max-width: ${STYLING.cutoffs.mobile}) {
-		p {
-			font-size: 30px;
-		}
 	}
 `;
 
@@ -101,7 +87,7 @@ export const AmountInput = styled.input`
 	outline: none;
 	background: transparent;
 	font-family: ${(props) => props.theme.typography.family.primary};
-	font-size: 84px;
+	font-size: ${(props) => props.theme.typography.size.xxxLg};
 	font-weight: ${(props) => props.theme.typography.weight.regular};
 	color: ${(props) => props.theme.colors.font.primary};
 	font-variant-numeric: tabular-nums;
@@ -109,30 +95,14 @@ export const AmountInput = styled.input`
 	&::placeholder {
 		color: ${(props) => props.theme.colors.font.primary};
 	}
-
-	@media (max-width: ${STYLING.cutoffs.tablet}) {
-		font-size: 58px;
-	}
-
-	@media (max-width: ${STYLING.cutoffs.mobile}) {
-		font-size: 42px;
-	}
 `;
 
 export const AmountUnit = styled.span`
 	flex-shrink: 0;
 	font-family: ${(props) => props.theme.typography.family.primary};
-	font-size: 74px;
+	font-size: ${(props) => props.theme.typography.size.xxLg};
 	font-weight: ${(props) => props.theme.typography.weight.regular};
 	color: ${(props) => props.theme.colors.font.primary};
-
-	@media (max-width: ${STYLING.cutoffs.tablet}) {
-		font-size: 48px;
-	}
-
-	@media (max-width: ${STYLING.cutoffs.mobile}) {
-		font-size: 36px;
-	}
 `;
 
 export const PresetRow = styled.div`
@@ -223,6 +193,8 @@ export const PeerInput = styled.input`
 
 	&::placeholder {
 		color: ${(props) => props.theme.colors.border.alt1};
+		font-style: italic;
+		opacity: 0.9;
 	}
 `;
 
@@ -267,7 +239,7 @@ export const ActionWrap = styled.div`
 	button {
 		width: 100%;
 		height: 90px;
-		font-size: 42px;
+		font-size: ${(props) => props.theme.typography.size.xxLg};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		border-radius: 0;
 		text-transform: none;
@@ -289,7 +261,7 @@ export const SubmitButton = styled.button`
 	background: ${(props) => props.theme.colors.container.alt1.background};
 	color: ${(props) => props.theme.colors.font.primary};
 	font-family: ${(props) => props.theme.typography.family.primary};
-	font-size: 42px;
+	font-size: ${(props) => props.theme.typography.size.xxLg};
 	font-weight: ${(props) => props.theme.typography.weight.regular};
 	text-transform: none;
 

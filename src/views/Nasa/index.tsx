@@ -13,11 +13,7 @@ import * as S from './styles';
 
 const MOCK_UNIT = 'AO';
 const PRESET_AMOUNTS = [25, 50, 100, 250, 500] as const;
-const DEFAULT_PEER_NODES = [
-	'src/include/hb_arweave_nodes.hrl',
-	'src/include/hb_arweave_nodes.hrl',
-	'src/include/hb_arweave_nodes.hrl',
-] as const;
+const DEFAULT_PEER_NODES = [''] as const;
 
 function formatAmount(n: number) {
 	if (!Number.isFinite(n)) return '—';
@@ -212,7 +208,7 @@ export default function Nasa() {
 											type={'text'}
 											value={node}
 											onChange={(e) => handlePeerNodeChange(index, e.target.value)}
-											placeholder={'src/include/hb_arweave_nodes.hrl'}
+											placeholder={'Example placeholder: src/include/hb_arweave_nodes.hrl'}
 										/>
 										<S.RemovePeerButton
 											type={'button'}

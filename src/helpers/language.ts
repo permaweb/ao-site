@@ -131,7 +131,7 @@ export const language = {
 		startDate: `Start Date`,
 		status: `Status`,
 		stakeNav: `Stake`,
-		nasaPageTitle: `Operator staking`,
+		nasaPageTitle: `Stake: NASA`,
 		nasaInfoTitle: `Stake as an operator`,
 		nasaInfoBody: `This page is a layout and interaction prototype. Nothing here submits transactions or talks to a live staking process—all balances and actions are simulated in the browser.`,
 		nasaInfoBody2: `Use the module to try amount entry, quick presets, and stake / unstake controls. Connect wallet in the header if you want to mirror the real flow; staking math below stays local either way.`,
