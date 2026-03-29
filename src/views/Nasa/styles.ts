@@ -243,12 +243,21 @@ export const ActionWrap = styled.div`
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		border-radius: 0;
 		text-transform: none;
+
+		span {
+			font-size: ${(props) => props.theme.typography.size.xLg} !important;
+			font-weight: ${(props) => props.theme.typography.weight.regular} !important;
+		}
 	}
 
 	@media (max-width: ${STYLING.cutoffs.mobile}) {
 		button {
 			height: 72px;
 			font-size: ${(props) => props.theme.typography.size.xLg};
+
+			span {
+				font-size: ${(props) => props.theme.typography.size.xLg} !important;
+			}
 		}
 	}
 `;
