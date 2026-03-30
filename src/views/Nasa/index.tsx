@@ -12,7 +12,8 @@ import * as MintS from '../Mint/styles';
 import * as S from './styles';
 
 const MOCK_UNIT = 'AO';
-const PRESET_AMOUNTS = [25, 50, 100, 250, 500] as const;
+const DEFAULT_STAKE_AMOUNT = '25';
+const MIN_STAKE_AO = 25;
 const DEFAULT_PEER_NODES = [''] as const;
 
 function formatAmount(n: number) {
@@ -34,35 +35,18 @@ export default function Nasa() {
 	const [available, setAvailable] = React.useState(10000);
 	const [staked, setStaked] = React.useState(1250.5);
 	const [networkTotal, setNetworkTotal] = React.useState(1_842_019.42);
-	const [amount, setAmount] = React.useState('');
+	const [lastEpochRewardDistributed] = React.useState(48_291.3705);
+	const [amount, setAmount] = React.useState(DEFAULT_STAKE_AMOUNT);
 	const [mode, setMode] = React.useState<'stake' | 'withdraw'>('stake');
 	const [feedback, setFeedback] = React.useState<string | null>(null);
 	const [error, setError] = React.useState<string | null>(null);
-	const [activePreset, setActivePreset] = React.useState<number | 'max' | null>(null);
 	const [peerNodes, setPeerNodes] = React.useState<string[]>([...DEFAULT_PEER_NODES]);
 
 	const amountNum = parsePositiveAmount(amount);
 	const filledPeerNodeCount = peerNodes.filter((node) => node.trim().length > 0).length;
 
-	const applyAmount = (value: number, preset: number | 'max') => {
-		const rounded = Math.round(value * 1e6) / 1e6;
-		setAmount(String(rounded));
-		setActivePreset(preset);
-		setError(null);
-		setFeedback(null);
-	};
-
-	const handlePresetAmount = (n: number) => {
-		applyAmount(n, n);
-	};
-
-	const handlePresetMax = () => {
-		applyAmount(available, 'max');
-	};
-
 	const handleInputChange = (raw: string) => {
 		setAmount(raw);
-		setActivePreset(null);
 		setError(null);
 		setFeedback(null);
 	};
@@ -95,6 +79,11 @@ export default function Nasa() {
 			setFeedback(null);
 			return;
 		}
+		if (v < MIN_STAKE_AO) {
+			setError(language.operatorStakeBelowMinimum);
+			setFeedback(null);
+			return;
+		}
 		if (v > available) {
 			setError(language.operatorStakeInsufficient);
 			setFeedback(null);
@@ -103,8 +92,7 @@ export default function Nasa() {
 		setAvailable((a) => Math.round((a - v) * 1e6) / 1e6);
 		setStaked((s) => Math.round((s + v) * 1e6) / 1e6);
 		setNetworkTotal((t) => Math.round((t + v) * 1e6) / 1e6);
-		setAmount('');
-		setActivePreset(null);
+		setAmount(DEFAULT_STAKE_AMOUNT);
 		setError(null);
 		setFeedback(`${language.operatorStakeMockFeedback} ${filledPeerNodeCount} peer nodes.`);
 	};
@@ -124,10 +112,9 @@ export default function Nasa() {
 		setStaked((s) => Math.round((s - v) * 1e6) / 1e6);
 		setAvailable((a) => Math.round((a + v) * 1e6) / 1e6);
 		setNetworkTotal((t) => Math.round((t - v) * 1e6) / 1e6);
-		setAmount('');
-		setActivePreset(null);
+		setAmount(DEFAULT_STAKE_AMOUNT);
 		setError(null);
-		setFeedback(`${language.operatorStakeMockFeedback} ${filledPeerNodeCount} peer nodes.`);
+		setFeedback(language.operatorStakeMockFeedback);
 	};
 
 	const submitLabel = mode === 'stake' ? language.operatorStakeSubmit : language.operatorUnstakeSubmit;
@@ -141,7 +128,7 @@ export default function Nasa() {
 	};
 
 	return (
-		<MintS.Wrapper className={'fade-in'}>
+		<S.PageWrapper className={'fade-in'}>
 			<ViewHeader header={language.nasaPageTitle} actions={[<WalletConnect key={'ar'} />]} />
 			<MintS.BodyWrapper>
 				<S.ModuleWrapper className={'border-wrapper-primary'}>
@@ -159,71 +146,67 @@ export default function Nasa() {
 							</S.TabButton>
 						</S.TabRow>
 
-						<S.StatsGrid>
-							<S.StatCell>
-								<span>{language.operatorYourStake}</span>
-								<p>{formatAmount(staked)}</p>
-							</S.StatCell>
+						<S.StatsGrid $columns={mode === 'withdraw' ? 2 : 3}>
+							{mode === 'stake' && (
+								<S.StatCell>
+									<span>{language.operatorYourStake}</span>
+									<p>{formatAmount(staked)}</p>
+								</S.StatCell>
+							)}
 							<S.StatCell>
 								<span>{language.operatorNetworkStakeMock}</span>
 								<p>{formatAmount(networkTotal)}</p>
 							</S.StatCell>
+							<S.StatCell>
+								<span>{language.operatorLastEpochRewardDistributed}</span>
+								<p>{formatAmount(lastEpochRewardDistributed)}</p>
+							</S.StatCell>
 						</S.StatsGrid>
 
-						<S.AmountBlock>
-							<S.AmountInput
-								type={'text'}
-								inputMode={'decimal'}
-								autoComplete={'off'}
-								placeholder={language.operatorStakePlaceholder}
-								value={amount}
-								onChange={(e) => handleInputChange(e.target.value)}
-							/>
-							<S.AmountUnit>{MOCK_UNIT}</S.AmountUnit>
-						</S.AmountBlock>
+						<S.AmountFieldWrap>
+							{mode === 'withdraw' && <S.AmountFieldLabel>{language.withdraw}</S.AmountFieldLabel>}
+							<S.AmountBlock>
+								<S.AmountInput
+									type={'text'}
+									inputMode={'decimal'}
+									autoComplete={'off'}
+									placeholder={language.operatorStakePlaceholder}
+									value={amount}
+									onChange={(e) => handleInputChange(e.target.value)}
+								/>
+								<S.AmountUnit>{MOCK_UNIT}</S.AmountUnit>
+							</S.AmountBlock>
+							{mode === 'stake' && <S.AmountHint>{language.operatorStakeMinimumEntry}</S.AmountHint>}
+						</S.AmountFieldWrap>
 
-						<S.PresetRow>
-							{PRESET_AMOUNTS.map((n) => (
-								<S.PresetButton
-									key={n}
-									type={'button'}
-									$active={activePreset === n}
-									onClick={() => handlePresetAmount(n)}
-								>
-									{n.toLocaleString()}
-								</S.PresetButton>
-							))}
-							<S.PresetButton type={'button'} $active={activePreset === 'max'} onClick={handlePresetMax}>
-								{language.max}
-							</S.PresetButton>
-						</S.PresetRow>
-
-						<S.PeersWrap>
-							<S.PeersTitle>Add your array of peer nodes</S.PeersTitle>
-							<S.PeersTable>
-								{peerNodes.map((node, index) => (
-									<S.PeerRow key={`peer-node-${index}`}>
-										<S.PeerIndex>{index + 1}</S.PeerIndex>
-										<S.PeerInput
-											type={'text'}
-											value={node}
-											onChange={(e) => handlePeerNodeChange(index, e.target.value)}
-											placeholder={'Example placeholder: src/include/hb_arweave_nodes.hrl'}
-										/>
-										<S.RemovePeerButton
-											type={'button'}
-											onClick={() => handleRemovePeerNode(index)}
-											aria-label={`Remove peer node ${index + 1}`}
-										>
-											X
-										</S.RemovePeerButton>
-									</S.PeerRow>
-								))}
-							</S.PeersTable>
-							<S.AddMoreButton type={'button'} onClick={handleAddPeerNode}>
-								Add More +
-							</S.AddMoreButton>
-						</S.PeersWrap>
+						{mode === 'stake' && (
+							<S.PeersWrap>
+								<S.PeersTitle>Add your array of peer nodes</S.PeersTitle>
+								<S.PeersTable>
+									{peerNodes.map((node, index) => (
+										<S.PeerRow key={`peer-node-${index}`}>
+											<S.PeerIndex>{index + 1}</S.PeerIndex>
+											<S.PeerInput
+												type={'text'}
+												value={node}
+												onChange={(e) => handlePeerNodeChange(index, e.target.value)}
+												placeholder={'Example placeholder: src/include/hb_arweave_nodes.hrl'}
+											/>
+											<S.RemovePeerButton
+												type={'button'}
+												onClick={() => handleRemovePeerNode(index)}
+												aria-label={`Remove peer node ${index + 1}`}
+											>
+												X
+											</S.RemovePeerButton>
+										</S.PeerRow>
+									))}
+								</S.PeersTable>
+								<S.AddMoreButton type={'button'} onClick={handleAddPeerNode}>
+									Add More +
+								</S.AddMoreButton>
+							</S.PeersWrap>
+						)}
 
 						<S.ActionWrap>
 							{arProvider.walletAddress ? (
@@ -251,6 +234,6 @@ export default function Nasa() {
 				</S.DescriptionPanel>
 			</MintS.BodyWrapper>
 			<Footer />
-		</MintS.Wrapper>
+		</S.PageWrapper>
 	);
 }

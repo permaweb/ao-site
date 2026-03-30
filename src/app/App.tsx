@@ -26,9 +26,14 @@ function getLazyImport(view: string) {
 	);
 }
 
+function isNasaRoute(pathname: string): boolean {
+	return pathname === '/nasa' || pathname.startsWith('/nasa/');
+}
+
 export default function App() {
 	const theme = useTheme();
 	const location = useLocation();
+	const showHeader = !isNasaRoute(location.pathname);
 	const routeLoadingMessage = React.useMemo(() => {
 		if (location.pathname.startsWith(URLS.blog) || location.pathname.startsWith(URLS.read)) {
 			return 'AO, the decentralized network is retrieving the latest updates happening in the ecosystem.';
@@ -108,7 +113,7 @@ export default function App() {
 
 	return (
 		<>
-			<Header />
+			{showHeader && <Header />}
 			<S.View>
 				<Suspense
 					fallback={

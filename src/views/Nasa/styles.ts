@@ -2,6 +2,12 @@ import styled from 'styled-components';
 
 import { STYLING } from 'helpers/config';
 
+import * as MintS from '../Mint/styles';
+
+export const PageWrapper = styled(MintS.Wrapper)`
+	padding-top: 40px;
+`;
+
 export const ModuleWrapper = styled.div`
 	width: 100%;
 `;
@@ -28,9 +34,9 @@ export const TabButton = styled.button<{ $active?: boolean }>`
 	padding: 24px 20px;
 `;
 
-export const StatsGrid = styled.div`
+export const StatsGrid = styled.div<{ $columns?: 2 | 3 }>`
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: repeat(${(props) => props.$columns ?? 3}, minmax(0, 1fr));
 	border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 
 	@media (max-width: ${STYLING.cutoffs.tablet}) {
@@ -41,12 +47,12 @@ export const StatsGrid = styled.div`
 export const StatCell = styled.div`
 	padding: 20px 22px 24px;
 
-	&:first-child {
+	&:not(:last-child) {
 		border-right: 1px solid ${(props) => props.theme.colors.border.primary};
 	}
 
 	@media (max-width: ${STYLING.cutoffs.tablet}) {
-		&:first-child {
+		&:not(:last-child) {
 			border-right: none;
 			border-bottom: 1px solid ${(props) => props.theme.colors.border.primary};
 		}
@@ -71,8 +77,21 @@ export const StatCell = styled.div`
 	}
 `;
 
+export const AmountFieldWrap = styled.div`
+	margin: 22px 22px 0;
+`;
+
+export const AmountFieldLabel = styled.span`
+	display: block;
+	margin-bottom: 10px;
+	font-family: ${(props) => props.theme.typography.family.primary};
+	font-weight: ${(props) => props.theme.typography.weight.regular};
+	font-size: ${(props) => props.theme.typography.size.lg};
+	color: ${(props) => props.theme.colors.font.primary};
+	line-height: 1.3;
+`;
+
 export const AmountBlock = styled.div`
-	margin: 22px;
 	border: 1px solid ${(props) => props.theme.colors.border.primary};
 	display: flex;
 	align-items: center;
@@ -105,39 +124,14 @@ export const AmountUnit = styled.span`
 	color: ${(props) => props.theme.colors.font.primary};
 `;
 
-export const PresetRow = styled.div`
-	display: grid;
-	grid-template-columns: repeat(6, minmax(0, 1fr));
-	gap: 8px;
-	padding: 0 22px;
-
-	@media (max-width: ${STYLING.cutoffs.tablet}) {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-`;
-
-export const PresetButton = styled.button<{ $active?: boolean }>`
-	cursor: pointer;
-	border: 1px solid
-		${(props) => (props.$active ? props.theme.colors.button.alt1.background : props.theme.colors.border.primary)};
-	background: ${(props) =>
-		props.$active ? props.theme.colors.button.alt1.background : props.theme.colors.container.alt1.background};
-	color: ${(props) => (props.$active ? props.theme.colors.button.alt1.color : props.theme.colors.font.primary)};
+export const AmountHint = styled.p`
+	margin: 12px 0 0;
+	padding: 0;
 	font-family: ${(props) => props.theme.typography.family.primary};
-	font-size: ${(props) => props.theme.typography.size.xLg};
 	font-weight: ${(props) => props.theme.typography.weight.regular};
-	min-height: 74px;
-	padding: 12px 10px;
-	text-align: left;
-
-	&:hover {
-		border-color: ${(props) => props.theme.colors.button.alt1.background};
-	}
-
-	&:last-child {
-		color: ${(props) =>
-			props.$active ? props.theme.colors.button.alt1.color : props.theme.colors.indicator.active};
-	}
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	color: ${(props) => props.theme.colors.font.alt1};
+	line-height: 1.45;
 `;
 
 export const PeersWrap = styled.div`
