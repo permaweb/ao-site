@@ -101,6 +101,12 @@ export const HeroImageWrapper = styled.div`
 		opacity: 1;
 		transform: translateY(0);
 	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		width: 100%;
+		max-width: 100%;
+		margin-left: 0;
+	}
 `;
 
 export const ImageZoomIndicator = styled.span`
@@ -166,6 +172,12 @@ export const MarkdownImageFrame = styled.span`
 	&:hover ${ImageZoomIndicator} {
 		opacity: 1;
 		transform: translateY(0);
+	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		width: 100%;
+		max-width: 100%;
+		margin-left: 0;
 	}
 `;
 
