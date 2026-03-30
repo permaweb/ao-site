@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from 'components/atoms/Button';
 import { ViewHeader } from 'components/atoms/ViewHeader';
 import { Footer } from 'navigation/footer';
+import { useAOProvider } from 'providers/AOProvider';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
 import { useLanguageProvider } from 'providers/LanguageProvider';
 import { WalletConnect } from 'wallet/WalletConnect';
@@ -15,6 +16,8 @@ const MOCK_UNIT = 'AO';
 const DEFAULT_STAKE_AMOUNT = '25';
 const MIN_STAKE_AO = 25;
 const DEFAULT_PEER_NODES = [''] as const;
+const REFERENCE_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{2,63}$/;
+const PREFIX_PATTERN = /^\/[A-Za-z0-9/_-]*$/;
 
 function formatAmount(n: number) {
 	if (!Number.isFinite(n)) return '—';
@@ -27,7 +30,17 @@ function parsePositiveAmount(raw: string): number | null {
 	return v;
 }
 
+function isValidReference(reference: string): boolean {
+	return REFERENCE_PATTERN.test(reference.trim());
+}
+
+function isValidPrefix(prefix: string): boolean {
+	const normalizedPrefix = prefix.trim();
+	return PREFIX_PATTERN.test(normalizedPrefix);
+}
+
 export default function Nasa() {
+	const aoProvider = useAOProvider();
 	const arProvider = useArweaveProvider();
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
@@ -41,12 +54,38 @@ export default function Nasa() {
 	const [feedback, setFeedback] = React.useState<string | null>(null);
 	const [error, setError] = React.useState<string | null>(null);
 	const [peerNodes, setPeerNodes] = React.useState<string[]>([...DEFAULT_PEER_NODES]);
+	const [reference, setReference] = React.useState('');
+	const [prefix, setPrefix] = React.useState('');
+	const [isSubmitting, setIsSubmitting] = React.useState(false);
 
 	const amountNum = parsePositiveAmount(amount);
-	const filledPeerNodeCount = peerNodes.filter((node) => node.trim().length > 0).length;
+	const normalizedPeerNodes = React.useMemo(
+		() => peerNodes.map((node) => node.trim()).filter((node) => node.length > 0),
+		[peerNodes]
+	);
+	const filledPeerNodeCount = normalizedPeerNodes.length;
+	const hasValidReference = isValidReference(reference);
+	const hasValidPrefix = isValidPrefix(prefix);
+	const isWalletConnected = Boolean(arProvider.walletAddress);
+	const isStakeBaseValid = amountNum !== null && filledPeerNodeCount > 0 && hasValidReference && hasValidPrefix;
+	const isWithdrawBaseValid = amountNum !== null;
+	const isSubmitDisabled =
+		mode === 'stake' ? !isStakeBaseValid || isSubmitting : !isWithdrawBaseValid || isSubmitting;
 
 	const handleInputChange = (raw: string) => {
 		setAmount(raw);
+		setError(null);
+		setFeedback(null);
+	};
+
+	const handleReferenceChange = (value: string) => {
+		setReference(value);
+		setError(null);
+		setFeedback(null);
+	};
+
+	const handlePrefixChange = (value: string) => {
+		setPrefix(value);
 		setError(null);
 		setFeedback(null);
 	};
@@ -89,6 +128,31 @@ export default function Nasa() {
 			setFeedback(null);
 			return;
 		}
+		if (filledPeerNodeCount < 1) {
+			setError(language.operatorStakePeerRequired);
+			setFeedback(null);
+			return;
+		}
+		if (!reference.trim()) {
+			setError(language.operatorStakeReferenceRequired);
+			setFeedback(null);
+			return;
+		}
+		if (!hasValidReference) {
+			setError(language.operatorStakeReferenceInvalid);
+			setFeedback(null);
+			return;
+		}
+		if (!prefix.trim()) {
+			setError(language.operatorStakePrefixRequired);
+			setFeedback(null);
+			return;
+		}
+		if (!hasValidPrefix) {
+			setError(language.operatorStakePrefixInvalid);
+			setFeedback(null);
+			return;
+		}
 		setAvailable((a) => Math.round((a - v) * 1e6) / 1e6);
 		setStaked((s) => Math.round((s + v) * 1e6) / 1e6);
 		setNetworkTotal((t) => Math.round((t + v) * 1e6) / 1e6);
@@ -118,13 +182,35 @@ export default function Nasa() {
 	};
 
 	const submitLabel = mode === 'stake' ? language.operatorStakeSubmit : language.operatorUnstakeSubmit;
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (mode === 'stake') {
-			runStake();
-			return;
+		if (isSubmitting) return;
+		setIsSubmitting(true);
+
+		try {
+			const contextValidation = await aoProvider.validateOperatorStakeContext({
+				reference: reference.trim(),
+				prefix: prefix.trim(),
+				peers: normalizedPeerNodes,
+			});
+			if (!contextValidation.isValid) {
+				setError(contextValidation.message || language.operatorStakeContextInvalid);
+				setFeedback(null);
+				return;
+			}
+
+			if (mode === 'stake') {
+				runStake();
+				return;
+			}
+			runUnstake();
+		} catch (e) {
+			console.error(e);
+			setError(language.operatorStakeContextInvalid);
+			setFeedback(null);
+		} finally {
+			setIsSubmitting(false);
 		}
-		runUnstake();
 	};
 
 	return (
@@ -166,22 +252,48 @@ export default function Nasa() {
 						<S.AmountFieldWrap>
 							{mode === 'withdraw' && <S.AmountFieldLabel>{language.withdraw}</S.AmountFieldLabel>}
 							<S.AmountBlock>
-								<S.AmountInput
-									type={'text'}
-									inputMode={'decimal'}
-									autoComplete={'off'}
-									placeholder={language.operatorStakePlaceholder}
-									value={amount}
-									onChange={(e) => handleInputChange(e.target.value)}
-								/>
-								<S.AmountUnit>{MOCK_UNIT}</S.AmountUnit>
+								<S.AmountTopRow>
+									<S.AmountInput
+										type={'text'}
+										inputMode={'decimal'}
+										autoComplete={'off'}
+										placeholder={language.operatorStakePlaceholder}
+										value={amount}
+										onChange={(e) => handleInputChange(e.target.value)}
+									/>
+									<S.AmountUnit>{MOCK_UNIT}</S.AmountUnit>
+								</S.AmountTopRow>
+								{mode === 'stake' && <S.AmountHint>{language.operatorStakeMinimumEntry}</S.AmountHint>}
 							</S.AmountBlock>
-							{mode === 'stake' && <S.AmountHint>{language.operatorStakeMinimumEntry}</S.AmountHint>}
 						</S.AmountFieldWrap>
 
 						{mode === 'stake' && (
 							<S.PeersWrap>
-								<S.PeersTitle>Add your array of peer nodes</S.PeersTitle>
+								<S.MetaFieldsWrap>
+									<S.MetaField>
+										<S.MetaFieldLabel>{language.operatorStakeReferenceLabel}</S.MetaFieldLabel>
+										<S.MetaFieldInput
+											type={'text'}
+											value={reference}
+											onChange={(e) => handleReferenceChange(e.target.value)}
+											placeholder={language.operatorStakeReferencePlaceholder}
+										/>
+									</S.MetaField>
+									<S.MetaField>
+										<S.MetaFieldLabel>{language.operatorStakePrefixLabel}</S.MetaFieldLabel>
+										<S.MetaFieldInput
+											type={'text'}
+											value={prefix}
+											onChange={(e) => handlePrefixChange(e.target.value)}
+											placeholder={language.operatorStakePrefixPlaceholder}
+										/>
+									</S.MetaField>
+								</S.MetaFieldsWrap>
+								<S.PeerInputsHeader>
+									<S.PeerInputsHeaderLabel>
+										{language.operatorStakePeerNodesTitle}
+									</S.PeerInputsHeaderLabel>
+								</S.PeerInputsHeader>
 								<S.PeersTable>
 									{peerNodes.map((node, index) => (
 										<S.PeerRow key={`peer-node-${index}`}>
@@ -190,7 +302,7 @@ export default function Nasa() {
 												type={'text'}
 												value={node}
 												onChange={(e) => handlePeerNodeChange(index, e.target.value)}
-												placeholder={'Example placeholder: src/include/hb_arweave_nodes.hrl'}
+												placeholder={language.operatorStakePeerNodePlaceholder}
 											/>
 											<S.RemovePeerButton
 												type={'button'}
@@ -203,14 +315,14 @@ export default function Nasa() {
 									))}
 								</S.PeersTable>
 								<S.AddMoreButton type={'button'} onClick={handleAddPeerNode}>
-									Add More +
+									{language.operatorStakeAddPeer}
 								</S.AddMoreButton>
 							</S.PeersWrap>
 						)}
 
 						<S.ActionWrap>
-							{arProvider.walletAddress ? (
-								<S.SubmitButton type={'submit'} disabled={amountNum === null}>
+							{isWalletConnected ? (
+								<S.SubmitButton type={'submit'} disabled={isSubmitDisabled}>
 									{submitLabel}
 								</S.SubmitButton>
 							) : (

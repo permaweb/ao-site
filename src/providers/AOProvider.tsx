@@ -24,6 +24,11 @@ interface AOContextState {
 	status: AONetworkStatus | null;
 	mintedSupply: number | null;
 	read: any;
+	validateOperatorStakeContext: (args: {
+		reference: string;
+		prefix: string;
+		peers: string[];
+	}) => Promise<{ isValid: boolean; message?: string }>;
 }
 
 const DEFAULT_CONTEXT = {
@@ -32,6 +37,7 @@ const DEFAULT_CONTEXT = {
 	status: null,
 	mintedSupply: null,
 	read: null,
+	validateOperatorStakeContext: async () => ({ isValid: true }),
 };
 
 const AOContext = React.createContext<AOContextState>(DEFAULT_CONTEXT);
@@ -190,6 +196,15 @@ export function AOProvider(props: { children: React.ReactNode }) {
 		}
 	}
 
+	async function validateOperatorStakeContext(_args: {
+		reference: string;
+		prefix: string;
+		peers: string[];
+	}): Promise<{ isValid: boolean; message?: string }> {
+		// Placeholder for future AO process validation.
+		return { isValid: true };
+	}
+
 	return (
 		<AOContext.Provider
 			value={{
@@ -198,6 +213,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				status: AONetworkStatus.Live,
 				mintedSupply: mintedSupply,
 				read: read,
+				validateOperatorStakeContext: validateOperatorStakeContext,
 			}}
 		>
 			{props.children}

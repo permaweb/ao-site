@@ -94,9 +94,15 @@ export const AmountFieldLabel = styled.span`
 export const AmountBlock = styled.div`
 	border: 1px solid ${(props) => props.theme.colors.border.primary};
 	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	padding: 24px 16px;
+`;
+
+export const AmountTopRow = styled.div`
+	display: flex;
 	align-items: center;
 	gap: 10px;
-	padding: 24px 16px;
 `;
 
 export const AmountInput = styled.input`
@@ -125,13 +131,53 @@ export const AmountUnit = styled.span`
 `;
 
 export const AmountHint = styled.p`
-	margin: 12px 0 0;
+	margin: 10px 0 0;
 	padding: 0;
 	font-family: ${(props) => props.theme.typography.family.primary};
 	font-weight: ${(props) => props.theme.typography.weight.regular};
 	font-size: ${(props) => props.theme.typography.size.xSmall};
 	color: ${(props) => props.theme.colors.font.alt1};
 	line-height: 1.45;
+`;
+
+export const MetaFieldsWrap = styled.div`
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+	margin: 0 0 12px;
+
+	@media (max-width: ${STYLING.cutoffs.tablet}) {
+		grid-template-columns: 1fr;
+	}
+`;
+
+export const MetaField = styled.label`
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+`;
+
+export const MetaFieldLabel = styled.span`
+	font-family: ${(props) => props.theme.typography.family.primary};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	font-weight: ${(props) => props.theme.typography.weight.regular};
+	color: ${(props) => props.theme.colors.font.alt1};
+`;
+
+export const MetaFieldInput = styled.input`
+	width: 100%;
+	border: 1px solid ${(props) => props.theme.colors.border.primary};
+	background: ${(props) => props.theme.colors.container.primary.background};
+	outline: none;
+	padding: 14px 12px;
+	font-family: ${(props) => props.theme.typography.family.primary};
+	font-size: ${(props) => props.theme.typography.size.small};
+	font-weight: ${(props) => props.theme.typography.weight.regular};
+	color: ${(props) => props.theme.colors.font.primary};
+
+	&::placeholder {
+		color: ${(props) => props.theme.colors.border.alt1};
+	}
 `;
 
 export const PeersWrap = styled.div`
@@ -142,12 +188,18 @@ export const PeersWrap = styled.div`
 	padding: 20px 24px 22px;
 `;
 
-export const PeersTitle = styled.p`
-	margin: 0 0 12px;
+export const PeerInputsHeader = styled.div`
+	display: flex;
+	align-items: center;
+	margin: 0 0 8px;
+	padding: 0;
+`;
+
+export const PeerInputsHeaderLabel = styled.span`
 	font-family: ${(props) => props.theme.typography.family.primary};
-	font-size: ${(props) => props.theme.typography.size.lg};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-weight: ${(props) => props.theme.typography.weight.regular};
-	color: ${(props) => props.theme.colors.font.primary};
+	color: ${(props) => props.theme.colors.font.alt1};
 `;
 
 export const PeersTable = styled.div`
