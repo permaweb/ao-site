@@ -385,6 +385,8 @@ export const MarkdownBody = styled.div`
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 		line-height: 1.75;
+		overflow-wrap: anywhere;
+		word-break: break-word;
 	}
 
 	ul,
