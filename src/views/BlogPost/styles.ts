@@ -101,6 +101,12 @@ export const HeroImageWrapper = styled.div`
 		opacity: 1;
 		transform: translateY(0);
 	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		width: 100%;
+		max-width: 100%;
+		margin-left: 0;
+	}
 `;
 
 export const ImageZoomIndicator = styled.span`
@@ -166,6 +172,12 @@ export const MarkdownImageFrame = styled.span`
 	&:hover ${ImageZoomIndicator} {
 		opacity: 1;
 		transform: translateY(0);
+	}
+
+	@media (max-width: ${STYLING.cutoffs.mobile}) {
+		width: 100%;
+		max-width: 100%;
+		margin-left: 0;
 	}
 `;
 
@@ -385,6 +397,8 @@ export const MarkdownBody = styled.div`
 		font-weight: ${(props) => props.theme.typography.weight.regular};
 		color: ${(props) => props.theme.colors.font.primary};
 		line-height: 1.75;
+		overflow-wrap: anywhere;
+		word-break: break-word;
 	}
 
 	ul,
