@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { STYLING } from 'helpers/config';
 
@@ -6,6 +6,8 @@ import * as MintS from '../Mint/styles';
 
 export const PageWrapper = styled(MintS.Wrapper)`
 	padding-top: 40px;
+	max-width: 1200px;
+	margin: 0 auto;
 `;
 
 export const ModuleWrapper = styled.div`
@@ -70,7 +72,7 @@ export const StatCell = styled.div`
 	p {
 		font-family: ${(props) => props.theme.typography.family.primary};
 		font-weight: ${(props) => props.theme.typography.weight.regular};
-		font-size: ${(props) => props.theme.typography.size.xxLg};
+		font-size: ${(props) => props.theme.typography.size.xLg};
 		color: ${(props) => props.theme.colors.font.primary};
 		margin: 0;
 		font-variant-numeric: tabular-nums;
@@ -131,8 +133,9 @@ export const AmountUnit = styled.span`
 `;
 
 export const AmountHint = styled.p`
-	margin: 10px 0 0;
-	padding: 0;
+	margin: 14px -16px -8px;
+	padding: 10px 16px 0 20px;
+	border-top: 1px solid ${(props) => props.theme.colors.border.primary};
 	font-family: ${(props) => props.theme.typography.family.primary};
 	font-weight: ${(props) => props.theme.typography.weight.regular};
 	font-size: ${(props) => props.theme.typography.size.xSmall};
@@ -142,13 +145,9 @@ export const AmountHint = styled.p`
 
 export const MetaFieldsWrap = styled.div`
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: 1fr;
 	gap: 14px;
 	margin: 0 0 12px;
-
-	@media (max-width: ${STYLING.cutoffs.tablet}) {
-		grid-template-columns: 1fr;
-	}
 `;
 
 export const MetaField = styled.label`
@@ -162,6 +161,68 @@ export const MetaFieldLabel = styled.span`
 	font-size: ${(props) => props.theme.typography.size.xSmall};
 	font-weight: ${(props) => props.theme.typography.weight.regular};
 	color: ${(props) => props.theme.colors.font.alt1};
+`;
+
+export const MetaFieldLabelWrap = styled.span`
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+`;
+
+export const MetaFieldInfoWrap = styled.span`
+	display: inline-flex;
+	align-items: center;
+	position: relative;
+
+	&:hover > span {
+		opacity: 1;
+		visibility: visible;
+	}
+`;
+
+export const MetaFieldInfo = styled.button`
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	padding: 0;
+	background: #ffffff;
+	border: 1px solid ${(props) => props.theme.colors.border.primary};
+	border-radius: 50%;
+	font-family: ${(props) => props.theme.typography.family.primary};
+	font-size: 11px;
+	font-weight: ${(props) => props.theme.typography.weight.medium};
+	color: ${(props) => props.theme.colors.font.alt1};
+	line-height: 1;
+	cursor: default;
+	user-select: none;
+	appearance: none;
+`;
+
+export const MetaFieldInfoTooltip = styled.span`
+	position: absolute;
+	left: 0;
+	bottom: calc(100% + 6px);
+	width: max-content;
+	max-width: 280px;
+	padding: 7px 9px;
+	border: 1px solid ${(props) => props.theme.colors.border.primary};
+	border-radius: 4px;
+	background: #ffffff;
+	color: ${(props) => props.theme.colors.font.primary};
+	font-family: ${(props) => props.theme.typography.family.primary};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	font-weight: ${(props) => props.theme.typography.weight.regular};
+	line-height: 1.4;
+	white-space: normal;
+	text-align: left;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+	transition: opacity 0.15s ease, visibility 0.15s ease;
+	z-index: 10;
 `;
 
 export const MetaFieldInput = styled.input`
@@ -178,6 +239,40 @@ export const MetaFieldInput = styled.input`
 	&::placeholder {
 		color: ${(props) => props.theme.colors.border.alt1};
 	}
+`;
+
+export const MetaFieldValidation = styled.span<{ $variant?: 'neutral' | 'success' | 'error' }>`
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-family: ${(props) => props.theme.typography.family.primary};
+	font-size: ${(props) => props.theme.typography.size.xSmall};
+	font-weight: ${(props) => props.theme.typography.weight.regular};
+	line-height: 1.35;
+	color: ${(props) => {
+		if (props.$variant === 'success') return props.theme.colors.status.published;
+		if (props.$variant === 'error') return props.theme.colors.warning.primary;
+		return props.theme.colors.font.alt1;
+	}};
+`;
+
+const spin = keyframes`
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+`;
+
+export const MetaFieldValidationSpinner = styled.span`
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	border: 1.5px solid ${(props) => props.theme.colors.border.alt2};
+	border-top-color: ${(props) => props.theme.colors.font.alt1};
+	animation: ${spin} 0.7s linear infinite;
+	flex-shrink: 0;
 `;
 
 export const PeersWrap = styled.div`
@@ -256,9 +351,10 @@ export const RemovePeerButton = styled.button`
 	font-weight: ${(props) => props.theme.typography.weight.medium};
 	color: ${(props) => props.theme.colors.font.alt1};
 	line-height: 1;
+	transition: none;
 
 	&:hover {
-		color: ${(props) => props.theme.colors.font.primary};
+		color: ${(props) => props.theme.colors.warning.primary};
 	}
 `;
 

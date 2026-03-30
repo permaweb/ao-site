@@ -14,6 +14,7 @@ const Blog = getLazyImport('Blog');
 const BlogPost = getLazyImport('BlogPost');
 const Mint = getLazyImport('Mint');
 const Nasa = getLazyImport('Nasa');
+const NasaDashboard = getLazyImport('NasaDashboard');
 const Delegate = getLazyImport('Delegate');
 const NotFound = getLazyImport('NotFound');
 const Policies = getLazyImport('Policies');
@@ -134,6 +135,7 @@ export default function App() {
 						<Route path={URLS.blog} element={<Blog />} />
 						<Route path={`${URLS.blog}:slug`} element={<BlogPost />} />
 						<Route path={URLS.mint} element={<Mint />} />
+						<Route path={URLS.nasaDashboard} element={<NasaDashboard />} />
 						<Route path={URLS.nasa} element={<Nasa />} />
 						<Route path={URLS.delegate} element={<Delegate />} />
 						<Route path={URLS.policies} element={<Policies />} />
