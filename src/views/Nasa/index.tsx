@@ -249,11 +249,22 @@ export default function Nasa() {
 			setPrefixValidation({ status: 'checking', message: 'Checking wallet association with node URL...' });
 
 			try {
-				const res = await fetch(ENDPOINTS.nasaNodeAddress(normalizedPrefix));
+				const [addressRes, prefixIndexRes] = await Promise.all([
+					fetch(ENDPOINTS.nasaNodeAddress(normalizedPrefix)),
+					fetch(ENDPOINTS.nasaPrefixIndex(normalizedPrefix)),
+				]);
 				if (prefixCheckRequestRef.current !== requestId) return;
-				const data = await res.json();
+
+				const addressData = await addressRes.json();
+				const prefixIndexData = await prefixIndexRes.json();
 				if (prefixCheckRequestRef.current !== requestId) return;
-				if (data.body === arProvider.walletAddress) {
+
+				if (prefixIndexData.body !== 'not_found') {
+					setPrefixValidation({
+						status: 'invalid',
+						message: 'Prefix is already registered. Try a different one.',
+					});
+				} else if (addressData.body === arProvider.walletAddress) {
 					setPrefixValidation({ status: 'valid', message: 'Wallet is associated with this node.' });
 				} else {
 					setPrefixValidation({
@@ -265,7 +276,7 @@ export default function Nasa() {
 				if (prefixCheckRequestRef.current !== requestId) return;
 				setPrefixValidation({
 					status: 'invalid',
-					message: 'Could not verify node association. Try again.',
+					message: 'Could not verify prefix. Try again.',
 				});
 			}
 		}, CHECK_TYPING_PAUSE_MS);

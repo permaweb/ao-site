@@ -19,7 +19,7 @@ export const AO = {
 	piBalanceProcess: '4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs',
 	blogIndexProcessId: import.meta.env.VITE_AO_BLOG_INDEX_PROCESS_ID || 'xr1mnj8gaabHwPaOSws0f0a5ltX71aPibSpvqn4ISbQ',
 	nasaToken: '8-FOnKgO6bZKNpsuYk9UVTv62_OOw1SSWzqKzftae2E',
-	nasaStake: '2zLyKy5z7tgPOfl9s20Aakc86MBSDbMC-IP6uar748E',
+	nasaStake: '8sNHBMW-gRui7u9tJE8hRL3UA360zWmFaie95PFhvEo',
 };
 
 export const BLOG = {
@@ -89,12 +89,14 @@ export const ENDPOINTS = {
 		`${BLOG.portalBaseUrl}/${publicationId}~process@1.0/compute/posts?require-codec=application/json&accept-bundle=true`,
 	portalAsset: (assetId: string) =>
 		`${BLOG.portalBaseUrl}/${assetId}~process@1.0/compute/asset?require-codec=application/json&accept-bundle=true`,
-	nasaReferences: (referenceName: string) =>
-		`${HB.nasaNode}/${AO.nasaStake}/now/references/${referenceName}?require-codec=application/json&accept-bundle=true`,
+	nasaReferences: (routeName: string) =>
+		`${HB.nasaNode}/${AO.nasaStake}/now/routes/${routeName}?require-codec=application/json&accept-bundle=true`,
 	nasaNodeAddress: (nodeUrl: string) =>
 		`${nodeUrl}/~meta@1.0/info/address?require-codec=application/json&accept-bundle=true`,
 	nasaStakedBalance: (walletAddress: string) =>
 		`${HB.nasaNode}/${AO.nasaStake}/now/balances/${walletAddress}?require-codec=application/json&accept-bundle=true`,
+	nasaPrefixIndex: (prefix: string) =>
+		`${HB.nasaNode}/${AO.nasaStake}/now/prefix-index/${prefix}?require-codec=application/json&accept-bundle=true`,
 };
 
 const getTxEndpoint = (txId: string) => ENDPOINTS.arTxEndpoint(txId);
