@@ -139,7 +139,7 @@ export const language = {
 		nasaMockLabel: `Mock`,
 		operatorMockApy: `Est. APY`,
 		operatorMockAvailable: `Available`,
-		operatorYourStake: `Your stake`,
+		operatorYourStake: `Your current stake`,
 		operatorStakePresets: `Quick amounts`,
 		operatorStakePercentPresets: `Of available`,
 		operatorNetworkStakeMock: `Network total (mock)`,

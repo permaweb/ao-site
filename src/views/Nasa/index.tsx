@@ -20,6 +20,7 @@ const MIN_STAKE_AO = 25;
 const DEFAULT_PEER_NODES = ['https://'] as const;
 const REFERENCE_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{2,63}$/;
 const CHECK_TYPING_PAUSE_MS = 450;
+const URL_VALIDATION_PAUSE_MS = 2000;
 
 type ValidationStatus = 'idle' | 'checking' | 'valid' | 'invalid';
 
@@ -75,6 +76,7 @@ export default function Nasa() {
 	const [feedback, setFeedback] = React.useState<string | null>(null);
 	const [error, setError] = React.useState<string | null>(null);
 	const [peerNodes, setPeerNodes] = React.useState<string[]>([...DEFAULT_PEER_NODES]);
+	const [peerNodeInvalidIndices, setPeerNodeInvalidIndices] = React.useState<Record<number, boolean>>({});
 	const [reference, setReference] = React.useState('');
 	const [prefix, setPrefix] = React.useState('');
 	const [referenceValidation, setReferenceValidation] = React.useState<ValidationResult>({
@@ -88,6 +90,7 @@ export default function Nasa() {
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
 	const referenceCheckRequestRef = React.useRef(0);
 	const prefixCheckRequestRef = React.useRef(0);
+	const peerNodeValidationTimersRef = React.useRef<Record<number, number>>({});
 	const amountInputRef = React.useRef<HTMLInputElement>(null);
 
 	React.useEffect(() => {
@@ -157,6 +160,21 @@ export default function Nasa() {
 
 	const handlePeerNodeChange = (index: number, value: string) => {
 		setPeerNodes((prev) => prev.map((node, i) => (i === index ? value : node)));
+		setPeerNodeInvalidIndices((prev) => ({ ...prev, [index]: false }));
+		const existingTimer = peerNodeValidationTimersRef.current[index];
+		if (existingTimer) {
+			window.clearTimeout(existingTimer);
+		}
+		peerNodeValidationTimersRef.current[index] = window.setTimeout(() => {
+			setPeerNodeInvalidIndices((prev) => ({
+				...prev,
+				[index]:
+					value.trim().length > 0 &&
+					value.trim() !== 'https://' &&
+					value.trim() !== 'http://' &&
+					!isValidUrl(value),
+			}));
+		}, URL_VALIDATION_PAUSE_MS);
 		setError(null);
 		setFeedback(null);
 	};
@@ -172,9 +190,18 @@ export default function Nasa() {
 			if (prev.length <= 1) return ['https://'];
 			return prev.filter((_, i) => i !== index);
 		});
+		Object.values(peerNodeValidationTimersRef.current).forEach((timer) => window.clearTimeout(timer));
+		peerNodeValidationTimersRef.current = {};
+		setPeerNodeInvalidIndices({});
 		setError(null);
 		setFeedback(null);
 	};
+
+	React.useEffect(() => {
+		return () => {
+			Object.values(peerNodeValidationTimersRef.current).forEach((timer) => window.clearTimeout(timer));
+		};
+	}, []);
 
 	React.useEffect(() => {
 		if (mode !== 'stake') {
@@ -379,11 +406,12 @@ export default function Nasa() {
 	};
 
 	const getPeerNodeValidation = (
-		node: string
+		node: string,
+		index: number
 	): { variant: 'success' | 'error' | 'neutral'; message: string | null } => {
 		const trimmed = node.trim();
 		if (!trimmed || trimmed === 'https://' || trimmed === 'http://') return { variant: 'neutral', message: null };
-		if (isValidUrl(trimmed)) return { variant: 'success', message: 'Valid URL.' };
+		if (!peerNodeInvalidIndices[index]) return { variant: 'neutral', message: null };
 		return { variant: 'error', message: 'Enter a valid http:// or https:// URL.' };
 	};
 
@@ -575,7 +603,7 @@ export default function Nasa() {
 								</S.PeerInputsHeader>
 								<S.PeersTable>
 									{peerNodes.map((node, index) => {
-										const peerVal = getPeerNodeValidation(node);
+										const peerVal = getPeerNodeValidation(node, index);
 										return (
 											<S.PeerRow key={`peer-node-${index}`}>
 												<S.PeerIndex>{index + 1}</S.PeerIndex>
