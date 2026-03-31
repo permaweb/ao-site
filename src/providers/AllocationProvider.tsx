@@ -324,6 +324,8 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 	};
 
 	const adjustTokenByPercentage = (token: AllocationRecordType, percentageChange: number) => {
+		setResponse(null);
+
 		if (token.value === undefined || token.value === null) {
 			console.error('No value provided');
 			return;
@@ -334,35 +336,28 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 
 		if (newAmount === token.value) return;
 
-		const totalTokens = records.length;
-		if (totalTokens === 1) {
-			updateRecords([{ ...token, value: 1 }]);
+		const otherTokensTotal = records
+			.filter((record) => record.id !== token.id)
+			.reduce((sum, record) => sum + record.value, 0);
+
+		const newTotal = otherTokensTotal + newAmount;
+
+		if (newTotal > 1) {
+			setResponse({
+				status: 'warning',
+				message: 'Total allocation cannot exceed 100%',
+			});
 			return;
 		}
 
-		const amountChanged = newAmount - token.value;
-		const distributionFactor = -amountChanged / (totalTokens - 1);
+		const updatedRecords = records.map((record) => {
+			if (token.id === record.id) {
+				return { ...record, value: newAmount };
+			}
+			return record;
+		});
 
-		const updatedRecords = records
-			.map((record) => {
-				if (token.id === record.id) {
-					return { ...record, value: newAmount };
-				} else {
-					return { ...record, value: Math.max(0, record.value + distributionFactor) };
-				}
-			})
-			.filter((record: AllocationRecordType) => record.value > 0);
-
-		const total = updatedRecords.reduce((sum, record) => sum + record.value, 0);
-		if (Math.abs(total - 1) > 0.001) {
-			const normalizedRecords = updatedRecords.map((record) => ({
-				...record,
-				value: record.value / total,
-			}));
-			updateRecords(normalizedRecords);
-		} else {
-			updateRecords(updatedRecords);
-		}
+		updateRecords(updatedRecords);
 	};
 
 	const removeToken = (token: AllocationTokenRecordType) => {
@@ -403,6 +398,16 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 			setLoading(true);
 			setResponse(null);
 			try {
+				const total = records.reduce((sum, record) => sum + record.value, 0);
+				if (Math.abs(total - 1) > 0.001) {
+					setResponse({
+						status: 'warning',
+						message: 'Total allocation must equal 100%',
+					});
+					setLoading(false);
+					return;
+				}
+
 				const messages = [];
 
 				const createMessage = (id, factor) => ({
@@ -449,11 +454,7 @@ export function AllocationProvider(props: { children: React.ReactNode }) {
 
 				for (const messageToSend of messages) {
 					const response = await message(messageToSend);
-					const updateResult = await result({
-						process: AO.delegationOracle,
-						message: response,
-					});
-					console.log(updateResult);
+					await result({ process: AO.delegationOracle, message: response });
 				}
 
 				setResponse({ status: 'success', message: `${language.preferencesUpdated}!` });
