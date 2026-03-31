@@ -68,7 +68,7 @@ const prefetchedImageUrls = new Set<string>();
 let manifestIdCache: { expiresAt: number; manifestId: string } | null = null;
 
 const AO_BLOG_NODE = 'https://push-1.forward.computer';
-const FALLBACK_MANIFEST_TX_ID = 'rdfXnvpnTSfhiiaFxsMxbjymEJFnCKPQOPX23y7pSa4';
+const FALLBACK_MANIFEST_TX_ID = 'XUQxzXqP1OFepgm2rswoc8YrO5-lpliqPKHxqj33BUs';
 
 const FRONTMATTER_PATTERN = /^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n|$)/;
 
@@ -202,10 +202,28 @@ const resolveManifestId = async (): Promise<string> => {
 	}
 
 	const aoManifestId = await getLatestManifestIdFromAo();
-	const usingFallback = !aoManifestId;
-	const manifestId = aoManifestId || FALLBACK_MANIFEST_TX_ID;
+	let manifestId = aoManifestId || FALLBACK_MANIFEST_TX_ID;
+	let manifestSource: 'ao' | 'fallback' | 'fallback-newer' = aoManifestId ? 'ao' : 'fallback';
 
-	console.info('[AO Blog] Manifest source:', usingFallback ? 'fallback' : 'ao', '| id:', manifestId);
+	if (aoManifestId && aoManifestId !== FALLBACK_MANIFEST_TX_ID) {
+		const [aoFreshness, fallbackFreshness] = await Promise.all([
+			getManifestFreshnessMs(aoManifestId),
+			getManifestFreshnessMs(FALLBACK_MANIFEST_TX_ID),
+		]);
+		if (fallbackFreshness > aoFreshness) {
+			manifestId = FALLBACK_MANIFEST_TX_ID;
+			manifestSource = 'fallback-newer';
+		}
+
+		console.info(
+			'[AO Blog] Manifest freshness (ms):',
+			`ao=${aoFreshness}`,
+			`fallback=${fallbackFreshness}`,
+			`selected=${manifestSource}`
+		);
+	}
+
+	console.info('[AO Blog] Manifest source:', manifestSource, '| id:', manifestId);
 
 	manifestIdCache = {
 		expiresAt: now + MANIFEST_ID_CACHE_TTL_MS,
@@ -229,6 +247,21 @@ const fetchManifestPosts = async (manifestId: string): Promise<ManifestPost[]> =
 	const posts = Array.isArray(payload.posts) ? payload.posts : [];
 	manifestPostsCache.set(manifestId, posts);
 	return posts;
+};
+
+const getManifestFreshnessMs = async (manifestId: string): Promise<number> => {
+	try {
+		const posts = await fetchManifestPosts(manifestId);
+		return posts.reduce((newest, post) => {
+			const candidate =
+				parseTimestampMs(post.frontmatter?.date) ||
+				parseTimestampMs(post.updated) ||
+				parseTimestampMs(post.publishedAt);
+			return candidate > newest ? candidate : newest;
+		}, 0);
+	} catch {
+		return 0;
+	}
 };
 
 const mapManifestPost = (post: ManifestPost): AoBlogPost | null => {

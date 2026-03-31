@@ -5,6 +5,7 @@ import { STYLING } from 'helpers/config';
 
 const BLOG_CONTENT_MAX_WIDTH = 600;
 const BLOG_IMAGE_EXTENSION = 100;
+const BLOG_IMAGE_MAX_HEIGHT = 'min(70vh, 640px)';
 const BLOG_LOADING_OFFSET = 68;
 const IMAGE_LIGHTBOX_ANIMATION_MS = 180;
 
@@ -84,15 +85,17 @@ export const HeroImageWrapper = styled.div`
 	width: calc(100% + ${BLOG_IMAGE_EXTENSION}px);
 	max-width: ${BLOG_CONTENT_MAX_WIDTH + BLOG_IMAGE_EXTENSION}px;
 	margin-left: -${BLOG_IMAGE_EXTENSION / 2}px;
-	aspect-ratio: 16 / 9;
 	overflow: hidden;
 	border: 1px solid ${(props) => props.theme.colors.border.primary};
 	background: ${(props) => props.theme.colors.container.alt1.background};
 
 	img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		display: block;
+		max-width: 100%;
+		max-height: ${BLOG_IMAGE_MAX_HEIGHT};
+		width: auto;
+		height: auto;
+		margin: 0 auto;
 		cursor: zoom-in;
 		transition: transform ${STYLING.motion.duration.fast} ${STYLING.motion.easing.decelerate};
 	}
@@ -156,7 +159,6 @@ export const MarkdownImageFrame = styled.span`
 	width: calc(100% + ${BLOG_IMAGE_EXTENSION}px);
 	max-width: ${BLOG_CONTENT_MAX_WIDTH + BLOG_IMAGE_EXTENSION}px;
 	margin-left: -${BLOG_IMAGE_EXTENSION / 2}px;
-	aspect-ratio: 16 / 9;
 	overflow: hidden;
 	border: 1px solid ${(props) => props.theme.colors.border.primary};
 	background: ${(props) => props.theme.colors.container.alt1.background};
@@ -164,9 +166,11 @@ export const MarkdownImageFrame = styled.span`
 
 	img {
 		display: block;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		max-width: 100%;
+		max-height: ${BLOG_IMAGE_MAX_HEIGHT};
+		width: auto;
+		height: auto;
+		margin: 0 auto;
 	}
 
 	&:hover ${ImageZoomIndicator} {
