@@ -327,7 +327,7 @@ export default function Nasa() {
 			await aoProvider.aoMainnet.message({
 				process: AO.nasaToken,
 				tags: [
-					{ name: 'Action', value: 'Transf' },
+					{ name: 'Action', value: 'Transfer' },
 					{ name: 'Recipient', value: AO.nasaStake },
 					{ name: 'Quantity', value: String(Math.floor(v * 1e12)) },
 					{ name: 'X-Action', value: 'Stake' },
