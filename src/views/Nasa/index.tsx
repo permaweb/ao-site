@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from 'components/atoms/Button';
 import { ViewHeader } from 'components/atoms/ViewHeader';
-import { URLS } from 'helpers/config';
+import { AO, ENDPOINTS, URLS } from 'helpers/config';
 import { Footer } from 'navigation/footer';
 import { useAOProvider } from 'providers/AOProvider';
 import { useArweaveProvider } from 'providers/ArweaveProvider';
@@ -17,11 +17,9 @@ import * as S from './styles';
 const MOCK_UNIT = 'AO';
 const DEFAULT_STAKE_AMOUNT = '25';
 const MIN_STAKE_AO = 25;
-const DEFAULT_PEER_NODES = [''] as const;
+const DEFAULT_PEER_NODES = ['https://'] as const;
 const REFERENCE_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{2,63}$/;
 const CHECK_TYPING_PAUSE_MS = 450;
-const CHECK_MIN_DELAY_MS = 1000;
-const CHECK_MAX_DELAY_MS = 2000;
 
 type ValidationStatus = 'idle' | 'checking' | 'valid' | 'invalid';
 
@@ -29,28 +27,6 @@ type ValidationResult = {
 	status: ValidationStatus;
 	message: string | null;
 };
-
-function getRandomDelayMs() {
-	return CHECK_MIN_DELAY_MS + Math.floor(Math.random() * (CHECK_MAX_DELAY_MS - CHECK_MIN_DELAY_MS + 1));
-}
-
-function simulateReferenceAvailability(referenceName: string): boolean {
-	const normalized = referenceName.trim().toLowerCase();
-	if (!isValidReference(normalized)) return false;
-	if (['taken', 'existing', 'reserved'].some((s) => normalized.includes(s))) return false;
-	const checksum = normalized.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
-	return checksum % 4 !== 0;
-}
-
-function simulatePrefixAssociation(prefixValue: string, walletAddress: string, nodeUrl: string): boolean {
-	const normalizedPrefix = prefixValue.trim();
-	const normalizedWallet = walletAddress.trim().toLowerCase();
-	const normalizedNode = nodeUrl.trim().toLowerCase();
-	if (!isValidPrefix(normalizedPrefix) || !normalizedWallet || !normalizedNode) return false;
-	const joined = `${normalizedPrefix}|${normalizedWallet}|${normalizedNode}`;
-	const checksum = joined.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
-	return checksum % 3 !== 0;
-}
 
 function formatAmount(n: number) {
 	if (!Number.isFinite(n)) return '—';
@@ -67,14 +43,20 @@ function isValidReference(reference: string): boolean {
 	return REFERENCE_PATTERN.test(reference.trim());
 }
 
+function isValidUrl(value: string): boolean {
+	const normalized = value.trim().toLowerCase();
+	return (
+		(normalized.startsWith('https://') && normalized.length > 'https://'.length) ||
+		(normalized.startsWith('http://') && normalized.length > 'http://'.length)
+	);
+}
+
 function isValidPrefix(prefix: string): boolean {
-	const normalizedPrefix = prefix.trim();
-	return normalizedPrefix.toLowerCase().startsWith('https://');
+	return isValidUrl(prefix);
 }
 
 function isHttpsUrl(value: string): boolean {
-	const normalized = value.trim();
-	return normalized.toLowerCase().startsWith('https://') && normalized.length > 'https://'.length;
+	return isValidUrl(value);
 }
 
 export default function Nasa() {
@@ -84,9 +66,9 @@ export default function Nasa() {
 	const languageProvider = useLanguageProvider();
 	const language = languageProvider.object[languageProvider.current];
 
-	const [available, setAvailable] = React.useState(10000);
-	const [staked, setStaked] = React.useState(1250.5);
-	const [networkTotal, setNetworkTotal] = React.useState(1_842_019.42);
+	const [available] = React.useState(10000);
+	const [staked, setStaked] = React.useState(0);
+	const [networkTotal] = React.useState(1_842_019.42);
 	const [lastEpochRewardDistributed] = React.useState(48_291.3705);
 	const [amount, setAmount] = React.useState(DEFAULT_STAKE_AMOUNT);
 	const [mode, setMode] = React.useState<'stake' | 'withdraw'>('stake');
@@ -116,6 +98,20 @@ export default function Nasa() {
 		input.setSelectionRange(cursorPosition, cursorPosition);
 	}, []);
 
+	React.useEffect(() => {
+		if (mode !== 'withdraw' || !arProvider.walletAddress) return;
+		(async () => {
+			try {
+				const res = await fetch(ENDPOINTS.nasaStakedBalance(arProvider.walletAddress));
+				const data = await res.json();
+				const stakedAmount = Number(data.body) / 1e12;
+				setStaked(Number.isFinite(stakedAmount) && stakedAmount > 0 ? stakedAmount : 0);
+			} catch {
+				setStaked(0);
+			}
+		})();
+	}, [mode, arProvider.walletAddress]);
+
 	const amountNum = parsePositiveAmount(amount);
 	const normalizedPeerNodes = React.useMemo(
 		() => peerNodes.map((node) => node.trim()).filter((node) => node.length > 0),
@@ -136,9 +132,8 @@ export default function Nasa() {
 		hasValidPrefix &&
 		hasReferenceCheckPassed &&
 		hasPrefixCheckPassed;
-	const isWithdrawBaseValid = amountNum !== null;
-	const isSubmitDisabled =
-		mode === 'stake' ? !isStakeBaseValid || isSubmitting : !isWithdrawBaseValid || isSubmitting;
+	const isWithdrawDisabled = staked === 0 || !isWalletConnected || isSubmitting;
+	const isSubmitDisabled = mode === 'stake' ? !isStakeBaseValid || isSubmitting : isWithdrawDisabled;
 
 	const handleInputChange = (raw: string) => {
 		setAmount(raw);
@@ -162,24 +157,21 @@ export default function Nasa() {
 
 	const handlePeerNodeChange = (index: number, value: string) => {
 		setPeerNodes((prev) => prev.map((node, i) => (i === index ? value : node)));
-		setPrefixValidation({ status: 'idle', message: null });
 		setError(null);
 		setFeedback(null);
 	};
 
 	const handleAddPeerNode = () => {
-		setPeerNodes((prev) => [...prev, '']);
-		setPrefixValidation({ status: 'idle', message: null });
+		setPeerNodes((prev) => [...prev, 'https://']);
 		setError(null);
 		setFeedback(null);
 	};
 
 	const handleRemovePeerNode = (index: number) => {
 		setPeerNodes((prev) => {
-			if (prev.length <= 1) return [''];
+			if (prev.length <= 1) return ['https://'];
 			return prev.filter((_, i) => i !== index);
 		});
-		setPrefixValidation({ status: 'idle', message: null });
 		setError(null);
 		setFeedback(null);
 	};
@@ -198,25 +190,34 @@ export default function Nasa() {
 
 		const requestId = referenceCheckRequestRef.current + 1;
 		referenceCheckRequestRef.current = requestId;
-		let processingTimer: number | null = null;
-		const typingPauseTimer = window.setTimeout(() => {
+		const typingPauseTimer = window.setTimeout(async () => {
 			if (referenceCheckRequestRef.current !== requestId) return;
 			setReferenceValidation({ status: 'checking', message: 'Checking reference name availability...' });
 
-			processingTimer = window.setTimeout(() => {
+			try {
+				const res = await fetch(ENDPOINTS.nasaReferences(normalizedReference));
 				if (referenceCheckRequestRef.current !== requestId) return;
-				const isAvailable = simulateReferenceAvailability(normalizedReference);
-				setReferenceValidation(
-					isAvailable
-						? { status: 'valid', message: 'Reference name is available.' }
-						: { status: 'invalid', message: 'Reference name is unavailable. Try a different name.' }
-				);
-			}, getRandomDelayMs());
+				const data = await res.json();
+				if (referenceCheckRequestRef.current !== requestId) return;
+				if (data.body === 'not_found') {
+					setReferenceValidation({ status: 'valid', message: 'Reference name is available.' });
+				} else {
+					setReferenceValidation({
+						status: 'invalid',
+						message: 'Reference name is unavailable. Try a different name.',
+					});
+				}
+			} catch {
+				if (referenceCheckRequestRef.current !== requestId) return;
+				setReferenceValidation({
+					status: 'invalid',
+					message: 'Could not verify reference. Try again.',
+				});
+			}
 		}, CHECK_TYPING_PAUSE_MS);
 
 		return () => {
 			window.clearTimeout(typingPauseTimer);
-			if (processingTimer !== null) window.clearTimeout(processingTimer);
 		};
 	}, [reference, mode]);
 
@@ -234,45 +235,47 @@ export default function Nasa() {
 
 		const requestId = prefixCheckRequestRef.current + 1;
 		prefixCheckRequestRef.current = requestId;
-		let processingTimer: number | null = null;
-		const typingPauseTimer = window.setTimeout(() => {
+		const typingPauseTimer = window.setTimeout(async () => {
 			if (prefixCheckRequestRef.current !== requestId) return;
 
-			const normalizedPrimaryPeer = normalizedPeerNodes[0]?.trim() || '';
-			if (!isWalletConnected || !normalizedPrimaryPeer || !isHttpsUrl(normalizedPrimaryPeer)) {
+			if (!isWalletConnected) {
 				setPrefixValidation({
 					status: 'invalid',
-					message: 'Unable to verify yet. Connect wallet and provide an https:// node URL first.',
+					message: 'Connect your wallet first.',
 				});
 				return;
 			}
 
 			setPrefixValidation({ status: 'checking', message: 'Checking wallet association with node URL...' });
-			processingTimer = window.setTimeout(() => {
+
+			try {
+				const res = await fetch(ENDPOINTS.nasaNodeAddress(normalizedPrefix));
 				if (prefixCheckRequestRef.current !== requestId) return;
-				const isAssociated = simulatePrefixAssociation(
-					normalizedPrefix,
-					arProvider.walletAddress || '',
-					normalizedPrimaryPeer
-				);
-				setPrefixValidation(
-					isAssociated
-						? { status: 'valid', message: 'Wallet is associated with this node URL.' }
-						: {
-								status: 'invalid',
-								message: 'Wallet is not associated with this node URL. Try a different one.',
-						  }
-				);
-			}, getRandomDelayMs());
+				const data = await res.json();
+				if (prefixCheckRequestRef.current !== requestId) return;
+				if (data.body === arProvider.walletAddress) {
+					setPrefixValidation({ status: 'valid', message: 'Wallet is associated with this node.' });
+				} else {
+					setPrefixValidation({
+						status: 'invalid',
+						message: 'Wallet is not associated with this node.',
+					});
+				}
+			} catch {
+				if (prefixCheckRequestRef.current !== requestId) return;
+				setPrefixValidation({
+					status: 'invalid',
+					message: 'Could not verify node association. Try again.',
+				});
+			}
 		}, CHECK_TYPING_PAUSE_MS);
 
 		return () => {
 			window.clearTimeout(typingPauseTimer);
-			if (processingTimer !== null) window.clearTimeout(processingTimer);
 		};
-	}, [prefix, normalizedPeerNodes, mode, isWalletConnected, arProvider.walletAddress]);
+	}, [prefix, mode, isWalletConnected, arProvider.walletAddress]);
 
-	const runStake = () => {
+	const runStake = async () => {
 		const v = parsePositiveAmount(amount);
 		if (v === null) {
 			setError(language.operatorStakeInvalidAmount);
@@ -319,35 +322,61 @@ export default function Nasa() {
 			setFeedback(null);
 			return;
 		}
-		setAvailable((a) => Math.round((a - v) * 1e6) / 1e6);
-		setStaked((s) => Math.round((s + v) * 1e6) / 1e6);
-		setNetworkTotal((t) => Math.round((t + v) * 1e6) / 1e6);
-		setAmount(DEFAULT_STAKE_AMOUNT);
-		setError(null);
-		setFeedback(`${language.operatorStakeMockFeedback} ${filledPeerNodeCount} peer nodes.`);
+		setIsSubmitting(true);
+		try {
+			await aoProvider.aoMainnet.message({
+				process: AO.nasaToken,
+				tags: [
+					{ name: 'Action', value: 'Transf' },
+					{ name: 'Recipient', value: AO.nasaStake },
+					{ name: 'Quantity', value: String(Math.floor(v * 1e12)) },
+					{ name: 'X-Action', value: 'Stake' },
+					{ name: 'X-Reference', value: reference.trim() },
+					{ name: 'X-Prefix', value: prefix.trim() },
+					{ name: 'X-Peers', value: normalizedPeerNodes.join(',') },
+				],
+			});
+			setAmount(DEFAULT_STAKE_AMOUNT);
+			setError(null);
+			setFeedback('Stake submitted successfully.');
+		} catch (e) {
+			console.error(e);
+			setError('Stake failed. Please try again.');
+			setFeedback(null);
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
-	const runUnstake = () => {
-		const v = parsePositiveAmount(amount);
-		if (v === null) {
-			setError(language.operatorStakeInvalidAmount);
+	const runUnstake = async () => {
+		setIsSubmitting(true);
+		try {
+			await aoProvider.aoMainnet.message({
+				process: AO.nasaStake,
+				tags: [{ name: 'Action', value: 'Unstake' }],
+			});
+			setStaked(0);
+			setError(null);
+			setFeedback('Unstake submitted successfully.');
+		} catch (e) {
+			console.error(e);
+			setError('Unstake failed. Please try again.');
 			setFeedback(null);
-			return;
+		} finally {
+			setIsSubmitting(false);
 		}
-		if (v > staked) {
-			setError(language.operatorUnstakeInsufficient);
-			setFeedback(null);
-			return;
-		}
-		setStaked((s) => Math.round((s - v) * 1e6) / 1e6);
-		setAvailable((a) => Math.round((a + v) * 1e6) / 1e6);
-		setNetworkTotal((t) => Math.round((t - v) * 1e6) / 1e6);
-		setAmount(DEFAULT_STAKE_AMOUNT);
-		setError(null);
-		setFeedback(language.operatorStakeMockFeedback);
 	};
 
-	const submitLabel = mode === 'stake' ? language.operatorStakeSubmit : language.operatorUnstakeSubmit;
+	const getPeerNodeValidation = (
+		node: string
+	): { variant: 'success' | 'error' | 'neutral'; message: string | null } => {
+		const trimmed = node.trim();
+		if (!trimmed || trimmed === 'https://' || trimmed === 'http://') return { variant: 'neutral', message: null };
+		if (isValidUrl(trimmed)) return { variant: 'success', message: 'Valid URL.' };
+		return { variant: 'error', message: 'Enter a valid http:// or https:// URL.' };
+	};
+
+	const submitLabel = mode === 'stake' ? language.operatorStakeSubmit : 'Unstake all';
 
 	const referenceValidationVariant =
 		referenceValidation.status === 'valid'
@@ -361,7 +390,6 @@ export default function Nasa() {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (isSubmitting) return;
-		setIsSubmitting(true);
 
 		try {
 			const contextValidation = await aoProvider.validateOperatorStakeContext({
@@ -376,16 +404,14 @@ export default function Nasa() {
 			}
 
 			if (mode === 'stake') {
-				runStake();
+				await runStake();
 				return;
 			}
-			runUnstake();
+			await runUnstake();
 		} catch (e) {
 			console.error(e);
 			setError(language.operatorStakeContextInvalid);
 			setFeedback(null);
-		} finally {
-			setIsSubmitting(false);
 		}
 	};
 
@@ -436,24 +462,36 @@ export default function Nasa() {
 							</S.StatCell>
 						</S.StatsGrid>
 
-						<S.AmountFieldWrap>
-							{mode === 'withdraw' && <S.AmountFieldLabel>{language.withdraw}</S.AmountFieldLabel>}
-							<S.AmountBlock>
-								<S.AmountTopRow>
-									<S.AmountInput
-										ref={amountInputRef}
-										type={'text'}
-										inputMode={'decimal'}
-										autoComplete={'off'}
-										placeholder={language.operatorStakePlaceholder}
-										value={amount}
-										onChange={(e) => handleInputChange(e.target.value)}
-									/>
-									<S.AmountUnit>{MOCK_UNIT}</S.AmountUnit>
-								</S.AmountTopRow>
-								{mode === 'stake' && <S.AmountHint>{language.operatorStakeMinimumEntry}</S.AmountHint>}
-							</S.AmountBlock>
-						</S.AmountFieldWrap>
+						{mode === 'stake' && (
+							<S.AmountFieldWrap>
+								<S.AmountBlock>
+									<S.AmountTopRow>
+										<S.AmountInput
+											ref={amountInputRef}
+											type={'text'}
+											inputMode={'decimal'}
+											autoComplete={'off'}
+											placeholder={language.operatorStakePlaceholder}
+											value={amount}
+											onChange={(e) => handleInputChange(e.target.value)}
+										/>
+										<S.AmountUnit>{MOCK_UNIT}</S.AmountUnit>
+									</S.AmountTopRow>
+									<S.AmountHint>{language.operatorStakeMinimumEntry}</S.AmountHint>
+								</S.AmountBlock>
+							</S.AmountFieldWrap>
+						)}
+
+						{mode === 'withdraw' && (
+							<S.AmountFieldWrap>
+								<S.AmountFieldLabel>{language.withdraw}</S.AmountFieldLabel>
+								<S.AmountBlock>
+									<S.AmountTopRow>
+										<S.AmountInput as={'span'}>{formatAmount(staked)}</S.AmountInput>
+									</S.AmountTopRow>
+								</S.AmountBlock>
+							</S.AmountFieldWrap>
+						)}
 
 						{mode === 'stake' && (
 							<S.PeersWrap>
@@ -525,26 +563,34 @@ export default function Nasa() {
 									</S.PeerInputsHeaderLabel>
 								</S.PeerInputsHeader>
 								<S.PeersTable>
-									{peerNodes.map((node, index) => (
-										<S.PeerRow key={`peer-node-${index}`}>
-											<S.PeerIndex>{index + 1}</S.PeerIndex>
-											<S.PeerInput
-												type={'text'}
-												value={node}
-												onChange={(e) => handlePeerNodeChange(index, e.target.value)}
-												placeholder={language.operatorStakePeerNodePlaceholder}
-											/>
-											{peerNodes.length > 1 && (
-												<S.RemovePeerButton
-													type={'button'}
-													onClick={() => handleRemovePeerNode(index)}
-													aria-label={`Remove peer node ${index + 1}`}
-												>
-													remove
-												</S.RemovePeerButton>
-											)}
-										</S.PeerRow>
-									))}
+									{peerNodes.map((node, index) => {
+										const peerVal = getPeerNodeValidation(node);
+										return (
+											<S.PeerRow key={`peer-node-${index}`}>
+												<S.PeerIndex>{index + 1}</S.PeerIndex>
+												<S.PeerInput
+													type={'text'}
+													value={node}
+													onChange={(e) => handlePeerNodeChange(index, e.target.value)}
+													placeholder={language.operatorStakePeerNodePlaceholder}
+												/>
+												{peerNodes.length > 1 && (
+													<S.RemovePeerButton
+														type={'button'}
+														onClick={() => handleRemovePeerNode(index)}
+														aria-label={`Remove peer node ${index + 1}`}
+													>
+														remove
+													</S.RemovePeerButton>
+												)}
+												{peerVal.message && (
+													<S.MetaFieldValidation $variant={peerVal.variant}>
+														{peerVal.message}
+													</S.MetaFieldValidation>
+												)}
+											</S.PeerRow>
+										);
+									})}
 								</S.PeersTable>
 								<S.AddMoreButton type={'button'} onClick={handleAddPeerNode}>
 									{language.operatorStakeAddPeer}

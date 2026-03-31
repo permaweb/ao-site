@@ -31,18 +31,18 @@ function Root() {
 				<LanguageProvider>
 					<HashRouter>
 						<GlobalStyle />
-						<AOProvider>
-							<EthereumProvider>
-								<ArweaveProvider>
+						<EthereumProvider>
+							<ArweaveProvider>
+								<AOProvider>
 									<AllocationProvider>
 										<div id={'loader'} />
 										<div id={'notification'} />
 										<div id={'overlay'} />
 										<App />
 									</AllocationProvider>
-								</ArweaveProvider>
-							</EthereumProvider>
-						</AOProvider>
+								</AOProvider>
+							</ArweaveProvider>
+						</EthereumProvider>
 					</HashRouter>
 				</LanguageProvider>
 			</CustomThemeProvider>

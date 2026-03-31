@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { connect } from '@permaweb/aoconnect';
+import { connect, createSigner } from '@permaweb/aoconnect';
 
 import { AO, AO_TOKEN_DENOMINATION, ENDPOINTS } from 'helpers/config';
 import { AONetworkStatus, AOPhase, MetricDataPoint, TagType } from 'helpers/types';
+
+import { useArweaveProvider } from './ArweaveProvider';
 
 const METRICS_CACHE_DURATION = 24 * 60 * 60 * 1000;
 const SUPPLY_CACHE_DURATION = 24 * 60 * 60 * 1000;
@@ -24,6 +26,7 @@ interface AOContextState {
 	status: AONetworkStatus | null;
 	mintedSupply: number | null;
 	read: any;
+	aoMainnet: any;
 	validateOperatorStakeContext: (args: {
 		reference: string;
 		prefix: string;
@@ -37,6 +40,7 @@ const DEFAULT_CONTEXT = {
 	status: null,
 	mintedSupply: null,
 	read: null,
+	aoMainnet: null,
 	validateOperatorStakeContext: async () => ({ isValid: true }),
 };
 
@@ -47,8 +51,21 @@ export function useAOProvider(): AOContextState {
 }
 
 export function AOProvider(props: { children: React.ReactNode }) {
+	const arProvider = useArweaveProvider();
 	const [metrics, setMetrics] = React.useState<MetricDataPoint[] | null>(null);
 	const [mintedSupply, setMintedSupply] = React.useState<number | null>(null);
+
+	const aoMainnet = React.useMemo(() => {
+		const config: any = {
+			MODE: 'mainnet',
+			URL: 'http://localhost:8734',
+			SCHEDULER: 'Fe27-MhE0X0CH9mWMKoOlbuRAR8ThTz9a-9m1ZivwtI',
+		};
+		if (arProvider.wallet) {
+			config.signer = createSigner(arProvider.wallet);
+		}
+		return connect(config);
+	}, [arProvider.wallet]);
 
 	React.useEffect(() => {
 		const CACHE_KEY = 'mintedSupply';
@@ -213,6 +230,7 @@ export function AOProvider(props: { children: React.ReactNode }) {
 				status: AONetworkStatus.Live,
 				mintedSupply: mintedSupply,
 				read: read,
+				aoMainnet: aoMainnet,
 				validateOperatorStakeContext: validateOperatorStakeContext,
 			}}
 		>
