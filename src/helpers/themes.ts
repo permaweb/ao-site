@@ -105,7 +105,7 @@ export const theme = (currentTheme: any): DefaultTheme => ({
 					color: currentTheme.neutralA1,
 				},
 				disabled: {
-					background: currentTheme.neutral3,
+					background: currentTheme.neutral4,
 					border: currentTheme.neutral5,
 					color: currentTheme.neutral7,
 				},

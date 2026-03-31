@@ -118,7 +118,7 @@ export default function App() {
 							</S.RouteLoadingState>
 						) : (
 							<S.RouteLoadingState>
-								<Loader relative noMargins />
+								<Loader />
 							</S.RouteLoadingState>
 						)
 					}
