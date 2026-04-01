@@ -41,15 +41,15 @@ export const HB = {
 
 export const PATCH_MAP = {
 	stEth: {
-		processId: 'U4IrjxcKVsEya5kQbZPbjLCoj868P129Z4IlArMOzuc',
+		processId: '9i60KewmzTjcEkswqLV7IO165bB7u4eJ6aU4hVZqpKk',
 		ticker: 'eth',
 	},
 	dai: {
-		processId: 'QzWis3AEZTl1se17kvHXko-dfhPdWXJezhuyy0e3NTg',
+		processId: 'tNPQL0i-hBl3GMbNssZT_lpyYn0izbZHUFVHOm4qhNI',
 		ticker: 'dai',
 	},
 	usds: {
-		processId: 'JJPMirAJb2RR7mqIAilAGWjA3EwHIEXAnc__CfNKqNs',
+		processId: 'zMu6PCkAEaglvYWAGvgltycYdghzskWrWE2QuDfuzlA',
 		ticker: 'usds',
 	},
 };
